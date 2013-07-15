@@ -1,5 +1,0 @@
-"name"				"Carter Addon Pack" 
-"author_name"		"Boba Fett, Madman07, Llapp, locotus_1, AlexALX"
-"author_email"		"info@sg-carterpack.com"
-"author_url"		"www.sg-carterpack.com"
-"info"				"All of the code for the Stargate Carter Addon Pack"
