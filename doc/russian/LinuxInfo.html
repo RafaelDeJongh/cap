@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Звёздные врата с системой групп - Информация для linux серверов</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Звёздные врата с системой групп</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net"><strong>AlexALX</strong></a><br>
+<b>Версия:</b>  SVN<br>
+Создано для игры <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Навигация:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Главная</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ReadMe.html">ReadMe</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ConVars.html">Настройки</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="WireInfo.html">Wire Информация</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>Для linux серверов</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Видео</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2'><b>Если у вас возникают проблемы на linux сервере, тогда попробуйте следующее:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><ul style='list-style-type:disc'>
+<li>Установите gmod сервер на <b>регистро-независимую</b> (case-insensitive) файловую систему, например как <b>vfat/ntfs</b> (ntfs-3g драйвер с lowntfs ignore_case флагом).
+<br><br><b>ФАЙЛОВАЯ СИСТЕМА ОЧЕНЬ ВАЖНА!</b>
+<br>Без <b>регистро-независимомой файловой системы</b> аддон скорей всего работать не будет!<br></li>
+<br><li>Переименуйте папку "before_cap_sg_groups" на "z_cap_sg_groups".</li>
+<li>Удалите старый avon stargate аддон.</li>
+</ul></td></tr>
+<tr>
+<td class='tbl2'><b>Старая цитата с facepunch (моё сообщение):</b></td>
+</tr>
+<tr>
+  <td class='tbl1'><div class='quote' style="width:740;text-align:left;">Теперь я полностью понимаю как работает метод перезаписи кода в gmod и знаю как исправить проблему на linux.
+<br>
+<br>На самом деле когда аддон кеширует (загружает) lua файл (код), то после этого он не может быть перекешироваться (перезаписаться), нужно перезапускать карту/сервер. В данном случае загружается только первый файл что найден (загружая аддоны).
+<br>
+<br>На windows gmod сервер кеширует аддоны в алфавитном порядке (сначала 0-9, потом A-Z).
+<br>На libux gmod сервер кеширует аддоны в обратном порядке (я не знаю почему, но сначала Z-A, потом 9-0, не тестировал насчёт цифр правда, только буквы)
+<br>
+<br>Я провёл много тестов и пришёл к такому выводу.
+<br>
+<br>Итак, что получилось:
+<br>
+<br>[В Windows]
+<br>
+<br>Если порядок аддонов такой:
+<br>before_cap_sg_groups
+<br>cap
+<br>catdaemon_stargate
+<br>stargate
+<br>всё работает нормально, если сделать такой порядок:
+<br>cap
+<br>catdaemon_stargate
+<br>d_cap_sg_groups
+<br>stargate
+<br>тогда код моего аддона не перезаписывает код cap. Если сделать в этом порядке:
+<br>before_stargate
+<br>cap
+<br>catdaemon_stargate
+<br>d_cap_sg_groups
+<br>тогда код cap и моего аддона не перезаписывает код avon'а, и мы имеем много ошибок и видим старые врата)
+<br>
+<br>[В Linux]
+<br>
+<br>В linux (возможно не во всех сборках) порядок должен быть обратным, поэтому если сделать так:
+<br>b_catdaemon_stargate
+<br>b_stargate
+<br>cap
+<br>z_cap_sg_groups
+<br>Всё прекрастно работает.
+<br>
+<br>Надеюсь вы поняли что я имею введу и эта информация была полезна для кого-то.</div></center></td>
+</tr>
+</table>
+
+</BODY>
+</HTML>

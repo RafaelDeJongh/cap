@@ -1,0 +1,13 @@
+﻿stargate_credits_01 = Crédits
+stargate_credits_02 = Ici, Vous pouvez rapporter tout bugs. si vous ne pouvez taper dans la zone de texte html, visitez %s avec votre navigateur.
+stargate_credits_03 = Impossible de déterminer la dernière version. Verifiez que vous êtes connectés à internet ou contactez Madman097.
+stargate_credits_04 = Impossible de déterminer votre version. Verifiez que vous avez correctement mis à jour le CAP et que VER.txt est dans addon/cap.
+stargate_credits_05 = Votre CAP est à jour.
+stargate_credits_06 = Votre version: %d. Dernière version: %d.
+stargate_credits_07 = SVP, mettez votre CAP à jour pour profiter des nouveautés!
+stargate_credits_08 = Il semble que vous ne soyez pas connecté à internet. Il est donc impossible d'afficher les crédits. Si vous êtes sûr d'être connecté et que vous avez reçu ce message accidentellement, Vous pouvez activer manuellement l'aide en ligne ci-dessous.
+stargate_credits_09 = Activation manuelle
+stargate_credits_10 = Les changements s'appliquerons après le redémarrage de Gmod.
+stargate_credits_11 = Le Carter's Pack Requière la dernière version du WireMod.
+stargate_credits_12 = Le Carter's Addon Pack bénéficie de la licence:
+stargate_credits_13 = Bugs

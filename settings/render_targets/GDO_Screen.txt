@@ -1,0 +1,6 @@
+"Screen_RT1"
+{
+	"Name"		"GDO_Screen"
+	"Width"		"256"
+	"Height"	"128"
+}

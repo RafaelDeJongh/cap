@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Stargate with Group System - Information for Linux servers</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net/eng/" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Stargate with Group System</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net/eng/"><strong>AlexALX</strong></a><br>
+<b>Version:</b>  SVN<br>
+Created for game <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Navigation:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Home page</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ReadMe.html">ReadMe</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ConVars.html">ConVars</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="WireInfo.html">Wire Information</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>For linux servers</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Videos</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2'><b>If you have problems on linux servers, then read this:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><ul style='list-style-type:disc'>
+<li>Install gmod server to <b>case-insensitive</b> (case-insensitive) file system, like <b>vfat/ntfs</b> (ntfs-3g driver with lowntfs ignore_case flag).
+<br><br><b>THE FILE SYSTEM IS MOST IMPORTANT!</b>
+<br>Without <b>case-insensitive file system</b> addon probably will now work correct!<br></li>
+<br><li>Rename folder "before_cap_sg_groups" to "z_cap_sg_groups".</li>
+<li>Remove old avon stargate addon.</li>
+</ul></td></tr>
+<tr>
+<td class='tbl2'><b>Old quote from facepunch (my message):</b></td>
+</tr>
+<tr>
+  <td class='tbl1'><div class='quote' style="width:740;text-align:left;">Now i fully understand how working addon code overwritten method and how fix problems on linux.
+<br>
+<br>In fact, when the addon precache lua file, it can not be overwritten (need restart the map/server). In this case, is always precache only the first file what found.
+<br>
+<br>On windows gmod server precache addons in in alphabetical order (first 0-9, then A-Z).
+<br>On linux gmod server precache addons in reverse order (I do not know why, but first is Z-A, then 9-0, but i not test numbers, only letters, so maybe about numbers i can mistake).
+<br>
+<br>I have made many tests and it came to that conclusion.
+<br>
+<br>So what i mean:
+<br>
+<br>[In Windows]
+<br>
+<br>if addons order is:
+<br>before_cap_sg_groups
+<br>cap
+<br>catdaemon_stargate
+<br>stargate
+<br>then all work fine, if do in this order:
+<br>cap
+<br>catdaemon_stargate
+<br>d_cap_sg_groups
+<br>stargate
+<br>then code from my stargate group addon not overwritten cap what not precache his files before my addon. If do in this order:
+<br>before_stargate
+<br>cap
+<br>catdaemon_stargate
+<br>d_cap_sg_groups
+<br>then code from cap and my addon do not overwritten avon code, and you have many errors and see old stargates)
+<br>
+<br>[In Linux]
+<br>
+<br>In linux (maybe not in all linux assembly) order must be reverse, so if do as:
+<br>b_catdaemon_stargate
+<br>b_stargate
+<br>cap
+<br>z_cap_sg_groups
+<br>then all works fine.
+<br>
+<br>Hope you understand what i mean and this information will be useful for some.</div></center></td>
+</tr>
+</table>
+
+</BODY>
+</HTML>

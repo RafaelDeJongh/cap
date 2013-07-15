@@ -1,0 +1,9 @@
+ring_ancient = Rings (Ancient)
+ring_goauld = Rings (Goauld)
+ring_ori = Rings (Ori)
+ring_panel_ancient = Ring Paneel (Ancient)
+ring_panel_goauld = Ring Paneel (Goauld)
+ring_panel_ori = Ring Paneel (Ori)
+ring_name = Benoem deze ring (alleen nummers!):
+ring_dial = Voer  adres van bestemming in (alleen nummers!):
+ring_dialb = Dial

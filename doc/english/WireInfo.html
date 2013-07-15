@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Stargate with Group System - Wire Information</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net/eng/" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Stargate with Group System</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net/eng/"><strong>AlexALX</strong></a><br>
+<b>Version:</b>  SVN<br>
+Created for game <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Navigation:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Home page</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ReadMe.html">ReadMe</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ConVars.html">ConVars</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>Wire Information</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="LinuxInfo.html">For linux servers</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Videos</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2'><b>General Information</b></td>
+</tr>
+<tr>
+<td class='tbl1'>In this section you will find information about all the new (and some old) inputs and outputs for the wire mod.
+<br>
+<br>You can find some examples of e2 chips in addon folder: <b><a href="../../data/Expression2/e2shared/stargate">data\Expression2\e2shared\stargate</a></b>.
+<br>In the game, they are also available in a folder <b>e2shared\stargate</b> when choosing what e2 chip to open.</td></tr>
+<tr>
+<td class='tbl2'><b>General inputs and outputs on stargates</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Dial Address</b> - dial address by old method, (for example - with wired keyboard).</li>
+<li><b>Dial String [STRING]</b> - for set address what you want to dial (string).</li>
+<li><b>Dial Mode</b> - for set dialling mode (slow/fast/nox - 0/1/2).
+<br><span class='small2'><b>Note:</b> Orlin's gate have only fast and nox modes, supergate havn't nox dialling mode.</span></li>
+<li><b>Start String Dial</b> - start dialling with current dial string value and dial mode.</li>
+<li><b>Close</b> - close stargate or abort dialling.</li>
+<li><b>Disable Autoclose</b> - disable auto-close stargate after passing through them.
+<br><span class='small2'><b>Note:</b> orlin gate do not have this input.</span></li>
+<li><b>Refresh List</b> - refresh list of available gates (for "Address List" output).</li>
+<li><b>Set Point of Origin</b> - force set point of origin for stargate (without depending is there dhd or not), 1 - earth, 2 - abydos.
+<br><span class='small2'><b>Note:</b> stargate universe, atlantis and supergate don't have this input.
+<br>Also for orlin and tollan stargates we can see different only on vgui menu or with e2 screens.</span></li></li>
+<li><b>Get Energy from Address [STRING]</b> -  when you set address, then you will have in output "Enegy from Address" required amount of energy for dial this address, -1 means gate have energy from dhd/blackhole or you when havn't life support addon.
+<br>Also this input have additional option - if add space and "D" after address (example: "SPAWN0#&nbsp;D"), then in output we will have distance to this gate.</li>
+<li><b>Disable Menu</b> - disable stargate menu (when press E).
+<br><span class='small2'><b>Note:</b> if you disable menu, then you can't set address etc.</span></li>
+</ul>
+<center><b>Wire Outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Active</b> - return 1 if gate activated.</li>
+<li><b>Open</b> - return 1 if gate opened.</li>
+<li><b>Inbound</b> - return 1 if gate have inbound connection.
+<br><span class='small2'><b>Note:</b> orlin gate do not have this output.</span></li>
+<li><b>Chevron</b> - return value with number of activated chevrons.
+<br><span class='small2'><b>Note:</b> supergate do not have this output.</span></li>
+<li><b>Chevron Locked</b> - return 1 if this is last chevron and it locked.
+<br><span class='small2'><b>Note:</b> supergate do not have this output.</span></li>
+<li><b>Chevrons [STRING]</b> - return string with status of all chevrons (activated or not), this field should be used for a visual indicator of chevrons activation with e2.
+<br><span class='small2'><b>Note:</b> Supergate, orlin and universe stargates don't have this output.</span></li>
+<li><b>Address List [ARRAY]</b> - return list of all available addresses from this gate for dialling (in array, not include private gates).</li>
+<li><b>Earth Point of Origin</b> - return 1 if will be used earth point of origin (for e2 screens).
+<br><span class='small2'><b>Note:</b> stargate universe, atlantis and supergate don't have this output.</span></li></li>
+<li><b>Dialing Address [STRING]</b> - return current dialling (outbound) or dialled (inbound) address.</li>
+<li><b>Dialing Mode</b> - return dialling mode (not active/slow/fast/nox - -1/0/1/2). inbound always shows as fast.</li>
+<li><b>Dialing Symbol [STRING]</b> - return current dialling symbol, only has an effect in outbound dialling.
+<br><span class='small2'><b>Note:</b> Supergate and orlin stargates don't have this output.</span></li>
+<li><b>Dialed Symbol [STRING]</b> - return current dialled symbol (what locked on chevron).
+<br><span class='small2'><b>Note:</b> Supergate and orlin stargates don't have this output.</span></li>
+<li><b>StarGate Address [STRING]</b> - return current stargate address.</li>
+<li><b>StarGate Group [STRING]</b> - return current stargate group. <span class='small2'>Only with stargate_group_system = 1.</span>
+<br><span class='small2'><b>Note:</b> Universe stargate do not have this output.</span></li>
+<li><b>StarGate Name [STRING]</b> - return current stargate name.</li>
+<li><b>StarGate Private</b> - return current stargate private status.</li>
+<li><b>StarGate Local</b> - return current stargate local status. <span class='small2'>Only with stargate_group_system = 1.</span></li>
+<li><b>StarGate Galaxy</b> - return current stargate galaxy status. <span class='small2'>Only with stargate_group_system = 0.</span>
+<br><span class='small2'><b>Note:</b> Universe stargate do not have this output.</span></li>
+<li><b>StarGate Blocked</b> - return 1 if address is blocked.
+<br><span class='small2'><b>Note:</b> supergate do not have this output.</span></li>
+<li><b>Energy from Address</b> - return required amount of energy from address what you set in input "Get Energy from Address", -1 means gate have energy from dhd/blackhole or you when havn't life support addon.
+<br><span class='small2'><b>Note:</b> Output "Energy from Address" return amount of energy for open stargate, not for keep connection open, also can ouput distance to gate if added option "D" in input.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Additional wire inputs and outputs - Stargate SG1/Infinity</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Additional wire inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Rotate Ring</b> - run the rotation of the ring.</li>
+<li><b>Ring Speed Mode</b> - set ring speed mode, 0 (default) = 50%, -1 = 25%, 1 = 100% (normal), 2 = 150%, 3 = 200%.</li>
+<li><b>Chevron Encode</b> - Encode chevron with current symbol on ring.</li>
+<li><b>Chevron 7 Lock</b> -  lock Chevron 7 with current symbol on ring and open gate if all correct.</li>
+<li><b>Activate chevron numbers [STRING]</b> - specify a string with the activation of all chevrons (active or not), this field can be used to activate the chevrons with e2 in various combinations.</li>
+<li><b>SGC Type</b> - rotate SGC Type connection, also will be chev7 lock in this case, and different sounds.
+<br><span class='small2'><b>Note:</b> this input can be saved with gatespawner.</span></li>
+</ul>
+<center><b>Additional wire outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - show currect symbol letter (what on chevron 7).</li>
+<li><b>Ring Rotation</b> - show ring symbol rotation status, 0 - idle, 1 - clockwise, -1 - counter-clockwise rotation.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Additional wire inputs and outputs - Stargate Movie</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Additional wire inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Chevron Light</b> - enable chevron light when stargate activated.</li>
+<li><b>Classic Mode</b> - enable classic mode for dialling scene.</li>
+<li><b>Rotate Ring</b> - run the rotation of the ring.</li>
+<li><b>Ring Speed Mode</b> - set ring speed mode, 0 (default) = 50%, -1 = 25%, 1 = 100% (normal), 2 = 150%, 3 = 200%.</li>
+<li><b>Chevron Encode</b> - Encode chevron with current symbol on ring.</li>
+<li><b>Chevrons Lock</b> - Lonk all chevrons with current symbol on ring (must take the value from the output "Ring Chev7 Symbol [STRING]") and open gate if all correct.</li>
+<li><b>Activate chevron numbers [STRING]</b> - specify a string with the activation of all chevrons (active or not), this field can be used to activate the chevrons with e2 in various combinations.</li>
+<li><b>SGC Type</b> - rotate ring on inbound connection, also will be chev7 lock in this case and different sounds.
+<br><span class='small2'><b>Note:</b> inputs "Chevron Light", "Classic Mode" and "SGC Type" can be saved with gatespawner.</span></li>
+</ul>
+<center><b>Additional wire outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - show currect symbol letter on chevron what need encode.</li>
+<li><b>Ring Chev7 Symbol [STRING]</b> - show currect symbol letter on chevron 7 (top).</li>
+<li><b>Ring Rotation</b> - show ring symbol rotation status, 0 - idle, 1 - clockwise, -1 - counter-clockwise rotation.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Additional wire inputs and outputs - Stargate Atlantis</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Additional wire inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Turn on ring light</b> - turning on all symbols (light) on the ring.</li>
+<li><b>Activate chevron numbers [STRING]</b> - specify a string with the activation of all chevrons (active or not), this field can be used to activate the chevrons with e2 in various combinations.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Additional wire inputs and outputs - Stargate Universe</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Additional wire inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Rotate Ring</b> - run the rotation of the ring.</li>
+<li><b>Ring Speed Mode</b> - set ring speed mode, 0 (default) = 50%, 1 = 100% (normal).</li>
+<li><b>Encode Symbol</b> - Encode currect symbol on top of ring.</li>
+<li><b>Symbols Lock</b> - Encode last symbol and open gate if all correct.</li>
+<li><b>Inbound Symbols</b> - enable symbols light in inbound connection. 1 - dialled symbols, 2 - all symbols.</li>
+<li><b>Activate chevrons</b> - activate all chevrons light (from 1 to 9).</li>
+<li><b>Activate Symbols</b> - activate all symbols (light).</li>
+</ul>
+<center><b>Additional wire outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - show currect symbol letter (what on top).</li>
+<li><b>Ring Rotation</b> - show ring symbol rotation status, 0 - idle, 1 - clockwise, -1 - counter-clockwise rotation.</li>
+<li><b>StarGate Type [STRING]</b> - return current stargate type. <span class='small2'>Only with stargate_group_system = 1.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Additional wire inputs and outputs - Tollan Stargate</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Additional wire inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activate chevron numbers [STRING]</b> - specify a string with the activation of all chevrons (active or not), this field can be used to activate the chevrons with e2 in various combinations.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Wire inputs and outputs on Stargate Iris Computer</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Iris Control</b> - activate or deactivate iris.</li>
+<li><b>GDO Status</b> - transmit to gdo that code is valid (for e2 chips).</li>
+<li><b>GDO Text [STRING]</b> - transmit text to gdo (for e2 chips).</li>
+<li><b>Auto-close</b> - automatically close iris on incoming connections.</li>
+<li><b>Don't Auto-Open</b> - disable automatic opening of the iris when entered correct code.</li>
+<li><b>Close time</b> - automatically close the iris through a specified number of seconds after entering the correct code.</li>
+</ul>
+<center><b>Wire Outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Incoming Wormhole</b> - returns 1 if this is incoming connection.</li>
+<li><b>Code Status</b> - return 1 if code is correct.</li>
+<li><b>Gate Active</b> - return 1 if gate active.</li>
+<li><b>Received Code</b> - return code what transmitted from gdo through stargate.</li>
+<li><b>Code Description [STRING]</b> - return description of transmitted code.</li>
+<li><b>Iris Active</b> - return 1 if iris activated.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Wire inputs and outputs on Stargate Iris</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activate</b> - if 1 - activate, 0 - deactivate.</li>
+<li><b>Toggle</b> - activate or deactivate iris.</li>
+</ul>
+<center><b>Wire Outputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activated</b> - return 1 if iris activated.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Wire inputs and outputs on DHD's</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Inputs:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Press Button</b> - press button on dhd (for example - with wired keyboard), use "*" for random address.</li>
+<li><b>Disable Menu</b> - disable dhd menu (vgui), so you can dial only by pressing buttons.</li>
+<li><b>Disable Ring Rotation</b> - disable ring rotation with on-button-press feature on dhd's.
+<br><span class='small2'><b>Note:</b> this input exists only on sg1/infinity/concept dhd's. Can be saved with gatespawner.</span></li>
+<li><b>Slow Mode</b> - enables slow dial mode with on-button-press feature on dhd.
+<br><span class='small2'><b>Note:</b> this input exists only on atlantis/city dhd's. Can be saved with gatespawner.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>It's kind of everything. Good luck ;)</b></td>
+</tr>
+</table>
+
+</BODY>
+</HTML>

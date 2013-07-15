@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Звёздные врата с системой групп - Настройки (переменные)</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Звёздные врата с системой групп</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net"><strong>AlexALX</strong></a><br>
+<b>Версия:</b>  SVN<br>
+Создано для игры <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Навигация:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Главная</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ReadMe.html">ReadMe</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>Настройки</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="WireInfo.html">Wire Информация</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="LinuxInfo.html">Для linux серверов</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Видео</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2'><b>Сохранение настроек на сервере:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>Для <b>сохранения настроек на сервере</b>, пропишите название переменной и её значение в файл "garrysmos\cfg\server.cfg".
+<br><span class='small2'><b>Пример:</b> stargate_candial_groups_menu 1</span></td></tr>
+<tr>
+<td class='tbl2'><b>Серверные настройки (переменные):</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+<li><b>stargate_group_system</b> <1/0> - если установить 0, тогда будет использоваться галактическая система набора врат из CAP.
+<br><span class='small2'><b>Примечание:</b> после изменения переменной "stargate_group_system" вы должны подождать 5-10 секунд, пока система врат перезагрузится.</span></li>
+<li><b>stargate_candial_groups_dhd</b> <1/0> - разрешит набор адресов больше 7-ми символов на наборном устройстве (по умолчанию 1). Включая мобильные наборные устройста (как например на джампере и тд). Не влияет на консоли атлантиса и вселенной.</li>
+<li><b>stargate_candial_groups_menu</b> <1/0> - разрешит набор адресов больше 7-ми символов из меню звёздных врат (по умолчанию 1).</li>
+<li><b>stargate_candial_groups_wire</b> <1/0> - разрешить набор адресов больше 7-ми стмволов с помощью wire (по умолчанию 1). Включая ручной режим медленного набора wire.</li>
+<li><b>stargate_sgu_find_range</b> <16000> - дистанция поиска sgu (по умолчанию 16000). Если universe врата очень далеко и тойже группы - тогда вы можете набрать их только используя 8 шевронов. 0 - выключить (разрешить всегда набирать используя 7 шевронов).</li>
+<li><b>stargate_energy_dial</b> <1/0> - включить потребление энергии звёздными вратами.</li>
+<li><b>stargate_energy_dial_spawner</b> <0/1> - если установить в 1 (по умолчанию 0), тогда врата спавненые gatespawner'ом (сервером) нуждаются в энергии тоже.</li>
+<li><b>stargate_different_dial_menu</b> <0/1> - вы можете набирать врата только с наборного устройства (включая мобильные наборные устройства).</li>
+<li><b>stargate_dhd_protect</b> <0/1> - если установить в 1 (по умолчанию 0), тогда игроки не смогут уничтожать наборные устройства.</li>
+<li><b>stargate_dhd_protect_spawner</b> <0/1> - если установить в 1 (по умолчанию 0), тогда игроки не смогут уничтожать наборные устройства созданные gatespawner'ом (сервером).</li>
+<li><b>stargate_dhd_destroyed_energy</b> <1/0> - если установить в 0 (по умолчанию 1), тогда уничтоженные наборные устройства не дают энергию для врат.</li>
+<li><b>stargate_dhd_close_incoming</b> <1/0> - если установить в 0 (по умолчанию 1), тогда нельзя будет закрывать входящие соеденения при помощи наборного устройства (dhd).</li>
+<li><b>stargate_show_inbound_address</b> <2/1/0> - по умолчанию 2, 0 - не показывать входящие адреса на dhd/wire, 1 - не показывать только если врата приватные, 2 - показывать всегда.</li>
+<li><b>stargate_protect</b> <0/1> - если установить в 1 (по умолчанию 0), тогда игроки не смогут уничтожать шевроны звёздных врат.</li>
+<li><b>stargate_protect_spawner</b> <0/1> - если установить в 1 (по умолчанию 0), тогда игроки не смогут уничтожать шевроны звёздных врат созданные gatespawner'ом (сервером).</li>
+<li><b>stargate_block_address</b> <2/1/0> - по умолчанию 2, фукнция блокировки адресов доступна для всех врат, если установить в 1, тогда функция будет доступна только для звёздных врат вселенной, установите 0 для полного отключения функции.</li>
+<li><b>stargate_dhd_letters</b> <1/0> - по умолчанию 1, показывает буквы на наборном устройстве.</li>
+<li><b>stargate_energy_target</b> <1/0> - по умолчанию 1, включает потребление энергии с врат которые вы набрали.</li>
+<li><b>stargate_vgui_glyphs</b> <2/1/0> - показывать символы и буквы в меню звёздных врат, 2 - оба поля (по-умолчанию), 1 - только символы, 0 - только буквы.</li>
+<li><b>stargate_dhd_menu</b> <1/0> - показ меню при нажатии на центральную кнопку наборного устройства (по-умолчанию 1).</li>
+<li><b>stargate_atlantis_override</b> <1/0> - включить возможность переопределения sg1-типа врат, вратами атлантиса (по-умолчанию 1).</li>
+<li><b>stargate_gatespawner_enabled</b> <1/0> - включить gatespawner (по-умолчанию 1).<br><span class='small2'><b>Примечание:</b> необходимо прописать stargate_reload для того чтобы изменения вступили в силу.</span></li>
+<li><b>stargate_dhd_ring</b> <1/0> - включить вращение кольца при нажатии кнопок на dhd (по-умолчанию 1).<br></li>
+<br><b>Подсказка:</b> Напишите в консоли <b>stargate_system_convars</b> для открытия меню редактирования переменных!</td>
+</tr>
+</table>
+
+</BODY>
+</HTML>

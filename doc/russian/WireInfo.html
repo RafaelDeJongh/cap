@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Звёздные врата с системой групп - Wire Информация</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Звёздные врата с системой групп</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net"><strong>AlexALX</strong></a><br>
+<b>Версия:</b>  SVN<br>
+Создано для игры <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Навигация:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Главная</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ReadMe.html">ReadMe</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ConVars.html">Настройки</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>Wire Информация</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="LinuxInfo.html">Для linux серверов</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Видео</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2'><b>Общая информация</b></td>
+</tr>
+<tr>
+<td class='tbl1'>В данном разделе вы найдёте информацию обо всех новых (и некоторых старых) входах и выходах для wire mod.
+<br>
+<br>Вы можете найти несколько примеров e2 скриптов в папке аддона: <b><a href="../../data/Expression2/e2shared/stargate">data\Expression2\e2shared\stargate</a></b>.
+<br>В игре они также доступны в папке <b>e2shared\stargate</b> при выборе какой e2 чип открыть.</td></tr>
+<tr>
+<td class='tbl2'><b>Основные входы и выходы у врат</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Dial Address</b> - набрать адресс старым методом (например с помощью wired keyboard).</li>
+<li><b>Dial String [STRING]</b> - установить адрес, который нужно набрать (string).</li>
+<li><b>Dial Mode</b> - установить режим набора (меденный/быстрый/ноксовый - 0/1/2).
+<br><span class='small2'><b>Примечание:</b> Orlin врата имеют только быстрый и ноксовый набор, супер врата не имеют ноксовый набор.</span></li>
+<li><b>Start String Dial</b> - начать набор с установленым адресом (string) и режимом.</li>
+<li><b>Close</b> - закрыть врата или остановить набор.</li>
+<li><b>Disable Autoclose</b> - выключить автоматическое закрытие врат после прохождение через них.
+<br><span class='small2'><b>Примечание:</b> Orlin врата не имеют этого входа.</span></li>
+<li><b>Refresh List</b> - обновить список доступных врат (для выхода "Address List").</li>
+<li><b>Set Point of Origin</b> - принудительно установить точку отправления врат (вне зависимости наличия dhd), 1 - земная, 2 - абидос.
+<br><span class='small2'><b>Примечание:</b> Этого входа нету у звёздных врат вселенной, атлантис и суперврат.
+<br>А также у врат орлина и толлан увидеть разницу можно только в наборном меню или на e2 экранах.</span></li></li>
+<li><b>Get Energy from Address [STRING]</b> -  когда задан адресс, тогда вы получите на выходе "Enegy from Address" необходимое количество энергии для набора этого адресса, -1 означает что вы имеете энергию от dhd/blackhole или у вас нету life support аддона.
+<br>А также данный вход имеет дополнительные параметр - если добавить после адреса пробел и "D" (например: "SPAWN0#&nbsp;D"), то мы получим дистанцию к этим вратам на выходе.</li>
+<li><b>Disable Menu</b> - отключить меню звёздных врат (при нажатии на E).
+<br><span class='small2'><b>Примечание:</b> если отключить меню, тогда нельзя надать адресс и тд у врат.</span></li>
+</ul>
+<center><b>Wire Выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Active</b> - возвращает 1 если врата активны.</li>
+<li><b>Open</b> - возвращает 1 если врата открыты.</li>
+<li><b>Inbound</b> - возвращает 1 если это входящее соеденение.
+<br><span class='small2'><b>Примечание:</b> Orlin врата не имеют этого выхода.</span></li>
+<li><b>Chevron</b> - возвращает значение с числом активированных шевронов.
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у суперврат.</span></li>
+<li><b>Chevron Locked</b> - возвращает 1 если это последний шеврон и он заблокирован.
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у суперврат.</span></li>
+<li><b>Chevrons [STRING]</b> - возвращает строку со статусом для всех шевронов (активен или нет), это поле например можно использовать для визуального индикатора активации шевронов с помощью e2.
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у supergate, orlin и universe врат.</span></li>
+<li><b>Address List [ARRAY]</b> - возвращает список всех доступных адресов для набора с этих врат (массив, не включает приватные адреса).</li>
+<li><b>Earth Point of Origin</b> - возвращает 1 если будет использована земная точка отправления (для e2 скринов).
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у звёздных врат вселенной, атлантис и суперврат.</span></li></li>
+<li><b>Dialing Address [STRING]</b> - возвращает набираемый адрес (исходящие соеденение) или набранный адрес (входящее соеденение).</li>
+<li><b>Dialing Mode</b> - возвращает режим набора (не активно/медленный/быстрый/нокс - -1/0/1/2). входящие соеденения всегда показываются как быстрый набор.</li>
+<li><b>Dialing Symbol [STRING]</b> - возвращает набираемый символ, имеет эффект только для исходящего соеденения.
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у суперврат и врат orlin'а.</span></li>
+<li><b>Dialed Symbol [STRING]</b> - возвращает набранный символ (что заблокировался на шевроне).
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у суперврат и врат orlin'а.</span></li>
+<li><b>StarGate Address [STRING]</b> - возвращает адрес врат.</li>
+<li><b>StarGate Group [STRING]</b> - возвращает группу врат. <span class='small2'>Только при stargate_group_system = 1.</span>
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у звёздных врат вселенной.</span></li>
+<li><b>StarGate Name [STRING]</b> - возвращает имя врат.</li>
+<li><b>StarGate Private</b> - возвращает приватный статус врат.</li>
+<li><b>StarGate Local</b> - возвращает локальный статус врат. <span class='small2'>Только при stargate_group_system = 1.</span></li>
+<li><b>StarGate Galaxy</b> - возвращает галактический статус врат. <span class='small2'>Только при stargate_group_system = 0.</span>
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у звёздных врат вселенной.</span></li>
+<li><b>StarGate Blocked</b> - возвращает 1 если адрес врат заблокирован.
+<br><span class='small2'><b>Примечание:</b> Этого выхода нету у суперврат.</span></li>
+<li><b>Energy from Address</b> - возвращает количество энергии необходимые для набора адресса из входа "Get Energy from Address", -1 означает что вы имеете энергию от dhd/blackhole или у вас нету life support аддона.
+<br><span class='small2'><b>Причечание:</b> Выход "Energy from Address" выдаёт количество энергии для открытия врат, не для поддержания связи в дальнейшем, а также может выводит дистанцию к вратам, если добавлена опция "D" на входе.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Дополнительные входы и выходы - Stargate SG1/Infinity</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Дополнительные wire входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Rotate Ring</b> - вращать кольцо.</li>
+<li><b>Ring Speed Mode</b> - установить скорость вращения кольца, 0 (по умолчанию) = 50%, -1 = 25%, 1 = 100% (нормальная), 2 = 150%, 3 = 200%.</li>
+<li><b>Chevron Encode</b> - Закодировать шеврон с текущим символом на кольце.</li>
+<li><b>Chevron 7 Lock</b> - Заблокировать шеврон 7 с текущим символом на кольце, и если всё верно - открыть врата.</li>
+<li><b>Activate chevron numbers [STRING]</b> - задать строку с активацией для всех шевронов (активен или нет), это поле можно использовать например для активации шевронов с помощью e2 в разных комбинациях.</li>
+<li><b>SGC Type</b> - Вращать кольцо при входящем соеденении, а также будет анимация блокировки 7 шеврона, и другие звуки.
+<br><span class='small2'><b>Причечание:</b> этот вход может быть сохранён с gatespawner.</span></li>
+</ul>
+<center><b>Дополнительные wire выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - показывает текущую букву символа на кольце (что на 7 шевроне).</li>
+<li><b>Ring Rotation</b> - показывает статус вращения кольца врат, 0 - не вращается, 1 - вращение по часовой стрелке, -1 - вращение притив часовой стрелки.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Дополнительные входы и выходы - Stargate Movie</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Дополнительные wire входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Chevron Light</b> - включить зажигание шеврова (свет) при активации шеврона.</li>
+<li><b>Classic Mode</b> - включить классический режим врат.</li>
+<li><b>Rotate Ring</b> - вращать кольцо.</li>
+<li><b>Ring Speed Mode</b> - установить скорость вращения кольца, 0 (по умолчанию) = 50%, -1 = 25%, 1 = 100% (нормальная), 2 = 150%, 3 = 200%.</li>
+<li><b>Chevron Encode</b> - Закодировать шеврон с текущим символом на кольце.</li>
+<li><b>Chevrons Lock</b> - Заблокировать шевроны с текущим символом на кольце (необходимо брать значение с выхода "Ring Chev7 Symbol [STRING]"), и если всё верно - открыть врата.</li>
+<li><b>Activate chevron numbers [STRING]</b> - задать строку с активацией для всех шевронов (активен или нет), это поле можно использовать например для активации шевронов с помощью e2 в разных комбинациях.</li>
+<li><b>SGC Type</b> - Вращать кольцо при входящем соеденении, а также будет анимация блокировки 7 шеврона и другие звуки.
+<br><span class='small2'><b>Причечание:</b> входы "Chevron Light", "Classic Mode" и "SGC Type" могут быть сохранены с gatespawner.</span></li>
+</ul>
+<center><b>Дополнительные wire выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - показывает текущую букву символа на кольце в зависимости от набираемого шеврона.</li>
+<li><b>Ring Chev7 Symbol [STRING]</b> - показывает текущую букву символа на кольце что на 7 шевроне.</li>
+<li><b>Ring Rotation</b> - показывает статус вращения кольца врат, 0 - не вращается, 1 - вращение по часовой стрелке, -1 - вращение притив часовой стрелки.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Дополнительные входы и выходы - Stargate Atlantis</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Дополнительные wire входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Turn on ring light</b> - зажечь все символы на кольце.</li>
+<li><b>Activate chevron numbers [STRING]</b> - задать строку с активацией для всех шевронов (активен или нет), это поле можно использовать например для активации шевронов с помощью e2 в разных комбинациях.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Дополнительные входы и выходы - Stargate Universe</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Дополнительные wire входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Rotate Ring</b> - вращать кольцо.</li>
+<li><b>Ring Speed Mode</b> - установить скорость вращения кольца, 0 (по умолчанию) = 50%, 1 = 100% (нормальная).</li>
+<li><b>Encode Symbol</b> - Закодировать текущий символ на вратах.</li>
+<li><b>Symbols Lock</b> - Закодировать последний символ на вратах и открыть их если всё верно.</li>
+<li><b>Inbound Symbols</b> - включить зажигания символов при входящем соединении. 1 - набранные символы, 2 - все символы.</li>
+<li><b>Activate chevrons</b> - активировать все шевроны (от 1 до 9).</li>
+<li><b>Activate Symbols</b> - активировать все символы (визуально).</li>
+</ul>
+<center><b>Дополнительные wire выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Ring Symbol [STRING]</b> - показывает текущую букву символа на кольце (что на верху).</li>
+<li><b>Ring Rotation</b> - показывает статус вращения кольца врат, 0 - не вращается, 1 - вращение по часовой стрелке, -1 - вращение притив часовой стрелки.</li>
+<li><b>StarGate Type [STRING]</b> - возвращает тип врат. <span class='small2'>Только при stargate_group_system = 1.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Дополнительные входы и выходы - Tollan Stargate</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Дополнительные wire входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activate chevron numbers [STRING]</b> - задать строку с активацией для всех шевронов (активен или нет), это поле можно использовать например для активации шевронов с помощью e2 в разных комбинациях.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Входы и выходы у Stargate Iris Computer</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Iris Control</b> - активировать или деактивировать iris.</li>
+<li><b>GDO Status</b> - передать на gdo что код верный (для e2 чипов).</li>
+<li><b>GDO Text [STRING]</b> - передать указаный текст на gdo (для e2 чипов).</li>
+<li><b>Auto-close</b> - автоматически закрывать iris при входящем соединении.</li>
+<li><b>Don't Auto-Open</b> - запретить автоматическое открытие iris при верном коде.</li>
+<li><b>Close time</b> - автоматически закрыть iris через указанное количество секунд после введения верного кода.</li>
+</ul>
+<center><b>Wire Выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Incoming Wormhole</b> - возвращает 1 если это входящее соединение.</li>
+<li><b>Code Status</b> - возвращает 1 если введённый код верный.</li>
+<li><b>Gate Active</b> - возвращает 1 если врата активны.</li>
+<li><b>Received Code</b> - возвращает код переданный с gdo через врата.</li>
+<li><b>Code Description [STRING]</b> - возвращает описание введённого кода.</li>
+<li><b>Iris Active</b> - возвращает 1 если iris активировано.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Входы и выходы у Stargate Iris</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activate</b> - если 1 - активировать, 0 - деактивировать.</li>
+<li><b>Toggle</b> - активировать или деактивировать iris.</li>
+</ul>
+<center><b>Wire Выходы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Activated</b> - возвращает 1 если iris активировано.</li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Входы и выходы на наборных устройствах (DHD)</b></td>
+</tr>
+<tr>
+<td class='tbl1'><center><b>Wire Входы:</b></center>
+<ul style='list-style-type:disc'>
+<li><b>Press Button</b> - нажать кнопку на наборном устройсте (например с помощью wired keyboard), используйте "*" для случайного адреса.</li>
+<li><b>Disable Menu</b> - выключить визуальное меню наборного устройства, таким образом набрать адрес можно только с помощью кнопок.</li>
+<li><b>Disable Ring Rotation</b> - выключить вращение кольца при нажатии на кнопках у dhd.
+<br><span class='small2'><b>Примечание:</b> этот вход есть только у sg1/infinity/concept наборных устройств (dhd's). Может быть сохранён с gatespawner.</span></li>
+<li><b>Slow Mode</b> - включает медленый режим набора для наборного устроства при нажатии на кнопку на нём.
+<br><span class='small2'><b>Примечание:</b> этот вход есть только у  atlantis/city наборных устройств (dhd's). Может быть сохранён с gatespawner.</span></li>
+</ul>
+</tr>
+<tr>
+<td class='tbl2'><b>Это вроде всё. Удачи ;)</b></td>
+</tr>
+</table>
+
+</BODY>
+</HTML>

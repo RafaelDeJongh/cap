@@ -1,0 +1,40 @@
+if (not StarGate.CheckModule("ship")) then return end
+include("shared.lua")
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+ENT.Railgunsound = Sound("pulse_weapon/dexgun_flyby1.mp3")
+
+function ENT:Initialize()
+
+	self:SetModel("models/sandeno/naquadah_bottle.mdl")
+	self:SetSolid(SOLID_NONE)
+	self:SetMoveType(MOVETYPE_NONE)
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self.Firing=false
+	self:SetColor(Color(255,255,255,0))
+
+end
+
+function ENT:Think()
+
+	if(self.Firing) then
+		self:Bullets()
+		self:EmitSound(self.Railgunsound,100,100)
+	end
+end
+
+function ENT:Bullets(p)
+
+	local StargateTrace = StarGate.Trace:New(self:GetPos()+self:GetForward()*100,self:GetPos()+self:GetForward() * 10^14, self.Entity:GetOwner());
+
+	bullet = ents.Create("energy_bullet");
+	bullet.Factor = 5;
+	bullet:SetColor(Color(255,255,math.random(75,125),255));
+	bullet:SetOwner(self.Entity);
+	bullet.Cannon = self.Entity;
+	bullet:SetPos(self:GetPos());
+	bullet.Ent = StargateTrace.Entity
+	bullet.EndPos = StargateTrace.HitPos
+	bullet:Spawn();
+
+end

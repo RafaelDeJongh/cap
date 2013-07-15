@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Звёздные врата с системой групп - Описание</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel='stylesheet' href='../styles.css' type='text/css'>
+</head>
+<BODY bgcolor='#ffffff'>
+<table align='center' cellpadding='0' cellspacing='1' width='800' class='tbl-border'>
+<tr>
+<td align='center' class='tbl1'><a href="http://alex-php.net" target="_blank"><img src="../logo.gif" border="0"></a><br>
+  <strong>Звёздные врата с системой групп</strong><br>
+Copyright &copy; 2011-2012 by <a href="http://alex-php.net"><strong>AlexALX</strong></a><br>
+<b>Версия:</b>  SVN<br>
+Создано для игры <strong>Garry's Mod 10</strong><br><br>
+<table align='center' cellpadding='0' cellspacing='1' width='580' class='tbl-border'>
+<tr>
+<td class='tbl2' align='center' colspan='6'><b>Навигация:</b></td>
+</tr>
+<tr>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="../../ReadMe.html">Главная</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<b>ReadMe</b>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="ConVars.html">Настройки</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="WireInfo.html">Wire Информация</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="LinuxInfo.html">Для linux серверов</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+<td class='tbl1' align='center'><img src="../bullet.gif" border="0">&nbsp;<a href="Videos.html">Видео</a>&nbsp;<img src="../bulletb.gif" border="0"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class='tbl2' style='color:red'><b>Пожалуйста обратите внимание:</b></td>
+</tr>
+<tr>
+<td class='tbl1' style='color:red'>Эта документация с аддона <b>Stargate with Group System</b>, не от <b>Carter Addon Pack</b>.
+<br>После того как этот аддон был включён в CAP, эта документация также была включена для информации о wire входах/выходах, настроек и прочего.
+<br>Некоторая информация может быть не актуальной (описание аддона и тд).
+<br>
+<br>Если вы ищите информацию о CAP, тогда <b><a href='../../tac/'>вам сюда</a></b>.</td></tr>
+<tr>
+<td class='tbl2'><b>Описание:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><strong>Система звёздных врат с группами</strong> - это аддон для Garry's Mod 10, который добавляет систему врат с группами, новые wire входы и выходы, а также множество других нововведений и изменений.
+<br>
+<br><b>Баг трекер:</b> <a href="http://sourceforge.net/tracker/?group_id=397542&atid=1649215" target='_blank'>http://sourceforge.net/tracker/?group_id=397542&atid=1649215</a>
+<br><b>Тема поддержки:</b> <a href="http://www.facepunch.com/threads/1163292" target='_blank'>http://www.facepunch.com/threads/1163292</a></td></tr>
+<tr>
+<td class='tbl2'><b>Этот аддон включает в себя:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+
+<ul style='list-style-type:disc'>
+<li>DHD's (наборные устройста) с поддержкой групп: atlantis, sg1, infinity, universe, concept, city.</li>
+<li>Звёздные врата с поддержкой групп: atlantis, infinity, movie, sg1, tollan, universe, orlin.</li>
+<li>Мобильное наборное устройство (Mobile DHD) с поддержкой групповых звёздных врат.</li>
+<li>Новые wire входы и выходы для групповых врат/наборных устройств, и некоторых других устройств.</li>
+<li>Новый медленный набор с функцией блокировки символа на шевроне для sg1, infinity, movie и universe звёздных врат, с поддержкой <b>двух точек отправления</b>!
+<br><span class='small2'>Создайте рядом concept dhd для использования другой точки отправления (также работает с медленным набором для sg1, infinity и movie врат).</span></li>
+<li>Улучшенная On-Button-Press-Chevron-Light-Up функция (при нажатии символа на наборном устройстве - активируется шеврон, отличается от CAP).</li>
+<li>Улучшенная поддержка энергии.</li>
+<li>Диафрагма stargate atlantis и goauld использует энергию.</li>
+<li><b>Символы звёздных врат в наборном меню!</b> Кроме суперврат.</li>
+<li>Серый эффект нестабильной червоточины (при открытии врат) для врат вселенной (universe).</li>
+<li>Локальные врата (на этих вратах вы можете активировать только 7 шевронов и только внутри-галактические соеденения).</li>
+<li>Возможность блокировать адресс для звёздных врат (показываются красным цветом и на них нельзя нажать).</li>
+<li>Карта "gm_stargateworlds_parody_beta3" с плохой графикой, но хорошим gatespawner'ом который использует локальные врата.</li>
+<li>Возможность уничтожать шевроны у звёздных врат (sg1, movie, tollan, atlantis, infinity)!</li>
+<li>Возможность переключать на <b>старую систему врат</b> (Galaxy System) из <b>Carter Addons Pack</b>.</li>
+<li>Очень много баг фиксов для CAP/aVoN кода и другие изменения/возможности.</li>
+<li>Мульти-язычное визуальное меню звёздных врат и некоторые другие вещи (английский, русский, голландский, испанский, немецкий, шведский, словацкий).
+<br><span class='small2'><b>Примечание:</b> для выбора языка используйте команду sg_language (в консоли).
+<br><b>Примечание номер два:</b> звёздные врата с уничноженым шевроном(и) могут быть сохранены с gatespawner!</span>
+<br>
+<br><b>Все врата/наборные устройства находятся в отдельной вкладке - Звёздные врата с системой групп.</b></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='tbl2'><b>Скачивание:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><b>SVN ссылка:</b> (всегда последняя версия!)
+<br><div class='quote'>http://sgwithgroups.svn.sourceforge.net/svnroot/sgwithgroups/before_cap_sg_groups/</div>
+</td>
+</tr>
+<tr>
+<td class='tbl2'><b>Установка и требования:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><b>Для работы аддона требуется обязательное наличие:</b>
+<ul style='list-style-type:disc'>
+<li><b>Carter Addon Pack</b> последней ревизии: <b><a href="http://www.facepunch.com/threads/1162629" target='_blank'>Facepunch thread</a></b></li>
+<li><b>Wire Mod</b> последней ревизии: <b><a href="http://www.wiremod.com/forum/installation-malfunctions-support/4-wiremod-svn-guide.html" target='_blank'>Forum Link</a></b></li>
+</ul>
+<b>Установка аддона:</b>
+<br><b><a href="http://tortoisesvn.net/" target='_blank'>TortoiseSVN</a> Клиент необходим!</b>
+<ol>
+<li>Заходите в папку с аддонами для garry's mod (Steam\steamapps\&lt;ваш_ник&gt;\garrysmod\garrysmod\addons\).</li>
+<li>Правый клик по пустому месту, выберите <b>SVN Извлечь</b>.<br>
+<li>Введите ссылку "http://sgwithgroups.svn.sourceforge.net/svnroot/sgwithgroups/before_cap_sg_groups/" (без " ) и нажмите ОК.</li>
+<li>Подождите пока закончиться загрузка (при возникновении ошибок нажимает "SVN Обновить" по появившейся папке).</li>
+<li>Проверте наличие папки "before_cap_sg_groups" в папке с аддонами, а также наличия файла info.txt внутри папки.</li>
+<li>Если папка есть, тогда <strong>установка завершена</strong>, вы можете запускать garry's mod.</li>
+</ol>
+<b>Если вы желаете использовать с modelclipping addon (от <b><a href="http://www.facepunch.com/threads/1021461" taeget='_blank'>Deathmaker</a></b>, не CAP версии) тогда:</b>
+<ol>
+<li>Удалите папку и все файлы в папке: cap\lua\entities\event_horizon из CAP аддона.</li>
+<li>Перейдите в папку before_cap_sg_groups\lua\entities\event_horizon\.<br>
+<li>Удалите файл init.lua и cl_init.lua.</li>
+<li>Переименуйте файл init.lua_mc в init.lua и файл cl_init.lua_mc в cl_init.lua.</li>
+<li>Наслаждайтесь ;).</li>
+</ol>
+<b>Внимание! Если вы держите сервер - тогда этот аддон должен быть обязательно на стороне клиента! Иначе возникнут некоторые неполадки.</b></td>
+</tr>
+<tr>
+<td class='tbl2'><b>ЕСЛИ АДДОН НЕ РАБОТАЕТ:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><ul style='list-style-type:disc'>
+<li>Правильно ли вы установили аддон - переместите папку before_cap_sg_groups в папку с аддонами для GMod.</li>
+<li><b>ИМЯ ПАПКИ ДОЛЖНО БЫТЬ ОБЯЗАТЕЛЬНО "before_cap_sg_groups" (без " )! ИНАЧЕ ВОЗНИКНУТ ПРОБЛЕМЫ С СОВМЕСТИМОСТЬЮ С CAP!</b><br>
+<li><b>НА MAC OS ИМЯ ПАПКИ ДОЛЖНО БЫТЬ ОБЯЗАТЕЛЬНО "z_cap_sg_groups" (без " )!</b> А также не должен быть установлен старый аддон звёздных врат (avon).</li>
+<li>Если вы держите linux сервер - тогда прочитайте файл "<a href="LinuxInfo.html">для linux серверов</a>".</li>
+<li>Если у вас есть старый аддон супер врат (supergate) - удалите его! Этот аддон уже устарел и не совместим с последним CAP. К томуже у него есть свои супер врата.</li>
+<li>Если у вас есть аддон Stargate Extras или Stargate GDO - удалите их! Они не совместимы с CAP, и уже включены в него.</li>
+<li>Также возможно могут создавать конфликты и другие старые аддоны для stargate.</li>
+<li>Вы имеете последний Carter Addon Pack? Если нет - тогда скачайте.</li>
+<li>У вас последний GMOD со стима? Если нет - тогда скачайте или купите его. Крайне не рекомендую качать что либо с торрентов - там всегда устаревшые версии (и нормальной работы аддонов не видать).
+<br><b>Примечание:</b> SG-Mod 0.95 поддерживается и будет работать с этим аддоном.</li>
+</ul></td>
+</tr>
+<tr>
+  <td class='tbl2'><b>Обновление аддона:</b></td>
+</tr>
+<tr>
+  <td class='tbl1'><ol>
+<li>Заходите в папку с аддонами для garry's mod (Steam\steamapps\<ваш_ник>\garrysmod\garrysmod\addons\).</li>
+<li>Правый клик по папке "before_cap_sg_groups", выберите <b>SVN Обновить</b>.<br>
+<li>Подождите пока закончиться обновление.</li>
+<li><strong>Обновление завершено</strong>, вы можете запускать garry's mod.</li>
+</ol><b>А также не забываем обновлять папки cap, cap_resource и wire!</b></td>
+</tr>
+<tr>
+  <td class='tbl2'><b>Как работает система групп:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+<ul style='list-style-type:disc'>
+<li>Если звёздные врата соеденяются с вратами тойже группы - используется 7 шевронов, и формула адресса следующая: адрес врат (например: 123456) + точка отправления ("#"). Итак набраный адрес будет "123456#". А также если sgu соеденятся с sgu - тогда расстояние должно быть меньше чем серверная переменная "stargate_sgu_find_range", иначе вы не соеденитесь.</li>
+<li>Если не universe врата соеденяются с не universe вратами и имеют разные группы - используется 8 шевронов, и формула адреса будет такой: адрес врат (например: 123456) + группа врат, только первый символ (например: P@) + точка отправления ("#"). Например набранный адрес будет "123456P#".</li>
+<li>Если не universe врата соеденяются с universe вратами - используется 9 шевронов, и формула адреса будет следующей: адрес врат (например: 123456) + тип врат (например: U@#). И получится: "123456U@#".</li>
+<li>Если universe врата соеденяются с не universe вратами - используется 9 шевронов, и формула адреса будет следующей: адрес врат (например: 123456) + группа врат (например: M@) + "#". Получится "123456M@#".</li>
+<li>Если universe врата соеденяются с universe вратами тойже группы и дистанция между ними больше серверной переменной "stargate_sgu_find_range" - используется 8 шевронов, формула: адрес врат (например: 123456) + тип врат, только первый символ (например: U@#) + точка отправления ("#"). Получится "123456U#".</li>
+<br><b>Примечание:</b> звёздные врата вселенная (universe) могут иметь символ "#" в группе (но символ "#" может быть только последним).</li>
+</ul>
+</tr>
+<tr>
+  <td class='tbl2'><b>Группы и типы у звёздных врат:</b></td>
+</tr>
+<tr>
+<td class='tbl1'><b>Названия групп</b> (символы): M@ - Milky Way, P@ - Pegasus, I@ - Ida (asgard), O@ - Ori galaxy, другие символы - Custom.
+<br>
+<br>Звёздные врата вселенной имеют <b>тип вместо группы</b>, и не могут иметь одинаковый тип на разных вратах, за исключением общих типов.
+<br>
+<br><b>Типы врат вселенной:</b> U@# - вселенная (общий), DST - судьба, SGI - установщик врат (общий), другие типы - Custom.
+<br>
+<br><b>Также вы можете добавить собственные группы и типы</b>, просто отредактируйте этот файл:
+<br><i>before_cap_sg_groups\lua\stargate\vgui\custom_groups.lua</i>
+<br>Вы можете вписать описание и русском, но только тогда <b>сохряняйте файл в utf8</b> (если вы используете notepad++ тогда вам необходимо также сконвертировать все символы в utf8).</span>
+</td>
+</tr>
+<tr>
+  <td class='tbl2'><b>Как работает система энергии:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+<ul style='list-style-type:disc'>
+<li>Система энергии работает только если вы имеете Life Support (версия 2 или 3) и Resource Distribution аддоны.</li>
+<li>Если переменная stargate_energy_dial установлена в 1 (по умолчанию) тогда все врата нуждаются в энергии для соеденения.</li>
+<li>Для соеденения с вратами тойже группы (7 шевронов) хватит энергии от наборного устройства (dhd) или нескольких наквадах генераторов.</li>
+<li>Звёздные врата вселенная (universe) могут питатся от рампы для соеденения с 7 шевронами.</li>
+<li>Для соеденения с вратами другой группы (8 шевронов) хватит энергии от одного или двух ZPM.</li>
+<li>Для соеденения с вратами вселенной (9 шевронов) необходимо иметь несколько ZPM.</li>
+<li>Чем больше расстояние между вратами - тем больше энергии необходимо.</li>
+</ul>
+</tr>
+<tr>
+  <td class='tbl2'><b>Что другого в моей версии "On-Button-Press-Chevron-Light-Up" в отличии от CAP:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+<ul style='list-style-type:disc'>
+<li>Набираемые врата активируются только после того как вы нажмёте кнопку "DIAL" на наборном устройстве (dhd).</li>
+<li>Для наборных устройст sg1/concept/infinity (dhd's) использованы новые звуки.</li>
+<li>С моей версией On-Button-Press звуки работают немного подругому.</li>
+<li>Добавлен таймер авто-выключения (20 сек) - если игрок нажал кнопки но не активировал врата, они будут выключены через 20 секунд.</li>
+<li>Исправлено множество багов.</li>
+</ul>
+</tr>
+<tr>
+  <td class='tbl2'><b>Различия в работе блокировки последнего шеврона:</b></td>
+</tr>
+<tr>
+<td class='tbl1'>
+<ul style='list-style-type:disc'>
+<li>В моей системе есть 2 различных варианта блокировки последнего шеврона: если аддресс верный (но врата также могут быть заняты), и если аддресс не верный.</li>
+<li>Последний шеврон зажигается только если введён верный адресс (за исключением нехватки энергии), но врата также могут быть заняты.</li>
+<li>Последший шеврон у sg1/infinity/movie врат имеет анимацию блокировки даже при неверном аддресе, но не зажигается.</li>
+<li>Можно также набрать аддрес своих врат, тогда вы увидите что они заняты.</li>
+<li>Центральная кнопка на дхд зажигается только при верном адрессе (за исключением нехватки энергии).</li>
+</ul>
+</tr>
+<tr>
+  <td class='tbl2'><b>Известные баги:</b></td>
+</tr>
+<tr>
+  <td class='tbl1'><ul style='list-style-type:disc'>
+<li>Два символа (F и X) не зажигаются (визуально) на звёздных вратах вселенная (universe), потому что эти символы не существуют на модели врат (есть только на наборном устройстве).</li>
+<li>На медленных компьютерах могут быть проблемы с функцией блокировки символов (на верху) с звёздными вратами sg1/movie/infinity/universe.</li>
+<li>Звёздные врата вселенной также имеют проблемы с вращением врат на слабых компьютерах.</li>
+<li>Поиск звёздных врат по именам чувствителен к регистру для не английских символов (включая русских).</li>
+<li>Быстрый режим набора врат не может вызвать врата, набераемые другими вратами в режиме медленого набора.</li>
+</ul>О багах можно сообщать в <b><a href="http://facepunch.com/threads/1163292">эту тему</a></b> или на <b><a href="http://sourceforge.net/tracker/?group_id=397542&atid=1649215">баг трекер</a></b>.</td>
+</tr>
+<tr>
+  <td class='tbl2'><b>Авторы, копирайты и лицензия:</b></td>
+</tr>
+<tr>
+  <td class='tbl1'><ul style='list-style-type:disc'>
+<li>Avon - stargate addon.</li>
+<li>Carter Addon Pack team - модели, материалы, некоторый код и другое.</li>
+<li>AlexALX - stargate with group system.</li>
+</ul>
+<center><b>Лицензия:</b><pre>
+<div class='quote' style="width:500px;text-align:left;">/*
+	Stargate with Group System for GarrysMod10
+	Copyright (C) 2007 aVoN
+	Copyright (C) 2011-2012 AlexALX
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/</div></pre></center></td>
+</tr>
+</table>
+
+</BODY>
+</HTML>
