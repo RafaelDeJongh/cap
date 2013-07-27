@@ -30,9 +30,3 @@ Rights other persons may have either in the work itself or in how the work is us
 Full License
 
 For more information read the full license here: http://creativecommons.org/licenses/by-nc-nd/3.0/legalcode
-
-Boba Fett's License
-
-Most of the Textures in Carter Addon Pack are created and licensed in every .VMT by Boba Fett, these textures are protected under a Proprietary Copyright License.
-Therefore You are not allowed to alter, distribute or use this work for commercial purposes. Without Permission of the author "Boba Fett" Also Known As "Rafaël De Jongh"
-

@@ -2,7 +2,7 @@ Terms and Conditions
 
 1. Acceptance of Terms
 
-The content and web pages available at sg-carterpack.com, are owned and operated by The Carter Addon Pack Team, Inc. (“CAP”), and is accessed by you under the Terms and Conditions described below.
+The content and web pages available at sg-carterpack.com, are owned and operated by The Carter Addon Pack Team, Inc. ("CAP"), and is accessed by you under the Terms and Conditions described below.
 
 Please read these Terms and Conditions carefully before using the Carter Addon Pack or its services. By accessing CAP or using any part of the Content or Site you agree to become bound by these Terms and Conditions. If you do not agree to all the terms and conditions, then you may not access Carter Addon Pack, use the content or any services offered. You are not allowed to alter, distribute or use this work for commercial purposes. Without full permission from the Carter Addon Pack Team. CAP's acceptance is expressly conditioned upon your assent to all these Terms and Conditions, to the exclusion of all other terms; if these terms and conditions are considered an offer by CAP, acceptance is expressly limited to these terms.
 
@@ -14,7 +14,7 @@ We may revise these terms from time to time, and the most current version will b
 
 By agreeing to these Terms and Conditions you agree to give Carter Addon Pack full permission to collect the following information:
 
-The Forum (“sg-carterpack.com”)
+The Forum ("sg-carterpack.com")
 
 When registering on the site, you may be asked to enter the following:
 
@@ -25,9 +25,9 @@ When registering on the site, you may be asked to enter the following:
 
 We require you to fill in this information to give you access to our Site and Forum. We use a special Steam Web API Plugin to verify that you have an Legal Copy of the game Garry's Mod until you are allowed to post on the Forum. So that we can restrict our site for only Legal user's and leave out any piracy or spam bots that could register and do damage on the Forum.
 
-The Addon (“Carter Addon Pack in Garry's Mod”)
+The Addon ("Carter Addon Pack in Garry's Mod")
 
-When first playing the Carter Addon Pack you will be prompt to accept the Terms and Conditions from within the Game (“Garry's Mod”). When these terms are accepted you will be able to proceed playing with CAP. When not accepted all the Content will be locked until you agree to all the Terms and Conditions.
+When first playing the Carter Addon Pack you will be prompt to accept the Terms and Conditions from within the Game ("Garry's Mod"). When these terms are accepted you will be able to proceed playing with CAP. When not accepted all the Content will be locked until you agree to all the Terms and Conditions.
 
 Carter Addon Pack will gather the user's Steam ID information and send this to our databases, that will check with the Steam Web API If your copy of Garry's Mod is an Legal or Illegal Copy.
 When the database gets a False response from the Steam Web API all content will be locked until the person purchase a Legal version of Garry's Mod trough the Steam Store.
@@ -84,7 +84,7 @@ to abuse, harass, threaten, impersonate or intimidate other Carter Addon Pack us
 to post or transmit any content that is infringing, libelous, defamatory, obscene, pornographic, abusive, offensive, profane, or otherwise violates any law or right of any third party, or content that contains homophobia, ethnic slurs or religious intolerance;
 for any illegal or unauthorized purpose. If you are an international user, you agree to comply with all local laws regarding online conduct and acceptable content;
 to post or transmit any communication or solicitation designed or intended to obtain password, account, or private information from any Carter Addon Pack user;
-to create or submit unwanted email (“Spam”) to any other Cap user's or any URL;
+to create or submit unwanted email ("Spam") to any other Cap user's or any URL;
 to violate any laws in your jurisdiction (including but not limited to copyright laws);
 to submit stories or comments linking to multi-level marketing schemes
 attempt to impersonate another user or person;
