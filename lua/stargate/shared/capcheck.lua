@@ -97,7 +97,7 @@ for _,v in pairs(engine.GetAddons()) do
 end
 
 if (not StarGate.WorkShop) then
-	if (not table.HasValue( GetAddonList(true), "cap" ) or (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ))) then
+	if (not table.HasValue( GetAddonList(true), "cap" ) or (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master") )) then
 		if (status != "Error") then
 			status = "Error";
 			Msg("Status: "..status.."\n")
@@ -118,7 +118,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Error: Workshop version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.\\nOr remove git/svn version.");
 	end
 else
-	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ))) then
+	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master" ) )) then
 		if (status != "Error") then
 			status = "Error";
 			Msg("Status: "..status.."\n")
@@ -166,13 +166,29 @@ Msg("--------------------------\n")
 
 function StarGate_Group.ShowError(ply)
 	for k,v in pairs(StarGate_Group.ErrorMSG) do
-		if (k==1) then MsgN("================================"); MsgN("Carter Addon Pack Error:"); MsgN("-------");
-		ply:SendLua( "MsgN(\"================================\")"); ply:SendLua("MsgN(\"Carter Addon Pack Error:\")"); ply:SendLua("MsgN(\"-------\")");
-		else MsgN("-------"); ply:SendLua("MsgN(\"-------\")"); end
-		Msg(v:Replace("\\n","\n").."\n"); ply:SendLua("Msg(\""..v.."\\n\")");
+		if (k==1) then
+			MsgN("================================");
+			MsgN("Carter Addon Pack Error:"); MsgN("-------");
+			if (IsValid(ply)) then
+				ply:SendLua( "MsgN(\"================================\")");
+				ply:SendLua("MsgN(\"Carter Addon Pack Error:\")"); ply:SendLua("MsgN(\"-------\")");
+			end
+		else
+			MsgN("-------");
+			if (IsValid(ply)) then
+				ply:SendLua("MsgN(\"-------\")");
+			end
+		end
+		Msg(v:Replace("\\n","\n").."\n");
+		if (IsValid(ply)) then
+			ply:SendLua("Msg(\""..v.."\\n\")");
+		end
 	end
-	MsgN("================================"); ply:SendLua("MsgN(\"================================\")");
-	ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Error, check your console\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	MsgN("================================");
+	if (IsValid(ply)) then
+		ply:SendLua("MsgN(\"================================\")");
+		ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Error, check your console\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	end
 end
 
 if (status == "Error") then

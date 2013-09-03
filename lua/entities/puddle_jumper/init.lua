@@ -325,12 +325,17 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			end
 		end
 	end
-	if(self.Shields.Depleted) then
-		self:SetWire("Shield Enabled",-1);
-		self:SetWire("Shield Strength",self.Shields.Strength);
+	if (IsValid(self.Shields)) then
+		if(self.Shields.Depleted) then
+			self:SetWire("Shield Enabled",-1);
+			self:SetWire("Shield Strength",self.Shields.Strength);
+		else
+			self:SetWire("Shield Enabled",self.Shields:Enabled());
+			self:SetWire("Shield Strength",self.Shields.Strength);
+		end
 	else
-		self:SetWire("Shield Enabled",self.Shields:Enabled());
-		self:SetWire("Shield Strength",self.Shields.Strength);
+		self:SetWire("Shield Enabled",0);
+		self:SetWire("Shield Strength",0);
 	end
 	self:SetWire("Health",self.EntHealth)
 end

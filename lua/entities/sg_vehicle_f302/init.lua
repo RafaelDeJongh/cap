@@ -183,8 +183,12 @@ end
 function ENT:OnRemove()
 
 	self.BaseClass.OnRemove(self);
-	self.Turret.Firing = false;
-	self.Turret2.Firing = false;
+	if (IsValid(self.Turret)) then
+		self.Turret.Firing = false;
+	end
+	if (IsValid(self.Turret2)) then
+		self.Turret2.Firing = false;
+	end
 	self.Wheels:Remove();
 	self.Cockpit:Remove();
 	self.CockpitAnim:Remove();
@@ -218,7 +222,7 @@ function ENT:Use(p)
 			else
 				self.CockpitAnim:Fire("setanimation","close","0")
 				timer.Simple(1, function() self.CockpitOpen = false; end)
-				self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup);
+				if (self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
 			end
 		end
 		self.NextUse.Use = CurTime() + 1;
@@ -242,7 +246,7 @@ function ENT:Exit(kill)
 	self.BaseClass.Exit(self,kill);
 	self.CockpitAnim:Fire("setanimation","open","0")
 	timer.Simple(1, function() self.CockpitOpen = true; end)
-	if (IsValid(self.Cockpit)) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
+	if (IsValid(self.Cockpit) and self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
 
 end
 
@@ -270,14 +274,18 @@ function ENT:Think() --####### Now let me think... @RononDex
 			umsg.String(self.WeaponType);
 		umsg.End();
 	else
-		self.Turret.Firing = false;
-		self.Turret2.Firing = false;
+		if (IsValid(self.Turret)) then
+			self.Turret.Firing = false;
+		end
+		if (IsValid(self.Turret2)) then
+			self.Turret2.Firing = false;
+		end
 	end
 
 	self.BaseClass.Think(self);
 
 	if(IsValid(self.Pilot) and self.Bullets and not self.Missile) then
-		if(self.Inflight) then
+		if(self.Inflight and IsValid(self.Turret) and IsValid(self.Turret2)) then
 			if((self.Pilot:KeyDown(self.Vehicle,"FIRE"))and(not(self.TurretDisabled))) then
 				self.Turret.Firing = true;
 				self.Turret2.Firing = true;
@@ -335,7 +343,7 @@ function ENT:Think() --####### Now let me think... @RononDex
 				end
 			else
 				if(not(self.MissileDisable)) then
-					if(self.Turret.Firing) then return end;
+					if(IsValid(self.Turret) and self.Turret.Firing) then return end;
 					self.Bullets = false;
 					self.WeaponType = "Missiles";
 					self.Missile = true;

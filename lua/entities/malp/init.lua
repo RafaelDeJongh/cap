@@ -161,9 +161,9 @@ function ENT:Think()
 	if(IsValid(self.gate)) then
 		if(self.gate.IsOpen) then
 			self.gate.EventHorizon.AutoClose=false
-			if(IsValid(self.pgate)) then
+			if(IsValid(self.pgate) and IsValid(self.pgate.EventHorizon)) then
 				self.pgate.EventHorizon.AutoClose=false
-				if(self.pgate.EventHorizon.Target==self.gate.EventHorizon) then --Only if the player is near the gate that is active with the malps gate
+				if(IsValid(self.pgate.EventHorizon.Target) and self.pgate.EventHorizon.Target==self.gate.EventHorizon) then --Only if the player is near the gate that is active with the malps gate
 					self.SignalLost=false
 					UpdateRenderTarget(self.RTCamera)
 				end

@@ -55,7 +55,7 @@ end
 --############ What happens when we take damage, what shall happen when we've taken a lot of damage @RononDex
 function ENT:OnTakeDamage(dmg)
 
-	if(not(self.Shields:Enabled()) or self.Shields.Depleted) then
+	if(not IsValid(self.Shields) or not self.Shields:Enabled() or self.Shields.Depleted) then
 		if(not(self.WaterDamage)) then
 			--###### The wobble's back
 			if(self.Inflight) then

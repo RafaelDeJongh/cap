@@ -230,10 +230,10 @@ function ENT:DeactivateStargate(ignore)
 		if(IsValid(self.Target)) then
 			self.Target:Close(ignore);
 			self.Target.NoxDialingType = false;
-			self.Target.Target = nil;
 			self.Target.OnButtLock = false;
 			self.Target.DialledAddress = {};
 			table.Empty(self.Target.DialledAddress);
+			self.Target.Target = nil;
 		end
 		self.NoxDialingType = false;
 		self:Close(ignore);

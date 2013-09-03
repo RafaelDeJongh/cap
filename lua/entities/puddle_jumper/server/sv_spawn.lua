@@ -146,17 +146,17 @@ end
 
 function ENT:RemoveAll()
 
-	for _,v in pairs(self.Buttons) do
+	for _,v in pairs(self.Buttons or {}) do
 		if IsValid(v) then
 			v:Remove();
 		end
 	end
 
-	if IsValid(self.Door) then
+	if IsValid(self.Door or {}) then
 		self.Door:Remove();
 	end
 
-	if IsValid(self.BulkDoor) then
+	if IsValid(self.BulkDoor or {}) then
 		self.BulkDoor:Remove();
 	end
 end
