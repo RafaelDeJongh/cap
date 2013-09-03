@@ -21,7 +21,9 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Next Ship", "Prev Ship", "Spawn Ship", "Toggle Doors"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Next Ship", "Prev Ship", "Spawn Ship", "Toggle Doors"});
+	end
 
 	self.ShipCount = 0;
 	self.ShipClass = {

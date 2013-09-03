@@ -55,7 +55,7 @@ function SWEP:Deploy()
 	if (IsValid(self.Weapon)) then
 		self.Weapon:SendWeaponAnim(ACT_VM_DRAW); -- Animation
 	end
-	if SERVER then self.Owner:EmitSound(self.Sounds.Deploy,90) end;
+	if SERVER and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Deploy,90) end;
 end
 
 --################### Shoot @aVoN

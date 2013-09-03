@@ -20,7 +20,9 @@ function ENT:Initialize()
 			self.phys:SetMass(math.Clamp(self.Weight, 1, 500))
 		end
 	end
-	self.Inputs = Wire_CreateInputs(self.Entity, {"ZPos", "Hovermode", "Add to Z", "Activate", "AirbrakeX" , "AirbrakeY" , "AirbrakeZ" , "GlobalBrake"})
+	if (WireAddon) then
+		self.Inputs = Wire_CreateInputs(self.Entity, {"ZPos", "Hovermode", "Add to Z", "Activate", "AirbrakeX" , "AirbrakeY" , "AirbrakeZ" , "GlobalBrake"})
+	end
 	self.CanUse = true
 	self.IsGravcontroller = true
 	self.PitchStartup = 0

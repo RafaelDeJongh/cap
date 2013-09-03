@@ -24,6 +24,11 @@ end
 
 function EFFECT:Think()
 
+	if (not IsValid(self.Parent)) then
+		self:Remove();
+		return false
+	end
+
 	if self.Parent:GetNetworkedBool("StopBuble") and self.Grow then
 		self.Grow = false;
 		self.Multiply = 0.5;

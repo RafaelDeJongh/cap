@@ -29,7 +29,9 @@ function ENT:Initialize()
 		phys:Wake();
 	end
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Entity [ENTITY]"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Entity [ENTITY]"});
+	end
 
 	self.WireShoot = nil;
 	self.WireEnt = nil;

@@ -57,7 +57,9 @@ function ENT:Initialize()
 
 	self.Entity:StartMotionController();
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
+	end
 
 	self.Yaw = 0;
 	self.Pitch = 0;

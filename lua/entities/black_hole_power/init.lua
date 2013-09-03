@@ -95,8 +95,10 @@ function ENT:StartTouch(ent)
 		if(phys:IsValid()) then
 			local mass = phys:GetMass()
 
-			if (ent:IsPlayer() or ent:IsNPC()) then
+			if (ent:IsPlayer()) then
 				ent:Kill()
+			elseif (ent:IsNPC()) then
+				ent:SetNPCState(NPC_STATE_DEAD);
 			else
 				if (not ent:CreatedByMap() and not ent.GateSpawnerSpawned) then
 					ent:Remove()

@@ -23,7 +23,9 @@ local DESTROYABLE=true
 
 function ENT:Initialize()   --############ @  Llapp
     self:SetNetworkedInt("health",HEALTH);
-    self.Inputs = WireLib.CreateInputs( self.Entity, {"Active", "AsuranShield","HyperDrive","Vector [VECTOR]","X","Y","Z","Entity [ENTITY]"}); -- "Iris",
+    if (WireAddon) then
+    	self.Inputs = WireLib.CreateInputs( self.Entity, {"Active", "AsuranShield","HyperDrive","Vector [VECTOR]","X","Y","Z","Entity [ENTITY]"}); -- "Iris",
+    end
 	self.Entity:SetModel("models/Iziraider/asuransat/asuran_sat.mdl") ;
 	--self.Entity:SetColor(Color(95, 155, 209, 255));
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;

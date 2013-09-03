@@ -24,7 +24,9 @@ function ENT:Initialize()
 	if (CAF and CAF.GetAddon("Resource Distribution")) then self.HaveRD3 = true end --RD3 needed!
 
 	if self.HaveRD3 then -- Life Support
-		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Water","Steam","Energy","ZPH","Oxygen"});
+		if (WireAddon) then
+			self.Outputs = WireLib.CreateOutputs( self.Entity, {"Water","Steam","Energy","ZPH","Oxygen"});
+		end
 
 		self.netid = CAF.GetAddon("Resource Distribution").CreateNetwork(self);
 		self:SetNetworkedInt( "netid", self.netid );
@@ -87,7 +89,7 @@ end
 -----------------------------------RESOURCE DISTRIBUTION----------------------------------
 
 function ENT:Think()
-	if self.HaveRD3 then
+	if self.HaveRD3 and self.RDEnt.GetNetTable then
 		local nettable = self.RDEnt.GetNetTable(self.netid);
 		if nettable.resources then
 			if nettable.resources.water then
@@ -156,7 +158,7 @@ function ENT:OnRemove()
 		self.Light = nil;
 	end
 
-	if self.HaveRD3 then
+	if self.HaveRD3 and CAF then
 		CAF.GetAddon("Resource Distribution").UnlinkAllFromNode(self.netid)
 		CAF.GetAddon("Resource Distribution").RemoveRDEntity(self)
 		if not (WireAddon == nil) then Wire_Remove(self.Entity) end

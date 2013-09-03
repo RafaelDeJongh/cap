@@ -67,8 +67,10 @@ function ENT:Initialize()
 		"Name A [STRING]","Name B [STRING]","Name C [STRING]","Name D [STRING]","Name E [STRING]","Name F [STRING]","Name G [STRING]","Name H [STRING]"
 	}
 
-	self.Outputs = WireLib.CreateOutputs( self.Entity, outputs);
-	self.Inputs = WireLib.CreateInputs( self.Entity, inputs);
+	if (WireAddon) then
+		self.Outputs = WireLib.CreateOutputs( self.Entity, outputs);
+		self.Inputs = WireLib.CreateInputs( self.Entity, inputs);
+	end
 
 	self.Toggle = {
 		[1] = 0,
@@ -401,6 +403,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Entity:Remove();
 		return
 	end
+
+	if not Ent.EntityMods then 	self.Entity:Remove(); return end
 
 	local dupeInfo = Ent.EntityMods.DestConDupeInfo
 

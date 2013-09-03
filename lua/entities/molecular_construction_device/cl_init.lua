@@ -87,40 +87,42 @@ function ENT:MolecularParticle()
 		local mathe2 = math.random(-60,60)
 		local mathe3 = math.random(-60,60)
         self.Ent = self.Entity:GetNWEntity("CreatingEntity");
-		local pos = self.Ent:GetPos() + self.Ent:GetUp()*mathe1 + self.Ent:GetRight()*mathe2 + self.Ent:GetForward()*mathe3;
-        local angle = (self.Ent:GetPos() - pos):GetNormalized()*((math.abs(mathe1) + math.abs(mathe2) + math.abs(mathe3)*5))
-	    local pt = self.Emitter:Add("sprites/gmdm_pickups/light",pos);
-	    pt:SetVelocity(angle);
-	    pt:SetDieTime(1);
-	    pt:SetAirResistance(250)
-	    pt:SetStartAlpha(85);
-	    pt:SetEndAlpha(255);
-	    pt:SetStartSize(3);
-	    pt:SetEndSize(0.4);
-	    pt:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
-	    pt:VelocityDecay(false);
-	    self.Emitter:Finish();
+        if (IsValid(self.Ent)) then
+			local pos = self.Ent:GetPos() + self.Ent:GetUp()*mathe1 + self.Ent:GetRight()*mathe2 + self.Ent:GetForward()*mathe3;
+	        local angle = (self.Ent:GetPos() - pos):GetNormalized()*((math.abs(mathe1) + math.abs(mathe2) + math.abs(mathe3)*5))
+		    local pt = self.Emitter:Add("sprites/gmdm_pickups/light",pos);
+		    pt:SetVelocity(angle);
+		    pt:SetDieTime(1);
+		    pt:SetAirResistance(250)
+		    pt:SetStartAlpha(85);
+		    pt:SetEndAlpha(255);
+		    pt:SetStartSize(3);
+		    pt:SetEndSize(0.4);
+		    pt:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
+		    pt:VelocityDecay(false);
+		    self.Emitter:Finish();
 
-		local size = math.random(0.5,0.7);
-		local pt2 = self.Emitter2:Add("sprites/gmdm_pickups/light",self.Ent:GetPos());
-	    pt2:SetDieTime(0.2);
-	    pt2:SetAirResistance(150)
-	    pt2:SetStartAlpha(0);
-	    pt2:SetEndAlpha(255);
-	    pt2:SetStartSize(size);
-	    pt2:SetEndSize(size);
-	    pt2:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
-	    pt2:VelocityDecay(false);
-		self.Emitter2:Finish();
+			local size = math.random(0.5,0.7);
+			local pt2 = self.Emitter2:Add("sprites/gmdm_pickups/light",self.Ent:GetPos());
+		    pt2:SetDieTime(0.2);
+		    pt2:SetAirResistance(150)
+		    pt2:SetStartAlpha(0);
+		    pt2:SetEndAlpha(255);
+		    pt2:SetStartSize(size);
+		    pt2:SetEndSize(size);
+		    pt2:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
+		    pt2:VelocityDecay(false);
+			self.Emitter2:Finish();
 
-		local dynlight2 = DynamicLight(0);
-		dynlight2.Pos = self.Ent:GetPos() - self.Ent:GetUp()*10;
-		dynlight2.Size = 200;
-		dynlight2.Decay = 300;
-		dynlight2.R = 155;
-		dynlight2.G = 35;
-		dynlight2.B = 0;
-		dynlight2.DieTime = CurTime()+3;
+			local dynlight2 = DynamicLight(0);
+			dynlight2.Pos = self.Ent:GetPos() - self.Ent:GetUp()*10;
+			dynlight2.Size = 200;
+			dynlight2.Decay = 300;
+			dynlight2.R = 155;
+			dynlight2.G = 35;
+			dynlight2.B = 0;
+			dynlight2.DieTime = CurTime()+3;
+		 end
     end
 end
 

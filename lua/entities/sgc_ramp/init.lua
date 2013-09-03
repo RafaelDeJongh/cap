@@ -8,7 +8,9 @@ AddCSLuaFile("shared.lua")
 ENT.CDSIgnore = true;
 
 function ENT:Initialize()
-    self.Inputs = WireLib.CreateInputs( self.Entity, {"Activation Alarm", "Smoke"});
+	if (WireAddon) then
+   		self.Inputs = WireLib.CreateInputs( self.Entity, {"Activation Alarm", "Smoke"});
+    end
 	self.Entity:SetModel("models/Zup/ramps/sgc_ramp.mdl") ;
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS );

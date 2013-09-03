@@ -43,7 +43,9 @@ function ENT:Initialize()
 	self.Immunity = false;
 	self.IsEnabled = false;
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Active"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Active"});
+	end
 
 end
 

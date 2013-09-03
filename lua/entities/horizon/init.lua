@@ -60,7 +60,9 @@ function ENT:Initialize()
 	--self.Entity:SpawnCovers()
 	--self.Entity:SpawnMissiles()
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire", "Release Covers", "Engine", "HitPos1 [VECTOR]", "HitPos2 [VECTOR]", "HitPos3 [VECTOR]", "HitPos4 [VECTOR]", "HitPos5 [VECTOR]", "HitPos6 [VECTOR]"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire", "Release Covers", "Engine", "HitPos1 [VECTOR]", "HitPos2 [VECTOR]", "HitPos3 [VECTOR]", "HitPos4 [VECTOR]", "HitPos5 [VECTOR]", "HitPos6 [VECTOR]"});
+	end
 
 end
 

@@ -27,8 +27,10 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
-	self.Outputs = WireLib.CreateOutputs( self.Entity, {"Charged % [NORMAL]"});
+	if WireAddon then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
+		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Charged % [NORMAL]"});
+	end
 
 	self.WireShoot = nil;
 	self.WireEnt = nil;
@@ -37,7 +39,7 @@ function ENT:Initialize()
 
 	self.APC = nil;
 	self.APCply = nil;
-	self.Target = NULL;
+	self.Target = Vector(0,0,0);
 	self.Power = 0;
 
 	local ChargingTime = 8;

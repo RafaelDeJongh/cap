@@ -25,7 +25,9 @@ function ENT:Initialize()
 	self.IsJamming = true;
 	self.Allow = {};
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Active"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Active"});
+	end
 
 end
 

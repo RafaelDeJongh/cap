@@ -223,14 +223,18 @@ if (CLIENT) then
 	        local p = LocalPlayer();
 
 			-- that checks mean if cap installed client-side
-			if (#file.Find("addons/cap/ver.txt","GAME") >= 1) then
+			if (#file.Find("addons/cap/ver.txt","GAME") >= 1 or StarGate.WorkShop) then
 		        -- AlexALX Stats, DO NOT EDIT --
-		     	local fil = file.Read("addons/cap/ver.txt","GAME")
-		     	local cap_ver = 0;
-				if fil then
-					local hddversion = tonumber(fil)
-					if hddversion then
-						cap_ver = hddversion;
+		        local cap_ver = 0;
+		        if (StarGate.WorkShop) then
+		        	cap_ver = StarGate.WorkShopVer;
+		        else
+			     	local fil = file.Read("addons/cap/ver.txt","GAME")
+					if fil then
+						local hddversion = tonumber(fil)
+						if hddversion then
+							cap_ver = hddversion;
+						end
 					end
 				end
 				local HTMLTest = vgui.Create("HTML");
@@ -238,7 +242,7 @@ if (CLIENT) then
 				HTMLTest:SetSize(0, 0);
 				StarGate.GroupSystem = StarGate.GroupSystem or 1;
 				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..cap_ver.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()));
-
+                /* removed?
 				-- Llapp stats
 		        http.Fetch("http://www.sg-carterpack.com/libs/sid.php?id="..p:SteamID(), function(contents)
 			        if(contents == "")then return end
@@ -247,7 +251,7 @@ if (CLIENT) then
 					    timer.Create("Cap_NotLegal_Window"..LocalPlayer():EntIndex(), 60, 0, function() CAP_NotLegal() end);
 						p:ConCommand("$luarun")
 				    end
-			    end);
+			    end); */
 		    end
 		end
 	end

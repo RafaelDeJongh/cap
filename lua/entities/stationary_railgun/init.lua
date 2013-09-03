@@ -27,8 +27,10 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE)
 	self.Entity:StartMotionController();
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Reload [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
-	self.Outputs = WireLib.CreateOutputs( self.Entity, {"Ammo"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Reload [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
+		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Ammo"});
+	end
 
 	self.Driver = NULL;
 

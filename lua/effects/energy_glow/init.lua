@@ -31,7 +31,7 @@ function EFFECT:Init( data )
 	self.LifeTime = CurTime()+data:GetMagnitude();
 
 	self.GlowScale = 0;
-	self.LastPos = self.Parent:LocalToWorld(self.LocalPos);
+	if (IsValid(self.Parent)) then self.LastPos = self.Parent:LocalToWorld(self.LocalPos); end
 	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*100000,Vector(1,1,1)*100000);
 end
 

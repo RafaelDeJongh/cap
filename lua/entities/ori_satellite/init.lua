@@ -18,8 +18,10 @@ ENT.Sounds={
 
 function ENT:Initialize()
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire", "Active", "Shield", "Vector [VECTOR]","Entity [ENTITY]"});
-	self.Outputs = WireLib.CreateOutputs( self.Entity, {"Shield Status", "Weapon Status", "Health"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire", "Active", "Shield", "Vector [VECTOR]","Entity [ENTITY]"});
+		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Shield Status", "Weapon Status", "Health"});
+	end
 
 	self.Entity:SetModel("models/Iziraider/ori_sat/ori_sat.mdl");
 

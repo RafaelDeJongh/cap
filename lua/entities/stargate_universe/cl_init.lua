@@ -153,11 +153,13 @@ function ENT:Draw()
 	render.SetMaterial(self.ChevronSprite);
 	local col = Color(self.ChevronColor.r,self.ChevronColor.g,self.ChevronColor.b,50); -- Decent please -> Less alpha
 	local col2 = Color(self.ChevronColor.r,self.ChevronColor.g,self.ChevronColor.b,40); -- Decent please -> Less alpha
-	for i=1,18 do
-		if(self.Entity:GetNWBool("chevron"..i,false)) then
-			local endpos = self.Entity:GetNetworkedEntity("GateLights",self.Gate):LocalToWorld(self.SpritePositions[i]);
-			if StarGate.LOSVector(EyePos(), endpos, LocalPlayer(), 10) then
-				render.DrawSprite(endpos,24,24,col);
+	if (IsValid(self.Gate)) then
+		for i=1,18 do
+			if(self.Entity:GetNWBool("chevron"..i,false)) then
+				local endpos = self.Entity:GetNetworkedEntity("GateLights",self.Gate):LocalToWorld(self.SpritePositions[i]);
+				if StarGate.LOSVector(EyePos(), endpos, LocalPlayer(), 10) then
+					render.DrawSprite(endpos,24,24,col);
+				end
 			end
 		end
 	end

@@ -63,7 +63,7 @@ function SWEP:SVPrimaryAttack(fast)
 	-- http://www.garrysmod.com/bugs/view.php?id=802 and http://www.garrysmod.com/bugs/view.php?id=801
 	self.Owner:SetNetworkedEntity("zat",self.Weapon);
 	-- Tracer and shot
-	timer.Simple(delay,function() self:DoShoot() end);
+	timer.Simple(delay,function() if IsValid(self) then self:DoShoot(); end end);
 end
 
 --################### Start a target-Trace @aVoN
@@ -152,7 +152,7 @@ function SWEP:DoShoot()
 	end
 	--################### Hiteffect
 	if(trace.Hit and not trace.HitSky and not (trace.Entity and trace.Entity:IsValid())) then
-		self:StunEffect(_,trace.HitPos+trace.HitNormal*10,0); -- Nothing hit - Just to zapping on the e.g. the wall
+		self:StunEffect(NULL,trace.HitPos+trace.HitNormal*10,0); -- Nothing hit - Just to zapping on the e.g. the wall
 	end
 	--################### Check for near objects - The will get stunned too
 	targets = self:FindNearEnts(targets);

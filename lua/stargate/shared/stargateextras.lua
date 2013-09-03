@@ -9,7 +9,8 @@ end
 
 function StarGate.GetEntityCentre(entity)
    if(entity == nil or not IsValid(entity)) then
-      error("Entity passed to GetEntityCentre(entity) cannot be nil.\n")
+      Msg("Entity passed to GetEntityCentre(entity) cannot be nil.\n")
+      return
    end
 
    return entity:LocalToWorld(entity:OBBCenter())
@@ -43,7 +44,8 @@ end
 
 function StarGate.GetEntityCentre2(entity) -- Get the centre of the gate
   if(entity == nil) then
-    error("Entity passed to GetEntityCentre(entity) cannot be nil.\n")
+    Msg("Entity passed to GetEntityCentre(entity) cannot be nil.\n")
+    return
   end
 
   local min,max = entity:WorldSpaceAABB()

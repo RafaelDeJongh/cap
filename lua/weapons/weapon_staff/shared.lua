@@ -62,6 +62,7 @@ end
 
 --################### Muzzleflash @aVoN
 function SWEP:Muzzle()
+	if (not IsValid(self.Owner)) then return end
 	-- Muzzle
 	local fx = EffectData();
 	fx:SetScale(0);

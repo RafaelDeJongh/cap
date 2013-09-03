@@ -69,7 +69,7 @@ function ENT:OnRemove()
 	if(timer.Exists(str)) then
 		timer.Destroy(str);
 	end
-	if(self.Parent and self.Parent:IsValid()) then
+	if(self.Parent and self.Parent:IsValid() and self.Parent.Missiles) then
 		if(self.Parent.Missiles[self.Entity]) then -- Only decrease, if we haven't already
 			self.Parent.MissileCount = self.Parent.MissileCount-1; -- Decrease count
 			self.Parent.Missiles[self.Entity] = nil;

@@ -84,8 +84,8 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay + 1 )
 		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-		timer.Simple(self.Primary.Delay+1, function() SendCode(self) end)
-		timer.Simple(2, function() self:SetNWString("gdo_textdisplay",self.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")) end);
+		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self) end end)
+		timer.Simple(2, function() if IsValid(self) then self:SetNWString("gdo_textdisplay",self.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")) end end);
 		timer.Simple(self.Primary.Delay+5, function() if (IsValid(self) and not self.Stand) then self:SetNWString("gdo_textdisplay", "GDO") end end);
 	end
 end

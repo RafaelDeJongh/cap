@@ -169,14 +169,16 @@ function ENT:DiallAllGates(dakara)
 		end);
 
 		timer.Create("Autoclose"..self:EntIndex(),15,1,function()
-			self.DialGate:EmergencyShutdown(); -- different methods or gates wont close, hope it will work
-			self.DialGate:AbortDialling();
-			self.DialGate:DeactivateStargate(true);
-			for _,v in pairs(self.IncomingGates) do
-				if IsValid(v) then
-					v:EmergencyShutdown();
-					v:AbortDialling();
-					v:DeactivateStargate(true);
+			if (IsValid(self.DialGate)) then
+				self.DialGate:EmergencyShutdown(); -- different methods or gates wont close, hope it will work
+				self.DialGate:AbortDialling();
+				self.DialGate:DeactivateStargate(true);
+				for _,v in pairs(self.IncomingGates) do
+					if IsValid(v) then
+						v:EmergencyShutdown();
+						v:AbortDialling();
+						v:DeactivateStargate(true);
+					end
 				end
 			end
 		end);

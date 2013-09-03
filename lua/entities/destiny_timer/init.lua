@@ -28,8 +28,10 @@ function ENT:Initialize()
 
 	self.Entity:SetUseType(SIMPLE_USE);
 
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Count","Reset","Minutes","Seconds"});
-	self.Outputs = WireLib.CreateOutputs( self.Entity, {"End", "Close Stargate","Minutes","Seconds"});
+	if (WireAddon) then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Count","Reset","Minutes","Seconds"});
+		self.Outputs = WireLib.CreateOutputs( self.Entity, {"End", "Close Stargate","Minutes","Seconds"});
+	end
 
 	self.Count = true;
 	self.Minutes = 0;

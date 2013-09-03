@@ -8,7 +8,9 @@ AddCSLuaFile("shared.lua")
 ENT.CDSIgnore = true;
 
 function ENT:Initialize()
-    self.Inputs = WireLib.CreateInputs( self.Entity, {"Activation Alarm","Smoke Mode","Lightning Mode","Make Lightning"});
+	if (WireAddon) then
+   		self.Inputs = WireLib.CreateInputs( self.Entity, {"Activation Alarm","Smoke Mode","Lightning Mode","Make Lightning"});
+    end
 	self.Entity:SetModel("models/zsdaniel/icarus_ramp/icarus_ramp.mdl") ;
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS );

@@ -389,27 +389,35 @@ function ENT:FireMissiles()
 				if((self.MissileCount) < (self.MaxMissiles) and self.MissileMade) then
 					if(self.On==0) then
 						self.On = 1;
-						self:FireMissile(self.M1:GetPos());
-						if((self.M1)and(self.M1:IsValid())) then
-							self.M1:Remove();
+						if (IsValid(self.M1)) then
+							self:FireMissile(self.M1:GetPos());
+							if((self.M1)and(self.M1:IsValid())) then
+								self.M1:Remove();
+							end
 						end
 					elseif(self.On==1) then
 						self.On = 2;
-						self:FireMissile(self.M2:GetPos());
-						if((self.M2)and(self.M2:IsValid())) then
-							self.M2:Remove();
+						if (IsValid(self.M2)) then
+							self:FireMissile(self.M2:GetPos());
+							if((self.M2)and(self.M2:IsValid())) then
+								self.M2:Remove();
+							end
 						end
 					elseif(self.On==2) then
 						self.On = 3;
-						self:FireMissile(self.M3:GetPos());
-						if((self.M3)and(self.M3:IsValid())) then
-							self.M3:Remove();
+						if (IsValid(self.M3)) then
+							self:FireMissile(self.M3:GetPos());
+							if((self.M3)and(self.M3:IsValid())) then
+								self.M3:Remove();
+							end
 						end
 					elseif(self.On==3) then
 						self.On = 0;
-						self:FireMissile(self.M4:GetPos());
-						if((self.M4)and(self.M4:IsValid())) then
-							self.M4:Remove();
+						if (IsValid(self.M4)) then
+							self:FireMissile(self.M4:GetPos());
+							if((self.M4)and(self.M4:IsValid())) then
+								self.M4:Remove();
+							end
 						end
 						self.MissileMade = false;
 					end
@@ -557,7 +565,7 @@ function ENT:TriggerInput(k,v) --######### Wire Inputs @ RononDex
 end
 
 function ENT:SpawnMissile() --############### Spawn Missile Props @RononDex
-
+	if (not IsValid(self.RocketClamps)) then return end
 	local pos = self:GetPos()+self:GetUp()*-40
 
 	local m1 = ents.Create("prop_physics")

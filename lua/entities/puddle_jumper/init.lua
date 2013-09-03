@@ -284,44 +284,46 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			end
 		end
 
-		if((self.Pilot:KeyDown(self.Vehicle,"SPD"))and(self.CanOpenPods)) then
-			self:TogglePods()
-		end
+		if (IsValid(self.Pilot)) then
+			if((self.Pilot:KeyDown(self.Vehicle,"SPD"))and(self.CanOpenPods)) then
+				self:TogglePods()
+			end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"DHD")) then
-			self:OpenDHD(self.Pilot) -- Open DHD for pilot
-		end
+			if(self.Pilot:KeyDown(self.Vehicle,"DHD")) then
+				self:OpenDHD(self.Pilot) -- Open DHD for pilot
+			end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"CLOAK")) then
-			self:ToggleCloak()
-		end
+			if(self.Pilot:KeyDown(self.Vehicle,"CLOAK")) then
+				self:ToggleCloak()
+			end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"SHIELD")) then
-			self:ToggleShield()
-		end
+			if(self.Pilot:KeyDown(self.Vehicle,"SHIELD")) then
+				self:ToggleShield()
+			end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"HOVER")) then
-			if(self.NextUse < CurTime()) then
-				if(not self.HoverAlways) then
-					self.HoverAlways = true;
-					self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: ON");
-				else
-					self.HoverAlways = false;
-					self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: OFF");
+			if(self.Pilot:KeyDown(self.Vehicle,"HOVER")) then
+				if(self.NextUse < CurTime()) then
+					if(not self.HoverAlways) then
+						self.HoverAlways = true;
+						self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: ON");
+					else
+						self.HoverAlways = false;
+						self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: OFF");
+					end
+					self.NextUse = CurTime() + 1;
 				end
-				self.NextUse = CurTime() + 1;
 			end
-		end
 
-		if(not(self.epodo)) then
-			if(self.Pilot:KeyDown(self.Vehicle,"DOOR")) then
-				self:ToggleDoor()
+			if(not(self.epodo)) then
+				if(self.Pilot:KeyDown(self.Vehicle,"DOOR")) then
+					self:ToggleDoor()
+				end
 			end
-		end
 
-		if(self.AllowActivation) then
-			if(self.Pilot:KeyDown(self.Vehicle,"EXIT")) then
-				self:ExitJumper()
+			if(self.AllowActivation) then
+				if(self.Pilot:KeyDown(self.Vehicle,"EXIT")) then
+					self:ExitJumper()
+				end
 			end
 		end
 	end

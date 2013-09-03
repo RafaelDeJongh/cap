@@ -25,7 +25,9 @@ function ENT:Initialize()
 
 	self.IsOn = false;
 	self.Radius = math.random(600, 800);
-	self.Inputs = WireLib.CreateInputs( self.Entity, {"Activate"});
+	if WireAddon then
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Activate"});
+	end
 
 end
 
