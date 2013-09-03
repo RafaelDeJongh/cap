@@ -27,7 +27,7 @@ StarGate.HTTP = {
 	VERSION = "http://stargatepack.googlecode.com/svn/help/VERSION.TXT",
 	VERSION_LOGO = "http://gmod.daggeringcats.com/stargate/version.php",
 	GMOD = "http://stargatepack.googlecode.com/svn/help/GMOD.TXT",
-	VER = "http://carterspack.svn.sourceforge.net/svnroot/carterspack/cap/ver.txt",
+	VER = "https://raw.github.com/RafaelDeJongh/cap/master/ver.txt",
 	SITE = "http://www.sg-carterpack.com",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
 	CREDITS = "https://carterspack.svn.sourceforge.net/svnroot/carterspack/cap/tac/credits.txt"
@@ -177,11 +177,11 @@ end);
 
 function StarGate.InstalledOnClient()
 	local addons = GetAddonList(true);
-	/*local ws_addons = {}
+	local ws_addons = {}
 	for _,v in pairs(engine.GetAddons()) do
 		if (v.mounted) then table.insert(ws_addons, v.title); end
-	end*/
-	--if (table.HasValue(ws_addons,"Stargate - Base Code")) then return true end
+	end
+	if (table.HasValue(ws_addons,"Stargate Carter Addon Pack")) then return true end
 	if (table.HasValue(addons,"cap") or table.HasValue(addons,"cap_resources") or table.HasValue(addons,"cap resources")) then return true end
 	return false;
 end

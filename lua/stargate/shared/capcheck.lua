@@ -96,44 +96,44 @@ for _,v in pairs(engine.GetAddons()) do
 	if (v.mounted) then table.insert(ws_addonlist, v.title); end
 end
 
-//if (not StarGate.WorkShop) then
-	if (not cap_ver or cap_ver==0 or cap_ver<400 and (game.SinglePlayer() or SERVER)) then
+if (not StarGate.WorkShop) then
+	if (not table.HasValue( GetAddonList(true), "cap" ) or (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ))) then
+		if (status != "Error") then
+			status = "Error";
+			Msg("Status: "..status.."\n")
+		end
+		MsgN("Error: Carter Addon Pack is wrong installed.\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.")
+		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is wrong installed.\\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.");
+	elseif (not cap_ver or cap_ver==0 or cap_ver<402 and (game.SinglePlayer() or SERVER)) then
 		status = "Error";
 		Msg("Status: "..status.."\n")
 		MsgN("Error: The file of addon version is corrupt.\nPlease remove and redownload file: cap/ver.txt.")
 		table.insert(StarGate_Group.ErrorMSG, "The file of addon version is corrupt.\\nPlease remove and redownload file cap/ver.txt.");
-	end if (cap_ver==0 or not table.HasValue( GetAddonList(true), "cap" ) or (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ))) then
+	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
 			Msg("Status: "..status.."\n")
 		end
-		MsgN("Error: Carter Addon Pack is wrong installed.")
-		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is wrong installed.");
-	end /*if (table.HasValue( ws_addonlist, "Carter Addon Pack - Base" ) or table.HasValue( ws_addonlist, "Carter Addon Pack - Base Code" )) then
-		if (status != "Error") then
-			status = "Error";
-			Msg("Status: "..status.."\n")
-		end
-		MsgN("Error: Workshop version of Carter Addon Pack installed.\nPlease remove it for prevent possible problems.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Workshop version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.");
+		MsgN("Error: Workshop version of Carter Addon Pack installed.\nPlease remove it for prevent possible problems.\nOr remove git/svn version.")
+		table.insert(StarGate_Group.ErrorMSG, "Error: Workshop version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.\\nOr remove git/svn version.");
 	end
 else
-	if (not table.HasValue( ws_addonlist, "StarGate CAP - Base Code" )) then
+	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			Msg("Status: "..status.."\n")
 		end
-		MsgN("Error: Please install CAP Base Code Addon.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Please install CAP Base Content Addon.");
-	end if (not table.HasValue( ws_addonlist, "StarGate CAP - Base Content" )) then
+		MsgN("Error: Please download CAP resources folder from git/svn.")
+		table.insert(StarGate_Group.ErrorMSG, "Error: Please download CAP resources folder from git/svn.");
+	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( GetAddonList(true), "cap" )) then
 		if (status != "Error") then
 			status = "Error";
 			Msg("Status: "..status.."\n")
 		end
-		MsgN("Error: Please install CAP Base Content Addon.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Please install CAP Base Content Addon.");
+		MsgN("Error: Git/svn version of Carter Addon Pack installed.\nPlease remove it for prevent possible problems.\nOr remove workshop version.")
+		table.insert(StarGate_Group.ErrorMSG, "Error: Git/svn version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.\\nOr remove workshop version.");
 	end
-end      */
+end
 
 if (VERSION<159) then
 	if (status != "Error") then
