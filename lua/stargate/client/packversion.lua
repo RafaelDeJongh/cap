@@ -4,23 +4,23 @@
 ]]--
 
 function StarGate.Update_Check(Panel)
-	local LAYOUT = Language.GetMessage("stargate_credits_01");
+	local LAYOUT = SGLanguage.GetMessage("stargate_credits_01");
 	local GREEN = Color(0,255,0,255);
 	local ORANGE = Color(255,128,0,255);
 
 	if(StarGate.HasInternet) then
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		-- VGUI:SetHelp("credits");
-		VGUI:SetTopic(Language.GetMessage("stargate_credits_01"));
-		VGUI:SetText(Language.GetMessage("stargate_credits_01"));
+		VGUI:SetTopic(SGLanguage.GetMessage("stargate_credits_01"));
+		VGUI:SetText(SGLanguage.GetMessage("stargate_credits_01"));
 		VGUI:SetImage("icon16/star.png");
 		VGUI:SetURL(StarGate.HTTP.CREDITS);
 		Panel:AddPanel(VGUI);
 
-		Panel:Help(Language.GetMessage("stargate_credits_02", StarGate.HTTP.BUGS));
+		Panel:Help(SGLanguage.GetMessage("stargate_credits_02", StarGate.HTTP.BUGS));
 		local VGUI = vgui.Create("SHelpButton",Panel);
-		VGUI:SetTopic(Language.GetMessage("stargate_credits_13"));
-		VGUI:SetText(Language.GetMessage("stargate_credits_13"));
+		VGUI:SetTopic(SGLanguage.GetMessage("stargate_credits_13"));
+		VGUI:SetText(SGLanguage.GetMessage("stargate_credits_13"));
 		VGUI:SetImage("icon16/exclamation.png");
 		VGUI:SetURL(StarGate.HTTP.BUGS);
 		Panel:AddPanel(VGUI);
@@ -34,19 +34,19 @@ function StarGate.Update_Check(Panel)
 		Panel:Help("");
 
 		if (StarGate.LATEST_VERSION == 0) then
-			Panel:Help(Language.GetMessage("stargate_credits_03")):SetTextColor(ORANGE);
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_03")):SetTextColor(ORANGE);
 		elseif (StarGate.CURRENT_VERSION == 0) then
-			Panel:Help(Language.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
 		elseif (StarGate.LATEST_VERSION == 0 and StarGate.CURRENT_VERSION == 0) then
-			Panel:Help(Language.GetMessage("stargate_credits_01")):SetTextColor(ORANGE);
-			Panel:Help(Language.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_01")):SetTextColor(ORANGE);
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
 		else
 			if (StarGate.CURRENT_VERSION >= StarGate.LATEST_VERSION) then
-				Panel:Help(Language.GetMessage("stargate_credits_05").." "..StarGate.CURRENT_VERSION.." :)"):SetTextColor(GREEN);
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_05").." "..StarGate.CURRENT_VERSION.." :)"):SetTextColor(GREEN);
 				VGUImg:SetImage("gui/update_checker/cap_is")
 			else
-				Panel:Help(Language.GetMessage("stargate_credits_06", StarGate.CURRENT_VERSION, StarGate.LATEST_VERSION)):SetTextColor(ORANGE);
-				Panel:Help(Language.GetMessage("stargate_credits_07"));
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_06", StarGate.CURRENT_VERSION, StarGate.LATEST_VERSION)):SetTextColor(ORANGE);
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_07"));
 				VGUImg:SetImage("gui/update_checker/cap_not")
 			end
 		end
@@ -73,14 +73,14 @@ function StarGate.Update_Check(Panel)
 		Panel:AddPanel(VGUImg);
 		Panel:Help("");
 
-		Panel:Help(Language.GetMessage("stargate_credits_08"));
-		Panel:CheckBox(Language.GetMessage("stargate_credits_09"),"cl_has_internet"):SetToolTip(Language.GetMessage("stargate_credits_10"));
+		Panel:Help(SGLanguage.GetMessage("stargate_credits_08"));
+		Panel:CheckBox(SGLanguage.GetMessage("stargate_credits_09"),"cl_has_internet"):SetToolTip(SGLanguage.GetMessage("stargate_credits_10"));
 	end
 
 	Panel:Help("");
-	Panel:Help(Language.GetMessage("stargate_credits_11"));
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_11"));
 	Panel:Help("");
-	Panel:Help(Language.GetMessage("stargate_credits_12"));
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_12"));
 	Panel:Help("Creative Commons Attribution-NonCommercial-NoDerivs");
 	Panel:Help("3.0 Unported License.");
 end
@@ -91,7 +91,7 @@ function CAP_Outdated()
 		local UpdateFrame = vgui.Create("DFrame");
 		UpdateFrame:SetPos(ScrW()-540, 100);
 		UpdateFrame:SetSize(440,130);
-		UpdateFrame:SetTitle(Language.GetMessage("stargate_updater_01"));
+		UpdateFrame:SetTitle(SGLanguage.GetMessage("stargate_updater_01"));
 		UpdateFrame:SetVisible(true);
 		UpdateFrame:SetDraggable(true);
 		UpdateFrame:ShowCloseButton(true);
@@ -118,11 +118,11 @@ function CAP_Outdated()
 			surface.SetDrawColor( 50, 50, 50, 255 )
 			surface.DrawOutlinedRect( 0, 0, UpdateFrame:GetWide(), UpdateFrame:GetTall() )
 
-			draw.DrawText(Language.GetMessage("stargate_updater_02",StarGate.CURRENT_VERSION,StarGate.LATEST_VERSION).."\n"..Language.GetMessage("stargate_updater_03"), "ScoreboardText", 220, 30, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
+			draw.DrawText(SGLanguage.GetMessage("stargate_updater_02",StarGate.CURRENT_VERSION,StarGate.LATEST_VERSION).."\n"..SGLanguage.GetMessage("stargate_updater_03"), "ScoreboardText", 220, 30, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
 		end;
 
 		local close = vgui.Create("DButton", UpdateFrame);
-		close:SetText(Language.GetMessage("stargate_updater_04"));
+		close:SetText(SGLanguage.GetMessage("stargate_updater_04"));
 		close:SetPos(340, 95);
 		close:SetSize(80, 25);
 		close.DoClick = function (btn)
@@ -193,7 +193,9 @@ function CAP_TAC()
 		no:SetPos(625, TACFrame:GetTall()-50);
 		no:SetSize(140, 30);
 		no.DoClick = function (btn)
-		LocalPlayer():ConCommand("$luarun");
+			if (IsValid(LocalPlayer())) then
+				LocalPlayer():ConCommand("$luarun");
+			end
 			RunConsoleCommand("cl_TAC_agree",2);
 			TACFrame:Close();
 	end

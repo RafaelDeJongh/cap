@@ -1,6 +1,8 @@
 include('shared.lua');
-ENT.Category = Language.GetMessage("entity_weapon_cat");
-ENT.PrintName = Language.GetMessage("entity_ori_satellite");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_weapon_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_ori_satellite");
+end
 
 ENT.GlowSprite = Material("effects/multi_purpose_noz"); //MaterialFromVMT doesn't support changing render mode of sprities! @Mad
 ENT.Col = Color(255,85,0,50);

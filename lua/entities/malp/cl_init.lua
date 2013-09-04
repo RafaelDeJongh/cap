@@ -1,6 +1,8 @@
 include("shared.lua")
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_malp");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_malp");
+end
 local MAXDIST = 5000
 local KBD = StarGate.KeyBoard:New("MALP")
 --Navigation
@@ -75,6 +77,7 @@ local fnt = {
 surface.CreateFont(FONT, fnt)
 
 local function RenderMALPHud()
+	if (not IsValid(LocalPlayer())) then return end
 	local p = LocalPlayer();
 	local malp = p:GetNWEntity("MALP")
 	local pos = p:GetPos()

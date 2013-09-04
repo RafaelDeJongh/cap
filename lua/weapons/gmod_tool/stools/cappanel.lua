@@ -2,11 +2,11 @@
 	Console
 	Copyright (C) 2011  Madman07
 */
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_console");
+TOOL.Name=SGLanguage.GetMessage("stool_console");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/MarkJaw/ancient_console/console.mdl";
@@ -44,7 +44,7 @@ end
 
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="cappanel_model",Category="",Models=self.Models});
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"cappanel_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cappanel_autoweld");
 end
 
 TOOL:Register();

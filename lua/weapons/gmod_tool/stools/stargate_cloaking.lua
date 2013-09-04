@@ -17,10 +17,10 @@
 */
 
 --################# Header
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech"
-TOOL.Name=Language.GetMessage("stool_cloak");
+TOOL.Name=SGLanguage.GetMessage("stool_cloak");
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
@@ -149,9 +149,9 @@ function TOOL:ControlsPanel(Panel)
 	Panel:CheckBox("Visible for Owner","stargate_cloaking_immunity"):SetToolTip("When this is enabled, the owner of the cloaking generator can always\nsee his cloaked props");
 	Panel:CheckBox("Phase Shifting","stargate_cloaking_phase_shift"):SetToolTip("Makes all cloaked props nocollide with anything but world");
 	Panel:CheckBox("Cloak Attached","stargate_cloaking_attached"):SetToolTip("If selected, every prop attached to this will get cloaked (Works like the Duplicator), if not only the one in the radius")
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"stargate_cloaking_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_cloaking_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"stargate_cloaking_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_cloaking_autolink"):SetToolTip("Autolink this to resouce using Entity?");
 	end
 end
 

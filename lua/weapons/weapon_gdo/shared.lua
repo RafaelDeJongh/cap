@@ -1,4 +1,4 @@
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 ------------------------------------------------
 --Author Info
 ------------------------------------------------
@@ -6,8 +6,10 @@ SWEP.Author             = "Rothon"
 SWEP.Contact            = "steven@facklerfamily.org"
 SWEP.Purpose            = "Sends IDC through stargates"
 SWEP.Instructions       = "Right click to set, Left click to send"
-SWEP.PrintName = Language.GetMessage("weapon_misc_gdo");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_gdo");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 ------------------------------------------------
 
 list.Set("CAP.Weapon", SWEP.PrintName, SWEP);

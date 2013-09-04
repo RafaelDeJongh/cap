@@ -16,6 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 include("shared.lua");
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
 ENT.Glow = StarGate.MaterialFromVMT(
 	"DroneSprite",
 	[["UnLitGeneric"
@@ -27,7 +28,9 @@ ENT.Glow = StarGate.MaterialFromVMT(
 		"$vertexcolor" 1
 	}]]
 );
-language.Add("drone",Language.GetMessage("drone_kill"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("drone",SGLanguage.GetMessage("drone_kill"));
+end
 
 --################### Init @aVoN
 function ENT:Initialize()

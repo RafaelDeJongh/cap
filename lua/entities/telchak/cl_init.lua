@@ -1,7 +1,9 @@
 include('shared.lua')
 ENT.RenderGroup = RENDERGROUP_OPAQUE
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_telchak");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_telchak");
+end
 
 ENT.TelchakSprite = Material("effects/multi_purpose_noz");
 ENT.Col = Color(255,255,255,50);
@@ -27,6 +29,7 @@ function ENT:Draw()
 end
 
 local function BlindPlayer()
+	if (not IsValid(LocalPlayer())) then return end
 	local health = LocalPlayer():Health();
 	local used = LocalPlayer():GetNWBool("Telchak_Heal", false);
 	if (health > 150 and used) then

@@ -4,7 +4,9 @@
 */
 
 include("shared.lua");
-language.Add("zpmhub",Language.GetMessage("stool_atlantis_hub"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("zpmhub",SGLanguage.GetMessage("stool_atlantis_hub"));
+end
 
 ENT.ZpmSprite = StarGate.MaterialFromVMT(
 	"ZpmSprite",

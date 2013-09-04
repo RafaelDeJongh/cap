@@ -6,8 +6,10 @@
 include("shared.lua");
 ENT.ChevronColor = Color(255,255,205);
 
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("stargate_orlin");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("stargate_orlin");
+end
 
 ENT.LightPositions = {
 	Vector(3.7, 0, 45),

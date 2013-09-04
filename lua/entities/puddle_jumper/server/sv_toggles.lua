@@ -237,7 +237,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				if(self.Inflight) then
 					self:ToggleRotorwash(false)
 				end
-				for _,v in pairs(self.Buttons) do
+				for _,v in pairs(self.Buttons or {}) do
 					if IsValid(v) then
 						v:Remove();
 					end

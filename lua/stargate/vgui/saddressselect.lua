@@ -268,8 +268,8 @@ function PANEL:Init()
 	--####### Apply Sizes: Search Fields
 	-- The Address List
 	self.VGUI.AddressListView:SetPos(0,25);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_address2")):SetFixedWidth(60);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_name2"));
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(60);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	self.VGUI.AddressListView:SortByColumn(1,true);
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
@@ -287,17 +287,17 @@ function PANEL:Init()
 	end
 
 	local w = 40
-	if (Language.ValidMessage("stargate_vgui_search_width")) then w = Language.GetMessage("stargate_vgui_search_width") end
+	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
 	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
-	self.VGUI.SearchLabel:SetText(Language.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
 	self.VGUI.SearchTextEntry:SetSize(140,self.VGUI.SearchTextEntry:GetTall());
-	self.VGUI.SearchTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_srchtip"));
+	self.VGUI.SearchTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_srchtip"));
 	self.VGUI.SearchTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.SearchTextEntry:SetText(self.Data.LastSearchText);
 	-- Starts the Search delayed
@@ -311,7 +311,7 @@ function PANEL:Init()
 	self.VGUI.SearchImageButton:SetPos(w+142,2);
 	self.VGUI.SearchImageButton:SetSize(16,16);
 	self.VGUI.SearchImageButton:SetImage(Panel_Images.Search);
-	self.VGUI.SearchImageButton:SetTooltip(Language.GetMessage("stargate_vgui_search2"));
+	self.VGUI.SearchImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_search2"));
 	self.VGUI.SearchImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList();
@@ -321,7 +321,7 @@ function PANEL:Init()
 	self.VGUI.RefreshImageButton:SetPos(w+161,2);
 	self.VGUI.RefreshImageButton:SetSize(16,16);
 	self.VGUI.RefreshImageButton:SetImage(Panel_Images.Refresh);
-	self.VGUI.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.VGUI.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.VGUI.RefreshImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList(true);
@@ -329,12 +329,12 @@ function PANEL:Init()
 
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
 	self.VGUI.AddressMultiChoice:SetSize(70,self.VGUI.AddressMultiChoice:GetTall());
-	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(Language.GetMessage("stargate_vgui_dialadr2"));
+	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_dialadr2"));
 	-- This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressMultiChoice.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -364,7 +364,7 @@ function PANEL:Init()
 	end
 
 	-- The DHD/SGC Dialmode Checkbox
-	self.VGUI.DialTypeCheckbox:SetToolTip(Language.GetMessage("stargate_vgui_dialtip"));
+	self.VGUI.DialTypeCheckbox:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialtip"));
 	self.VGUI.DialTypeCheckbox:SetValue(self:GetCookie("DHDDial",false));
 	self.VGUI.DialTypeCheckbox.ConVarChanged = function(CheckBox)
 		self:SetCookie("DHDDial",CheckBox:GetChecked());
@@ -373,7 +373,7 @@ function PANEL:Init()
 	-- The Dial Button
 	self.VGUI.DialImageButton:SetSize(16,16);
 	self.VGUI.DialImageButton:SetImage(Panel_Images.Dial);
-	self.VGUI.DialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialgt"));
+	self.VGUI.DialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialgt"));
 	self.VGUI.DialImageButton.DoClick = function(ImageButton)
 		self:DialGate(self.VGUI.AddressMultiChoice.TextEntry:GetValue());
 	end
@@ -381,7 +381,7 @@ function PANEL:Init()
 	-- The AbortDial Button
 	self.VGUI.AbortDialImageButton:SetSize(16,16);
 	self.VGUI.AbortDialImageButton:SetImage(Panel_Images.Abort);
-	self.VGUI.AbortDialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialab"));
+	self.VGUI.AbortDialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialab"));
 	self.VGUI.AbortDialImageButton.DoClick = function(ImageButton)
 		if(self.OnAbort) then self.OnAbort(self.Entity) end;
 	end
@@ -628,11 +628,11 @@ function PANEL:Init()
 	--####### Apply Sizes: Search Fields
 	-- The Address List
 	self.VGUI.AddressListView:SetPos(0,25);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(150);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(150);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
 	self.VGUI.Width = 80;
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_grouptype")):SetFixedWidth(100);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_name2"));
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_grouptype")):SetFixedWidth(100);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	self.VGUI.AddressListView:SortByColumn(1,true);
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
@@ -653,17 +653,17 @@ function PANEL:Init()
 	end
 
 	local w = 40
-	if (Language.ValidMessage("stargate_vgui_search_width")) then w = Language.GetMessage("stargate_vgui_search_width") end
+	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
 	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
-	self.VGUI.SearchLabel:SetText(Language.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
 	self.VGUI.SearchTextEntry:SetSize(140,self.VGUI.SearchTextEntry:GetTall());
-	self.VGUI.SearchTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_srchtip"));
+	self.VGUI.SearchTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_srchtip"));
 	self.VGUI.SearchTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.SearchTextEntry:SetText(self.Data.LastSearchText);
 	-- Starts the Search delayed
@@ -677,7 +677,7 @@ function PANEL:Init()
 	self.VGUI.SearchImageButton:SetPos(w+142,2);
 	self.VGUI.SearchImageButton:SetSize(16,16);
 	self.VGUI.SearchImageButton:SetImage(Panel_Images.Search);
-	self.VGUI.SearchImageButton:SetTooltip(Language.GetMessage("stargate_vgui_search2"));
+	self.VGUI.SearchImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_search2"));
 	self.VGUI.SearchImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList();
@@ -687,7 +687,7 @@ function PANEL:Init()
 	self.VGUI.RefreshImageButton:SetPos(w+161,2);
 	self.VGUI.RefreshImageButton:SetSize(16,16);
 	self.VGUI.RefreshImageButton:SetImage(Panel_Images.Refresh);
-	self.VGUI.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.VGUI.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.VGUI.RefreshImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList(true);
@@ -695,12 +695,12 @@ function PANEL:Init()
 
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
 	self.VGUI.AddressMultiChoice:SetSize(80,self.VGUI.AddressMultiChoice:GetTall());
-	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(Language.GetMessage("stargate_vgui_dialadr"));
+	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_dialadr"));
 	-- This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressMultiChoice.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -730,7 +730,7 @@ function PANEL:Init()
 	end
 
 	-- The DHD/SGC Dialmode Checkbox
-	self.VGUI.DialTypeCheckbox:SetToolTip(Language.GetMessage("stargate_vgui_dialtip"));
+	self.VGUI.DialTypeCheckbox:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialtip"));
 	self.VGUI.DialTypeCheckbox:SetValue(self:GetCookie("DHDDial",false));
 	self.VGUI.DialTypeCheckbox.ConVarChanged = function(CheckBox)
 		self:SetCookie("DHDDial",CheckBox:GetChecked());
@@ -739,7 +739,7 @@ function PANEL:Init()
 	-- The Dial Button
 	self.VGUI.DialImageButton:SetSize(16,16);
 	self.VGUI.DialImageButton:SetImage(Panel_Images.Dial);
-	self.VGUI.DialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialgt"));
+	self.VGUI.DialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialgt"));
 	self.VGUI.DialImageButton.DoClick = function(ImageButton)
 		self:DialGate(self.VGUI.AddressMultiChoice.TextEntry:GetValue());
 	end
@@ -747,7 +747,7 @@ function PANEL:Init()
 	-- The AbortDial Button
 	self.VGUI.AbortDialImageButton:SetSize(16,16);
 	self.VGUI.AbortDialImageButton:SetImage(Panel_Images.Abort);
-	self.VGUI.AbortDialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialab"));
+	self.VGUI.AbortDialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialab"));
 	self.VGUI.AbortDialImageButton.DoClick = function(ImageButton)
 		if(self.OnAbort) then self.OnAbort(self.Entity) end;
 	end
@@ -839,29 +839,29 @@ include("custom_groups.lua");
 
 --################# Get group/type name by AlexALX
 function PANEL:GetGroupName(g)
-	local name = Language.GetMessage("stargate_vgui_grpc")
+	local name = SGLanguage.GetMessage("stargate_vgui_grpc")
 	if (g == "M@") then
-		name = Language.GetMessage("stargate_vgui_grp1");
+		name = SGLanguage.GetMessage("stargate_vgui_grp1");
 	elseif (g == "P@") then
-		name = Language.GetMessage("stargate_vgui_grp2");
+		name = SGLanguage.GetMessage("stargate_vgui_grp2");
 	elseif (g == "I@") then
-		name = Language.GetMessage("stargate_vgui_grp3");
+		name = SGLanguage.GetMessage("stargate_vgui_grp3");
 	elseif (g == "OT") then
-		name = Language.GetMessage("stargate_vgui_grp8");
+		name = SGLanguage.GetMessage("stargate_vgui_grp8");
 	elseif (g == "O@") then
-		name = Language.GetMessage("stargate_vgui_grp4");
+		name = SGLanguage.GetMessage("stargate_vgui_grp4");
 	elseif (g == "U@#") then
-		name = Language.GetMessage("stargate_vgui_grp5");
+		name = SGLanguage.GetMessage("stargate_vgui_grp5");
 	elseif (g == "SGI") then
-		name = Language.GetMessage("stargate_vgui_grp6");
+		name = SGLanguage.GetMessage("stargate_vgui_grp6");
 	elseif (g == "DST") then
-		name = Language.GetMessage("stargate_vgui_grp7");
+		name = SGLanguage.GetMessage("stargate_vgui_grp7");
 	elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 		name = SG_CUSTOM_GROUPS[g][1];
 	elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 		name = SG_CUSTOM_TYPES[g][1];
 	elseif (g:len()==3) then
-		name = Language.GetMessage("stargate_vgui_grpc2");
+		name = SGLanguage.GetMessage("stargate_vgui_grpc2");
 	end
 	return name;
 end
@@ -1088,11 +1088,11 @@ function PANEL:Init()
 	--####### Apply Sizes: Search Fields
 	-- The Address List
 	self.VGUI.AddressListView:SetPos(0,25);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(128);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_address2")):SetFixedWidth(60);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(128);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(60);
 	self.VGUI.Width = 60;
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_grouptype")):SetFixedWidth(100);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_name2"));
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_grouptype")):SetFixedWidth(100);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	self.VGUI.AddressListView:SortByColumn(1,true);
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
@@ -1113,17 +1113,17 @@ function PANEL:Init()
 	end
 
 	local w = 40
-	if (Language.ValidMessage("stargate_vgui_search_width")) then w = Language.GetMessage("stargate_vgui_search_width") end
+	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
 	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
-	self.VGUI.SearchLabel:SetText(Language.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
 	self.VGUI.SearchTextEntry:SetSize(140,self.VGUI.SearchTextEntry:GetTall());
-	self.VGUI.SearchTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_srchtip"));
+	self.VGUI.SearchTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_srchtip"));
 	self.VGUI.SearchTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.SearchTextEntry:SetText(self.Data.LastSearchText);
 	-- Starts the Search delayed
@@ -1137,7 +1137,7 @@ function PANEL:Init()
 	self.VGUI.SearchImageButton:SetPos(w+142,2);
 	self.VGUI.SearchImageButton:SetSize(16,16);
 	self.VGUI.SearchImageButton:SetImage(Panel_Images.Search);
-	self.VGUI.SearchImageButton:SetTooltip(Language.GetMessage("stargate_vgui_search2"));
+	self.VGUI.SearchImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_search2"));
 	self.VGUI.SearchImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList();
@@ -1147,7 +1147,7 @@ function PANEL:Init()
 	self.VGUI.RefreshImageButton:SetPos(w+161,2);
 	self.VGUI.RefreshImageButton:SetSize(16,16);
 	self.VGUI.RefreshImageButton:SetImage(Panel_Images.Refresh);
-	self.VGUI.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.VGUI.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.VGUI.RefreshImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList(true);
@@ -1155,12 +1155,12 @@ function PANEL:Init()
 
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
 	self.VGUI.AddressMultiChoice:SetSize(70,self.VGUI.AddressMultiChoice:GetTall());
-	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(Language.GetMessage("stargate_vgui_dialadr2"));
+	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_dialadr2"));
 	-- This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressMultiChoice.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -1190,7 +1190,7 @@ function PANEL:Init()
 	end
 
 	-- The DHD/SGC Dialmode Checkbox
-	self.VGUI.DialTypeCheckbox:SetToolTip(Language.GetMessage("stargate_vgui_dialtip"));
+	self.VGUI.DialTypeCheckbox:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialtip"));
 	self.VGUI.DialTypeCheckbox:SetValue(self:GetCookie("DHDDial",false));
 	self.VGUI.DialTypeCheckbox.ConVarChanged = function(CheckBox)
 		self:SetCookie("DHDDial",CheckBox:GetChecked());
@@ -1199,7 +1199,7 @@ function PANEL:Init()
 	-- The Dial Button
 	self.VGUI.DialImageButton:SetSize(16,16);
 	self.VGUI.DialImageButton:SetImage(Panel_Images.Dial);
-	self.VGUI.DialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialgt"));
+	self.VGUI.DialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialgt"));
 	self.VGUI.DialImageButton.DoClick = function(ImageButton)
 		self:DialGate(self.VGUI.AddressMultiChoice.TextEntry:GetValue());
 	end
@@ -1207,7 +1207,7 @@ function PANEL:Init()
 	-- The AbortDial Button
 	self.VGUI.AbortDialImageButton:SetSize(16,16);
 	self.VGUI.AbortDialImageButton:SetImage(Panel_Images.Abort);
-	self.VGUI.AbortDialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialab"));
+	self.VGUI.AbortDialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialab"));
 	self.VGUI.AbortDialImageButton.DoClick = function(ImageButton)
 		if(self.OnAbort) then self.OnAbort(self.Entity) end;
 	end
@@ -1297,29 +1297,29 @@ end
 
 --################# Get group/type name by AlexALX
 function PANEL:GetGroupName(g)
-	local name = Language.GetMessage("stargate_vgui_grpc")
+	local name = SGLanguage.GetMessage("stargate_vgui_grpc")
 	if (g == "M@") then
-		name = Language.GetMessage("stargate_vgui_grp1");
+		name = SGLanguage.GetMessage("stargate_vgui_grp1");
 	elseif (g == "P@") then
-		name = Language.GetMessage("stargate_vgui_grp2");
+		name = SGLanguage.GetMessage("stargate_vgui_grp2");
 	elseif (g == "I@") then
-		name = Language.GetMessage("stargate_vgui_grp3");
+		name = SGLanguage.GetMessage("stargate_vgui_grp3");
 	elseif (g == "OT") then
-		name = Language.GetMessage("stargate_vgui_grp8");
+		name = SGLanguage.GetMessage("stargate_vgui_grp8");
 	elseif (g == "O@") then
-		name = Language.GetMessage("stargate_vgui_grp4");
+		name = SGLanguage.GetMessage("stargate_vgui_grp4");
 	elseif (g == "U@#") then
-		name = Language.GetMessage("stargate_vgui_grp5");
+		name = SGLanguage.GetMessage("stargate_vgui_grp5");
 	elseif (g == "SGI") then
-		name = Language.GetMessage("stargate_vgui_grp6");
+		name = SGLanguage.GetMessage("stargate_vgui_grp6");
 	elseif (g == "DST") then
-		name = Language.GetMessage("stargate_vgui_grp7");
+		name = SGLanguage.GetMessage("stargate_vgui_grp7");
 	elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 		name = SG_CUSTOM_GROUPS[g][1];
 	elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 		name = SG_CUSTOM_TYPES[g][1];
 	elseif (g:len()==3) then
-		name = Language.GetMessage("stargate_vgui_grpc2");
+		name = SGLanguage.GetMessage("stargate_vgui_grpc2");
 	end
 	return name;
 end
@@ -1536,10 +1536,10 @@ function PANEL:Init()
 	--####### Apply Sizes: Search Fields
 	-- The Address List
 	self.VGUI.AddressListView:SetPos(0,25);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(150);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(150);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
 	self.VGUI.Width = 80;
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_name2"));
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	self.VGUI.AddressListView:SortByColumn(1,true);
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
@@ -1560,17 +1560,17 @@ function PANEL:Init()
 	end
 
 	local w = 40
-	if (Language.ValidMessage("stargate_vgui_search_width")) then w = Language.GetMessage("stargate_vgui_search_width") end
+	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
 	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
-	self.VGUI.SearchLabel:SetText(Language.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
 	self.VGUI.SearchTextEntry:SetSize(140,self.VGUI.SearchTextEntry:GetTall());
-	self.VGUI.SearchTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_srchtip"));
+	self.VGUI.SearchTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_srchtip"));
 	self.VGUI.SearchTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.SearchTextEntry:SetText(self.Data.LastSearchText);
 	-- Starts the Search delayed
@@ -1584,7 +1584,7 @@ function PANEL:Init()
 	self.VGUI.SearchImageButton:SetPos(w+142,2);
 	self.VGUI.SearchImageButton:SetSize(16,16);
 	self.VGUI.SearchImageButton:SetImage(Panel_Images.Search);
-	self.VGUI.SearchImageButton:SetTooltip(Language.GetMessage("stargate_vgui_search2"));
+	self.VGUI.SearchImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_search2"));
 	self.VGUI.SearchImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList();
@@ -1594,7 +1594,7 @@ function PANEL:Init()
 	self.VGUI.RefreshImageButton:SetPos(w+161,2);
 	self.VGUI.RefreshImageButton:SetSize(16,16);
 	self.VGUI.RefreshImageButton:SetImage(Panel_Images.Refresh);
-	self.VGUI.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.VGUI.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.VGUI.RefreshImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList(true);
@@ -1602,12 +1602,12 @@ function PANEL:Init()
 
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
 	self.VGUI.AddressMultiChoice:SetSize(70,self.VGUI.AddressMultiChoice:GetTall());
-	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(Language.GetMessage("stargate_galaxy_vgui_dialadr"));
+	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_galaxy_vgui_dialadr"));
 	-- This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressMultiChoice.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -1646,7 +1646,7 @@ function PANEL:Init()
 	end
 
 	-- The DHD/SGC Dialmode Checkbox
-	self.VGUI.DialTypeCheckbox:SetToolTip(Language.GetMessage("stargate_vgui_dialtip"));
+	self.VGUI.DialTypeCheckbox:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialtip"));
 	self.VGUI.DialTypeCheckbox:SetValue(self:GetCookie("DHDDial",false));
 	self.VGUI.DialTypeCheckbox.ConVarChanged = function(CheckBox)
 		self:SetCookie("DHDDial",CheckBox:GetChecked());
@@ -1655,7 +1655,7 @@ function PANEL:Init()
 	-- The Dial Button
 	self.VGUI.DialImageButton:SetSize(16,16);
 	self.VGUI.DialImageButton:SetImage(Panel_Images.Dial);
-	self.VGUI.DialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialgt"));
+	self.VGUI.DialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialgt"));
 	self.VGUI.DialImageButton.DoClick = function(ImageButton)
 		self:DialGate(self.VGUI.AddressMultiChoice.TextEntry:GetValue());
 	end
@@ -1663,7 +1663,7 @@ function PANEL:Init()
 	-- The AbortDial Button
 	self.VGUI.AbortDialImageButton:SetSize(16,16);
 	self.VGUI.AbortDialImageButton:SetImage(Panel_Images.Abort);
-	self.VGUI.AbortDialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialab"));
+	self.VGUI.AbortDialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialab"));
 	self.VGUI.AbortDialImageButton.DoClick = function(ImageButton)
 		if(self.OnAbort) then self.OnAbort(self.Entity) end;
 	end
@@ -1978,10 +1978,10 @@ function PANEL:Init()
 	--####### Apply Sizes: Search Fields
 	-- The Address List
 	self.VGUI.AddressListView:SetPos(0,25);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(128);
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(128);
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
 	self.VGUI.Width = 80;
-	self.VGUI.AddressListView:AddColumn(Language.GetMessage("stargate_vgui_name2"));
+	self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	self.VGUI.AddressListView:SortByColumn(1,true);
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
@@ -2002,17 +2002,17 @@ function PANEL:Init()
 	end
 
 	local w = 40
-	if (Language.ValidMessage("stargate_vgui_search_width")) then w = Language.GetMessage("stargate_vgui_search_width") end
+	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
 	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
-	self.VGUI.SearchLabel:SetText(Language.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
 	self.VGUI.SearchTextEntry:SetSize(140,self.VGUI.SearchTextEntry:GetTall());
-	self.VGUI.SearchTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_srchtip"));
+	self.VGUI.SearchTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_srchtip"));
 	self.VGUI.SearchTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.SearchTextEntry:SetText(self.Data.LastSearchText);
 	-- Starts the Search delayed
@@ -2026,7 +2026,7 @@ function PANEL:Init()
 	self.VGUI.SearchImageButton:SetPos(w+142,2);
 	self.VGUI.SearchImageButton:SetSize(16,16);
 	self.VGUI.SearchImageButton:SetImage(Panel_Images.Search);
-	self.VGUI.SearchImageButton:SetTooltip(Language.GetMessage("stargate_vgui_search2"));
+	self.VGUI.SearchImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_search2"));
 	self.VGUI.SearchImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList();
@@ -2036,7 +2036,7 @@ function PANEL:Init()
 	self.VGUI.RefreshImageButton:SetPos(w+161,2);
 	self.VGUI.RefreshImageButton:SetSize(16,16);
 	self.VGUI.RefreshImageButton:SetImage(Panel_Images.Refresh);
-	self.VGUI.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.VGUI.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.VGUI.RefreshImageButton.DoClick = function(ImageButton)
 		-- Immediately do a search (Maybe a stargate has recently changed it's addresse or name?)
 		self:RefreshList(true);
@@ -2044,12 +2044,12 @@ function PANEL:Init()
 
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
 	self.VGUI.AddressMultiChoice:SetSize(70,self.VGUI.AddressMultiChoice:GetTall());
-	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(Language.GetMessage("stargate_galaxy_vgui_dialadr2"));
+	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_galaxy_vgui_dialadr2"));
 	-- This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressMultiChoice.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -2080,7 +2080,7 @@ function PANEL:Init()
 	end
 
 	-- The DHD/SGC Dialmode Checkbox
-	self.VGUI.DialTypeCheckbox:SetToolTip(Language.GetMessage("stargate_vgui_dialtip"));
+	self.VGUI.DialTypeCheckbox:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialtip"));
 	self.VGUI.DialTypeCheckbox:SetValue(self:GetCookie("DHDDial",false));
 	self.VGUI.DialTypeCheckbox.ConVarChanged = function(CheckBox)
 		self:SetCookie("DHDDial",CheckBox:GetChecked());
@@ -2089,7 +2089,7 @@ function PANEL:Init()
 	-- The Dial Button
 	self.VGUI.DialImageButton:SetSize(16,16);
 	self.VGUI.DialImageButton:SetImage(Panel_Images.Dial);
-	self.VGUI.DialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialgt"));
+	self.VGUI.DialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialgt"));
 	self.VGUI.DialImageButton.DoClick = function(ImageButton)
 		self:DialGate(self.VGUI.AddressMultiChoice.TextEntry:GetValue());
 	end
@@ -2097,7 +2097,7 @@ function PANEL:Init()
 	-- The AbortDial Button
 	self.VGUI.AbortDialImageButton:SetSize(16,16);
 	self.VGUI.AbortDialImageButton:SetImage(Panel_Images.Abort);
-	self.VGUI.AbortDialImageButton:SetToolTip(Language.GetMessage("stargate_vgui_dialab"));
+	self.VGUI.AbortDialImageButton:SetToolTip(SGLanguage.GetMessage("stargate_vgui_dialab"));
 	self.VGUI.AbortDialImageButton.DoClick = function(ImageButton)
 		if(self.OnAbort) then self.OnAbort(self.Entity) end;
 	end

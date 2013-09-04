@@ -3,7 +3,7 @@
 	Copyright (C) 2010 Madman07
 ]]--
 
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -80,7 +80,7 @@ function ENT:Think()
 				table.insert(self.Entities, v)
 
 				if v:IsNPC() then
-					if (v:Alive()) then v:Fire("kill","","0.1") end
+					v:Fire("kill","","0.1")
 				elseif v:IsPlayer() then
 					if (v:Alive()) then
 						v:SetModel("models/player/charple01.mdl")

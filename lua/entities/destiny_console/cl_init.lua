@@ -10,8 +10,10 @@ local font = {
 }
 surface.CreateFont("DestConsole", font);
 
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_dest_console");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_dest_console");
+end
 
 function ENT:Initialize()
 	self.Wire = 0;

@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_ori_staff");
-SWEP.Category = Language.GetMessage("weapon_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_ori_staff");
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 SWEP.Author = "RononDex, Boba Fett"
 SWEP.Purpose = "Kill the non believers"
 SWEP.Instructions = "Shoot the Non Believers"
@@ -31,7 +33,9 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= "none"
 
 -- Add weapon for NPCs
-list.Set("NPCWeapons","ori_staff_weapon",Language.GetMessage("weapon_ori_staff"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+list.Set("NPCWeapons","ori_staff_weapon",SGLanguage.GetMessage("weapon_ori_staff"));
+end
 
 function SWEP:Initialize()
 

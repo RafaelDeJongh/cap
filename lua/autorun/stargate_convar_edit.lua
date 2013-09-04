@@ -110,34 +110,34 @@ function Group_Convar_OpenNet()
 	local matBlurScreen = Material( "pp/blurscreen" )
 
 	local allowdialgroup = {
-		{Language.GetMessage("stargate_menu_01"), "stargate_candial_groups_menu", 1},
-		{Language.GetMessage("stargate_menu_02"), "stargate_candial_groups_dhd", 1},
-		{Language.GetMessage("stargate_menu_03"), "stargate_candial_groups_wire", 1}
+		{SGLanguage.GetMessage("stargate_menu_01"), "stargate_candial_groups_menu", 1},
+		{SGLanguage.GetMessage("stargate_menu_02"), "stargate_candial_groups_dhd", 1},
+		{SGLanguage.GetMessage("stargate_menu_03"), "stargate_candial_groups_wire", 1}
 	}
 
 	local sgsettings = {
-		{Language.GetMessage("stargate_menu_04"), "stargate_different_dial_menu", 0},
-		{Language.GetMessage("stargate_menu_05"), "stargate_energy_dial", 1},
-		{Language.GetMessage("stargate_menu_06"), "stargate_energy_dial_spawner", 0},
-		{Language.GetMessage("stargate_menu_28"), "stargate_energy_target", 1},
-		{Language.GetMessage("stargate_menu_21"), "stargate_protect", 0, 1},
-		{Language.GetMessage("stargate_menu_22"), "stargate_protect_spawner", 0, 1},
-		{Language.GetMessage("stargate_menu_33"), "stargate_atlantis_override", 1},
-		{Language.GetMessage("stargate_menu_34"), "stargate_gatespawner_enabled", 1},
-		{Language.GetMessage("stargate_menu_34b"), "stargate_gatespawner_protect", 1},
-		{Language.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
-		{Language.GetMessage("stargate_menu_38"), "stargate_model_clipping", 1},
-		{Language.GetMessage("stargate_menu_39"), "stargate_open_effect", 1},
+		{SGLanguage.GetMessage("stargate_menu_04"), "stargate_different_dial_menu", 0},
+		{SGLanguage.GetMessage("stargate_menu_05"), "stargate_energy_dial", 1},
+		{SGLanguage.GetMessage("stargate_menu_06"), "stargate_energy_dial_spawner", 0},
+		{SGLanguage.GetMessage("stargate_menu_28"), "stargate_energy_target", 1},
+		{SGLanguage.GetMessage("stargate_menu_21"), "stargate_protect", 0, 1},
+		{SGLanguage.GetMessage("stargate_menu_22"), "stargate_protect_spawner", 0, 1},
+		{SGLanguage.GetMessage("stargate_menu_33"), "stargate_atlantis_override", 1},
+		{SGLanguage.GetMessage("stargate_menu_34"), "stargate_gatespawner_enabled", 1},
+		{SGLanguage.GetMessage("stargate_menu_34b"), "stargate_gatespawner_protect", 1},
+		{SGLanguage.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
+		{SGLanguage.GetMessage("stargate_menu_38"), "stargate_model_clipping", 1},
+		{SGLanguage.GetMessage("stargate_menu_39"), "stargate_open_effect", 1},
 	}
 
 	local dhdsettings = {
-		{Language.GetMessage("stargate_menu_07"), "stargate_dhd_protect", 0, 1},
-		{Language.GetMessage("stargate_menu_08"), "stargate_dhd_protect_spawner", 0, 1},
-		{Language.GetMessage("stargate_menu_09"), "stargate_dhd_destroyed_energy", 1},
-		{Language.GetMessage("stargate_menu_10"), "stargate_dhd_close_incoming", 1},
-		{Language.GetMessage("stargate_menu_31"), "stargate_dhd_menu", 1},
-		{Language.GetMessage("stargate_menu_32"), "stargate_dhd_letters", 1},
-		{Language.GetMessage("stargate_menu_35"), "stargate_dhd_ring", 1},
+		{SGLanguage.GetMessage("stargate_menu_07"), "stargate_dhd_protect", 0, 1},
+		{SGLanguage.GetMessage("stargate_menu_08"), "stargate_dhd_protect_spawner", 0, 1},
+		{SGLanguage.GetMessage("stargate_menu_09"), "stargate_dhd_destroyed_energy", 1},
+		{SGLanguage.GetMessage("stargate_menu_10"), "stargate_dhd_close_incoming", 1},
+		{SGLanguage.GetMessage("stargate_menu_31"), "stargate_dhd_menu", 1},
+		{SGLanguage.GetMessage("stargate_menu_32"), "stargate_dhd_letters", 1},
+		{SGLanguage.GetMessage("stargate_menu_35"), "stargate_dhd_ring", 1},
 	}
 
 	GroupConvarFrame = vgui.Create("DFrame");
@@ -147,7 +147,7 @@ function Group_Convar_OpenNet()
 	else
 		GroupConvarFrame:SetSize(560,310);
 	end
-	GroupConvarFrame:SetTitle(Language.GetMessage("stargate_menu_00"));
+	GroupConvarFrame:SetTitle(SGLanguage.GetMessage("stargate_menu_00"));
 	GroupConvarFrame:SetVisible(true);
 	GroupConvarFrame:SetDraggable(false);
 	GroupConvarFrame:ShowCloseButton(true);
@@ -207,14 +207,14 @@ function Group_Convar_OpenNet()
 		local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 		laber:SetFont("OldDefaultSmall");
 		laber:SetPos(135, 310);
-		laber:SetText(Language.GetMessage("stargate_menu_25"));
+		laber:SetText(SGLanguage.GetMessage("stargate_menu_25"));
 		laber:SizeToContents();
 	end
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(20, 40);
-	laber:SetText(Language.GetMessage("stargate_menu_12"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_12"));
 	laber:SizeToContents();
 
 	local i = 0;
@@ -243,11 +243,11 @@ function Group_Convar_OpenNet()
 		    end
 		end
 		if(k==7) then
-			box:SetToolTip(Language.GetMessage("stargate_menu_33_tip").." "..Language.GetMessage("stargate_menu_hint",val[2]));
+			box:SetToolTip(SGLanguage.GetMessage("stargate_menu_33_tip").." "..SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		elseif(k==10) then
-			box:SetToolTip(Language.GetMessage("stargate_menu_36_tip").." "..Language.GetMessage("stargate_menu_hint",val[2]));
+			box:SetToolTip(SGLanguage.GetMessage("stargate_menu_36_tip").." "..SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		else
-			box:SetToolTip(Language.GetMessage("stargate_menu_hint",val[2]));
+			box:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		end
 		if ((k==2 or k==3 or k==4) and GroupGetConvar("stargate_has_rd")!=1) then
 			box:SetDisabled(true);
@@ -267,18 +267,18 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(20, offset+15);
-	laber:SetText(Language.GetMessage("stargate_menu_13"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_13"));
 	laber:SizeToContents();
 
 	local slider = vgui.Create( "DOldNumSlider" , GroupConvarFrame);
 	slider:SetPos(15, offset+30);
 	slider:SetSize(170, 50);
-	slider:SetText(Language.GetMessage("stargate_menu_14"));
+	slider:SetText(SGLanguage.GetMessage("stargate_menu_14"));
 	slider:SetMin(0);
 	slider:SetMax(32000);
 	slider:SetValue(GroupGetConvar("stargate_sgu_find_range"));
 	slider:SetDecimals(0);
-	slider:SetToolTip(Language.GetMessage("stargate_menu_hint","stargate_sgu_find_range"));
+	slider:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint","stargate_sgu_find_range"));
 	slider.OnValueChanged = function(Size_x, fValue)
 		GroupSetConvar("stargate_sgu_find_range", fValue);
 	end
@@ -288,13 +288,13 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(15, offset+65);
-	laber:SetText(Language.GetMessage("stargate_menu_15"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_15"));
 	laber:SizeToContents();
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(210, 40);
-	laber:SetText(Language.GetMessage("stargate_menu_16"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_16"));
 	laber:SizeToContents();
 
 	i = 0;
@@ -313,7 +313,7 @@ function Group_Convar_OpenNet()
 			box:SetValue(GroupGetConvar(val[2]));
 		end
 		box:SizeToContents();
-		box:SetToolTip(Language.GetMessage("stargate_menu_hint",val[2]));
+		box:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		box.PerformLayout = function(self)
 		    local x = self.m_iIndent or 0
 		    self.Button:SetSize( 14, 14 )
@@ -341,17 +341,17 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(210, offset+17);
-	laber:SetText(Language.GetMessage("stargate_menu_17"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_17"));
 	laber:SizeToContents();
 
 	local select = vgui.Create("DMultiChoice", GroupConvarFrame);
-    select:SetToolTip(Language.GetMessage("stargate_menu_18").." "..Language.GetMessage("stargate_menu_hint","stargate_show_inbound_address"));
+    select:SetToolTip(SGLanguage.GetMessage("stargate_menu_18").." "..SGLanguage.GetMessage("stargate_menu_hint","stargate_show_inbound_address"));
     select:SetPos(205, offset+32);
     select:SetSize(170, 20);
     select:SetEditable(false);
-    select:AddChoice(Language.GetMessage("stargate_menu_18a"),2);
-    select:AddChoice(Language.GetMessage("stargate_menu_18b"),1);
-    select:AddChoice(Language.GetMessage("stargate_menu_18c"),0);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_18a"),2);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_18b"),1);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_18c"),0);
     if (GroupGetConvar("stargate_show_inbound_address")==2) then
 		select:ChooseOptionID(1);
     elseif (GroupGetConvar("stargate_show_inbound_address")==1) then
@@ -364,29 +364,29 @@ function Group_Convar_OpenNet()
 	end
 
 	local closeall = vgui.Create("DButton", GroupConvarFrame);
-    closeall:SetText(Language.GetMessage("stargate_menu_37"));
+    closeall:SetText(SGLanguage.GetMessage("stargate_menu_37"));
     closeall:SetPos(210, offset+65);
     closeall:SetSize(160, 33);
 	closeall.DoClick = function ( btn )
 		GroupSetConvar("stargate_close_all");
-		GAMEMODE:AddNotify(Language.GetMessage("stargate_menu_37b"), NOTIFY_GENERIC, 5);
+		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_37b"), NOTIFY_GENERIC, 5);
 		surface.PlaySound( "buttons/button9.wav" );
 	end
 
 	local dospawner = vgui.Create("DButton", GroupConvarFrame);
-    dospawner:SetText(Language.GetMessage("stargate_menu_19"));
+    dospawner:SetText(SGLanguage.GetMessage("stargate_menu_19"));
     dospawner:SetPos(210, offset+105);
     dospawner:SetSize(160, 33);
 	dospawner.DoClick = function ( btn )
 		GroupSetConvar("stargate_gatespawner_createfile");
-		GAMEMODE:AddNotify(Language.GetMessage("stargate_menu_20"), NOTIFY_GENERIC, 5);
+		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_20"), NOTIFY_GENERIC, 5);
 		surface.PlaySound( "buttons/button9.wav" );
 	end
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(400, 40);
-	laber:SetText(Language.GetMessage("stargate_menu_11"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_11"));
 	laber:SizeToContents();
 
 	local i = 0;
@@ -409,7 +409,7 @@ function Group_Convar_OpenNet()
 			box:SetValue(GroupGetConvar(val[2]));
 		end
 		box:SizeToContents();
-		box:SetToolTip(Language.GetMessage("stargate_menu_hint",val[2]));
+		box:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		box.PerformLayout = function(self)
 		    local x = self.m_iIndent or 0
 		    self.Button:SetSize( 14, 14 )
@@ -429,17 +429,17 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(400, 115);
-	laber:SetText(Language.GetMessage("stargate_menu_26"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_26"));
 	laber:SizeToContents();
 
 	local select = vgui.Create("DMultiChoice", GroupConvarFrame);
-    select:SetToolTip(Language.GetMessage("stargate_menu_27").." "..Language.GetMessage("stargate_menu_hint","stargate_block_address"));
+    select:SetToolTip(SGLanguage.GetMessage("stargate_menu_27").." "..SGLanguage.GetMessage("stargate_menu_hint","stargate_block_address"));
     select:SetPos(395, 130);
     select:SetSize(150, 20);
     select:SetEditable(false);
-    select:AddChoice(Language.GetMessage("stargate_menu_27a"),2);
-    select:AddChoice(Language.GetMessage("stargate_menu_27b"),1);
-    select:AddChoice(Language.GetMessage("stargate_menu_27c"),0);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_27a"),2);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_27b"),1);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_27c"),0);
     if (GroupGetConvar("stargate_block_address")==2) then
 		select:ChooseOptionID(1);
     elseif (GroupGetConvar("stargate_block_address")==1) then
@@ -454,17 +454,17 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(400, 155);
-	laber:SetText(Language.GetMessage("stargate_menu_29"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_29"));
 	laber:SizeToContents();
 
 	local select = vgui.Create("DMultiChoice", GroupConvarFrame);
-    select:SetToolTip(Language.GetMessage("stargate_menu_30").." "..Language.GetMessage("stargate_menu_hint","stargate_vgui_glyphs"));
+    select:SetToolTip(SGLanguage.GetMessage("stargate_menu_30").." "..SGLanguage.GetMessage("stargate_menu_hint","stargate_vgui_glyphs"));
     select:SetPos(395, 170);
     select:SetSize(150, 20);
     select:SetEditable(false);
-    select:AddChoice(Language.GetMessage("stargate_menu_30a"),2);
-    select:AddChoice(Language.GetMessage("stargate_menu_30b"),1);
-    select:AddChoice(Language.GetMessage("stargate_menu_30c"),0);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_30a"),2);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_30b"),1);
+    select:AddChoice(SGLanguage.GetMessage("stargate_menu_30c"),0);
     if (GroupGetConvar("stargate_vgui_glyphs")==2) then
 		select:ChooseOptionID(1);
     elseif (GroupGetConvar("stargate_vgui_glyphs")==1) then
@@ -479,11 +479,11 @@ function Group_Convar_OpenNet()
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(400, 212);
-	laber:SetText(Language.GetMessage("stargate_menu_23"));
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_23"));
 	laber:SizeToContents();
 
 	local system = vgui.Create("DMultiChoice", GroupConvarFrame);
-    system:SetToolTip(Language.GetMessage("stargate_menu_24").." "..Language.GetMessage("stargate_menu_hint","stargate_group_system"));
+    system:SetToolTip(SGLanguage.GetMessage("stargate_menu_24").." "..SGLanguage.GetMessage("stargate_menu_hint","stargate_group_system"));
     system:SetPos(395, 227);
     system:SetSize(150, 20);
     system:SetEditable(false);
@@ -496,18 +496,18 @@ function Group_Convar_OpenNet()
     end
 	system.OnSelect = function(panel,index,value,data)
 		--if (GroupGetConvar("stargate_group_system")!=data) then
-			LocalPlayer():ChatPrint(Language.GetMessage("stargate_reload_start"));
+			LocalPlayer():ChatPrint(SGLanguage.GetMessage("stargate_reload_start"));
 			GroupSetConvar("stargate_group_system", Format("%d", data));
 		--end
 	end
 
 	local reloadbut = vgui.Create("DButton", GroupConvarFrame);
-    reloadbut:SetText(Language.GetMessage("stargate_menu_40"));
+    reloadbut:SetText(SGLanguage.GetMessage("stargate_menu_40"));
     reloadbut:SetPos(395, 260);
     reloadbut:SetSize(150, 33);
 	reloadbut.DoClick = function ( btn )
 		GroupSetConvar("stargate_gatespawner_reload");
-		GAMEMODE:AddNotify(Language.GetMessage("stargate_menu_40b"), NOTIFY_GENERIC, 5);
+		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_40b"), NOTIFY_GENERIC, 5);
 		surface.PlaySound( "buttons/button9.wav" );
 	end
 

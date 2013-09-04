@@ -19,8 +19,10 @@
 --############# Header #################--
 include("shared.lua");
 include("client/cl_effects.lua");
-ENT.Category = Language.GetMessage("entity_ships_cat");
-ENT.PrintName = Language.GetMessage("entity_jumper") or "Puddle Jumper";
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_jumper") or "Puddle Jumper";
+end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("PuddleJumper")

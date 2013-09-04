@@ -223,10 +223,10 @@ if (CLIENT) then
 	        local p = LocalPlayer();
 
 			-- that checks mean if cap installed client-side
-			if (#file.Find("addons/cap/ver.txt","GAME") >= 1 or StarGate.WorkShop) then
+			if (file.Exists("addons/cap/ver.txt","GAME") or StarGate.WorkShop) then
 		        -- AlexALX Stats, DO NOT EDIT --
 		        local cap_ver = 0;
-		        if (StarGate.WorkShop) then
+		        if (StarGate.WorkShop and not file.Exists("addons/cap/ver.txt","GAME")) then
 		        	cap_ver = StarGate.WorkShopVer;
 		        else
 			     	local fil = file.Read("addons/cap/ver.txt","GAME")

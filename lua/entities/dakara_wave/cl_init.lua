@@ -1,2 +1,4 @@
 include("shared.lua")
-language.Add("dakara_wave", Language.GetMessage("dakara_energy_kill"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("dakara_wave", SGLanguage.GetMessage("dakara_energy_kill"))
+end

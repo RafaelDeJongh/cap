@@ -1,6 +1,6 @@
 /*   Copyright (C) 2010 by Llapp   */
 
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("shared.lua")
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")

@@ -17,10 +17,10 @@
 */
 
 --################# Header
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Weapons";
-TOOL.Name=Language.GetMessage("stool_staff");
+TOOL.Name=SGLanguage.GetMessage("stool_staff");
 
 -- The keys for the numpad. 1 is shoot, 2 is explode all current shots
 TOOL.ClientConVar["shoot"] = 1;
@@ -208,9 +208,9 @@ function TOOL:ControlsPanel(Panel)
 	Panel:CheckBox("Draw Shaft","staff_weapon_shaft");
 	Panel:CheckBox("Explosion","staff_weapon_explosion");
 	Panel:CheckBox("Colorize Explosion","staff_weapon_explosion_colorize");
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"staff_weapon_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"staff_weapon_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"staff_weapon_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"staff_weapon_autolink"):SetToolTip("Autolink this to resouce using Entities?");
 	end
 end
 

@@ -1,4 +1,4 @@
-if (not StarGate.CheckModule("weapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
 
 local HitImpact = function(attacker, tr, dmginfo)
 
@@ -30,7 +30,9 @@ if SERVER then
 
 end
 
-SWEP.PrintName = Language.GetMessage("weapon_p90");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_p90");
+end
 
 if CLIENT then
 	SWEP.Slot 			= 2
@@ -63,8 +65,9 @@ SWEP.MuzzleEffect			= "rg_muzzle_hmg" -- This is an extra muzzleflash effect
 SWEP.MuzzleAttachment		= "1" -- Should be "1" for CSS models or "muzzle" for hl2 models
 */
 
-
-SWEP.Category = Language.GetMessage("weapon_cat");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 
 SWEP.DrawWeaponInfoBox  	= true					-- Draw Weapon Info HUD
 
@@ -323,7 +326,7 @@ end
 
 local function ReduceScopeSensitivity (uCmd)
 
-	if LocalPlayer():GetActiveWeapon() and LocalPlayer():GetActiveWeapon():IsValid() then
+	if LocalPlayer():GetActiveWeapon() and IsValid(LocalPlayer():GetActiveWeapon()) then
 		local newAng = uCmd:GetViewAngles()
 			if LastViewAng then
 				SimilarizeAngles (LastViewAng, newAng)

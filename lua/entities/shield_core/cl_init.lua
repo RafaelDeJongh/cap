@@ -4,8 +4,10 @@
 ]]--
 
 include('shared.lua');
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_shield_core");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_shield_core");
+end
 
 ENT.RenderGroup = RENDERGROUP_BOTH;
 ENT.SC_hud = surface.GetTextureID("VGUI/resources_hud/MCD");

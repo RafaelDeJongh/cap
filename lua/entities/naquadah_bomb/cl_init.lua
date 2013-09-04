@@ -1,6 +1,8 @@
 include('shared.lua')
 
-language.Add("naquadah_bomb", Language.GetMessage("entity_naq_bomb"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("naquadah_bomb", SGLanguage.GetMessage("entity_naq_bomb"))
+end
 
 local cycleInterval = 0.5
 
@@ -88,13 +90,13 @@ function ENT:CreateCodeWindow()
    local CodeWindow = vgui.Create("DFrame")
    CodeWindow:SetDeleteOnClose(true)
    if (self:GetNWInt("State",0)==3) then
-   	CodeWindow:SetTitle(Language.GetMessage("naq_bomb_menu_01a"))
+   	CodeWindow:SetTitle(SGLanguage.GetMessage("naq_bomb_menu_01a"))
 
-   	CodeWindow.CodeBoxLabel = Label(Language.GetMessage("naq_bomb_menu_02a").." ", CodeWindow)
+   	CodeWindow.CodeBoxLabel = Label(SGLanguage.GetMessage("naq_bomb_menu_02a").." ", CodeWindow)
    else
-   	CodeWindow:SetTitle(Language.GetMessage("naq_bomb_menu_01"))
+   	CodeWindow:SetTitle(SGLanguage.GetMessage("naq_bomb_menu_01"))
 
-   	CodeWindow.CodeBoxLabel = Label(Language.GetMessage("naq_bomb_menu_02").." ", CodeWindow)
+   	CodeWindow.CodeBoxLabel = Label(SGLanguage.GetMessage("naq_bomb_menu_02").." ", CodeWindow)
    end
    CodeWindow.CodeBoxLabel:SetPos(padding, padding + 50)
    CodeWindow.CodeBoxLabel:SetContentAlignment(ALIGN_RIGHT)

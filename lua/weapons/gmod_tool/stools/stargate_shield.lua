@@ -17,10 +17,10 @@
 */
 
 --################# Header
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_shield");
+TOOL.Name=SGLanguage.GetMessage("stool_shield");
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
@@ -209,9 +209,9 @@ function TOOL:ControlsPanel(Panel)
 	if(StarGate.CFG:Get("shield","allow_containment",true)) then
 		Panel:CheckBox("Containment","stargate_shield_containment"):SetToolTip("Enable this to keep things inside a shield instead of keeping it away");
 	end
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"stargate_shield_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_shield_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"stargate_shield_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_shield_autolink"):SetToolTip("Autolink this to resouce using Entity?");
 	end
 	Panel:CheckBox("Anti Noclip", "stargate_shield_anti_noclip"):SetToolTip("People can't noclip in the shield?");
 end

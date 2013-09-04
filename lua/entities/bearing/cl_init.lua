@@ -1,6 +1,8 @@
 include('shared.lua') ;
 ENT.BearingColor = Color(255,255,255);
-language.Add("bearing",Language.GetMessage("stool_bearing"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("bearing",SGLanguage.GetMessage("stool_bearing"));
+end
 
 ENT.RenderGroup = RENDERGROUP_OPAQUE
 ENT.SpritePositions = Vector(0,0,5);

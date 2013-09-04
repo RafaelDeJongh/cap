@@ -2,11 +2,11 @@
 	Braziers
 	Copyright (C) 2010  Madman07
 */
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_brazier");
+TOOL.Name=SGLanguage.GetMessage("stool_brazier");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/Boba_Fett/props/brazier.mdl";
@@ -48,7 +48,7 @@ end
 
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="braziers_model",Category="",Models=self.Models});
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"braziers_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"braziers_autoweld");
 end
 
 TOOL:Register();

@@ -56,14 +56,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -89,12 +89,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,133);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,133);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -119,9 +119,9 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,160);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
 	self.VGUI.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.PrivateCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -134,8 +134,8 @@ function PANEL:Init()
 	-- The Local Checkbox
 	self.VGUI.LocaleCheckbox:SetPos(75,175);
 	self.VGUI.LocaleCheckbox:SetWide(110);
-	self.VGUI.LocaleCheckbox:SetText(Language.GetMessage("stargate_vgui_locale"));
-	local tip = Language.GetMessage("stargate_vgui_localetip");
+	self.VGUI.LocaleCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_locale"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_localetip");
 	self.VGUI.LocaleCheckbox:SetTooltip(tip);
 	self.VGUI.LocaleCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.LocaleCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -156,8 +156,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,190);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -171,7 +171,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -359,14 +359,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -392,12 +392,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,133);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,133);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -422,9 +422,9 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,160);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
 	self.VGUI.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.PrivateCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -437,8 +437,8 @@ function PANEL:Init()
 	-- The Local Checkbox
 	self.VGUI.LocaleCheckbox:SetPos(75,175);
 	self.VGUI.LocaleCheckbox:SetWide(110);
-	self.VGUI.LocaleCheckbox:SetText(Language.GetMessage("stargate_vgui_locale"));
-	local tip = Language.GetMessage("stargate_vgui_localetip");
+	self.VGUI.LocaleCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_locale"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_localetip");
 	self.VGUI.LocaleCheckbox:SetTooltip(tip);
 	self.VGUI.LocaleCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.LocaleCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -459,8 +459,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,190);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -474,7 +474,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -551,14 +551,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -584,12 +584,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,133);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,133);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -614,9 +614,9 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,160);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
 	self.VGUI.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.PrivateCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -629,8 +629,8 @@ function PANEL:Init()
 	-- The Local Checkbox
 	self.VGUI.LocaleCheckbox:SetPos(75,175);
 	self.VGUI.LocaleCheckbox:SetWide(110);
-	self.VGUI.LocaleCheckbox:SetText(Language.GetMessage("stargate_vgui_locale"));
-	local tip = Language.GetMessage("stargate_vgui_localetip");
+	self.VGUI.LocaleCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_locale"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_localetip");
 	self.VGUI.LocaleCheckbox:SetTooltip(tip);
 	self.VGUI.LocaleCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.LocaleCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -660,8 +660,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,190);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -675,7 +675,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -751,14 +751,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -784,12 +784,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,133);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,133);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -814,9 +814,9 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,160);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
 	self.VGUI.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.PrivateCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -829,8 +829,8 @@ function PANEL:Init()
 	-- The Local Checkbox
 	self.VGUI.LocaleCheckbox:SetPos(75,175);
 	self.VGUI.LocaleCheckbox:SetWide(110);
-	self.VGUI.LocaleCheckbox:SetText(Language.GetMessage("stargate_vgui_locale"));
-	local tip = Language.GetMessage("stargate_vgui_localetip");
+	self.VGUI.LocaleCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_locale"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_localetip");
 	self.VGUI.LocaleCheckbox:SetTooltip(tip);
 	self.VGUI.LocaleCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.LocaleCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -860,8 +860,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,190);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -875,7 +875,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -949,14 +949,14 @@ function PANEL:Init()
 		PrivateCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -980,12 +980,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,103);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,103);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -1010,9 +1010,9 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,130);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
 	self.VGUI.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.PrivateCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -1026,7 +1026,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1093,14 +1093,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1116,12 +1116,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,103);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,103);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -1146,8 +1146,8 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,130);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox:SetWide(110);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1159,8 +1159,8 @@ function PANEL:Init()
 	end
 
 	self.VGUI.GalaxyCheckbox:SetPos(75,145);
-	self.VGUI.GalaxyCheckbox:SetText(Language.GetMessage("stargate_galaxy_vgui"));
-	local tip = Language.GetMessage("stargate_galaxy_vgui_tip");
+	self.VGUI.GalaxyCheckbox:SetText(SGLanguage.GetMessage("stargate_galaxy_vgui"));
+	local tip = SGLanguage.GetMessage("stargate_galaxy_vgui_tip");
 	self.VGUI.GalaxyCheckbox:SetTooltip(tip);
 	self.VGUI.GalaxyCheckbox:SetWide(110);
 	self.VGUI.GalaxyCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1182,8 +1182,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,160);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -1197,7 +1197,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1272,14 +1272,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetWide(200);
 	self.VGUI.TitleLabel:SetPos(30,7);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1295,12 +1295,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,103);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,103);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -1325,8 +1325,8 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,130);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox:SetWide(110);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1340,8 +1340,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,145);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -1355,7 +1355,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1432,14 +1432,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1455,12 +1455,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,103);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,103);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -1485,8 +1485,8 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,130);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox:SetWide(110);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1498,8 +1498,8 @@ function PANEL:Init()
 	end
 
 	self.VGUI.GalaxyCheckbox:SetPos(75,145);
-	self.VGUI.GalaxyCheckbox:SetText(Language.GetMessage("stargate_galaxy_vgui"));
-	local tip = Language.GetMessage("stargate_galaxy_vgui_tip");
+	self.VGUI.GalaxyCheckbox:SetText(SGLanguage.GetMessage("stargate_galaxy_vgui"));
+	local tip = SGLanguage.GetMessage("stargate_galaxy_vgui_tip");
 	self.VGUI.GalaxyCheckbox:SetTooltip(tip);
 	self.VGUI.GalaxyCheckbox:SetWide(110);
 	self.VGUI.GalaxyCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1521,8 +1521,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,160);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -1536,7 +1536,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1611,14 +1611,14 @@ function PANEL:Init()
 		BlockedCheckbox = vgui.Create("DCheckBoxLabel",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetWide(200);
 	self.VGUI.TitleLabel:SetPos(30,7);
 	--###### Set Address
 	-- The Topic of this section
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressLabel[i]:SetText(Language.GetMessage("stargate_vgui_settings"));
+		self.VGUI.AddressLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_settings"));
 		self.VGUI.AddressLabel[i]:SetPos(30-mul*2,35-mul*2);
 		self.VGUI.AddressLabel[i]:SetWide(150);
 		self.VGUI.AddressLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -1634,12 +1634,12 @@ function PANEL:Init()
 	--###### Name
 	-- Name Label
 	self.VGUI.NameLabel:SetPos(30,103);
-	self.VGUI.NameLabel:SetText(Language.GetMessage("stargate_vgui_name"));
+	self.VGUI.NameLabel:SetText(SGLanguage.GetMessage("stargate_vgui_name"));
 
 	-- Name TextEntry
 	self.VGUI.NameTextEntry:SetPos(75,103);
 	self.VGUI.NameTextEntry:SetWide(110);
-	self.VGUI.NameTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_nametip"));
+	self.VGUI.NameTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_nametip"));
 	self.VGUI.NameTextEntry:SetAllowNonAsciiCharacters(true);
 	self.VGUI.NameTextEntry.OnTextChanged = function(TextEntry)
 		local s = TextEntry:GetValue();
@@ -1664,8 +1664,8 @@ function PANEL:Init()
 
 	-- The Private Checkbox
 	self.VGUI.PrivateCheckbox:SetPos(75,130);
-	self.VGUI.PrivateCheckbox:SetText(Language.GetMessage("stargate_vgui_private"));
-	local tip = Language.GetMessage("stargate_vgui_privatetip");
+	self.VGUI.PrivateCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_private"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_privatetip");
 	self.VGUI.PrivateCheckbox:SetTooltip(tip);
 	self.VGUI.PrivateCheckbox:SetWide(110);
 	self.VGUI.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
@@ -1679,8 +1679,8 @@ function PANEL:Init()
 	-- The Blocked Checkbox
 	self.VGUI.BlockedCheckbox:SetPos(75,145);
 	self.VGUI.BlockedCheckbox:SetWide(150);
-	self.VGUI.BlockedCheckbox:SetText(Language.GetMessage("stargate_vgui_blocked"));
-	local tip = Language.GetMessage("stargate_vgui_blockedtip");
+	self.VGUI.BlockedCheckbox:SetText(SGLanguage.GetMessage("stargate_vgui_blocked"));
+	local tip = SGLanguage.GetMessage("stargate_vgui_blockedtip");
 	self.VGUI.BlockedCheckbox:SetTooltip(tip);
 	self.VGUI.BlockedCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 	self.VGUI.BlockedCheckbox.Button.ConVarChanged = function(CheckBox)
@@ -1694,7 +1694,7 @@ function PANEL:Init()
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(250-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));

@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 EFFECT.Material1 = StarGate.MaterialCopy("HandBeam","generic_laser");
 EFFECT.Material2 = StarGate.MaterialFromVMT(
 	"HandGlow",

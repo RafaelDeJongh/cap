@@ -2,11 +2,11 @@
 	Door Controller
 	Copyright (C) 2011  Madman07
 */
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_door_c");
+TOOL.Name=SGLanguage.GetMessage("stool_door_c");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/Iziraider/destinybutton/destinybutton.mdl";
@@ -45,7 +45,7 @@ end
 
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="cap_door_contr_model",Category="",Models=self.Models});
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"cap_door_contr_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cap_door_contr_autoweld");
 end
 
 TOOL:Register();

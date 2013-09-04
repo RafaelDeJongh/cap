@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-if (not StarGate.CheckModule("ship")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship")) then return end
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
 include("shared.lua");
@@ -189,10 +189,18 @@ function ENT:OnRemove()
 	if (IsValid(self.Turret2)) then
 		self.Turret2.Firing = false;
 	end
-	self.Wheels:Remove();
-	self.Cockpit:Remove();
-	self.CockpitAnim:Remove();
-	self.WheelsAnim:Remove();
+	if (IsValid(self.Wheels)) then
+		self.Wheels:Remove();
+	end
+	if (IsValid(self.Cockpit)) then
+		self.Cockpit:Remove();
+	end
+	if (IsValid(self.CockpitAnim)) then
+		self.CockpitAnim:Remove();
+	end
+	if (IsValid(self.WheelsAnim)) then
+		self.WheelsAnim:Remove();
+	end
 
 end
 
@@ -206,23 +214,27 @@ function ENT:Use(p)
 	if self.NextUse.Use < CurTime() then
 		if((pos.x>-100 and pos.x<100)and(pos.y>-120 and pos.y<120)and(pos.z>-100 and pos.z<100)) then
 			if(not(self.CockpitOpen)) then
-				self.CockpitAnim:Fire("setanimation","open","0")
-				timer.Simple(1, function() self.CockpitOpen = true; end)
+				if (IsValid(self.CockpitAnim)) then
+					self.CockpitAnim:Fire("setanimation","open","0")
+					timer.Simple(1, function() if (IsValid(self)) then self.CockpitOpen = true; end end)
+				end
 			else
 				self.CanUse = true;
 				self:Enter(p)
 			end
 		else
 			self.CanUse = false;
-			if(not(self.CockpitOpen)) then
-				self.CockpitAnim:Fire("setanimation","open","0")
-				timer.Simple(1, function() self.CockpitOpen = true; end)
-				self.Cockpit.CollisionGroup = self.Cockpit:GetCollisionGroup();
-				self.Cockpit:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE);
-			else
-				self.CockpitAnim:Fire("setanimation","close","0")
-				timer.Simple(1, function() self.CockpitOpen = false; end)
-				if (self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
+			if (IsValid(self.CockpitAnim)) then
+				if(not(self.CockpitOpen)) then
+					self.CockpitAnim:Fire("setanimation","open","0")
+					timer.Simple(1, function() self.CockpitOpen = true; end)
+					self.Cockpit.CollisionGroup = self.Cockpit:GetCollisionGroup();
+					self.Cockpit:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE);
+				else
+					self.CockpitAnim:Fire("setanimation","close","0")
+					timer.Simple(1, function() self.CockpitOpen = false; end)
+					if (self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
+				end
 			end
 		end
 		self.NextUse.Use = CurTime() + 1;
@@ -234,7 +246,7 @@ function ENT:Enter(p)
 
 	self.BaseClass.Enter(self,p);
 	self.CanUse = false;
-	if(self.CockpitOpen) then
+	if(self.CockpitOpen and IsValid(self.CockpitAnim)) then
 		self.CockpitAnim:Fire("setanimation","close","0")
 	end
 	self.CockpitOpen = false;
@@ -244,7 +256,7 @@ end
 function ENT:Exit(kill)
 
 	self.BaseClass.Exit(self,kill);
-	self.CockpitAnim:Fire("setanimation","open","0")
+	if (IsValid(self.CockpitAnim)) then self.CockpitAnim:Fire("setanimation","open","0") end
 	timer.Simple(1, function() self.CockpitOpen = true; end)
 	if (IsValid(self.Cockpit) and self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
 

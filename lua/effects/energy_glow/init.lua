@@ -3,6 +3,8 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 EFFECT.GlowMat = Material("sprites/portalglow");
 EFFECT.GlowMat2 = Material("sprites/light_ignorez");
 EFFECT.GlowMat3 = StarGate.MaterialFromVMT(
@@ -31,7 +33,8 @@ function EFFECT:Init( data )
 	self.LifeTime = CurTime()+data:GetMagnitude();
 
 	self.GlowScale = 0;
-	if (IsValid(self.Parent)) then self.LastPos = self.Parent:LocalToWorld(self.LocalPos); end
+	if (IsValid(self.Parent)) then self.LastPos = self.Parent:LocalToWorld(self.LocalPos);
+	else self.LastPos = Vector(0,0,0); end
 	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*100000,Vector(1,1,1)*100000);
 end
 

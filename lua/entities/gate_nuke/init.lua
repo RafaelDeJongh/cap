@@ -17,7 +17,7 @@ DrFattyJr(Me)...
 	Do NOT set the position of this Entity.
 ]]--
 
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')

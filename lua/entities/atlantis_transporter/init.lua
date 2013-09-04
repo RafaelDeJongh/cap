@@ -1,4 +1,4 @@
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 
 AddCSLuaFile("shared.lua");
 AddCSLuaFile("cl_init.lua");
@@ -180,7 +180,7 @@ function ENT:SetAtlName(name,wire,ply)
 		-- No multiple rings please!
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
 			if(v.TName == name and v.Entity != self.Entity) then
-				if (not wire) then ply:SendLua("GAMEMODE:AddNotify(Language.GetMessage(\"atl_tp_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); end
+				if (not wire) then ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"atl_tp_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); end
 				return;
 			end
 		end

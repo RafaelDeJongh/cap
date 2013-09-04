@@ -1,5 +1,7 @@
 include('shared.lua');
-language.Add("kino_ball", Language.GetMessage("entity_kino"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("kino_ball", SGLanguage.GetMessage("entity_kino"))
+end
 
 ENT.RenderGroup 	= RENDERGROUP_BOTH
 

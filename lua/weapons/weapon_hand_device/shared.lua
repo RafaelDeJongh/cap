@@ -16,9 +16,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 --################### Head
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.Category = Language.GetMessage("weapon_cat");
-SWEP.PrintName = Language.GetMessage("weapon_hand_device");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+SWEP.PrintName = SGLanguage.GetMessage("weapon_hand_device");
+end
 SWEP.Author = "JDM12989 & aVoN";
 SWEP.Contact = "";
 SWEP.Purpose = "";

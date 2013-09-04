@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("base")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_misc_malp");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_malp");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "RononDex"
 SWEP.Purpose = "Control the MALP"
 SWEP.Instructions = ""

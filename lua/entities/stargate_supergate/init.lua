@@ -17,7 +17,7 @@
 */
 
 --################# HEADER #################
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 --################# Include
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
@@ -178,30 +178,31 @@ function ENT:LightUp(Tick)
 	local ent = self.Entity;
 
 	timer.Create( "Effects"..self:EntIndex(), Tick, 72, function()
+		if (IsValid(self)) then
+			self:Fade(self.EffectSegments[i], true);
 
-		self:Fade(self.EffectSegments[i], true);
+			local pos = self.Segments[i]:GetPos();
+			local e = self.Segments[i];
 
-		local pos = self.Segments[i]:GetPos();
-		local e = self.Segments[i];
+			timer.Create("Zaping"..e:EntIndex()..math.Rand(0,100),0.07,5,function()
+				-- hmm, i decreased them as spawn effect is also nice and les laggy
 
-		timer.Create("Zaping"..e:EntIndex()..math.Rand(0,100),0.07,5,function()
-			-- hmm, i decreased them as spawn effect is also nice and les laggy
+				local fx3 = EffectData()
+					fx3:SetStart(pos);
+					fx3:SetOrigin(pos);
+					fx3:SetScale(50);
+					fx3:SetMagnitude(50);
+					fx3:SetEntity(e);
+				util.Effect("TeslaHitBoxes",fx3);
 
-			local fx3 = EffectData()
-				fx3:SetStart(pos);
-				fx3:SetOrigin(pos);
-				fx3:SetScale(50);
-				fx3:SetMagnitude(50);
-				fx3:SetEntity(e);
-			util.Effect("TeslaHitBoxes",fx3);
-
-		end);
-        /*
-		local ed = EffectData()
-			ed:SetEntity(e)
-		util.Effect( "old_propspawn", ed, true, true )
-        */
-		i=i+1;
+			end);
+	        /*
+			local ed = EffectData()
+				ed:SetEntity(e)
+			util.Effect( "old_propspawn", ed, true, true )
+	        */
+			i=i+1;
+		end
 
 	end )
 
@@ -217,10 +218,12 @@ function ENT:Fade(segment, tofull)
 		segment.alpha = 255;
 	end
 	timer.Create("FadeSegmentss"..segment:EntIndex(),0.001,16,function()
-		segment.alpha = segment.alpha + segment.direction;
-		if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
-		if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
-		segment:SetColor(Color(255,255,255,segment.alpha))
+		if (IsValid(segment)) then
+			segment.alpha = segment.alpha + segment.direction;
+			if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
+			if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
+			segment:SetColor(Color(255,255,255,segment.alpha))
+		end
 	end);
 end
 

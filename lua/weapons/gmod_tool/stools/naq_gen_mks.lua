@@ -1,9 +1,9 @@
 /*   Copyright (C) 2010 by Llapp   */
-if (not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";
-TOOL.Name=Language.GetMessage("stool_naq_gen");
+TOOL.Name=SGLanguage.GetMessage("stool_naq_gen");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["autolink"] = 1;
 local models =
@@ -103,9 +103,9 @@ if(SERVER) then
 end
 
 function TOOL.BuildCPanel(panel)
-    panel:CheckBox(Language.GetMessage("stool_autoweld"),"naq_gen_mks_autoweld");
+    panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"naq_gen_mks_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		panel:CheckBox(Language.GetMessage("stool_autolink"),"naq_gen_mks_autolink"):SetToolTip("Autolink this to resource using Entities?");
+		panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_gen_mks_autolink"):SetToolTip("Autolink this to resource using Entities?");
 	end
 	panel:AddControl("Header",
    {

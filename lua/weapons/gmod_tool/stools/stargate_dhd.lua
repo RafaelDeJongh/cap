@@ -17,10 +17,10 @@
 */
 
 --################# Header
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_mdhd");
+TOOL.Name=SGLanguage.GetMessage("stool_mdhd");
 
 --TOOL.ClientConVar["autolink"] = 1; -- No lifesupport added yet
 TOOL.ClientConVar["autoweld"] = 1;
@@ -117,10 +117,10 @@ function TOOL:ControlsPanel(Panel)
 		Command="stargate_dhd_toggle",
 	});
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_dhd_model",Category="",Models=self.Models});
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"stargate_dhd_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_dhd_autoweld");
 	--[[ -- No LifeSupport added yet
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"stargate_dhd_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_dhd_autolink"):SetToolTip("Autolink this to resouce using Entity?");
 	end
 	--]]
 end

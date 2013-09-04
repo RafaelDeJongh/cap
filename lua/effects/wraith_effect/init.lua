@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 -- The old Material can't use alpha-shading anymore. Seems to be a problem with the engine update and UnlitTwoTexture shaders
 --EFFECT.Material1 = Material("models/props_combine/portalball001_sheet");
 -- This is a reduced shader - Does not look like exactly like the one before, but much much better than with no alpha shading

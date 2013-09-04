@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.Category = Language.GetMessage("weapon_cat");
-SWEP.PrintName = Language.GetMessage("weapon_wraith_blaster");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+SWEP.PrintName = SGLanguage.GetMessage("weapon_wraith_blaster");
+end
 SWEP.Author = "Ronon Dex"
 SWEP.Contact = ""
 SWEP.Purpose = "Stun"
@@ -33,7 +35,9 @@ list.Add("NPCUsableWeapons", {class = "weapon_blaster", title = SWEP.PrintName})
 
 SWEP.Sounds = Sound("weapons/wraith_stunner.wav");
 
-list.Set("NPCWeapons","weapon_blaster",Language.GetMessage("weapon_wraith_blaster"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+list.Set("NPCWeapons","weapon_blaster",SGLanguage.GetMessage("weapon_wraith_blaster"));
+end
 
 function SWEP:Initialize()
 

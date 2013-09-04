@@ -2,11 +2,11 @@
 	Naquada Bomb
 	Copyright (C) 2010  Madman07, Stargate Extras
 */
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Weapons";
-TOOL.Name=Language.GetMessage("stool_naq_bomb");
+TOOL.Name=SGLanguage.GetMessage("stool_naq_bomb");
 TOOL.ClientConVar["detonationCode"] = "";
 TOOL.ClientConVar["abortCode"] = "";
 TOOL.ClientConVar["yield"] = 100;
@@ -78,21 +78,21 @@ function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="naqbomb_model",Category="",Models=self.Models});
 	Panel:AddControl("TextBox",
    {
-		Label = Language.GetMessage("naq_bomb_menu_02"),
+		Label = SGLanguage.GetMessage("naq_bomb_menu_02"),
 		Description = "Enter the code you wish to use to detonate the bomb, NOTE: If you use anything other than numbers you will not be able to detonate via wire.",
 		Command = "naqbomb_detonationCode",
 	})
 	Panel:AddControl("TextBox",
    {
-		Label = Language.GetMessage("naq_bomb_menu_02a"),
+		Label = SGLanguage.GetMessage("naq_bomb_menu_02a"),
 		Description = "Enter the code you wish to use to abort the detonation, NOTE: Using letters may result in not being able to trigger via wire",
 		Command = "naqbomb_abortCode",
 	})
-	Panel:NumSlider(Language.GetMessage("naq_stool_menu_y"),"naqbomb_yield",10,100,0);
-	Panel:NumSlider(Language.GetMessage("naq_stool_menu_d"),"naqbomb_chargeTime",10,300,0);
-   	Panel:CheckBox(Language.GetMessage("naq_stool_menu_h"),"naqbomb_hud"):SetToolTip(Language.GetMessage("naq_stool_menu_h_d"));
-	Panel:CheckBox(Language.GetMessage("naq_stool_menu_c"),"naqbomb_cart"):SetToolTip(Language.GetMessage("naq_stool_menu_c_d"));
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"naqbomb_autoweld"):SetToolTip(Language.GetMessage("naq_stool_menu_a_d"));
+	Panel:NumSlider(SGLanguage.GetMessage("naq_stool_menu_y"),"naqbomb_yield",10,100,0);
+	Panel:NumSlider(SGLanguage.GetMessage("naq_stool_menu_d"),"naqbomb_chargeTime",10,300,0);
+   	Panel:CheckBox(SGLanguage.GetMessage("naq_stool_menu_h"),"naqbomb_hud"):SetToolTip(SGLanguage.GetMessage("naq_stool_menu_h_d"));
+	Panel:CheckBox(SGLanguage.GetMessage("naq_stool_menu_c"),"naqbomb_cart"):SetToolTip(SGLanguage.GetMessage("naq_stool_menu_c_d"));
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"naqbomb_autoweld"):SetToolTip(SGLanguage.GetMessage("naq_stool_menu_a_d"));
 end
 
 TOOL:Register();

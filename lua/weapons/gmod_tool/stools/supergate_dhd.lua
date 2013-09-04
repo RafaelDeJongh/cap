@@ -4,10 +4,10 @@
 ]]--
 
 --################# Header
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_sdhd");
+TOOL.Name=SGLanguage.GetMessage("stool_sdhd");
 
 --TOOL.ClientConVar["autolink"] = 1; -- No lifesupport added yet
 --TOOL.ClientConVar["autoweld"] = 1;

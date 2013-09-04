@@ -25,7 +25,7 @@ hook.Add("HUDPaint","Ring.Hook.HUDPaint.ShowAddressAndNames",
 					if(e.IsRings) then
 						local address = e:GetRingAddress();
 						if(address ~= "") then
-							local message = Language.GetMessage("stargate_address")..": "..address;
+							local message = SGLanguage.GetMessage("stargate_address")..": "..address;
 							draw.WordBox(8,40,ScrH()/2,message,"Default",Color(50,50,75,100),Color(255,255,255,255));
 						end
 					end
@@ -75,7 +75,7 @@ function PANEL:Init()
 	end
 
  	self.L1 = vgui.Create( "DLabel", self )
- 	self.L1:SetText(Language.GetMessage("ring_name"))
+ 	self.L1:SetText(SGLanguage.GetMessage("ring_name"))
  	self.L1:SetFont("OldDefaultSmall")
 
  	self.Button = vgui.Create( "RingNameButtonCap", self)

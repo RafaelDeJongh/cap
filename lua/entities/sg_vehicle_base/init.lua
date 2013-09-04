@@ -25,7 +25,7 @@
 	Ronon Dex
 ]]--
 
-if (not StarGate.CheckModule("ship")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship")) then return end
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
 include("shared.lua");

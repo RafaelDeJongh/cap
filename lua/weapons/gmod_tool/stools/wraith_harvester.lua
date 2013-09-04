@@ -19,11 +19,11 @@
 -- The original Warithharvester spawntool code has been replaced with this version which has fully stargatepack support.
 
 --################# Header
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_harvester");
+TOOL.Name=SGLanguage.GetMessage("stool_harvester");
 
 -- CliebtConVars
 TOOL.ClientConVar["spit"] = 2;
@@ -135,9 +135,9 @@ function TOOL:ControlsPanel(Panel)
 	});
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="wraith_harvester_model",Category="",Models=self.Models});
 	Panel:CheckBox("Beam Always Straigth Down","wraith_harvester_always_down");
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"wraith_harvester_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"wraith_harvester_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"wraith_harvester_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"wraith_harvester_autolink"):SetToolTip("Autolink this to resouce using Entities?");
 	end
 end
 

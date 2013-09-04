@@ -17,7 +17,7 @@
 */
 
 --################# HEADER #################
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 ENT.CDSIgnore = true; -- CDS Immunity
 function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invulnarability!
 
@@ -499,7 +499,7 @@ function ENT:Shutdown(override)
 	if(self.ShuttingDown or (not self:IsOpen() and not override)) then return end; -- Aready shutting down or not opened yets
 	--self:StopSound(self.Sounds.Idle,0.4);
 	self.Entity:SetColor(Color(255,255,255,255));
-	self.IdleSound:Stop()
+	if (self.IdleSound) then self.IdleSound:Stop() end
 	timer.Remove("EventHorizonOpening"..self.Entity:EntIndex());
 	self.ShuttingDown = true;
 	self.ShuttingDownKill = true;

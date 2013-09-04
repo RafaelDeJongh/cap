@@ -2,11 +2,11 @@
 	Naquada Bomb
 	Copyright (C) 2010  Madman07, Stargate Extras
 */
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Weapons";
-TOOL.Name= Language.GetMessage("entity_asgard_ashen_def");
+TOOL.Name= SGLanguage.GetMessage("entity_asgard_ashen_def");
 
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["model"] = "models/Madman07/ashen_defence/ashen_defence.mdl";
@@ -43,7 +43,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 */
 function TOOL:ControlsPanel(Panel)
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"ashen_defence_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"ashen_defence_autoweld");
 end
 
 TOOL:Register();

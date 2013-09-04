@@ -3,12 +3,14 @@
 	Copyright (C) 2012 Llapp
 ]]--
 
-if (not StarGate.CheckModule("weapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
 if SERVER then
 	AddCSLuaFile("shared.lua");
 end
-SWEP.PrintName = Language.GetMessage("weapon_misc_atanik");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_atanik");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "Llapp"
 SWEP.Contact = "llapp612@googlemail.com"
 SWEP.Purpose = "Atanik Armband"

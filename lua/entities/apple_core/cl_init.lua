@@ -1,6 +1,8 @@
 include("shared.lua")
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_apple_core");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+	ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+	ENT.PrintName = SGLanguage.GetMessage("entity_apple_core");
+end
 ENT.RenderGroup = RENDERGROUP_BOTH;
 ENT.HoloText = surface.GetTextureID("VGUI/resources_hud/sgu_screen");
 local font = {

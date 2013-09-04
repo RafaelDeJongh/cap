@@ -3,7 +3,7 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 if SERVER then
 	AddCSLuaFile("shared.lua");
 else
@@ -18,12 +18,14 @@ else
 		killicon.Add("ring_panel","weapons/ring_killicon",Color(255,255,255));
 	end
 end
-SWEP.PrintName = Language.GetMessage("weapon_misc_nox");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_nox");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+SWEP.Instructions = SGLanguage.GetMessage("weapon_misc_nox_desc")
+end
 SWEP.Author = "Madman07"
 SWEP.Contact = "madman097@gmail.com"
 SWEP.Purpose = "Nox Hands"
-SWEP.Instructions = Language.GetMessage("weapon_misc_nox_desc")
 SWEP.Base = "weapon_base";
 SWEP.Slot = 1;
 SWEP.SlotPos = 5;

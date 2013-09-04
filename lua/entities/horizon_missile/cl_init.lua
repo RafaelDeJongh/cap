@@ -16,7 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 include("shared.lua");
-language.Add("horizon_missile",Language.GetMessage("entity_horizon_missile"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("horizon_missile",SGLanguage.GetMessage("entity_horizon_missile"));
+end
 
 --################### Init @aVoN
 function ENT:Initialize()

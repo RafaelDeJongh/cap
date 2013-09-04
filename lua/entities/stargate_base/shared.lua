@@ -52,7 +52,7 @@ ENT.ChevAdd = 2000;
 
 properties.Add( "Stargate.AutoClose.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_03d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_03d"),
 	Order		=	-109,
 	MenuIcon	=	"icon16/plugin_delete.png",
 
@@ -83,7 +83,7 @@ properties.Add( "Stargate.AutoClose.On",
 
 properties.Add( "Stargate.AutoClose.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_03"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_03"),
 	Order		=	-109,
 	MenuIcon	=	"icon16/plugin_add.png",
 
@@ -115,7 +115,7 @@ properties.Add( "Stargate.AutoClose.Off",
 
 properties.Add( "Stargate.DisableMenu.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_07d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_07d"),
 	Order		=	-108,
 	MenuIcon	=	"icon16/plugin_delete.png",
 
@@ -146,7 +146,7 @@ properties.Add( "Stargate.DisableMenu.On",
 
 properties.Add( "Stargate.DisableMenu.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_07"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_07"),
 	Order		=	-108,
 	MenuIcon	=	"icon16/plugin_add.png",
 
@@ -178,7 +178,7 @@ properties.Add( "Stargate.DisableMenu.Off",
 
 properties.Add( "Stargate.ChevronLight.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_09"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_09"),
 	Order		=	-111,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -212,7 +212,7 @@ properties.Add( "Stargate.ChevronLight.On",
 
 properties.Add( "Stargate.ChevronLight.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_09d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_09d"),
 	Order		=	-111,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -247,7 +247,7 @@ properties.Add( "Stargate.ChevronLight.Off",
 
 properties.Add( "Stargate.RingRotate.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_11"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_11"),
 	Order		=	-110,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -278,7 +278,7 @@ properties.Add( "Stargate.RingRotate.On",
 
 properties.Add( "Stargate.RingRotate.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_11d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_11d"),
 	Order		=	-110,
 	MenuIcon	=	"icon16/plugin.png",
 

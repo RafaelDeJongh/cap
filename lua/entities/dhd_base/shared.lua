@@ -165,7 +165,7 @@ end
 
 properties.Add( "Stargate.DHD.SG1.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_01d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_01d"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_delete.png",
 
@@ -196,7 +196,7 @@ properties.Add( "Stargate.DHD.SG1.On",
 
 properties.Add( "Stargate.DHD.SG1.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_01"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_01"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_add.png",
 
@@ -228,7 +228,7 @@ properties.Add( "Stargate.DHD.SG1.Off",
 
 properties.Add( "Stargate.DHD.Atl.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_02"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_02"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_add.png",
 
@@ -259,7 +259,7 @@ properties.Add( "Stargate.DHD.Atl.On",
 
 properties.Add( "Stargate.DHD.Atl.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_02d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_02d"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_delete.png",
 

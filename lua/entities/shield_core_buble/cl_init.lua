@@ -4,7 +4,9 @@
 ]]--
 
 include('shared.lua');
-language.Add("shield_core_buble",Language.GetMessage("ship_core_buble"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("shield_core_buble",SGLanguage.GetMessage("ship_core_buble"));
+end
 
 include("modules/sphere.lua")
 include("modules/box.lua")

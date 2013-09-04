@@ -1,6 +1,8 @@
 include('shared.lua')
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("ring_panel_ancient");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("ring_panel_ancient");
+end
 
 ENT.ButtonPos = {
 	[1] = Vector(1.53, -1.5, 19.38),

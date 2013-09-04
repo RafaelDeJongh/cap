@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("extra")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_misc_virus");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_virus");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "Llapp, Boba Fett, Assassin21";
 SWEP.Contact = "";
 SWEP.Purpose = "";

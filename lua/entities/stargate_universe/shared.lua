@@ -9,7 +9,7 @@ ENT.WireDebugName = "Stargate Universe"
 
 properties.Add( "Stargate.Uni.SymLight.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_10"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_10"),
 	Order		=	-200,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -39,7 +39,7 @@ properties.Add( "Stargate.Uni.SymLight.On",
 
 properties.Add( "Stargate.Uni.SymLight.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_10d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_10d"),
 	Order		=	-200,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -70,7 +70,7 @@ properties.Add( "Stargate.Uni.SymLight.Off",
 
 properties.Add( "Stargate.Uni.SymInc.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_12"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_12"),
 	Order		=	-199,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -100,7 +100,7 @@ properties.Add( "Stargate.Uni.SymInc.On",
 
 properties.Add( "Stargate.Uni.SymInc.On2",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_12b"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_12b"),
 	Order		=	-199,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -130,7 +130,7 @@ properties.Add( "Stargate.Uni.SymInc.On2",
 
 properties.Add( "Stargate.Uni.SymInc.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_12d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_12d"),
 	Order		=	-199,
 	MenuIcon	=	"icon16/plugin_link.png",
 

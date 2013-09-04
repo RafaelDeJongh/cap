@@ -9,7 +9,7 @@ ENT.WireDebugName = "Stargate Atlantis"
 
 properties.Add( "Stargate.Atl.RingLight.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_08"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_08"),
 	Order		=	-120,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -39,7 +39,7 @@ properties.Add( "Stargate.Atl.RingLight.On",
 
 properties.Add( "Stargate.Atl.RingLight.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_08d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_08d"),
 	Order		=	-120,
 	MenuIcon	=	"icon16/plugin.png",
 

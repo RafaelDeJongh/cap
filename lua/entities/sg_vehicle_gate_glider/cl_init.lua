@@ -1,6 +1,8 @@
 include('shared.lua')
-ENT.Category = Language.GetMessage("entity_ships_cat");
-ENT.PrintName = Language.GetMessage("entity_gate_glider");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_gate_glider");
+end
 ENT.RenderGroup = RENDERGROUP_BOTH
 
 --########## Keybinder stuff

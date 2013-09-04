@@ -1,3 +1,5 @@
 include('shared.lua')
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("ring_ancient");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("ring_ancient");
+end

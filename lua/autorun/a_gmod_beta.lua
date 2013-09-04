@@ -63,21 +63,21 @@ function file.Find(path,dir,order)
 end
 
 function file.IsDir(path,dir)
-	if (path==nil or dir==nil) then return false end
+	if (path==nil or dir==nil or type(dir)!="string") then return false end
 	local tmp = file_IsDir(path,dir);
 	if (dir:upper()=="DATA" and not tmp) then tmp = file_IsDir("data/"..path,"GAME"); end
 	return tmp;
 end
 
 function file.Exists(path,dir)
-	if (path==nil or dir==nil) then return false end
+	if (path==nil or dir==nil or type(dir)!="string") then return false end
 	local tmp = file_Exists(path,dir);
 	if (dir:upper()=="DATA" and not tmp) then tmp = file_Exists("data/"..path,"GAME"); end
 	return tmp;
 end
 
 function file.Size(path,dir)
-	if (path==nil or dir==nil) then return -1 end
+	if (path==nil or dir==nil or type(dir)!="string") then return -1 end
 	local tmp = file_Exists(path,dir);
 	if (dir:upper()=="DATA" and not tmp) then tmp = file_Size("data/"..path,"GAME"); end
 	return file_Size(path,dir);

@@ -50,9 +50,11 @@ function PANEL:AddModel( model, ConVars )
 	-- Run a console command when the Icon is clicked
 	Icon.DoClick = 	function ( self )
 
-						for k, v in pairs( self.ConVars ) do
-							if (type(v)=="string" or type(v)=="number") then -- fix for error, damn you garry
-								LocalPlayer():ConCommand( Format( "%s \"%s\"\n", k, v ) )
+						if (type(self.ConVars)=="table") then
+							for k, v in pairs( self.ConVars ) do
+								if (type(v)=="string" or type(v)=="number") then -- fix for error, damn you garry
+									LocalPlayer():ConCommand( Format( "%s \"%s\"\n", k, v ) )
+								end
 							end
 						end
 

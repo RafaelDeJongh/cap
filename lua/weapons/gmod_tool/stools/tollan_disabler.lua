@@ -2,11 +2,11 @@
 	Jamming Device
 	Copyright (C) 2010  Madman07
 */
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_tolland");
+TOOL.Name=SGLanguage.GetMessage("stool_tolland");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["immunity"] = 0;
 TOOL.ClientConVar["size"] = 100;
@@ -83,7 +83,7 @@ function TOOL:ControlsPanel(Panel)
 		Command="tollan_disabler_toggle",
 	});
 	Panel:CheckBox("Immunity","tollan_disabler_immunity"):SetToolTip("Note: Immunity allows you to use your weapons, if disabler is online");
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"tollan_disabler_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"tollan_disabler_autoweld");
 end
 
 if SERVER then

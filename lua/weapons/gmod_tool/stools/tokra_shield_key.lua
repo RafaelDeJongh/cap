@@ -2,11 +2,11 @@
 	Tokra Shield Controller
 	Copyright (C) 2012  Madman07
 */
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_tshieldc");
+TOOL.Name=SGLanguage.GetMessage("stool_tshieldc");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/Madman07/tokra_shield/controller.mdl";
@@ -40,7 +40,7 @@ function TOOL:PreEntitySpawn(p,e,model,toggle)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"tokra_shield_key_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"tokra_shield_key_autoweld");
 end
 
 TOOL:Register();

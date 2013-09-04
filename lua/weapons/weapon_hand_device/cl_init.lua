@@ -7,8 +7,10 @@ end
 if(file.Exists("materials/VGUI/weapons/hand_killicon.vmt","GAME")) then
 	killicon.Add("weapon_hand_device","VGUI/weapons/hand_killicon",Color(255,255,255));
 end
-language.Add("Battery_ammo",Language.GetMessage("naquadah"));
-language.Add("weapon_hand_device",Language.GetMessage("weapon_hand_device"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("Battery_ammo",SGLanguage.GetMessage("naquadah"));
+language.Add("weapon_hand_device",SGLanguage.GetMessage("weapon_hand_device"));
+end
 
 --################### Positions the viewmodel correctly @aVoN
 function SWEP:GetViewModelPosition(p,a)

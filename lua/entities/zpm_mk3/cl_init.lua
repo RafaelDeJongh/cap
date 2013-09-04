@@ -4,7 +4,9 @@
 */
 
 include("shared.lua");
-language.Add("zpm_mk3",Language.GetMessage("stool_zpm_mk3"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("zpm_mk3",SGLanguage.GetMessage("stool_zpm_mk3"));
+end
 
 local font = {
 	font = "Arial",

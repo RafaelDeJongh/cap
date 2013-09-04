@@ -3,11 +3,11 @@
 	Copyright (C) 2010 Llapp
 */
 
-if (not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";
-TOOL.Name=Language.GetMessage("stool_zpm_mk3");
+TOOL.Name=SGLanguage.GetMessage("stool_zpm_mk3");
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
@@ -49,9 +49,9 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"zpm_mk3_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"zpm_mk3_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip("Autolink this to resource using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip("Autolink this to resource using Entities?");
 	end
 	Panel:AddControl("Label", {Text = "\nThis is the Zpm MK3, this tool is in use for LifeSupport and Resource Distribution. If you don't got LS/RD this Zpm MK3 is quite useless for you.",})
 end

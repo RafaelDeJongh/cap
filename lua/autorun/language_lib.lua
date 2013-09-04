@@ -152,67 +152,67 @@ function LANGParser:get()
 	return self.nodes;
 end
 
-Language = Language or {};
+SGLanguage = SGLanguage or {};
 
 -- it will always return english messages server-side (for lua shared files)
 
-local Language_Messages = {};
+local SGLanguage_Messages = {};
 
 local function LangInit()
 	local langfiles = file.Find("lua/data/language/english/*.lua","GAME");
 	for _,f in pairs(langfiles) do
-		Language.ParseFile("english",f);
+		SGLanguage.ParseFile("english",f);
 	end
 	if CLIENT then
-		langfiles = file.Find("lua/data/language/"..Language.GetClientLanguage().."/*.lua","GAME");
+		langfiles = file.Find("lua/data/language/"..SGLanguage.GetClientSGLanguage().."/*.lua","GAME");
 		for _,f in pairs(langfiles) do
-			Language.ParseFile(Language.GetClientLanguage(),f);
+			SGLanguage.ParseFile(SGLanguage.GetClientSGLanguage(),f);
 		end
 	end
 end
 
-function Language.GetClientLanguage()
+function SGLanguage.GetClientSGLanguage()
 	if SERVER then return "english" end
 	return GetConVarString("sg_language") or "english";
 end
 
-function Language.SetClientLanguage(lang)
+function SGLanguage.SetClientSGLanguage(lang)
 	if SERVER then return end
 	RunConsoleCommand("sg_language",lang);
 end
 
-function Language.GetMessage(message, ...)
-	return Format(tostring(Language_Messages[message] or message), ...) or message;
+function SGLanguage.GetMessage(message, ...)
+	return Format(tostring(SGLanguage_Messages[message] or message), ...) or message;
 end
 
-function Language.ValidMessage(message)
-	if (Language_Messages[message] and tostring(Language_Messages[message])!="") then
+function SGLanguage.ValidMessage(message)
+	if (SGLanguage_Messages[message] and tostring(SGLanguage_Messages[message])!="") then
 		return true;
 	end
 	return false;
 end
 
-function Language.RegisterMessage(message,text,override)
-	if (text and (not Language.ValidMessage(message) or override)) then
-		Language_Messages[message] = text;
+function SGLanguage.RegisterMessage(message,text,override)
+	if (text and (not SGLanguage.ValidMessage(message) or override)) then
+		SGLanguage_Messages[message] = text;
 	end
 end
 
 if (CLIENT) then
-	function Language.ReloadLanguages(no_msg)
-		Language_Messages = {};
+	function SGLanguage.ReloadSGLanguages(no_msg)
+		SGLanguage_Messages = {};
 		LangInit();
-		if (not no_msg) then MsgN("Languages successfully reloded."); end
+		if (not no_msg) then MsgN("SGLanguages successfully reloded."); end
 	end
-	concommand.Add("sg_language_reload", function() Language.ReloadLanguages() end);
+	concommand.Add("sg_language_reload", function() SGLanguage.ReloadSGLanguages() end);
 end
 
-function Language.ParseFile(lang, file)
+function SGLanguage.ParseFile(lang, file)
 	ini = LANGParser:new("lua/data/language/"..lang.."/"..file);
 	if (ini and ini.messages) then
 		for _,v in pairs(ini.messages) do
 			for k,m in pairs(v) do
-				Language.RegisterMessage(k,m,true);
+				SGLanguage.RegisterMessage(k,m,true);
 			end
 		end
 	end

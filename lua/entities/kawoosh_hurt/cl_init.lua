@@ -1,3 +1,5 @@
 include("shared.lua");
-ENT.PrintName = Language.GetMessage("kawoosh_hurt");
-language.Add("kawoosh_hurt",Language.GetMessage("kawoosh_hurt"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.PrintName = SGLanguage.GetMessage("kawoosh_hurt");
+language.Add("kawoosh_hurt",SGLanguage.GetMessage("kawoosh_hurt"))
+end

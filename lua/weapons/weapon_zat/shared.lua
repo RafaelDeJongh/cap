@@ -16,9 +16,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 --################### Head
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_zat");
-SWEP.Category = Language.GetMessage("weapon_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_zat");
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 SWEP.Author = "aVoN"
 SWEP.Contact = "http://forums.facepunchstudios.com/aVoN"
 SWEP.Purpose = "Paralyze,Kill and let things disappear"
@@ -48,7 +50,9 @@ list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
 list.Add("NPCUsableWeapons", {class = "weapon_zat", title = SWEP.PrintName});
 
 -- Add weapon for NPCs
-list.Set("NPCWeapons","weapon_zat",Language.GetMessage("weapon_zat"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+list.Set("NPCWeapons","weapon_zat",SGLanguage.GetMessage("weapon_zat"));
+end
 
 --################### Deploy @aVoN
 function SWEP:Deploy()

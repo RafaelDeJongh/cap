@@ -1,3 +1,5 @@
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 local matRefract	= Material( "refract_ring" )
 local matPinch		= Material( "particle/warp1_warp" )
 local matRipple		= Material( "particle/warp_ripple" )

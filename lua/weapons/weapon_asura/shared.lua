@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_asuran");
-SWEP.Category = Language.GetMessage("weapon_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_asuran");
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 SWEP.Author = "RononDex"
 SWEP.Purpose = "Kill People"
 SWEP.Instructions = "Shoot First, ask questions later"
@@ -30,7 +32,9 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= "none"
 
-list.Set("NPCWeapons","weapon_asura",Language.GetMessage("weapon_asuran"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+list.Set("NPCWeapons","weapon_asura",SGLanguage.GetMessage("weapon_asuran"));
+end
 
 function SWEP:Initialize()
 

@@ -1,3 +1,3 @@
 include("shared.lua")
-ENT.Category = Language.GetMessage("entity_weapon_cat");
-ENT.PrintName = Language.GetMessage("entity_asgard_ashen_def");
+ENT.Category = SGLanguage.GetMessage("entity_weapon_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_asgard_ashen_def");

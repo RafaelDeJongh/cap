@@ -1,5 +1,7 @@
 include("shared.lua");
-language.Add("ship_shield",Language.GetMessage("ship_shield"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("ship_shield",SGLanguage.GetMessage("ship_shield"));
+end
 -- Register shield SENT to the trace class
 StarGate.Trace:Add("shield",
 	function(e,values,trace,in_box)

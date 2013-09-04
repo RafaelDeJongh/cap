@@ -1,6 +1,6 @@
 include("shared.lua")
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_sodan_obelisk");
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_sodan_obelisk");
 
 ENT.ButtonPos = {
 	[1] = Vector(22.53, -3.98, 94.35),
@@ -93,7 +93,7 @@ function PANEL:Init()
 	end
 
  	self.L1 = vgui.Create( "DLabel", self )
- 	self.L1:SetText(Language.GetMessage("sodan_obelisk_menu"))
+ 	self.L1:SetText(SGLanguage.GetMessage("sodan_obelisk_menu"))
  	self.L1:SetFont("OldDefaultSmall")
 
  	self.Button = vgui.Create( "ObeliskPassButton", self)

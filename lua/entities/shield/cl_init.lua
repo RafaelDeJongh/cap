@@ -1,6 +1,8 @@
 include("shared.lua");
 include("modules/bullets.lua");
-language.Add("shield",Language.GetMessage("stool_shield"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("shield",SGLanguage.GetMessage("stool_shield"));
+end
 -- Register shield SENT to the trace class
 StarGate.Trace:Add("shield",
 	function(e,values,trace,in_box)

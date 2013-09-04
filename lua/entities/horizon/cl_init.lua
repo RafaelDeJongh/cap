@@ -2,8 +2,10 @@ include('shared.lua');
 ENT.RenderGroup = RENDERGROUP_BOTH;
 ENT.EnginePos = {"Engine01", "Engine02", "Engine03"}
 
-ENT.Category = Language.GetMessage("entity_weapon_cat");
-ENT.PrintName = Language.GetMessage("entity_horizon_missile");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_weapon_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_horizon_missile");
+end
 
 ENT.Sounds = {
 	Flyby = Sound("weapons/horizon_missle_Flyby.wav"),

@@ -335,7 +335,7 @@ hook.Add("GUIMousePressed","StarGate.DHD.GUIMousePressed_Group",
 	function(_,dir)
 		--if(IsValid(DHD)) then
 			local p = LocalPlayer();
-			if (input.IsButtonDown( MOUSE_RIGHT )) then return end
+			if (input.IsButtonDown( MOUSE_RIGHT ) or not IsValid(p)) then return end
 			local trace = util.QuickTrace(p:GetShootPos(),dir*1024,p);
 			if(IsValid(trace.Entity) and trace.Entity.IsDHD and not trace.Entity:GetNetworkedBool("BusyGUI",false)) then
 				DHD = trace.Entity;

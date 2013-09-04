@@ -8,8 +8,10 @@ local font = {
 }
 surface.CreateFont("AncientsT", font);
 
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_dest_timer");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_dest_timer");
+end
 
 function ENT:Draw()
 

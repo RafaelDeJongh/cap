@@ -1,9 +1,9 @@
 /*   Copyright (C) 2010 by Llapp   */
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Ramps";
-TOOL.Name=Language.GetMessage("stool_ring_ramps");
+TOOL.Name=SGLanguage.GetMessage("stool_ring_ramps");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = StarGate.Ramps.RingDefault;

@@ -1,8 +1,10 @@
 include("shared.lua");
 
 ENT.ChevronColor = Color(50,50,180);
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("stargate_supergate");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("stargate_supergate");
+end
 
 --################# Think function, to set the gates address @aVoN
 function ENT:Think()

@@ -2,11 +2,11 @@
 	Atlantis ZPM Hub
 	Copyright (C) 2010  Llapp
 */
-if (not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";
-TOOL.Name=Language.GetMessage("stool_atlantis_hub");
+TOOL.Name=SGLanguage.GetMessage("stool_atlantis_hub");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/pg_props/pg_zpm/pg_zpm_hub.mdl";

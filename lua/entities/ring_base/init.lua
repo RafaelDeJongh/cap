@@ -1,4 +1,4 @@
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 local base_size=100 -- the size of the ring tube
 
 -- stuff in here cannnot be teleported
@@ -89,7 +89,7 @@ function RingsNamingCallback(ply,cmd,args)
 			-- No multiple rings please!
 			for _,v in pairs(ents.FindByClass("ring_base_*")) do
 				if(v.Address == adr and v.Entity != ply.RingNameEnt) then
-					ply:SendLua("GAMEMODE:AddNotify(Language.GetMessage(\"ring_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+					ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"ring_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 					return;
 				end
 			end

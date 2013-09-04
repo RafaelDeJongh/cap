@@ -5,7 +5,7 @@ StarGate.CAP = true; -- for some scripts
 StarGate.Installed = true;
 StarGate.Loading = false;
 StarGate.WorkShop = false;
-StarGate.WorkShopVer = 402;
+StarGate.WorkShopVer = 405;
 if(CLIENT and not game.SinglePlayer()) then
 	/* Probably this code isn't work anymore in gmod13, not sure */
 	if(file.Exists("lua_temp","GAME")) then -- On a ListenServer, lua_temp does not exists for the HOST
@@ -73,7 +73,7 @@ if (Gmod13Lib==nil) then include("a_gmod_beta.lua") end
 --################# Loads the libraries @aVoN
 function StarGate.Load()
 	local ver = 0;
-	if (StarGate.WorkShop) then
+	if (StarGate.WorkShop and not file.Exists("addons/cap/ver.txt","GAME")) then
 		ver = StarGate.WorkShopVer;
 	else
 		local fil = file.Read("addons/cap/ver.txt","GAME")
@@ -85,7 +85,7 @@ function StarGate.Load()
 	if (StarGate.WorkShop) then
 		MsgN("Initializing workshop version");
 	else
-		MsgN("Initializing git/svn version");
+		MsgN("Initializing git version");
 	end
 	if (ver==0) then
 		MsgN("CAP Version: ERROR");

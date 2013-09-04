@@ -20,7 +20,7 @@
 -- Reload handler
 -- Someone just entered lua_reloadents into console. Therefore, remove all stargates in the map or they will get all fucked
 if(CurTime() > 10) then StarGate.CallReload(_) end;
-if (not StarGate.CheckModule("base",true)) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base",true)) then return end
 
 --Include
 AddCSLuaFile("cl_init.lua");

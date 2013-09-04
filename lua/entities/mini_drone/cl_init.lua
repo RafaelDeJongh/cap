@@ -10,7 +10,9 @@ ENT.Glow = StarGate.MaterialFromVMT(
 		"$vertexcolor" 1
 	}]]
 );
-language.Add("mini_drone",Language.GetMessage("mdrone_kill"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("mini_drone",SGLanguage.GetMessage("mdrone_kill"));
+end
 
 function ENT:Initialize()
 	self.Created = CurTime();

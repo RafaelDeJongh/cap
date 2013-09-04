@@ -1,6 +1,8 @@
 include("shared.lua");
-ENT.Category = Language.GetMessage("entity_weapon_cat");
-ENT.PrintName = Language.GetMessage("entity_directional_nuke");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_weapon_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_directional_nuke");
+end
 
 local font = {
 	font = "quiver",
@@ -53,7 +55,7 @@ function VGUI:Init()
 	local DermaPanel = vgui.Create( "DFrame" )
    	DermaPanel:SetPos(ScrW()/2-115, ScrH()/2-60)
    	DermaPanel:SetSize(230, 120)
-	DermaPanel:SetTitle( Language.GetMessage("directional_nuke_menu_t") )
+	DermaPanel:SetTitle( SGLanguage.GetMessage("directional_nuke_menu_t") )
    	DermaPanel:SetVisible( true )
    	DermaPanel:SetDraggable( false )
    	DermaPanel:ShowCloseButton( false )
@@ -71,7 +73,7 @@ function VGUI:Init()
 	local timlab = vgui.Create('DLabel')
 	timlab:SetParent( DermaPanel )
 	timlab:SetPos(20, 40)
-	timlab:SetText(Language.GetMessage("directional_nuke_menu_d"))
+	timlab:SetText(SGLanguage.GetMessage("directional_nuke_menu_d"))
 	timlab:SizeToContents()
 
 	local timr = vgui.Create('DNumberWang')
@@ -87,7 +89,7 @@ function VGUI:Init()
 	cancel:SetParent( DermaPanel )
 	cancel:SetSize(70, 25)
 	cancel:SetPos(130, 80)
-	cancel:SetText(Language.GetMessage("directional_nuke_menu_c"))
+	cancel:SetText(SGLanguage.GetMessage("directional_nuke_menu_c"))
 	cancel.DoClick = function()
 		DermaPanel:Remove();
 	end

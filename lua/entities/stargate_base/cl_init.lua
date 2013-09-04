@@ -226,9 +226,9 @@ hook.Add("HUDPaint","StarGate.Hook.HUDPaint.ShowAddressAndGroupAndName",
 						if(address != "" and group != "") then
 							local name = e:GetGateName();
 							if(name == "") then name = "N/A" end;
-							local message = Language.GetMessage("stargate_address")..": "..address.." - "..Language.GetMessage("stargate_group")..": "..group.." - "..Language.GetMessage("stargate_name")..": "..name;
+							local message = SGLanguage.GetMessage("stargate_address")..": "..address.." - "..SGLanguage.GetMessage("stargate_group")..": "..group.." - "..SGLanguage.GetMessage("stargate_name")..": "..name;
 							if (e:GetClass()=="stargate_universe") then
-								message = Language.GetMessage("stargate_address")..": "..address.." - "..Language.GetMessage("stargate_type")..": "..group.." - "..Language.GetMessage("stargate_name")..": "..name;
+								message = SGLanguage.GetMessage("stargate_address")..": "..address.." - "..SGLanguage.GetMessage("stargate_type")..": "..group.." - "..SGLanguage.GetMessage("stargate_name")..": "..name;
 							end
 							draw.WordBox(8,40,ScrH()/2,message,"Default",Color(50,50,75,100),color);
 						end
@@ -238,9 +238,9 @@ hook.Add("HUDPaint","StarGate.Hook.HUDPaint.ShowAddressAndGroupAndName",
 							local name = e:GetGateName();
 							if(name == "") then name = "N/A" end;
 							local galaxy = e:GetGalaxy();
-							if galaxy then galaxy = Language.GetMessage("stargate_galaxy_y")
-							else galaxy = Language.GetMessage("stargate_galaxy_n") end
-							local message = Language.GetMessage("stargate_address")..": "..address.." - "..Language.GetMessage("stargate_name")..": "..name.." - "..Language.GetMessage("stargate_galaxy")..": "..galaxy;
+							if galaxy then galaxy = SGLanguage.GetMessage("stargate_galaxy_y")
+							else galaxy = SGLanguage.GetMessage("stargate_galaxy_n") end
+							local message = SGLanguage.GetMessage("stargate_address")..": "..address.." - "..SGLanguage.GetMessage("stargate_name")..": "..name.." - "..SGLanguage.GetMessage("stargate_galaxy")..": "..galaxy;
 							draw.WordBox(8,40,ScrH()/2,message,"Default",Color(50,50,75,100),color);
 						end
 					elseif(e.IsStargate) then
@@ -248,7 +248,7 @@ hook.Add("HUDPaint","StarGate.Hook.HUDPaint.ShowAddressAndGroupAndName",
 						if(address != "") then
 							local name = e:GetGateName();
 							if(name == "") then name = "N/A" end;
-							local message = Language.GetMessage("stargate_address")..": "..address.." - "..Language.GetMessage("stargate_name")..": "..name;
+							local message = SGLanguage.GetMessage("stargate_address")..": "..address.." - "..SGLanguage.GetMessage("stargate_name")..": "..name;
 							draw.WordBox(8,40,ScrH()/2,message,"Default",Color(50,50,75,100),color);
 						end
 					end

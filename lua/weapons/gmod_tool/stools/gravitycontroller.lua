@@ -1,7 +1,7 @@
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
-TOOL.Name=Language.GetMessage("stool_gravc");
+TOOL.Name=SGLanguage.GetMessage("stool_gravc");
 TOOL.Category="Tech";
 TOOL.Tab = "Stargate";
 TOOL.Entity.Class = "gravitycontroller";

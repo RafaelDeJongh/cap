@@ -2,11 +2,11 @@
 	SGC ZPM Hub
 	Copyright (C) 2010  Llapp
 */
-if (not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";
-TOOL.Name=Language.GetMessage("stool_asuran_hub");
+TOOL.Name=SGLanguage.GetMessage("stool_asuran_hub");
 TOOL.ClientConVar["autoweld"] = 1;
 
 TOOL.ClientConVar["model"] = "models/pg_props/pg_stargate/pg_asuran_hub.mdl";
@@ -47,7 +47,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-    Panel:CheckBox(Language.GetMessage("stool_autoweld"),"asuran_zpm_hub_autoweld");
+    Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"asuran_zpm_hub_autoweld");
 	Panel:AddControl("Label", {Text = "\nThis is the Asuran ZPM Hub. This tool requires Life Support and Resource Distribution. If you don't have LS/RD, this ZPM Hub is quite useless to you.",})
 end
 

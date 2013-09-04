@@ -155,87 +155,87 @@ function Cap_Convar_OpenNet()
 	local matBlurScreen = Material( "pp/blurscreen" )
 
 	local limits = {
-		{Language.GetMessage("stargate_cap_menu_01"), "destsmall", 4},
-		{Language.GetMessage("stargate_cap_menu_02"), "destmedium", 2},
-		{Language.GetMessage("stargate_cap_menu_03"), "destmain", 1},
-		{Language.GetMessage("stargate_cap_menu_04"), "ioncannon", 6},
-		{Language.GetMessage("stargate_cap_menu_05"), "shiprail", 6},
-		{Language.GetMessage("stargate_cap_menu_06"), "statrail", 2},
-		{Language.GetMessage("stargate_cap_menu_08"), "launchdrone", 2},
-		{Language.GetMessage("stargate_cap_menu_09"), "minidrone", 2},
-		{Language.GetMessage("stargate_cap_menu_10"), "asgbeam", 2},
-		{Language.GetMessage("stargate_cap_menu_11"), "ag3", 6},
-		{Language.GetMessage("stargate_cap_menu_12"), "overloader", 1},
-		{Language.GetMessage("stargate_cap_menu_13"), "asuran_beam", 1},
-		{Language.GetMessage("stargate_cap_menu_15"), "ori_beam", 2},
-		{Language.GetMessage("stargate_cap_menu_16"), "dakara", 1},
-		{Language.GetMessage("stargate_cap_menu_17"), "dirn", 1},
-		{Language.GetMessage("stargate_cap_menu_18"), "horizon", 1},
-		{Language.GetMessage("stargate_cap_menu_19"), "ori", 1},
-		{Language.GetMessage("stargate_cap_menu_20"), "staffstat", 2},
-		{Language.GetMessage("stargate_cap_menu_21"), "dispenser", 1},
-		{Language.GetMessage("stargate_cap_menu_22"), "destcon", 5},
-		{Language.GetMessage("stargate_cap_menu_23"), "applecore", 1},
-		{Language.GetMessage("stargate_cap_menu_24"), "lantholo", 1},
-		{Language.GetMessage("stargate_cap_menu_25"), "shieldcore",1},
-		{Language.GetMessage("stargate_cap_menu_26"), "sod_obelisk", 4},
-		{Language.GetMessage("stargate_cap_menu_27"), "anc_obelisk", 4}
+		{SGLanguage.GetMessage("stargate_cap_menu_01"), "destsmall", 4},
+		{SGLanguage.GetMessage("stargate_cap_menu_02"), "destmedium", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_03"), "destmain", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_04"), "ioncannon", 6},
+		{SGLanguage.GetMessage("stargate_cap_menu_05"), "shiprail", 6},
+		{SGLanguage.GetMessage("stargate_cap_menu_06"), "statrail", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_08"), "launchdrone", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_09"), "minidrone", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_10"), "asgbeam", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_11"), "ag3", 6},
+		{SGLanguage.GetMessage("stargate_cap_menu_12"), "overloader", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_13"), "asuran_beam", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_15"), "ori_beam", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_16"), "dakara", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_17"), "dirn", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_18"), "horizon", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_19"), "ori", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_20"), "staffstat", 2},
+		{SGLanguage.GetMessage("stargate_cap_menu_21"), "dispenser", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_22"), "destcon", 5},
+		{SGLanguage.GetMessage("stargate_cap_menu_23"), "applecore", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_24"), "lantholo", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_25"), "shieldcore",1},
+		{SGLanguage.GetMessage("stargate_cap_menu_26"), "sod_obelisk", 4},
+		{SGLanguage.GetMessage("stargate_cap_menu_27"), "anc_obelisk", 4}
 	}
 	local wepssett = {
-		{Language.GetMessage("stargate_cap_menu_28"), "ag3_weapon", 60},
-		{Language.GetMessage("stargate_cap_menu_29"), "ag3_health", 500},
-		{Language.GetMessage("stargate_cap_menu_30"), "ori_shield", 120},
-		{Language.GetMessage("stargate_cap_menu_31"), "ori_weapon", 60},
-		{Language.GetMessage("stargate_cap_menu_32"), "ori_health", 500},
-		{Language.GetMessage("stargate_cap_menu_33"), "shiprail_damage", 10},
-		{Language.GetMessage("stargate_cap_menu_34"), "statrail_damage", 10},
-		{Language.GetMessage("stargate_cap_menu_35"), "shieldcore_atlfrac", 50},
+		{SGLanguage.GetMessage("stargate_cap_menu_28"), "ag3_weapon", 60},
+		{SGLanguage.GetMessage("stargate_cap_menu_29"), "ag3_health", 500},
+		{SGLanguage.GetMessage("stargate_cap_menu_30"), "ori_shield", 120},
+		{SGLanguage.GetMessage("stargate_cap_menu_31"), "ori_weapon", 60},
+		{SGLanguage.GetMessage("stargate_cap_menu_32"), "ori_health", 500},
+		{SGLanguage.GetMessage("stargate_cap_menu_33"), "shiprail_damage", 10},
+		{SGLanguage.GetMessage("stargate_cap_menu_34"), "statrail_damage", 10},
+		{SGLanguage.GetMessage("stargate_cap_menu_35"), "shieldcore_atlfrac", 50},
 	}
 
 	local miscsett = {
-		{Language.GetMessage("stargate_cap_menu_36"), "CAP_shipshield", 1},
-		{Language.GetMessage("stargate_cap_menu_37"), "cap_drop_weapons", 1},
-		{Language.GetMessage("stargate_cap_menu_38"), "cap_ashen_en", 1}
+		{SGLanguage.GetMessage("stargate_cap_menu_36"), "CAP_shipshield", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_37"), "cap_drop_weapons", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_38"), "cap_ashen_en", 1}
 	}
 
 	local sboxlimits = {
-		{Language.GetMessage("stargate_cap_sbox_01"), "anim_ramps", 10},
-		{Language.GetMessage("stargate_cap_sbox_02"), "ramp", 50},
-		{Language.GetMessage("stargate_cap_sbox_03"), "asuran_zpm_hub", 5},
-		{Language.GetMessage("stargate_cap_menu_07"), "ashen_defence", 10},
-		{Language.GetMessage("stargate_cap_sbox_04"), "zpmhub", 5},
-		{Language.GetMessage("stargate_cap_sbox_05"), "sgc_zpm_hub", 5},
-		{Language.GetMessage("stargate_cap_sbox_06"), "bearing", 10},
-		{Language.GetMessage("stargate_cap_sbox_07"), "brazier", 50},
-		{Language.GetMessage("stargate_cap_sbox_08"), "cap_doors_contr", 10},
-		{Language.GetMessage("stargate_cap_sbox_09"), "cap_doors_frame", 10},
-		{Language.GetMessage("stargate_cap_sbox_10"), "cap_console", 50},
-		{Language.GetMessage("stool_controlpanel"), "control_panel", 10},
-		{Language.GetMessage("stargate_cap_sbox_11"), "drone_launcher", 2},
-		{Language.GetMessage("stargate_cap_sbox_12"), "floorchevron", 10},
-		{Language.GetMessage("stargate_cap_sbox_13"), "stargate_iris", 10},
-		{Language.GetMessage("stargate_cap_sbox_28"), "goauld_iris", 5},
-		{Language.GetMessage("stargate_cap_sbox_14"), "gravitycontroller", 15},
-		{Language.GetMessage("stargate_cap_sbox_15"), "jamming_device", 5},
-		{Language.GetMessage("stargate_cap_sbox_16"), "naq_gen_mks", 10},
-		{Language.GetMessage("stargate_cap_menu_14"), "naquadah_bomb", 1},
-		{Language.GetMessage("stargate_cap_sbox_17"), "staff_weapon_glider", 2},
-		{Language.GetMessage("stargate_cap_sbox_18"), "cloaking_generator", 1},
-		{Language.GetMessage("stargate_cap_sbox_19"), "mobile_dhd", 3},
-		{Language.GetMessage("stargate_cap_sbox_27"), "supergate_dhd", 3},
-		{Language.GetMessage("stargate_cap_sbox_20"), "shield_generator", 1},
-		{Language.GetMessage("stargate_cap_sbox_21"), "tampered_zpm", 3},
-		{Language.GetMessage("stargate_cap_sbox_22"), "tokra_emmiter", 2},
-		{Language.GetMessage("stargate_cap_sbox_23"), "tokra_key", 1},
-		{Language.GetMessage("stargate_cap_sbox_24"), "tollan_disabler", 2},
-		{Language.GetMessage("stargate_cap_sbox_25"), "wraith_harvester", 1},
-		{Language.GetMessage("stargate_cap_sbox_26"), "zpm_mk3", 6},
+		{SGLanguage.GetMessage("stargate_cap_sbox_01"), "anim_ramps", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_02"), "ramp", 50},
+		{SGLanguage.GetMessage("stargate_cap_sbox_03"), "asuran_zpm_hub", 5},
+		{SGLanguage.GetMessage("stargate_cap_menu_07"), "ashen_defence", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_04"), "zpmhub", 5},
+		{SGLanguage.GetMessage("stargate_cap_sbox_05"), "sgc_zpm_hub", 5},
+		{SGLanguage.GetMessage("stargate_cap_sbox_06"), "bearing", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_07"), "brazier", 50},
+		{SGLanguage.GetMessage("stargate_cap_sbox_08"), "cap_doors_contr", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_09"), "cap_doors_frame", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_10"), "cap_console", 50},
+		{SGLanguage.GetMessage("stool_controlpanel"), "control_panel", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_11"), "drone_launcher", 2},
+		{SGLanguage.GetMessage("stargate_cap_sbox_12"), "floorchevron", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_13"), "stargate_iris", 10},
+		{SGLanguage.GetMessage("stargate_cap_sbox_28"), "goauld_iris", 5},
+		{SGLanguage.GetMessage("stargate_cap_sbox_14"), "gravitycontroller", 15},
+		{SGLanguage.GetMessage("stargate_cap_sbox_15"), "jamming_device", 5},
+		{SGLanguage.GetMessage("stargate_cap_sbox_16"), "naq_gen_mks", 10},
+		{SGLanguage.GetMessage("stargate_cap_menu_14"), "naquadah_bomb", 1},
+		{SGLanguage.GetMessage("stargate_cap_sbox_17"), "staff_weapon_glider", 2},
+		{SGLanguage.GetMessage("stargate_cap_sbox_18"), "cloaking_generator", 1},
+		{SGLanguage.GetMessage("stargate_cap_sbox_19"), "mobile_dhd", 3},
+		{SGLanguage.GetMessage("stargate_cap_sbox_27"), "supergate_dhd", 3},
+		{SGLanguage.GetMessage("stargate_cap_sbox_20"), "shield_generator", 1},
+		{SGLanguage.GetMessage("stargate_cap_sbox_21"), "tampered_zpm", 3},
+		{SGLanguage.GetMessage("stargate_cap_sbox_22"), "tokra_emmiter", 2},
+		{SGLanguage.GetMessage("stargate_cap_sbox_23"), "tokra_key", 1},
+		{SGLanguage.GetMessage("stargate_cap_sbox_24"), "tollan_disabler", 2},
+		{SGLanguage.GetMessage("stargate_cap_sbox_25"), "wraith_harvester", 1},
+		{SGLanguage.GetMessage("stargate_cap_sbox_26"), "zpm_mk3", 6},
 	}
 
 	CapConvarFrame = vgui.Create("DFrame");
 	CapConvarFrame:SetPos(ScrW()/2-360, ScrH()/2-325);
 	CapConvarFrame:SetSize(760,650);
-	CapConvarFrame:SetTitle(Language.GetMessage("stargate_cap_menu_00"));
+	CapConvarFrame:SetTitle(SGLanguage.GetMessage("stargate_cap_menu_00"));
 	CapConvarFrame:SetVisible(true);
 	CapConvarFrame:SetDraggable(false);
 	--CapConvarFrame:ShowCloseButton(false);
@@ -307,12 +307,12 @@ function Cap_Convar_OpenNet()
 		sliders[i] = slider;
 		sliders[i]:SetPos(5, 5+40*i);
 		sliders[i]:SetSize(210, 50);
-		sliders[i]:SetText(val[1].." "..Language.GetMessage("stargate_cap_menu_l"));
+		sliders[i]:SetText(val[1].." "..SGLanguage.GetMessage("stargate_cap_menu_l"));
 		sliders[i]:SetMin(0);
 		sliders[i]:SetMax(val[3]*3);
 		sliders[i]:SetValue(CapGetConvar(convar));
 		sliders[i]:SetDecimals(0);
-		sliders[i]:SetToolTip(Language.GetMessage("stargate_menu_hint",convar));
+		sliders[i]:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
 		sliders[i].OnValueChanged = function(Size_x, fValue)
 			CapSetConvar(convar, fValue);
 		end
@@ -340,7 +340,7 @@ function Cap_Convar_OpenNet()
 		slider:SetMax(val[3]*3);
 		slider:SetValue(CapGetConvar(convar));
 		slider:SetDecimals(0);
-		slider:SetToolTip(Language.GetMessage("stargate_menu_hint",convar));
+		slider:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
 		slider.OnValueChanged = function(Size_x, fValue)
 			CapSetConvar(convar, fValue);
 		end
@@ -358,7 +358,7 @@ function Cap_Convar_OpenNet()
 		box:SetText(val[1]);
 		box:SetValue(CapGetConvar(val[2]));
 		box:SizeToContents();
-		box:SetToolTip(Language.GetMessage("stargate_menu_hint",val[2]));
+		box:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",val[2]));
 		box.Label:SetFont("OldDefaultSmall");
 		box.OnChange = function(box, fValue)
 			local v = 0;
@@ -400,12 +400,12 @@ function Cap_Convar_OpenNet()
 		sliders[i] = slider;
 		sliders[i]:SetPos(5, 5+40*i);
 		sliders[i]:SetSize(210, 50);
-		sliders[i]:SetText(val[1].." "..Language.GetMessage("stargate_cap_menu_l"));
+		sliders[i]:SetText(val[1].." "..SGLanguage.GetMessage("stargate_cap_menu_l"));
 		sliders[i]:SetMin(0);
 		sliders[i]:SetMax(val[3]*3);
 		sliders[i]:SetValue(CapGetConvar(convar));
 		sliders[i]:SetDecimals(0);
-		sliders[i]:SetToolTip(Language.GetMessage("stargate_menu_hint",convar));
+		sliders[i]:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
 		sliders[i].OnValueChanged = function(Size_x, fValue)
 			CapSetConvar(convar, fValue);
 		end
@@ -421,7 +421,7 @@ function Cap_Convar_OpenNet()
 	end
 
 	local sgsets = vgui.Create("DButton", CapConvarFrame);
-    sgsets:SetText( Language.GetMessage("stargate_settings_02") );
+    sgsets:SetText( SGLanguage.GetMessage("stargate_settings_02") );
     sgsets:SetPos(45, 615);
     sgsets:SetSize(160, 25);
 	sgsets.DoClick = function ( btn )

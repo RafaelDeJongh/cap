@@ -2,11 +2,11 @@
 	Doors
 	Copyright (C) 2010  Madman07
 */
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_door");
+TOOL.Name=SGLanguage.GetMessage("stool_door");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["toggle"] = 3;
 TOOL.ClientConVar["diff_text"] = 0;
@@ -76,7 +76,7 @@ function TOOL:ControlsPanel(Panel)
 		Command="cap_doors_toggle",
 	});
 	Panel:CheckBox("Red Texture on Atlantis frame","cap_doors_diff_text");
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"cap_doors_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cap_doors_autoweld");
 end
 
 if SERVER then

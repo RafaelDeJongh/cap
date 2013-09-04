@@ -1,9 +1,11 @@
 StarGate.LifeSupportAndWire(ENT);
 ENT.Type = "anim"
 ENT.Base = "base_anim" --gmodentity
-ENT.PrintName = Language.GetMessage("entity_atlantist")
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.PrintName = SGLanguage.GetMessage("entity_atlantist")
+ENT.Category = SGLanguage.GetMessage("entity_main_cat")
+end
 ENT.Author = "AlexALX, Ronon Dex"
-ENT.Category = Language.GetMessage("entity_main_cat")
 ENT.WireDebugName = "Atlantis Transporter"
 
 list.Set("CAP.Entity", ENT.PrintName, ENT);

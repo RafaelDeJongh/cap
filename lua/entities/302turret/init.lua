@@ -1,4 +1,4 @@
-if (not StarGate.CheckModule("ship")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship")) then return end
 
 include("shared.lua")
 AddCSLuaFile("cl_init.lua")

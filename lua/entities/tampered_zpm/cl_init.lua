@@ -4,7 +4,9 @@
 */
 
 include("shared.lua");
-language.Add("tampered_zpm",Language.GetMessage("stool_tzpm"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("tampered_zpm",SGLanguage.GetMessage("stool_tzpm"));
+end
 
 ENT.ZpmSprite = StarGate.MaterialFromVMT(
 	"ZpmSprite",

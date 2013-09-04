@@ -17,10 +17,10 @@
 */
 
 --################# Header
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_iris");
+TOOL.Name=SGLanguage.GetMessage("stool_iris");
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
@@ -135,10 +135,10 @@ function TOOL:ControlsPanel(Panel)
 		Command2="stargate_iris_deactivate",
 	});
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_iris_model",Category="",Models=self.Models});
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"stargate_iris_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_iris_autoweld");
 	--[[
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(Language.GetMessage("stool_autolink"),"stargate_iris_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_iris_autolink"):SetToolTip("Autolink this to resouce using Entities?");
 	end
 	--]]
 end

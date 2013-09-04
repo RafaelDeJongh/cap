@@ -1,7 +1,5 @@
-include("shared.lua")
-language.Add("kull_disruptor",Language.GetMessage("entity_kd"))
-
-
+include("shared.lua")if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("kull_disruptor",SGLanguage.GetMessage("entity_kd"))end
 function ENT:Initialize()
 
 	self.BaseClass.Initialize(self)

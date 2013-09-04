@@ -67,7 +67,7 @@ function PANEL:Init()
   	self.TextEntry:SetAllowNonAsciiCharacters(true)
 
   	self.ListView = vgui.Create( "DListView", self )
-  	self.ListView:AddColumn(Language.GetMessage("atl_tp_05")):SetFixedWidth(380);
+  	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_05")):SetFixedWidth(380);
   	self.ListView:SortByColumn(0,false);
   	self.ListView:SetSize(380,170);
   	self.ListView.OnRowSelected = function(ListView,Row)
@@ -94,7 +94,7 @@ function PANEL:Init()
 	self.RefreshImageButton:SetPos(285,40);
 	self.RefreshImageButton:SetSize(16,16);
 	self.RefreshImageButton:SetImage("icon16/arrow_refresh.png");
-	self.RefreshImageButton:SetTooltip(Language.GetMessage("stargate_vgui_refresh"));
+	self.RefreshImageButton:SetTooltip(SGLanguage.GetMessage("stargate_vgui_refresh"));
 	self.RefreshImageButton.DoClick = function(ImageButton)
 		local panel2=ImageButton:GetParent()
 		panel2.ListView:Clear();
@@ -102,7 +102,7 @@ function PANEL:Init()
 	end
 
  	self.L1 = vgui.Create( "DLabel", self )
- 	self.L1:SetText(Language.GetMessage("atl_tp_02"))
+ 	self.L1:SetText(SGLanguage.GetMessage("atl_tp_02"))
  	self.L1:SetFont("OldDefaultSmall")
 
  	self.Button = vgui.Create( "Button", self)
@@ -115,7 +115,7 @@ function PANEL:Init()
 		net.SendToServer();
 		panel2:Remove();
  	end
-	self.Button:SetText(Language.GetMessage("atl_tp_04"))
+	self.Button:SetText(SGLanguage.GetMessage("atl_tp_04"))
 
 	self.Button:SetPos(310,39)
 	self.Button:SetSize(80,22)
@@ -175,7 +175,7 @@ function PANEL:Init()
  	self.TextEntry:SetAllowNonAsciiCharacters(true)
 
  	self.L1 = vgui.Create( "DLabel", self )
- 	self.L1:SetText(Language.GetMessage("atl_tp_01"))
+ 	self.L1:SetText(SGLanguage.GetMessage("atl_tp_01"))
  	self.L1:SetFont("OldDefaultSmall")
 
 	self.PrivateImage = vgui.Create("DImage",self)
@@ -185,9 +185,9 @@ function PANEL:Init()
 
 	self.PrivateCheckbox = vgui.Create("DCheckBoxLabel",self)
 	self.PrivateCheckbox:SetPos(35,67);
-	self.PrivateCheckbox:SetText(Language.GetMessage("atl_tp_06"));
+	self.PrivateCheckbox:SetText(SGLanguage.GetMessage("atl_tp_06"));
 	self.PrivateCheckbox:SetWide(110);
-	local tip = Language.GetMessage("atl_tp_07");
+	local tip = SGLanguage.GetMessage("atl_tp_07");
 	self.PrivateCheckbox:SetTooltip(tip);
 	self.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 
@@ -202,7 +202,7 @@ function PANEL:Init()
 		net.SendToServer();
 		panel2:Remove();
  	end
-	self.Button:SetText(Language.GetMessage("atl_tp_03"))
+	self.Button:SetText(SGLanguage.GetMessage("atl_tp_03"))
 
 	self.Button:SetPos(310,39)
 	self.Button:SetSize(80,22)

@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("ship")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_misc_jumper");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_jumper");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "RononDex, Boba Fett"
 SWEP.Purpose = "Use features of Jumper"
 SWEP.Instructions = "Primary: Cloak \n Secondary: Door \n Reload: Selfdestruct"
@@ -62,7 +64,7 @@ function SWEP:SecondaryAttack()
 	self:SendWeaponAnim( ACT_VM_SECONDARYATTACK )
 	timer.Simple(self.Delay, function()
 	for _,v in pairs(ents.FindByClass("puddle_jumper")) do
-		if(IsValid(v)) then
+		if(IsValid(v) and IsValid(self) and IsValid(v.Owner) and IsValid(self.Owner)) then
 			if(v.Owner==self.Owner) then
 				if(not(self.Owner:KeyDown(IN_USE))) then
 					v:ToggleDoor()

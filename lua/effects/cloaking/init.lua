@@ -79,7 +79,7 @@ function EFFECT:Init(data)
 	self.Entity:SetPos(pos);
 	self.Entity:SetMaterial(e:GetMaterial());
 	self.Entity:SetAngles(e:GetAngles());
-	self.Entity:SetSkin(e:GetSkin());
+	self.Entity:SetSkin(e:GetSkin() or 0);
 	self.Entity:SetParent(e);
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 	local start_alpha = 1;

@@ -98,7 +98,7 @@ function PANEL:Init()
 		MessageImage = vgui.Create("DImage",self),
 		MessageLabel = vgui.Create("DLabel",self),
 	}
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 	self.VGUI.StatusLabel:SetText("");
 	self.VGUI.MessageLabel:SetText("");
 	self.Entity = NULL;
@@ -110,7 +110,7 @@ function PANEL:Init()
 	-- The Address TextEntry
 	self.VGUI.AddressTextEntry:SetPos(45,0);
 	self.VGUI.AddressTextEntry:SetSize(60,self.VGUI.AddressTextEntry:GetTall());
-	self.VGUI.AddressTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_adrtip"));
+	self.VGUI.AddressTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_adrtip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressTextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -222,32 +222,32 @@ function PANEL:SetStatus(s,no_message)
 		-- Valid address?
 		if(valid) then
 			self.VGUI.StatusImage:SetImage(self.Images.Valid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_valid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_valid"));
 			if(not no_message) then
 				-- Have we set the address or is it the old from before?
 				if(set) then
-					self:ShowMessage(Language.GetMessage("stargate_vgui_valid2"),"Info");
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid2"),"Info");
 				else
-					self:ShowMessage(Language.GetMessage("stargate_vgui_valid3",s),"Info",true);
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid3",s),"Info",true);
 				end
 			end
 			if(self.OnAddressSet) then self.OnAddressSet(self.Entity,s:upper()) end; -- SET THE ADDRESS!
 		else
 			-- INVALID!
 			self.VGUI.StatusImage:SetImage(self.Images.Invalid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self:ShowMessage(Language.GetMessage("stargate_vgui_adrexs"),"Warning");
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrexs"),"Warning");
 		end
 	elseif(len == 0) then
 		-- Cleared this gate's address
 		self.VGUI.StatusImage:SetImage("null");
 		self.VGUI.StatusLabel:SetText("");
-		if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_adrclr"),"Info") end;
+		if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrclr"),"Info") end;
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"") end; -- CLEAR ADDRESS
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
-		self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_edit"));
+		self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		self:ShowMessage();
 	end
 	-- Clear any previous message
@@ -321,8 +321,8 @@ function PANEL:Init()
 		MessageLabel = vgui.Create("DLabel",self),
 		GroupStatus = vgui.Create("DLabel",self),
 	}
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
-	self.VGUI.GroupLabel:SetText(Language.GetMessage("stargate_vgui_group"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
+	self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
 	self.VGUI.StatusLabel:SetText("");
 	self.VGUI.MessageLabel:SetText("");
 	self.VGUI.GroupStatus:SetText("");
@@ -335,7 +335,7 @@ function PANEL:Init()
 	-- The Address TextEntry
 	self.VGUI.AddressTextEntry:SetPos(45,0);
 	self.VGUI.AddressTextEntry:SetSize(60,self.VGUI.AddressTextEntry:GetTall());
-	self.VGUI.AddressTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_adrtip"));
+	self.VGUI.AddressTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_adrtip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressTextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -369,7 +369,7 @@ function PANEL:Init()
 	-- The Group TextEntry
 	self.VGUI.GroupTextEntry:SetPos(45,30);
 	self.VGUI.GroupTextEntry:SetSize(35,self.VGUI.GroupTextEntry:GetTall());
-	self.VGUI.GroupTextEntry.TextEntry:SetTooltip(Language.GetMessage("stargate_vgui_grptip"));
+	self.VGUI.GroupTextEntry.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_grptip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.GroupTextEntry.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -441,11 +441,11 @@ function PANEL:Init()
 		end
 	end
 
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp1"),"M@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp2"),"P@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp3"),"I@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp8"),"OT");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp4"),"O@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp1"),"M@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp2"),"P@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp3"),"I@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp8"),"OT");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp4"),"O@");
 	if (SG_CUSTOM_GROUPS) then
 		for g,d in pairs(SG_CUSTOM_GROUPS) do
 			self.VGUI.GroupTextEntry:AddChoice(d[1],g);
@@ -563,114 +563,114 @@ function PANEL:SetStatus(s,g,no_message,letters,gs)
 		-- Valid address?
 		if(valid) then
 			self.VGUI.StatusImage:SetImage(self.Images.Valid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_valid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_valid"));
 			if(not no_message) then
 				-- Have we set the address or is it the old from before?
 				if(set) then
-					if (g != self.Entity:GetGateGroup()) then
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid4"),"Info");
+					if (IsValid(self.Entity) and self.Entity.GetGateGroup and g != self.Entity:GetGateGroup()) then
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid4"),"Info");
 					else
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid2"),"Info");
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid2"),"Info");
 					end
 				else
 					if (gs) then
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid4b",g),"Info");
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid4b",g),"Info");
 					else
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid3",s),"Info",true);
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid3",s),"Info",true);
 					end
 				end
 			end
 			if(self.OnAddressSet) then self.OnAddressSet(self.Entity,s:upper(),g:upper()) end; -- SET THE ADDRESS!
 			if (g == "M@") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 			elseif (g == "P@") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 			elseif (g == "I@") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 			elseif (g == "OT") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 			elseif (g == "O@") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 			elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 				self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 			else
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 			end
 		else
 			-- INVALID!
 			self.VGUI.StatusImage:SetImage(self.Images.Invalid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_invalid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
 			if (l!="" and l:len()==1) then
-				self:ShowMessage(Language.GetMessage("stargate_vgui_symused",l),"Warning");
+				self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_symused",l),"Warning");
 			elseif (l!="" and l:len()==2) then
-				self:ShowMessage(Language.GetMessage("stargate_vgui_symsused",l),"Warning");
+				self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_symsused",l),"Warning");
 			else
-				self:ShowMessage(Language.GetMessage("stargate_vgui_adrexs"),"Warning");
+				self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrexs"),"Warning");
 			end
 		end
 	elseif(len == 0 and g:len() == 2 and g == self.Entity:GetGateGroup()) then
 		-- Cleared this gate's address
 		self.VGUI.StatusImage:SetImage("null");
 		self.VGUI.StatusLabel:SetText("");
-		if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_adrclr"),"Info") end;
+		if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrclr"),"Info") end;
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"",g:upper()) end; -- CLEAR ADDRESS
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		end
 	elseif(len == 0 and g:len() == 2 and g != self.Entity:GetGateGroup()) then
 		-- Cleared this gate's address
 		self.VGUI.StatusImage:SetImage("null");
 		self.VGUI.StatusLabel:SetText("");
-		if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_valid4"),"Info"); end;
+		if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid4"),"Info"); end;
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"",g:upper()) end; -- CLEAR ADDRESS
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		end
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
-		self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_edit"));
+		self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 				self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		elseif (g:len() == 2) then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_edit"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		end
 		self:ShowMessage();
 	end
@@ -743,8 +743,8 @@ function PANEL:Init()
 		MessageLabel = vgui.Create("DLabel",self),
 		GroupStatus = vgui.Create("DLabel",self),
 	}
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
-	self.VGUI.GroupLabel:SetText(Language.GetMessage("stargate_vgui_type"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
+	self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_type"));
 	self.VGUI.StatusLabel:SetText("");
 	self.VGUI.MessageLabel:SetText("");
 	self.VGUI.GroupStatus:SetText("");
@@ -757,7 +757,7 @@ function PANEL:Init()
 	-- The Address TextEntry
 	self.VGUI.AddressTextEntry:SetPos(45,0);
 	self.VGUI.AddressTextEntry:SetSize(60,self.VGUI.AddressTextEntry:GetTall());
-	self.VGUI.AddressTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_adrtip"));
+	self.VGUI.AddressTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_adrtip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressTextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -791,7 +791,7 @@ function PANEL:Init()
 	-- The Group TextEntry
 	self.VGUI.GroupTextEntry:SetPos(45,30);
 	self.VGUI.GroupTextEntry:SetSize(42,self.VGUI.GroupTextEntry:GetTall());
-	self.VGUI.GroupTextEntry.TextEntry:SetTooltip(Language.GetMessage("stargate_vgui_typetip"));
+	self.VGUI.GroupTextEntry.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_typetip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.GroupTextEntry.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -881,9 +881,9 @@ function PANEL:Init()
 		end
 	end
 
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp5"),"U@#");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp6"),"SGI");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp7"),"DST");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp5"),"U@#");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp6"),"SGI");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp7"),"DST");
 	if (SG_CUSTOM_TYPES) then
 		for g,d in pairs(SG_CUSTOM_TYPES) do
 			self.VGUI.GroupTextEntry:AddChoice(d[1],g);
@@ -1009,49 +1009,49 @@ function PANEL:SetStatus(s,g,no_message,letters,gs)
 		-- Valid address?
 		if(valid) then
 			self.VGUI.StatusImage:SetImage(self.Images.Valid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_valid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_valid"));
 			if(not no_message) then
 				-- Have we set the address or is it the old from before?
 				if(set) then
-					if (g != self.Entity:GetGateGroup()) then
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid5"),"Info");
+					if (IsValid(self.Entity) and self.Entity.GetGateGroup and g != self.Entity:GetGateGroup()) then
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid5"),"Info");
 					else
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid2"),"Info");
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid2"),"Info");
 					end
 				else
 					if (gs) then
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid5b",g),"Info");
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid5b",g),"Info");
 					else
-						self:ShowMessage(Language.GetMessage("stargate_vgui_valid3",s),"Info",true);
+						self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid3",s),"Info",true);
 					end
 				end
 			end
 			if(self.OnAddressSet) then self.OnAddressSet(self.Entity,s:upper(),g:upper()) end; -- SET THE ADDRESS!
 			if (g == "U@#") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp5"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp5"));
 			elseif (g == "SGI") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp6"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp6"));
 			elseif (g == "DST") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp7"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp7"));
 			elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 				self.VGUI.GroupStatus:SetText(SG_CUSTOM_TYPES[g][1]);
 			else
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc2"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc2"));
 			end
 		else
 			-- INVALID!
 			self.VGUI.StatusImage:SetImage(self.Images.Invalid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_invalid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
 			if (l!="" and l:len()==1) then
-				self:ShowMessage(Language.GetMessage("stargate_vgui_symused",l),"Warning");
+				self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_symused",l),"Warning");
 			elseif (l!="" and l:len()>=2) then
-				self:ShowMessage(Language.GetMessage("stargate_vgui_symsused",l),"Warning");
+				self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_symsused",l),"Warning");
 			else
 				if (valid_type) then
-					self:ShowMessage(Language.GetMessage("stargate_vgui_adrexs"),"Warning");
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrexs"),"Warning");
 				else
-					self:ShowMessage(Language.GetMessage("stargate_vgui_typexs"),"Warning");
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_typexs"),"Warning");
 				end
 			end
 		end
@@ -1059,18 +1059,18 @@ function PANEL:SetStatus(s,g,no_message,letters,gs)
 		-- Cleared this gate's address
 		self.VGUI.StatusImage:SetImage("null");
 		self.VGUI.StatusLabel:SetText("");
-		if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_adrclr"),"Info") end;
+		if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrclr"),"Info") end;
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"",g:upper()) end; -- CLEAR ADDRESS
 		if (g == "U@#") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp5"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp5"));
 		elseif (g == "SGI") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp6"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp6"));
 		elseif (g == "DST") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp7"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp7"));
 		elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_TYPES[g][1]);
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc2"));
 		end
 	elseif(len == 0 and g:len() == 3 and g != self.Entity:GetGateGroup()) then
 		local valid = true;
@@ -1088,43 +1088,43 @@ function PANEL:SetStatus(s,g,no_message,letters,gs)
 			-- Cleared this gate's address
 			self.VGUI.StatusImage:SetImage("null");
 			self.VGUI.StatusLabel:SetText("");
-			if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_valid5"),"Info"); end;
+			if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid5"),"Info"); end;
 			if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"",g:upper()) end; -- CLEAR ADDRESS
 			if (g == "U@#") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp5"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp5"));
 			elseif (g == "SGI") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp6"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp6"));
 			elseif (g == "DST") then
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp7"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp7"));
 			elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 				self.VGUI.GroupStatus:SetText(SG_CUSTOM_TYPES[g][1]);
 			else
-				self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc2"));
+				self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc2"));
 			end
 		else
 			-- INVALID!
 			self.VGUI.StatusImage:SetImage(self.Images.Invalid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self:ShowMessage(Language.GetMessage("stargate_vgui_typexs"),"Warning");
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_typexs"),"Warning");
 		end
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
-		self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_edit"));
+		self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		self:ShowMessage();
 		if (g == "U@#") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp5"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp5"));
 		elseif (g == "SGI") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp6"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp6"));
 		elseif (g == "DST") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp7"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp7"));
 		elseif (SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_TYPES[g][1]);
 		elseif (g:len() == 3) then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc2"));
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_edit"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		end
 	end
 	-- Clear any previous message
@@ -1194,7 +1194,7 @@ function PANEL:Init()
 		MessageImage = vgui.Create("DImage",self),
 		MessageLabel = vgui.Create("DLabel",self),
 	}
-	self.VGUI.AddressLabel:SetText(Language.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
 	self.VGUI.StatusLabel:SetText("");
 	self.VGUI.MessageLabel:SetText("");
 	self.Entity = NULL;
@@ -1206,7 +1206,7 @@ function PANEL:Init()
 	-- The Address TextEntry
 	self.VGUI.AddressTextEntry:SetPos(45,0);
 	self.VGUI.AddressTextEntry:SetSize(60,self.VGUI.AddressTextEntry:GetTall());
-	self.VGUI.AddressTextEntry:SetTooltip(Language.GetMessage("stargate_galaxy_vgui_adrtip"));
+	self.VGUI.AddressTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_galaxy_vgui_adrtip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.AddressTextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -1318,32 +1318,32 @@ function PANEL:SetStatus(s,no_message)
 		-- Valid address?
 		if(valid) then
 			self.VGUI.StatusImage:SetImage(self.Images.Valid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_valid"));
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_valid"));
 			if(not no_message) then
 				-- Have we set the address or is it the old from before?
 				if(set) then
-					self:ShowMessage(Language.GetMessage("stargate_vgui_valid2"),"Info");
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid2"),"Info");
 				else
-					self:ShowMessage(Language.GetMessage("stargate_vgui_valid3",s),"Info",true);
+					self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_valid3",s),"Info",true);
 				end
 			end
 			if(self.OnAddressSet) then self.OnAddressSet(self.Entity,s:upper()) end; -- SET THE ADDRESS!
 		else
 			-- INVALID!
 			self.VGUI.StatusImage:SetImage(self.Images.Invalid);
-			self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_invalid"));
-			self:ShowMessage(Language.GetMessage("stargate_vgui_adrexs"),"Warning");
+			self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_invalid"));
+			self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrexs"),"Warning");
 		end
 	elseif(len == 0) then
 		-- Cleared this gate's address
 		self.VGUI.StatusImage:SetImage("null");
 		self.VGUI.StatusLabel:SetText("");
-		if(not no_message) then self:ShowMessage(Language.GetMessage("stargate_vgui_adrclr"),"Info") end;
+		if(not no_message) then self:ShowMessage(SGLanguage.GetMessage("stargate_vgui_adrclr"),"Info") end;
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,"") end; -- CLEAR ADDRESS
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
-		self.VGUI.StatusLabel:SetText(Language.GetMessage("stargate_vgui_edit"));
+		self.VGUI.StatusLabel:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		self:ShowMessage();
 	end
 	-- Clear any previous message

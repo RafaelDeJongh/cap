@@ -4,6 +4,8 @@
 
 */
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 EFFECT.Material = StarGate.MaterialFromVMT(
 	"ShieldBubbleGlow",
 	[["UnLitGeneric"

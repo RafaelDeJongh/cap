@@ -1,5 +1,7 @@
 include("shared.lua");
-language.Add("naq_gen_mk2",Language.GetMessage("naq_gen_mk2"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("naq_gen_mk2",SGLanguage.GetMessage("naq_gen_mk2"));
+end
 
 ENT.Zpm_hud = surface.GetTextureID("VGUI/resources_hud/mk2");
 

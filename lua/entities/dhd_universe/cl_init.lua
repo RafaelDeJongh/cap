@@ -20,5 +20,7 @@ include("shared.lua")
 ENT.RenderGroup = RENDERGROUP_BOTH -- This FUCKING THING avoids the clipping bug I have had for ages since stargate BETA 1.0. DAMN!
 -- Damn u aVoN. It need to be setted to BOTH. I spend many hours on trying to fix Z-index issue. @Mad
 
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("dhd_universe");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("dhd_universe");
+end

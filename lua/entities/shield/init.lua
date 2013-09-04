@@ -17,7 +17,7 @@
 */
 
 --################# HEADER #################
-if (not StarGate.CheckModule("base")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
 AddCSLuaFile("modules/bullets.lua");
@@ -186,7 +186,7 @@ function ENT:EndTouch(e)
 	-- Fixes a few bugs: E.g. if you delete a prop it will call this function before it is invalid => It will draw the "DrawOnPassing" effect but the prop is deleted.
 	timer.Simple(0,
 		function()
-			if(not e:IsValid()) then return end;
+			if(not IsValid(self) or not IsValid(self.Parent) or not e:IsValid()) then return end;
 			-- This starts the effect on players who own the shield, but won't reflect them
 			if(self.Parent.ImmuneOwner and e == self.Parent.Owner) then
 				self:HitEffect(e,e:LocalToWorld(e:OBBCenter()),5);

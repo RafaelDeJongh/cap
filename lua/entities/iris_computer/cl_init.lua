@@ -1,6 +1,8 @@
 include('shared.lua')
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_iris_comp");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_iris_comp");
+end
 
 local function gdopc_menuhook(len)
 

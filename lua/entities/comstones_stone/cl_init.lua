@@ -1,7 +1,9 @@
 include("shared.lua");
 ENT.Stone_hud = surface.GetTextureID("VGUI/resources_hud/MCD");
-ENT.Category = Language.GetMessage("entity_main_cat");
-ENT.PrintName = Language.GetMessage("entity_stone");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_stone");
+end
 
 function ENT:Draw()
     self.Entity:DrawModel();

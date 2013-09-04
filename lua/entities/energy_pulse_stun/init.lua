@@ -19,7 +19,7 @@
 */
 
 --################# HEADER #################
-if (not StarGate.CheckModule("weapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
 include("shared.lua");
@@ -300,18 +300,20 @@ function ENT:Stun( Ent )
 					    local infl = dmginfo:GetInflictor()
 					    local att = dmginfo:GetAttacker()
 					    local amount = dmginfo:GetDamage()
-						local NewHP = Ent:Health() - amount
-						if NewHP <= 0 then
-							Ent.Stunned = nil
-							Ent:SetNoDraw( false )
-							Ent:SetNotSolid( false )
-							Ent:SetPos( Ragdoll:GetPos() )
-							Ent:SetHealth( 0 )
-							Ent:SetNPCState( NPC_STATE_DEAD )
+					    if (IsValid(Ent)) then
+							local NewHP = Ent:Health() - amount
+							if NewHP <= 0 then
+								Ent.Stunned = nil
+								Ent:SetNoDraw( false )
+								Ent:SetNotSolid( false )
+								Ent:SetPos( Ragdoll:GetPos() )
+								Ent:SetHealth( 0 )
+								Ent:SetNPCState( NPC_STATE_DEAD )
 
-							Ragdoll:Remove()
-						else
-							Ent:SetHealth( NewHP )
+								Ragdoll:Remove()
+							else
+								Ent:SetHealth( NewHP )
+							end
 						end
 					end
 				end )

@@ -83,7 +83,9 @@ function ENT:OnTakeDamage(dmg)
 
 			if((self.EntHealth)<=250) then
 				self.CanShield = false;
-				self.Shields.CantBeEnabled = true;
+				if (IsValid(self.Shields)) then
+					self.Shields.CantBeEnabled = true;
+				end
 				if(self.Shielded) then
 					self:ToggleShield()
 				end

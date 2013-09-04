@@ -33,18 +33,18 @@ if (CLIENT) then
 	language.Add("Tool_janus_door_desc", "Makes anything into a Janus Door");
 	language.Add("Tool_janus_door_0", "Click on something to make it a Janus Door.");
 	language.Add("Undone_fading_door", "Undone Janus Door");
-	
+
 	function TOOL:BuildCPanel()
 		self:AddControl("Header",   {Text = "#Tool_janus_door_name", Description = "#Tool_janus_door_desc"});
 		self:AddControl("CheckBox", {Label = "Reversed (Starts invisible, becomes solid)", Command = "janus_door_reversed"});
 		self:AddControl("CheckBox", {Label = "Toggle Active", Command = "janus_door_toggle"});
 		self:AddControl("Numpad",   {Label = "Button", ButtonSize = "22", Command = "janus_door_key"});
 	end
-	
+
 	TOOL.LeftClick = checkTrace;
-	
+
 	return;
-end	
+end
 umsg.PoolString("FadingDoorHurrah!");
 
 local function fadeActivate(self)
@@ -185,7 +185,7 @@ local function PostEntityPaste(self, ply, ent, ents)
 		self:fadePostEntityPaste(ply, ent, ents);
 	end
 end
-	
+
 
 local function onRemove(self)
 	numpad.Remove(self.fadeUpNum);
@@ -213,7 +213,7 @@ local function dooEet(ply, ent, stuff)
 				ent.PreEntityCopy = PreEntityCopy;
 				ent.fadePostEntityPaste = ent.PostEntityPaste;
 				ent.PostEntityPaste = PostEntityPaste;
-			end				
+			end
 		end
 	end
 	ent.fadeUpNum = numpad.OnUp(ply, stuff.key, "Fading Doors onUp", ent);
@@ -281,7 +281,7 @@ function TOOL:LeftClick(tr)
 		undo.AddFunction(doUndo, ent);
 		undo.SetPlayer(ply);
 	undo.Finish();
-	
+
 	SendUserMessage("FadingDoorHurrah!", ply);
 	return true
 end

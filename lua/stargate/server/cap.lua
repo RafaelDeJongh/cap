@@ -126,7 +126,7 @@ function StarGate.ReloadSystem(groupsystem)
 		system = "Group System";
 	end
 	for k, v in pairs(player.GetHumans()) do
-		v:SendLua("LocalPlayer():ChatPrint(Language.GetMessage(\"stargate_reload\",\""..system.."\"))");
+		v:SendLua("LocalPlayer():ChatPrint(SGLanguage.GetMessage(\"stargate_reload\",\""..system.."\"))");
 	end
 	RunConsoleCommand("stargate_reload");
 	if (tostring(groupsystem)=="true") then
@@ -146,6 +146,6 @@ end
 
 function StarGate.ReloadedSystemMessage()
 	for k, v in pairs(player.GetHumans()) do
-		v:SendLua("LocalPlayer():ChatPrint(Language.GetMessage(\"stargate_reloaded\"))");
+		v:SendLua("LocalPlayer():ChatPrint(SGLanguage.GetMessage(\"stargate_reloaded\"))");
 	end
 end

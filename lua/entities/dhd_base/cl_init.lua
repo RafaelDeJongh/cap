@@ -149,6 +149,7 @@ end
 -- ugly workaround
 local properties_HaloThink = properties.HaloThink;
 properties.HaloThink = function()
+	if (!IsValid(LocalPlayer())) then return end
 	local ent = properties.GetHovered(LocalPlayer():EyePos(), LocalPlayer():GetAimVector())
 	if (!IsValid( ent ) or ent.IsDHD) then return end
 	properties_HaloThink();

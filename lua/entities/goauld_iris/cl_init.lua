@@ -1,3 +1,5 @@
 include("shared.lua");
 ENT.RenderGroup = RENDERGROUP_OPAQUE
-language.Add("goauld_iris",Language.GetMessage("stool_giris"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("goauld_iris",SGLanguage.GetMessage("stool_giris"));
+end

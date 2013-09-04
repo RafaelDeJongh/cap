@@ -3,7 +3,7 @@
 	Copyright (C) 2010 Llapp
 */
 
-if (not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
 
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");

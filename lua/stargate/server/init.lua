@@ -387,7 +387,7 @@ concommand.Add( "cap_spawnswep", function( ply, cmd, args ) CAP_Spawn_Weapon( pl
 
 function StarGate.NotSpawnable(class,player,mode)
 	if (not mode) then mode = "ent" end
-	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then player:SendLua("GAMEMODE:AddNotify(Language.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
-	if ( StarGate.CFG:Get(mode.."_admin_only",class,false) && !player:IsAdmin() ) then player:SendLua("GAMEMODE:AddNotify(Language.GetMessage(\"cap_admin_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
+	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
+	if ( StarGate.CFG:Get(mode.."_admin_only",class,false) && !player:IsAdmin() ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_admin_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
 	return false;
 end

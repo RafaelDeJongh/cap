@@ -51,7 +51,7 @@ function StarGate.Hook.GetInternetStatus(_,key)
     string.__todivide(key);
 	if(key ~= "+menu") then return end;
 	hook.Remove("PlayerBindPress","StarGate.Hook.GetInternetStatus");
-	if (not StarGate.WorkShop) then
+	if (not StarGate.WorkShop or file.Exists("addons/cap/ver.txt","GAME")) then
 		local fil = file.Read("addons/cap/ver.txt","GAME")
 		if fil then
 			local hddversion = tonumber(fil)

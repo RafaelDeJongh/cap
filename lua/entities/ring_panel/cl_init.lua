@@ -86,11 +86,11 @@ function PANEL:Init()
 	end
 
  	self.L1 = vgui.Create( "DLabel", self )
- 	self.L1:SetText(Language.GetMessage("ring_dial"))
+ 	self.L1:SetText(SGLanguage.GetMessage("ring_dial"))
  	self.L1:SetFont("OldDefaultSmall")
 
  	self.Button = vgui.Create( "RingDialButtonCap", self)
-	self.Button:SetText(Language.GetMessage("ring_dialb"))
+	self.Button:SetText(SGLanguage.GetMessage("ring_dialb"))
 
 	self.Button:SetPos(325,39)
  	self.TextEntry:SetSize( 305, self.TextEntry:GetTall() )

@@ -1,2 +1,4 @@
 include("shared.lua")
-language.Add("f302", Language.GetMessage("entity_f302"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+	language.Add("f302", SGLanguage.GetMessage("entity_f302"))
+end

@@ -45,45 +45,45 @@ list.Set( "Wire_button_Models", "models/Iziraider/artifacts/asgard_stone.mdl", {
 if (StarGate.CheckModule("npc")) then
 local NPC =
 {
-	Name = Language.GetMessage("npc_wraith"),
+	Name = SGLanguage.GetMessage("npc_wraith"),
 	Class = "npc_combine_s",
 	KeyValues = {},
 	Model = "models/pg_props/pg_charaktere/pg_wraith_test.mdl",
 	Health = "300",
-	Category = Language.GetMessage("npc_cat"),
+	Category = SGLanguage.GetMessage("npc_cat"),
 	Author = "ProgSys"
 }
 
 local NPC2 =
 {
-	Name = Language.GetMessage("npc_prior"),
+	Name = SGLanguage.GetMessage("npc_prior"),
 	Class = "npc_combine_s",
 	KeyValues = {},
 	Model = "models/tiny/Playermodels/Prior_PM.mdl",
 	Health = "200",
-	Category = Language.GetMessage("npc_cat"),
+	Category = SGLanguage.GetMessage("npc_cat"),
 	Author = "Tiny"
 }
 
 local NPC3 =
 {
-	Name = Language.GetMessage("npc_goauld"),
+	Name = SGLanguage.GetMessage("npc_goauld"),
 	Class = "npc_combine_s",
 	KeyValues = {},
 	Model = "models/ViktorK/player/anubis.mdl",
 	Health = "200",
-	Category = Language.GetMessage("npc_cat"),
+	Category = SGLanguage.GetMessage("npc_cat"),
 	Author = "ViktorK"
 }
 
 local NPC4 =
 {
-	Name = Language.GetMessage("npc_soldier"),
+	Name = SGLanguage.GetMessage("npc_soldier"),
 	Class = "npc_citizen",
 	KeyValues =	{ citizentype = 4 },
 	Model = "models/ViktorK/player/scout_tau.mdl",
 	Health = "200",
-	Category = Language.GetMessage("npc_cat"),
+	Category = SGLanguage.GetMessage("npc_cat"),
 	Author = "ViktorK",
 	Weapons = {"fnp90"}
 }
@@ -107,10 +107,10 @@ list.Set( "PlayerOptionsModel",  "#pm_goauld", "models/ViktorK/player/anubis.mdl
 list.Set( "PlayerOptionsModel",  "#pm_sg_soldier", "models/ViktorK/player/scout_tau.mdl" )
 
 if (CLIENT) then
-	language.Add("pm_wraith",Language.GetMessage("npc_wraith"))
-	language.Add("pm_prior",Language.GetMessage("npc_prior"))
-	language.Add("pm_goauld",Language.GetMessage("npc_goauld"))
-	language.Add("pm_sg_soldier",Language.GetMessage("npc_soldier"))
+	language.Add("pm_wraith",SGLanguage.GetMessage("npc_wraith"))
+	language.Add("pm_prior",SGLanguage.GetMessage("npc_prior"))
+	language.Add("pm_goauld",SGLanguage.GetMessage("npc_goauld"))
+	language.Add("pm_sg_soldier",SGLanguage.GetMessage("npc_soldier"))
 end
 
 player_manager.AddValidModel( "#pm_wraith", "models/pg_props/pg_charaktere/pg_wraith_player.mdl" )

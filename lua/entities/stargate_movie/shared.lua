@@ -9,7 +9,7 @@ ENT.WireDebugName = "Stargate Movie"
 
 properties.Add( "Stargate.MChevL.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_16"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_16"),
 	Order		=	-145,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -39,7 +39,7 @@ properties.Add( "Stargate.MChevL.On",
 
 properties.Add( "Stargate.MChevL.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_16d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_16d"),
 	Order		=	-145,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -69,7 +69,7 @@ properties.Add( "Stargate.MChevL.Off",
 
 properties.Add( "Stargate.MCl.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_15"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_15"),
 	Order		=	-144,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -99,7 +99,7 @@ properties.Add( "Stargate.MCl.On",
 
 properties.Add( "Stargate.MCl.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_15d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_15d"),
 	Order		=	-144,
 	MenuIcon	=	"icon16/plugin.png",
 

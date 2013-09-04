@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 --################### Head
 if SERVER then
 	AddCSLuaFile("shared.lua"); -- GNAAA
@@ -35,8 +35,10 @@ else
 	--language.Add("ring_panel","Ring Panel"); -- Haha. how stupid. Killed by a panel
 	-- Shit happens aVoN;p Especialy in gmod ;p (Mad)
 end
-SWEP.PrintName = Language.GetMessage("weapon_misc_ring");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_ring");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "aVoN"
 SWEP.Contact = "http://forums.facepunchstudios.com/aVoN"
 SWEP.Purpose = "Ring ring ring ring ring ring ring, banaphone"

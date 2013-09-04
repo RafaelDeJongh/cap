@@ -16,7 +16,7 @@ ENT.IsRings = true;
 
 properties.Add( "Stargate.Ring.Unusable.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_04"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_04"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_delete.png",
 
@@ -47,7 +47,7 @@ properties.Add( "Stargate.Ring.Unusable.On",
 
 properties.Add( "Stargate.Unusable.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_04d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_04d"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_add.png",
 
@@ -79,7 +79,7 @@ properties.Add( "Stargate.Unusable.Off",
 
 properties.Add( "Stargate.Ring.DialClosest",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_05"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_05"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin_go.png",
 
@@ -109,7 +109,7 @@ properties.Add( "Stargate.Ring.DialClosest",
 
 properties.Add( "Stargate.Ring.DialMenu",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_06"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_06"),
 	Order		=	-100,
 	MenuIcon	=	"icon16/plugin.png",
 

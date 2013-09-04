@@ -3,7 +3,7 @@
 
 -- FIXME: Rewrite every single line below and add a stool so it's not required to use wire
 
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");

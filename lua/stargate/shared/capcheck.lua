@@ -32,7 +32,7 @@ if (CLIENT) then
 			local UpdateFrame = vgui.Create("DFrame");
 			UpdateFrame:SetPos(ScrW()-580, 240);
 			UpdateFrame:SetSize(500,230);
-			UpdateFrame:SetTitle(Language.GetMessage("stargate_dxlevel_01"));
+			UpdateFrame:SetTitle(SGLanguage.GetMessage("stargate_dxlevel_01"));
 			UpdateFrame:SetVisible(true);
 			UpdateFrame:SetDraggable(true);
 			UpdateFrame:ShowCloseButton(true);
@@ -59,13 +59,13 @@ if (CLIENT) then
 				surface.SetDrawColor( 50, 50, 50, 255 )
 				surface.DrawOutlinedRect( 0, 0, UpdateFrame:GetWide(), UpdateFrame:GetTall() )
 
-				draw.DrawText(Language.GetMessage("stargate_dxlevel_02"), "ScoreboardText", 250, 25, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
-				draw.DrawText(Language.GetMessage("stargate_dxlevel_03"), "ScoreboardText", 10, 80, Color(255, 255, 255, 255),TEXT_ALIGN_LEFT);
-				draw.DrawText(Language.GetMessage("stargate_dxlevel_04"), "ScoreboardText", 250, 160, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
+				draw.DrawText(SGLanguage.GetMessage("stargate_dxlevel_02"), "ScoreboardText", 250, 25, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
+				draw.DrawText(SGLanguage.GetMessage("stargate_dxlevel_03"), "ScoreboardText", 10, 80, Color(255, 255, 255, 255),TEXT_ALIGN_LEFT);
+				draw.DrawText(SGLanguage.GetMessage("stargate_dxlevel_04"), "ScoreboardText", 250, 160, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
 			end;
 
 			local close = vgui.Create("DButton", UpdateFrame);
-			close:SetText(Language.GetMessage("stargate_updater_04"));
+			close:SetText(SGLanguage.GetMessage("stargate_updater_04"));
 			close:SetPos(380, 195);
 			close:SetSize(80, 25);
 			close.DoClick = function (btn)
@@ -104,7 +104,7 @@ if (not StarGate.WorkShop) then
 		end
 		MsgN("Error: Carter Addon Pack is wrong installed.\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.")
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is wrong installed.\\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.");
-	elseif (not cap_ver or cap_ver==0 or cap_ver<402 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<405 and (game.SinglePlayer() or SERVER)) then
 		status = "Error";
 		Msg("Status: "..status.."\n")
 		MsgN("Error: The file of addon version is corrupt.\nPlease remove and redownload file: cap/ver.txt.")

@@ -1,3 +1,5 @@
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 local matRefraction	= Material("refract_ring")
 
 local matGlow = {}

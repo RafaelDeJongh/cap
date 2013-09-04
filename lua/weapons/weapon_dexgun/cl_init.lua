@@ -7,8 +7,10 @@ end
 if(file.Exists("materials/VGUI/weapons/dexgun_killicon.vmt","GAME")) then
 	killicon.Add("weapon_dexgun","VGUI/weapons/dexgun_killicon",Color(255,255,255));
 end
-language.Add("HelicopterGun_ammo",Language.GetMessage("energy_cell"));
-language.Add("weapon_dexgun",Language.GetMessage("weapon_ronongun"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("HelicopterGun_ammo",SGLanguage.GetMessage("energy_cell"));
+language.Add("weapon_dexgun",SGLanguage.GetMessage("weapon_ronongun"));
+end
 
 function SWEP:Initialize()
 

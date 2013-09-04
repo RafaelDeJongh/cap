@@ -29,7 +29,9 @@ ENT.Glow = StarGate.MaterialFromVMT(
 );
 ENT.Shaft = Material("effects/ar2ground2");
 ENT.LightSettings = "cl_staff_dynlights_flight";
-language.Add("energy_pulse",Language.GetMessage("energy_pulse_kill"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("energy_pulse",SGLanguage.GetMessage("energy_pulse_kill"));
+end
 ENT.RenderGroup = RENDERGROUP_BOTH;
 
 --################### Init @aVoN

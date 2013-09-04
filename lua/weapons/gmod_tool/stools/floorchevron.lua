@@ -1,9 +1,9 @@
 /*   Copyright (C) 2011 by Llapp   */
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_fchev");
+TOOL.Name=SGLanguage.GetMessage("stool_fchev");
 TOOL.ClientConVar["model"] = "models/The_Sniper_9/Universe/Stargate/floorchevron.mdl";
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.List = "FloorChevronModels";

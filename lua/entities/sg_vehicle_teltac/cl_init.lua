@@ -1,6 +1,8 @@
 include('shared.lua')
-ENT.Category = Language.GetMessage("entity_ships_cat");
-ENT.PrintName = Language.GetMessage("entity_teltak");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
+ENT.PrintName = SGLanguage.GetMessage("entity_teltak");
+end
 ENT.ViewOverride = true;
 ENT.Sounds = {
 	Engine=Sound("vehicles/AlkeshEngine.wav"),

@@ -3,7 +3,7 @@
 	Copyright (C) 2010 Madman07
 ]]--
 
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 
 AddCSLuaFile("shared.lua");
 AddCSLuaFile("cl_init.lua");

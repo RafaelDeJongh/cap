@@ -1,6 +1,8 @@
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_misc_shield");
-SWEP.Category = Language.GetMessage("weapon_misc_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_shield");
+SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+end
 SWEP.Author = "DrFattyJr"
 SWEP.Purpose = "Shield yourself"
 SWEP.Instructions = "Press primary attack to shield yourself and secondary to unshield!"

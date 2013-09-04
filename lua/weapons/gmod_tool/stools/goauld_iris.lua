@@ -2,11 +2,11 @@
 	Goauld Iris
 	Copyright (C) 2010  Madman07
 */
-if (not StarGate.CheckModule("extra")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_giris");
+TOOL.Name=SGLanguage.GetMessage("stool_giris");
 TOOL.ClientConVar["toggle"] = 3;
 TOOL.ClientConVar["activate"] = 12;
 TOOL.ClientConVar["deactivate"] = 13;

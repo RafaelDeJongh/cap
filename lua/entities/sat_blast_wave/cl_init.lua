@@ -18,7 +18,9 @@
 ]]--
 
 include("shared.lua");
-language.Add("sat_blast_wave",Language.GetMessage("sat_blask_wave"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("sat_blast_wave",SGLanguage.GetMessage("sat_blask_wave"));
+end
 
 function ENT:Initialize()
 

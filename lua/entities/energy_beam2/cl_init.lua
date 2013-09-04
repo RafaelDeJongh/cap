@@ -1,5 +1,7 @@
 include("shared.lua");
-language.Add("energy_beam2",Language.GetMessage("energy_beam_kill"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("energy_beam2",SGLanguage.GetMessage("energy_beam_kill"));
+end
 
 function ENT:Draw()
 end

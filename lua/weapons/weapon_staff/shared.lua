@@ -16,9 +16,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 --################### Head
-if (not StarGate.CheckModule("weapon")) then return end
-SWEP.PrintName = Language.GetMessage("weapon_staff");
-SWEP.Category = Language.GetMessage("weapon_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+SWEP.PrintName = SGLanguage.GetMessage("weapon_staff");
+SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 SWEP.Author = "aVoN"
 SWEP.Contact = "http://forums.facepunchstudios.com/aVoN"
 SWEP.Purpose = "Kill Tau'ri"
@@ -48,7 +50,9 @@ list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
 list.Add("NPCUsableWeapons", {class = "weapon_staff", title = SWEP.PrintName});
 
 -- Add weapon for NPCs
-list.Set("NPCWeapons","weapon_staff",Language.GetMessage("weapon_staff"));
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+list.Set("NPCWeapons","weapon_staff",SGLanguage.GetMessage("weapon_staff"));
+end
 
 --################### Deploy @aVoN
 function SWEP:Deploy()
@@ -56,7 +60,7 @@ function SWEP:Deploy()
 	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
 	-- Muzzle
 	self:Muzzle();
-	if SERVER then self.Owner:EmitSound(self.Sounds.Deploy,math.random(90,110),math.random(90,110)) end;
+	if SERVER and IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Deploy,math.random(90,110),math.random(90,110)) end;
 	return true;
 end
 

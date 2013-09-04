@@ -1,4 +1,6 @@
-language.Add("gate_nuke", Language.GetMessage("gate_nuke"))
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("gate_nuke", SGLanguage.GetMessage("gate_nuke"))
+end
 
 info = {
 	Pos = Vector(0,0,0),

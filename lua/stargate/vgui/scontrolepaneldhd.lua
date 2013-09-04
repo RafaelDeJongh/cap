@@ -47,14 +47,14 @@ function PANEL:Init()
 		},
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -252,21 +252,21 @@ function PANEL:Init()
 		StatusImage = vgui.Create("DImage",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
 	end
 
 	-- Group
-	self.VGUI.GroupLabel:SetText(Language.GetMessage("stargate_vgui_group"));
+	self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
 	self.VGUI.GroupStatus:SetText("");
 
 	local grouppos = 145;
@@ -276,7 +276,7 @@ function PANEL:Init()
 	-- The Group TextEntry
 	self.VGUI.GroupTextEntry:SetPos(grouppos+45,35);
 	self.VGUI.GroupTextEntry:SetSize(35,self.VGUI.GroupTextEntry:GetTall());
-	self.VGUI.GroupTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_grptip"));
+	self.VGUI.GroupTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_grptip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.GroupTextEntry.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -314,11 +314,11 @@ function PANEL:Init()
 		end
 	end
 
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp1"),"M@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp2"),"P@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp3"),"I@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp8"),"OT");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp4"),"O@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp1"),"M@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp2"),"P@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp3"),"I@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp8"),"OT");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp4"),"O@");
 	if (SG_CUSTOM_GROUPS) then
 		for g,d in pairs(SG_CUSTOM_GROUPS) do
 			self.VGUI.GroupTextEntry:AddChoice(d[1],g);
@@ -391,39 +391,39 @@ function PANEL:SetStatus(g,no_message)
 		if (not no_message) then surface.PlaySound(self.Sounds["Info"]); end
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,g:upper()) end; -- SET THE GROUP!
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		end
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		elseif (g:len() == 2) then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_edit"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		end
 	end
 end
@@ -461,14 +461,14 @@ function PANEL:Init()
 		},
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -551,21 +551,21 @@ function PANEL:Init()
 		StatusImage = vgui.Create("DImage",self),
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
 	end
 
 	-- Group
-	self.VGUI.GroupLabel:SetText(Language.GetMessage("stargate_vgui_group"));
+	self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
 	self.VGUI.GroupStatus:SetText("");
 
 	local grouppos = 145;
@@ -575,7 +575,7 @@ function PANEL:Init()
 	-- The Group TextEntry
 	self.VGUI.GroupTextEntry:SetPos(grouppos+45,35);
 	self.VGUI.GroupTextEntry:SetSize(35,self.VGUI.GroupTextEntry:GetTall());
-	self.VGUI.GroupTextEntry:SetTooltip(Language.GetMessage("stargate_vgui_grptip"));
+	self.VGUI.GroupTextEntry:SetTooltip(SGLanguage.GetMessage("stargate_vgui_grptip"));
 	--This function restricts the letters you can enter to a valid address
 	self.VGUI.GroupTextEntry.TextEntry.OnTextChanged = function(TextEntry)
 		local text = TextEntry:GetValue();
@@ -613,11 +613,11 @@ function PANEL:Init()
 		end
 	end
 
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp1"),"M@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp2"),"P@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp3"),"I@");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp8"),"OT");
-	self.VGUI.GroupTextEntry:AddChoice(Language.GetMessage("stargate_vgui_grp4"),"O@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp1"),"M@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp2"),"P@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp3"),"I@");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp8"),"OT");
+	self.VGUI.GroupTextEntry:AddChoice(SGLanguage.GetMessage("stargate_vgui_grp4"),"O@");
 	if (SG_CUSTOM_GROUPS) then
 		for g,d in pairs(SG_CUSTOM_GROUPS) do
 			self.VGUI.GroupTextEntry:AddChoice(d[1],g);
@@ -690,39 +690,39 @@ function PANEL:SetStatus(g,no_message)
 		if (not no_message) then surface.PlaySound(self.Sounds["Info"]); end
 		if(self.OnAddressSet) then self.OnAddressSet(self.Entity,g:upper()) end; -- SET THE GROUP!
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		end
 	else
 		-- Typing address!
 		self.VGUI.StatusImage:SetImage(self.Images.Editing);
 		if (g == "M@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp1"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp1"));
 		elseif (g == "P@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp2"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp2"));
 		elseif (g == "I@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp3"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp3"));
 		elseif (g == "OT") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp8"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp8"));
 		elseif (g == "O@") then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grp4"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grp4"));
 		elseif (SG_CUSTOM_GROUPS and SG_CUSTOM_GROUPS[g]) then
 			self.VGUI.GroupStatus:SetText(SG_CUSTOM_GROUPS[g][1]);
 		elseif (g:len() == 2) then
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_grpc"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_grpc"));
 		else
-			self.VGUI.GroupStatus:SetText(Language.GetMessage("stargate_vgui_edit"));
+			self.VGUI.GroupStatus:SetText(SGLanguage.GetMessage("stargate_vgui_edit"));
 		end
 	end
 end
@@ -760,14 +760,14 @@ function PANEL:Init()
 		},
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -834,14 +834,14 @@ function PANEL:Init()
 		},
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));
@@ -910,14 +910,14 @@ function PANEL:Init()
 		},
 	}
 	-- The topic of the whole frame
-	self.VGUI.TitleLabel:SetText(Language.GetMessage("stargate_vgui"));
+	self.VGUI.TitleLabel:SetText(SGLanguage.GetMessage("stargate_vgui"));
 	self.VGUI.TitleLabel:SetPos(30,7);
 	self.VGUI.TitleLabel:SetWide(200);
 	--###### Select Address
 	-- The topic
 	for i=1,2 do
 		local mul = (i-1);
-		self.VGUI.AddressSelectLabel[i]:SetText(Language.GetMessage("stargate_vgui_dial"));
+		self.VGUI.AddressSelectLabel[i]:SetText(SGLanguage.GetMessage("stargate_vgui_dial"));
 		self.VGUI.AddressSelectLabel[i]:SetPos(10-mul*2,35-mul*2);
 		self.VGUI.AddressSelectLabel[i]:SetWide(200);
 		self.VGUI.AddressSelectLabel[i]:SetTextColor(Color(255*mul,255*mul,255*mul,255));

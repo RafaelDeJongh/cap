@@ -2,11 +2,11 @@
 	Jamming Device
 	Copyright (C) 2010  Madman07
 */
-if (not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
-TOOL.Name=Language.GetMessage("stool_jamming");
+TOOL.Name=SGLanguage.GetMessage("stool_jamming");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["immunity"] = 0;
 TOOL.ClientConVar["size"] = 100;
@@ -82,7 +82,7 @@ function TOOL:ControlsPanel(Panel)
 		Command="jamming_toggle",
 	});
 	Panel:CheckBox("Immunity","jamming_immunity"):SetToolTip("Note: Immunity allows you to beam even if jamming is online");
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"jamming_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"jamming_autoweld");
 end
 
 if SERVER then

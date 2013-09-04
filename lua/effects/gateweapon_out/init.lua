@@ -3,6 +3,8 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 EFFECT.GlowMat = Material("sprites/portalglow");
 EFFECT.GlowMat2 = Material("sprites/light_ignorez");
 EFFECT.GlowMat3 = StarGate.MaterialFromVMT(

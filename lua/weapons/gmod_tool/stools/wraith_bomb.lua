@@ -2,11 +2,11 @@
 	Naquada Bomb
 	Copyright (C) 2010  Madman07, Stargate Extras
 */
-if (not StarGate.CheckModule("entweapon")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Weapons";
-TOOL.Name=Language.GetMessage("stool_wh_bomb");
+TOOL.Name=SGLanguage.GetMessage("stool_wh_bomb");
 TOOL.ClientConVar["power"] = 5;
 TOOL.ClientConVar["yield"] = 500;
 TOOL.ClientConVar["timer"] = 5;
@@ -68,7 +68,7 @@ function TOOL:ControlsPanel(Panel)
 	Panel:NumSlider("Yield","wraith_bomb_yield",100,1000,0);
 	Panel:NumSlider("Timer","wraith_bomb_timer",5,60,0);
 	Panel:NumSlider("Power","wraith_bomb_power",5,30,0);
-	Panel:CheckBox(Language.GetMessage("stool_autoweld"),"wraith_bomb_autoweld"):SetToolTip("Autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"wraith_bomb_autoweld"):SetToolTip("Autoweld");
 end
 
 TOOL:Register();

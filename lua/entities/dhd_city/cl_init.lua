@@ -19,8 +19,10 @@
 include("shared.lua")
 ENT.ChevronColor = Color(100,100,255);
 
-ENT.Category = Language.GetMessage("stargate_category");
-ENT.PrintName = Language.GetMessage("dhd_city");
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+ENT.Category = SGLanguage.GetMessage("stargate_category");
+ENT.PrintName = SGLanguage.GetMessage("dhd_city");
+end
 
 --################# Draw @aVoN
 function ENT:Draw()

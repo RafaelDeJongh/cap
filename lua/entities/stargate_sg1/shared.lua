@@ -9,7 +9,7 @@ list.Set("CAP.Entity", ENT.PrintName, ENT);
 
 properties.Add( "Stargate.SGCType.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_13"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_13"),
 	Order		=	-150,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -40,7 +40,7 @@ properties.Add( "Stargate.SGCType.On",
 
 properties.Add( "Stargate.SGCType.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_13d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_13d"),
 	Order		=	-150,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -71,7 +71,7 @@ properties.Add( "Stargate.SGCType.Off",
 
 properties.Add( "Stargate.PoO.On",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_14"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14"),
 	Order		=	-140,
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
@@ -102,7 +102,7 @@ properties.Add( "Stargate.PoO.On",
 
 properties.Add( "Stargate.PoO.On2",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_14b"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14b"),
 	Order		=	-140,
 	MenuIcon	=	"icon16/plugin.png",
 
@@ -133,7 +133,7 @@ properties.Add( "Stargate.PoO.On2",
 
 properties.Add( "Stargate.PoO.Off",
 {
-	MenuLabel	=	Language.GetMessage("stargate_c_tool_14d"),
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14d"),
 	Order		=	-140,
 	MenuIcon	=	"icon16/plugin_link.png",
 
