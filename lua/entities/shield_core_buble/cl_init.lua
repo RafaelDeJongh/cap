@@ -13,6 +13,8 @@ include("modules/box.lua")
 include("modules/atlantis.lua")
 include("modules/bullets.lua");
 
+if (StarGate==nil or StarGate.Trace==nil) then return end
+
 StarGate.Trace:Add("shield_core_buble",
 	function(e,values,trace,in_box)
 		if(not e:GetNetworkedBool("depleted",false) and e:GetNWBool("Enabled",false)) then

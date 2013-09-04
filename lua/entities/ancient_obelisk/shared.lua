@@ -1,6 +1,6 @@
 ENT.Type="anim"
 ENT.Base="base_anim"
-StarGate.LifeSupportAndWire(ENT)
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 ENT.PrintName = "Ancient Obelisk"
 ENT.Author = "Madman07, Boba Fett"
 ENT.Category = "Stargate Carter Addon Pack"

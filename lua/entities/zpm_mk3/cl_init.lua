@@ -8,6 +8,8 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 language.Add("zpm_mk3",SGLanguage.GetMessage("stool_zpm_mk3"));
 end
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 local font = {
 	font = "Arial",
 	size = 16,

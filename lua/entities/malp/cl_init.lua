@@ -3,6 +3,9 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 ENT.Category = SGLanguage.GetMessage("entity_main_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_malp");
 end
+
+if (StarGate==nil or StarGate.MaterialCopy==nil or StarGate.KeyBoard==nil) then return end
+
 local MAXDIST = 5000
 local KBD = StarGate.KeyBoard:New("MALP")
 --Navigation

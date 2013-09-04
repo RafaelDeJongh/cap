@@ -181,7 +181,7 @@ end
 --################# Think function, to set the gates address @aVoN
 function ENT:Think()
 	--######### Dynamic Lights, toggleable by the client!
-	if(not StarGate.VisualsMisc("cl_stargate_dynlights")) then return end;
+	if(StarGate.VisualsMisc==nil or not StarGate.VisualsMisc("cl_stargate_dynlights")) then return end;
 	if(self.ChevronColor and (self.NextLight or 0) < CurTime()) then
 		self.NextLight = CurTime()+0.001;
 		for i=1,9 do

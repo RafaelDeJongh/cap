@@ -6,6 +6,7 @@ end
 
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
 ENT.Stars = StarGate.MaterialFromVMT(
 	"Stars",
 	[["Sprite"

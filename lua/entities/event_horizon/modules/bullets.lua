@@ -48,7 +48,7 @@ end
 
 --################# This makes bullets being able to shoot through the EH @aVoN
 -- Register EH SENT to the trace class
-StarGate.Trace:Add("event_horizon");
+if (StarGate.Trace) then StarGate.Trace:Add("event_horizon"); end
 
 if (SERVER) then
 -- We need a fake entity from which we will shoot the teleportet bullet from, otherwise bullet traces looks strange

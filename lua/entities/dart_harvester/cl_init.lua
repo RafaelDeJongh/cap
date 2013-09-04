@@ -17,6 +17,7 @@
 */
 include("shared.lua");
 ENT.RenderGroup = RENDERGROUP_BOTH;
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
 ENT.Beam = StarGate.MaterialCopy("HarvesterBeam","models/alyx/emptool_glow");
 ENT.LightMaterial = StarGate.MaterialFromVMT(
 	"HarvesterSprite",

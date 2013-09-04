@@ -1,4 +1,4 @@
-StarGate.LifeSupportAndWire(ENT);
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 ENT.Type = "anim"
 ENT.Base = "base_anim" --gmodentity
 ENT.PrintName = "ZPM Hub Mk2"

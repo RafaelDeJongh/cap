@@ -3,7 +3,7 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include('shared.lua')
 
-StarGate.LifeSupportAndWire(ENT);
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 
 function ENT:Initialize()
 	self.Entity:SetModel("models/props_lab/reciever01b.mdl")

@@ -1,4 +1,4 @@
-StarGate.LifeSupportAndWire(ENT)
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 
 ENT.PrintName = "Stargate Vehicle Base"
 ENT.Author = "RononDex"

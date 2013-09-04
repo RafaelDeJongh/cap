@@ -8,6 +8,8 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 language.Add("tampered_zpm",SGLanguage.GetMessage("stool_tzpm"));
 end
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 ENT.ZpmSprite = StarGate.MaterialFromVMT(
 	"ZpmSprite",
 	[["Sprite"

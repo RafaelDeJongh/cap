@@ -1,4 +1,5 @@
 include("shared.lua");
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
 ENT.Glow = StarGate.MaterialFromVMT(
 	"DroneSprite",
 	[["UnLitGeneric"

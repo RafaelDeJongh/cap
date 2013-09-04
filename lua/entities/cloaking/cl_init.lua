@@ -1,4 +1,5 @@
 include("shared.lua");
+if (StarGate==nil or StarGate.MaterialCopy==nil) then return end
 ENT.Material = StarGate.MaterialCopy("CloakMuzzle","effects/strider_bulge_dudv");
 
 --################### Init @aVoN

@@ -16,6 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 include("shared.lua");
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
 ENT.Glow = StarGate.MaterialFromVMT(
 	"StaffGlow",
 	[["UnLitGeneric"

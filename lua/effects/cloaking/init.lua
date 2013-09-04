@@ -16,6 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+if (StarGate==nil or StarGate.MaterialCopy==nil) then return end
 EFFECT.Material = StarGate.MaterialCopy("CloakingMuzzle","models/shadertest/predator");
 
 --################### Init @aVoN

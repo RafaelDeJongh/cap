@@ -6,6 +6,8 @@ end
 ENT.RenderGroup = RENDERGROUP_BOTH;
 ENT.ViewOverride = true;
 
+if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("F302");
 --Navigation

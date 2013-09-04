@@ -5,6 +5,8 @@ ENT.PrintName = SGLanguage.GetMessage("entity_gate_glider");
 end
 ENT.RenderGroup = RENDERGROUP_BOTH
 
+if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("GateGlider")
 --Navigation

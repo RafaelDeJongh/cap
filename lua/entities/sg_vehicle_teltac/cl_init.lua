@@ -8,6 +8,8 @@ ENT.Sounds = {
 	Engine=Sound("vehicles/AlkeshEngine.wav"),
 }
 
+if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("Teltac")
 --Navigation

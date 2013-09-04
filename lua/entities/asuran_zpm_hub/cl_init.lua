@@ -8,6 +8,8 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 language.Add("asuran_zpm_hub",SGLanguage.GetMessage("stool_asuran_hub"));
 end
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 ENT.ZpmSprite = StarGate.MaterialFromVMT(
 	"ZpmSprite",
 	[["Sprite"

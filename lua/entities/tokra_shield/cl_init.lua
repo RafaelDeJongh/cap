@@ -10,6 +10,7 @@ end
 include("box.lua")
 include("bullets.lua");
 
+if (StarGate==nil or StarGate.Trace==nil) then return end
 StarGate.Trace:Add("tokra_shield",
 	function(e,values,trace,in_box)
 		return true;

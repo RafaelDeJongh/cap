@@ -1,5 +1,5 @@
 -- Use the Stargate addon to add LS, RD and Wire support to this entity
-StarGate.LifeSupportAndWire(ENT)
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 
 ENT.Type             = "anim"
 ENT.Base             = "base_anim"
