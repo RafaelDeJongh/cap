@@ -12,7 +12,7 @@ function EFFECT:Init(data)
 	self.Fraction = (self.ExpansionRate/self.cycleInterval)/512;
 
 	self.Entity:SetModel(Model("models/Madman07/shields/sphere.mdl"));
-	self.Entity:SetPos(self.Ent:GetPos());
+	if (IsValid(self.Ent)) then self.Entity:SetPos(self.Ent:GetPos()); end
 
 	self.Entity:SetRenderBounds(-Vector(1,1,1)*100000000,Vector(1,1,1)*100000000);
 end

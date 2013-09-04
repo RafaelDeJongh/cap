@@ -66,7 +66,6 @@ function ENT:SpawnFunction( ply, tr )
 	local PropLimit = GetConVar("CAP_statrail_max"):GetInt()
 	if(ply:GetCount("CAP_statrail")+1 > PropLimit) then
 		ply:SendLua("GAMEMODE:AddNotify(\"Stationary Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
 		return
 	end
 

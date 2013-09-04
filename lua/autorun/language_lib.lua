@@ -164,19 +164,19 @@ local function LangInit()
 		SGLanguage.ParseFile("english",f);
 	end
 	if CLIENT then
-		langfiles = file.Find("lua/data/language/"..SGLanguage.GetClientSGLanguage().."/*.lua","GAME");
+		langfiles = file.Find("lua/data/language/"..SGLanguage.GetClientLanguage().."/*.lua","GAME");
 		for _,f in pairs(langfiles) do
-			SGLanguage.ParseFile(SGLanguage.GetClientSGLanguage(),f);
+			SGLanguage.ParseFile(SGLanguage.GetClientLanguage(),f);
 		end
 	end
 end
 
-function SGLanguage.GetClientSGLanguage()
+function SGLanguage.GetClientLanguage()
 	if SERVER then return "english" end
 	return GetConVarString("sg_language") or "english";
 end
 
-function SGLanguage.SetClientSGLanguage(lang)
+function SGLanguage.SetClientLanguage(lang)
 	if SERVER then return end
 	RunConsoleCommand("sg_language",lang);
 end

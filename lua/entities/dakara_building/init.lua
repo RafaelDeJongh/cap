@@ -266,6 +266,7 @@ function ENT:OnRemove(ply)
 end
 
 function ENT:Think(ply)
+	if (not IsValid(self)) then return end
 	local e = ents.FindInSphere(self:GetPos()+Vector(0,0,1000), 1000);
 	for _,v in pairs(e) do
 		if (v:IsPlayer() and v:GetMoveType() == MOVETYPE_NOCLIP) then

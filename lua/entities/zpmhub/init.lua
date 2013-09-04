@@ -100,7 +100,7 @@ function ENT:Touch(ent)
 				ent:SetUseType(SIMPLE_USE);
 				ent.Use = function()
 					local constr = constraint.FindConstraint(self,"Weld");
-					if (constr) then
+					if (constr and IsValid(constr.Entity[1].Entity)) then
 						constr.Entity[1].Entity:UseZPM(i);
 					end
 				end
@@ -240,7 +240,7 @@ function ENT:Think()
 	end
 
 	for i=1,3 do
-		if IsValid(self.ZPMs[i].Ent) and self.ZPMs[i].Dist == 0 then
+		if self.ZPMs[i] and IsValid(self.ZPMs[i].Ent) and self.ZPMs[i].Dist == 0 then
 			self:SetWire("ZPM "..i.." %",zpm[i].On and zpm[i].Per or -1);
 		else
 			self:SetWire("ZPM "..i.." %",-1);
@@ -453,11 +453,13 @@ function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
 	self.ZPMs = Ent.EntityMods.ZPMs.ZPMs;
 	for i,v in ipairs(Ent.EntityMods.ZPMs.ZPMid) do
 		if (v!=-1) then
-			self.ZPMs[i].Ent = CreatedEntities[v]
-			self.ZPMs[i].Ent:SetUseType(SIMPLE_USE);
-			self.ZPMs[i].Ent.Use = function()
-				local constr = constraint.FindConstraint(self,"Weld");
-				constr.Entity[1].Entity:UseZPM(i);
+			if (self.ZPMs[i]) then
+				self.ZPMs[i].Ent = CreatedEntities[v]
+				self.ZPMs[i].Ent:SetUseType(SIMPLE_USE);
+				self.ZPMs[i].Ent.Use = function()
+					local constr = constraint.FindConstraint(self,"Weld");
+					constr.Entity[1].Entity:UseZPM(i);
+				end
 			end
 		end
 	end

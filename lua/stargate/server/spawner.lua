@@ -292,9 +292,8 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 						end
 					end
 				elseif(IsGravityController) then
-					e:GetPhysicsObject():SetMass(200);
 					local phys = e:GetPhysicsObject(); -- hey, unfreeze me!
-					if IsValid(phys) then phys:EnableMotion(true); end
+					if IsValid(phys) then phys:SetMass(200); phys:EnableMotion(true); end
 
 					// weld to the gates
 					for _,sg in pairs(ents.FindInSphere(pos, 200)) do

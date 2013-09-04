@@ -230,12 +230,14 @@ function SWEP:DoShoot()
 						--################### Check for NPC-Ragdolls to make them dissovle when hit with the next shot
 						if(IS_NPC) then
 							for _,v in pairs(ents.FindInSphere(pos,60)) do
-								if(v:IsValid() and v:GetClass() == "prop_ragdoll") then
+								if(IsValid(v) and v:GetClass() == "prop_ragdoll") then
 									-- Make the NPC's ragdoll valid for dissolve
 									v.ZatMode = 2;
 									v.LastZat = CurTime();
 									-- Apply some force to the ragdoll
-									v:GetPhysicsObject():ApplyForceCenter((trace.Normal*0.7+VectorRand()*0.3)*60000);
+									if (IsValid(v:GetPhysicsObject())) then
+										v:GetPhysicsObject():ApplyForceCenter((trace.Normal*0.7+VectorRand()*0.3)*60000);
+									end
 									break;
 								end
 							end

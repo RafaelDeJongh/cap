@@ -31,6 +31,7 @@ EFFECT.RefractBeam = Material("models/shadertest/predator");
 function EFFECT:Init(data)
 	self.StartPos	= data:GetOrigin();
 	self.TargetEnt	= StarGate.FindEntInsideSphere(self.StartPos, 10, "event_horizon")[1];	-- Remote Gate
+	if (not IsValid(self.TargetEnt)) then return end
 	self.Parent		= data:GetEntity();
 	self.StartPos	= StarGate.GetEntityCentre(self.Parent);
 	self.Length		= 256;

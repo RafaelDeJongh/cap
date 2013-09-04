@@ -244,7 +244,7 @@ function ENT:Think()
 	if crt>self.NextCheckConstrained and self.ConTable["bLiveGravity"]==1 and self.ConTable["bBrakeOnly"][2] == 0 or self.ConTable["bSGAPowerNode"][2]==1 then
 		local t=constraint.GetAllConstrainedEntities(self.Entity)
 			for _,e in pairs(t) do
-				if e.phys and e.phys:IsGravityEnabled() == self.Active then
+				if e.phys and IsValid(e.Phys) and e.phys:IsGravityEnabled() == self.Active then
 					self:SetEntGravity(e, self.Active)
 				end
 			end

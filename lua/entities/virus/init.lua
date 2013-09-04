@@ -70,11 +70,13 @@ end
 function ENT:FindVirus()
 	local epos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		local vpos = v:GetPos();
-		local dist = (vpos - epos):Length();
-		if(dist <= 500) then
-			self.Gate = v;
-		  v:Viru(true);
+		if (IsValid(v) and v.IsStargate and v.Viru) then
+			local vpos = v:GetPos();
+			local dist = (vpos - epos):Length();
+			if(dist <= 500) then
+				self.Gate = v;
+			  v:Viru(true);
+			end
 		end
 	end
 end

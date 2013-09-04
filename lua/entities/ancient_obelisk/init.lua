@@ -78,6 +78,7 @@ function ENT:PrepareTeleport()
 	while (true) do -- well, be sure that target have stargates and its valid and adress is valid - no more manualy adres seting
 		self.Entity:FindObelisk()
 		self.TargetObelisk = table.Random(self.ObeliskTable)
+		if (not IsValid(self.TargetObelisk)) then self:CreateTimer(); return end
 		self.TargetGate = self.TargetObelisk:FindGate();
 		if (not self.TargetGate) then self:CreateTimer(); return end
 		if (self.TargetGate.GateAddress != "") then break end
@@ -222,6 +223,7 @@ function ENT:FindGate()
 end
 
 function ENT:FindObelisk()
+	self.ObeliskTable = {};
 	for _,v in pairs(ents.FindByClass("ancient_obelisk")) do
 		if (not table.HasValue(self.ObeliskTable, v) and v != self.Entity) then
 			table.insert(self.ObeliskTable, v);

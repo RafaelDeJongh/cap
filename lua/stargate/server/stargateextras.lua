@@ -86,7 +86,8 @@ end
 
 function StarGate.CoolGate(gate)
    if(gate == nil) then
-      error("Gate passed to CoolGate(gate) cannot be nil.\n")
+      Msg("Gate passed to CoolGate(gate) cannot be nil.\n")
+      return flase
    elseif(gate.excessPower == nil || gate.excessPower <= 0) then
       return false
    end
@@ -108,7 +109,8 @@ end
 
 function StarGate.TintGate(gate)
    if(gate == nil || gate:IsValid() == false) then
-      error("Gate passed to StarGate.TintGate was not valid.\n")
+      Msg("Gate passed to StarGate.TintGate was not valid.\n")
+      return
    elseif(gate.excessPower == nil) then
       return
    end
@@ -194,7 +196,8 @@ end
 
 function StarGate.CauseHeatDamage(gate)
    if(gate == nil) then
-      error("Gate passed to CauseHeatDamage(gate) cannot be nil.\n")
+      Msg("Gate passed to CauseHeatDamage(gate) cannot be nil.\n")
+      return false
    elseif(gate.excessPower == nil) then
       return false
    end
@@ -227,11 +230,11 @@ end
 -- Returns: whether the gate could be jammed
 function StarGate.JamRemoteGate(gate)
    if(gate == nil || gate:IsValid() == false) then
-      error("The stargate passed to JamRemoteGate(gate) is not valid.\n")
+      Msg("The stargate passed to JamRemoteGate(gate) is not valid.\n")
       return false
    elseif(StarGate.IsStargateOpen(gate) == false ||
           StarGate.IsStargateOutbound(gate)) then
-      error("The stargate passed to JamRemoteGate(gate) does not have an outbound wormhole open.\n")
+      Msg("The stargate passed to JamRemoteGate(gate) does not have an outbound wormhole open.\n")
       return false
    elseif(gate.jammed == true) then
       return true
@@ -327,7 +330,7 @@ end
 
 function StarGate.UnJamGate(gate)
    if(gate == nil) then
-      error("The stargate passed to UnJamGate(gate) cannot be nil.\n")
+      Msg("The stargate passed to UnJamGate(gate) cannot be nil.\n")
       return false
    elseif(gate:IsValid() == false) then
       return false
@@ -351,7 +354,7 @@ end
 
 function StarGate.JamDHD(dhd, duration)
    if(dhd == nil) then
-      error("The DHD passed to JamDHD(dhd) cannot be nil.\n")
+      Msg("The DHD passed to JamDHD(dhd) cannot be nil.\n")
       return false
    elseif(dhd:IsValid() == false) then
       return false
@@ -368,7 +371,7 @@ end
 
 function StarGate.UnJamDHD(dhd)
    if(dhd == nil) then
-      error("The DHD passed to UnJamDHD(dhd) cannot be nil.\n")
+      Msg("The DHD passed to UnJamDHD(dhd) cannot be nil.\n")
       return false
    elseif(dhd:IsValid() == false) then
       return false
@@ -380,7 +383,8 @@ end
 
 function StarGate.GetGateMarker(gate)
    if(gate == nil) then
-      error("Gate passed to GetGateMarker(gate) cannot be nil.\n")
+      Msg("Gate passed to GetGateMarker(gate) cannot be nil.\n")
+      return
    end
 
    if(gate.centreMarker == nil) then

@@ -9,6 +9,7 @@ EFFECT.Materialb = Material("effects/shieldb");
 function EFFECT:Init(data)
 	if(not StarGate.VisualsMisc("cl_shield_bubble")) then return end;
 	local e = data:GetEntity();
+    if (not IsValid(e)) then return end
 
 	self.Siz = e:GetNetworkedVector("Size", Vector(100,100,100))/512;
 	self.Col = e:GetNWVector("Col", Vector(170,185,255));

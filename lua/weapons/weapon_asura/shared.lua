@@ -56,7 +56,7 @@ function SWEP:EquipAmmo()
 end
 
 function SWEP:Deploy()
-
+	if (not IsValid(self) or not IsValid(self.Owner)) then return end
 	self.Owner:EmitSound(Sound("pulse_weapon/asuran_hand_deploy.wav"),75,math.random(75,125))
 
 end

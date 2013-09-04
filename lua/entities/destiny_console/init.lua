@@ -222,7 +222,9 @@ function ENT:FlashButton(btn)
 	local button = self.Buttons[btn];
 	button:SetSkin(1);
 	timer.Create(self.Entity:EntIndex().."Console_Btn"..tostring(btn), 0.5, 1, function()
-		button:SetSkin(0);
+		if (IsValid(button)) then
+			button:SetSkin(0);
+		end
 	end);
 end
 

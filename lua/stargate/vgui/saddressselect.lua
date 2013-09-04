@@ -2217,7 +2217,7 @@ function PANEL:AddGatesToList(s)
 		if(tonumber(v.ent) ~= self.Entity:EntIndex() and not v.private) then
 		    local address = v.address;
 			if(address ~= "") then
-				if(IsValid(g))then
+				if(IsValid(g) and g.GetGalaxy)then
 					local range = (g:GetPos() - v.pos):Length();
 					local c_range = g:GetNetworkedInt("SGU_FIND_RANDE");
 				    if(v.galaxy or g:GetGalaxy() or
