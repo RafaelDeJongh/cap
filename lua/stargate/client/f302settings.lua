@@ -26,13 +26,13 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddF302KeysettingsConfig",StarGate.Hoo
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.F302Settings(Panel)
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/f302");
 		VGUI:SetTopic("Help:  F302 Config");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	local LAYOUT = "F302";
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
@@ -45,7 +45,7 @@ function StarGate.F302Settings(Panel)
 				{"Reset Roll","RROLL"},
 				{"Air Brake","BRAKE"},
 				{"Boost","BOOST"},
-				
+
 			},
 		},
 		{

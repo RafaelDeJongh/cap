@@ -219,6 +219,14 @@ if CLIENT then
 	local function UpdatePanel()
 		local CPanel = controlpanel.Get("gravitycontroller")
 		CPanel:Clear()
+
+		if(StarGate.HasInternet) then
+			local VGUI = vgui.Create("SHelpButton",Panel);
+			VGUI:SetHelp("stools/#gravitycontroller");
+			VGUI:SetTopic("Help: Tools - "..SGLanguage.GetMessage("stool_gravc"));
+			CPanel:AddPanel(VGUI);
+		end
+
 		--CPanel:AddHeader()
 		--CPanel:AddDefaultControls()
 		CPanel:AddControl( "PropSelect", {

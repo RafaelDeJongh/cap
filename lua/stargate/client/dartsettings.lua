@@ -26,13 +26,13 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddDartKeysettingsConfig",StarGate.Hoo
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.DartSettings(Panel)
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/dart");
 		VGUI:SetTopic("Help:  Destiny Dart Config");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	local LAYOUT = "Dart";
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {

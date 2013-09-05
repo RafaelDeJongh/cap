@@ -276,6 +276,7 @@ function ENT:LowProrityThink()
 end
 
 function ENT:Think(ply)
+	if (not IsValid(self)) then return end
 	if self.LowThink then self.Entity:LowProrityThink(); end
 	self.Entity:NextThink(CurTime());
 	return true
@@ -284,7 +285,7 @@ end
 -----------------------------------PHYS----------------------------------
 
 function ENT:PhysicsUpdate( phys, deltatime )
-
+	if (not IsValid(self)) then return end
 	local TargetPos = nil;
 
 	if IsValid(self.APC) then
@@ -372,11 +373,13 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local dupeInfo = Ent.EntityMods.OriDupeInfo
 
-	local PropLimit = GetConVar("CAP_ori_max"):GetInt()
-	if(ply:GetCount("CAP_ori")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Ori Satellites limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ori_max"):GetInt()
+		if(ply:GetCount("CAP_ori")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ori Satellites limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	if dupeInfo.EntityID then
@@ -406,7 +409,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.CallThink = false;
 	self.Pressed = false
 
-	self.Owner = ply;
-	ply:AddCount("CAP_ori", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_ori", self.Entity)
+	end
 
 end

@@ -191,7 +191,7 @@ function ENT:Think()
 		end
 		--##############################################################################
 		y = y or 0;
-		if(y <= 360)then
+		if(type(y)=="number" and y <= 360)then
 		    y = y + 0.5;
 		else
 		    y = 0;

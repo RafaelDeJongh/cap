@@ -137,6 +137,7 @@ end
 
 --##################@Madman07,Assassin21
 function ENT:OnRemove()
+	self:StopActions();
 	self.Entity:DisActivateLights(true);
 	self:RemoveGateFromList();
 
@@ -178,7 +179,7 @@ function ENT:LightUp(Tick)
 	local ent = self.Entity;
 
 	timer.Create( "Effects"..self:EntIndex(), Tick, 72, function()
-		if (IsValid(self)) then
+		if (IsValid(ent)) then
 			self:Fade(self.EffectSegments[i], true);
 
 			local pos = self.Segments[i]:GetPos();
@@ -236,13 +237,14 @@ function ENT:LightUps(Tick)
 	local ent = self.Entity;
 
 	timer.Create( "Effectss"..self:EntIndex(), Tick, 72, function()
-
+		if (not IsValid(ent)) then return end
 		self:Fades(self.EffectSegments[i], true);
 
 		local pos = self.Segments[i]:GetPos();
 		local e = self.Segments[i];
 
 		timer.Create("Zappings"..e:EntIndex()..math.Rand(0,100),0.07,5,function()
+			if (not IsValid(e)) then return end
 			-- hmm, i decreased them as spawn effect is also nice and les laggy
 
 			local fx3 = EffectData()
@@ -275,10 +277,12 @@ function ENT:Fades(segment, tofull)
 		segment.alpha = 255;
 	end
 	timer.Create("FadeSegmentss"..segment:EntIndex(),0.001,13,function()
-		segment.alpha = segment.alpha + segment.direction;
-		if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
-		if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
-		segment:SetColor(Color(255,255,255,segment.alpha))
+		if (IsValid(segment)) then
+			segment.alpha = segment.alpha + segment.direction;
+			if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
+			if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
+			segment:SetColor(Color(255,255,255,segment.alpha))
+		end
 	end);
 end
 

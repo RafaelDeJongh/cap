@@ -486,6 +486,7 @@ end
 --################# Light every DHD near us up @aVoN
 -- Chevron,Delay,NoShutdon (Noshutdown is used, when every DHD near the gate will get "light up" again, when the stagate openes)
 function ENT:DHDSetChevron(ch,delay,ns)
+	if(not (self and self.FindDHD)) then return end;
 	local delay = delay or 0.4;
 	if(not self.DialledAddress or (table.getn(self.DialledAddress) < 8 or table.getn(self.DialledAddress) > 10)) then
 		self.DialledAddress={"","","","","","","","DIAL"};
@@ -521,6 +522,7 @@ end
 
 --################# Disables near DHDs @aVoN
 function ENT:DHDSetAllBusy()
+	if(not (self and self.FindDHD)) then return end;
 	-- Set all DHD's busy during the opening sequence - necessary to avoid some evil bugs
 	for _,v in pairs(self:FindDHD()) do
 		v:SetBusy(4);

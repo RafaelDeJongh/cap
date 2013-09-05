@@ -265,11 +265,13 @@ duplicator.RegisterEntityModifier( "SodanTrDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_sod_obelisk_max"):GetInt();
-	if(ply:GetCount("CAP_sod_obelisk")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Sodan Obelisk limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_sod_obelisk_max"):GetInt();
+		if(ply:GetCount("CAP_sod_obelisk")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Sodan Obelisk limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	local dupeInfo = Ent.EntityMods.SodanTrDupeInfo
@@ -289,7 +291,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.Entity:SetNetworkedString("pass",self.Password)
 
-	self.Owner = ply;
-	ply:AddCount("CAP_sod_obelisk", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_sod_obelisk", self.Entity)
+	end
 
 end

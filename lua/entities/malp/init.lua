@@ -355,6 +355,7 @@ function ENT:SpawnRTCam(ent)
 end
 
 function ENT:FindPlayerGate(dist)
+	if (not IsValid(self.Owner)) then return end
 	local gate;
 	local pos = self.Owner:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do -- Find the gates by their class name

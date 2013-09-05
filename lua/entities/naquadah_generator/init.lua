@@ -196,11 +196,13 @@ end
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable("naq_gen_mks",ply,"tool")) then self.Entity:Remove(); return end
-	if(ply:GetCount("naq_gen_mks")+1>GetConVar("sbox_maxnaq_gen_mks"):GetInt()) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Naquadah generator limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("naq_gen_mks")+1>GetConVar("sbox_maxnaq_gen_mks"):GetInt()) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Naquadah generator limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("naq_gen_mks", self.Entity)
 	end
-	ply:AddCount("naq_gen_mks", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

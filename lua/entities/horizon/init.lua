@@ -134,13 +134,15 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	if (StarGate.NotSpawnable(self:GetClass(),ply)) then self.Entity:Remove(); return end
 
-	local PropLimit = GetConVar("CAP_horizon_max"):GetInt()
-	if(ply:GetCount("CAP_horizon")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Horizon Platforms limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_horizon_max"):GetInt()
+		if(ply:GetCount("CAP_horizon")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Horizon Platforms limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_horizon", self.Entity)
 	end
-	ply:AddCount("CAP_horizon", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

@@ -477,11 +477,13 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local dupeInfo = Ent.EntityMods.StatRailDupeInfo
 
-	local PropLimit = GetConVar("CAP_statrail_max"):GetInt()
-	if(ply:GetCount("CAP_statrail")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Stationary Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_statrail_max"):GetInt()
+		if(ply:GetCount("CAP_statrail")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Stationary Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	if dupeInfo.StandID then
@@ -513,7 +515,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.weps = {}
 
-	ply:AddCount("CAP_statrail", self.Entity)
+	if (IsValid(ply)) then
+		ply:AddCount("CAP_statrail", self.Entity)
+	end
 
 end
 		--PrintMessage( HUD_PRINTTALK, ""..tostring() )

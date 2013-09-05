@@ -68,7 +68,7 @@ function StarGate.LoadConfig(p)
 					end*/
 				end
 			end
-			if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(_,true) end) end -- fix for reload.
+			if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(NULL,true) end) end -- fix for reload.
 		end
 	end
 end
@@ -80,7 +80,7 @@ util.AddNetworkString( "StarGate_CFG" );
 function StarGate.Hook.PlayerInitialSpawn(p,reload)
 	-- Now start syncing the config (also tells the client, SGPack is installed - just to be sure)
 	for name,data in pairs(StarGate.CFG.SYNC) do
-		if(p and p:IsValid() and p:IsPlayer() or reload) then -- Prevents crashing (must be done everytime we send a umsg!)
+		if(p and IsValid(p) and p:IsPlayer() or reload) then -- Prevents crashing (must be done everytime we send a umsg!)
 			net.Start("StarGate_CFG");
 			net.WriteString(name); -- Tell the client, what CFG node
 			net.WriteInt(table.Count(data),8); -- Tell the client, how much data will follow (Char goes from -128 to 128). But you seriously shoudln't add more than 20 umsg!

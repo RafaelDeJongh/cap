@@ -216,7 +216,7 @@ function ENT:Touch(e,override)
 	end
 	if(self.Parent.Containment and self.AllowContainment and not override) then return end;
 
-	if(not self.Passed[e]) then
+	if(self.Passed and not self.Passed[e]) then
 		self.Passed[e] = true;
 		local parent = e:GetParent();
 		if(

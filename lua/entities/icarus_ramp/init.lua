@@ -257,10 +257,12 @@ end
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable("anim_ramps",ply,"tool") ) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("sbox_maxanim_ramps"):GetInt()
-	if(ply:GetCount("CAP_anim_ramps")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Anim ramps limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_anim_ramps")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Anim ramps limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_anim_ramps", self.Entity)
 	end
-	ply:AddCount("CAP_anim_ramps", self.Entity)
 end

@@ -199,14 +199,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.Stand = self.Entity;
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_destmain_max"):GetInt()
-	if(ply:GetCount("CAP_destmain_max")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Destiny Main Weapons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:OnRemove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_destmain_max"):GetInt()
+		if(ply:GetCount("CAP_destmain_max")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Destiny Main Weapons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:OnRemove();
+			return
+		end
+		ply:AddCount("CAP_destmain_max", self.Entity)
 	end
 	self.Duped = true;
-	ply:AddCount("CAP_destmain_max", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

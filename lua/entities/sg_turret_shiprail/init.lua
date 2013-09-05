@@ -34,10 +34,12 @@ ENT.Pitch = -25;
 function ENT:SpawnFunction( ply, tr )
 	if ( !tr.HitPos ) then return end
 
-	local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
-	if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
+		if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			return
+		end
 	end
 
 	local ang = ply:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = ang.y % 360
@@ -48,7 +50,9 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Spawn();
 	ent:Activate();
 
-	ply:AddCount("CAP_shiprail", ent)
+	if (IsValid(ply)) then
+		ply:AddCount("CAP_shiprail", ent)
+	end
 	ent:SpawnRest();
 	ent.Duped = true;
 	return ent
@@ -92,14 +96,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.Stand = self.Entity;
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
-	if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
+		if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_shiprail", self.Entity)
 	end
 	self.Duped = true;
-	ply:AddCount("CAP_shiprail", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

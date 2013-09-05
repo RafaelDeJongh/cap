@@ -148,7 +148,7 @@ if (CLIENT) then
 		<style type='text/css'>
 			body {
 				background-color: #171717;
-				background-image: url(http://sg-carterpack.com/tac/images/bg.jpg);
+				background-image: url(http://sg-carterpack.com/wp-content/uploads/2013/09/bg1.jpg);
 				background-repeat: repeat;
 				font-family: Verdana, Geneva, sans-serif;
 				color: #FFF;
@@ -185,7 +185,7 @@ if (CLIENT) then
 			<li><a href="http://sg-carterpack.com/">Home</a> |</li>
 		    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
 		    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
-		    <li><a href="http://sg-carterpack.com/tac/credits.html">Credits</a></li>
+		    <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
 		</ul><hr>
 		<h2>]]..SGLanguage.GetMessage("sg_err_html_t").."</h2>"..text.."</body></html>";
 

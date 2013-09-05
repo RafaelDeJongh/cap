@@ -245,10 +245,14 @@ duplicator.RegisterEntityModifier( "AncientObeliskDupeInfo" , function() end)
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_anc_obelisk_max"):GetInt();
-	if(ply:GetCount("CAP_anc_obelisk")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Ancient Obelisk limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_anc_obelisk")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ancient Obelisk limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_sod_obelisk", self.Entity)
+		self.Owner = ply;
 	end
 
 	local dupeInfo = Ent.EntityMods.AncientObeliskDupeInfo
@@ -256,7 +260,4 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if dupeInfo.EntID then
 		self.Entity = CreatedEntities[ dupeInfo.EntID ]
 	end
-
-	ply:AddCount("CAP_sod_obelisk", self.Entity)
-	self.Owner = ply;
 end

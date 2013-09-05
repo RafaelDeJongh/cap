@@ -2,7 +2,7 @@
 sg_err_title = Carter Addon Pack - Error
 sg_err_html_t = Carter Addon Pack Error:
 sg_err_n = Error
-sg_err_01 = Stargate with Group System found, please remove it.<br>This addon included in Carter Addon Pack and should be removed.
+sg_err_01 = The Stargate Group System has been found on your system. Please remove it.<br>The addon has been included into the Carter Addon Pack and should be removed to avoid errors.
 sg_err_02 = Carter Addon Pack is incorrectly installed.<br>Make sure you downloaded 'cap' and 'cap_resources' folders and named the folders correctly.
 sg_err_03 = The addon version file is corrupt.<br>Please remove and redownload the file 'addons/cap/ver.txt'.
 sg_err_04 = The Git version of the Code pack from Carter Addon Pack is installed.<br>Please remove this to prevent possible problems.<br>Or remove the workshop version.

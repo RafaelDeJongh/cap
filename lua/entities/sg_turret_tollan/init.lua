@@ -132,14 +132,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.Stand = self.Entity;
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_ioncannon_max"):GetInt()
-	if(ply:GetCount("CAP_ioncannon")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Tollana Ion Cannons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ioncannon_max"):GetInt()
+		if(ply:GetCount("CAP_ioncannon")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Tollana Ion Cannons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_ioncannon", self.Entity)
 	end
 	self.Duped = true;
-	ply:AddCount("CAP_ioncannon", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

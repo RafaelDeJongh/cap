@@ -400,10 +400,12 @@ duplicator.RegisterEntityModifier( "DestConDupeInfo" , function() end)
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_destcon_max"):GetInt();
-	if(ply:GetCount("CAP_destcon")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Destiny Console limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_destcon")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Destiny Console limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	if not Ent.EntityMods then 	self.Entity:Remove(); return end
@@ -436,7 +438,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.Entity:SetNetworkedString("NameG",dupeInfo.ScreenTextG);
 	self.Entity:SetNetworkedString("NameH",dupeInfo.ScreenTextH);
 
-	self.Owner = ply;
-	ply:AddCount("CAP_destcon", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_destcon", self.Entity)
+	end
 
 end

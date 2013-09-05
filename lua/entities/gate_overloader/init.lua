@@ -57,10 +57,12 @@ ENT.CDSEmp_Ignore = true
 function ENT:SpawnFunction( ply, tr )
 	if ( !tr.Hit ) then return end
 
-	local PropLimit = GetConVar("CAP_overloader_max"):GetInt()
-	if(ply:GetCount("CAP_overloader")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Gate Overloader limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_overloader_max"):GetInt()
+		if(ply:GetCount("CAP_overloader")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Gate Overloader limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			return
+		end
 	end
 
 	local ang = ply:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = ang.y % 360;
@@ -85,7 +87,9 @@ function ENT:SpawnFunction( ply, tr )
 		if IsValid(phys) then phys:EnableMotion(false) end
 	end
 
-	ply:AddCount("CAP_overloader", ent)
+	if (IsValid(ply)) then
+		ply:AddCount("CAP_overloader", ent)
+	end
 	return ent
 end
 
@@ -682,7 +686,7 @@ function ENT:HeatGate(gate)
    end  */
 
    -- If the gate can no longer hold any more energy, make it explode
-   if(gate.excessPower >= gate.excessPowerLimit && not self:FindAsuran(gate)) then
+   if(gate.excessPower and gate.excessPowerLimit and gate.excessPower >= gate.excessPowerLimit && not self:FindAsuran(gate)) then
       gate.isOverloading = true
 
       local overloadEffect = EffectData()

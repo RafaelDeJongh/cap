@@ -313,13 +313,14 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:OnRemove(); return end
 
-	local PropLimit = GetConVar("CAP_staffstat_max"):GetInt()
-	if(ply:GetCount("CAP_staffstat")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Staff Stationary limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:OnRemove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_staffstat_max"):GetInt()
+		if(ply:GetCount("CAP_staffstat")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Staff Stationary limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:OnRemove();
+			return
+		end
 	end
-
 
 	self.Driver = NULL;
 	self.weps = {}
@@ -331,5 +332,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.NextFire = CurTime()+2;
 	self.Pressed = false;
 
-	ply:AddCount("CAP_staffstat", self.Entity)
+	if (IsValid(ply)) then
+		ply:AddCount("CAP_staffstat", self.Entity)
+	end
 end

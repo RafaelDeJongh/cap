@@ -108,10 +108,10 @@ function StarGate.CoolGate(gate)
 end
 
 function StarGate.TintGate(gate)
-   if(gate == nil || gate:IsValid() == false) then
+   if(gate == nil || not IsValid(gate)) then
       Msg("Gate passed to StarGate.TintGate was not valid.\n")
       return
-   elseif(gate.excessPower == nil) then
+   elseif(gate.excessPower == nil or gate.excessPowerLimit==nil) then
       return
    end
 

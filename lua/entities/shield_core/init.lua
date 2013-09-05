@@ -500,11 +500,13 @@ duplicator.RegisterEntityModifier( "SCDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt();
-	if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Shield Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt();
+		if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Shield Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	local dupeInfo = Ent.EntityMods.SCDupeInfo
@@ -531,8 +533,10 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.Mod = dupeInfo.Mod;
 	self.MenuData = dupeInfo.MenuData;
 
-	self.Owner = ply;
-	ply:AddCount("CAP_shieldcore", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_shieldcore", self.Entity)
+	end
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 
 end

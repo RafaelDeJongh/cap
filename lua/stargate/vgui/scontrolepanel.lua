@@ -73,8 +73,10 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address,group)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
-			e:SetGateGroup(group);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+				e:SetGateGroup(group);
+			end
 			timer.Remove("_StarGate.RefreshAddressList");
 			timer.Create("_StarGate.RefreshAddressList",0.25,1,
 				function()
@@ -376,8 +378,10 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address,group)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
-			e:SetGateGroup(group);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+				e:SetGateGroup(group);
+			end
 			timer.Remove("_StarGate.RefreshAddressList");
 			timer.Create("_StarGate.RefreshAddressList",0.25,1,
 				function()
@@ -568,8 +572,10 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address,group)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
-			e:SetGateGroup(group);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+				e:SetGateGroup(group);
+			end
 			timer.Remove("_StarGate.RefreshAddressList");
 			timer.Create("_StarGate.RefreshAddressList",0.25,1,
 				function()
@@ -768,8 +774,10 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address,group)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
-			e:SetGateGroup(group);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+				e:SetGateGroup(group);
+			end
 			timer.Remove("_StarGate.RefreshAddressList");
 			timer.Create("_StarGate.RefreshAddressList",0.25,1,
 				function()
@@ -966,7 +974,9 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+			end
 			timer.Remove("_StarGate.RefreshAddressList");
 			timer.Create("_StarGate.RefreshAddressList",0.25,1,
 				function()
@@ -1110,7 +1120,9 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+			end
 		end
 	end
 	--###### Name
@@ -1289,7 +1301,9 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+			end
 		end
 	end
 	--###### Name
@@ -1449,7 +1463,9 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+			end
 		end
 	end
 	--###### Name
@@ -1628,7 +1644,9 @@ function PANEL:Init()
 	self.VGUI.AddressPanel:SetPos(30,60);
 	self.VGUI.AddressPanel.OnAddressSet = function(e,address)
 		if((self.AlphaTime or 0)+0.3 < CurTime()) then -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
-			e:SetGateAddress(address);
+			if (IsValid(e)) then
+				e:SetGateAddress(address);
+			end
 		end
 	end
 	--###### Name

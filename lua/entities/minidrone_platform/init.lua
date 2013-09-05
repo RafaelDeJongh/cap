@@ -124,18 +124,22 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local dupeInfo = Ent.EntityMods.MiniDroneDupeInfo
 
-	local PropLimit = GetConVar("CAP_minidrone_max"):GetInt();
-	if(ply:GetCount("CAP_minidrone")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Minidrone Platform limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return false
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_minidrone_max"):GetInt();
+		if(ply:GetCount("CAP_minidrone")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Minidrone Platform limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return false
+		end
 	end
 
 	if dupeInfo.EntID then
 		self.Entity = CreatedEntities[ dupeInfo.EntID ]
 	end
 
-	self.Owner = ply;
-	ply:AddCount("CAP_minidrone", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_minidrone", self.Entity)
+	end
 
 end

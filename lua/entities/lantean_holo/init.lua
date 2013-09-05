@@ -91,11 +91,13 @@ duplicator.RegisterEntityModifier( "DestConDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_lantholo_max"):GetInt();
-	if(ply:GetCount("CAP_lantholo")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Lantean Holo limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return;
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_lantholo_max"):GetInt();
+		if(ply:GetCount("CAP_lantholo")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Lantean Holo limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return;
+		end
 	end
 
 	local dupeInfo = Ent.EntityMods.DestConDupeInfo
@@ -104,7 +106,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Entity = CreatedEntities[ dupeInfo.EntID ]
 	end
 
-	self.Owner = ply;
-	ply:AddCount("CAP_lantholo", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_lantholo", self.Entity)
+	end
 
 end

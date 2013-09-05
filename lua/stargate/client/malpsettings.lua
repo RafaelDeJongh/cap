@@ -26,13 +26,13 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddMALPKeysettingsConfig",StarGate.Hoo
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.MALPSettings(Panel)
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/malp");
 		VGUI:SetTopic("Help:  MALP Config");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	local LAYOUT = "MALP";
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {

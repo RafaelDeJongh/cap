@@ -23,14 +23,10 @@
 --################# Header ###################
 StarGate.HTTP = {
 	BUGS = "http://sg-carterpack.com/forums/forum/support/",
-	INTERNET = "http://stargatepack.googlecode.com/svn/help/HASINTERNET.TXT",
-	VERSION = "http://stargatepack.googlecode.com/svn/help/VERSION.TXT",
-	VERSION_LOGO = "http://gmod.daggeringcats.com/stargate/version.php",
-	GMOD = "http://stargatepack.googlecode.com/svn/help/GMOD.TXT",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/ver.txt",
 	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
-	CREDITS = "http://sg-carterpack.com/tac/credits.html"
+	CREDITS = "http://sg-carterpack.com/wiki/"
 };
 StarGate.LATEST_VERSION = 0;
 StarGate.CURRENT_VERSION = 0;
@@ -64,12 +60,6 @@ function StarGate.Hook.GetInternetStatus(_,key)
 	end
 
 	local installed = StarGate.InstalledOnClient();
-
-	if (installed) then -- show TAC only for players what have cap installed
-		if (TAC:GetInt() == 0 or TAC:GetInt() == 2) then -- show TAC if we didnt saw that yet or we didnt agreed
-			LocalPlayer():ConCommand("CAP_TAC");
-		end
-	end
 
 	-- displaying warning message when user have dxlevel 81 or lower
 	if (installed and GetConVar("mat_dxlevel"):GetInt()<90) then

@@ -81,6 +81,14 @@ if(SERVER) then
 end
 
 function TOOL.BuildCPanel(panel)
+
+	if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetHelp("stools/#anim_ramps");
+		VGUI:SetTopic("Help: Tools - "..SGLanguage.GetMessage("stool_anim_ramps"));
+		panel:AddPanel(VGUI);
+	end
+
 	panel:AddControl("Header",
    {
       Text = "#Tool_"..entityName.."_name",

@@ -20,7 +20,7 @@
 
 local PANEL = {};
 PANEL.Data = {
-	URL="http://stargatepack.googlecode.com/svn/help/", -- Base URL
+	URL="http://sg-carterpack.com/wiki/", -- Base URL
 	Width=ScrW()-100,
 	Heigth=ScrH()-100,
 }
@@ -69,11 +69,7 @@ end
 
 --################# HELP Category @aVoN
 function PANEL:SetHelp(help)
-	--self:SetURL(self.Data.URL..help..".html");
-	-- fix by AlexALX
-	http.Fetch(self.Data.URL..help..".html", function(contents)
-		self:SetHTML(contents);
-	end);
+	self:SetURL(self.Data.URL..help);
 end
 
 --################# Paint @aVoN

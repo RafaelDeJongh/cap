@@ -75,12 +75,14 @@ end
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_asuran_beam_max"):GetInt()
-	if(ply:GetCount("CAP_asuran_beam")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Asuran Gate Weapon limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_asuran_beam")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Asuran Gate Weapon limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_asuran_beam", self.Entity)
 	end
-	ply:AddCount("CAP_asuran_beam", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

@@ -111,11 +111,13 @@ duplicator.RegisterEntityModifier( "DispDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_dispenser_max"):GetInt();
-	if(ply:GetCount("CAP_dispenser")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Kino Dispenser limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_dispenser_max"):GetInt();
+		if(ply:GetCount("CAP_dispenser")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Kino Dispenser limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
 	end
 
 	local dupeInfo = Ent.EntityMods.DispDupeInfo
@@ -126,6 +128,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.CanSpawn = true;
 
-	self.Owner = ply;
-	ply:AddCount("CAP_dispenser", self.Entity)
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_dispenser", self.Entity)
+	end
 end

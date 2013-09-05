@@ -351,7 +351,7 @@ function SWEP:Reload()
 
 	self.Weapon:DefaultReload( ACT_VM_RELOAD )
 
-	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
+	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and IsValid(self.Owner) and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
 		self:SetIronsights(false, self.Owner)
 
 		self:SetScope(false, self.Owner)

@@ -43,7 +43,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 */
 function TOOL:ControlsPanel(Panel)
-	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"ashen_defence_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"ashen_weapon_autoweld");
 end
 
 TOOL:Register();

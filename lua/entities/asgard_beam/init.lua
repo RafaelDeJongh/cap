@@ -174,10 +174,13 @@ duplicator.RegisterEntityModifier( "AsgardDupeInfo" , function() end)
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_asgbeam_max"):GetInt()
-	if(ply:GetCount("CAP_asgbeam")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Asgard Beams limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_asgbeam")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Asgard Beams limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_asgbeam", self.Entity)
 	end
 
 	local dupeInfo = Ent.EntityMods.AsgardDupeInfo
@@ -192,7 +195,5 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if(Ent.EntityMods and Ent.EntityMods.AsgardDupeInfo.WireData) then
 		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.AsgardDupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end    */
-
-	ply:AddCount("CAP_asgbeam", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

@@ -58,12 +58,14 @@ end
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_dirn_max"):GetInt()
-	if(ply:GetCount("CAP_dirn")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Shaped Charge limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		self.Entity:Remove();
-		return
+	if (IsValid(ply)) then
+		if(ply:GetCount("CAP_dirn")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Shaped Charge limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_dirn", self.Entity)
 	end
-	ply:AddCount("CAP_dirn", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

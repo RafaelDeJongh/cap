@@ -218,6 +218,8 @@ end
 
 function ENT:SwapPlayers(pl1,pl2)
 
+	if (not IsValid(pl1) or not IsValid(pl2)) then return end
+
 	local fx1 = EffectData();
 		fx1:SetEntity(pl1);
 	util.Effect("com_device_light",fx1,true);

@@ -59,7 +59,7 @@ function TOOL:Register()
 				-- Add the HELP, if Internet is applied!
 				if(StarGate.HasInternet and self.Mode) then
 					local VGUI = vgui.Create("SHelpButton",Panel);
-					VGUI:SetHelp("stools/"..self.Mode);
+					VGUI:SetHelp("stools/#"..self.Mode);
 					VGUI:SetTopic("Help: Tools - "..self.Name);
 					Panel:AddPanel(VGUI);
 				end

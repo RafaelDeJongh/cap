@@ -5,12 +5,12 @@ function StarGate.MiscVisualSettings(Panel)
 
 	Panel:ClearControls();
 	-- The HELP Button
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/visual");
 		VGUI:SetTopic("Help:  Visual Settings");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	-- Configuration
 	Panel:CheckBox("Draw Effects","cl_stargate_visualsmisc"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
 	Panel:Help("");
@@ -59,12 +59,12 @@ function StarGate.ShipVisualSettings(Panel)
 
 	Panel:ClearControls();
 	-- The HELP Button
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/visual");
 		VGUI:SetTopic("Help:  Visual Settings");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	-- Configuration
 	Panel:CheckBox("Draw Effects","cl_stargate_visualsship"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
 	Panel:Help("");
@@ -97,12 +97,12 @@ function StarGate.WeaponVisualSettings(Panel)
 
 	Panel:ClearControls();
 	-- The HELP Button
-	if(StarGate.HasInternet) then
+	/*if(StarGate.HasInternet) then
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("config/visual");
 		VGUI:SetTopic("Help:  Visual Settings");
 		Panel:AddPanel(VGUI);
-	end
+	end */
 	-- Configuration
 	Panel:CheckBox("Draw Effects","cl_stargate_visualsweapon"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
 	Panel:Help("");

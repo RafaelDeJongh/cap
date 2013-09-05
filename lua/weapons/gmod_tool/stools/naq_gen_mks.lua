@@ -103,6 +103,14 @@ if(SERVER) then
 end
 
 function TOOL.BuildCPanel(panel)
+
+	if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetHelp("stools/#naq_gen_mks");
+		VGUI:SetTopic("Help: Tools - "..SGLanguage.GetMessage("stool_naq_gen"));
+		panel:AddPanel(VGUI);
+	end
+
     panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"naq_gen_mks_autoweld");
 	if(StarGate.HasResourceDistribution) then
 		panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_gen_mks_autolink"):SetToolTip("Autolink this to resource using Entities?");

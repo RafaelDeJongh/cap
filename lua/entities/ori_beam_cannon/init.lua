@@ -171,10 +171,12 @@ duplicator.RegisterEntityModifier( "OriShipDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	local PropLimit = GetConVar("CAP_ori_beam_max"):GetInt()
-	if(ply:GetCount("CAP_ori_beam")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Ori Beam Cannon limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		return
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ori_beam_max"):GetInt()
+		if(ply:GetCount("CAP_ori_beam")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ori Beam Cannon limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			return
+		end
 	end
 
 	local dupeInfo = Ent.EntityMods.OriShipDupeInfo
@@ -190,6 +192,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.AsgardDupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end         */
 
-	ply:AddCount("CAP_ori_beam", self.Entity)
+	if (IsValid(ply)) then
+		ply:AddCount("CAP_ori_beam", self.Entity)
+	end
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

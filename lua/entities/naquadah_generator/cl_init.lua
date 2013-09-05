@@ -35,6 +35,10 @@ function ENT:Draw()
 	            add = self.Entity:GetNetworkedString("add");
 	            perc = self.Entity:GetNWString("perc");
 	            eng = self.Entity:GetNWString("eng");
+	        else
+	        	add = "";
+	        	perc = 0;
+	        	eng = "";
 	        end
 
             surface.SetFont("center")
