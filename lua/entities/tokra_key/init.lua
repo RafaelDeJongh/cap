@@ -33,8 +33,12 @@ function ENT:Use(ply)
 		local Gen2 = self:FindGen(Gen1);
 		if (not IsValid(Gen1) or not IsValid(Gen2)) then self.Enabled = false; return end
 		self:SetSkin(1);
-		Gen1:SetSkin(1);
-		Gen2:SetSkin(1);
+		if (IsValid(Gen1)) then
+			Gen1:SetSkin(1);
+		end
+		if (IsValid(Gen2)) then
+			Gen2:SetSkin(1);
+		end
 
 		self.Weld1 = constraint.Weld(Gen1,Gen2,0,0,0,true);
 		self.Weld2 = constraint.Weld(Gen1,self.Entity,0,0,0,true);
@@ -48,8 +52,12 @@ function ENT:Use(ply)
 		local Gen1 = self:FindGen(self);
 		local Gen2 = self:FindGen(Gen1);
 		self:SetSkin(0);
-		Gen1:SetSkin(0);
-		Gen2:SetSkin(0);
+		if (IsValid(Gen1)) then
+			Gen1:SetSkin(0);
+		end
+		if (IsValid(Gen2)) then
+			Gen2:SetSkin(0);
+		end
 
 		if IsValid(self.Weld1) then self.Weld1:Remove(); end
 		if IsValid(self.Weld2) then self.Weld2:Remove(); end

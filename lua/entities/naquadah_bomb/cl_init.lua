@@ -108,6 +108,7 @@ function ENT:CreateCodeWindow()
    CodeWindow.CodeBox:SetEditable(true)
    CodeWindow.CodeBox:SetEnterAllowed(true)
    CodeWindow.CodeBox.OnEnter = function()
+		if (not IsValid(self)) then return end
       local playerDistance = self:GetPos():Distance(LocalPlayer():GetPos())
 
       if(playerDistance < 100) then

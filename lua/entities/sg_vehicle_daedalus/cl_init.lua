@@ -91,7 +91,7 @@ local function KeyPress()
 	local p = LocalPlayer();
 	local daedalus = p:GetNetworkedEntity("Daedalus");
 	if (IsValid(daedalus) and key != "") then
-		p:ConCommand("Daedalus_FireRocket"..daedalus:EntIndex().." "..key);
+		p:ConCommand("Daedalus_FireRocket "..daedalus:EntIndex().." "..key);
 	end
 end
 hook.Add("Think","Daedalus_Rockets",KeyPress)

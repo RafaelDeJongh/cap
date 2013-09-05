@@ -22,15 +22,15 @@
 
 --################# Header ###################
 StarGate.HTTP = {
-	BUGS = "http://sourceforge.net/tracker/?atid=1427616&group_id=341006",
+	BUGS = "http://sg-carterpack.com/forums/forum/support/",
 	INTERNET = "http://stargatepack.googlecode.com/svn/help/HASINTERNET.TXT",
 	VERSION = "http://stargatepack.googlecode.com/svn/help/VERSION.TXT",
 	VERSION_LOGO = "http://gmod.daggeringcats.com/stargate/version.php",
 	GMOD = "http://stargatepack.googlecode.com/svn/help/GMOD.TXT",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/ver.txt",
-	SITE = "http://www.sg-carterpack.com",
+	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
-	CREDITS = "https://carterspack.svn.sourceforge.net/svnroot/carterspack/cap/tac/credits.txt"
+	CREDITS = "http://sg-carterpack.com/tac/credits.html"
 };
 StarGate.LATEST_VERSION = 0;
 StarGate.CURRENT_VERSION = 0;
@@ -182,6 +182,6 @@ function StarGate.InstalledOnClient()
 		if (v.mounted) then table.insert(ws_addons, v.title); end
 	end
 	if (table.HasValue(ws_addons,"Stargate Carter Addon Pack")) then return true end
-	if (table.HasValue(addons,"cap") or table.HasValue(addons,"cap_resources") or table.HasValue(addons,"cap resources")) then return true end
+	if (table.HasValue(addons,"cap") or table.HasValue(addons,"cap_resources") or table.HasValue(addons,"cap resources") or table.HasValue(addons,"cap_resources-master")) then return true end
 	return false;
 end

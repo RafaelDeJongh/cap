@@ -435,6 +435,7 @@ end
 function ENT:FindGate()
 	local gate;
 	local dist = self.Range;
+	if (dist==nil) then return NULL end
 	local pos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
 		if(v.IsStargate and v:GetClass() != "stargate_supergate") then

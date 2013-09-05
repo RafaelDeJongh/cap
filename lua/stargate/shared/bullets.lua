@@ -31,7 +31,7 @@ function MEnt:FireBullets(bullet)
 	local override = false; -- If set to true, we will shoot the bullets instead of letting the engine decide
 	-- The modified part now, to determine if we hit a shield!
 	local num = bullet.Num or 1; bullet.Num = 1; -- Just ONE bullet drawn by FireBullets. The others are getting shot by the loop
-	local spread = bullet.Spread; bullet.Spread = Vector(0,0,0);
+	local spread = bullet.Spread or Vector(0,0,0); bullet.Spread = Vector(0,0,0);
 	local direction = (bullet.Dir or Vector(0,0,0));
 	local pos = bullet.Src or self:GetPos();
 	local rnd = {};

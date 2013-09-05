@@ -101,7 +101,9 @@ function ENT:DisintegrateTargets()
 
             timer.Simple(waveDuration,
                          function()
-                            entity.isHitByDakaraWave = false
+                         	if (IsValid(entity)) then
+                            	entity.isHitByDakaraWave = false
+                            end
                          end)
          end
       end

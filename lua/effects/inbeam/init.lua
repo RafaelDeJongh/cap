@@ -20,7 +20,7 @@ function EFFECT:Init(data)
 	self.Rad	= 0
 	self.Rel	= 0
 	self.State	= 1
-	self.Emit	= ParticleEmitter(self.StartPos)
+	self.Emit	= ParticleEmitter(self.StartPos or Vector(0,0,0))
 	self.GlowSize = 40;
 
 end

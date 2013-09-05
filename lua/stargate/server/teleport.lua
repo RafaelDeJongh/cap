@@ -46,7 +46,7 @@ end
 --##### Set changed hoverball heigh to the hoverball to make it not spazz out
 StarGate.Teleport:Add("gmod_hoverball",
 	function(e,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
-		e.TargetZ = e.TargetZ + (pos.z-old_pos.z);
+		if (e.TargetZ) then e.TargetZ = e.TargetZ + (pos.z-old_pos.z); end
 	end
 );
 --##### Same like for hoverball, but for wire

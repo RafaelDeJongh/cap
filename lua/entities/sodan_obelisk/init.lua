@@ -107,10 +107,12 @@ function ENT:PressButton(button, ply)
 		self.Entity:EmitSound(self.Sounds[2]);
 
 		timer.Create( self.Entity:EntIndex().."Dial", 2, 1, function()
-			self.DialAdress = nil;
-			self.DialAdress = {};
-			self.CantDial = false;
-			self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+			if (IsValid(self)) then
+				self.DialAdress = nil;
+				self.DialAdress = {};
+				self.CantDial = false;
+				self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+			end
 		end )
 
 		timer.Destroy(self.Entity:EntIndex().."Counting")
@@ -121,18 +123,22 @@ function ENT:PressButton(button, ply)
 
 		if (table.getn(self.DialAdress) == 0) then
 			timer.Create( self.Entity:EntIndex().."Counting", 3, 1, function()
-				self.DialAdress = nil;
-				self.DialAdress = {};
-				self.CantDial = false;
-				self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				if (IsValid(self)) then
+					self.DialAdress = nil;
+					self.DialAdress = {};
+					self.CantDial = false;
+					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				end
 			end )
 		else
 			if timer.Exists(self.Entity:EntIndex().."Counting") then timer.Destroy(self.Entity:EntIndex().."Counting") end
 			timer.Create( self.Entity:EntIndex().."Counting", 3,1, function()
-				self.DialAdress = nil;
-				self.DialAdress = {};
-				self.CantDial = false;
-				self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				if (IsValid(self)) then
+					self.DialAdress = nil;
+					self.DialAdress = {};
+					self.CantDial = false;
+					self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialAdress));
+				end
 			end )
 		end
 
@@ -203,12 +209,14 @@ function ENT:Teleport()
 					newpos = self.Target:LocalToWorld(oldpos);
 
 					timer.Create("Transport"..v:EntIndex(), 0.5, 1, function()
-						v:SetPos(newpos);
-						v:SetEyeAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
-						local fx3 = EffectData();
-							fx3:SetOrigin(v:GetShootPos()+v:GetAimVector()*10);
-							fx3:SetEntity(v);
-						util.Effect("arthur_cloak",fx3,true);
+						if (IsValid(v)) then
+							v:SetPos(newpos);
+							v:SetEyeAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
+							local fx3 = EffectData();
+								fx3:SetOrigin(v:GetShootPos()+v:GetAimVector()*10);
+								fx3:SetEntity(v);
+							util.Effect("arthur_cloak",fx3,true);
+						end
 					end)
 
 					local fx = EffectData();

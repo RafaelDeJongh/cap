@@ -88,7 +88,9 @@ end
 
 function ENT:ActivateIt(bool)
 	if !bool and self.Active then
-		self.phys:Wake()
+		if (IsValid(self.phys)) then
+			self.phys:Wake()
+		end
 		self:SetNetworkedBool("drawsprite", false)
 		self.Active = false
 		for _,e in pairs(self.ConstrainedEntities) do

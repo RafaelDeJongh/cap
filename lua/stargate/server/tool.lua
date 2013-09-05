@@ -29,7 +29,7 @@ function StarGate.TOOL.CreateSpawner(class,...)
 	StarGate.TOOL.Entities[class] = StarGate.TOOL.Entities[class] or {};
 	StarGate.TOOL.Entities[class].args = {...};
 	StarGate.TOOL.Entities[class].func = function (p,ang,pos,...)
-		if(not p:CheckLimit(class)) then return end; -- Spawned too much!
+		if(not IsValid(p) or not p:CheckLimit(class)) then return end; -- Spawned too much!
 		local arg = {...}
 		-- Create Entity
 		local e = ents.Create(class);

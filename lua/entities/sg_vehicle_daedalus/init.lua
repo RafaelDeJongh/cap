@@ -602,10 +602,6 @@ function ENT:Think(ply)
 			if (self.Driver:KeyDown(IN_ATTACK)) then self:FireRailgun() end
 
 			self:AimRailgun(tr.HitPos);
-
-			concommand.Add("Daedalus_FireRocket"..self:EntIndex(),function(ply,cmd,args)
-				self:FireRocket(tonumber(args[1]));
-			end);
 			-- local trace = {}
 				-- trace.start = self.Entity:GetPos()+self.Entity:GetUp()*1000;
 				-- trace.endpos = self.Driver:GetAimVector() * 10^14;
@@ -631,6 +627,13 @@ function ENT:Think(ply)
 	self.Entity:NextThink( CurTime() + 0.1 )
 	return true
 end
+
+concommand.Add("Daedalus_FireRocket",function(ply,cmd,args)
+	local self = Entity( args[1] );
+	if (IsValid(self)) then
+		self:FireRocket(tonumber(args[2]));
+	end
+end);
 
 -----------------------------------PHYSIC----------------------------------
 
@@ -753,6 +756,7 @@ end
 
 function ENT:Exit()
 	self.Active = false;
+	if (not IsValid(self.Driver)) then return end
 	self.Driver:UnSpectate();
 	self.Driver:DrawViewModel(true);
 	self.Driver:DrawWorldModel(true);

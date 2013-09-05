@@ -171,13 +171,11 @@ function CAP_TAC()
 
 	end
 
-	if file.Exists("addons/cap/tac/motd.txt", "GAME") then
-		local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
-		MOTDHTMLFrame:SetPos( 25, 50 )
-		MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 150 )
-		MOTDHTMLFrame:SetHTML(file.Read("addons/cap/tac/motd.txt", "GAME"))
-		//MOTDHTMLFrame:OpenURL("http://sg-carterpack.com/tac")
-	end
+	local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
+	MOTDHTMLFrame:SetPos( 25, 50 )
+	MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 150 )
+	--MOTDHTMLFrame:SetHTML(file.Read("addons/cap/tac/motd.txt", "GAME"))
+	MOTDHTMLFrame:OpenURL("http://sg-carterpack.com/tac")
 
 	local yes = vgui.Create("DButton", TACFrame);
 		yes:SetText("Yes, I agree");

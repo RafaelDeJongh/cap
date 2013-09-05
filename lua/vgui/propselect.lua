@@ -51,7 +51,7 @@ function PANEL:AddModel( model, ConVars )
 	Icon.DoClick = 	function ( self )
 
 						if (type(self.ConVars)=="table") then
-							for k, v in pairs( self.ConVars ) do
+							for k, v in pairs( self.ConVars or {} ) do
 								if (type(v)=="string" or type(v)=="number") then -- fix for error, damn you garry
 									LocalPlayer():ConCommand( Format( "%s \"%s\"\n", k, v ) )
 								end

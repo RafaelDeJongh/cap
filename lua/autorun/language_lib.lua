@@ -70,7 +70,9 @@ end
 function LANGParser:StripComment(line)
 	local found_comment = line:find("[/][/]");
 	if(found_comment) then
-		line = line:sub(1,found_comment-1):Trim(); -- Removes any non neccessayry stuff
+		if (line:sub(found_comment-3,found_comment-1)!="tp:") then
+			line = line:sub(1,found_comment-1):Trim(); -- Removes any non neccessayry stuff
+		end
 	end
 	return line;
 end
@@ -105,6 +107,7 @@ function LANGParser:parse()
 					data[2] = data[2].."="..data[k];
 					data[k] = nil;
 				end
+				table_count = 2;
 			end
 			if(table_count == 2) then
 				local key = ""

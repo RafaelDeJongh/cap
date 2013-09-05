@@ -83,16 +83,20 @@ function TOOL:Register()
 				end
 				if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then return end
 				-- Now, spawn the SENT
-				local e = StarGate.TOOL.Entities[class].func(p,Angle(),trace.HitPos,...);
-				self:SetPositionAndAngles(e,trace);
-				-- Eyecandy for your suckers
-				if(DoPropSpawnedEffect) then
-					DoPropSpawnedEffect(e);
+				if (StarGate.TOOL) then
+					local e = StarGate.TOOL.Entities[class].func(p,Angle(),trace.HitPos,...);
+					self:SetPositionAndAngles(e,trace);
+					-- Eyecandy for your suckers
+					if(DoPropSpawnedEffect) then
+						DoPropSpawnedEffect(e);
+					end
+					return e;
+				else
+					return NULL;
 				end
-				return e;
 			end
 			-- We have a PreEntitySpawn function - Register it to the StarGate SentSpawn class
-			if(self.PreEntitySpawn) then
+			if(self.PreEntitySpawn and StarGate.TOOL) then
 				StarGate.TOOL.Entities[class].PreEntitySpawn = function(p,e,...)
 					if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(p); return
 					elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
@@ -107,7 +111,7 @@ function TOOL:Register()
 				end
 			end
 			-- We have a PostEntitySpawn function - Register it to the StarGate SentSpawn class
-			if(self.PostEntitySpawn) then
+			if(self.PostEntitySpawn and StarGate.TOOL) then
 				StarGate.TOOL.Entities[class].PostEntitySpawn = function(p,e,...)
 					self.PostEntitySpawn(self,p,e,...);
 				end
@@ -217,7 +221,7 @@ function TOOL:AutoLink(e1,e2)
 				Dev_Link(e1,e2,e1:GetPos(),e2:GetPos(),"cable/cable2",Color(0,0,0,0),0);
 			end
 		elseif (CAF and CAF.GetAddon("Resource Distribution")) then
-			if (e2.IsNode) then
+			if (RD and e2.IsNode) then
 				RD.Link(e1,e2.netid);
 			end
 		elseif (Environments) then

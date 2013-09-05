@@ -45,6 +45,7 @@ function EFFECT:Render()
 	for _, sat in pairs(self.Satellite) do
 		if (not IsValid(sat)) then continue end
 		local data = sat:GetAttachment(sat:LookupAttachment("Fire"))
+		if (not data) then data = {}; end
 		if (not (data and data.Pos)) then data.Pos = sat:GetPos() + sat:GetForward()*20 end
 
 		if self.ShouldDrawBeam then

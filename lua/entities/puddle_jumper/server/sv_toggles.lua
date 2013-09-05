@@ -4,23 +4,27 @@ function ENT:ToggleShield()
 	if(IsValid(self)) then
 		if(self.CanShield) then
 			if(self.CanToggleShield) then
-				if(not(self.Shielded)) then
-					if(not(self.Shields:Enabled())) then
-						self.Shields:Status(true)
-						self.Shielded=true
-						self.CanCloak=false
-					end
-				else
-					if(self.Shields:Enabled()) then
-						self.Shields:Status(false)
-						self.Shielded=false
-						self.CanCloak=true
-					end
+				if (IsValid(self.Shields)) then
+					if(not(self.Shielded)) then
+						if(not(self.Shields:Enabled())) then
+							self.Shields:Status(true)
+							self.Shielded=true
+							self.CanCloak=false
+						end
+					else
+						if(self.Shields:Enabled()) then
+							self.Shields:Status(false)
+							self.Shielded=false
+							self.CanCloak=true
+						end
 
+					end
 				end
 				self.CanToggleShield=false
 				timer.Simple(0.75, function()
-					self.CanToggleShield=true
+					if (IsValid(self)) then
+						self.CanToggleShield=true
+					end
 				end)
 			end
 		end

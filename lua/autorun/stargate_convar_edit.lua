@@ -158,15 +158,14 @@ function Group_Convar_OpenNet()
 		// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
 
 		// Background
-		-- disabled, because broken somewhy now, i see own menu
-		/*surface.SetMaterial( matBlurScreen )
+		surface.SetMaterial( matBlurScreen )
 		surface.SetDrawColor( 255, 255, 255, 255 )
 
 		matBlurScreen:SetFloat( "$blur", 5 )
 
 		render.UpdateScreenEffectTexture()
 
-		surface.DrawTexturedRect( -ScrH()/10, -ScrH()/10, ScrW(), ScrH() )*/
+		surface.DrawTexturedRect( -ScrH()/10, -ScrH()/10, ScrW(), ScrH() )
 
 		surface.SetDrawColor( 100, 100, 100, 150 )
 		surface.DrawRect( 0, 0, ScrW(), ScrH() )

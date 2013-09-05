@@ -2,7 +2,7 @@
   Stargate Expression2 Lib
   Created by AlexALX (c) 2012
 */
-
+if (E2Lib==nil) then return end
 E2Lib.RegisterExtension("stargate", true)
 
 e2function string entity:stargateAddress()

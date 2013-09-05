@@ -1,3 +1,4 @@
+if (E2Helper==nil) then return end
 E2Helper.Descriptions["stargateDial"] = "Dial gate.\nSyntax: address, mode.\nModes: 0 - slow, 1 - fast, 2 - nox.";
 E2Helper.Descriptions["stargateClose"] = "Close stargate or abort dialling.";
 E2Helper.Descriptions["stargateDHDPressButton"] = "Press button on DHD (not stargate!).";

@@ -197,7 +197,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	end
 
 	--######### Apply water pressure damage
-	if(self:WaterLevel()>=1) then
+	if(self:WaterLevel()>=1 and self.Shields) then
 		if(not(self.Shields:Enabled())) then
 			self.WaterDamage=true
 			if(not(self.RunningAnimation)) then

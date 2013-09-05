@@ -24,6 +24,11 @@ end
 local status = "Loaded";
 StarGate_Group.Error = false;
 StarGate_Group.ErrorMSG = {};
+StarGate_Group.ErrorMSG_HTML = {};
+
+if (SERVER) then
+	util.AddNetworkString( "CAP_ERROR" );
+end
 
 if (CLIENT) then
 
@@ -80,14 +85,123 @@ if (CLIENT) then
 	if (GetConVar("mat_dxlevel"):GetInt()<90) then
 		Msg("-------\nWarning: your gmod running under DirectX 8.1 or lower.\nThis will cause compatibility problems with Carter Addon Pack.\nList of problems:\n* No kawoosh when stargate opens.\n* White boxes on huds.\n* Universe stargate have always all glyphs enabled.\n* Some other glitches.\nPlease Run gmod under dxlevel 90 or higher (95 recommended).\nThis can be changed with convar mat_dxlevel.\n-------\n")
 	end
+
+	net.Receive( "CAP_ERROR", function( length )
+		local tbl = net.ReadTable();
+		if (table.Count(tbl)==0) then return end
+
+		local text = "";
+		for k,v in pairs(tbl) do
+			if (k!=1) then
+				text = text.."<br><br>";
+			end
+			text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..k.."</b><br>"..SGLanguage.GetMessage(v);
+		end
+
+		surface.PlaySound( "buttons/button2.wav" );
+
+		--local Width, Height = ScrW() * 0.8, ScrH() * 0.8 --Half screen size
+
+		local TACFrame = vgui.Create("DFrame");
+		TACFrame:SetPos(ScrW()/2-400, 50);
+		TACFrame:SetSize(800,ScrH()-100);
+		--TACFrame:SetSize(Width, Height);
+		TACFrame:SetTitle(SGLanguage.GetMessage("sg_err_title"));
+		TACFrame:SetVisible(true);
+		TACFrame:SetDraggable(true);
+		TACFrame:ShowCloseButton(true);
+		TACFrame:SetBackgroundBlur(false);
+		TACFrame:MakePopup();
+		--TACFrame:Center();
+		TACFrame.Paint = function()
+
+			// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
+			local matBlurScreen = Material( "pp/blurscreen" )
+
+			// Background
+			surface.SetMaterial( matBlurScreen )
+			surface.SetDrawColor( 255, 255, 255, 255 )
+
+			matBlurScreen:SetFloat( "$blur", 5 )
+			render.UpdateScreenEffectTexture()
+
+			surface.DrawTexturedRect( -ScrW()/10, -ScrH()/10, ScrW(), ScrH() )
+
+			surface.SetDrawColor( 100, 100, 100, 150 )
+			surface.DrawRect( 0, 0, ScrW(), ScrH() )
+
+			// Border
+			surface.SetDrawColor( 50, 50, 50, 255 )
+			surface.DrawOutlinedRect( 0, 0, TACFrame:GetWide(), TACFrame:GetTall() )
+
+			surface.SetDrawColor( 50, 50, 50, 255 )
+			surface.DrawRect( 20, 35, TACFrame:GetWide() - 40, TACFrame:GetTall() - 55 )
+
+		end
+
+		local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
+		MOTDHTMLFrame:SetPos( 25, 40 )
+		MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 65 )
+
+		local html = [[<html>
+		<head>
+		<style type='text/css'>
+			body {
+				background-color: #171717;
+				background-image: url(http://sg-carterpack.com/tac/images/bg.jpg);
+				background-repeat: repeat;
+				font-family: Verdana, Geneva, sans-serif;
+				color: #FFF;
+			}
+			a:link {
+				text-decoration: underline;
+				color: #e5e5e5;
+			}
+			a:visited {
+				text-decoration: underline;
+				color: #e5e5e5;
+			}
+			a:active {
+				text-decoration: underline;
+			}
+			a:hover {
+				text-decoration: underline;
+				color: #FFF;
+			}
+			#nav {
+				padding: 0px;
+				margin: 0px;
+				text-align: center;
+			}
+
+			#nav li {
+				display: inline-block;
+				list-style-type: none;
+
+			}
+		</style>
+		</head>
+		<body><hr><ul id="nav">
+			<li><a href="http://sg-carterpack.com/">Home</a> |</li>
+		    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
+		    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
+		    <li><a href="http://sg-carterpack.com/tac/credits.html">Credits</a></li>
+		</ul><hr>
+		<h2>]]..SGLanguage.GetMessage("sg_err_html_t").."</h2>"..text.."</body></html>";
+
+		MOTDHTMLFrame:SetHTML(html)
+
+	end )
+
 end
 
 -- just to be sure
 if (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" )) then
 	status = "Error";
-	Msg("Status: "..status.."\n")
-	Msg("Error: Stargate with Group System found, please remove it.\nThis addon included in Carter Addon Pack and should be removed.\n")
-	table.insert(StarGate_Group.ErrorMSG, "Stargate with Group System found, please remove it.\\nThis addon included in Carter Addon Pack and should be removed.");
+	MsgN("Status: "..status)
+	table.insert(StarGate_Group.ErrorMSG, "The Stargate Group System has been found on your system. Please remove it.");
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_01");
+	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 end
 
 local ws_addonlist = {}
@@ -100,65 +214,75 @@ if (not StarGate.WorkShop) then
 	if (not table.HasValue( GetAddonList(true), "cap" ) or (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master") )) then
 		if (status != "Error") then
 			status = "Error";
-			Msg("Status: "..status.."\n")
+			MsgN("Status: "..status)
 		end
-		MsgN("Error: Carter Addon Pack is wrong installed.\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.")
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is wrong installed.\\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.");
-	elseif (not cap_ver or cap_ver==0 or cap_ver<405 and (game.SinglePlayer() or SERVER)) then
-		status = "Error";
-		Msg("Status: "..status.."\n")
-		MsgN("Error: The file of addon version is corrupt.\nPlease remove and redownload file: cap/ver.txt.")
-		table.insert(StarGate_Group.ErrorMSG, "The file of addon version is corrupt.\\nPlease remove and redownload file cap/ver.txt.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	elseif (not cap_ver or cap_ver==0 or cap_ver<408 and (game.SinglePlayer() or SERVER)) then
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, "The addon version file is corrupt.\\nPlease remove and redownload the file cap/ver.txt.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_03");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
-			Msg("Status: "..status.."\n")
+			MsgN("Status: "..status)
 		end
-		MsgN("Error: Workshop version of Carter Addon Pack installed.\nPlease remove it for prevent possible problems.\nOr remove git/svn version.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Workshop version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.\\nOr remove git/svn version.");
+		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end
 else
 	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master" ) )) then
 		if (status != "Error") then
 			status = "Error";
-			Msg("Status: "..status.."\n")
+			MsgN("Status: "..status)
 		end
-		MsgN("Error: Please download CAP resources folder from git/svn.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Please download CAP resources folder from git/svn.");
+		table.insert(StarGate_Group.ErrorMSG, "Please download the CAP resources folder from github.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_05");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( GetAddonList(true), "cap" )) then
 		if (status != "Error") then
 			status = "Error";
-			Msg("Status: "..status.."\n")
+			MsgN("Status: "..status)
 		end
-		MsgN("Error: Git/svn version of Carter Addon Pack installed.\nPlease remove it for prevent possible problems.\nOr remove workshop version.")
-		table.insert(StarGate_Group.ErrorMSG, "Error: Git/svn version of Carter Addon Pack installed.\\nPlease remove it for prevent possible problems.\\nOr remove workshop version.");
+		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end
 end
 
 if (VERSION<159) then
 	if (status != "Error") then
 		status = "Error";
-		Msg("Status: "..status.."\n")
+		MsgN("Status: "..status)
 	end
-	MsgN("Error: Your GMod is old, please update it.")
-	table.insert(StarGate_Group.ErrorMSG, "Your GMod is old, please update it.");
+	table.insert(StarGate_Group.ErrorMSG, "Your GMod is out of date, please update it.");
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_06");
+	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 end if (not WireAddon and #file.Find("weapons/gmod_tool/stools/wire.lua","LUA") == 0) then
 	if (status != "Error") then
 		status = "Error";
-		Msg("Status: "..status.."\n")
+		MsgN("Status: "..status)
 	end
-	MsgN("Error: Wiremod not found or wrong installed.")
-	table.insert(StarGate_Group.ErrorMSG, "Wiremod not found or wrong installed.");
+	table.insert(StarGate_Group.ErrorMSG, "Wiremod has not been found or is incorrectly installed.");
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_07");
+	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 end if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then
 	if (status != "Error") then
 		status = "Error";
-		Msg("Status: "..status.."\n")
+		MsgN("Status: "..status)
 	end
-	MsgN("Error: Sorry, Garry's Mod 13 beta isn't supported anymore.\nPlease use normal Garry's Mod which is already 13.")
-	table.insert(StarGate_Group.ErrorMSG, "Error: Sorry, Garry's Mod 13 beta isn't supported anymore.\\nPlease use normal Garry's Mod which is already 13.");
+	table.insert(StarGate_Group.ErrorMSG, "Sorry, Garry's Mod 13 beta isn't supported anymore.\\nPlease make use of the normal Garry's Mod that already came out of the beta.");
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_08");
+	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 end
 if (status != "Error") then
-	Msg("Status: "..status.."\n")
+	MsgN("Status: "..status)
 else
 	StarGate_Group.Error = true;
 end
@@ -187,7 +311,10 @@ function StarGate_Group.ShowError(ply)
 	MsgN("================================");
 	if (IsValid(ply)) then
 		ply:SendLua("MsgN(\"================================\")");
-		ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Error, check your console\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		--ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Error, check your console\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		net.Start("CAP_ERROR");
+		net.WriteTable(StarGate_Group.ErrorMSG_HTML);
+		net.Send(ply);
 	end
 end
 

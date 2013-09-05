@@ -137,6 +137,7 @@ end
 
 --################# Close wormhole (effect) @aVoN
 function ENT:Close(ignore)
+	if (not IsValid(self)) then return end
 	self:StopActions();
 	-- Remove the EH
 	if(self.EventHorizon and self.EventHorizon:IsValid()) then

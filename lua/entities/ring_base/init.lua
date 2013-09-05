@@ -68,9 +68,11 @@ function ENT:OnRemove()
 			self.Other:ReadyChecks();
 		end
 	end
-	if IsValid(self.Laser) then
+	if self.Laser then
 		self.Laser = false;
-		self.LaserBeam:RemoveLaser();
+		if (IsValid(self.LaserBeam)) then
+			self.LaserBeam:RemoveLaser();
+		end
 	end
 end
 

@@ -347,7 +347,7 @@ Reload
 ---------------------------------------------------------*/
 function SWEP:Reload()
 
-	if ( self.Reloadaftershoot > CurTime() ) then return end
+	if ( self.Reloadaftershoot and self.Reloadaftershoot > CurTime() ) then return end
 
 	self.Weapon:DefaultReload( ACT_VM_RELOAD )
 
@@ -730,7 +730,7 @@ if CLIENT then return end
 end
 
 function SWEP:RecoilPower()
-	if (not IsValid(self.Owner) or not self.Owner:IsPlayer()) then return end
+	if (not IsValid(self.Owner) or not self.Owner:IsPlayer() and not self.Owner:IsNPC()) then return end
 	if not self.Owner:IsOnGround() then
 		if (self:GetIronsights() == true) then
 			self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil * 1.7, self.Primary.NumShots, self.Primary.Cone)

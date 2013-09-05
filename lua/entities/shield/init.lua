@@ -393,7 +393,7 @@ function ENT:HitEffect(e,pos,strength)
 			local fx = EffectData();
 			fx:SetOrigin(pos);
 			fx:SetEntity(shield);
-			fx:SetScale(strength);
+			fx:SetScale(strength or 0);
 			util.Effect("shield_hit",fx,true,true);
 			shield:DrawBubbleEffect(_,true);
 		end

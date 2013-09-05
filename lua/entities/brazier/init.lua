@@ -45,9 +45,10 @@ function ENT:Light()
 	local lamp = ents.Create( "gmod_light" )
 
 	lamp:SetColor(Color(255, 128, 0))
-
-	lamp:SetBrightness(2)
-	lamp:SetLightSize(200)
+	if (lamp.SetBrightness) then
+		lamp:SetBrightness(2)
+		lamp:SetLightSize(200)
+	end
 
 	lamp:SetPos(self.Entity:LocalToWorld(self.Pos));
 	lamp:Spawn()

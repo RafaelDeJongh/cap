@@ -46,6 +46,10 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
+	if not IsValid(self.Parent) then
+		self:Remove();
+		return false
+	end
 
 	if self.Parent:GetNWBool("StopBuble") and self.Grow then
 		self.Grow = false;

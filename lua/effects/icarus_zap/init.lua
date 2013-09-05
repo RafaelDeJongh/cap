@@ -14,7 +14,7 @@ function EFFECT:Init(data)
 	local offset = 50*Vector(1,1,1);
 	self.Entity:SetRenderBounds(-1*offset,offset);
 	self.Rand = VectorRand()*4;
-	timer.Simple(0.05,function() self.Rand = self.Rand*0.5; end)
+	timer.Simple(0.05,function() if IsValid(self) then self.Rand = self.Rand*0.5; end end)
 	local rnd = math.random(50,75);
 	self.Col = Color(rnd,rnd,255,255);
     sound.Play(Sound("ambient/energy/spark"..math.random(1,4)..".wav"),self.EndPos,67,math.random(90,110));
