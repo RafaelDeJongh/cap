@@ -135,29 +135,33 @@ end
 
 function ENT:Exit(kill) --####### Get out @RononDex
 
-	StarGate.KeyBoard.ResetKeys(self.Pilot,self.Vehicle);
-	self.Pilot:UnSpectate();
-	self.Pilot:DrawViewModel(true);
-	self.Pilot:DrawWorldModel(true);
-	self.Pilot:Spawn();
-	self.Pilot:SetNetworkedBool("Flying"..self.Vehicle,false);
-	self.Pilot:SetPos(self.ExitPos or self:GetPos());
-	self.Pilot:SetParent();
-	self.Pilot:SetMoveType(MOVETYPE_WALK);
-	self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
+	if (IsValid(self.Pilot)) then
+		StarGate.KeyBoard.ResetKeys(self.Pilot,self.Vehicle);
+		self.Pilot:UnSpectate();
+		self.Pilot:DrawViewModel(true);
+		self.Pilot:DrawWorldModel(true);
+		self.Pilot:Spawn();
+		self.Pilot:SetNetworkedBool("Flying"..self.Vehicle,false);
+		self.Pilot:SetPos(self.ExitPos or self:GetPos());
+		self.Pilot:SetParent();
+		self.Pilot:SetMoveType(MOVETYPE_WALK);
+		self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
+	end
 	if(self.ShouldRotorwash) then
 		self:Rotorwash(false);
 	end
 	self.Inflight = false;
 	self:SetNetworkedEntity(self.Vehicle,nil);
-	--self.Pilot:SetScriptedVehicle(NULL);
-	self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
-	self.Pilot:SetViewEntity( NULL )
-	self.Pilot:SetHealth(self.PlayerHealth);
-	for _,v in pairs(self.WeaponsTable) do
-		self.Pilot:Give(tostring(v));
+	if (IsValid(self.Pilot)) then
+		--self.Pilot:SetScriptedVehicle(NULL);
+		self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
+		self.Pilot:SetViewEntity( NULL )
+		self.Pilot:SetHealth(self.PlayerHealth);
+		for _,v in pairs(self.WeaponsTable) do
+			self.Pilot:Give(tostring(v));
+		end
+		if (kill) then self.Pilot:Kill(); end
 	end
-	if (kill) then self.Pilot:Kill(); end
 	self.Pilot = NULL;
 	self.Accel.FWD = 0;
 	self.Accel.RIGHT = 0;

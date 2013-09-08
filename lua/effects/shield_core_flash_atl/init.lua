@@ -8,6 +8,7 @@ EFFECT.Refract = Material("effects/atlantisb");
 
 function EFFECT:Init(data)
 	local ent = data:GetEntity();
+    if (not IsValid(ent)) then return end
 	self.Status = data:GetMagnitude();
 
 	self.Siz = ent:GetNetworkedVector("Size", Vector(100,100,100)) - Vector(10,10,10);
@@ -37,7 +38,7 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
-	if (self.LifeTime < CurTime() and self.Status == 0) then return false
+	if (self.LifeTime==nil or self.LifeTime < CurTime() and self.Status == 0) then return false
 	else return true end
 end
 

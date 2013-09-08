@@ -226,7 +226,7 @@ end
 
 function ENT:ToggleDoors(d,set)
 
-	if(d=="out") then
+	if(d=="out" and IsValid(self.Door)) then
 		if(self.Open) then
 			self:SetPlaybackRate(0.4)
 			self:ResetSequence("unhide");
@@ -240,7 +240,7 @@ function ENT:ToggleDoors(d,set)
 			self.Door:SetSolid(SOLID_NONE);
 			self.Door:EmitSound(self.Sounds.Close,80,100);
 		end
-	elseif(d=="inc") then
+	elseif(d=="inc" and IsValid(self.Door2)) then
 		if(self.Door2.Open) then
 			timer.Simple(0.2,function()
 				if (IsValid(self)) then
@@ -258,7 +258,7 @@ function ENT:ToggleDoors(d,set)
 			self.Door2:SetSolid(SOLID_NONE)
 			self.Door2:EmitSound(self.Sounds.OpenC,80,100);
 		end
-	elseif(d=="ine") then
+	elseif(d=="ine" and IsValid(self.Door3)) then
 		if(self.Door3.Open) then
 			timer.Simple(0.2,function()
 				if (IsValid(self)) then

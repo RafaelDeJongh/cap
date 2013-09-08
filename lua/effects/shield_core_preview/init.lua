@@ -17,7 +17,7 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
-	if self.Parent:GetNetworkedBool("Kill", false) then return false end
+	if not IsValid(self.Parent) or self.Parent:GetNetworkedBool("Kill", false) then return false end
 	local Siz = self.Parent:GetNWVector("Size", Vector(100,100,100));
 	local Ang = self.Parent:GetNWAngle("Ang", Angle(0,0,0));
 	local Pos = self.Parent:GetNWVector("Pos", Vector(0,0,0));

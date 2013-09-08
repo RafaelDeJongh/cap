@@ -127,13 +127,15 @@ function ENT:Think(ply)
 		timer.Create("StopAnim"..self:EntIndex(),20+power/2,1,function() self.AnimRunning = false end);
 
 		local dakara = self:FindDakara();
-		timer.Create("PrepareDakara"..self:EntIndex(),5+power/2,1,function()
-			dakara:PrepareWeapon(power, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6]))
-		end);
+		if (IsValid(dakara)) then
+			timer.Create("PrepareDakara"..self:EntIndex(),5+power/2,1,function()
+				if (IsValid(dakara)) then dakara:PrepareWeapon(power, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]), tonumber(args[5]), tonumber(args[6])) end
+			end);
 
-		timer.Create("DialAllGates"..self:EntIndex(),power/2,1,function()
-			self:DiallAllGates(dakara);
-		end);
+			timer.Create("DialAllGates"..self:EntIndex(),power/2,1,function()
+				if (IsValid(self)) then self:DiallAllGates(dakara); end
+			end);
+		end
 
     end);
 

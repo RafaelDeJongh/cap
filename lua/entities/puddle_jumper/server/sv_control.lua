@@ -1,22 +1,23 @@
 
 function ENT:ExitJumper() --################# Get out the jumper@RononDex
+	if (IsValid(self.Pilot)) then
+		StarGate.KeyBoard.ResetKeys(self.Pilot,"PuddleJumper");
 
-	StarGate.KeyBoard.ResetKeys(self.Pilot,"PuddleJumper");
-
-	self.Pilot:UnSpectate()
-	self.Pilot:DrawViewModel(true)
-	self.Pilot:DrawWorldModel(true)
-	self.Pilot:Spawn()
-	self.Pilot:SetNetworkedBool("isFlyingjumper",false)
-	self.Pilot:SetPos(self:GetPos()+self:GetForward()*15+self:GetUp()*-40)
-	self.AllowActivation=false
-	self.Pilot:SetHealth(self.health)
-	self.Pilot:SetMoveType(MOVETYPE_WALK)
-	self:EmitSound(self.Sounds.Shutdown,100,100)
-	self:SetNetworkedEntity("jumper",NULL)
-	--self.Pilot:SetScriptedVehicle(NULL)
-	self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
-	self.Pilot:SetViewEntity(NULL)
+		self.Pilot:UnSpectate()
+		self.Pilot:DrawViewModel(true)
+		self.Pilot:DrawWorldModel(true)
+		self.Pilot:Spawn()
+		self.Pilot:SetNetworkedBool("isFlyingjumper",false)
+		self.Pilot:SetPos(self:GetPos()+self:GetForward()*15+self:GetUp()*-40)
+		self.AllowActivation=false
+		self.Pilot:SetHealth(self.health)
+		self.Pilot:SetMoveType(MOVETYPE_WALK)
+		self:EmitSound(self.Sounds.Shutdown,100,100)
+		self:SetNetworkedEntity("jumper",NULL)
+		--self.Pilot:SetScriptedVehicle(NULL)
+		self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
+		self.Pilot:SetViewEntity(NULL)
+	end
 
 	self.HoverPos = self:GetPos();
 

@@ -198,18 +198,20 @@ function ENT:PhysicsUpdate( phys, deltatime )
 			self.Pitch = 15;
 	end
 
-	local Cannon = self.Cann:GetPhysicsObject();
-	Cannon:Wake();
+	if (IsValid(self.Cann) and IsValid(self.Cann:GetPhysicsObject())) then
+		local Cannon = self.Cann:GetPhysicsObject();
+		Cannon:Wake();
 
-	self.CannPhys = {
-		secondstoarrive = 0.01;
-		angle 			= Angle(self.Pitch-StandPitch, self.Yaw+StandYaw, StandRoll);
-		maxangular 		= 1000000;
-		maxangulardamp 	= 100000000;
-		dampfactor 		= 0.8;
-		deltatime 		= deltatime;
-	}
-	Cannon:ComputeShadowControl(self.CannPhys);
+		self.CannPhys = {
+			secondstoarrive = 0.01;
+			angle 			= Angle(self.Pitch-StandPitch, self.Yaw+StandYaw, StandRoll);
+			maxangular 		= 1000000;
+			maxangulardamp 	= 100000000;
+			dampfactor 		= 0.8;
+			deltatime 		= deltatime;
+		}
+		Cannon:ComputeShadowControl(self.CannPhys);
+	end
 
 end
 

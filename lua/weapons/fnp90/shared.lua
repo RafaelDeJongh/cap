@@ -351,7 +351,7 @@ function SWEP:Reload()
 
 	self.Weapon:DefaultReload( ACT_VM_RELOAD )
 
-	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and IsValid(self.Owner) and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
+	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and IsValid(self.Owner) and self.Owner.GetAmmoCount and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
 		self:SetIronsights(false, self.Owner)
 
 		self:SetScope(false, self.Owner)
@@ -735,12 +735,12 @@ function SWEP:RecoilPower()
 		if (self:GetIronsights() == true) then
 			self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil * 1.7, self.Primary.NumShots, self.Primary.Cone)
 
-			self.Owner:ViewPunch(Angle(math.Rand(-0.5,-2.5) * (self.Primary.Recoil * 1.7), math.Rand(-1,1) * (self.Primary.Recoil / 1.7), 0))
+			if (self.Owner.ViewPunch) then self.Owner:ViewPunch(Angle(math.Rand(-0.5,-2.5) * (self.Primary.Recoil * 1.7), math.Rand(-1,1) * (self.Primary.Recoil / 1.7), 0)) end
 		else
 			self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self.Primary.Cone)
 			-- Recoil * 2.5
 
-			self.Owner:ViewPunch(Angle(math.Rand(-0.5,-2.5) * (self.Primary.Recoil * 2.5), math.Rand(-1,1) * (self.Primary.Recoil * 2.5), 0))
+			if (self.Owner.ViewPunch) then self.Owner:ViewPunch(Angle(math.Rand(-0.5,-2.5) * (self.Primary.Recoil * 2.5), math.Rand(-1,1) * (self.Primary.Recoil * 2.5), 0)) end
 			-- Punch the screen * 2.5
 		end
 

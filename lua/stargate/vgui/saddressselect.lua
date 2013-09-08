@@ -2251,7 +2251,7 @@ function PANEL:AddGatesToList(s)
 					if (address:len()==6) then
 						local blocked, energy = "false", "true";
 						if (IsValid(g) and v.blocked) then blocked = "true"; end
-						if (not ent:CheckEnergy(v,address2:len())) then energy = "false"; end
+						if (ent.CheckEnergy and not ent:CheckEnergy(v,address2:len())) then energy = "false"; end
 						self.VGUI.AddressListView:AddLine(address2,address,name,blocked,energy);
 					end
 				end

@@ -43,6 +43,7 @@ end
 
 function ENT:Light()
 	local lamp = ents.Create( "gmod_light" )
+	if (not IsValid(lamp)) then self:Remove(); return end
 
 	lamp:SetColor(Color(255, 128, 0))
 	if (lamp.SetBrightness) then

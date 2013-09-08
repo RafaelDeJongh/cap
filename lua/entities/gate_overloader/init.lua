@@ -318,7 +318,7 @@ function ENT:UpdateWireOutputs()
       return
    end
 
-   if(self.isFiring) then
+   if(self.isFiring and self.remoteGate.excessPowerLimit and self.remoteGate.excessPower) then
       local energyRequired = self.remoteGate.excessPowerLimit -
                              self.remoteGate.excessPower
       local timeLeft = (energyRequired / self.energyPerSecond)

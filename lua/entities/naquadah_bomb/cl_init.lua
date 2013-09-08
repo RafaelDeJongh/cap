@@ -23,8 +23,8 @@ end
 function ENT:Draw()
 
 	self.Entity:DrawModel()
-	local pos;
-	local ang;
+	local pos = self.Entity:LocalToWorld(Vector(-7.5, 9.5, 25));
+	local ang = self.Entity:GetAngles();
 
 
 	if self.Entity:GetNetworkedBool("Hud", false) then

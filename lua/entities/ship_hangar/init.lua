@@ -220,7 +220,7 @@ function ENT:ButtonPressed(id, ply)
 		if self.LockedDoor then self.LED:SetColor(Color(0, 255, 0, 255));
 		else self.LED:SetColor( Color(20, 50, 20, 255)); end
 	elseif (id == 5) then
-		if not self.LockedDoor then
+		if not self.LockedDoor and IsValid(self.Door1) and IsValid(self.Door2) then
 			self.Door1:Toggle();
 			self.Door2:Toggle();
 		end

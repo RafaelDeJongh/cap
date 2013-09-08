@@ -33,6 +33,7 @@ function EFFECT:Init(data)
 	end
 	local norm = data:GetNormal();
 	local em = ParticleEmitter(pos);
+	if (em==nil) then return end
 	-- ######################## Sound
 	sound.Play(Sound("weapons/mortar/mortar_explode"..math.random(1,3)..".wav"),pos,80,math.random(80,120));
 	-- ######################## Glowing particles

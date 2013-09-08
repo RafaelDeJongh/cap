@@ -18,7 +18,7 @@ end
 function StarGate.DrawGateHeatEffects(gate)
    StarGate.TintGate(gate)
 
-   if(gate.excessPower) then
+   if(gate.excessPower and gate.excessPowerLimit) then
       -- The amount of excess power required to destabalise the stargate
       local destabalisingExcessPower = 3 * (gate.excessPowerLimit / 4)
 

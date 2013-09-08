@@ -352,11 +352,11 @@ function ENT:HubLink(ent)
 	end
 end
 function ENT:HubUnlink(ent)
-	if self.HaveRD3 then
+	if self.HaveRD3 and CAF then
 		CAF.GetAddon("Resource Distribution").Unlink(ent);
 	elseif Environments then
 		ent:Unlink();
-	elseif ( RES_DISTRIB == 2 ) then
+	elseif ( RES_DISTRIB == 2 and Dev_Unlink_All) then
 		Dev_Unlink_All(ent);
 	end
 end

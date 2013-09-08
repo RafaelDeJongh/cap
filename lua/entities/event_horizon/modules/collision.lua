@@ -12,7 +12,7 @@
 function ShouldEHEntitiesCollide(ent1,ent2)
 	if ent1 == ent2 then return true end
 	local enta, entb = ent1, ent2
-	if (!enta:IsValid() || !entb:IsValid()) then return true end
+	if (not IsValid(enta) || not IsValid(entb)) then return true end
 
 	local eh, ent, tent, ent_dir, tent_bdir;
 

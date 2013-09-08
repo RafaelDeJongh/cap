@@ -113,7 +113,7 @@ function ENT:Think(ply)
 		if(v:IsValid() and v.Target ~= self.Entity) then
 			timer.Create("destiny_console"..k..self.Entity:EntIndex(),0,1,
 				function()
-					if(IsValid(v) and self.Entity:GetNWBool( "Smoke", true )) then
+					if(IsValid(v) and IsValid(self) and self.Entity:GetNWBool( "Smoke", true )) then
 					    self:SteamSound(true);
 					    self:SmokeRight();
                         self:SmokeLeft();

@@ -24,6 +24,7 @@ EFFECT.RefractBeam = Material("models/shadertest/predator");
 
 function EFFECT:Init(data)
 	self.Parent	= data:GetEntity();
+	if (not IsValid(self.Parent) or self.Parent.GetLocalGate==nil) then return end
 	self.EH	= StarGate.FindEntInsideSphere(self.Parent:GetLocalGate():GetPos(), 10, "event_horizon")[1]	-- Remote Gate
 	self.Beam = self.Parent:GetInboundBeam();
 
@@ -47,6 +48,8 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
+	if (not IsValid(self.Parent)) then return false end
+	if (self.GlowScale==nil) then return false end
 	if not IsValid(self.Beam) then
 		self.ShouldDrawBeam = false;
 	end
@@ -86,6 +89,7 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
+	if (not IsValid(self.Parent)) then return false end
 	local texcoor = CurTime()*-7;
 
 	if self.ShouldDrawBeam then
