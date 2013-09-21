@@ -5,7 +5,7 @@ StarGate.CAP = true; -- for some scripts
 StarGate.Installed = true;
 StarGate.Loading = false;
 StarGate.WorkShop = false;
-StarGate.WorkShopVer = 405;
+StarGate.WorkShopVer = 411;
 if(CLIENT and not game.SinglePlayer()) then
 	/* Probably this code isn't work anymore in gmod13, not sure */
 	if(file.Exists("lua_temp","GAME")) then -- On a ListenServer, lua_temp does not exists for the HOST

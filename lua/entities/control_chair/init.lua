@@ -157,7 +157,9 @@ function ENT:DeactivateChair(p)
 	self.Pilot:Spawn()
 	self.Pilot:SetParent()
 	self.Pilot:SetPos(self:GetPos()+self:GetRight()*30+self:GetUp()*10)
-	self.Chair:SetSkin(0)
+	if (IsValid(self.Chair)) then
+		self.Chair:SetSkin(0)
+	end
 	self.Pilot:SetParent()
 	self.Pilot:SetNWBool("Control",false)
 	self.Pilot:SetNWEntity("chair",NULL)
@@ -334,7 +336,7 @@ end
 
 function ENT:Anims(anim)
 
-	if(IsValid(self)) then
+	if(IsValid(self) and IsValid(self.Chair)) then
 		self.Anim = self.Chair:LookupSequence(anim)
 		self:SetPlaybackRate(0.005)
 		self.Chair:ResetSequence(self.Anim)

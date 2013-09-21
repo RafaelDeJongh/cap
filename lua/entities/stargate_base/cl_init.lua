@@ -156,6 +156,7 @@ end
 -- But sadly then the ring sometimes clips (Strange behaviour).
 
 function ENT:Draw()
+	if (not IsValid(self.Entity)) then return end
 	self.Entity:DrawModel();
 	if(not self.ChevronColor) then return end;
 	render.SetMaterial(self.ChevronSprite);

@@ -34,6 +34,7 @@ surface.CreateFont("DHD_font", font)
 
 --################# Draw @aVoN
 function ENT:Draw()
+	if (not IsValid(self.Entity)) then return end
 	self.Entity:DrawModel();
 	if (StarGate.VisualsMisc==nil or not StarGate.VisualsMisc("cl_dhd_letters",true)) then return end
 	if self.Entity:GetNetworkedInt("DHD_LETTERS",0)<=0 then return end

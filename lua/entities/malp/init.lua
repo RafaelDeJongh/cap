@@ -254,13 +254,25 @@ function ENT:PhysicOverdrive()
 			self.Sounds.LoopSoundFade = false;
 		end
 
-		self.MalpWheels[1]:GetPhysicsObject():SetVelocity(vel1);
-		self.MalpWheels[2]:GetPhysicsObject():SetVelocity(vel1);
-		self.MalpWheels[3]:GetPhysicsObject():SetVelocity(vel1);
+  		if (IsValid(self.MalpWheels[1]) and IsValid(self.MalpWheels[1]:GetPhysicsObject())) then
+			self.MalpWheels[1]:GetPhysicsObject():SetVelocity(vel1);
+		end
+  		if (IsValid(self.MalpWheels[2]) and IsValid(self.MalpWheels[2]:GetPhysicsObject())) then
+			self.MalpWheels[2]:GetPhysicsObject():SetVelocity(vel1);
+		end
+  		if (IsValid(self.MalpWheels[3]) and IsValid(self.MalpWheels[3]:GetPhysicsObject())) then
+			self.MalpWheels[3]:GetPhysicsObject():SetVelocity(vel1);
+		end
 
-		self.MalpWheels[4]:GetPhysicsObject():SetVelocity(vel2);
-		self.MalpWheels[5]:GetPhysicsObject():SetVelocity(vel2);
-		self.MalpWheels[6]:GetPhysicsObject():SetVelocity(vel2);
+  		if (IsValid(self.MalpWheels[4]) and IsValid(self.MalpWheels[4]:GetPhysicsObject())) then
+			self.MalpWheels[4]:GetPhysicsObject():SetVelocity(vel2);
+		end
+  		if (IsValid(self.MalpWheels[5]) and IsValid(self.MalpWheels[5]:GetPhysicsObject())) then
+			self.MalpWheels[5]:GetPhysicsObject():SetVelocity(vel2);
+		end
+  		if (IsValid(self.MalpWheels[6]) and IsValid(self.MalpWheels[6]:GetPhysicsObject())) then
+			self.MalpWheels[6]:GetPhysicsObject():SetVelocity(vel2);
+		end
 	else
 		if self.Sounds.LoopSound and not self.Sounds.LoopSoundFade then
 			self.Sounds.LoopSound:FadeOut(1);

@@ -5,6 +5,7 @@ ENT.RenderGroup = RENDERGROUP_OPAQUE
 ENT.ButtCount = 6;
 
 function ENT:Draw()
+	if (not IsValid(self.Entity)) then return end
 	self.Entity:DrawModel();
 
 	local address = self.Entity:GetNetworkedString("ADDRESS"):TrimExplode(",");

@@ -6,7 +6,7 @@ local HitImpact = function(attacker, tr, dmginfo)
 	hit:SetOrigin(tr.HitPos)
 	hit:SetNormal(tr.HitNormal)
 	hit:SetScale(20)
-	util.Effect("effect_hit", hit)
+	util.Effect("effect_hit_fnp90", hit)
 
 	return true
 end

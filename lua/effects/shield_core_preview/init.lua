@@ -8,6 +8,7 @@ EFFECT.Materialb = Material("effects/shieldb");
 
 function EFFECT:Init(data)
 	local e = data:GetEntity();
+	if (not IsValid(e)) then return end
 	self.Entity:SetModel(Model("models/Madman07/shields/sphere.mdl"));
 	self.Entity:SetPos(e:GetPos());
 	self.Entity:SetColor(Color(170,185,255,140));

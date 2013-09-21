@@ -137,7 +137,7 @@ end
 
 --################# Close wormhole (effect) @aVoN
 function ENT:Close(ignore)
-	if (not IsValid(self)) then return end
+	if (not IsValid(self.Entity)) then return end
 	self:StopActions();
 	-- Remove the EH
 	if(self.EventHorizon and self.EventHorizon:IsValid()) then
@@ -175,6 +175,7 @@ end
 
 --################# Openes the gate (creates the event horizon) @aVoN
 function ENT:Open()
+	if (not IsValid(self.Entity)) then return end
 	local e = ents.Create("event_horizon");
 	if(self.Entity:GetClass()=="stargate_supergate")then
 		e:SetPos(self.Entity:GetPos()+self.Entity:GetUp()*2375);
