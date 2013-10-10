@@ -623,7 +623,7 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 				self.Entity:SetNWBool("ActRotRingL",true);
 			end
 		else
-			self:ActivateRing(false,false,true);
+			self:ActivateRing(false,false,false);
 			self.Entity:SetNWBool("ActRotRingL",false);
 		end
 	elseif(k == "Chevron Encode" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then

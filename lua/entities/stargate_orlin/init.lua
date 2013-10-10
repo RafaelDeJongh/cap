@@ -246,7 +246,7 @@ function ENT:Think()
 					self.EventHorizon:BufferEmpty();
 					if(self.Target.Entity:GetClass() == "stargate_universe") then
 					    self.Target.EventHorizon:SetMaterial("sgu/effect_shock.vmt");
-					elseif(self.Target.Entity:GetClass() == "stargate_infinity") then
+					elseif(self.Target.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH) then
 					  	self.Target.EventHorizon:SetColor(Color(255,255,255,math.random(55,165)));
 					  	self.Target.EventHorizon:SetNWBool("Flicker",true);
 					else
@@ -286,7 +286,7 @@ function ENT:Think()
 							self.EventHorizon.Unstable = false;
 							if(self.Target.Entity:GetClass() == "stargate_universe")then
 								self.Target.EventHorizon:SetMaterial("sgu/effect_02.vmt");
-							elseif(self.Target.Entity:GetClass() == "stargate_infinity")then
+							elseif(self.Target.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH)then
 								self.Target.EventHorizon:SetColor(Color(255,255,255,255));
 								self.Target.EventHorizon:SetNWBool("Flicker",false);
 							else
@@ -312,6 +312,8 @@ function ENT:Think()
 		end
 	end
 	self:LowThink();
+	self.Entity:NextThink(CurTime()+0.1);
+	return true;
 end
 
 --################# @Llapp
@@ -324,8 +326,8 @@ function ENT:JammingGates(bool)
                 if(i==1)then
                     gate = self.Entity
                 elseif(i==2)then
-			        if(IsValid(self.Entity.Target))then
-                        gate = self.Entity.Target;
+			        if(IsValid(self.Target))then
+                        gate = self.Target;
 				    else
 				        return false;
 				    end
@@ -360,8 +362,8 @@ function ENT:JammingGates(bool)
                 if(i==1)then
                     gate = self.Entity;
                 elseif(i==2)then
-                    if(IsValid(self.Entity.Target))then
-                        gate = self.Entity.Target;
+                    if(IsValid(self.Target))then
+                        gate = self.Target;
 				    else
 				        return false;
 				    end
@@ -423,6 +425,7 @@ function ENT:Open()
 end
 
 function ENT:DialGate(address,mode)
+	if (self.DeactivateGate) then return nil; end
 	local allow_override_dial = false;
 	-- Someone dials in. Are we getting dialled slowly? If yes, allow dialling out (and abort the dial-in)
 	if(not self.Outbound and not self.Active and IsValid(self.Target)) then

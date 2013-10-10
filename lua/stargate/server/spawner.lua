@@ -536,7 +536,7 @@ timer.Create("StarGate.GateSpawner.AutoRespawn",3,0,function() StarGate.GateSpaw
 -- ############### Gatespawner creation command @aVoN
 concommand.Add("stargate_gatespawner_createfile",
 	function(p)
-		if(p:IsAdmin()) then
+		if(not IsValid(p) or p:IsAdmin()) then
 			local f = "[gatespawner]\nversion = 3\n\n\n";
 			local gatefolder = "gatespawner_maps";
 			local groupsystem = false;

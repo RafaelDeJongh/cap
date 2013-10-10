@@ -57,3 +57,5 @@ stargate_c_tool_15 = Enable classic mode
 stargate_c_tool_15d = Disable classic mode
 stargate_c_tool_16 = Enable chevron light
 stargate_c_tool_16d = Disable chevron light
+stargate_c_tool_17 = Enable SG1 Event Horizon
+stargate_c_tool_17d = Disable SG1 Event Horizon

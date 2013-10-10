@@ -17,9 +17,14 @@ for _,v in pairs(GetAddonList(true)) do
 end
 
 local cap_ver = 0;
+local cap_res = 0;
+local cap_res_req = 21;
 if (not StarGate.WorkShop) then
 	local cap = file.Read("addons/cap/ver.txt","GAME")
 	if cap then cap_ver = tonumber(cap) end
+	if (file.Exists("lua/cap_res.lua","GAME")) then
+		cap_res = tonumber(file.Read("lua/cap_res.lua","GAME"));
+	end
 end
 local status = "Loaded";
 StarGate_Group.Error = false;
@@ -280,10 +285,10 @@ if (not StarGate.WorkShop) then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is wrong installed.\\nPlease make sure you have downloaded cap and cap_resources folders and named it correctly.");
+		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and named the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<411 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<412 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -298,6 +303,14 @@ if (not StarGate.WorkShop) then
 		end
 		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	end if (cap_res<cap_res_req) then
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, "Cap_resources folder is outdated!\\nPlease update it.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_12");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end
 else

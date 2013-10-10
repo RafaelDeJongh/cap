@@ -306,3 +306,65 @@ properties.Add( "Stargate.RingRotate.Off",
 					end
 
 });
+
+properties.Add( "Stargate.InfinityEH.On",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_17"),
+	Order		=	-110,
+	MenuIcon	=	"icon16/plugin_disabled.png",
+
+	Filter		=	function( self, ent, ply )
+						local vg = {"stargate_infinity"}
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("SG1 Event Horizon",1);
+					end
+
+});
+
+properties.Add( "Stargate.InfinityEH.Off",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_17d"),
+	Order		=	-110,
+	MenuIcon	=	"icon16/plugin.png",
+
+	Filter		=	function( self, ent, ply )
+                        local vg = {"stargate_infinity"}
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("SG1 Event Horizon",0);
+					end
+
+});

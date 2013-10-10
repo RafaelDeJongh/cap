@@ -57,3 +57,5 @@ stargate_c_tool_15 = Включить классический режим
 stargate_c_tool_15d = Выключить классический режим
 stargate_c_tool_16 = Включить свет шевронов
 stargate_c_tool_16d = Выключить свет шевронов
+stargate_c_tool_17 = Включить SG1 Текстуру горизонта
+stargate_c_tool_17d = Выключить SG1 Текстуру горизонта

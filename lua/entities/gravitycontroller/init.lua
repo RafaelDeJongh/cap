@@ -2,7 +2,6 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extr
 
 AddCSLuaFile("cl_init.lua");
 AddCSLuaFile("shared.lua");
-include('entities/base_wire_entity/init.lua');
 include("shared.lua");
 
 function ENT:Initialize()

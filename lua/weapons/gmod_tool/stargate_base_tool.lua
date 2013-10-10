@@ -221,6 +221,7 @@ function TOOL:AutoLink(e1,e2)
 				Dev_Link(e1,e2,e1:GetPos(),e2:GetPos(),"cable/cable2",Color(0,0,0,0),0);
 			end
 		elseif (CAF and CAF.GetAddon("Resource Distribution")) then
+			local RD = CAF.GetAddon("Resource Distribution");
 			if (RD and e2.IsNode) then
 				RD.Link(e1,e2.netid);
 			end

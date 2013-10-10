@@ -1,25 +1,25 @@
 // Rings
 ring_ancient = Halkalar (Kadim)
-ring_goauld = Halkalar (Goauld)
+ring_goauld = Halkalar (Goa'uld)
 ring_ori = Halkalar (Ori)
 ring_panel_ancient = Halka Paneli (Kadim)
-ring_panel_goauld = Halka Paneli (Goauld)
+ring_panel_goauld = Halka Paneli (Goa'uld)
 ring_panel_ori = Halka Paneli (Ori)
 ring_name = Bu Halkanın ismi (Sadece rakam!):
 ring_dial = Hedef Adresi Girin (Sadece rakam!):
 ring_dialb = Çevir
-ring_error = Bu halka adresi geçerli değil !
+ring_error = Bu adres geçerli değil !
 
 // Weapon Entities
 entity_weapon_cat = Silahlar
 entity_ag3 = AG-3 Satellite
 entity_asgard_beam = Asgard Beam Weapon
-entity_asgard_ashen_def = Ashen Defence System
+entity_asgard_ashen_def = Ashen Savunma Sistemi
 entity_asuran_satellite = Asuran Satellite
 entity_dakara = Dakara Silahı
-entity_drone = Drone Ateşleyici
-entity_overloader = Gate Overloader
-entity_asuran_weapon = Gate Weapon
+entity_drone = Dron Atar
+entity_overloader = Geçit Aşırı Yükleyici
+entity_asuran_weapon = Geçit Silahı
 entity_horizon_missile = Horizon Missile
 entity_ion_cannon = İyon Topu
 entity_dest_main = Ana Silah
@@ -29,14 +29,14 @@ entity_minidrone = Minidrone Platform
 entity_ori_beam = Ori Işın Topu
 entity_ori_satellite = Ori Uydusu
 entity_shiprail = Ship Railgun
-entity_stat_railgun = Stationary Railgun
-entity_staff_weapon = Stationary Staff Weapon
+entity_stat_railgun = Sabit Railgun
+entity_staff_weapon = Sabit Staff Silahı
 
 //Shaped Charge
-entity_directional_nuke = Shaped Charge
-directional_nuke_menu_t = Shaped Charge Timer
-directional_nuke_menu_d = Seconds to explosion:
-directional_nuke_menu_c = Cancel
+entity_directional_nuke = Shaped Şarj
+directional_nuke_menu_t = Shaped Şarj Süresi
+directional_nuke_menu_d = Patlama Süresi:
+directional_nuke_menu_c = İptal
 
 // Ship Entities
 entity_ships_cat = Gemiler
@@ -52,9 +52,9 @@ entity_dart = Wraith Dart
 
 // Main Entities
 entity_main_cat = Çeşitli Cihazlar
-entity_obelisk = Ancient Obelisk
-entity_antiprior = Anti Priori Cihazı
-entity_apple_core = Apple Core
+entity_obelisk = Kadim Obelisk
+entity_antiprior = Anti Rahip Cihazı
+entity_apple_core = Kontrol Paneli
 entity_arthurs_mantle = Arthurs Mantle
 entity_asgart_trans = Asgard Teleportu
 entity_black_hole = Karadelik
@@ -63,17 +63,17 @@ entity_cfd_full = Call Forwarding Device
 entity_dest_console = Destiny Konsolu
 entity_dest_timer = Destiny Saati
 entity_kino_dis = Kino Yaratıcı
-entity_lant_holo = Lantean Holo
+entity_lant_holo = Lantean Hologramı
 entity_malp = MALP
 entity_mcd = MCD
 entity_mcd_full = Molecular Construction Device
-entity_shield_core = Shield Core
-entity_ship_hangar = Ships Hangar
-entity_iris_comp = Stargate Iris Computer
+entity_shield_core = Shield Jeneratörü
+entity_ship_hangar = Gemi Hangarı
+entity_iris_comp = Stargate Iris Bilgisayarı
 entity_stone = Stone
 entity_stone_tablet = Stone Tablet
 entity_telchak = Telchak healing device
-entity_atlantist = Atlantis Transporter
+entity_atlantist = Atlantis Taşıyıcısı
 
 // Sodan obelisk
 entity_sodan_obelisk = Sodan Obelisk
@@ -82,8 +82,8 @@ sodan_obelisk_menu = Set obelisk password (only numbers from 1 to 6!):
 // Npcs
 npc_cat = NPC
 npc_wraith = Wraith
-npc_prior = Prior
-npc_goauld = Goauld
+npc_prior = Rahip
+npc_goauld = Goa'uld
 npc_soldier = Asker
 
 // Player Weapons
@@ -125,8 +125,8 @@ stool_cat_keys = Keybinders
 stool_cat_ramps = Rampalar
 
 // Stools Updater
-stool_update_01 = Senin CAP Versiyonun eskimiş.
-stool_update_02 = EN SON BUILD:
+stool_update_01 = Carter Addon Pack versionun eski.
+stool_update_02 = En Son Sürüm:
 stool_update_03 = Bir sunucuda bu mesaji aliyorsaniz, admine cap'i guncellemesini soyleyin.
 
 // Stool Names - Config
@@ -149,10 +149,10 @@ stool_jamming = Jamming Device
 stool_cloak = Gorunmezlik
 stool_mdhd = Mobile DHD
 stool_iris = Iris
-stool_shield = Kalkan
+stool_shield = Enerji Kalkanı
 stool_sdhd = Supergate DHD
-stool_tshield = Tokra Shield Emmiter
-stool_tshieldc = Tokra Shield Controller
+stool_tshield = Tokra Kalkanı
+stool_tshieldc = Tokra Kalkan Kontrolleri
 stool_tolland = Tollan Weapon Disabler
 stool_harvester = Harvester
 stool_controlpanel = Kontrol Paneli
@@ -229,6 +229,8 @@ atl_tp_02 = Hedefteki taşıyıcı ismi:
 atl_tp_03 = Kaydet
 atl_tp_04 = Teleport
 atl_tp_05 = Hedef
+atl_tp_06 = Özel
+atl_tp_07 = Özel taşıyıcılar çevirme listesinde gözükmez, ama halen çevrilebilir!
 atl_tp_error = Bu isim zaten kullanılıyor!
 
 // Misc
@@ -258,3 +260,9 @@ cap_prop_cat1 = Çeşitli
 cap_prop_cat2 = Cap Build
 cap_prop_cat3 = Catwalk Build
 cap_menu_author = Yazar
+cap_admin_ent = Bu entity sadece adminler içindir !
+cap_admin_swep = Bu silah sadece adminler içindir !
+cap_admin_tool = Bi araç sadece adminler içindir !
+cap_disabled_ent = Bu entity serverde yasaklanmıştır !
+cap_disabled_swep = Bu silah serverde yasaklanmıştır !
+cap_disabled_tool = Bu araç serverde yasaklanmıştır !

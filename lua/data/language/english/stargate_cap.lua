@@ -114,6 +114,8 @@ weapon_misc_sodan = Sodan Cloaking
 weapon_misc_gdo = Stargate GDO
 weapon_misc_nox = Nox Hands
 weapon_misc_nox_desc = Left Click: Open Stargate dialing menu, Right Click: Heal your friend.
+weapon_misc_adrenaline = Adrenaline Shot
+weapon_misc_atl_medkit = Atlantis Medical Kit
 
 // Stools Cats
 stool_cat = Stargate
@@ -163,6 +165,7 @@ stool_atlantis_hub = Atlantis ZPM Hub
 stool_naq_gen = Naquada Generator MK1/MK2
 stool_sgc_hub = SGC ZPM Hub
 stool_zpm_mk3 = ZPM MK III
+stool_naq_bottle = Naquadah Bottle
 
 // Stool Names - Weapons
 stool_drones = Drones

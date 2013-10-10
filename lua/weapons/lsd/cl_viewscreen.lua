@@ -6,7 +6,6 @@ local dot = surface.GetTextureID("Markjaw/LSD/dot");
 local bg = surface.GetTextureID("Markjaw/LSD/screen_bg");
 
 function SWEP:RenderScreen()
-
     local NewRT = RTTexture;
     local oldW = ScrW();
     local oldH = ScrH();
@@ -16,7 +15,7 @@ function SWEP:RenderScreen()
 
     local OldRT = render.GetRenderTarget();
     render.SetRenderTarget(NewRT);
-    render.SetViewPort( 0, 0, 512, 1024);
+    render.SetViewPort( 0, 0, 512, 0);
 
     cam.Start2D();
 
@@ -29,17 +28,7 @@ function SWEP:RenderScreen()
 		surface.SetTexture(dot);
 
 		for k, v in pairs(ents.GetAll()) do
-			if v:IsNPC() then
-				local ang = ply:GetAngles();
-				local pos = ply:GetPos() - v:GetPos();
-				pos:Rotate(Angle(0, -1*ang.Yaw, 0));
-				local x1 = 256 + pos.y/5;
-				local y1 = 512 + 0.3*pos.x;
-				if (math.abs(pos.z)<200) then
-					surface.DrawTexturedRect(x1-16, y1-24, 32, 48);
-				end
-			end
-			if v:IsPlayer() then
+			if v:IsNPC() or v:IsPlayer() then
 				local ang = ply:GetAngles();
 				local pos = ply:GetPos() - v:GetPos();
 				pos:Rotate(Angle(0, -1*ang.Yaw, 0));

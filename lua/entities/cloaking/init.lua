@@ -221,6 +221,8 @@ function ENT:Cloak(e,b)
 
 		if(timer.Exists(id.."end2")) then timer.Destroy(id.."end2") end;
 		if(timer.Exists(id.."start")) then timer.Destroy(id.."start") end;
+		if(timer.Exists(id.."matstart1")) then timer.Destroy(id.."matstart1") end;
+		if(timer.Exists(id.."matstart2")) then timer.Destroy(id.."matstart2") end;
 
 		-- Handle cloaking!
 		if(b) then
@@ -256,6 +258,32 @@ function ENT:Cloak(e,b)
 						--e:SetKeyValue("renderamt",alpha);  -- Old Method
 						local color = e:GetColor();
 						e:SetColor(Color(color.r,color.g,color.b,alpha));
+						e.Material = e:GetMaterial();
+						if (e:IsPlayer() or e:IsNPC()) then
+							e.__SGCloacked = true;
+							if (e:IsPlayer()) then
+								e:SetNetworkedBool("CloakCloaked",true);
+							end
+							if (IsValid(e:GetActiveWeapon())) then
+								e:GetActiveWeapon().WeaponRenderMode = e:GetActiveWeapon():GetRenderMode()
+								if (e:GetActiveWeapon():GetMaterial()!="models/effects/vol_light001") then
+									e:GetActiveWeapon().WeaponMaterial = e:GetActiveWeapon():GetMaterial();
+								else
+									e:GetActiveWeapon().WeaponMaterial = "";
+								end
+								e:GetActiveWeapon():SetRenderMode( RENDERMODE_TRANSALPHA )
+								e:GetActiveWeapon():Fire( "alpha", alpha, 0 )
+								local color = e:GetActiveWeapon():GetColor();
+								e:GetActiveWeapon():SetColor(Color(color.r,color.g,color.b,alpha))
+								timer.Create(id.."matstart1",2.0,1,function() if IsValid(e) then e:GetActiveWeapon():SetMaterial( "models/effects/vol_light001" ) end end)
+								if ply:GetActiveWeapon():GetClass() == "gmod_tool" then
+									ply:DrawWorldModel( false ) -- tool gun has problems
+								else
+									ply:DrawWorldModel( true )
+								end
+							end
+						end
+						timer.Create(id.."matstart2",2.0,1,function() if IsValid(e) then e:SetMaterial( "models/effects/vol_light001" ) end end)
 					end
 				end
 			);
@@ -273,9 +301,27 @@ function ENT:Cloak(e,b)
 					e:SetRenderMode(e.CloakRenderMode);
 					local color = e:GetColor();
 					e:SetColor(Color(color.r,color.g,color.b,old_alpha or 255));
+					if ((e:IsPlayer() or e:IsNPC()) and IsValid(e:GetActiveWeapon())) then
+						if (e:GetActiveWeapon().WeaponRenderMode!=nil) then
+							e:GetActiveWeapon():SetRenderMode(e:GetActiveWeapon().WeaponRenderMode);
+						end
+						e:GetActiveWeapon():Fire("alpha", old_alpha, 0);
+						local color = e:GetActiveWeapon():GetColor();
+						e:GetActiveWeapon():SetColor(Color(color.r,color.g,color.b,old_alpha))
+					end
 					e.OldAlpha = nil;
 				end
 			end
+			if (e:IsPlayer() or e:IsNPC()) then
+				e.__SGCloacked = false;
+				if (e:IsPlayer()) then
+					e:SetNetworkedBool("CloakCloaked",false);
+				end
+				if (IsValid(e:GetActiveWeapon()) and e:GetActiveWeapon().WeaponMaterial!=nil) then
+					e:GetActiveWeapon():SetMaterial(e:GetActiveWeapon().WeaponMaterial);
+				end
+			end
+			e:SetMaterial(e.Material);
 			timer.Create(id.."end1",delay-0.1,1,function() reset_cloak(e) end); -- The first uncloak (make sure things will be synched with the effect)
 			timer.Create(id.."end2",delay+0.3,4,function() reset_cloak(e) end); -- The last effect - Make really, sure, everything has his correct alpha (For multiplayer to compensate lag)
 			if(e.CloakCollisionGroup) then
@@ -289,3 +335,31 @@ function ENT:Cloak(e,b)
 		end
 	end
 end
+
+hook.Add("PlayerSwitchWeapon", "StarGate.WeaponCloak.Changed", function(ply, oldWeapon, newWeapon)
+	if (not ply or not IsValid(ply) or not ply:IsPlayer() or not IsValid(oldWeapon) or not IsValid(newWeapon)) then return nil end
+
+	if (ply.__SGCloacked==true) then
+		if (oldWeapon.WeaponMaterial!=nil) then
+			oldWeapon:SetMaterial(oldWeapon.WeaponMaterial);
+		end
+		if (oldWeapon.WeaponRenderMode!=nil) then
+			oldWeapon:SetRenderMode(oldWeapon.WeaponRenderMode);
+		end
+		oldWeapon:Fire("alpha", 255, 0);
+		local color = oldWeapon:GetColor();
+		oldWeapon:SetColor(Color(color.r,color.g,color.b,255))
+
+		timer.Simple(0.05,function()
+			if (IsValid(newWeapon)) then
+				newWeapon.WeaponRenderMode = newWeapon:GetRenderMode()
+				newWeapon.WeaponMaterial = newWeapon:GetMaterial();
+				newWeapon:SetRenderMode( RENDERMODE_TRANSALPHA )
+				newWeapon:Fire( "alpha", 0, 0 )
+				newWeapon:SetMaterial( "models/effects/vol_light001" )
+				local color = newWeapon:GetColor();
+				newWeapon:SetColor(Color(color.r,color.g,color.b,0))
+			end
+		end)
+	end
+end)

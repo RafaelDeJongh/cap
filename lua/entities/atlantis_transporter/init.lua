@@ -384,6 +384,7 @@ end
 
 function ENT:CanTeleport(ent)
 	local class = ent:GetClass();
+	if((ent:GetModel() or ""):find("*")) then return false end; -- Do not cloak brushes (like athmospheres in spacebuild)
 	if not self.Disallowed[class] and not string.find(class,"stargate_") and not string.find(class,"ring_") and not protected_entities[class] and ent~=game.GetWorld() and not self.Ents[ent] and not ent.NotTeleportable and not ent:GetParent():IsValid() and not ent.GateSpawnerProtected then
 		return true;
 	end
@@ -473,7 +474,7 @@ function ENT:DoTeleport(target)
 	self:SetWire("Active",1);
 
 	if (IsValid(self.Target)) then
-		self:EmitSound(self.Sound,100,100);
+		timer.Simple(0.1, function() if IsValid(self) then self:EmitSound(self.Sound,100,100); end end);
 	end
 
 	if (IsValid(self.Target) and target and not self.Fail and not self.NoAutoOpen) then

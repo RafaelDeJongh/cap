@@ -83,6 +83,7 @@ end
 
 function ENT:CAPOnShieldTouch(shield)
 	self:Blast("energy_impact",self:GetPos(),shield,Vector(1,1,1),false,self.Damage,self.Radius);
+	if (self.Explosion) then self:Blast("energy_explosion",self:GetPos(),self,Vector(1,1,1),false,self.Damage,self.Radius); end
 	self:Destroy();
 end
 
@@ -171,6 +172,7 @@ function ENT:PhysicsCollide( data, physobj )
 		else
 			self:Blast("energy_impact",pos,e,hitnormal,hitsmoke,self.Damage,self.Radius, data.OurOldVelocity);
 		end
+		if (self.Explosion) then self:Blast("energy_explosion",pos,self,Vector(1,1,1),false,self.Damage,self.Radius); end
 
 		self:Destroy();
 

@@ -128,15 +128,15 @@ function TOOL:PostEntitySpawn(p,e,shoot,explode,model,r,g,b,shaft,explosion,expl
 	if(r and g and b) then
 		e.Color = Color(r,g,b,255);
 	end
-	if(shaft) then
+	/*if(shaft) then
 		e:SetNWBool("shaft",util.tobool(shaft));
 	end
-	e.DrawExplosion = true;
+	e.DrawExplosion = true; */
 	if(explosion) then
-		e.DrawExplosion = util.tobool(explosion);
-	end
+		e.Explosion = util.tobool(explosion);
+	end      /*
 	e.AddCannonVelocity = util.tobool(add_cannon_velocity);
-	e.ColorizeExplosion = util.tobool(explosion_colorize);
+	e.ColorizeExplosion = util.tobool(explosion_colorize);*/
 	-- Little workaround for that special model - It is turned upside down by 180°, so we need to alter the shoot position and direction with "this"
 	if(e:GetModel():find("combine_binocular01.mdl")) then
 		e.ShootDirection = -1;
@@ -204,10 +204,10 @@ function TOOL:ControlsPanel(Panel)
 		Multiplier = 255,
 	});
 	Panel:AddControl("PropSelect",{Label="Model",ConVar="staff_weapon_model",Category="",Models=self.Models});
-	Panel:CheckBox("Add Cannon's Velocity","staff_weapon_add_cannon_velocity"):SetToolTip("This will add the velocity of the cannon to the shot");
-	Panel:CheckBox("Draw Shaft","staff_weapon_shaft");
+	--Panel:CheckBox("Add Cannon's Velocity","staff_weapon_add_cannon_velocity"):SetToolTip("This will add the velocity of the cannon to the shot");
+	--Panel:CheckBox("Draw Shaft","staff_weapon_shaft");
 	Panel:CheckBox("Explosion","staff_weapon_explosion");
-	Panel:CheckBox("Colorize Explosion","staff_weapon_explosion_colorize");
+	--Panel:CheckBox("Colorize Explosion","staff_weapon_explosion_colorize");
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"staff_weapon_autoweld");
 	if(StarGate.HasResourceDistribution) then
 		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"staff_weapon_autolink"):SetToolTip("Autolink this to resouce using Entities?");

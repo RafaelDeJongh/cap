@@ -134,8 +134,9 @@ function ENT:Think(ply)
 			if(self.Entity:GetNWBool("chevron"..i,false)) then
     		-- Clientside lights, yeah! Can be toggled by clients this causes much less lag when deactivated. Method below is from Catdaemon's harvester
 				local dlight = DynamicLight(self:EntIndex()..i);
-				if(dlight) then
-					dlight.Pos = self.Entity:GetNetworkedEntity("GateLights",self.Gate):LocalToWorld(self.LightPositions[i]);
+				local gate = self.Entity:GetNetworkedEntity("GateLights",self.Gate);
+				if(dlight and IsValid(gate)) then
+					dlight.Pos = gate:LocalToWorld(self.LightPositions[i]);
 					dlight.r = self.ChevronColor.r;
 					dlight.g = self.ChevronColor.g;
 					dlight.b = self.ChevronColor.b;

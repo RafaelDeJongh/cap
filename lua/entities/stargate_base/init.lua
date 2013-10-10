@@ -385,7 +385,7 @@ function ENT:SubFlicker(target)
 	if (not IsValid(self.Entity)) then return end
 	if(self.Entity:GetClass() == "stargate_universe")then
 	    self.EventHorizon:SetMaterial("sgu/effect_shock.vmt");
-	elseif(self.Entity:GetClass() == "stargate_infinity")then
+	elseif(self.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH)then
 	    self.EventHorizon:SetColor(Color(255,255,255,math.random(55,165)))
 	    self.EventHorizon:SetNWBool("Flicker",true);
 	else
@@ -399,7 +399,7 @@ function ENT:SubFlicker(target)
 	if (target) then
 		if(self.Target.Entity:GetClass() == "stargate_universe") then
 		    self.Target.EventHorizon:SetMaterial("sgu/effect_shock.vmt");
-		elseif(self.Target.Entity:GetClass() == "stargate_infinity") then
+		elseif(self.Target.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH) then
 	   		self.Target.EventHorizon:SetColor(Color(255,255,255,math.random(55,165)));
 	   		self.Target.EventHorizon:SetNWBool("Flicker",true);
 		else
@@ -413,7 +413,7 @@ function ENT:SubFlicker(target)
 	    if(IsValid(self.EventHorizon) and self.EventHorizon:IsOpen())then
 			if(self.Entity:GetClass() == "stargate_universe")then
 				self.EventHorizon:SetMaterial("sgu/effect_02.vmt");
-			elseif(self.Entity:GetClass() != "stargate_infinity")then
+			elseif(self.Entity:GetClass() != "stargate_infinity" or self.InfDefaultEH)then
 				self.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
 			elseif (self.Entity:GetClass()=="stargate_infinity") then
 				self.EventHorizon:SetNWBool("Flicker",false);
@@ -423,7 +423,7 @@ function ENT:SubFlicker(target)
 		    if (IsValid(self.Target) and self.Target:GetClass()!="stargate_supergate" and IsValid(self.Target.EventHorizon) and self.Target.EventHorizon:IsOpen()) then
 				if(self.Target.Entity:GetClass() == "stargate_universe")then
 					self.Target.EventHorizon:SetMaterial("sgu/effect_02.vmt");
-				elseif(self.Target.Entity:GetClass() != "stargate_infinity")then
+				elseif(self.Target.Entity:GetClass() != "stargate_infinity" or self.InfDefaultEH)then
 					self.Target.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
 				elseif (self.Entity:GetClass()=="stargate_infinity") then
 					self.Target.EventHorizon:SetNWBool("Flicker",false);

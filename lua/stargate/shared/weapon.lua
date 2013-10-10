@@ -19,37 +19,58 @@ if (SERVER) then
 		if(not ply:GetActiveWeapon():IsValid() or ply:IsTyping())then return end
    		local tr = ply:GetEyeTraceNoCursor();
    		local class = ply:GetActiveWeapon():GetClass();
-   		local ent = ents.Create(class);
-   		ent:SetPos(tr.StartPos+ply:GetAimVector()-Vector(0,0,5))
-   		ent:SetAngles(Angle(0,ply:EyeAngles().y,0))
-   		ent:Spawn()
-   		ent:Activate()
-		ent:PhysicsInit(SOLID_VPHYSICS)
-		ent:SetMoveType(MOVETYPE_VPHYSICS)
-		ent:SetSolid(SOLID_VPHYSICS);
-		ent.PhysFixEnt = true;
-   		local phys = ent:GetPhysicsObject()
-   		if (IsValid(phys)) then
-   			phys:Wake()
-   			phys:AddAngleVelocity(Vector(100,50,100))
-   			phys:SetVelocity(ply:GetAimVector()*Vector(250,250,0));
-   			ply:StripWeapon(class);
-   			-- this is fix for player touch
-     		local ent2 = ents.Create(class)
-     		ent2:PhysWake();
-			ent2:SetPos(tr.StartPos+ply:GetAimVector()-Vector(0,0,5))
-	   		ent2:SetAngles(Angle(0,ply:EyeAngles().y,0))
-	   		ent2:Spawn()
-	   		ent2:Activate()
-	   		ent2:SetParent(ent)
-	   		ent2:SetColor(Color(0,0,0,0))
-	   		ent2:SetRenderMode(RENDERMODE_TRANSALPHA)
-	   		ent2.PhysFixEnt = true;
-	   		ent.PhysFix = ent2;
-	   		timer.Simple(1.0,function() if IsValid(ent) then ent.PhysFixEnt = false end end);
+   		if (class=="sg_adrenaline") then -- don't know why, but it spawn ivnisible if use class
+   			local ent = ents.Create("sg_adrenaline_thrown");
+	   		ent:SetPos(tr.StartPos+ply:GetAimVector()-Vector(0,0,15))
+	   		ent:SetAngles(Angle(0,ply:EyeAngles().y,0))
+	   		ent:Spawn()
+	   		ent:Activate()
+			ent:PhysicsInit(SOLID_VPHYSICS)
+			ent:SetMoveType(MOVETYPE_VPHYSICS)
+			ent:SetSolid(SOLID_VPHYSICS);
+	   		local phys = ent:GetPhysicsObject()
+	   		if (IsValid(phys)) then
+	   			phys:Wake()
+	   			phys:AddAngleVelocity(Vector(100,50,100))
+	   			phys:SetVelocity(ply:GetAimVector()*Vector(250,250,0));
+	   			ply:StripWeapon(class);
+	   		else
+	   			ent:Remove();
+				ply:DropWeapon(ply:GetActiveWeapon())
+	   		end
    		else
-   			ent:Remove();
-			ply:DropWeapon(ply:GetActiveWeapon())
+   			local ent = ents.Create(class);
+	   		ent:SetPos(tr.StartPos+ply:GetAimVector()-Vector(0,0,5))
+	   		ent:SetAngles(Angle(0,ply:EyeAngles().y,0))
+	   		ent:Spawn()
+	   		ent:Activate()
+			ent:PhysicsInit(SOLID_VPHYSICS)
+			ent:SetMoveType(MOVETYPE_VPHYSICS)
+			ent:SetSolid(SOLID_VPHYSICS);
+			ent.PhysFixEnt = true;
+	   		local phys = ent:GetPhysicsObject()
+	   		if (IsValid(phys)) then
+	   			phys:Wake()
+	   			phys:AddAngleVelocity(Vector(100,50,100))
+	   			phys:SetVelocity(ply:GetAimVector()*Vector(250,250,0));
+	   			ply:StripWeapon(class);
+	   			-- this is fix for player touch
+	     		local ent2 = ents.Create(class)
+	     		ent2:PhysWake();
+				ent2:SetPos(tr.StartPos+ply:GetAimVector()-Vector(0,0,5))
+		   		ent2:SetAngles(Angle(0,ply:EyeAngles().y,0))
+		   		ent2:Spawn()
+		   		ent2:Activate()
+		   		ent2:SetParent(ent)
+		   		ent2:SetColor(Color(0,0,0,0))
+		   		ent2:SetRenderMode(RENDERMODE_TRANSALPHA)
+		   		ent2.PhysFixEnt = true;
+		   		ent.PhysFix = ent2;
+		   		timer.Simple(1.0,function() if IsValid(ent) then ent.PhysFixEnt = false end end);
+	   		else
+	   			ent:Remove();
+				ply:DropWeapon(ply:GetActiveWeapon())
+	   		end
    		end
 	end
 	concommand.Add("Drop_Weapon", Drop)

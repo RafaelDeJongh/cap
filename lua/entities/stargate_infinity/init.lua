@@ -182,6 +182,7 @@ function ENT:Initialize()
 	self:AddChevron();
 	self.IsConcept = false;
 	self.RingInbound = false;
+	self.InfDefaultEH = false;
 end
 
 --#################  Called when stargate_group_system changed
@@ -250,7 +251,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","SG1 Event Horizon");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -611,6 +612,20 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		else
 			self.RingInbound = false;
 			self.Entity:SetNWBool("ActSGCT",false);
+		end
+	elseif(k == "SG1 Event Horizon") then
+		if (v>=1) then
+			self.InfDefaultEH = true;
+			self.Entity:SetNWBool("ActInf_SG1_EH",true);
+			if (IsValid(self.EventHorizon)) then
+				self.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
+			end
+		else
+			self.InfDefaultEH = false;
+			self.Entity:SetNWBool("ActInf_SG1_EH",false);
+			if (IsValid(self.EventHorizon)) then
+				self.EventHorizon:SetMaterial("CoS/stargate/effect_02.vmt");
+			end
 		end
 	end
 end

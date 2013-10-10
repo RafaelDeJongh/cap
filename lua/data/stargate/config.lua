@@ -121,6 +121,11 @@ energy_capacity = 5000000
 # What is the ZPM's spawnlimit?
 limit = 3
 
+[naquadah_bottle]
+limit = 5
+capacity = 30000
+energy_capacity = 8000
+
 #### Zat'nik'tel config
 [zat]
 # Maximum size of an object or contraption to get dissolved?

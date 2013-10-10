@@ -114,6 +114,8 @@ weapon_misc_sodan = Устройство Невидимости Содан
 weapon_misc_gdo = Stargate GDO
 weapon_misc_nox = Руки Ноксов
 weapon_misc_nox_desc = Левый Клик: Открыть Меню набора Звёздных Врат, Правый Клик: Лечить друга.
+weapon_misc_adrenaline = Инжектор Адреналина
+weapon_misc_atl_medkit = Аптечка Атлантиды
 
 // Stools Cats
 stool_cat = Звёздные Врата
@@ -163,6 +165,7 @@ stool_atlantis_hub = Атлантис ZPM Hub
 stool_naq_gen = Наквадах Генератор MK1/MK2
 stool_sgc_hub = SGC ZPM Hub
 stool_zpm_mk3 = ZPM MK III
+stool_naq_bottle = Наквадах бутылка
 
 // Stool Names - Weapons
 stool_drones = Дроны

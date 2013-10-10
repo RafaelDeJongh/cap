@@ -41,6 +41,7 @@ function ENT:Initialize()
 	self:CreateWireOutputs("Can Fire","Shots Remaining");
 	self.Color = self.Color or Color(math.random(230,255),200,120,255);
 	self.Phys = self.Entity:GetPhysicsObject();
+	self.Explosion = false;
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(10);
@@ -111,6 +112,7 @@ function ENT:FireWeapon()
 	e.Owner = self;
 	e:Spawn();
 	e:Activate();
+	e.Explosion = self.Explosion;
 	e:SetColor(Color(self.Color.r, self.Color.g, self.Color.b,255));
 	self.NextFire = CurTime()+self.Delay;
 	self.Shots[e] = true;

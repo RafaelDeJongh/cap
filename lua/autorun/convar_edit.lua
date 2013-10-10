@@ -76,6 +76,7 @@ local cap_convars = {}
 		{"wraith_harvester", 1},
 		{"zpm_mk3", 6},
 		{"control_panel", 10},
+		{"naquadah_bottle", 5},
 	}
 
 	for _,val in pairs(convars) do
@@ -210,7 +211,7 @@ function Cap_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_sbox_08"), "cap_doors_contr", 10},
 		{SGLanguage.GetMessage("stargate_cap_sbox_09"), "cap_doors_frame", 10},
 		{SGLanguage.GetMessage("stargate_cap_sbox_10"), "cap_console", 50},
-		{SGLanguage.GetMessage("stool_controlpanel"), "control_panel", 10},
+		{SGLanguage.GetMessage("stool_controlpanel"), 	"control_panel", 10},
 		{SGLanguage.GetMessage("stargate_cap_sbox_11"), "drone_launcher", 2},
 		{SGLanguage.GetMessage("stargate_cap_sbox_12"), "floorchevron", 10},
 		{SGLanguage.GetMessage("stargate_cap_sbox_13"), "stargate_iris", 10},
@@ -230,6 +231,7 @@ function Cap_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_sbox_24"), "tollan_disabler", 2},
 		{SGLanguage.GetMessage("stargate_cap_sbox_25"), "wraith_harvester", 1},
 		{SGLanguage.GetMessage("stargate_cap_sbox_26"), "zpm_mk3", 6},
+		{SGLanguage.GetMessage("stool_naq_bottle"), 	"naquadah_bottle", 5},
 	}
 
 	CapConvarFrame = vgui.Create("DFrame");

@@ -192,7 +192,7 @@ function ENT:EHType()
 		self.Entity:SetModel("models/iziraider/supergate/eh.mdl")
 		self.Entity:SetPos(self.Entity:GetPos()-self.Entity:GetUp()*2375)
 	else
-	    if(class=="stargate_infinity")then
+	    if(class=="stargate_infinity" and not self:GetParent().InfDefaultEH)then
 	        self.Entity:SetMaterial("CoS/stargate/effect_02.vmt")
 	    end
 		self.Entity:SetModel(self.Model);

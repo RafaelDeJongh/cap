@@ -19,16 +19,24 @@ hook.Add("Think","StarGate.SodanCloaking.Think",
 					if(cloaked) then a = 255 end;
 				else
 					if(cloaked) then
+						/*if (p.__HasBeenCloaked==nil or p.__HasBeenCloaked==false) then
+							if (p.__SGCloakMaterial and p.__SGCloakMaterial!="models/effects/vol_light001") then
+								p.__SGCloakMaterial = p:GetMaterial();
+							end
+							p:SetMaterial("models/effects/vol_light001");
+						end*/
 						a = 0;
 						p.__HasBeenCloaked = true;
 					elseif(a == 0 and p.__HasBeenCloaked) then -- If he is uncloaked but still at 0 alpha, make him visible back again (Failsafe) - But do this only, if WE have cloaked him
 						a = 255;
 						p.__HasBeenCloaked = false;
+						--if (p.__SGCloakMaterial!=nil) then if (p.__SGCloakMaterial=="models/effects/vol_light001") then p:SetMaterial(""); else p:SetMaterial(p.__SGCloakMaterial); end end
 					end
 				end
 				p:SetRenderMode( RENDERMODE_TRANSALPHA )
 				p:SetColor(Color(r,g,b,a)); -- Cloak, lol
 				if(IsValid(weapon)) then
+					weapon:SetRenderMode( RENDERMODE_TRANSALPHA )
 					weapon:SetColor(Color(255,255,255,a)); -- Cloak his weapon too
 				end
 			end
@@ -78,10 +86,10 @@ hook.Add("PlayerFootstep","StarGate.SodanCloaking.PlayerFootStep",
 
 -- HACKY HACKY HACKY HACKY HACKY @aVoN
 -- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
-if(util.__TraceLine) then return end;
-util.__TraceLine = util.TraceLine;
+if(util._Sodan_TraceLine) then return end;
+util._Sodan_TraceLine = util.TraceLine;
 function util.TraceLine(...)
-	local t = util.__TraceLine(...);
+	local t = util._Sodan_TraceLine(...);
 	if(t and IsValid(t.Entity)) then
 		if(t.Entity:IsPlayer()) then
 			if(not LocalPlayer():GetNetworkedBool("pCloaked",false) and t.Entity:GetNWBool("pCloaked",false)) then t.Entity = NULL end;

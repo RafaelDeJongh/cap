@@ -21,3 +21,4 @@ sg_err_11 =[[ The custom fonts are not installed, you will have to download the 
 <br>
 <br>The reason why you need to download these fonts separated is that the GMA workshop file type doesn't function with custom fonts (Gmod bug).
 ]]
+sg_err_12 = Cap_resources folder is outdated!<br>Please update it.

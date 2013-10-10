@@ -159,7 +159,7 @@ hook.Add("KeyPress","StarGate.KeyPress.SendGateData",
 );
 
 local function StarGate_CloseAll(ply)
-	if (not ply:IsAdmin()) then ply:PrintMessage( HUD_PRINTCONSOLE, "Yor are not admin!"); return end
+	if (IsValid(ply) and not ply:IsAdmin()) then ply:PrintMessage( HUD_PRINTCONSOLE, "Yor are not admin!"); return end
 	timer.Simple(0.1,function()
 		for k,v in pairs(ents.FindByClass("stargate_*")) do
 			if (v.IsStargate) then
@@ -167,7 +167,11 @@ local function StarGate_CloseAll(ply)
 			end
 		end
 	end);
-	ply:PrintMessage( HUD_PRINTCONSOLE, "All gates closed! (not including blocked stargates by some devices)");
+	if (IsValid(ply)) then
+		ply:PrintMessage( HUD_PRINTCONSOLE, "All gates closed! (not including blocked stargates by some devices)");
+	else
+		print("All gates closed! (not including blocked stargates by some devices)");
+	end
 end
 concommand.Add("stargate_close_all",StarGate_CloseAll);
 

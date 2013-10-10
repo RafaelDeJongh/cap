@@ -5,5 +5,5 @@ stargate_settings_04 = Not: Yalnızca stargate vgui menüler ve diğer menüleri
 stargate_settings_05 = Eğer kendi dilini çevirmek istiyorsan:\n"ReadMe.html" Dosyasını oku.
 stargate_settings_06 = Görüntüleme Dilini Seç :
 stargate_settings_07 = Değişikler Yeniden Başlatılınca Aktif Olur.
-stargate_settings_08 = Türkçe Çeviri : Garry's Mod Türkiye Çeviri Ekibi : Ancients,Code-R,barisBQBQ,Mindex,Citron777
+stargate_settings_08 = Türkçe Çeviri : Garry's Mod Türkiye Çeviri Ekibi : Ancients(Alterans),Code-R,barisBQBQ,Mindex,Citron777
 
