@@ -223,25 +223,13 @@ if (CLIENT) then
 	        local p = LocalPlayer();
 
 			-- that checks mean if cap installed client-side
-			if (file.Exists("addons/cap/ver.txt","GAME") or StarGate.WorkShop and StarGate.InstalledOnClient()) then
+			if (StarGate.InstalledOnClient()) then
 		        -- AlexALX Stats, DO NOT EDIT --
-		        local cap_ver = 0;
-		        if (StarGate.WorkShop and not file.Exists("addons/cap/ver.txt","GAME")) then
-		        	cap_ver = StarGate.WorkShopVer;
-		        else
-			     	local fil = file.Read("addons/cap/ver.txt","GAME")
-					if fil then
-						local hddversion = tonumber(fil)
-						if hddversion then
-							cap_ver = hddversion;
-						end
-					end
-				end
 				local HTMLTest = vgui.Create("HTML");
 				HTMLTest:SetPos(0,0);
 				HTMLTest:SetSize(0, 0);
 				StarGate.GroupSystem = StarGate.GroupSystem or 1;
-				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..cap_ver.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()));
+				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()));
                 /* removed?
 				-- Llapp stats
 		        http.Fetch("http://www.sg-carterpack.com/libs/sid.php?id="..p:SteamID(), function(contents)

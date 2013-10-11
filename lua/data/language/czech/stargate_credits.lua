@@ -1,7 +1,7 @@
-﻿stargate_credits_01 = Kredity
+stargate_credits_01 = Kredity
 stargate_credits_02 = Tady můžete nahlašovat chyby. Pokuď nemůžete psát v  HTML-Formuláři, Navštivte webové stránky %s .
 stargate_credits_03 = Nelze určit poslední verzy. Zajistěte, že jste připojený k internetu, pokuď máte problém kontaktujte "Madman097"
-stargate_credits_04 = Nelze určit aktualní verzy. Stáhněte znovu "VER.txt" je v "addons/cap".
+stargate_credits_04 = Nelze určit aktualní verzy. Stáhněte znovu "cap_ver.lua" je v "addons/cap/lua/".
 stargate_credits_05 = Váš Carter's Pack Addon je aktualní na verzi
 stargate_credits_06 = Vaše verze: %d. Nejnovější verze: %d.
 stargate_credits_07 = Prosím aktualizujte Carter Pack pro nové funkce a méně chyb.

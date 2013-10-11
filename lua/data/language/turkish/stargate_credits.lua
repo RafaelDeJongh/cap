@@ -1,7 +1,7 @@
-﻿stargate_credits_01 = Yapımcı
+stargate_credits_01 = Yapımcı
 stargate_credits_02 = Burada, hata bildiriminde bulunabilirsiniz. Eğer HTML-formüllerle de yazamıyorsanız, ziyaret edin %s sizin webbrowser ile.
 stargate_credits_03 = Son Build belirlenemedi. Eğer internet bağlantından eminsen  Madman097 ile iletişim kurun.
-stargate_credits_04 = Geçerli Build belirlenemedi. file VER.txt Dosyasını kontrol edin Addons/CAP içinde.
+stargate_credits_04 = Geçerli Build belirlenemedi. file cap_ver.lua Dosyasını kontrol edin Addons/CAP/lua içinde.
 stargate_credits_05 = Senin Carter's Pack Addonun güncel.
 stargate_credits_06 = Senin Versionun: %d. Son Version: %d.
 stargate_credits_07 = Sorunları gidermek ve yenilikler için Carter's Pack'ı güncelleyin.

@@ -87,7 +87,7 @@ end
 
 function CAP_Outdated()
 	local addons = GetAddonList(true);
-	if (StarGate.HasInternet and (table.HasValue(addons,"cap") or table.HasValue(addons,"cap_resources") or table.HasValue(addons,"cap resources"))) then
+	if (StarGate.HasInternet and StarGate.InstalledOnClient()) then
 		local UpdateFrame = vgui.Create("DFrame");
 		UpdateFrame:SetPos(ScrW()-540, 100);
 		UpdateFrame:SetSize(440,130);

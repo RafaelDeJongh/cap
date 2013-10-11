@@ -276,11 +276,6 @@ function ENT:Cloak(e,b)
 								local color = e:GetActiveWeapon():GetColor();
 								e:GetActiveWeapon():SetColor(Color(color.r,color.g,color.b,alpha))
 								timer.Create(id.."matstart1",2.0,1,function() if IsValid(e) then e:GetActiveWeapon():SetMaterial( "models/effects/vol_light001" ) end end)
-								if ply:GetActiveWeapon():GetClass() == "gmod_tool" then
-									ply:DrawWorldModel( false ) -- tool gun has problems
-								else
-									ply:DrawWorldModel( true )
-								end
 							end
 						end
 						timer.Create(id.."matstart2",2.0,1,function() if IsValid(e) then e:SetMaterial( "models/effects/vol_light001" ) end end)

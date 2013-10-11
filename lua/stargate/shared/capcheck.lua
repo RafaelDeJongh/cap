@@ -16,16 +16,17 @@ for _,v in pairs(GetAddonList(true)) do
 	end
 end
 
-local cap_ver = 0;
+local cap_ver = StarGate.CapVer;
 local cap_res = 0;
-local cap_res_req = 21;
-if (not StarGate.WorkShop) then
-	local cap = file.Read("addons/cap/ver.txt","GAME")
-	if cap then cap_ver = tonumber(cap) end
-	if (file.Exists("lua/cap_res.lua","GAME")) then
-		cap_res = tonumber(file.Read("lua/cap_res.lua","GAME"));
-	end
+local cap_res_req = 0;
+
+if (file.Exists("lua/cap_res.lua","GAME")) then
+	cap_res = tonumber(file.Read("lua/cap_res.lua","GAME"));
 end
+if (file.Exists("lua/cap_res_req.lua","GAME")) then
+	cap_res_req = tonumber(file.Read("lua/cap_res_req.lua","GAME"));
+end
+
 local status = "Loaded";
 StarGate_Group.Error = false;
 StarGate_Group.ErrorMSG = {};
@@ -280,20 +281,20 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "You've got the Github version of cap_resources installed.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_10");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not table.HasValue( GetAddonList(true), "cap" ) or (not cap_installed and not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master") )) then
+	elseif (not Workshop_res_Installed() and (not table.HasValue( addonlist, "Carter Addon Pack" ) or not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and named the folders correctly.");
+		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<413 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<414 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "The addon version file is corrupt.\\nPlease remove and redownload the file cap/ver.txt.");
+		table.insert(StarGate_Group.ErrorMSG, "The addon version file is corrupt.\\nPlease remove and redownload the file cap/lua/cap_ver.lua.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_03");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" )) then
@@ -322,7 +323,7 @@ else
 		table.insert(StarGate_Group.ErrorMSG, "Please subscribe to all workshop addons to make CAP functional.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_09");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	end	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not cap_installed and not table.HasValue( GetAddonList(true), "cap_resources" ) and not table.HasValue( GetAddonList(true), "cap resources" ) and not table.HasValue( GetAddonList(true), "cap_resources-master" ) )) then
+	end	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -330,7 +331,23 @@ else
 		table.insert(StarGate_Group.ErrorMSG, "Please download all the resources from steam workshop collection or from github.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_05");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( GetAddonList(true), "cap" )) then
+	end if (not cap_installed and table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, "Cap_resources folder is outdated!\\nPlease update it.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_12");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	end if (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Resource pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_13");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( addonlist, "Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)

@@ -23,7 +23,7 @@
 --################# Header ###################
 StarGate.HTTP = {
 	BUGS = "http://sg-carterpack.com/forums/forum/support/",
-	VER = "https://raw.github.com/RafaelDeJongh/cap/master/ver.txt",
+	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
 	CREDITS = "http://sg-carterpack.com/wiki/"
@@ -47,17 +47,8 @@ function StarGate.Hook.GetInternetStatus(_,key)
     string.__todivide(key);
 	if(key ~= "+menu") then return end;
 	hook.Remove("PlayerBindPress","StarGate.Hook.GetInternetStatus");
-	if (not StarGate.WorkShop or file.Exists("addons/cap/ver.txt","GAME")) then
-		local fil = file.Read("addons/cap/ver.txt","GAME")
-		if fil then
-			local hddversion = tonumber(fil)
-			if hddversion then
-				StarGate.CURRENT_VERSION = hddversion;
-			end
-		end
-	else
-		StarGate.CURRENT_VERSION = StarGate.WorkShopVer;
-	end
+
+	StarGate.CURRENT_VERSION = StarGate.CapVer;
 
 	local installed = StarGate.InstalledOnClient();
 
@@ -166,12 +157,23 @@ net.Receive("stargate_systemtype",function(len)
 end);
 
 function StarGate.InstalledOnClient()
-	local addons = GetAddonList(true);
-	local ws_addons = {}
-	for _,v in pairs(engine.GetAddons()) do
-		if (v.mounted) then table.insert(ws_addons, v.title); end
+	local addonlist = {}
+	for _,v in pairs(GetAddonList(true)) do
+		for k,c in pairs(GetAddonInfo(v)) do
+			if (k == "Name") then
+				table.insert(addonlist, c);
+			end
+		end
 	end
-	if (table.HasValue(ws_addons,"Stargate Carter Addon Pack")) then return true end
-	if (table.HasValue(addons,"cap") or table.HasValue(addons,"cap_resources") or table.HasValue(addons,"cap resources") or table.HasValue(addons,"cap_resources-master")) then return true end
+	local ws_addonlist = {}
+	local cap_installed = false;
+	for _,v in pairs(engine.GetAddons()) do
+		if (v.mounted) then
+			table.insert(ws_addonlist, v.title);
+			if (v.title:find("Carter Addon Pack:")) then cap_installed = true end
+		end
+	end
+	if (table.HasValue(ws_addonlist,"Stargate Carter Addon Pack") or cap_installed) then return true end
+	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addons,"Carter Addon Pack - Resources")) then return true end
 	return false;
 end

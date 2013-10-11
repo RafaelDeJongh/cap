@@ -5,7 +5,7 @@ StarGate.CAP = true; -- for some scripts
 StarGate.Installed = true;
 StarGate.Loading = false;
 StarGate.WorkShop = false;
-StarGate.WorkShopVer = 411;
+StarGate.CapVer = 0;
 if(CLIENT and not game.SinglePlayer()) then
 	/* Probably this code isn't work anymore in gmod13, not sure */
 	if(file.Exists("lua_temp","GAME")) then -- On a ListenServer, lua_temp does not exists for the HOST
@@ -70,16 +70,24 @@ local function ValidToExecute(fl,state)
 	return true;
 end
 if (Gmod13Lib==nil) then include("a_gmod_beta.lua") end
+
+for _,v in pairs(engine.GetAddons()) do
+	if (v.mounted and v.title=="Stargate Carter Addon Pack") then
+		StarGate.Workshop = true;
+		break;
+	end
+end
+
+if (file.Exists("lua/cap_ver.lua","GAME")) then
+	StarGate.CapVer = tonumber(file.Read("lua/cap_ver.lua","GAME"));
+elseif(file.Exists("addons/cap/ver.txt","GAME")) then -- for old clients compatibility in mp
+	StarGate.CapVer = tonumber(file.Read("addons/cap/ver.txt","GAME"));
+elseif (StarGate.Workshop and CLIENT) then
+	StarGate.CapVer = 413; -- just for old workshop clients compatibility in mp, can be removed later
+end
+
 --################# Loads the libraries @aVoN
 function StarGate.Load()
-	local ver = 0;
-	if (StarGate.WorkShop and not file.Exists("addons/cap/ver.txt","GAME")) then
-		ver = StarGate.WorkShopVer;
-	else
-		local fil = file.Read("addons/cap/ver.txt","GAME")
-		if fil then ver = tonumber(fil) end
-	end
-
 	MsgN("=======================================================");
 	MsgN("Stargate Carter Addon Pack: Initializing");
 	if (StarGate.WorkShop) then
@@ -90,11 +98,11 @@ function StarGate.Load()
 	if (ver==0) then
 		MsgN("CAP Version: ERROR");
 	else
-		MsgN("CAP Version: "..ver);
+		MsgN("CAP Version: "..StarGate.CapVer);
 	end
 
 	-- Addons check
-	if (#file.Find("stargate/shared/capcheck.lua","LUA") >= 1) then
+	if (file.Exists("stargate/shared/capcheck.lua","LUA")) then
 		include("stargate/shared/capcheck.lua");
 	end
 

@@ -1,7 +1,7 @@
-﻿stargate_credits_01 = Készítők
+stargate_credits_01 = Készítők
 stargate_credits_02 = Here, you can report bugs. If you can't type in the HTML-Formulars, visit %s with your webbrowser.
 stargate_credits_03 = Nem lehet meghatározni az új verziót. Kösse vissza az internetet vagy lépjen kapcsolatba Madman097-el.
-stargate_credits_04 = Nem lehet meghatározni a jelenlegi verziót. Nézze meg hogy rendesen töltötte e le vagy frissítette a capot és hogy létezik e a VER.txt az addons/cap mappában.
+stargate_credits_04 = Nem lehet meghatározni a jelenlegi verziót. Nézze meg hogy rendesen töltötte e le vagy frissítette a capot és hogy létezik e a cap_ver.lua az addons/cap/lua mappában.
 stargate_credits_05 = A Carter's Pack Addon jelenlegi verziója
 stargate_credits_06 = A CAP jelenleg verziója: %d.Utolsó Verzió: %d.
 stargate_credits_07 = Kérem Frissítse a CAP-ját,hogy új funciói legyenek és kevesebb hiba.!
