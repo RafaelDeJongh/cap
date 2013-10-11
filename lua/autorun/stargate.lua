@@ -73,7 +73,7 @@ if (Gmod13Lib==nil) then include("a_gmod_beta.lua") end
 
 for _,v in pairs(engine.GetAddons()) do
 	if (v.mounted and v.title=="Stargate Carter Addon Pack") then
-		StarGate.Workshop = true;
+		StarGate.WorkShop = true;
 		break;
 	end
 end
