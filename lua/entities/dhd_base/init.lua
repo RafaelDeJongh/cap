@@ -278,16 +278,8 @@ function ENT:TriggerInput(k,v)
 				self:PressButton(char,_,true);
 			end
 		end
-	elseif (k == "Disable Ring Rotation") then
-		if (self:GetWire("Disable Ring Rotation",0) >= 1) then
-			self.DisRingRotate = true;
-			self.Entity:SetNWBool("DisRingRotate",true);
-		else
-			self.DisRingRotate = false;
-			self.Entity:SetNWBool("DisRingRotate",false);
-		end
-	elseif (k == "Slow Mode") then
-		if (self:GetWire("Slow Mode",0) >= 1) then
+	elseif (k == "Disable Ring Rotation" or k == "Slow Mode") then
+		if (v >= 1) then
 			self.DisRingRotate = true;
 			self.Entity:SetNWBool("DisRingRotate",true);
 		else

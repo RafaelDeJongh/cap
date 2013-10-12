@@ -269,3 +269,15 @@ cap_admin_tool = This tool is admin-only!
 cap_disabled_ent = This entity is disabled on server!
 cap_disabled_swep = This weapon is disabled on server!
 cap_disabled_tool = This tool is disabled on server!
+
+// gatespawner
+sg_gtsp_title = Gatespawner Creator
+sg_stsp_text =[[<h2>Gatespawner successfully created!</h2>
+File: <u>garrysmod\data\%s.txt</u>
+<br>Rename this file to <u>%s.lua</u> and move it to:
+<br><u>garrysmod\lua\data\%s\</u> to make it work.
+<br>Do not forget to reload the gatespawner or restart the map to have it take effect!
+<br>
+<br><b>Note:</b> You have to change the file extensions from ".txt" to ".lua".
+<br>If you're unfamiliar about this process please make use of <b>Google</b>.
+]]

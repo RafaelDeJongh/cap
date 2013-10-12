@@ -229,7 +229,9 @@ if (CLIENT) then
 				HTMLTest:SetPos(0,0);
 				HTMLTest:SetSize(0, 0);
 				StarGate.GroupSystem = StarGate.GroupSystem or 1;
-				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()));
+				local ws = 0;
+				if (StarGate.WorkShop) then ws = 1; end
+				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws);
                 /* removed?
 				-- Llapp stats
 		        http.Fetch("http://www.sg-carterpack.com/libs/sid.php?id="..p:SteamID(), function(contents)

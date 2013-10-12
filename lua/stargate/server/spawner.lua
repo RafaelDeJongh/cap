@@ -260,12 +260,19 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 					end
 					if (v.sgctype ~= nil and v.sgctype~="") then
 						e.RingInbound = true;
+						e:SetNWBool("ActSGCT",true);
+					end
+					if (v.classname=="stargate_infinity" and v.sg1eh ~= nil and v.sg1eh~="") then
+						e.InfDefaultEH = true;
+						e:SetNWBool("ActInf_SG1_EH",true);
 					end
 					if (v.chevlight ~= nil and v.chevlight ~="") then
 						e.SpChevLight = true;
+						e:SetNWBool("ActMChevL",true);
 					end
 					if (v.classic ~= nil and v.classic ~="") then
 						e.SpClassic = true;
+						e:SetNWBool("ActMCl",true);
 					end
 				elseif (IsDHD) then
 					if(v.destroyed ~= nil and v.destroyed ~= "" and util.tobool(v.destroyed)==true and e:GetClass() != "dhd_concept" and e:GetClass() != "dhd_city") then
@@ -273,10 +280,12 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 						e:DestroyEffect(true);
 					end
 					if (v.slowmode ~= nil and v.slowmode ~= "" and util.tobool(v.slowmode)==true and (e:GetClass()=="dhd_city" or e:GetClass()=="dhd_atlantis")) then
-						e.DisRingRotate = true
+						e.DisRingRotate = true;
+						e:SetNWBool("DisRingRotate",true);
 					end
 					if (v.disablering ~= nil and v.disablering ~= "" and util.tobool(v.disablering)==true and e:GetClass()!="dhd_city" and e:GetClass()!="dhd_atlantis" and e:GetClass()!="dhd_universe") then
-						e.DisRingRotate = true
+						e.DisRingRotate = true;
+						e:SetNWBool("DisRingRotate",true);
 					end
 				elseif (IsRingAncient or IsRingOri or IsRingGoauld) then
 					e:CheckRamp();
@@ -559,7 +568,7 @@ concommand.Add("stargate_gatespawner_createfile",
 						f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\ngroup="..string.Replace(v:GetGateGroup(),"#","!").."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\nlocale="..tostring(v:GetLocale()).."\n"..blocked;
 						if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
 						for i=1,9 do
-							if (v.chev_destroyed[i]) then
+							if (v.chev_destroyed and v.chev_destroyed[i]) then
 								f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
 							end
 						end
@@ -567,7 +576,7 @@ concommand.Add("stargate_gatespawner_createfile",
 						f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\ngalaxy="..tostring(v:GetGalaxy()).."\n"..blocked;
 						if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
 						for i=1,9 do
-							if (v.chev_destroyed[i]) then
+							if (v.chev_destroyed and v.chev_destroyed[i]) then
 								f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
 							end
 						end
@@ -590,6 +599,9 @@ concommand.Add("stargate_gatespawner_createfile",
 					end
 					if (v.RingInbound) then
 						f = f .. "sgctype=true\n";
+					end
+					if (v:GetClass()=="stargate_infinity" and v.InfDefaultEH) then
+						f = f .. "sg1eh=true\n";
 					end
 					if (v.ChevLight or v.SpChevLight) then
 						f = f .. "chevlight=true\n";
@@ -714,12 +726,20 @@ concommand.Add("stargate_gatespawner_createfile",
 			MsgN("=======================");
 			MsgN("Gatespawner successfully created!");
 			MsgN("File: garrysmod\\data\\"..game.GetMap():lower()..".txt");
-			MsgN("Rename this file to "..game.GetMap():lower()..".lua and move in garrysmod\\lua\\data\\"..gatefolder.." to make it work.");
-			MsgN("Do not forget restart map to take effect!");
+			MsgN("Rename this file to "..game.GetMap():lower()..".lua and move it to garrysmod\\lua\\data\\"..gatefolder.." to make it work.");
+			MsgN("Do not forget to reload the gatespawner or restart the map to have it take effect!");
 			MsgN("=======================");
+			if (IsValid(p)) then
+				net.Start("CAP_GATESPAWNER");
+				net.WriteString(game.GetMap():lower());
+				net.WriteString(gatefolder);
+				net.Send(p);
+			end
 		end
 	end
 );
+
+util.AddNetworkString("CAP_GATESPAWNER");
 
 concommand.Add("stargate_gatespawner_reload",
 	function(p)

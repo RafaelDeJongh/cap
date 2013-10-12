@@ -177,3 +177,97 @@ function StarGate.InstalledOnClient()
 	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addons,"Carter Addon Pack - Resources")) then return true end
 	return false;
 end
+
+net.Receive( "CAP_GATESPAWNER", function( length )
+	local map = net.ReadString();
+	local path = net.ReadString();
+
+	local TACFrame = vgui.Create("DFrame");
+	TACFrame:SetPos(ScrW()/2-400, 50);
+	TACFrame:SetSize(800,ScrH()-100);
+	--TACFrame:SetSize(Width, Height);
+	TACFrame:SetTitle(SGLanguage.GetMessage("sg_gtsp_title"));
+	TACFrame:SetVisible(true);
+	TACFrame:SetDraggable(true);
+	TACFrame:ShowCloseButton(true);
+	TACFrame:SetBackgroundBlur(false);
+	TACFrame:MakePopup();
+	--TACFrame:Center();
+	TACFrame.Paint = function()
+
+		// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
+		local matBlurScreen = Material( "pp/blurscreen" )
+
+		// Background
+		surface.SetMaterial( matBlurScreen )
+		surface.SetDrawColor( 255, 255, 255, 255 )
+
+		matBlurScreen:SetFloat( "$blur", 5 )
+		render.UpdateScreenEffectTexture()
+
+		surface.DrawTexturedRect( -ScrW()/10, -ScrH()/10, ScrW(), ScrH() )
+
+		surface.SetDrawColor( 100, 100, 100, 150 )
+		surface.DrawRect( 0, 0, ScrW(), ScrH() )
+
+		// Border
+		surface.SetDrawColor( 50, 50, 50, 255 )
+		surface.DrawOutlinedRect( 0, 0, TACFrame:GetWide(), TACFrame:GetTall() )
+
+		surface.SetDrawColor( 50, 50, 50, 255 )
+		surface.DrawRect( 20, 35, TACFrame:GetWide() - 40, TACFrame:GetTall() - 55 )
+
+	end
+
+	local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
+	MOTDHTMLFrame:SetPos( 25, 40 )
+	MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 65 )
+
+	local html = [[<html>
+	<head>
+	<style type='text/css'>
+		body {
+			background-color: #171717;
+			background-image: url(http://sg-carterpack.com/wp-content/uploads/2013/09/bg1.jpg);
+			background-repeat: repeat;
+			font-family: Verdana, Geneva, sans-serif;
+			color: #FFF;
+		}
+		a:link {
+			text-decoration: underline;
+			color: #e5e5e5;
+		}
+		a:visited {
+			text-decoration: underline;
+			color: #e5e5e5;
+		}
+		a:active {
+			text-decoration: underline;
+		}
+		a:hover {
+			text-decoration: underline;
+			color: #FFF;
+		}
+		#nav {
+			padding: 0px;
+			margin: 0px;
+			text-align: center;
+		}
+
+		#nav li {
+			display: inline-block;
+			list-style-type: none;
+
+		}
+	</style>
+	</head>
+	<body><hr><ul id="nav">
+		<li><a href="http://sg-carterpack.com/">Home</a> |</li>
+	    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
+	    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
+	    <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
+	</ul><hr>]]..SGLanguage.GetMessage("sg_stsp_text",map,map,path).."</body></html>";
+
+	MOTDHTMLFrame:SetHTML(html)
+
+end)
