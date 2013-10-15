@@ -74,7 +74,7 @@ local function gdopc_menuhook(len)
 			end
 		end
 
-		if not found then
+		if not found and code:GetValue():gsub("[^1-9]","")!="" and desc:GetValue()!="" then
 			codes[desc:GetValue()] = code:GetValue():gsub("[^1-9]","")
 			updateCodes()
 		end

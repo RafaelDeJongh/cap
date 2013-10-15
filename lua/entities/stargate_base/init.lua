@@ -90,6 +90,7 @@ function ENT:Initialize()
 	self.Jumped = false; -- FixJumping issues
 	self.Jumping = false; -- don't allow close while jumping
 	self.NoxDialingType = false;
+	self.NoxIrisReactivated = false;
 	self.Shutingdown = false;
 	self.Entity:SetUseType(SIMPLE_USE);
 	--################# Wire!

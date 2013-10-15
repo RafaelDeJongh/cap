@@ -33,7 +33,7 @@ StarGate.Trace:Add("shield_core_buble",
 					values[3]:SetNWEntity("SC_Owner", own);
 				end
 			end
-			if not (IsValid(own) and own:IsPlayer()) then return true end
+			if not IsValid(own) then return true end
 
 			if (table.HasValue(e.nocollide, own) or (e.Parent.Immunity and e.Parent.Owner == own)) then
 				return false
@@ -121,8 +121,8 @@ function ENT:GetTraceSize()
 	return self.Size;
 end
 
-function ENT:IsPlayerInShield()
-	for _,v in pairs(player.GetAll()) do
+function ENT:IsEntityInShield()
+	for _,v in pairs(ents.GetAll()) do
 		if StarGate.IsInShieldCore(v, self.Entity) then
 			table.insert(self.nocollide, v);
 			table.insert(self.nocollideID, v:EntIndex()); //tracelines
@@ -138,7 +138,7 @@ function ENT:Status(status)
 		self:DrawBubbleEffect(Vector(1,1,1), Vector(1,1,1), 1, false, false);
 		self:SetNotSolid(false);
 		self:SetNWBool("Enabled",true); // tracelines
-		self:IsPlayerInShield();
+		self:IsEntityInShield();
 		self:SetNWString("NoCollideID", string.Implode(" ", self.nocollideID)); // tracelines
 	else
 		self.nocollide = nil;

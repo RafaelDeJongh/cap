@@ -34,6 +34,7 @@ StarGate_Group.ErrorMSG_HTML = {};
 
 if (SERVER) then
 	util.AddNetworkString( "CAP_ERROR" );
+	util.AddNetworkString( "CL_CAP_ERROR" );
 end
 
 if (CLIENT) then
@@ -289,7 +290,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<416 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<417 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -390,8 +391,23 @@ else
 end
 Msg("--------------------------\n")
 
-function StarGate_Group.ShowError(ply)
-	for k,v in pairs(StarGate_Group.ErrorMSG) do
+if (SERVER) then
+	net.Receive("CL_CAP_ERROR",function(len,ply)
+		if (IsValid(ply) and ply:IsPlayer()) then
+			local tbl = {net.ReadTable(),net.ReadTable()};
+			StarGate_Group.ShowError(ply,tbl)
+		end
+	end)
+end
+
+function StarGate_Group.ShowError(ply,cl)
+	local ErrorMSG = StarGate_Group.ErrorMSG;
+	local ErrorMSG_HTML = StarGate_Group.ErrorMSG_HTML;
+	if (cl!=nil) then
+		ErrorMSG = cl[1];
+		ErrorMSG_HTML = cl[2];
+	end
+	for k,v in pairs(ErrorMSG) do
 		if (k==1) then
 			MsgN("================================");
 			MsgN("Carter Addon Pack Error:"); MsgN("-------");
@@ -415,7 +431,7 @@ function StarGate_Group.ShowError(ply)
 		ply:SendLua("MsgN(\"================================\")");
 		--ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Error, check your console\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		net.Start("CAP_ERROR");
-		net.WriteTable(StarGate_Group.ErrorMSG_HTML);
+		net.WriteTable(ErrorMSG_HTML);
 		net.Send(ply);
 	end
 end

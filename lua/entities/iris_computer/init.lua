@@ -107,7 +107,7 @@ function ENT:Think()
 		if iris:GetOwner() == self:GetOwner() then
 			if not gate.Outbound and (gate.IsOpen or gate.NewActive) then
 				if self.autoclose and not self.didclose then
-					if not iris.IsActivated then
+					if not iris.IsActivated and (not iris:IsBusy() or gate.NoxDialingType) then
 						iris:Toggle()
 						self.didclose = true	--We won't close the iris again until then next time the gate is active
 					end
@@ -120,11 +120,13 @@ function ENT:Think()
 		end
 
 		if not (gate.IsOpen or gate.NewActive) and self.didclose and iris.IsActivated then
-			self.didclose = false	--Resetting so we can autoclose again
-			iris:Toggle()		--Make this optional in the future?
+			if (not iris:IsBusy()) then
+				self.didclose = false	--Resetting so we can autoclose again
+				iris:Toggle()		--Make this optional in the future?
+			end
 		end
 
-		if self.didclose and not (gate.IsOpen or gate.NewActive) then
+		if self.didclose and not (gate.IsOpen or gate.NewActive) and not iris:IsBusy() then
 			self.didclose = false
 		end
 
@@ -220,8 +222,12 @@ local function ReceiveCodes(len, player)
 		local count = net.ReadInt(8)
 		local codes = {}
 		for i=1,count do
-        	codes[net.ReadString()] = net.ReadString()
+			local k,v = net.ReadString(),net.ReadString();
+			if (k!="" and v!="") then
+        		codes[k] = v
+        	end
 		end
+		print_r(codes);
 		ent.Codes = codes;
 	end
 end

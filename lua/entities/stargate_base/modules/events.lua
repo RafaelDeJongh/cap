@@ -204,11 +204,13 @@ function ENT:EmergencyShutdown(dont_clear_address,instant_stop)
 			self:RunActions(self.Sequence:DialFail(instant_stop)); -- Add dialfail sequence
 			if(IsValid(self.Target)) then
 				self.Target.NoxDialingType = false;
+				self.Target.NoxIrisReactivated = false;
 			end
 			self.OnButtLock = false;
 			self.Target = nil;
 			self.Dialling = false;
 			self.NoxDialingType = false;
+			self.NoxIrisReactivated = false;
 			if(not dont_clear_address) then
 				self.DialledAddress = {};
 			end
@@ -219,6 +221,7 @@ end
 
 function ENT:ResetVars()
 	self.NoxDialingType = false;
+	self.NoxIrisReactivated = false;
 	self:Close(ignore);
 	self.OnButtLock = false;
 	self.DialledAddress = {};
@@ -232,12 +235,14 @@ function ENT:DeactivateStargate(ignore)
 		if(IsValid(self.Target)) then
 			self.Target:Close(ignore);
 			self.Target.NoxDialingType = false;
+			self.Target.NoxIrisReactivated = false;
 			self.Target.OnButtLock = false;
 			self.Target.DialledAddress = {};
 			table.Empty(self.Target.DialledAddress);
 			self.Target.Target = nil;
 		end
 		self.NoxDialingType = false;
+		self.NoxIrisReactivated = false;
 		self:Close(ignore);
 		self.OnButtLock = false;
 		self.DialledAddress = {};
@@ -254,6 +259,7 @@ function ENT:ActivateStargate(inbound,fast)
 	 -- prepare power calculations, and check for energy
 	self:CheckConnection()
 	self.NoxDialingType = false;
+	self.NoxIrisReactivated = false;
 	if (self.HasRD and not self:CheckEnergy(true) and not self.Dialling and not inbound) then
 		local action = self.Sequence:New();
 		action = self.Sequence:DialFail(nil,true);

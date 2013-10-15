@@ -231,6 +231,18 @@ if (CLIENT) then
 				StarGate.GroupSystem = StarGate.GroupSystem or 1;
 				local ws = 0;
 				if (StarGate.WorkShop) then ws = 1; end
+				for _,v in pairs(engine.GetAddons()) do
+					if (v.mounted) then
+						if (v.title:find("Carter Addon Pack:")) then
+							if (ws==1) then
+								ws = 2;
+							else
+								ws = 3;
+							end
+							break;
+						end
+					end
+				end
 				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws);
                 /* removed?
 				-- Llapp stats

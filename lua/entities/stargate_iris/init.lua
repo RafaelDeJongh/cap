@@ -120,12 +120,21 @@ function ENT:HitIris(e,pos,velo)
 	end
 end
 
+function ENT:IsBusy()
+	if(self.NextAction <= CurTime()) then
+		return false;
+	end
+	return true;
+end
+
 --################# Activate @aVoN
 function ENT:Toggle(ignore_energy)
-	if(self.NextAction <= CurTime()) then
+	local gate = self:FindGate();
+	local reactivate = false;
+	if (IsValid(gate) and gate.NoxDialingType and not gate.NoxIrisReactivated) then gate.NoxIrisReactivated = true; reactivate = true; end
+	if(self.NextAction <= CurTime() or reactivate) then
 		local deactivate = false
 		if(self.HasRD and ignore_energy and self.Entity:GetModel() == "models/zup/stargate/sga_shield.mdl") then
-			local gate = self:FindGate();
 			if IsValid(gate) and gate.IsStargate and not gate:HaveEnergy(true,true) then deactivate = true end
 		end
 		if(self.IsActivated or deactivate) then

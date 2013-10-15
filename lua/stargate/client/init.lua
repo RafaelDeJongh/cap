@@ -22,7 +22,7 @@
 
 --################# Header ###################
 StarGate.HTTP = {
-	BUGS = "http://sg-carterpack.com/forums/forum/support/",
+	BUGS = "http://sg-carterpack.com/forum/support/",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
@@ -55,6 +55,13 @@ function StarGate.Hook.GetInternetStatus(_,key)
 	-- displaying warning message when user have dxlevel 81 or lower
 	if (installed and GetConVar("mat_dxlevel"):GetInt()<90) then
 		LocalPlayer():ConCommand("CAP_dxlevel");
+	end
+
+	if (installed and StarGate_Group.Error and not game.SinglePlayer()) then
+		net.Start("CL_CAP_ERROR");
+		net.WriteTable(StarGate_Group.ErrorMSG);
+		net.WriteTable(StarGate_Group.ErrorMSG_HTML);
+		net.SendToServer();
 	end
 
 	local mode = InternetCheck:GetString();
