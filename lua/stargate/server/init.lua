@@ -20,14 +20,24 @@ StarGate.Installed = true;
 --						Config System
 --#########################################
 
+if (not file.IsDir("stargate","DATA")) then
+	file.CreateDir("stargate","DATA");
+end
+
 --################# Loads the config @aVoN
 function StarGate.LoadConfig(p)
 	if(not p or p:IsAdmin() or game.SinglePlayer()) then
 		StarGate.CFG.SYNC = {}; -- They sync keys
 		-- Loads the config only ONE time and not always when I press "sent_reload" (Increases loading times)
 		if(not INIParser) then include("ini_parser.lua") end;
-		local ini = INIParser:new("lua/data/stargate/config.lua",false,true);
-		local custom_config = INIParser:new("lua/data/stargate/user_config.lua",false,true);
+		if (file.Exists("lua/data/stargate/config.lua","GAME")) then
+			file.Write("stargate/config.txt",file.Read("lua/data/stargate/config.lua","GAME"));
+		end
+		if (file.Exists("lua/data/stargate/how to create your own config.lua","GAME")) then
+			file.Write("stargate/how to create your own config.txt",file.Read("lua/data/stargate/how to create your own config.lua","GAME"));
+		end
+		local ini = INIParser:new("stargate/config.txt",false);
+		local custom_config = INIParser:new("stargate/user_config.txt",false);
 		-- Merge our custom config with the default one
 		if(custom_config) then
 			for node,datas in pairs(custom_config.nodes) do

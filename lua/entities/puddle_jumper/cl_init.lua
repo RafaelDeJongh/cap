@@ -30,13 +30,13 @@ if (StarGate==nil or StarGate.KeyBoard==nil) then return end
 local KBD = StarGate.KeyBoard:New("PuddleJumper")
 
 --Navigation
-KBD:SetDefaultKey("FWD","W") -- Forward
-KBD:SetDefaultKey("LEFT","A") -- Strafe Left
-KBD:SetDefaultKey("RIGHT","D") -- Strafe Right
-KBD:SetDefaultKey("BACK","S") -- Go backwards
-KBD:SetDefaultKey("UP","SPACE") -- Strafe Up
-KBD:SetDefaultKey("DOWN","CTRL") -- Strafe Down
-KBD:SetDefaultKey("SPD","SHIFT") --  Drive Pods
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A") -- Strafe Left
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D") -- Strafe Right
+KBD:SetDefaultKey("BACK",StarGate.KeyBoard.BINDS["+back"] or "S") -- Go backwards
+KBD:SetDefaultKey("UP",StarGate.KeyBoard.BINDS["+jump"] or "SPACE") -- Strafe Up
+KBD:SetDefaultKey("DOWN",StarGate.KeyBoard.BINDS["+duck"] or "CTRL") -- Strafe Down
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT") --  Drive Pods
 
 --Roll
 KBD:SetDefaultKey("RL","MWHEELDOWN") -- Roll left
@@ -44,8 +44,8 @@ KBD:SetDefaultKey("RR","MWHEELUP") -- Roll right
 KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset Roll
 
 --Attack
-KBD:SetDefaultKey("FIRE","MOUSE1") -- Fire Drones
-KBD:SetDefaultKey("TRACK","MOUSE2") -- Lock target on drones
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1") -- Fire Drones
+KBD:SetDefaultKey("TRACK",StarGate.KeyBoard.BINDS["+attack2"] or "MOUSE2") -- Lock target on drones
 
 --Special Actions
 KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset roll
@@ -66,7 +66,7 @@ KBD:SetDefaultKey("Z-","DOWNARROW") -- Change the zoom out
 KBD:SetDefaultKey("A+","LEFTARROW") -- View Go up
 KBD:SetDefaultKey("A-","RIGHTARROW") -- View go down
 
-KBD:SetDefaultKey("EXIT","E")
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E")
 
 ENT.Sounds={
 	Engine=Sound("jumper/JumperEngineLoop.wav"),

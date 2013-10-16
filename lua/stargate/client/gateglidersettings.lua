@@ -50,15 +50,15 @@ function StarGate.GateGliderSettings(Panel)
 				{"Reset Roll","RROLL"},
 			},
 		},
-		--[[
+
 		{
 			Name = "Combat",
 			Keys = {
-				{"Fire Drones","FIRE"},
-				{"Track Drones","TRACK"},
+				{"Primary attack","FIRE"},
+				--{"Track Drones","TRACK"},
 			},
 		},
-		]]--
+
 		{
 			Name = "Special Actions",
 			Keys = {

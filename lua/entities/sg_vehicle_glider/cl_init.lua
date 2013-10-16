@@ -13,14 +13,14 @@ if (StarGate==nil or StarGate.KeyBoard==nil) then return end
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("DeathGlider")
 --Navigation
-KBD:SetDefaultKey("FWD","W") -- Forward
-KBD:SetDefaultKey("SPD","SHIFT")
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT")
 --Roll
 KBD:SetDefaultKey("RL","MWHEELDOWN") -- Roll left
 KBD:SetDefaultKey("RR","MWHEELUP") -- Roll right
 KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset Roll
 --Attack
-KBD:SetDefaultKey("FIRE","MOUSE1") -- Fire blasts
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1") -- Fire blasts
 --Special Actions
 KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset roll
 KBD:SetDefaultKey("BOOM","BACKSPACE")
@@ -32,7 +32,7 @@ KBD:SetDefaultKey("A+","LEFTARROW")
 KBD:SetDefaultKey("A-","RIGHTARROW")
 KBD:SetDefaultKey("VIEW","1")
 
-KBD:SetDefaultKey("EXIT","E")
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E")
 
 function ENT:Initialize()
 	self.Dist=-850

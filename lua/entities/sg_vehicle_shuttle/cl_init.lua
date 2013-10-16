@@ -10,14 +10,14 @@ if (StarGate==nil or StarGate.KeyBoard==nil) then return end
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("Shuttle")
 --Navigation
-KBD:SetDefaultKey("FWD","W") -- Forward
-KBD:SetDefaultKey("SPD","SHIFT") --  Boost
-KBD:SetDefaultKey("UP","SPACE")
-KBD:SetDefaultKey("DOWN","CTRL")
-KBD:SetDefaultKey("LEFT","A")
-KBD:SetDefaultKey("RIGHT","D")
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT") --  Boost
+KBD:SetDefaultKey("UP",StarGate.KeyBoard.BINDS["+jump"] or "SPACE")
+KBD:SetDefaultKey("DOWN",StarGate.KeyBoard.BINDS["+duck"] or "CTRL")
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A")
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D")
 --Attack
-KBD:SetDefaultKey("FIRE","MOUSE1")
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1")
 --View
 KBD:SetDefaultKey("Z+","UPARROW")
 KBD:SetDefaultKey("Z-","DOWNARROW")
@@ -27,7 +27,7 @@ KBD:SetDefaultKey("A-","RIGHTARROW")
 KBD:SetDefaultKey("SHIELD","ALT")
 
 KBD:SetDefaultKey("BOOM","BACKSPACE")
-KBD:SetDefaultKey("EXIT","E")
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E")
 
 ENT.Sounds={
 	Engine=Sound("f302/f302_Engine.wav"),

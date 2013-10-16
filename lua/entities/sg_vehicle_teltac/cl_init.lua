@@ -13,20 +13,20 @@ if (StarGate==nil or StarGate.KeyBoard==nil) then return end
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("Teltac")
 --Navigation
-KBD:SetDefaultKey("FWD","W"); -- Forward
-KBD:SetDefaultKey("LEFT","A"); -- Forward
-KBD:SetDefaultKey("RIGHT","D"); -- Forward
-KBD:SetDefaultKey("BACK","S"); -- Forward
-KBD:SetDefaultKey("UP","SPACE"); -- Forward
-KBD:SetDefaultKey("DOWN","CTRL"); -- Forward
-KBD:SetDefaultKey("SPD","SHIFT");
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W"); -- Forward
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A"); -- Forward
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D"); -- Forward
+KBD:SetDefaultKey("BACK",StarGate.KeyBoard.BINDS["+back"] or "S"); -- Forward
+KBD:SetDefaultKey("UP",StarGate.KeyBoard.BINDS["+jump"] or "SPACE"); -- Forward
+KBD:SetDefaultKey("DOWN",StarGate.KeyBoard.BINDS["+duck"] or "CTRL"); -- Forward
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT");
 KBD:SetDefaultKey("LAND","ENTER");
 --Roll
 KBD:SetDefaultKey("RL","MWHEELDOWN"); -- Roll left
 KBD:SetDefaultKey("RR","MWHEELUP"); -- Roll right
 KBD:SetDefaultKey("RROLL","MOUSE3"); -- Reset Roll
 --Attack
-KBD:SetDefaultKey("FIRE","MOUSE1"); -- Fire blasts
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1"); -- Fire blasts
 --Special Actions
 KBD:SetDefaultKey("RROLL","MOUSE3"); -- Reset roll
 KBD:SetDefaultKey("BOOM","BACKSPACE");
@@ -41,7 +41,7 @@ KBD:SetDefaultKey("A+","LEFTARROW");
 KBD:SetDefaultKey("A-","RIGHTARROW");
 KBD:SetDefaultKey("FPV","1");
 
-KBD:SetDefaultKey("EXIT","E");
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E");
 
 
 function ENT:Initialize()

@@ -47,6 +47,12 @@ function StarGate.ShuttleSettings(Panel)
 			},
 		},
 		{
+			Name = "Combat",
+			Keys = {
+				{"Primary attack","FIRE"},
+			},
+		},
+		{
 			Name = "Special Actions",
 			Keys = {
 				{"Selfdestruct","BOOM"},

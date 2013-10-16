@@ -10,20 +10,20 @@ if (StarGate==nil or StarGate.KeyBoard==nil) then return end
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("GateGlider")
 --Navigation
-KBD:SetDefaultKey("FWD","W") -- Forward
-KBD:SetDefaultKey("LEFT","A")
-KBD:SetDefaultKey("RIGHT","D")
-KBD:SetDefaultKey("BACK","S")
-KBD:SetDefaultKey("UP","SPACE")
-KBD:SetDefaultKey("DOWN","CTRL")
-KBD:SetDefaultKey("SPD","SHIFT")
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A")
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D")
+KBD:SetDefaultKey("BACK",StarGate.KeyBoard.BINDS["+back"] or "S")
+KBD:SetDefaultKey("UP",StarGate.KeyBoard.BINDS["+jump"] or "SPACE")
+KBD:SetDefaultKey("DOWN",StarGate.KeyBoard.BINDS["+duck"] or "CTRL")
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT")
 --Roll
 KBD:SetDefaultKey("RL","MWHEELDOWN") -- Roll left
 KBD:SetDefaultKey("RR","MWHEELUP") -- Roll right
 KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset Roll
 --Attack
-KBD:SetDefaultKey("FIRE","MOUSE1")
-KBD:SetDefaultKey("TRACK","MOUSE2")
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1")
+KBD:SetDefaultKey("TRACK",StarGate.KeyBoard.BINDS["+attack2"] or "MOUSE2")
 --Special Actions
 KBD:SetDefaultKey("DHD","R")
 KBD:SetDefaultKey("BOOM","BACKSPACE")
@@ -34,7 +34,7 @@ KBD:SetDefaultKey("Z-","DOWNARROW")
 KBD:SetDefaultKey("A+","LEFTARROW")
 KBD:SetDefaultKey("A-","RIGHTARROW")
 
-KBD:SetDefaultKey("EXIT","E")
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E")
 
 ENT.Sounds={
 	Engine=Sound("glider/deathglideridleoutside.wav"),

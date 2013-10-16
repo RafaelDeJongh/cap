@@ -9,10 +9,10 @@ if (StarGate==nil or StarGate.MaterialCopy==nil or StarGate.KeyBoard==nil) then 
 local MAXDIST = 5000
 local KBD = StarGate.KeyBoard:New("MALP")
 --Navigation
-KBD:SetDefaultKey("FWD","W")
-KBD:SetDefaultKey("LEFT","A")
-KBD:SetDefaultKey("RIGHT","D")
-KBD:SetDefaultKey("BACK","S")
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W")
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A")
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D")
+KBD:SetDefaultKey("BACK",StarGate.KeyBoard.BINDS["+back"] or "S")
 KBD:SetDefaultKey("VIEW","1")
 
 KBD:SetDefaultKey("CAMUP","UPARROW")
