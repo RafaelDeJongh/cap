@@ -48,8 +48,8 @@ SWEP.Slot = 1;
 SWEP.SlotPos = 5;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
-SWEP.ViewModel = "models/weapons/v_pistol.mdl";
-SWEP.WorldModel = "models/weapons/w_pistol.mdl";
+SWEP.ViewModel = "models/weapons/c_arms_animations.mdl";
+SWEP.WorldModel = "models/Weapons/w_bugbait.mdl";
 
 -- primary.
 SWEP.Primary.ClipSize = -1;

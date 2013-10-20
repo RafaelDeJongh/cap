@@ -47,7 +47,7 @@ function ENT:Initialize()
 		umsg.Float(self.Scale)
 	umsg.End()
 
-	util.PrecacheModel("models/player/charple01.mdl")
+	util.PrecacheModel("models/player/charple.mdl")
 
 	--remove this ent after awhile
 	self.Entity:Fire("kill","",20)
@@ -69,7 +69,7 @@ function ENT:Initialize()
 				v:Fire("kill","","0.1")
 			elseif v:IsPlayer() then
 				if v:Alive() then
-					v:SetModel("models/player/charple01.mdl")
+					v:SetModel("models/player/charple.mdl")
 					v:Kill()
 				end
 			end
@@ -165,7 +165,7 @@ function ENT:Think()
 		if self.Rel < 5 then
 			if Damage >= 250  then
 				if v:IsPlayer() then --if we've hit a Player
-					v:SetModel("models/player/charple01.mdl") --burn it
+					v:SetModel("models/player/charple.mdl") --burn it
 					v:SetHealth(1)
 				elseif table.HasValue(self.GateList, class) then
 					if self.Scale > 30 then v:Remove();

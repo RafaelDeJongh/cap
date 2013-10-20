@@ -12,12 +12,18 @@ SWEP.Slot = 3
 SWEP.SlotPos = 3
 SWEP.DrawAmmo	= false
 SWEP.DrawCrosshair = true
-SWEP.ViewModel = "models/weapons/v_pistol.mdl"
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.ViewModel = "models/weapons/c_arms_animations.mdl"
+SWEP.WorldModel = "models/Weapons/w_bugbait.mdl"
 
 -- Lol, without this we can't use this weapon in mp on gmod13...
 if SERVER then
 	AddCSLuaFile("shared.lua");
+end
+
+if CLIENT then
+	if(file.Exists("materials/VGUI/weapons/malp.vmt","GAME")) then
+		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/malp");
+	end
 end
 
 -- primary.

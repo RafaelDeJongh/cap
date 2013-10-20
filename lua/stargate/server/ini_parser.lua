@@ -17,7 +17,7 @@
 */
 INIParser = {};
 -- ############## Loads an ini file (object) @ aVoN
-function INIParser:new(file_,no_autotrim,game_folder)
+function INIParser:new(file_,no_autotrim,game_folder,commtype)
 	local obj = {};
 	setmetatable(obj,self);
 	self.__index = function(t,n)
@@ -38,6 +38,7 @@ function INIParser:new(file_,no_autotrim,game_folder)
 	if(exists) then
 		obj.file = file_;
 		obj.notrim = no_autotrim;
+		obj.commtype = commtype;
 		if (game_folder) then
 			obj.content = file.Read(file_,"GAME"); -- Saves raw content of the file
 		else
@@ -55,6 +56,9 @@ end
 -- ############## Strips comments from a line(string) @ aVoN
 function INIParser:StripComment(line)
 	local found_comment = line:find("[;#]");
+	if (self.commtype) then
+		found_comment = line:find("[/][/]");
+	end
 	if(found_comment) then
 		line = line:sub(1,found_comment-1):Trim(); -- Removes any non neccessayry stuff
 	end
@@ -75,6 +79,9 @@ function INIParser:parse()
 	local cur_node_index = 1;
 	for k,v in pairs(exploded) do
 		local line = self:StripComment(v):gsub("\n",""):Trim();
+		if (line:sub(1,1):byte()==239) then
+			line = line:sub(4)
+		end
 		if(line ~= "") then -- Only add lines with contents (no commented lines)
 			if(line:sub(1,1) == "[") then -- Holy shit, it's a node
 				local node_end = line:find("%]");

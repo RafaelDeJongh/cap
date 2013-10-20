@@ -6,16 +6,6 @@ StarGate.Installed = true;
 StarGate.Loading = false;
 StarGate.WorkShop = false;
 StarGate.CapVer = 0;
-if(CLIENT and not game.SinglePlayer()) then
-	/* Probably this code isn't work anymore in gmod13, not sure */
-	if(file.Exists("lua_temp","GAME")) then -- On a ListenServer, lua_temp does not exists for the HOST
-		if(not file.Exists("lua_temp/autorun/stargate.lua","GAME")) then
-			-- We found out, that THIS script here is running but NOT existant in lua_temp. This can only mean, that the client has it installed but the server doesn't have it.
-			-- Therefore, set the gates as "NOT INSTALLED" and don't show the tools-tab
-			StarGate.Installed = false;
-		end
-	end
-end
 -- Only loads serverside files on server,clientside files on client, shared on both and vgui on client
 local function ValidToInclude(state)
 	return (state == "server" and SERVER) or ((state == "client" or state == "vgui") and CLIENT) or state == "shared";

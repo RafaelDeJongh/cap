@@ -39,7 +39,11 @@ function EFFECT:Render()
 	if(not IsValid(self.Parent)) then return end;
 	local multiply = (CurTime() - self.Created)/self.LifeTime
 	if(multiply > 0) then
-		self.Entity:SetPos(self.Parent:GetShootPos()+self.Parent:GetAimVector()*10);
+		if (self.Parent:IsNPC()) then
+			self.Entity:SetPos(self.Parent:GetPos());
+		else
+			self.Entity:SetPos(self.Parent:GetShootPos()+self.Parent:GetAimVector()*10);
+		end
 		local size = 280 + 200*(1-multiply);
 		self.Material:SetFloat("$refractamount", math.sin(multiply*math.pi)*0.16);
 		render.SetMaterial(self.Material);

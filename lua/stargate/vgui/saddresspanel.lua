@@ -297,8 +297,6 @@ end
 --###### SAddressPanel_Group.lua
 --##################################
 
-include("custom_groups.lua");
-
 local PANEL = {};
 PANEL.Images = Panel_Images;
 PANEL.Sounds = {

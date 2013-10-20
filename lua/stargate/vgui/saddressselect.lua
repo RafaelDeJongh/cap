@@ -835,8 +835,6 @@ function PANEL:PerformLayout()
 	self.VGUI.AbortDialImageButton:SetPos(w-20,2);
 end
 
-include("custom_groups.lua");
-
 --################# Get group/type name by AlexALX
 function PANEL:GetGroupName(g)
 	local name = SGLanguage.GetMessage("stargate_vgui_grpc")

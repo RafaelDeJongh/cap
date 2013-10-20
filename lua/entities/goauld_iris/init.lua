@@ -140,6 +140,7 @@ function ENT:HitEffect(e,pos,strength, side)
 end
 
 function ENT:DrawBuble(grow)
+	self.Entity:SetNWBool("StopBuble", true); -- update
 	self.Entity:SetNWBool("StopBuble", false);
 	-- should be delayed!
 	timer.Simple(0.1, function() if (IsValid(self)) then

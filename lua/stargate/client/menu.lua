@@ -458,7 +458,7 @@ end )
 
 --################# Adds the tab to the spawnmenu @aVoN
 function StarGate.Hook.AddToolTab()
-	if(not StarGate.Installed) then return end;
+	if(not StarGate.Installed or not StarGate.InstalledOnClient()) then return end;
 	-- Add Tab
 	-- local logo;
 	-- if(file.Exists("materials/gui/cap_logo","GAME")) then logo = "gui/cap_logo" end;

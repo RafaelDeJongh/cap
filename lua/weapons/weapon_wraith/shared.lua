@@ -19,6 +19,12 @@ if SERVER then
 	AddCSLuaFile("shared.lua");
 end
 
+if CLIENT then
+	if(file.Exists("materials/VGUI/weapons/wraith_hands.vmt","GAME")) then
+		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/wraith_hands.vmt")
+	end
+end
+
 SWEP.Primary.ClipSize = -1;
 SWEP.Primary.DefaultClip = -1;
 SWEP.Primary.Automatic = true;
@@ -62,10 +68,12 @@ end
 
 function SWEP:PrimaryAttack()
 	if( CurTime() < self.NextHit ) then return end
-	self.NextHit = ( CurTime() + 0.6 );
+	self.NextHit = ( CurTime() + 0.65 );
 
 	self.Owner:SetAnimation( PLAYER_ATTACK1 );
 	self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK_1 );
+
+	timer.Simple( 0.57, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
 
  	local tr = self.Owner:GetEyeTrace();
 	if tr.HitPos:Distance(self.Owner:GetShootPos()) <= 75 then
@@ -81,7 +89,8 @@ end
 
 function SWEP:SecondaryAttack()
 	if( CurTime() < self.NextHit ) then return end
-	self.NextHit = ( CurTime() + 0.5 );
+	self.NextHit = ( CurTime() + 0.55 );
+	timer.Simple( 0.47, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
 	timer.Simple(0.1, function()
 		if (IsValid(self)) then
 			self.Owner:SetAnimation( PLAYER_ATTACK1 );

@@ -10,6 +10,12 @@ if (SERVER) then
 	AddCSLuaFile("shared.lua");
 end
 
+if CLIENT then
+	if(file.Exists("materials/VGUI/weapons/sg_adrenaline.vmt","GAME")) then
+		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/sg_adrenaline.vmt")
+	end
+end
+
 SWEP.Author 		= "Gmod4phun, AlexALX"
 SWEP.Purpose		= "Heal yourself during a battle."
 SWEP.Instructions	= "Left click to heal yourself."

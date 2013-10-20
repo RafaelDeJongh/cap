@@ -174,16 +174,21 @@ end
 
 -----------------------------------DEATH----------------------------------
 
-function PlayerDeath_Stone(ply,a,b) -- What happen if one of connected player will die?
+function PlayerDeath_Stone(ply) -- What happen if one of connected player will die?
 	if ply.UsingStone then
 		local stone = ply.Stone
+		local ply2 = ply.Ply;
 		if IsValid(ply2) then
+			ply2.Ply = nil;
+			ply2:Kill();
+		end
+		if IsValid(stone) then
 			local tablet = stone.Tablet;
 			if IsValid(tablet) then tablet:Disconnect(stone); end
 		end
-
-		local ply2 = ply.Ply;
-		if IsValid(ply2) then ply2:Kill() end
+		ply.Ply = nil;
+		ply.Stone = nil;
+		ply.UsingStone = nil;
 	end
 end
 hook.Add( "PlayerDeath", "PlayerDeath_Stone", PlayerDeath_Stone )
@@ -246,6 +251,8 @@ function ENT:SwapPlayers(pl1,pl2)
 	for k,v in pairs(pl1:GetWeapons()) do table.insert(w1, v:GetClass()) end
 	local w2 = {};
 	for k,v in pairs(pl2:GetWeapons()) do table.insert(w2, v:GetClass()) end
+
+	if (not IsValid(pl1:GetActiveWeapon()) or not IsValid(pl2:GetActiveWeapon())) then return end
 
 	local aw1 = pl1:GetActiveWeapon():GetClass();
 	local aw2 = pl2:GetActiveWeapon():GetClass();

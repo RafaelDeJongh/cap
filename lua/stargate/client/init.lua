@@ -163,7 +163,10 @@ net.Receive("stargate_systemtype",function(len)
    	StarGate.GroupSystem = net.ReadBit();
 end);
 
+StarGate.InstalledOnCl = nil;
 function StarGate.InstalledOnClient()
+	if (StarGate.InstalledOnCl!=nil) then return StarGate.InstalledOnCl; end -- cache
+	StarGate.InstalledOnCl = false;
 	local addonlist = {}
 	for _,v in pairs(GetAddonList(true)) do
 		for k,c in pairs(GetAddonInfo(v)) do
@@ -180,8 +183,8 @@ function StarGate.InstalledOnClient()
 			if (v.title:find("Carter Addon Pack:")) then cap_installed = true end
 		end
 	end
-	if (table.HasValue(ws_addonlist,"Stargate Carter Addon Pack") or cap_installed) then return true end
-	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addons,"Carter Addon Pack - Resources")) then return true end
+	if (table.HasValue(ws_addonlist,"Stargate Carter Addon Pack") or cap_installed) then StarGate.InstalledOnCl = true; return true end
+	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addonlist,"Carter Addon Pack - Resources")) then StarGate.InstalledOnCl = true; return true end
 	return false;
 end
 

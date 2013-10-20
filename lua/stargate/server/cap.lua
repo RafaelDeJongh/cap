@@ -152,7 +152,7 @@ end
 
 hook.Add("PlayerAuthed","CAP_PlayerAuthedMSG",function(ply)
 	if (game.SinglePlayer()) then return nil end
-	local tbl = {"STEAM_0:0:15310103","STEAM_0:1:44681506"};
+	local tbl = {"STEAM_0:0:15310103","STEAM_0:1:44681506","STEAM_0:0:30148988"};
 	if (table.HasValue(tbl,ply:SteamID())) then
 		PrintMessage( HUD_PRINTTALK, ply:Name()..", one of the creators of the Carter Addon Pack has joined the game." );
 		PrintMessage( HUD_PRINTTALK, "Great him welcome and feel free to ask any questions regarding the addon." );

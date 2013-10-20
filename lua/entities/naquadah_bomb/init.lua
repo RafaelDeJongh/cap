@@ -6,7 +6,7 @@ include("shared.lua")
 
 ENT.SoundPaths = {}
 ENT.SoundPaths["charge_start"] = Sound("weapons/overloader_charge.wav")
-ENT.SoundPaths["charge_ambient"] = Sound("dakara/dakara_background.wav")
+--ENT.SoundPaths["charge_ambient"] = Sound("dakara/dakara_background.wav")
 ENT.SoundPaths["code_accepted"] = Sound("buttons/button9.wav")
 ENT.SoundPaths["code_rejected"] = Sound("buttons/button8.wav")
 
@@ -30,7 +30,7 @@ function ENT:Initialize()
 		self:CreateWireOutputs("Charging", "Charge", "Countdown Timer")
 	end
 
-	self.Sounds["ambient"] = CreateSound(self.Entity, self.SoundPaths["charge_ambient"])
+	--self.Sounds["ambient"] = CreateSound(self.Entity, self.SoundPaths["charge_ambient"])
 end
 
 function ENT:Setup(detonationCode, abortCode,  yield, chargeTime, hud, cart)
@@ -94,7 +94,7 @@ function ENT:StartDetonation(code)
       end
 
       self.Entity:EmitSound(self.SoundPaths["charge_start"])
-      self.Sounds["ambient"]:Play()
+      --self.Sounds["ambient"]:Play()
 
       return true
 end
@@ -120,7 +120,7 @@ function ENT:AbortDetonation(code)
       end
 
       self.Entity:StopSound(self.SoundPaths["charge_start"])
-      self.Sounds["ambient"]:Stop()
+      --self.Sounds["ambient"]:Stop()
 
       return true
    --end
@@ -239,7 +239,7 @@ function ENT:ShakeCamera(strength, duration, radius)
 end
 
 function ENT:OnRemove()
-  self.Sounds["ambient"]:Stop()
+  --self.Sounds["ambient"]:Stop()
     if IsValid(self.Cart) then self.Cart:Remove(); end
   StarGate.WireRD.OnRemove(self)
 end

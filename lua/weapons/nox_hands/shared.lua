@@ -8,8 +8,8 @@ if SERVER then
 	AddCSLuaFile("shared.lua");
 else
 	-- Inventory Icon
-	if(file.Exists("materials/VGUI/weapons/ring_inventory.vmt","GAME")) then
-		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/ring_inventory");
+	if(file.Exists("materials/VGUI/weapons/nox_hands.vmt","GAME")) then
+		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/nox_hands.vmt")
 	end
 	-- Kill Icon
 	if(file.Exists("materials/weapons/ring_killicon.vmt","GAME")) then
@@ -31,7 +31,7 @@ SWEP.Slot = 1;
 SWEP.SlotPos = 5;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
-SWEP.ViewModel = "";
+SWEP.ViewModel = "models/weapons/c_arms_animations.mdl";
 SWEP.WorldModel = "models/Weapons/w_bugbait.mdl";
 
 -- primary.

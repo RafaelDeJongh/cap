@@ -405,3 +405,44 @@ function StarGate.NotSpawnable(class,player,mode)
 	if ( StarGate.CFG:Get(mode.."_admin_only",class,false) && !player:IsAdmin() ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_admin_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
 	return false;
 end
+
+util.AddNetworkString("_SGCUSTOM_GROUPS");
+if (not file.Exists("stargate/custom_groups.txt","DATA") and file.Exists("lua/data/stargate/custom_groups.lua","GAME")) then
+	file.Write("stargate/custom_groups.txt",file.Read("lua/data/stargate/custom_groups.lua","GAME"))
+end
+
+StarGate.CUSTOM_GROUPS = {};
+StarGate.CUSTOM_TYPES = {};
+
+local ini = INIParser:new("stargate/custom_groups.txt",false,false,true);
+if(ini) then
+	if (ini.nodes.stargate_custom_groups and ini.nodes.stargate_custom_groups[1]) then
+		for k,v in pairs(ini.nodes.stargate_custom_groups[1]) do
+			StarGate.CUSTOM_GROUPS[k] = {v};
+		end
+	end
+	if (ini.nodes.stargate_custom_types and ini.nodes.stargate_custom_types[1]) then
+		for k,v in pairs(ini.nodes.stargate_custom_types[1]) do
+			if (v:find(" !SHARED")) then
+				StarGate.CUSTOM_TYPES[k] = {v:Replace(" !SHARED",""),1};
+			else
+				StarGate.CUSTOM_TYPES[k] = {v};
+			end
+		end
+	end
+
+	hook.Add("PlayerInitialSpawn","SG_INIT_CUSTOM_GROUPS",function(ply)
+		net.Start("_SGCUSTOM_GROUPS");
+		net.WriteTable(StarGate.CUSTOM_GROUPS);
+		net.WriteTable(StarGate.CUSTOM_TYPES);
+		net.Send(ply);
+	end)
+
+	-- if reload config
+	timer.Simple(1.0,function()
+		net.Start("_SGCUSTOM_GROUPS");
+		net.WriteTable(StarGate.CUSTOM_GROUPS);
+		net.WriteTable(StarGate.CUSTOM_TYPES);
+		net.Broadcast();
+	end)
+end

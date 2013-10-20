@@ -227,8 +227,6 @@ PANEL.Sounds = {
 	Info = Sound("buttons/button9.wav"),
 }
 
-include("custom_groups.lua");
-
 --################# Init @aVoN
 function PANEL:Init()
 	self:SetSize(440,160);

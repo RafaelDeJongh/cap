@@ -26,15 +26,25 @@ function ENT:Initialize()
 
 	self.ObeliskTable = {}
 	self.Range = 1000
-
+    /*
 	local CurrentToSend = true;
 	for _,v in pairs(ents.FindByClass("ancient_obelisk")) do
-		if (v != self.Entity) then
+		if (v != self) then
 			CurrentToSend = false;
 		end
 	end
 
-	if CurrentToSend then self.Entity:CreateTimer() end
+	if CurrentToSend then self.Entity:CreateTimer() end     */
+
+	-- now global timer, not anymore bugs with few times...
+	if (not timer.Exists("CAP_Obelisk_TeleportFunc")) then
+		timer.Create("CAP_Obelisk_TeleportFunc", 60, 0, function()
+			local obelisks = ents.FindByClass("ancient_obelisk")
+			if (obelisks and #obelisks>1) then
+				table.Random(obelisks):PrepareTeleport();
+			end
+		end)
+	end
 
 end
 
@@ -67,9 +77,11 @@ end
 
 -----------------------------------THINK----------------------------------
 
+/*
 function ENT:CreateTimer()
-	timer.Create(self.Entity:EntIndex().."TeleportFunc", 60, 1, function() if IsValid(self.Entity) then self:PrepareTeleport() end end)
+	timer.Create(self.Entity:EntIndex().."TeleportFunc", 5, 1, function() if IsValid(self.Entity) then self:PrepareTeleport() end end)
 end
+*/
 
 function ENT:PrepareTeleport()
 
@@ -78,13 +90,13 @@ function ENT:PrepareTeleport()
 	while (true) do -- well, be sure that target have stargates and its valid and adress is valid - no more manualy adres seting
 		self.Entity:FindObelisk()
 		self.TargetObelisk = table.Random(self.ObeliskTable)
-		if (not IsValid(self.TargetObelisk)) then self:CreateTimer(); return end
+		if (not IsValid(self.TargetObelisk)) then return end
 		self.TargetGate = self.TargetObelisk:FindGate();
-		if (not self.TargetGate) then self:CreateTimer(); return end
-		if (self.TargetGate.GateAddress != "") then break end
+		if (not IsValid(self.TargetGate)) then return end
+		if (self.TargetGate:GetGateAddress()!="") then break end
 	end
 
-	self.TargetObelisk:CreateTimer()
+	--self.TargetObelisk:CreateTimer()
 	self.PairGate = self.Entity:FindGate()
 	if not IsValid(self.PairGate) then return end -- if there is no gates near current obelisk, then say other obelisk to transport sg-1
 
@@ -116,9 +128,11 @@ end
 
 function ENT:PrepareTeleport2()
 	if IsValid(self.TargetObelisk) then --if obelisk isnt valid then go back to prepare, otherwise dial it!
-		self.PairGate:DialGate(self.TargetGate.GateAddress,true)
-		timer.Create(self.Entity:EntIndex().."TeleportEffect", 10, 1, function() if IsValid(self) then self:Teleport() end end)
-		self.TargetObelisk:CreateTimer()
+		if (IsValid(self.PairGate)) then
+			self.PairGate:DialGate(self.TargetGate.GateAddress,true)
+			timer.Create(self.Entity:EntIndex().."TeleportEffect", 10, 1, function() if IsValid(self) then self:Teleport() end end)
+		end
+		--self.TargetObelisk:CreateTimer()
 	else
 		self:PrepareTeleport();
 	end
@@ -126,7 +140,7 @@ end
 
 function ENT:Teleport()
 
-	if IsValid(self.Entity) and IsValid(self.TargetObelisk) then
+	if IsValid(self.Entity) and IsValid(self.TargetObelisk) and IsValid(self.TargetGate) then
 
 		local pos = self.Entity:GetPos();
 
@@ -138,21 +152,25 @@ function ENT:Teleport()
 
 		local deltayaw = self.PairGate:GetAngles().Yaw - self.TargetGate:GetAngles().Yaw
 
-		for _,v in pairs(ents.FindByClass("player*")) do
-			if IsValid(v) and v:IsPlayer() then
+		local function IsPlayerNPC(self,v)
+			if IsValid(v) and (v:IsPlayer() or v:IsNPC()) then
 
 				local dist = (pos - v:GetPos()):Length();
 				if (dist < self.Range) then
-
-					oldpos = self.PairGate:WorldToLocal(v:GetPos()) + Vector(0,0,5);
-					newpos = self.TargetGate:LocalToWorld(oldpos);
 
 					timer.Create("Transport"..v:EntIndex(), 0.5, 1, function()
 						if not IsValid(self.Entity) then return end
 						if not IsValid(v) then return end
 
+						oldpos = self.PairGate:WorldToLocal(v:GetPos()) + Vector(0,0,5);
+						newpos = self.TargetGate:LocalToWorld(oldpos);
+
 						v:SetPos(newpos);
-						v:SetEyeAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
+						if (not v:IsNPC()) then
+							v:SetEyeAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
+						else
+							v:SetAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
+						end
 
 						local fx3 = EffectData();
 							fx3:SetOrigin(v:GetShootPos()+v:GetAimVector()*10);
@@ -172,7 +190,14 @@ function ENT:Teleport()
 				end
 
 			end
+		end
 
+		for _,v in pairs(ents.FindByClass("player*")) do
+			IsPlayerNPC(self,v);
+		end
+
+		for _,v in pairs(ents.FindByClass("npc*")) do
+			IsPlayerNPC(self,v);
 		end
 
 	end
@@ -211,7 +236,7 @@ function ENT:FindGate()
 	local dist = 500;
 	local pos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate) then
+		if(v.IsGroupStargate and v:GetClass()!="stargate_orlin" and v:GetGateAddress()!="") then
 			local sg_dist = (pos - v:GetPos()):Length();
 			if(dist >= sg_dist) then
 				dist = sg_dist;

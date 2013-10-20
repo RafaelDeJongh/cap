@@ -199,24 +199,30 @@ function ENT:Teleport()
 
 		local deltayaw = self.Entity:GetAngles().Yaw - self.Target:GetAngles().Yaw
 
-		for _,v in pairs(ents.FindByClass("player*")) do
-			if IsValid(v) and v:IsPlayer() then
+		local function IsPlayerNPC(self,v)
+			if IsValid(v) and (v:IsPlayer() or v:IsNPC()) then
 
 				local dist = (pos - v:GetPos()):Length();
 				if (dist < self.Range) then
 
-					oldpos = self.Entity:WorldToLocal(v:GetPos()) + Vector(0,0,5);
-					newpos = self.Target:LocalToWorld(oldpos);
-
 					timer.Create("Transport"..v:EntIndex(), 0.5, 1, function()
-						if (IsValid(v)) then
-							v:SetPos(newpos);
+						if not IsValid(self.Entity) then return end
+						if not IsValid(v) then return end
+
+						oldpos = self.Entity:WorldToLocal(v:GetPos()) + Vector(0,0,5);
+						newpos = self.Target:LocalToWorld(oldpos);
+
+						v:SetPos(newpos);
+						if (not v:IsNPC()) then
 							v:SetEyeAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
-							local fx3 = EffectData();
-								fx3:SetOrigin(v:GetShootPos()+v:GetAimVector()*10);
-								fx3:SetEntity(v);
-							util.Effect("arthur_cloak",fx3,true);
+						else
+							v:SetAngles(v:GetAimVector():Angle() - Angle(0,deltayaw,0));
 						end
+
+						local fx3 = EffectData();
+							fx3:SetOrigin(v:GetShootPos()+v:GetAimVector()*10);
+							fx3:SetEntity(v);
+						util.Effect("arthur_cloak",fx3,true);
 					end)
 
 					local fx = EffectData();
@@ -231,7 +237,14 @@ function ENT:Teleport()
 				end
 
 			end
+		end
 
+		for _,v in pairs(ents.FindByClass("player*")) do
+			IsPlayerNPC(self,v);
+		end
+
+		for _,v in pairs(ents.FindByClass("npc*")) do
+			IsPlayerNPC(self,v);
 		end
 	end
 end

@@ -21,6 +21,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
+	self.Entity:SetUseType(SIMPLE_USE);
 
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
@@ -53,6 +54,9 @@ function ENT:Initialize()
 	self.IdleSound = self.IdleSound or CreateSound(self.Entity,self.Sounds.Idle);
 	self.IdleS = false;
 
+	--local sequence = self:LookupSequence("up_idle")
+	--self:ResetSequence(sequence)
+
 	self:Skins();
 end
 
@@ -65,7 +69,6 @@ function ENT:SpawnFunction(p,t)
 	e:SetAngles(ang);
 	e:DrawShadow(true);
 	e:SetVar("Owner",p);
-	e:SetUseType(SIMPLE_USE);
 	e:Spawn();
 	e:Activate();
 	return e;
@@ -338,6 +341,7 @@ function ENT:HubUnlink(ent)
 end
 
  function ENT:Use()
+
     local val = false;
     if((self.ZPM.IsValid and self.ZPM.Dist == 1)) then
 		val = true;
@@ -347,12 +351,18 @@ end
 		timer.Simple(1,function()
 			if (IsValid(self.Entity)) then
 				self.ZPM.Dir = 0;
+				--local sequence = self:LookupSequence("idle")
+				--self:ResetSequence(sequence)
+				--self:SetPlaybackRate(0.1) -- WHY NOT WORKING?!!!
 			end
 		end);
 	else
 		timer.Simple(1,function()
 			if (IsValid(self.Entity)) then
 				self.ZPM.Dir = 1;
+				--local sequence = self:LookupSequence("up_idle")
+				--self:ResetSequence(sequence)
+				--self:SetPlaybackRate(0.1) -- WHY NOT WORKING?!!!
 			end
 		end);
 	end
@@ -414,13 +424,19 @@ function ENT:PreEntityCopy()
 end
 
 function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
-	self.ZPM = Ent.EntityMods.ZPMs.ZPM;
-	if (Ent.EntityMods.ZPMs.ZPMid!=-1) then
-		self.ZPM.Ent = CreatedEntities[Ent.EntityMods.ZPMs.ZPMid]
-		self.ZPM.Ent:SetUseType(SIMPLE_USE);
-		self.ZPM.Ent.Use = function()
-			local constr = constraint.FindConstraint(self,"Weld");
-			constr.Entity[1].Entity:UseZPM(i);
+	if (Ent.EntityMods.ZPMs) then
+		self.ZPM = Ent.EntityMods.ZPMs.ZPM;
+		if (Ent.EntityMods.ZPMs.ZPMid!=-1) then
+			self.ZPM.Ent = CreatedEntities[Ent.EntityMods.ZPMs.ZPMid]
+			self.ZPM.Ent:SetUseType(SIMPLE_USE);
+			self.ZPM.Ent.Use = function()
+				local constr = constraint.FindConstraint(self,"Weld");
+				constr.Entity[1].Entity:UseZPM(i);
+			end
+			/*if (self.ZPM.Dir==0) then
+				local sequence = self:LookupSequence("idle")
+				self:ResetSequence(sequence)
+			end*/
 		end
 	end
 	StarGate.WireRD.PostEntityPaste(self,Player,Ent,CreatedEntities)

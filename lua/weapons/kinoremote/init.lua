@@ -180,9 +180,10 @@ function SWEP:EnterKino()
 	self.FOV = self.Owner:GetFOV()
 	self.StartPos = self.Owner:GetPos();
 	self:EmitSound(self.Sounds.TurnOn, 150);
-	self.Owner:Spectate( OBS_MODE_FIXED );
+	--self.Owner:Spectate( OBS_MODE_FIXED );
+	self.Owner:SetObserverMode( OBS_MODE_FIXED )
 	self.Owner:SetMoveType(MOVETYPE_OBSERVER);
-	self.Owner:SetPos(self.Owner:GetPos()-Vector(0,0,65));
+	--self.Owner:SetPos(self.Owner:GetPos()-Vector(0,0,65));
 	self.Owner:SetEyeAngles(self.KinoEntActive:GetAngles());
 	self.Owner:SetViewEntity(self.KinoEntActive)
 	self.Owner:SetNWEntity("Kino", self.KinoEntActive);
@@ -192,7 +193,7 @@ function SWEP:EnterKino()
 end
 
 function SWEP:ExitKino()
-	self.Owner:UnSpectate();
+	--self.Owner:UnSpectate();
 	self.Owner:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Owner:Spawn();
 	self.Owner:SetFOV(self.FOV,0.3);

@@ -74,9 +74,9 @@ end
 
 
 function ENT:OnRemove()
-	if self.Sounds.LoopSound then
-		self.Sounds.LoopSound:Stop();
-		self.Sounds.LoopSound = nil;
+	if self.LoopSound then
+		self.LoopSound:Stop();
+		self.LoopSound = nil;
 	end
 	if IsValid(self.Light) then
 		self.Light:Fire("TurnOn","","0");
@@ -143,9 +143,9 @@ function ENT:Use(ply)
 	if (IsValid(ply) and ply:IsPlayer()) then
 		if not self.Active then
 
-			self.Sounds.LoopSound = CreateSound(self.Entity, self.Sounds.Heal)
-			if self.Sounds.LoopSound then
-				self.Sounds.LoopSound:Play()
+			self.LoopSound = CreateSound(self.Entity, self.Sounds.Heal)
+			if self.LoopSound then
+				self.LoopSound:Play()
 			end
 
 			self.Entity:SetNWBool("healing", true);
@@ -163,8 +163,8 @@ function ENT:Use(ply)
 
 		else
 
-			if self.Sounds.LoopSound then
-				self.Sounds.LoopSound:FadeOut(2);
+			if self.LoopSound then
+				self.LoopSound:FadeOut(2);
 			end
 
 			self.Entity:SetNWBool("healing", false);

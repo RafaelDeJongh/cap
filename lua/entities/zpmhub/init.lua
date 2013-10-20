@@ -20,6 +20,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
+	self.Entity:SetUseType(SIMPLE_USE);
 
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
@@ -67,7 +68,6 @@ function ENT:SpawnFunction(p,t)
 	e:SetAngles(ang);
 	e:DrawShadow(true);
 	e:SetVar("Owner",p);
-	e:SetUseType(SIMPLE_USE);
 	e:Spawn();
 	e:Activate();
 	return e;
