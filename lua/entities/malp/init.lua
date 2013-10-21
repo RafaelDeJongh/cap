@@ -311,10 +311,11 @@ end
 
 function ENT:FirstPersonSpectate(p)
 	self.FOV = self.Controler:GetFOV()
-	self.Controler:Spectate( OBS_MODE_FIXED );
-	self.Controler:DrawViewModel(false)
+	--self.Controler:Spectate( OBS_MODE_FIXED );
+	self.Controler:SetObserverMode( OBS_MODE_FIXED )
+	--self.Controler:DrawViewModel(false)
 	self.Controler:SetMoveType(MOVETYPE_OBSERVER);
-	self.Controler:SetPos(self.Controler:GetPos()+Vector(0,0,-65));
+	--self.Controler:SetPos(self.Controler:GetPos()+Vector(0,0,-65));
 	self.Controler:SetNWEntity("MALP",self);
 	self.Controler:SetNWBool("FirstPerson",true)
 	self.Controler:SetEyeAngles(self.Camera:GetAngles()+Angle(0,180,0));
@@ -324,9 +325,9 @@ function ENT:FirstPersonSpectate(p)
 end
 
 function ENT:StopSpectate(p)
-	self.Controler:UnSpectate();
+	--self.Controler:UnSpectate();
 	self.Controler:SetMoveType(MOVETYPE_VPHYSICS);
-	self.Controler:DrawViewModel(true)
+	--self.Controler:DrawViewModel(true)
 	self.Controler:Spawn();
 	self.Controler:SetPos(self.OriginPos)
 	self.Controler:SetFOV(self.FOV,0.3);

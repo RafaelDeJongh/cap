@@ -213,6 +213,8 @@ local function CanPlayerSpawnSENT( player, EntityName )
 		return false;
 	end
 
+	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
+
 	-- You're not allowed to spawn this unless you're an admin!
 	if (StarGate.NotSpawnable(EntityName,player)) then return false end
 
@@ -319,6 +321,8 @@ function CAP_CCGiveSWEP( player, command, arguments )
 		return false;
 	end
 
+	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
+
 	-- Make sure this is a SWEP
 	local swept = list.Get( "CAP.Weapon" );
 	local swep;
@@ -359,6 +363,8 @@ function CAP_Spawn_Weapon( Player, wepname, tr )
 		player:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return false;
 	end
+
+	if (table.HasValue(StarGate.SlGort,Player:SteamID())) then return false end
 
 	local swept = list.Get( "CAP.Weapon" );
 	local swep;

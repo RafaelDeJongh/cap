@@ -436,7 +436,7 @@ function RingTickInfinity()
 				if (!need) then self:AbortDialling(); self.Ring.Moving = false; else
 					--need = need+3;
 					local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
-					if (stop) then
+					if (stop and not self.Shutingdown) then
 						self.Entity:ActivateRing(false,true);
 						self.Entity:DHDSetAllBusy();
 						self.Ring.Moving = false;

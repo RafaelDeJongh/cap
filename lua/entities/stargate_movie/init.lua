@@ -475,7 +475,7 @@ function RingTickMovie()
 					end
 					if (need<0) then need = need+360; end
 					local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
-					if (stop) then
+					if (stop and not self.Shutingdown) then
 						self.Entity:ActivateRing(false,false,true);
 						self.Entity:DHDSetAllBusy();
 						self.Ring.Moving = false;

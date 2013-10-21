@@ -141,6 +141,10 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		action:Add({f=self.ActivateGateSound,v={self,i},d=1.4});
 		action:Add({f=self.SpinFailChecker,v={self,true},d=0});
 
+		if (self.SpinSpeed==1) then
+			action:Add({f=self.StopAtStartPos,v={self,true},d=3.5}); -- Stop at Started Position
+		end
+
 		local delay = 0;
 		-- Chevron 1-9
 		--local rnd = {};

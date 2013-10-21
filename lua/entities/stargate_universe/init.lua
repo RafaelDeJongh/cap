@@ -412,7 +412,7 @@ function ENT:Rotation(sse)
 	local va = 24;
 	if(val > 0.5)then va = 25 end ;
 	local angEnt = math.floor((e:GetAngles().p + e:GetAngles().y + e:GetAngles().r - va) % 360);
-	if(angGate == angEnt and self.Stop)then
+	if(angGate == angEnt and self.Stop and spr >= speed4)then
 	    self:SetSpeed(false);
 	end
 	if(spr == 0 and self.Stop)then
@@ -504,7 +504,7 @@ function RingTickUniverse()
 				if (self.DiallingSymbol != "") then
 					if (self.SymbolsLock[tonumber(self.DiallingSymbol) or self.DiallingSymbol]==nil) then self:AbortDialling(); self.Gate.Moving = false; else
 						local x = tonumber(self.SymbolsLock[tonumber(self.DiallingSymbol) or self.DiallingSymbol][1]);
-						if (self:StopFormula(y,x,25,24)) then
+						if (self:StopFormula(y,x,25,24) and not self.Shutingdown) then
 							self:SetSpeed(false);
 							self.Entity:DHDSetAllBusy();
 							self.Gate.Moving = false;

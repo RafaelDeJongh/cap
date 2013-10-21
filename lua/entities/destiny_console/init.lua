@@ -15,6 +15,7 @@ ENT.Sounds = {
 	Butt3 = Sound("button/button_press3.wav"),
 	Butt4 = Sound("button/button_press4.wav"),
 	Alarm = Sound("alarm/destiny_alarm.wav"),
+	Siren = Sound("alarm/destiny_siren.wav"),
 }
 
 ENT.ButtModels = {
@@ -204,13 +205,26 @@ function ENT:TriggerInput(variable, value)
 	elseif (variable == "H") then self.Entity:SetNetworkedInt("ValueH",value)
 
 	elseif (variable == "Alarm") then
-			if (value>0) then
+			if (value==1) then
+				if (self.SNDAlarm2) then
+					self.SNDAlarm2:Stop();
+				end
 		        self.SNDAlarm = CreateSound(self.Entity, self.Sounds.Alarm);
         		self.SNDAlarm:Play();
 				self.SNDAlarm:ChangeVolume(100,0.1);
+	    	elseif (value>1) then
+				if (self.SNDAlarm) then
+					self.SNDAlarm:Stop();
+				end
+		        self.SNDAlarm2 = CreateSound(self.Entity, self.Sounds.Siren);
+        		self.SNDAlarm2:Play();
+				self.SNDAlarm2:ChangeVolume(100,0.1);
 	    	else
 				if (self.SNDAlarm) then
 					self.SNDAlarm:Stop();
+				end
+				if (self.SNDAlarm2) then
+					self.SNDAlarm2:Stop();
 				end
 	    	end
 	end
