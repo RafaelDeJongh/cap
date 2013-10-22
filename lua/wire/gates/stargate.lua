@@ -23,7 +23,7 @@ GateActions["SetAddress"] = {
 	name = "Set atargate address",
 	inputs = { "Ent", "Address", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Address, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetGateAddress(Address) end
 	end
@@ -48,7 +48,7 @@ GateActions["SetGroup"] = {
 	name = "Set stargate group",
 	inputs = { "Ent", "Group", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Group, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetGateGroup(Group) end
 	end
@@ -72,7 +72,7 @@ GateActions["SetName"] = {
 	name = "Set stargate name",
 	inputs = { "Ent", "Name", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetGateName(Group) end
 	end
@@ -96,7 +96,7 @@ GateActions["SetPrivate"] = {
 	name = "Set stargate private",
 	inputs = { "Ent", "Private", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Private, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetPrivate(Private) end
 	end
@@ -120,7 +120,7 @@ GateActions["SetLocale"] = {
 	name = "Set stargate local",
 	inputs = { "Ent", "Locale", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Locale, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetLocale(Locale) end
 	end
@@ -144,7 +144,7 @@ GateActions["SetBlocked"] = {
 	name = "Set stargate blocked",
 	inputs = { "Ent", "Blocked", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Blocked, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetBlocked(Blocked) end
 	end
@@ -168,9 +168,111 @@ GateActions["SetGalaxy"] = {
 	name = "Set stargate galaxy",
 	inputs = { "Ent", "Galaxy", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Galaxy, Set)
 		if !IsValid(Ent) or !Ent.IsStargate then return "" elseif Set>0 then return Ent:SetGalaxy(Galaxy) end
+	end
+}
+
+GateActions["IsOverload"] = {
+	name = "Get stargate overload status",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsStargate then
+			return 0
+		else
+			if (Ent.isOverloading) then
+				return 2
+			end
+			if (IsValid(Ent.overloader) and Ent.overloader.isFiring) then
+				return 1
+			else
+				return 0
+			end
+		end
+	end,
+	label = function(Out)
+		return string.format ("Overload = %q", Out)
+	end
+}
+
+GateActions["OverloadPerc"] = {
+	name = "Get stargate overload percent status",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsStargate then
+			return 0
+		else
+			if (Ent.excessPower==nil or Ent.excessPowerLimit==nil) then return 0; end
+			local perc = (Ent.excessPower/Ent.excessPowerLimit)*100;
+			if (perc>100) then return 100; end
+			return perc;
+		end
+	end,
+	label = function(Out)
+		return string.format ("Overload percent = %q", Out)
+	end
+}
+
+GateActions["OverloadTime"] = {
+	name = "Get stargate time to overload",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsStargate then
+			return 0
+		else
+			if (Ent.excessPower==nil or Ent.excessPowerLimit==nil or not IsValid(Ent.overloader)) then return -1; end
+			local energyRequired = Ent.excessPowerLimit - Ent.excessPower;
+			local timeLeft = (energyRequired / Ent.overloader.energyPerSecond)
+			if(StarGate.IsIrisClosed(Ent)) then
+				timeLeft = timeLeft * 2;
+			end
+			if (Ent.isOverloading) then
+				return 0;
+			end
+			if (Ent.overloader.isFiring) then
+				return math.ceil(timeLeft);
+			else
+				return -1
+			end
+			return perc;
+		end
+	end,
+	label = function(Out)
+		return string.format ("Overload time = %q", Out)
+	end
+}
+
+
+
+GateActions["IsAsuranBeam"] = {
+	name = "Get stargate asuran gate weapon status",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsStargate then
+			return 0
+		else
+			if (IsValid(Ent.asuranweapon) and Ent.asuranweapon.isFiring) then
+				return 1
+			else
+				return 0
+			end
+		end
+	end,
+	label = function(Out)
+		return string.format ("Asuran Beam = %q", Out)
 	end
 }
 
@@ -272,7 +374,7 @@ GateActions["SetRingAddress"] = {
 	name = "Set ring address",
 	inputs = { "Ent", "Address", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Address, Set)
 		if !IsValid(Ent) or !Ent.IsRings then return "" elseif Set>0 then return Ent:SetRingAddress(Address) end
 	end
@@ -317,7 +419,7 @@ GateActions["SetAtlantisTPName"] = {
 	name = "Set atlantis transporter name",
 	inputs = { "Ent", "Name", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
 		if !IsValid(Ent) or !Ent.IsAtlTP then return "" elseif Set>0 then return Ent:SetAtlName(Name,true) end
 	end
@@ -341,7 +443,7 @@ GateActions["SetAtlantisTPPrivate"] = {
 	name = "Set atlantis transporter private",
 	inputs = { "Ent", "Private", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
-	outputs = {},
+	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
 		if !IsValid(Ent) or !Ent.IsAtlTP then return "" elseif Set>0 then return Ent:SetAtlPrivate(Private) end
 	end

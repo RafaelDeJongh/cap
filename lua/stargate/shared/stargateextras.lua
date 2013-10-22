@@ -1,7 +1,7 @@
 StarGate.CYCLE_INTERVAL = 0.2 -- Number of seconds between Think() calls
-StarGate.COOLING_PER_CYCLE = 300 -- Amount of heat lost by a stargate per Think cycle
-StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY = 580000
-StarGate.STARGATE_DEFAULT_ENERGY_DRAIN = StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY / 2280 * StarGate.CYCLE_INTERVAL
+--StarGate.COOLING_PER_CYCLE = 300 -- Amount of heat lost by a stargate per Think cycle
+--StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY = 580000
+--StarGate.STARGATE_DEFAULT_ENERGY_DRAIN = StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY / 2280 * StarGate.CYCLE_INTERVAL
 
 function StarGate.IsEntityValid(entity)
    return IsValid(entity)

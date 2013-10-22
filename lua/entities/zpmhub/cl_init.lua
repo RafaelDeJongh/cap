@@ -115,11 +115,14 @@ function ENT:Draw()
             surface.SetFont("center");
 
     	    draw.DrawText("SGA HUB", "header", ScrW() / 2 + 58 + w, ScrH() / 2 +41 - h, Color(0,255,255,255),0);
-            draw.DrawText("Status", "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +65 - h, Color(209,238,238,255),0);
-		    draw.DrawText("Energy", "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +115 - h, Color(209,238,238,255),0);
-		    draw.DrawText("Capacity", "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +165 - h, Color(209,238,238,255),0);
+    	    if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+            	draw.DrawText(SGLanguage.GetMessage("hud_status"), "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +65 - h, Color(209,238,238,255),0);
+		    	draw.DrawText(SGLanguage.GetMessage("hud_energy"), "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +115 - h, Color(209,238,238,255),0);
+		    	draw.DrawText(SGLanguage.GetMessage("hud_capacity"), "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +165 - h, Color(209,238,238,255),0);
 
-			draw.DrawText("Capacities", "zpmheader", ScrW() / 2 + 180 + w, ScrH() / 2 +45 - h, Color(209,238,238,255),0);
+		    	draw.DrawText(SGLanguage.GetMessage("hud_capacities"), "zpmheader", ScrW() / 2 + 180 + w, ScrH() / 2 +45 - h, Color(209,238,238,255),0);
+		    end
+
 			draw.DrawText("ZPM 1", "center", ScrW() / 2 + 180 + w, ScrH() / 2 +65 - h, Color(209,238,238,255),0);
 		    draw.DrawText("ZPM 2", "center", ScrW() / 2 + 180 + w, ScrH() / 2 +115 - h, Color(209,238,238,255),0);
 		    draw.DrawText("ZPM 3", "center", ScrW() / 2 + 180 + w, ScrH() / 2 +165 - h, Color(209,238,238,255),0);
@@ -144,7 +147,9 @@ function ENT:Draw()
 			if(tonumber(zpm2)>0 and zpm2 != nil)then zpm2 = string.format("%G",zpm2) end;
 			if(tonumber(zpm3)>0 and zpm3 != nil)then zpm3 = string.format("%G",zpm3) end;
 
-	        draw.SimpleText(add, "center", ScrW() / 2 + 40 + w, ScrH() / 2 +85 - h, color,0);
+            if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+	        	draw.SimpleText(SGLanguage.GetMessage("hud_sts_"..add:lower()), "center", ScrW() / 2 + 40 + w, ScrH() / 2 +85 - h, color,0);
+	        end
 	        draw.SimpleText(tostring(eng), "center", ScrW() / 2 + 40 + w, ScrH() / 2 +135 - h, Color(255,255,255,255),0);
 	        draw.SimpleText(tostring(perc).."%", "center", ScrW() / 2 + 40 + w, ScrH() / 2 +185 - h, Color(255,255,255,255),0);
 

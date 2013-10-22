@@ -1,3 +1,6 @@
+StarGate.STARGATE_DEFAULT_ENERGY_CAPACITY = StarGate.CFG:Get("gate_overloader","energyCapacity",580000)
+StarGate.COOLING_PER_CYCLE = StarGate.CFG:Get("gate_overloader","coolingPerCycle",300)
+
 -- Registers an entity with the system
 function StarGate.RegisterWithDamageSystem(entity)
    if(CombatDamageSystem) then

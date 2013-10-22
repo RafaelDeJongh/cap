@@ -281,3 +281,15 @@ sg_stsp_text =[[<h2>Gatespawner успешно создан!</h2>
 <br><b>Примечание:</b> Вы должны изменить расширение файла из ".txt" в ".lua".
 <br>Если вы не знакомы с этим процессом, пожалуйста, воспользуйтесь <b>Google</b>.
 ]]
+
+// huds
+hud_status = Статус
+hud_energy = Енергия
+hud_capacity = Мощность
+hud_capacities = Мощность
+hud_naquadah = Наквадах
+hud_sts_active = Активный
+hud_sts_inactive = Неактивный
+hud_sts_connected = Подключено
+hud_sts_disconnected = Отключено
+hud_sts_depleted = Исчерпано

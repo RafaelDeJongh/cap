@@ -281,3 +281,15 @@ File: <u>garrysmod\data\%s.txt</u>
 <br><b>Note:</b> You have to change the file extensions from ".txt" to ".lua".
 <br>If you're unfamiliar about this process please make use of <b>Google</b>.
 ]]
+
+// huds
+hud_status = Status
+hud_energy = Energy
+hud_capacity = Capacity
+hud_capacities = Capacities
+hud_naquadah = Naquadah
+hud_sts_active = Active
+hud_sts_inactive = Inactive
+hud_sts_connected = Connected
+hud_sts_disconnected = Disconnected
+hud_sts_depleted = Depleted

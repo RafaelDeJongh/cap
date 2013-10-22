@@ -240,7 +240,8 @@ classnames = cloaking,shield,physgun_beam,Beam_Drawer,predicted_viewmodel,player
 #### Black hole config
 [black_hole]
 amount = 500000
-resources = energy,coolant,air,water,steam,heavy water,ammo_basic,ammo_explosion,ammo_fuel,ammo_pierce,ammo_basic,terrajuice,titanium,redterracrystal,greenterracrystal
+resources = energy,oxygen,nitrogen,water,steam,heavy water,hydrogen,carbon dioxide,liquid nitrogen,hot liquid nitrogen,methane,propane,deuterium,tritium
+disallow = info_player_start,physgun_beam,predicted_viewmodel,black_hole_power,env_sprite,stargate_supergate
 
 #### Naquadah generator mk1
 [naq_gen_mk1]
@@ -281,13 +282,20 @@ menu = true
 # These entity types are disallowed to teleportation
 classnames = physgun_beam, gmod_ghost
 
+#### Stargate Overloader
+# energyCapacity less value - faster overload, higher value = slower overload
+# energyPerSecond - how much drain energy
+# coolingPerCycle - how fast gate cooling
+[gate_overloader]
+energyCapacity = 580000
+coolingPerCycle = 300
+
 # Admin-only ents
 [ent_admin_only]
 ag_3 = true
 black_hole_power = true
 dakara_building = true
 horizon = true
-ori_satellite = true
 sg_turret_destmain = true
 sg_turret_tollan = true
 sg_vehicle_daedalus = true

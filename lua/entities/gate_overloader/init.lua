@@ -145,7 +145,7 @@ function ENT:Initialize()
     -- Set up wire inputs and outputs
 	if(self.HasWire) then
 		self:CreateWireInputs("Fire")
-		self:CreateWireOutputs("Energy", "Time")
+		self:CreateWireOutputs("Active", "Percent", "Energy", "Time")
 	end
 
 	-- The time when the USE key was last pressed on this entity
@@ -304,7 +304,6 @@ function ENT:Think()
       -- If there isn't enough energy left to power the beam for another second, stop firing
       if(energyAvailable < self.energyPerSecond) then
          self:StopFiring()
-         return false
       end
    end
 
@@ -322,10 +321,18 @@ function ENT:UpdateWireOutputs()
       local energyRequired = self.remoteGate.excessPowerLimit -
                              self.remoteGate.excessPower
       local timeLeft = (energyRequired / self.energyPerSecond)
-
+      if(StarGate.IsIrisClosed(self.remoteGate)) then
+      	timeLeft = timeLeft * 2;
+	  end
+      local perc = (self.remoteGate.excessPower/self.remoteGate.excessPowerLimit)*100;
       self:SetWire("Energy", energyRequired)
+      self:SetWire("Percent", perc)
       self:SetWire("Time", timeLeft)
+      self:SetWire("Active", 1)
    else
+   	  self:SetWire("Energy", 0)
+   	  self:SetWire("Percent", 0)
+      self:SetWire("Active", 0)
       self:SetWire("Time", -1)
    end
 end
@@ -621,14 +628,14 @@ function ENT:StopFiring()
 
    if(self.remoteGate && self.remoteGate:IsValid()) then
       StarGate.UnJamGate(self.remoteGate)
-      self.remoteGate:DeactivateStargate()
+      self.remoteGate:DeactivateStargate(true)
    end
 
    self.remoteGate = nil
 
    if(self.localGate && self.localGate:IsValid()) then
       StarGate.UnJamGate(self.localGate)
-      self.localGate:DeactivateStargate()
+      self.localGate:DeactivateStargate(true)
    else
       self.localGate = nil
    end
@@ -686,7 +693,7 @@ function ENT:HeatGate(gate)
    end  */
 
    -- If the gate can no longer hold any more energy, make it explode
-   if(gate.excessPower and gate.excessPowerLimit and gate.excessPower >= gate.excessPowerLimit && not self:FindAsuran(gate)) then
+   if(gate.excessPower and gate.excessPowerLimit and gate.excessPower >= gate.excessPowerLimit/* && not self:FindAsuran(gate)*/) then
       gate.isOverloading = true
 
       local overloadEffect = EffectData()
@@ -698,7 +705,7 @@ function ENT:HeatGate(gate)
 
    return true
 end
-
+   /*
 function ENT:FindAsuran(gat)
 	if (not IsValid(gat)) then return end
 	local pos = gat:GetPos();
@@ -721,7 +728,7 @@ function ENT:FindAsuran(gat)
 		end
 	end
 	return false;
-end
+end     */
 
 -- Causes the gate overloader to take the given damage
 function ENT:OnTakeDamage(damageInfo)

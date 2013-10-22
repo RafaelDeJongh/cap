@@ -28,6 +28,11 @@ function ENT:Initialize()
 		table.insert(self.Resources,v);
 	end
 
+	self.Disallow = {}
+	for _,v in pairs(StarGate.CFG:Get("black_hole","disallow",""):TrimExplode(",")) do
+		table.insert(self.Disallow,v);
+	end
+
 	local phys = self.Entity:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
@@ -134,7 +139,7 @@ function ENT:PhysicsUpdate()
 	local inRange = ents.FindInBox( lowRange, highRange )
 
 	for entKey,entVal in pairs(inRange) do
-		if(self.Disallow[entVal:GetClass()] != false) then
+		if(not table.HasValue(self.Disallow,entVal:GetClass())) then
 			local entLocation = entVal:GetPos()
 
 			local difference = myPosition - entLocation

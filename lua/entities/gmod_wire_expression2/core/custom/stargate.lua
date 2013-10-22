@@ -264,6 +264,102 @@ e2function number wirelink:stargateActive()
 	end
 end
 
+e2function number entity:stargateOverload()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	if (this.isOverloading) then
+		return 2
+	end
+	if (IsValid(this.overloader) and this.overloader.isFiring) then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function number wirelink:stargateOverload()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	if (this.isOverloading) then
+		return 2
+	end
+	if (IsValid(this.overloader) and this.overloader.isFiring) then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function number entity:stargateOverloadPerc()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	if (this.excessPower==nil or this.excessPowerLimit==nil) then return 0; end
+	local perc = (this.excessPower/this.excessPowerLimit)*100;
+	if (perc>100) then return 100; end
+	return perc;
+end
+
+e2function number wirelink:stargateOverloadPerc()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	if (this.excessPower==nil or this.excessPowerLimit==nil) then return 0; end
+	local perc = (this.excessPower/this.excessPowerLimit)*100;
+	if (perc>100) then return 100; end
+	return perc;
+end
+
+e2function number entity:stargateOverloadTime()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	if (this.excessPower==nil or this.excessPowerLimit==nil or not IsValid(this.overloader)) then return -1; end
+	local energyRequired = this.excessPowerLimit - this.excessPower;
+	local timeLeft = (energyRequired / this.overloader.energyPerSecond)
+	if(StarGate.IsIrisClosed(this)) then
+		timeLeft = timeLeft * 2;
+	end
+	if (this.isOverloading) then
+		return 0;
+	end
+	if (this.overloader.isFiring) then
+		return math.ceil(timeLeft);
+	else
+		return -1
+	end
+	return perc;
+end
+
+e2function number wirelink:stargateOverloadTime()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	if (this.excessPower==nil or this.excessPowerLimit==nil or not IsValid(this.overloader)) then return -1; end
+	local energyRequired = this.excessPowerLimit - this.excessPower;
+	local timeLeft = (energyRequired / this.overloader.energyPerSecond)
+	if(StarGate.IsIrisClosed(this)) then
+		timeLeft = timeLeft * 2;
+	end
+	if (this.isOverloading) then
+		return 0;
+	end
+	if (this.overloader.isFiring) then
+		return math.ceil(timeLeft);
+	else
+		return -1
+	end
+	return perc;
+end
+
+e2function number entity:stargateAsuranBeam()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	if (IsValid(this.asuranweapon) and this.asuranweapon.isFiring) then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function number wirelink:stargateAsuranBeam()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	if (IsValid(this.asuranweapon) and this.asuranweapon.isFiring) then
+		return 1
+	else
+		return 0
+	end
+end
+
 e2function void entity:stargateDial(string address)
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:DialGate(string.upper(address))

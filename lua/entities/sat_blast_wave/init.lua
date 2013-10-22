@@ -83,7 +83,7 @@ function ENT:Think()
 					v:Fire("kill","","0.1")
 				elseif v:IsPlayer() then
 					if (v:Alive()) then
-						v:SetModel("models/player/charple01.mdl")
+						v:SetModel("models/player/charple.mdl")
 						v:Kill()
 					end
 				elseif class == "npc_strider" then

@@ -94,7 +94,7 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS)
 
 	-- Round up energy requirement
-	self:SetEnergyUsage(1)
+	self:SetEnergyUsage(1000)
 
 	-- Reset states (this sets them as networked variables)
 	self:SetIsActive(false)
@@ -108,6 +108,7 @@ function ENT:Initialize()
 	 -- Set up wire inputs and outputs
 	if(self.HasWire) then
 		self:CreateWireInputs("Fire")
+		self:CreateWireOutputs("Active")
 	end
 
 	-- The time when the USE key was last pressed on this entity
@@ -323,6 +324,7 @@ function ENT:Shutdown()
 	end
 
 	self:SetIsActive(false)
+	self:UpdateWireOutputs()
 
 	return true
 end
@@ -344,6 +346,7 @@ function ENT:Disarm()
 
 	self:Shutdown()
 	self.isArmed = false
+	self:UpdateWireOutputs()
 
 	return true
 end
@@ -398,6 +401,7 @@ function ENT:FireBeam()
 	end
 
 	self:SetIsFiring(true)
+	self:UpdateWireOutputs()
 
 	if(self.beam == nil) then
 		self.beam = self:CreateBeam()
@@ -428,8 +432,8 @@ function ENT:StartFiring()
 													  energyMultiplier
 	end
 
-	self.remoteGate.overloader = self.Entity
 	self.Entity:SetNetworkedEntity("remoteGate", self.remoteGate)  */
+	self.remoteGate.asuranweapon = self.Entity
 end
 
 function ENT:SetIsActive(isActive)
@@ -526,14 +530,14 @@ function ENT:StopFiring()
 
 	if(self.remoteGate && self.remoteGate:IsValid()) then
 		StarGate.UnJamGate(self.remoteGate)
-		self.remoteGate:DeactivateStargate()
+		self.remoteGate:DeactivateStargate(true)
 	end
 
 	self.remoteGate = nil
 
 	if(self.localGate && self.localGate:IsValid()) then
 		StarGate.UnJamGate(self.localGate)
-		self.localGate:DeactivateStargate()
+		self.localGate:DeactivateStargate(true)
 	else
 		self.localGate = nil
 	end
@@ -541,6 +545,19 @@ function ENT:StopFiring()
 	self:SetIsFiring(false)
 
 	return true
+end
+
+-- Updates all wire output values
+function ENT:UpdateWireOutputs()
+   if(!self.HasWire) then
+      return
+   end
+
+   if(self.isFiring) then
+      self:SetWire("Active", 1)
+   else
+      self:SetWire("Active", 0)
+   end
 end
 
 function ENT:OnRemove()

@@ -26,7 +26,8 @@
 		{"Lantean Holo Device", "lantholo", 1},
 		{"Shield Core", "shieldcore",1},
 		{"Sodan Obelisk", "sod_obelisk", 4},
-		{"Ancient Obelisk", "anc_obelisk", 4}
+		{"Ancient Obelisk", "anc_obelisk", 4},
+		{"MCD", "mcd", 1}
 	}
 	local wepssett = {
 		{"AG-3 Charge Time", "ag3_weapon", 60},

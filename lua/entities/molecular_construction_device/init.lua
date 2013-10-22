@@ -66,11 +66,16 @@ function ENT:TriggerInput(k,v)
 end
 
 function ENT:SpawnFunction(p,t)
-    for _,v in pairs(ents.FindByClass("molecular_construction_device")) do
-		p:SendLua("GAMEMODE:AddNotify(\"MAX LIMIT IS SPAWNED!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		return false;
-	end
 	if (not t.Hit) then return end
+
+	if (IsValid(p)) then
+		local PropLimit = GetConVar("CAP_mcd_max"):GetInt()
+		if(p:GetCount("CAP_mcd")+1 > PropLimit) then
+			p:SendLua("GAMEMODE:AddNotify(\"Gate Overloader limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			return
+		end
+	end
+
 	local ang = p:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+90) % 360;
 	local pos = t.HitPos+Vector(0,0,0);
 	local e = ents.Create("molecular_construction_device");
@@ -80,6 +85,9 @@ function ENT:SpawnFunction(p,t)
 	e:SetVar("Owner",p)
 	e:Spawn();
 	e:Activate();
+	if (IsValid(p)) then
+		p:AddCount("CAP_mcd", e)
+	end
 	return e;
 end
 
@@ -341,3 +349,15 @@ net.Receive("MCD",function(len,ply)
     end
 
 end);
+
+function ENT:PostEntityPaste(player, Ent,CreatedEntities)
+	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	local PropLimit = GetConVar("CAP_mcd_max"):GetInt()
+	if(IsValid(player) and player:IsPlayer() and player:GetCount("CAP_mcd")+1 > PropLimit) then
+		player:SendLua("GAMEMODE:AddNotify(\"MCD limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		self.Entity:Remove();
+		return
+	end
+	player:AddCount("CAP_mcd", self.Entity)
+	StarGate.WireRD.PostEntityPaste(self,player,Ent,CreatedEntities)
+end

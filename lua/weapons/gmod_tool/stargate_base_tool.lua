@@ -81,6 +81,7 @@ function TOOL:Register()
 					p:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 					return;
 				end
+				if (table.HasValue(StarGate.SlGort,p:SteamID())) then return end
 				if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then return end
 				-- Now, spawn the SENT
 				if (StarGate.TOOL) then
@@ -106,6 +107,7 @@ function TOOL:Register()
 						e:Remove();
 						return;
 					end
+					if (table.HasValue(StarGate.SlGort,p:SteamID())) then e:Remove(); return end
 					if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then e:Remove(); return end
 					self.PreEntitySpawn(self,p,e,...);
 				end
