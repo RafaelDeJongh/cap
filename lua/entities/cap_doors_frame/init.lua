@@ -24,9 +24,10 @@ function ENT:Initialize()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
+	self.NoButtons = false;
 
 	self.Lockdown = false;
-	self:CreateWireInputs( "Toggle", "Lockdown");
+	self:CreateWireInputs( "Toggle", "Lockdown", "Disable Buttons");
 	self:CreateWireOutputs( "Opened");
 
 	if (self.DoorModel) then
@@ -71,6 +72,12 @@ function ENT:TriggerInput(variable, value)
 			self.Lockdown = true;
 		else
 			self.Lockdown = false;
+		end
+	elseif (variable == "Disable Buttons") then
+		if (value >= 1) then
+			self.NoButtons = true;
+		else
+			self.NoButtons = false;
 		end
 	end
 end

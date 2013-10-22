@@ -72,6 +72,7 @@ function ENT:FindDoor()
 		door = self.AtlDoor;
 	else
 		for _,v in pairs(ents.FindByClass("cap_doors_frame")) do
+			if (v.NoButtons) then continue end
 			local door_dist = (pos - v:GetPos()):Length();
 			if(dist >= door_dist) then
 				dist = door_dist;

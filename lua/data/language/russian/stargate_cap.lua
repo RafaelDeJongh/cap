@@ -284,7 +284,7 @@ sg_stsp_text =[[<h2>Gatespawner успешно создан!</h2>
 
 // huds
 hud_status = Статус
-hud_energy = Енергия
+hud_energy = Энергия
 hud_capacity = Мощность
 hud_capacities = Мощность
 hud_naquadah = Наквадах
