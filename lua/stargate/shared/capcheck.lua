@@ -290,7 +290,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<417 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<422 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -355,6 +355,14 @@ else
 		end
 		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
+		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	end if (table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, "Cap_resources folder is outdated!\\nPlease update it.");
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_12");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 	end
 end
