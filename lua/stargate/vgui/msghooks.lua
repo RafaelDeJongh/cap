@@ -11,11 +11,11 @@ usermessage.Hook("StarGate.OpenDialMenu_Group",
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
 			local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 			if (candialg==1 and not e:GetLocale()) then -- if(not VGUI) then  end;
-				if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanel_Group"); end
+				if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanel_Group"); end
 				VGUI:SetVisible(true);
 				VGUI:SetEntity(e);
 			else
-				if (not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanel_NoGroup"); end
+				if (not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanel_NoGroup"); end
 				VGUI2:SetVisible(true);
 				VGUI2:SetEntity(e);
 			end
@@ -27,7 +27,7 @@ usermessage.Hook("StarGate.OpenDialMenuGate_Group",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if (not VGUI3 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI3 = vgui.Create("SControlePanelGate_Group"); end
+			if (not VGUI3 or GetConVarNumber("sg_language_debug")>=1) then VGUI3 = vgui.Create("SControlePanelGate_Group"); end
 			VGUI3:SetVisible(true);
 			VGUI3:SetEntity(e);
 		end
@@ -41,11 +41,11 @@ usermessage.Hook("StarGate.OpenDialMenu_GroupSGU",
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
 			local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 			if (candialg==1 and not e:GetLocale()) then -- if(not VGUI) then  end;
-				if (not SGUVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then SGUVGUI = vgui.Create("SControlePanel_GroupSGU"); end
+				if (not SGUVGUI or GetConVarNumber("sg_language_debug")>=1) then SGUVGUI = vgui.Create("SControlePanel_GroupSGU"); end
 				SGUVGUI:SetVisible(true);
 				SGUVGUI:SetEntity(e);
 			else
-				if (not SGUVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then SGUVGUI2 = vgui.Create("SControlePanel_NoGroupSGU"); end
+				if (not SGUVGUI2 or GetConVarNumber("sg_language_debug")>=1) then SGUVGUI2 = vgui.Create("SControlePanel_NoGroupSGU"); end
 				SGUVGUI2:SetVisible(true);
 				SGUVGUI2:SetEntity(e);
 			end
@@ -57,7 +57,7 @@ usermessage.Hook("StarGate.OpenDialMenuGate_GroupSGU",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if (not SGUVGUI3 or GetConVarNumber("stargate_cl_language_debug")>=1) then SGUVGUI3 = vgui.Create("SControlePanelGate_GroupSGU"); end
+			if (not SGUVGUI3 or GetConVarNumber("sg_language_debug")>=1) then SGUVGUI3 = vgui.Create("SControlePanelGate_GroupSGU"); end
 			SGUVGUI3:SetVisible(true);
 			SGUVGUI3:SetEntity(e);
 		end
@@ -71,11 +71,11 @@ usermessage.Hook("StarGate.OpenDialMenu_Galaxy",
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
 			local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 			if (candialg==1 and not e:GetLocale()) then -- if(not VGUI) then  end;*
-				if (not GVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI = vgui.Create("SControlePanel_Galaxy"); end
+				if (not GVGUI or GetConVarNumber("sg_language_debug")>=1) then GVGUI = vgui.Create("SControlePanel_Galaxy"); end
 				GVGUI:SetVisible(true);
 				GVGUI:SetEntity(e);
 			else
-				if (not GVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanel_NoGalaxy"); end
+				if (not GVGUI2 or GetConVarNumber("sg_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanel_NoGalaxy"); end
 				GVGUI2:SetVisible(true);
 				GVGUI2:SetEntity(e);
 			end
@@ -87,7 +87,7 @@ usermessage.Hook("StarGate.OpenDialMenuGate_Galaxy",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if (not GVGUI3 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI3 = vgui.Create("SControlePanelGate_Galaxy"); end
+			if (not GVGUI3 or GetConVarNumber("sg_language_debug")>=1) then GVGUI3 = vgui.Create("SControlePanelGate_Galaxy"); end
 			GVGUI3:SetVisible(true);
 			GVGUI3:SetEntity(e);
 		end
@@ -101,11 +101,11 @@ usermessage.Hook("StarGate.OpenDialMenu_GalaxySGU",
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
 			local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 			if (candialg==1 and not e:GetLocale()) then
-				if (not NGVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then NGVGUI = vgui.Create("SControlePanel_GalaxySGU"); end
+				if (not NGVGUI or GetConVarNumber("sg_language_debug")>=1) then NGVGUI = vgui.Create("SControlePanel_GalaxySGU"); end
 				NGVGUI:SetVisible(true);
 				NGVGUI:SetEntity(e);
 			else
-				if (not NGVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then NGVGUI2 = vgui.Create("SControlePanel_NoGalaxySGU"); end
+				if (not NGVGUI2 or GetConVarNumber("sg_language_debug")>=1) then NGVGUI2 = vgui.Create("SControlePanel_NoGalaxySGU"); end
 				NGVGUI2:SetVisible(true);
 				NGVGUI2:SetEntity(e);
 			end
@@ -117,7 +117,7 @@ usermessage.Hook("StarGate.OpenDialMenuGate_GalaxySGU",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if (not NGVGUI3 or GetConVarNumber("stargate_cl_language_debug")>=1) then NGVGUI3 = vgui.Create("SControlePanelGate_GalaxySGU"); end
+			if (not NGVGUI3 or GetConVarNumber("sg_language_debug")>=1) then NGVGUI3 = vgui.Create("SControlePanelGate_GalaxySGU"); end
 			NGVGUI3:SetVisible(true);
 			NGVGUI3:SetEntity(e);
 		end
@@ -129,7 +129,7 @@ usermessage.Hook("StarGate.OpenDialMenu_Super",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if(not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanelSuper") end;
+			if(not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanelSuper") end;
 			VGUI:SetVisible(true);
 			VGUI:SetEntity(e);
 		end
@@ -141,7 +141,7 @@ usermessage.Hook("StarGate.OpenDialMenuSuperGate",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass():find("stargate_")) then
-			if(not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelSuperGate") end;
+			if(not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelSuperGate") end;
 			VGUI2:SetVisible(true);
 			VGUI2:SetEntity(e);
 		end
@@ -160,11 +160,11 @@ usermessage.Hook("StarGate.OpenDialMenuDHD_Group",
 			DHD = data:ReadEntity();
 			if (IsValid(DHD) and (DHD:GetClass()=="dhd_city" or DHD:GetClass()=="destiny_console")) then candialg = 1; end
 			if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-				if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
+				if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
 				VGUI:SetVisible(true);
 				VGUI:SetEntity(e);
 			else
-				if (not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
+				if (not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
 				VGUI2:SetVisible(true);
 				VGUI2:SetEntity(e);
 			end
@@ -181,11 +181,11 @@ usermessage.Hook("StarGate.OpenDialMenuDHD_Galaxy",
 			DHD = data:ReadEntity();
 			if (IsValid(DHD) and (DHD:GetClass()=="dhd_city" or DHD:GetClass()=="destiny_console")) then candialg = 1; end
 			if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-				if (not GVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
+				if (not GVGUI or GetConVarNumber("sg_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
 				GVGUI:SetVisible(true);
 				GVGUI:SetEntity(e);
 			else
-				if (not GVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
+				if (not GVGUI2 or GetConVarNumber("sg_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
 				GVGUI2:SetVisible(true);
 				GVGUI2:SetEntity(e);
 			end
@@ -203,32 +203,32 @@ usermessage.Hook("StarGate.OpenDialMenuDHDGate_Group",
 			if (IsValid(DHD) and (DHD:GetClass()=="dhd_city" or DHD:GetClass()=="destiny_console")) then candialg = 1; end
 			if (e:GetClass()=="stargate_orlin" and groupsystem) then
 				if (candialg==1) then
-					if (not VGUI_ORL or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI_ORL = vgui.Create("SControlePanelDHD_OrlinGroup"); end
+					if (not VGUI_ORL or GetConVarNumber("sg_language_debug")>=1) then VGUI_ORL = vgui.Create("SControlePanelDHD_OrlinGroup"); end
 					VGUI_ORL:SetVisible(true);
 					VGUI_ORL:SetEntity(e);
 				else
-					if (not VGUI_ORL2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI_ORL2 = vgui.Create("SControlePanelDHD_OrlinNoGroup"); end
+					if (not VGUI_ORL2 or GetConVarNumber("sg_language_debug")>=1) then VGUI_ORL2 = vgui.Create("SControlePanelDHD_OrlinNoGroup"); end
 					VGUI_ORL2:SetVisible(true);
 					VGUI_ORL2:SetEntity(e);
 				end
 			else
 				if (groupsystem) then
 					if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-						if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
+						if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
 						VGUI:SetVisible(true);
 						VGUI:SetEntity(e);
 					else
-						if (not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
+						if (not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
 						VGUI2:SetVisible(true);
 						VGUI2:SetEntity(e);
 					end
 				else
 					if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-						if (not GVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
+						if (not GVGUI or GetConVarNumber("sg_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
 						GVGUI:SetVisible(true);
 						GVGUI:SetEntity(e);
 					else
-						if (not GVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
+						if (not GVGUI2 or GetConVarNumber("sg_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
 						GVGUI2:SetVisible(true);
 						GVGUI2:SetEntity(e);
 					end
@@ -245,7 +245,7 @@ usermessage.Hook("StarGate.OpenDialMenuDHD",
 	function(data)
 		local e = data:ReadEntity();
 		if(IsValid(e) and e:GetClass() == "stargate_supergate") then
-			if(not VGUI3 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI3 = vgui.Create("SControlePanelDHDSuper") end;
+			if(not VGUI3 or GetConVarNumber("sg_language_debug")>=1) then VGUI3 = vgui.Create("SControlePanelDHDSuper") end;
 			VGUI3:SetVisible(true);
 			VGUI3:SetEntity(e);
 		elseif(IsValid(e) and e:GetClass():find("stargate_") and e:GetClass() != "stargate_supergate") then
@@ -255,21 +255,21 @@ usermessage.Hook("StarGate.OpenDialMenuDHD",
 			if (IsValid(DHD) and (DHD:GetClass()=="dhd_city" or DHD:GetClass()=="destiny_console")) then candialg = 1; end
 			if (groupsystem) then
 				if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-					if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
+					if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
 					VGUI:SetVisible(true);
 					VGUI:SetEntity(e);
 				else
-					if (not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
+					if (not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
 					VGUI2:SetVisible(true);
 					VGUI2:SetEntity(e);
 				end
 			else
 				if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-					if (not GVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
+					if (not GVGUI or GetConVarNumber("sg_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
 					GVGUI:SetVisible(true);
 					GVGUI:SetEntity(e);
 				else
-					if (not GVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
+					if (not GVGUI2 or GetConVarNumber("sg_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
 					GVGUI2:SetVisible(true);
 					GVGUI2:SetEntity(e);
 				end
@@ -286,21 +286,21 @@ usermessage.Hook("StarGate.OpenDialMenuDHDNox",
 			local groupsystem = e.Entity:GetNetworkedBool("SG_GROUP_SYSTEM");
 			if (groupsystem) then
 				if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-					if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
+					if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanelDHD_Group"); end
 					VGUI:SetVisible(true);
 					VGUI:SetEntity(e,true);
 				else
-					if (not VGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
+					if (not VGUI2 or GetConVarNumber("sg_language_debug")>=1) then VGUI2 = vgui.Create("SControlePanelDHD_NoGroup"); end
 					VGUI2:SetVisible(true);
 					VGUI2:SetEntity(e,true);
 				end
 			else
 				if (candialg==1 and e.Entity:GetNetworkedBool("Locale")==false) then
-					if (not GVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
+					if (not GVGUI or GetConVarNumber("sg_language_debug")>=1) then GVGUI = vgui.Create("SControlePanelDHD_Galaxy"); end
 					GVGUI:SetVisible(true);
 					GVGUI:SetEntity(e,true);
 				else
-					if (not GVGUI2 or GetConVarNumber("stargate_cl_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
+					if (not GVGUI2 or GetConVarNumber("sg_language_debug")>=1) then GVGUI2 = vgui.Create("SControlePanelDHD_NoGalaxy"); end
 					GVGUI2:SetVisible(true);
 					GVGUI2:SetEntity(e,true);
 				end

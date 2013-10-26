@@ -1,0 +1,1 @@
+global_lang_name = Svenska

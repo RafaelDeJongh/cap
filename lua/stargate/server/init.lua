@@ -52,6 +52,7 @@ function StarGate.LoadConfig(p)
 		end
 		for name,cfg in pairs(ini:get()) do
 			if(name ~= "config") then
+				if (cfg[1]==nil) then continue; end
 				StarGate.CFG[name] = {};
 				local sync = (cfg[1].SYNC or ""):TrimExplode(",");
 				for k,v in pairs(cfg[1]) do
@@ -64,7 +65,7 @@ function StarGate.LoadConfig(p)
 					end
 					StarGate.CFG[name][k] = v;
 					-- Sync the values with the Client
-					if(table.HasValue(sync,k) or name:find("_admin_only") or name:find("cap_disabled_")) then
+					if(table.HasValue(sync,k) or name:find("_groups_only") or name:find("cap_disabled_")) then
 						StarGate.CFG.SYNC[name] = StarGate.CFG.SYNC[name] or {};
 						StarGate.CFG.SYNC[name][k] = v;
 					end
@@ -408,7 +409,20 @@ concommand.Add( "cap_spawnswep", function( ply, cmd, args ) CAP_Spawn_Weapon( pl
 function StarGate.NotSpawnable(class,player,mode)
 	if (not mode) then mode = "ent" end
 	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
-	if ( StarGate.CFG:Get(mode.."_admin_only",class,false) && !player:IsAdmin() ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_admin_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
+	if ( StarGate.CFG:Get(mode.."_groups_only",class,"")) then
+		local tbl = StarGate.CFG:Get(mode.."_groups_only",class,""):TrimExplode(",");
+		local disallow = true;
+		for k,v in pairs(tbl) do
+			if (v=="add_shield") then continue end
+			if (player:IsUserGroup(v)) then
+				disallow = false; break;
+			end
+		end
+		if (disallow) then
+			player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_group_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			return true;
+		end
+	end
 	return false;
 end
 

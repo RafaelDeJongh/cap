@@ -652,7 +652,7 @@ function PANEL:Init()
 							local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 							if (candialg==1 and e:GetNetworkedBool("Locale")==false) then
 								self:SetVisible(false);
-								if (not VGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then VGUI = vgui.Create("SControlePanel_Group"); end
+								if (not VGUI or GetConVarNumber("sg_language_debug")>=1) then VGUI = vgui.Create("SControlePanel_Group"); end
 								VGUI:SetVisible(true);
 								VGUI:SetEntity(e);
 							end
@@ -854,7 +854,7 @@ function PANEL:Init()
 							local candialg = e:GetNetworkedInt("CANDIAL_GROUP_MENU");
 							if (candialg==1 and e:GetNetworkedBool("Locale")==false) then
 								self:SetVisible(false);
-								if (not SGUVGUI or GetConVarNumber("stargate_cl_language_debug")>=1) then SGUVGUI = vgui.Create("SControlePanel_GroupSGU"); end
+								if (not SGUVGUI or GetConVarNumber("sg_language_debug")>=1) then SGUVGUI = vgui.Create("SControlePanel_GroupSGU"); end
 								SGUVGUI:SetVisible(true);
 								SGUVGUI:SetEntity(e);
 							end

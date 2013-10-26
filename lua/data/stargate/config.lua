@@ -290,29 +290,32 @@ classnames = physgun_beam, gmod_ghost
 energyCapacity = 580000
 coolingPerCycle = 300
 
-# Admin-only ents
-[ent_admin_only]
-ag_3 = true
-black_hole_power = true
-dakara_building = true
-horizon = true
-sg_turret_destmain = true
-sg_turret_tollan = true
-sg_vehicle_daedalus = true
-stargate_supergate = true
+# Group-only ents
+# add_shield means add shield icon to spawnmenu
+[ent_groups_only]
+ag_3 = admin,superadmin
+black_hole_power = admin,superadmin,add_shield
+dakara_building = admin,superadmin,add_shield
+horizon = admin,superadmin,add_shield
+sg_turret_destmain = admin,superadmin,add_shield
+sg_turret_tollan = admin,superadmin,add_shield
+sg_vehicle_daedalus = admin,superadmin,add_shield
+stargate_supergate = admin,superadmin,add_shield
 
-# Admin-only sweps
-#[swep_admin_only]
+# Group-only sweps
+# add_shield means add shield icon to spawnmenu
+[swep_groups_only]
 
-# Admin-only tools
-#[tool_admin_only]
+# Group-only tools
+# add_shield means add shield icon to spawnmenu
+[tool_groups_only]
 
 # Disabled ents
-#[cap_disabled_ent]
+[cap_disabled_ent]
 
 # Disabled sweps
-#[cap_disabled_swep]
+[cap_disabled_swep]
 
 # Disabled tools
 # Note: tools will still displaying in stargate tab, but player can't use it.
-#[cap_disabled_tool]
+[cap_disabled_tool]

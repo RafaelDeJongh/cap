@@ -76,6 +76,13 @@ elseif (StarGate.Workshop and CLIENT) then
 	StarGate.CapVer = 413; -- just for old workshop clients compatibility in mp, can be removed later
 end
 
+if (SERVER) then
+	local capver = CreateConVar("stargate_cap_version",StarGate.CapVer,{FCVAR_GAMEDLL,FCVAR_NOTIFY});
+	if (capver:GetInt()!=StarGate.CapVer) then
+		RunConsoleCommand("stargate_cap_version", tostring(StarGate.CapVer))
+	end
+end
+
 --################# Loads the libraries @aVoN
 function StarGate.Load()
 	MsgN("=======================================================");

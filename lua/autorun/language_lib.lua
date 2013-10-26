@@ -31,8 +31,8 @@ if (SERVER) then
 end
 
 if (CLIENT) then
-	CreateClientConVar( "sg_language", GetConVarString("cl_language") or "english", true, false )
-	CreateClientConVar( "stargate_cl_language_debug", "0", false, false )
+	CreateClientConVar( "sg_language", GetConVarString("gmod_language") or "en", true, false )
+	CreateClientConVar( "sg_language_debug", "0", false, false )
 end
 
 if (Gmod13Lib==nil) then
@@ -161,10 +161,25 @@ SGLanguage = SGLanguage or {};
 
 local SGLanguage_Messages = {};
 
+local lang_names = {["Name"]={},["Lang"]={}}
+
+local function LangNames()
+	local fi,fo = file.Find("lua/data/language/*","GAME");
+	for k,lang in pairs(fo) do
+		if (not file.Exists("lua/data/language/"..lang.."/stargate.lua","GAME")) then continue; end
+		ini = LANGParser:new("lua/data/language/"..lang.."/stargate.lua");
+		if (ini and ini.messages) then
+			for _,v in pairs(ini.messages) do
+				if (v["global_lang_name"]) then lang_names["Name"][lang] = v["global_lang_name"]; lang_names["Lang"][v["global_lang_name"]] = lang; end
+			end
+		end
+	end
+end
+
 local function LangInit()
-	local langfiles = file.Find("lua/data/language/english/*.lua","GAME");
+	local langfiles = file.Find("lua/data/language/en/*.lua","GAME");
 	for _,f in pairs(langfiles) do
-		SGLanguage.ParseFile("english",f);
+		SGLanguage.ParseFile("en",f);
 	end
 	if CLIENT then
 		langfiles = file.Find("lua/data/language/"..SGLanguage.GetClientLanguage().."/*.lua","GAME");
@@ -172,16 +187,48 @@ local function LangInit()
 			SGLanguage.ParseFile(SGLanguage.GetClientLanguage(),f);
 		end
 	end
+	LangNames();
+end
+
+-- for fix old lang names
+local old_langs = {
+	["croatian"] = "hr",
+    ["czech"] = "cs",
+    ["dutch"] = "nl",
+    ["english"] = "en",
+    ["estonian"] = "et",
+    ["french"] = "fr",
+    ["german"] = "de",
+    ["hungarian"] = "hu",
+    ["russian"] = "ru",
+    ["spanish"] = "es",
+    ["swedish"] = "sv",
+    ["turkish"] = "tr",
+}
+
+local lang = GetConVarString("sg_language") or "en";
+if (old_langs[lang]) then
+	if (lang=="english") then
+		local lg = GetConVarString("gmod_language") or "en";
+		if (lg=="uk") then lg = "ru"; end
+		RunConsoleCommand("sg_language",lg);
+	else
+		RunConsoleCommand("sg_language",old_langs[lang]);
+	end
 end
 
 function SGLanguage.GetClientLanguage()
-	if SERVER then return "english" end
-	return GetConVarString("sg_language") or "english";
+	if SERVER then return "en" end
+	local lang = GetConVarString("sg_language") or "en";
+	if (lang=="uk") then lang = "ru"; end
+	return lang;
 end
 
 function SGLanguage.SetClientLanguage(lang)
 	if SERVER then return end
 	RunConsoleCommand("sg_language",lang);
+	timer.Remove("SGLanguage.Reload");
+	timer.Create("SGLanguage.Reload",0.5,1,function() RunConsoleCommand("sg_language_reload") end);
 end
 
 function SGLanguage.GetMessage(message, ...)
@@ -201,11 +248,20 @@ function SGLanguage.RegisterMessage(message,text,override)
 	end
 end
 
+function SGLanguage.GetLanguageName(lang)
+	return lang_names["Name"][lang] or "Error";
+end
+
+function SGLanguage.GetLanguageFromName(lang)
+	return lang_names["Lang"][lang] or "err";
+end
+
 if (CLIENT) then
 	function SGLanguage.ReloadSGLanguages(no_msg)
 		SGLanguage_Messages = {};
+		lang_names = {["Name"]={},["Lang"]={}}
 		LangInit();
-		if (not no_msg) then MsgN("SGLanguages successfully reloded."); end
+		if (not no_msg) then MsgN("Languages successfully reloded."); end
 	end
 	concommand.Add("sg_language_reload", function() SGLanguage.ReloadSGLanguages() end);
 end

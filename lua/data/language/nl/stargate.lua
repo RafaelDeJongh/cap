@@ -1,0 +1,27 @@
+global_lang_name = Nederlands
+
+stargate_category = Gates and Rings
+stargate_address = Adres
+stargate_group = Groep
+stargate_type = Type
+stargate_name = Naam
+dhd_atlantis = DHD (Atlantis)
+dhd_city = DHD (City)
+dhd_concept = DHD (Concept)
+dhd_infinity = DHD (Infinity)
+dhd_sg1 = DHD (SG1)
+dhd_universe = DHD (Universe)
+stargate_atlantis = Stargate (Atlantis)
+stargate_infinity = Stargate (Infinity)
+stargate_movie = Stargate (Movie)
+stargate_orlin = Stargate (Orlin)
+stargate_sg1 = Stargate (SG1)
+stargate_supergate = Supergate
+stargate_tollan = Stargate (Tollan)
+stargate_universe = Stargate (Universe)
+stargate_galaxy = Is Galaxy
+stargate_galaxy_y = Ja
+stargate_galaxy_n = Nee
+stargate_reload = Stargate dial systeem type veranderd in:\nNieuw dial systeem is: %s.\nHerlaad Stargate Systeem in 5 seconden.
+stargate_reloaded = Stargate systeem succesvol herstart.
+stargate_reload_start = Het Stargate herlaad systeem is aan het starten... En moment.

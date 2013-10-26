@@ -31,27 +31,41 @@ function StarGate_Settings(Panel)
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_06")):SetTextColor(DGREEN);
 	local clientlang = vgui.Create("DMultiChoice",Panel);
 	clientlang:SetSize(50,20);
-	clientlang:SetText(SGLanguage.GetClientLanguage());
+	local lg = SGLanguage.GetLanguageName(SGLanguage.GetClientLanguage());
+	if (lg!="Error") then
+		clientlang:SetText(lg);
+	else
+		clientlang:SetText(SGLanguage.GetClientLanguage());
+	end
 	clientlang.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_settings_07"));
 	clientlang.TextEntry.OnTextChanged = function(TextEntry)
 		local pos = TextEntry:GetCaretPos();
 		local text = TextEntry:GetValue();
 		local len = text:len();
 		local letters = text:lower():gsub("[^a-z]",""); -- Lower, remove invalid chars and split!
-		TextEntry:SetText(letters);
-		TextEntry:SetCaretPos(math.Clamp(pos - (len-letters:len()),0,text:len())); -- Reset the caretpos!
+		local lg = SGLanguage.GetLanguageName(letters);
+		if (lg!="Error") then
+			TextEntry:SetText(lg);
+			TextEntry:SetCaretPos(lg:len()); -- Reset the caretpos!
+		else
+			TextEntry:SetText(letters);
+			TextEntry:SetCaretPos(math.Clamp(pos - (len-letters:len()),0,text:len())); -- Reset the caretpos!
+		end
 		if (letters!="") then SGLanguage.SetClientLanguage(letters); end
 	end
 	clientlang.OnSelect = function(panel,index,value)
-		if (value!="") then SGLanguage.SetClientLanguage(value); end
+		if (value!="") then
+			local lg = SGLanguage.GetLanguageFromName(value);
+			SGLanguage.SetClientLanguage(lg);
+		end
 	end
 	-- add exists languages
 	local langstext = "";
 	local _,langs = file.Find("lua/data/language/*","GAME");
 	for i,lang in pairs(langs) do
 		if (i!=1) then langstext = langstext..", "; end
-		langstext = langstext..lang
-		clientlang:AddChoice(lang);
+		langstext = langstext..SGLanguage.GetLanguageName(lang)
+		clientlang:AddChoice(SGLanguage.GetLanguageName(lang));
 	end
 	Panel:AddPanel(clientlang);
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_03")):SetTextColor(DGREEN);

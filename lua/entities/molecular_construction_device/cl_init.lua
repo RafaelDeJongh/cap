@@ -50,12 +50,12 @@ function ENT:Draw()
             surface.SetFont("center")
 			local percent = 0;
 			if(IsValid(self.Entity))then
-	            percent = self.Entity:GetNetworkedInt("Advance");
+	            percent = self.Entity:GetNetworkedInt("Advance",0);
 			end
 			if(percent>0)then
                 percent = string.format("%G",percent);
 	        end
-            draw.SimpleText(percent.."%", "center", ScrW() / 2 + 40 + w, ScrH() / 2 +85 - h - 70, color,0)
+            draw.SimpleText(percent.."%", "center", ScrW() / 2 + 40 + w, ScrH() / 2 +85 - h - 70, Color(209,238,238,255),0)
 		end);
 	end
 end

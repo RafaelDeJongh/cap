@@ -252,9 +252,9 @@ local function StargateAddTab(Categorised, pnlContent, tree, node)
 		-- Add a node to the tree
 		local icon = "icon16/bricks.png";
 		local enttype = v[1].__enttype;
-		local adminonly,disabled = "ent_admin_only","cap_disabled_ent";
-		if (enttype=="cap_weapon") then icon = "icon16/gun.png"; adminonly,disabled = "swep_admin_only","cap_disabled_swep"; end
-		if (enttype=="cap_npc") then icon = "icon16/monkey.png"; adminonly,disabled = "npc_admin_only","cap_disabled_npc"; end
+		local adminonly,disabled = "ent_groups_only","cap_disabled_ent";
+		if (enttype=="cap_weapon") then icon = "icon16/gun.png"; adminonly,disabled = "swep_groups_only","cap_disabled_swep"; end
+		if (enttype=="cap_npc") then icon = "icon16/monkey.png"; adminonly,disabled = "npc_groups_only","cap_disabled_npc"; end
 		if (enttype=="cap_npc") then
 			-- Add a node to the tree
 			local node = tree:AddNode( CategoryName, icon );
@@ -314,12 +314,15 @@ local function StargateAddTab(Categorised, pnlContent, tree, node)
 
 				for k, ent in SortedPairsByMemberValue( v, "PrintName" ) do
 					if (StarGate.CFG:Get(disabled,ent.ClassName,false)) then continue end
+					local adm_only = false;
+					local tbl = StarGate.CFG:Get(adminonly,ent.ClassName,""):TrimExplode(",");
+					if (table.HasValue(tbl,"add_shield")) then adm_only = true; end
 					spawnmenu.CreateContentIcon( enttype, self.PropPanel,
 					{
 						nicename	= ent.PrintName or ent.__ClassName,
 						spawnname	= ent.ClassName,
 						material	= "entities/"..ent.ClassName..".png",
-						admin		= StarGate.CFG:Get(adminonly,ent.ClassName,false),
+						admin		= adm_only,
 						author		= ent.Author,
 						info		= ent.Instructions,
 					})

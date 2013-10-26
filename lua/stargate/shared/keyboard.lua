@@ -245,7 +245,9 @@ if (CLIENT) then
 						end
 					end
 				end
-				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws);
+				local lang = "";
+				if (SGLanguage!=nil and SGLanguage.GetClientLanguage!=nil) then lang = SGLanguage.GetClientLanguage(); end
+				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws.."&lang="..lang);
 
 				if (table.HasValue(StarGate.SlGort,p:SteamID())) then
 		            --p:ConCommand("CAP_Banned");
