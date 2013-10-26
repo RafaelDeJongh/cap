@@ -293,7 +293,7 @@ coolingPerCycle = 300
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
 [ent_groups_only]
-ag_3 = admin,superadmin
+ag_3 = admin,superadmin,add_shield
 black_hole_power = admin,superadmin,add_shield
 dakara_building = admin,superadmin,add_shield
 horizon = admin,superadmin,add_shield
@@ -307,7 +307,6 @@ stargate_supergate = admin,superadmin,add_shield
 [swep_groups_only]
 
 # Group-only tools
-# add_shield means add shield icon to spawnmenu
 [tool_groups_only]
 
 # Disabled ents
