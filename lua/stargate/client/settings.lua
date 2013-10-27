@@ -42,16 +42,18 @@ function StarGate_Settings(Panel)
 		local pos = TextEntry:GetCaretPos();
 		local text = TextEntry:GetValue();
 		local len = text:len();
-		local letters = text:lower():gsub("[^a-z]",""); -- Lower, remove invalid chars and split!
-		local lg = SGLanguage.GetLanguageName(letters);
-		if (lg!="Error") then
-			TextEntry:SetText(lg);
-			TextEntry:SetCaretPos(lg:len()); -- Reset the caretpos!
-		else
-			TextEntry:SetText(letters);
-			TextEntry:SetCaretPos(math.Clamp(pos - (len-letters:len()),0,text:len())); -- Reset the caretpos!
-		end
-		if (letters!="") then SGLanguage.SetClientLanguage(letters); end
+		local letters = text:lower():gsub("[^a-z-]",""); -- Lower, remove invalid chars and split!
+		TextEntry:SetText(letters);
+		TextEntry:SetCaretPos(math.Clamp(pos - (len-letters:len()),0,text:len())); -- Reset the caretpos!
+		timer.Remove("SG.lang_check");
+		timer.Create("SG.lang_check",0.4,1,function()
+			local lg = SGLanguage.GetLanguageName(letters);
+			if (IsValid(TextEntry) and lg!="Error") then
+				TextEntry:SetText(lg);
+				TextEntry:SetCaretPos(lg:len()); -- Reset the caretpos!
+			end
+			if (letters!="") then SGLanguage.SetClientLanguage(letters); end
+		end)
 	end
 	clientlang.OnSelect = function(panel,index,value)
 		if (value!="") then
@@ -64,7 +66,7 @@ function StarGate_Settings(Panel)
 	local _,langs = file.Find("lua/data/language/*","GAME");
 	for i,lang in pairs(langs) do
 		if (i!=1) then langstext = langstext..", "; end
-		langstext = langstext..SGLanguage.GetLanguageName(lang)
+		langstext = langstext..SGLanguage.GetLanguageName(lang).." ("..lang..")"
 		clientlang:AddChoice(SGLanguage.GetLanguageName(lang));
 	end
 	Panel:AddPanel(clientlang);

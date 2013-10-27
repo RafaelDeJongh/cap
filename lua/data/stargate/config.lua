@@ -292,6 +292,7 @@ coolingPerCycle = 300
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
+# default groups: user, operator, admin, superadmin
 [ent_groups_only]
 ag_3 = admin,superadmin,add_shield
 black_hole_power = admin,superadmin,add_shield

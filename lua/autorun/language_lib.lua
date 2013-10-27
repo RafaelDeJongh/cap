@@ -215,6 +215,10 @@ if (old_langs[lang]) then
 	else
 		RunConsoleCommand("sg_language",old_langs[lang]);
 	end
+elseif (lang:len()>5) then
+	local lg = GetConVarString("gmod_language") or "en";
+	if (lg=="uk") then lg = "ru"; end
+	RunConsoleCommand("sg_language",lg);
 end
 
 function SGLanguage.GetClientLanguage()
