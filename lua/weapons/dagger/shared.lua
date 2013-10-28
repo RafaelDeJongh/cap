@@ -55,7 +55,7 @@ if SERVER then
 end
 
 function SWEP:Initialize()
-	if( SERVER ) then self:SetWeaponHoldType( "melee" ) end
+	self:SetWeaponHoldType( "knife" )
 
 	self.Hit = Sound( "dagger/knife_hitwall1.wav" );
 	self.Slash = Sound( "dagger/knife_slash1.wav" );

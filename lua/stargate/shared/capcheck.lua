@@ -290,7 +290,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<424 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<427 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)

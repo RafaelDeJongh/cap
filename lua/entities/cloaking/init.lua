@@ -331,6 +331,11 @@ function ENT:Cloak(e,b)
 	end
 end
 
+hook.Add("PlayerDeath","StarGate.Cloak.PlayerDeath",function(ply)
+	ply.__SGCloacked = false;
+	ply:SetNetworkedBool("CloakCloaked",false);
+end)
+
 hook.Add("PlayerSwitchWeapon", "StarGate.WeaponCloak.Changed", function(ply, oldWeapon, newWeapon)
 	if (not ply or not IsValid(ply) or not ply:IsPlayer() or not IsValid(oldWeapon) or not IsValid(newWeapon)) then return nil end
 

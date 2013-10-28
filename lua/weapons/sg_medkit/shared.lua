@@ -92,13 +92,34 @@ function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime()+4)
 	self:SetNextSecondaryFire(CurTime()+4)
 
-	timer.Simple(3, function()
-		if (IsValid(self) and IsValid(self.Owner)) then
-			if (self.Owner:Health()<120) then
-				self.Owner:SetHealth(120)
+	if (SERVER) then
+		timer.Simple(3, function()
+			if (IsValid(self) and IsValid(self.Owner)) then
+				if (self.Owner:Health()<120) then
+					self.Owner:SetHealth(120)
+				else
+					if (self.Owner:Health()<165) then
+						self.Owner:SetHealth(165)
+					else
+						if (self.Owner:Health()<200) then
+							self.Owner:SetHealth(200)
+							local ply = self.Owner;
+							timer.Create("SGAdrenaline.Kill"..ply:EntIndex(),15.0,1,function()
+								if (IsValid(ply) and ply:Health()>=180) then
+									ply:Kill();
+								end
+							end);
+						else
+							self.Owner:Kill();
+						end
+					end
+					if (self.Owner:Alive()) then
+						self.Owner:SetNWBool("SGAdrenaline_Heal", true);
+					end
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	timer.Simple(3.7, function()
 		if (IsValid(self)) then

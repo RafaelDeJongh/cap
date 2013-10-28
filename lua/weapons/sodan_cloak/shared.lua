@@ -29,7 +29,7 @@ SWEP.Slot = 3;
 SWEP.SlotPos = 4;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
-SWEP.ViewModel = "";
+SWEP.ViewModel = "models/weapons/c_arms_animations.mdl";
 SWEP.WorldModel = "models/roltzy/w_sodan.mdl";
 SWEP.AnimPrefix = "melee";
 

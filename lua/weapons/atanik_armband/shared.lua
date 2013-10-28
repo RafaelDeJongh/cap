@@ -48,7 +48,7 @@ SWEP.Secondary.Automatic   	= true
 SWEP.Secondary.Ammo         = "none"
 
 function SWEP:Initialize()
-	if( SERVER ) then self:SetWeaponHoldType( "melee" ) end
+	self:SetWeaponHoldType( "fist" )
 	self.Hit = Sound( "player/pl_fallpain1.wav" );
 	self.NextHit = 0;
 end
@@ -65,16 +65,7 @@ function SWEP:PrimaryAttack()
 	    if (SERVER) then
 	   		self.Owner:EmitSound(self.Hit);
 	    end
-	    --self.Weapon:Hurt(55); -- And why this not working on dedicated server?!
-	    bullet = {}
-		bullet.Num    = 1
-		bullet.Src    = self.Owner:GetShootPos()
-		bullet.Dir    = self.Owner:GetAimVector()
-		bullet.Spread = Vector(0.1, 0.1, 0)
-		bullet.Tracer = 0
-		bullet.Force  = 10
-		bullet.Damage = 55
-		self.Owner:FireBullets(bullet)
+	    self:Hurt(55); -- And why this not working on dedicated server?!
 	end
 end
 
@@ -90,22 +81,12 @@ function SWEP:SecondaryAttack()
 		if (SERVER) then
         	self.Owner:EmitSound(self.Hit);
         end
-	    --self.Weapon:Hurt(200); -- And why this not working on dedicated server?!
-	    bullet = {}
-		bullet.Num    = 1
-		bullet.Src    = self.Owner:GetShootPos()
-		bullet.Dir    = self.Owner:GetAimVector()
-		bullet.Spread = Vector(0.1, 0.1, 0)
-		bullet.Tracer = 0
-		bullet.Force  = 10
-		bullet.Damage = 200
-		self.Owner:FireBullets(bullet)
+	    self:Hurt(200); -- And why this not working on dedicated server?!
 	end
 end
 
-/*
 function SWEP:Hurt(damage)
-	bullet = {}
+	local bullet = {}
 	bullet.Num    = 1
 	bullet.Src    = self.Owner:GetShootPos()
 	bullet.Dir    = self.Owner:GetAimVector()
@@ -114,7 +95,7 @@ function SWEP:Hurt(damage)
 	bullet.Force  = 10
 	bullet.Damage = damage
 	self.Owner:FireBullets(bullet)
-end */
+end
 
 --################### Tell a player how to use this @aVoN
 function SWEP:DrawHUD()

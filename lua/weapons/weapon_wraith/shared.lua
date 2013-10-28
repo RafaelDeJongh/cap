@@ -35,8 +35,9 @@ SWEP.Secondary.DefaultClip = -1;
 SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo = "none";
 
-SWEP.Sounds = {feeling=Sound("weapons/wraith_feeding.wav")}
+SWEP.Sounds = {feeling=Sound("weapons/wraith_feeding.wav"),SwingSound = Sound( "weapons/slam/throw.wav" ),HitSound=Sound("Flesh.ImpactHard")}
 
+SWEP.HitDistance = 67
 
 list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
 
@@ -63,6 +64,7 @@ function SWEP:Initialize()
 
 	self.NextHit = 0;
 	self.Hit = Sound( "player/pl_fallpain1.wav" );
+	self:SetWeaponHoldType( "fist" )
 
 end
 
@@ -75,16 +77,11 @@ function SWEP:PrimaryAttack()
 
 	timer.Simple( 0.57, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
 
- 	local tr = self.Owner:GetEyeTrace();
-	if tr.HitPos:Distance(self.Owner:GetShootPos()) <= 75 then
+    if (SERVER) then
+   		self.Owner:EmitSound( self.Sounds.SwingSound )
+   		self:DealDamage();
+    end
 
-	    if (SERVER) then
-	   		self.Owner:EmitSound(self.Hit);
-	    end
-
-		self:Hurt(20);
-
-	end
 end
 
 function SWEP:SecondaryAttack()
@@ -100,16 +97,36 @@ function SWEP:SecondaryAttack()
 	end);
 end
 
-function SWEP:Hurt(damage)
-	bullet = {}
-	bullet.Num    = 1
-	bullet.Src    = self.Owner:GetShootPos()
-	bullet.Dir    = self.Owner:GetAimVector()
-	bullet.Spread = Vector(0.1, 0.1, 0)
-	bullet.Tracer = 0
-	bullet.Force  = 10
-	bullet.Damage = damage
-	self.Owner:FireBullets(bullet)
+function SWEP:DealDamage()
+	local tr = util.TraceLine( {
+		start = self.Owner:GetShootPos(),
+		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.HitDistance,
+		filter = self.Owner
+	} )
+
+	if ( !IsValid( tr.Entity ) ) then
+		tr = util.TraceHull( {
+			start = self.Owner:GetShootPos(),
+			endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * self.HitDistance,
+			filter = self.Owner,
+			mins = self.Owner:OBBMins() / 3,
+			maxs = self.Owner:OBBMaxs() / 3
+		} )
+	end
+
+	if ( tr.Hit ) then self.Owner:EmitSound( self.Sounds.HitSound ) end
+
+	if ( IsValid( tr.Entity ) ) then
+		local dmginfo = DamageInfo()
+		dmginfo:SetDamage( 20 )
+		dmginfo:SetDamageForce( self.Owner:GetRight() * 49125 + self.Owner:GetForward() * 99984 )
+		dmginfo:SetInflictor( self )
+		local attacker = self.Owner
+		if ( !IsValid( attacker ) ) then attacker = self end
+		dmginfo:SetAttacker( attacker )
+
+		tr.Entity:TakeDamageInfo( dmginfo )
+	end
 end
 
 if SERVER then

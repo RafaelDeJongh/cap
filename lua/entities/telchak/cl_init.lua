@@ -33,7 +33,7 @@ local function BlindPlayer()
 	local health = LocalPlayer():Health();
 	local used = LocalPlayer():GetNWBool("Telchak_Heal", false);
 	if (health > 150 and used) then
-
+		if (health>200) then health = 200 end
 		DrawMotionBlur( 0.2, (-150+health)/50, 0.05)
 
 		local tab = {}

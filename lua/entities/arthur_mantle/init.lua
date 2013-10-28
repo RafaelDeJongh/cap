@@ -121,6 +121,13 @@ function ENT:Use(ply)
 
 end
 
+local function playerDies( victim, weapon, killer )
+	if (victim:GetNetworkedBool("ArthurCloaked", false)) then
+		victim:SetNetworkedBool("ArthurCloaked",false);
+	end
+end
+hook.Add( "PlayerDeath", "StarGate.Arthur", playerDies )
+
 -----------------------------------DUPLICATOR----------------------------------
 
 function ENT:PreEntityCopy()

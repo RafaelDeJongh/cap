@@ -49,6 +49,10 @@ SWEP.Secondary.Ammo	= "none";
 -- spawnables.
 list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
 
+function SWEP:Initialize()
+	self:SetWeaponHoldType("pistol")
+end
+
 --################### Open Gate dialogue and overwrite default method @Madman07
 function SWEP:PrimaryAttack()
 	if(CLIENT) then return end;

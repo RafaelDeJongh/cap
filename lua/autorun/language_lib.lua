@@ -202,7 +202,7 @@ local old_langs = {
     ["hungarian"] = "hu",
     ["russian"] = "ru",
     ["spanish"] = "es",
-    ["swedish"] = "sv",
+    ["swedish"] = "sv-se",
     ["turkish"] = "tr",
 }
 

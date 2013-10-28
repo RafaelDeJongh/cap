@@ -181,12 +181,12 @@ function ENT:Use(ply)
 end
 
 -- Small fix by AlexALX & Llapp
-function playerDies( victim, weapon, killer )
-	if (victim:GetNetworkedBool("Telchak_Heal", true)) then
-          victim:SetNWBool("Telchak_Heal", false);
-     end
+local function playerDies( victim, weapon, killer )
+	if (victim:GetNetworkedBool("Telchak_Heal", false)) then
+		victim:SetNetworkedBool("Telchak_Heal", false);
+	end
 end
-hook.Add( "PlayerDeath", "playerDies", playerDies )
+hook.Add( "PlayerDeath", "StarGate.Telchak", playerDies )
 
 -----------------------------------DUPLICATOR----------------------------------
 

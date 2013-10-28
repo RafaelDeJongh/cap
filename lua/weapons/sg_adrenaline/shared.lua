@@ -108,13 +108,34 @@ function SWEP:PrimaryAttack()
 		end
 	end)
 
-	timer.Simple(1.6, function()
-		if (IsValid(self) and IsValid(self.Owner)) then
-			if (self.Owner:Health()<120) then
-				self.Owner:SetHealth(120)
+	if (SERVER) then
+		timer.Simple(1.6, function()
+			if (IsValid(self) and IsValid(self.Owner)) then
+				if (self.Owner:Health()<120) then
+					self.Owner:SetHealth(120)
+				else
+					if (self.Owner:Health()<165) then
+						self.Owner:SetHealth(165)
+					else
+						if (self.Owner:Health()<200) then
+							self.Owner:SetHealth(200)
+							local ply = self.Owner;
+							timer.Create("SGAdrenaline.Kill"..ply:EntIndex(),15.0,1,function()
+								if (IsValid(ply) and ply:Health()>=180) then
+									ply:Kill();
+								end
+							end);
+						else
+							self.Owner:Kill();
+						end
+					end
+					if (self.Owner:Alive()) then
+						self.Owner:SetNetworkedBool("SGAdrenaline_Heal", true);
+					end
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	timer.Simple(0.6, function()
 		if (IsValid(self)) then
@@ -134,4 +155,55 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Reload()
+end
+
+if (SERVER) then
+
+	util.AddNetworkString("SGAdrenaline.Reset");
+
+	-- don't know why, but if set this on clien it wont send to server, so this is workaround.
+	net.Receive("SGAdrenaline.Reset",function(len,ply)
+		if (IsValid(ply)) then
+			ply:SetNetworkedBool("SGAdrenaline_Heal", false)
+		end
+	end)
+
+	local function playerDies( victim, weapon, killer )
+		if (victim:GetNetworkedBool("SGAdrenaline_Heal", false)) then
+			victim:SetNetworkedBool("SGAdrenaline_Heal", false);
+		end
+	end
+	hook.Add( "PlayerDeath", "StarGate.Adrenaline", playerDies )
+end
+
+
+if (CLIENT) then
+	local function BlindPlayer()
+		if (not IsValid(LocalPlayer())) then return end
+		local health = LocalPlayer():Health();
+		local used = LocalPlayer():GetNWBool("SGAdrenaline_Heal", false);
+		if (health > 150 and used) then
+			if (health>200) then health = 200 end
+			DrawMotionBlur( 0.2, (-150+health)/50, 0.05)
+
+			local tab = {}
+			tab[ "$pp_colour_addr" ] = 0
+			tab[ "$pp_colour_addg" ] = 0
+			tab[ "$pp_colour_addb" ] = 0
+			tab[ "$pp_colour_brightness" ] = (-150+health)/150
+			tab[ "$pp_colour_contrast" ] = (-150+health)/150+1
+			tab[ "$pp_colour_colour" ] = 1
+			tab[ "$pp_colour_mulr" ] = 1
+			tab[ "$pp_colour_mulg" ] = 1
+			tab[ "$pp_colour_mulb" ] = 1
+
+			DrawColorModify( tab )
+
+		elseif (used) then
+			net.Start("SGAdrenaline.Reset")
+			net.WriteBit(true)
+			net.SendToServer()
+		end
+	end
+	hook.Add( "RenderScreenspaceEffects", "SGAdrenaline.BlindPlayer", BlindPlayer )
 end
