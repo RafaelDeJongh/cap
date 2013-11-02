@@ -15,8 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-EFFECT.Material = Material("Zup/Stargate/eventhorizon_establish"); -- Normal "white" overlay
-EFFECT.Collapse = Material("Zup/Stargate/eh_closing"); -- Thanks to flyboi who sent me this good material!
+EFFECT.Material = Material("zup/stargate/eventhorizon_establish"); -- Normal "white" overlay
+EFFECT.Collapse = Material("zup/stargate/eh_closing"); -- Thanks to flyboi who sent me this good material!
 --################# Init @aVoN
 function EFFECT:Init(data)
 	if (not StarGate.VisualsMisc("cl_stargate_effects",true)) then return end
@@ -64,6 +64,15 @@ function EFFECT:Render()
 		return;
 	end
 	if(not self.Draw) then return end; -- Stops crashing ppl
+
+	-- test fix for client crash
+	if (self.Collapse:GetName()!="zup/stargate/eh_closing") then
+		self.Collapse = Material("zup/stargate/eh_closing");
+	end
+	if (self.Material:GetName()!="zup/stargate/eventhorizon_establish") then
+		self.Material = Material("zup/stargate/eventhorizon_establish");
+	end
+
 	self.Parent.AllowBacksideDrawing = nil; -- Disable backside drawing!
 	local mul = math.sin(math.pi*(CurTime()-self.Spawned)/self.LifeTime);
 	if(mul > 0) then
@@ -76,7 +85,7 @@ function EFFECT:Render()
 			-- Really big thank's to flyboi who sent me this cool material:
 			self.StartedCollapse = self.StartedCollapse or CurTime();
 			local frame = math.floor((CurTime()-self.StartedCollapse)*self.FrameRate);
-			if(frame <= self.FrameEnd) then
+			if(frame <= self.FrameEnd and self.Collapse:GetName()=="zup/stargate/eh_closing" and frame>=0 and frame<=17) then
 				self.Parent:SetAlpha(1); -- If we are drawing the closing animation: Make the EH at low alpha!
 				self.Entity:SetColor(Color(255,255,255,255));
 				local pos = self.Entity:GetPos();

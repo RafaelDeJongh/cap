@@ -49,6 +49,13 @@ local DOORE_POS = Vector(-162.5597, 5.3606, 47.9206)
 
 function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn it @RononDex
 	if (!tr.HitWorld) then return end;
+
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(pl:GetCount("CAP_ships")+1 > PropLimit) then
+		pl:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local e = ents.Create("sg_vehicle_teltac");
 	e:SetPos(tr.HitPos + Vector(0,0,180));
 	e:Spawn();
@@ -61,6 +68,7 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:ToggleDoors("out")
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	pl:Give("weapon_ringcaller");
+	pl:AddCount("CAP_ships", e)
 	return e;
 end
 
@@ -546,5 +554,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self:ToggleDoors("out")
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_ships", Ent);
+	end
+
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

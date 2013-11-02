@@ -319,3 +319,26 @@ if(meta and not meta.__SetMaterial) then
 		end
 	end
 end
+
+local meta = FindMetaTable("Player");
+if(meta and not meta.__GodEnable) then
+	meta.__GodEnable = meta.GodEnable
+	function meta:GodEnable()
+	   self.__pGodMode = true
+	   self:__GodEnable()
+	end
+
+	meta.__GodDisable = meta.GodDisable
+	function meta:GodDisable()
+	   self.__pGodMode = false
+	   self:__GodDisable()
+	end
+
+	function meta:HasGodMode()
+	   return self.__pGodMode or false;
+	end
+
+	hook.Add("PlayerDeath","Player.Death.ResetGod",function(ply)
+		ply.__pGodMode = false;
+	end)
+end

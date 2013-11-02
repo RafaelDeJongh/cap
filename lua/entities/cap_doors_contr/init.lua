@@ -60,24 +60,29 @@ function ENT:BressButton()
 
 	if (self.Atlantis and IsValid(self.AtlTP) and self.AtlTP.Busy) then return end
 
-	local door = self:FindDoor();
-	if IsValid(door) then door:Toggle(); end
+	if (self.Atlantis and self.AtlDoor) then
+		if (IsValid(self.AtlDoor[1])) then
+			self.AtlDoor[1]:Toggle();
+		end
+		if (IsValid(self.AtlDoor[2])) then
+			self.AtlDoor[2]:Toggle();
+		end
+	else
+		local door = self:FindDoor();
+		if IsValid(door) then door:Toggle(); end
+	end
 end
 
 function ENT:FindDoor()
 	local door;
 	local dist = 1000;
 	local pos = self.Entity:GetPos();
-	if (self.Atlantis) then
-		door = self.AtlDoor;
-	else
-		for _,v in pairs(ents.FindByClass("cap_doors_frame")) do
-			if (v.NoButtons) then continue end
-			local door_dist = (pos - v:GetPos()):Length();
-			if(dist >= door_dist) then
-				dist = door_dist;
-				door = v;
-			end
+	for _,v in pairs(ents.FindByClass("cap_doors_frame")) do
+		if (v.NoButtons) then continue end
+		local door_dist = (pos - v:GetPos()):Length();
+		if(dist >= door_dist) then
+			dist = door_dist;
+			door = v;
 		end
 	end
 	return door;

@@ -150,6 +150,7 @@ function ENT:Initialize()
 	self.StopRollSP = false;
 	self.WireSpin = false;
 	self.WireSpinSpeed = false;
+	self.ActSymSound = false;
 end
 
 --#################  Called when stargate_group_system changed
@@ -216,7 +217,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Encode Symbol","Symbols Lock","Inbound Symbols","Activate Chevrons","Activate Symbols","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Encode Symbol","Symbols Lock","Force Encode Symbol [STRING]","Force Lock Symbol [STRING]","Inbound Symbols","Activate Chevrons","Activate All Symbols","Activate Symbols [STRING]","Activate Symbols Sound","Disable Menu");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -320,15 +321,32 @@ function ENT:ChangeSkin(skin,inbound,symbol)
 end
 
 --############# Activate/Deactivate all symbols by AlexALX
-function ENT:ActivateSymbols(deactivate)
+function ENT:ActivateSymbols(deactivate,syms)
 	if (not IsValid(self.Entity)) then return end
-	if (not deactivate) then
+	if (syms and syms!="") then
+		local s = syms:gsub("[^"..self.WireCharters.."]",""):TrimExplode("")
 		for i=1,45 do
-			self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+			self.Symbols[i]:SetColor(Color(40,40,40,255));
+		end
+		local s2 = "";
+		for k,v in pairs(s) do
+			if (s2:find(v)) then continue end
+		    local i = self.SymbolsLock[tonumber(v) or v][2]; --self.SymbolPositions[skin-1];
+    		self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+    		s2 = s2..v;
+		end
+		if (self.ActSymSound and table.Count(s)>0) then
+			self:ChevronSound(1);
 		end
 	else
-		for i=1,45 do
-		    self.Symbols[i]:SetColor(Color(40,40,40,255));
+		if (not deactivate) then
+			for i=1,45 do
+				self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+			end
+		else
+			for i=1,45 do
+			    self.Symbols[i]:SetColor(Color(40,40,40,255));
+			end
 		end
 	end
 end
@@ -486,8 +504,10 @@ function RingTickUniverse()
 				local reset = true;
 				local symbols = self.SymbolsLock;
 				local s1,s2 = 7.5,4.5;
-				if (self.WireSpinSpeed) then
+				local s3,s4 = 6.8,5.2;
+				if (self.WireSpinSpeed or not self.WireSpin) then
 					s1,s2 = 26.5,23.5;
+					s3,s4 = 25,24;
 				end
 				for k, v in pairs(symbols) do
 					local symbol = self:StopFormula(y,tonumber(self.SymbolsLock[tonumber(k) or k][1]),s1,s2);
@@ -501,14 +521,32 @@ function RingTickUniverse()
 					self.Entity:SetWire("Ring Symbol",""); -- Wire
 					self.RingSymbol = "";
 				end
-				if (self.DiallingSymbol != "") then
-					if (self.SymbolsLock[tonumber(self.DiallingSymbol) or self.DiallingSymbol]==nil) then self:AbortDialling(); self.Gate.Moving = false; else
-						local x = tonumber(self.SymbolsLock[tonumber(self.DiallingSymbol) or self.DiallingSymbol][1]);
-						if (self:StopFormula(y,x,25,24) and not self.Shutingdown) then
-							self:SetSpeed(false);
-							self.Entity:DHDSetAllBusy();
-							self.Gate.Moving = false;
-							self.Entity:PauseActions(true);
+				local nsym = self.DiallingSymbol;
+				local lock = false;
+				local encode = false;
+				if (self.WireEncodeSymbol!="") then nsym = self.WireEncodeSymbol; encode = true; end
+				if (self.WireLockSymbol!="") then nsym = self.WireLockSymbol; lock = true; end
+				if (nsym != "") then
+					if (self.SymbolsLock[tonumber(nsym) or nsym]==nil) then self:AbortDialling(); self.Gate.Moving = false; else
+						local x = tonumber(self.SymbolsLock[tonumber(nsym) or nsym][1]);
+						if (self:StopFormula(y,x,s3,s4) and not self.Shutingdown) then
+							if (encode or lock) then
+								self:TriggerInput("Rotate Ring",0);
+								timer.Simple(1,function()
+									if (IsValid(self)) then
+										if (lock) then
+											self.Entity:Chevron7Lock();
+										else
+											self.Entity:EncodeChevron();
+										end
+									end
+								end)
+							else
+								self:SetSpeed(false);
+								self.Entity:DHDSetAllBusy();
+								self.Gate.Moving = false;
+								self.Entity:PauseActions(true);
+							end
 						end
 					end
 				end
@@ -548,6 +586,8 @@ function ENT:SetSpeed(speed,speed2)
 			    self.SpinSpeed = 2;
 			end
 			self.Gate.Moving = false;
+			self.WireEncodeSymbol = "";
+			self.WireLockSymbol = "";
         end
 	end
 end
@@ -675,17 +715,17 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActRotRingL",false);
 		end
 	elseif(k == "Ring Speed Mode" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial)) then
-		if (self:GetWire("Ring Speed Mode",0) >= 1) then
+		if (v >= 1) then
 			self.WireSpinSpeed = true;
 		else
 			self.WireSpinSpeed = false;
 		end
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
-		if (self:GetWire("Encode Symbol",0) >= 1) then
+		if (v >= 1) then
 			self:EncodeChevron();
 		end
 	elseif(k == "Symbols Lock" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
-		if (self:GetWire("Symbols Lock",0) >= 1) then
+		if (v >= 1) then
 			self:Chevron7Lock();
 		end
 	elseif(k == "Inbound Symbols")then
@@ -697,13 +737,25 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.InboundSymbols = 0;
 		end
 		self.Entity:SetNWInt("ActSymsI",self.InboundSymbols);
-	elseif(k == "Activate Symbols" and not self.NewActive and not self.WireManualDial)then
+	elseif(k == "Activate All Symbols" and not self.NewActive and not self.WireManualDial)then
 		if (v >= 1 and self:CheckEnergy(true,true)) then
 	    	self:ActivateSymbols();
-	    	self.Entity:SetNWBool("ActSymsL",true);
+	    	self.Entity:SetNWBool("ActSymsAL",true);
 	    else
 			self:ActivateSymbols(true);
-			self.Entity:SetNWBool("ActSymsL",false);
+			self.Entity:SetNWBool("ActSymsAL",false);
+		end
+	elseif(k == "Activate Symbols" and not self.NewActive and not self.WireManualDial)then
+		if (v!="" and self:CheckEnergy(true,true)) then
+	    	self:ActivateSymbols(false,v);
+	    else
+			self:ActivateSymbols(true);
+		end
+	elseif(k == "Activate Symbols Sound")then
+		if (v>=1) then
+	    	self.ActSymSound = true;
+	    else
+			self.ActSymSound = false;
 		end
 	elseif(k == "Activate Chevrons" and not self.NewActive and not self.WireManualDial)then
 		if (v >= 1 and self:CheckEnergy(true,true)) then
@@ -713,6 +765,16 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 	    else
 			self.Chevron:SetMaterial("The_Sniper_9/Universe/Stargate/UniverseChevronOff.vmt");
 			self.Entity:SetNWBool("ActChevronsL",false);
+		end
+	elseif(k == "Force Encode Symbol" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
+		if (v != "" and v:len()==1 and not self.Gate.Moving) then
+			self:TriggerInput("Rotate Ring",1,mobile,mdhd);
+			self.WireEncodeSymbol = v;
+		end
+	elseif(k == "Force Lock Symbol" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
+		if (v != "" and v:len()==1 and not self.Gate.Moving) then
+			self:TriggerInput("Rotate Ring",1,mobile,mdhd);
+			self.WireLockSymbol = v;
 		end
 	end
 end
@@ -816,6 +878,8 @@ function ENT:Shutdown() -- It is called at the end of ENT:Close or ENT.Sequence:
 	self.WireSpin = false;
 	self.WireSpinDir = false;
 	self.WireBlock = false;
+	self.WireEncodeSymbol = "";
+	self.WireLockSymbol = "";
 	if (IsValid(self.Gate)) then
 		self.Gate.Moving = false;
 	end

@@ -190,7 +190,7 @@ function ENT:Initialize()
 			else
 				chev = e.DialledAddress[i];
 			end
-			if(not e:GetNetworkedBool("chevron"..i) and chev ~= "DIAL") then break end;
+			if(not e:GetNetworkedBool("chevron"..i) and not e.WireManualDial and chev ~= "DIAL") then break end;
 			self:AddChevron(chev,true,true);
 		end
 	end

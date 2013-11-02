@@ -38,6 +38,7 @@ local group_convars = {
 	"stargate_physics_clipping",
 	"stargate_model_clipping",
 	"stargate_open_effect",
+	"stargate_random_address",
 }
 
 util.AddNetworkString("_sggroup_convars");
@@ -128,6 +129,7 @@ function Group_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
 		{SGLanguage.GetMessage("stargate_menu_38"), "stargate_model_clipping", 1},
 		{SGLanguage.GetMessage("stargate_menu_39"), "stargate_open_effect", 1},
+		{SGLanguage.GetMessage("stargate_menu_41"), "stargate_random_address", 1},
 	}
 
 	local dhdsettings = {
@@ -221,7 +223,7 @@ function Group_Convar_OpenNet()
 		i = i + 1;
 
 		local box = vgui.Create( "DCheckBoxLabel" , GroupConvarFrame);
-		box:SetPos(15, 40+15*i);
+		box:SetPos(15, 40+14*i);
 		box:SetText(val[1]);
 		box.Label:SetFont("OldDefaultSmall");
 		if (val[4]==1) then
@@ -261,7 +263,7 @@ function Group_Convar_OpenNet()
 		end
 	end
 
-	local offset = 40+15*i;
+	local offset = 40+14*i;
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");

@@ -24,13 +24,21 @@ include("shared.lua")
 ENT.Model = Model("models/Iziraider/shuttle/shuttle.mdl")
 ENT.Shuttle=true
 
-function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn it @RononDex
+function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spawn it @RononDex
 	if (!tr.HitWorld) then return end
+
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+		ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local e = ents.Create("sg_vehicle_shuttle")
 	e:SetPos(tr.HitPos + Vector(0,0,90))
 	e:Spawn()
 	e:Activate()
 	e:SetWire("Health",e:GetNetworkedInt("health"));
+	ply:AddCount("CAP_ships", e)
 	return e
 end
 ENT.Sounds={

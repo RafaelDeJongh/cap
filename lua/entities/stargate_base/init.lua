@@ -85,6 +85,8 @@ function ENT:Initialize()
 	self.WireDialledAddress = {};
 	self.WireManualDial = false;
 	self.WireBlock = false;
+	self.WireEncodeSymbol = "";
+	self.WireLockSymbol = "";
 	self.InboundDelay = 29.5;
 	self.DialType = {};
 	self.Jumped = false; -- FixJumping issues
@@ -145,21 +147,6 @@ function ENT:Initialize()
 	self:ConvarsThink();
 	self.DisAutoClose = false;
 	self.DisMenu = false;
-	self.__LastChevron = 0;
-	self.__ChevronLocked = false;
-
-	-- fast code for icarus ramp
-	self.__SetWire = self.SetWire;
-	self.SetWire = function(self,key,value)
-		if (key=="Chevron") then
-			self.__LastChevron = value;
-		elseif (key=="Chevron Locked") then
-			self.__ChevronLocked = util.tobool(value);
-		end
-		if (self.__SetWire) then
-			self.__SetWire(self,key,value);
-		end
-	end
 
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
 end

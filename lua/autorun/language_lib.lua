@@ -191,6 +191,7 @@ local function LangInit()
 end
 
 -- for fix old lang names
+-- should be removed later
 local old_langs = {
 	["croatian"] = "hr",
     ["czech"] = "cs",
@@ -204,27 +205,31 @@ local old_langs = {
     ["spanish"] = "es",
     ["swedish"] = "sv-se",
     ["turkish"] = "tr",
+    ["sv"] = "sv-se",
+    ["es"] = "es-es",
 }
-
-local lang = GetConVarString("sg_language") or "en";
-if (old_langs[lang]) then
-	if (lang=="english") then
+if (CLIENT) then
+	local lang = GetConVarString("sg_language") or "en";
+	if (old_langs[lang]) then
+		if (lang=="english") then
+			local lg = GetConVarString("gmod_language") or "en";
+			if (lg=="uk") then lg = "ru"; end
+			RunConsoleCommand("sg_language",lg);
+		else
+			RunConsoleCommand("sg_language",old_langs[lang]);
+		end
+	elseif (lang:len()>5) then
 		local lg = GetConVarString("gmod_language") or "en";
 		if (lg=="uk") then lg = "ru"; end
 		RunConsoleCommand("sg_language",lg);
-	else
-		RunConsoleCommand("sg_language",old_langs[lang]);
 	end
-elseif (lang:len()>5) then
-	local lg = GetConVarString("gmod_language") or "en";
-	if (lg=="uk") then lg = "ru"; end
-	RunConsoleCommand("sg_language",lg);
 end
 
 function SGLanguage.GetClientLanguage()
 	if SERVER then return "en" end
 	local lang = GetConVarString("sg_language") or "en";
 	if (lang=="uk") then lang = "ru"; end
+	if (old_langs[lang]) then return old_langs[lang]; end
 	return lang;
 end
 

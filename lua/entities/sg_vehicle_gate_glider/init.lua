@@ -27,13 +27,21 @@ ENT.Sounds = {
 	Staff=Sound("pulse_weapon/staff_weapon.mp3")
 }
 
-function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn it @RononDex
+function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spawn it @RononDex
 	if (!tr.HitWorld) then return end
+
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+		ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local e = ents.Create("sg_vehicle_gate_glider")
 	e:SetPos(tr.HitPos + Vector(0,0,80))
 	e:Spawn()
 	e:Activate()
 	e:SetWire("Health",e:GetNetworkedInt("health"));
+	ply:AddCount("CAP_ships", e)
 	return e
 end
 

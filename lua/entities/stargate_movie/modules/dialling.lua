@@ -42,8 +42,12 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		chevs = count-1;
 	end
 	local classicmode = false;
-	if (self.SpClassic or self.Classic) then
+	local sgctype = false;
+	if (self.Classic) then
 		classicmode = true;
+		if (self.RingInbound) then
+			sgctype = true;
+		end
 	end
 	if (classicmode) then
 		self.Sounds = self.SoundsClassic;
@@ -51,7 +55,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		self.Sounds = self.SoundsBak;
 	end
 	local chevlight = false;
-	if (self.SpChevLight or self.ChevLight) then
+	if (self.ChevLight) then
 		chevlight = true;
 	end
 	--################# INBOUND AND DHD (fast) DIAL
@@ -298,10 +302,17 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					action:Add({f=self.SetChevrons,v={self,7,1},d=0}); -- Wire
 					action:Add({f=self.SetWire,v={self,"Chevron Locked",1},d=0}); -- Wire
 					if (classicmode) then
-						action:Add({f=self.ChevronAnimation,v={self,7,true},d=0}); -- Animate chevron
-						action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
-						action:Add({f=self.ChevronSound,v={self,7,false,false,false,true},d=1.5}); -- Chevron Locked
-						action:Add({f=self.ActivateChevronLight,v={self,7,true},d=0.6}); -- Chevron lights up
+						if (sgctype) then
+							action:Add({f=self.ActivateChevronLight,v={self,7,true},d=0}); -- Chevron lights up
+							action:Add({f=self.ChevronAnimation,v={self,7,true},d=0}); -- Animate chevron
+							action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
+							action:Add({f=self.ChevronSound,v={self,7,false,false,false,true},d=2.1}); -- Chevron Locked
+						else
+							action:Add({f=self.ChevronAnimation,v={self,7,true},d=0}); -- Animate chevron
+							action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
+							action:Add({f=self.ChevronSound,v={self,7,false,false,false,true},d=1.5}); -- Chevron Locked
+							action:Add({f=self.ActivateChevronLight,v={self,7,true},d=0.6}); -- Chevron lights up
+						end
 					else
 						for c=1,chevs do
 							action:Add({f=self.ActivateChevron,v={self,c,true},d=0});
@@ -317,13 +328,24 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 				if (i == 7 and (chevs == 8 or chevs == 9) or i == 8 and chevs == 9) then
 					s = s+1;
 				end
-				action:Add({f=self.ChevronAnimation,v={self,s,classicmode},d=0}); -- Animate chevron
-				action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
-				action:Add({f=self.SetWire,v={self,"Dialed Symbol",DialSymbol},d=0}); -- Wire
-				action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
+				if (sgctype) then
+					action:Add({f=self.ChevronSound,v={self,s,false,false,false,true},d=0.4}); -- Chevron Locked
+					action:Add({f=self.ChevronAnimation,v={self,s,classicmode},d=0}); -- Animate chevron
+					action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
+					action:Add({f=self.SetWire,v={self,"Dialed Symbol",DialSymbol},d=0}); -- Wire
+					action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
+					action:Add({f=self.ActivateChevronLight,v={self,s,true},d=1.8}); -- Chevron lights up
+				else
+					action:Add({f=self.ChevronAnimation,v={self,s,classicmode},d=0}); -- Animate chevron
+					action:Add({f=self.SetWire,v={self,"Chevron",i},d=0}); -- Wire
+					action:Add({f=self.SetWire,v={self,"Dialed Symbol",DialSymbol},d=0}); -- Wire
+					action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
+				end
 				if (classicmode) then
-					action:Add({f=self.ChevronSound,v={self,s,false,false,false,true},d=1.7}); -- Chevron Locked
-					action:Add({f=self.ActivateChevronLight,v={self,s,true},d=0.8}); -- Chevron lights up
+					if (not sgctype) then
+						action:Add({f=self.ChevronSound,v={self,s,false,false,false,true},d=1.7}); -- Chevron Locked
+						action:Add({f=self.ActivateChevronLight,v={self,s,true},d=0.8}); -- Chevron lights up
+					end
 				else
 					if (chevlight) then
 						action:Add({f=self.ChevronSound,v={self,s},d=1.7}); -- Chevron Locked
@@ -359,10 +381,10 @@ function ENT.Sequence:InstantOpen(action,delay,instant,inbound,slow,nox,fail)
 	chevs = 7
 	if (count >= 8 and count <= 10) then chevs = count-1; end
 	local classicmode = false;
-	if (self.SpClassic or self.Classic) then classicmode = true; end
+	if (self.Classic) then classicmode = true; end
 	if (classicmode) then self.Sounds = self.SoundsClassic; else self.Sounds = self.SoundsBak; end
 	local chevlight = false;
-	if (self.SpChevLight or self.ChevLight) then chevlight = true; end
+	if (self.ChevLight) then chevlight = true; end
 	for i=1,9 do
 		action:Add({f=self.ActivateChevron,v={self,i,false,false,true},d=0});
 	end
@@ -459,9 +481,9 @@ function ENT.Sequence:OnButtonChevron(lightup, dialchev, address, symbol, fail, 
 	local classicmode = false;
 	local chevlight = false;
 	if (dialchev == 1) then
-		if (self.SpClassic or self.Classic) then classicmode = true; self.ClassicMode = true; else self.ClassicMode = false; end
+		if (self.Classic) then classicmode = true; self.ClassicMode = true; else self.ClassicMode = false; end
 		if (classicmode) then self.Sounds = self.SoundsClassic; else self.Sounds = self.SoundsBak; end
-		if (self.SpChevLight or self.ChevLight) then chevlight = true; self.LightMode = true; else self.LightMode = false; end
+		if (self.ChevLight) then chevlight = true; self.LightMode = true; else self.LightMode = false; end
 	elseif (dialchev == 0) then
 		self.ClassicMode = false;
 		self.LightMode = false;
@@ -499,7 +521,7 @@ function ENT.Sequence:OnButtonChevron(lightup, dialchev, address, symbol, fail, 
 				action:Add({f=self.ActivateChevron,v={self,dialchev,true,false},d=0});
 			end
 			action:Add({f=self.SetChevrons,v={self,dialchev,1},d=0}); -- Wire
-			if (classicmode and self.chev_destroyed and not self.chev_destroyed[dialchev]) then
+			if (classicmode and self.chev_destroyed and not self.chev_destroyed[dialchev] and dialchev != 7) then
 				action:Add({f=self.EmitSound,v={self.Entity,self.ButtChevSounds[math.random(1,table.getn(self.ButtChevSounds))],90,math.random(97,103)},d=0}); -- Chevron lights up
 			end
 		elseif (not classicmode) then

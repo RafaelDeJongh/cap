@@ -14,14 +14,14 @@ function Gmod13Lib()
 end
 
 -- Fix for file.* function not finding files from legacy addon system in data folder (needed for other addons like wiremod, for find cap e2 chips etc).
-local file_Read = file.Read
+local file_Open = file.Open
 local file_Find = file.Find
 local file_IsDir = file.IsDir
 local file_Exists = file.Exists
 local file_Size = file.Size
 
 -- need keep old way for compatibility with other mods (including wiremod)
-function file.Read(path,param)
+function file.Open(path,mode,param)
 	local dir = "GAME";
 	if (not param) then
 		dir = "DATA"
@@ -30,10 +30,10 @@ function file.Read(path,param)
 	else
 		dir = param
 	end
-	if (dir:upper()=="DATA" and not file_Exists(path,dir)) then
-		return file_Read("data/"..path,"GAME");
+	if (dir:upper()=="DATA" and not file_Exists(path,dir) and (mode=="r" or mode=="rb")) then
+		return file_Open("data/"..path,mode,"GAME");
 	end
-	return file_Read(path,dir);
+	return file_Open(path,mode,dir);
 end
 
 function file.Find(path,dir,order)

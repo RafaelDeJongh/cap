@@ -31,6 +31,7 @@ local cap_convars = {}
 		{"Sodan Obelisk", "sod_obelisk", 4},
 		{"Ancient Obelisk", "anc_obelisk", 4},
 		{"MCD", "mcd", 1},
+		{"Ships", "ships", 10},
 	}
 
 	local convars2 = {
@@ -182,7 +183,8 @@ function Cap_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_menu_25"), "shieldcore",1},
 		{SGLanguage.GetMessage("stargate_cap_menu_26"), "sod_obelisk", 4},
 		{SGLanguage.GetMessage("stargate_cap_menu_27"), "anc_obelisk", 4},
-		{SGLanguage.GetMessage("entity_mcd"), "mcd", 1}
+		{SGLanguage.GetMessage("entity_mcd"), "mcd", 1},
+		{SGLanguage.GetMessage("stargate_cap_menu_39"), "ships", 10}
 	}
 	local wepssett = {
 		{SGLanguage.GetMessage("stargate_cap_menu_28"), "ag3_weapon", 60},

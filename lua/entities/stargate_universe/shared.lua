@@ -14,7 +14,7 @@ properties.Add( "Stargate.Uni.SymLight.On",
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
 	Filter		=	function( self, ent, ply )
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_universe" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActSymsL",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_universe" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActSymsAL",false)) then return false end
 						return true
 
 					end,
@@ -32,7 +32,7 @@ properties.Add( "Stargate.Uni.SymLight.On",
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent:TriggerInput("Activate Symbols",1);
+						ent:TriggerInput("Activate All Symbols",1);
 					end
 
 });
@@ -45,7 +45,7 @@ properties.Add( "Stargate.Uni.SymLight.Off",
 
 	Filter		=	function( self, ent, ply )
 
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_universe" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActSymsL",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_universe" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActSymsAL",false)) then return false end
 						return true
 
 					end,
@@ -63,7 +63,7 @@ properties.Add( "Stargate.Uni.SymLight.Off",
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent:TriggerInput("Activate Symbols",0);
+						ent:TriggerInput("Activate All Symbols",0);
 					end
 
 });

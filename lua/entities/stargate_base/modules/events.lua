@@ -66,7 +66,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound)
 	if(instant_stop) then delay = 0 end;
 	action:Add({f=self.SetStatus,v={self,false,true,true},d=0}); -- We need to keep in "dialling" mode to get around with conflicts
 	if(self.Entity.Active or play_sound) then
-		action:Add({f=self.EmitSound,v={self.Entity,self.Sounds.Fail,90,math.random(95,105)},d=0});-- Fail sound
+		action:Add({f=self.DialFailSound,v={self.Entity},d=0});-- Fail sound
 	end
 	action:Add({f=self.SetShutdown,v={self,true},d=0});
 	action:Add({f=self.DHDDisable,v={self,1.5,true},d=delay});-- Shutdown EVERY DHD

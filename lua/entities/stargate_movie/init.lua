@@ -46,27 +46,33 @@ ENT.SoundsBak = {
 	Chevron={Sound("AlexALX/stargate/movie/locked.mp3"),Sound("AlexALX/stargate/movie/unlocked.mp3")},
 	Lock=Sound("AlexALX/stargate/movie/lock.mp3"),
 	LockDHD=Sound("stargate/chevron_lock_dhd.mp3"),
-	Fail=Sound("stargate/dial_fail.mp3"),
+	Fail=Sound("stargate/dial_fail_nc.mp3"),
 	Slow=Sound("AlexALX/stargate/gate_roll_long.wav"),
 	Chev9Dial=Sound("stargate/universe/fail3.wav"),
 	OnButtonLock=Sound("stargate/stargate/dhd/dhd_usual_dial.wav"),
 }
 
 ENT.SoundsClassic = {
-	Open=Sound("stargate/gate_open.mp3"),
+	Open=Sound("stargate/sg1/open.mp3"),
 	Travel=Sound("stargate/gate_travel.mp3"),
 	Close=Sound("stargate/gate_close.mp3"),
 	ChevronDHD=Sound("stargate/chevron_dhd.mp3"),
 	Inbound=Sound("stargate/chevron_incoming.mp3");
 	Lock=Sound("stargate/chevron_lock.mp3"),
 	LockDHD=Sound("stargate/chevron_lock_dhd.mp3"),
-	Fail=Sound("stargate/dial_fail.mp3"),
+	Fail=Sound("stargate/dial_fail_sg1.mp3"),
+	Fail_NC=Sound("stargate/dial_fail_nc.mp3"),
 	Slow=Sound("AlexALX/stargate/gate_roll_long.wav"),
 	Chev9Dial=Sound("stargate/universe/fail3.wav"),
 	OnButtonLock=Sound("stargate/stargate/dhd/dhd_usual_dial.wav"),
 }
 
 ENT.Sounds = ENT.SoundsBak;
+
+ENT.SGCChevron = {
+	Sound("AlexALX/stargate/movie/sgc_chevron.mp3"),
+	Sound("AlexALX/stargate/movie/sgc_chevron2.mp3")
+}
 
 ENT.SGCLock = {
 	Sound("stargate/sg1/lock.mp3"),
@@ -209,8 +215,6 @@ function ENT:Initialize()
 	self.RingInbound = false;
 	self.ChevLight = false;
 	self.Classic = false;
-	self.SpChevLight = false;
-	self.SpClassic = false;
 end
 
 --#################  Called when stargate_group_system changed
@@ -279,7 +283,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Chevron Light","Classic Mode","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevrons Lock","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Chevron Light","Classic Mode","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevrons Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -393,6 +397,8 @@ function ENT:ActivateRing(b,classic,loop,fast)
 		self.Ring:Fire("stop","",0);
 		self.Ring.Moving = false;
 		self.Ring.WireMoving = false;
+		self.WireEncodeSymbol = "";
+		self.WireLockSymbol = "";
 	end
 end
 
@@ -518,7 +524,107 @@ function RingTickMovie()
 					end
 				end
 			end
-			if (self.Ring.WireMoving) then
+			if (self.Ring.WireMoving and (self.WireEncodeSymbol!="" or self.WireLockSymbol!="")) then
+				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))--+3;
+				local isconcept = self.IsConcept;
+				if (angle<0) then angle = angle+360; end
+				local angle2 = angle;
+				local symbols = self.SymbolsLock;
+				if (isconcept) then symbols = self.SymbolsLockConcept; end
+				local nsym = self.WireEncodeSymbol;
+				local lock = false;
+				if (self.WireLockSymbol!="") then nsym = self.WireLockSymbol; lock = true; end
+				local need = tonumber(symbols[tonumber(nsym) or nsym]);
+				if (!need) then self:AbortDialling(); self.Ring.Moving = false; else
+					--need = need+3;
+					local chevron = 1;
+					if (self.DiallingChevron!="") then
+						if (self.Outbound and self.Ring.Moving) then
+							chevron = tonumber(self.DiallingChevron);
+						else
+							chevron = tonumber(self.DiallingChevron)+1;
+						end
+					end;
+					if (chevron==7) then chevron = 8 end;
+					if (lock) then chevron = 7 end;
+					if (chevron <= 3) then
+						need = need - (40*chevron);
+					elseif (chevron >= 4 and chevron < 7) then
+						need = need - (40*(chevron+2));
+					elseif (chevron == 8) then
+						need = need - (40*4);
+					elseif (chevron == 9) then
+						need = need - (40*5);
+					end
+					if (need<0) then need = need+360; end
+					if (lock) then
+						local stop = self:StopFormula(angle2,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
+						if (stop and not self.Shutingdown) then
+							self.Entity:ActivateRing(false,false,true);
+							self.Entity:SetNWBool("ActRotRingL",false);
+							self.Ring.WireMoving = false;
+							self:BlockWire(true);
+							self.WireEncodeSymbol = "";
+							self.WireLockSymbol = "";
+							timer.Simple(1,function()
+								if (IsValid(self)) then
+									self.Entity:Chevron7Lock();
+								end
+							end)
+						end
+					else
+						local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
+						if (stop and not self.Shutingdown) then
+							self.Entity:ActivateRing(false,false,true);
+							self.Entity:SetNWBool("ActRotRingL",false);
+							self.Ring.WireMoving = false;
+							self:BlockWire(true);
+							self.WireEncodeSymbol = "";
+							self.WireLockSymbol = "";
+							timer.Simple(1,function()
+								if (IsValid(self)) then
+									self.Entity:EncodeChevron();
+								end
+							end)
+						end
+					end
+					if (chevron <= 3) then
+						angle2 = angle2 + (40*chevron);
+					elseif (chevron >= 4 and chevron < 7) then
+						angle2 = angle2 + (40*(chevron+2));
+					elseif (chevron == 8) then
+						angle2 = angle2 + (40*4);
+					elseif (chevron == 9) then
+						angle2 = angle2 + (40*5);
+					end
+					if (angle2>=360) then angle2 = angle2-360; end
+					local reset = true;
+					local reset2 = true;
+					for k, v in pairs(symbols) do
+						--v = v+3;
+						local symbol = self:StopFormula(angle2,v,18.9,14.9);
+						if (symbol) then
+							self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
+							self.RingSymbol = tostring(k);
+							reset = false;
+						end
+						local symbol2 = self:StopFormula(angle,v,18.9,14.9);
+						if (symbol2) then
+							self.Entity:SetWire("Ring Chev7 Symbol",tostring(k)); -- Wire
+							self.RingSymbol7Chev = tostring(k);
+							reset2 = false;
+						end
+					end
+					if (reset and self.RingSymbol != "") then
+						self.Entity:SetWire("Ring Symbol",""); -- Wire
+						self.RingSymbol = "";
+					end
+					if (reset2 and self.RingSymbol7Chev != "") then
+						self.Entity:SetWire("Ring Chev7 Symbol",""); -- Wire
+						self.RingSymbol7Chev = "";
+					end
+				end
+			elseif (self.Ring.WireMoving) then
 				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
 				local isconcept = self.IsConcept;
 				if (angle<0) then angle = angle+360; end
@@ -627,37 +733,37 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActRotRingL",false);
 		end
 	elseif(k == "Chevron Encode" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
-		if (self:GetWire("Chevron Encode",0) >= 1) then
+		if (v >= 1) then
 			self:EncodeChevron();
 		end
 	elseif(k == "Chevrons Lock" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
-		if (self:GetWire("Chevrons Lock",0) >= 1) then
+		if (v >= 1) then
 			self.RingSymbol = self.RingSymbol7Chev;
 			self:Chevron7Lock();
 		end
 	elseif(k == "Ring Speed Mode" and not self.Active and (not self.NewActive or self.WireManualDial)) then
-		if (self:GetWire("Ring Speed Mode",0) == 1) then
+		if (v == 1) then
 			self.RingSpeed = 1;
 			if (not self.NewActive or self.WireManualDial) then
 				self.Ring.Entity:SetKeyValue("maxspeed",30);
 				if (self.Ring.WireMoving) then self.Ring:Fire("start","",0); end
 				if (self.RingSound) then self.RingSound:ChangePitch(97,0); end
 			end
-		elseif (self:GetWire("Ring Speed Mode",0) == 2) then
+		elseif (v == 2) then
 			self.RingSpeed = 2;
 			if (not self.NewActive or self.WireManualDial) then
 				self.Ring.Entity:SetKeyValue("maxspeed",45);
 				if (self.Ring.WireMoving) then self.Ring:Fire("start","",0); end
 				if (self.RingSound) then self.RingSound:ChangePitch(102,0); end
 			end
-		elseif (self:GetWire("Ring Speed Mode",0) >= 3) then
+		elseif (v >= 3) then
 			self.RingSpeed = 3;
 			if (not self.NewActive or self.WireManualDial) then
 				self.Ring.Entity:SetKeyValue("maxspeed",60);
 				if (self.Ring.WireMoving) then self.Ring:Fire("start","",0); end
 				if (self.RingSound) then self.RingSound:ChangePitch(106); end
 			end
-		elseif (self:GetWire("Ring Speed Mode",0) <= -1) then
+		elseif (v <= -1) then
 			self.RingSpeed = -1;
 			if (not self.NewActive or self.WireManualDial) then
 				self.Ring.Entity:SetKeyValue("maxspeed",7.5);
@@ -681,9 +787,9 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			for i=1,9 do
 				if (chevs[i] and tonumber(chevs[i]) >= 1) then
 					if (tonumber(chevs[i]) >= 2) then sound = false; end
-					if (self.SpClassic or self.Classic or self.SpChevLight or self.ChevLight) then
+					if (self.Classic or self.ChevLight) then
 						self:ActivateChevronLight(i,true);
-					end if (not self.SpClassic and not self.Classic) then
+					end if (not self.Classic) then
 						self:ActivateChevron(i,true);
 						sound = false;
 					end
@@ -722,7 +828,6 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActMChevL",true);
 		else
 			self.ChevLight = false;
-			self.SpChevLight = false;
 			self.Entity:SetNWBool("ActMChevL",false);
 		end
 	elseif(k == "Classic Mode") then
@@ -731,8 +836,20 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActMCl",true);
 		else
 			self.Classic = false;
-			self.SpClassic = false;
 			self.Entity:SetNWBool("ActMCl",false);
+		end
+	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
+		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
+			self.Ring.WireMoving = true;
+			self:ActivateRing(true);
+			self.WireEncodeSymbol = v;
+		end
+	elseif(k == "Lock Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
+		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
+			self.Ring.WireMoving = true;
+			self.Entity:SetNWBool("ActRotRingL",true);
+			self:ActivateRing(true);
+			self.WireLockSymbol = v;
 		end
 	end
 end
@@ -820,7 +937,7 @@ function ENT:ChevronAnimation(chev,classic)
 		return
 	end
 	if (classic) then
-		if (chev==7 and self.RingInbound) then
+		if (self.RingInbound) then
 			self.Chevron[chev]:Fire("SetAnimation","LockUnlock",0.4);
 		else
 			self.Chevron[chev]:Fire("SetAnimation","LockUnlockLong",0);
@@ -840,7 +957,11 @@ function ENT:ChevronSound(chev,fast,inbound,b,classic,wire)
 	-- Manual slowdial
 	if(not fast) then
 		if (classic) then
-			snd = self.SoundsClassic.Lock;
+			if (self.RingInbound) then
+				snd = self.SGCChevron[math.random(1,2)]
+			else
+				snd = self.SoundsClassic.Lock;
+			end
 		else
 			snd = self.SoundsBak.Lock;
 		end
@@ -872,11 +993,25 @@ function ENT:Shutdown() -- It is called at the end of ENT:Close or ENT.Sequence:
 	self.RingSymbol7Chev = "";
 	self.WireDialledAddress = {};
 	self.WireManualDial = false;
+	self.WireEncodeSymbol = "";
+	self.WireLockSymbol = "";
 	self.WireBlock = false;
 	if (IsValid(self.Entity)) then
 		self.Entity:SetNWBool("ActChevronsL",false);
 		self.Entity:SetNWBool("ActRotRingL",false);
 		self:SetWire("Ring Symbol",""); -- Wire
 		self:SetWire("Ring Chev7 Symbol",""); -- Wire
+	end
+end
+
+function ENT:DialFailSound()
+	if (self.Classic) then
+		if (self.Sounds.Fail_NC and self.Entity:GetWire("Chevron",0,true)==0) then
+			self.Entity:EmitSound(self.Sounds.Fail_NC,90,math.random(90,92));
+		else
+			self.Entity:EmitSound(self.Sounds.Fail,90,math.random(95,105));
+		end
+	else
+		self.Entity:EmitSound(self.Sounds.Fail,90,math.random(87,88));
 	end
 end

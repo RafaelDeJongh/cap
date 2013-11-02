@@ -116,6 +116,12 @@ function ENT:SpawnFunction( ply, tr )
 		-- return
 	-- end
 
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+		ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	ent = ents.Create("sg_vehicle_daedalus");
 	ent:SetPos(ply:GetPos()+Vector(0,50,800));
 	ent:Spawn();
@@ -125,6 +131,7 @@ function ENT:SpawnFunction( ply, tr )
 	-- ent.Owner:SetNetworkedEntity("DaedalusOutside",ent);
 
 	-- ply:AddCount("ships_daedalus", ent)
+	ply:AddCount("CAP_ships", ent)
 	return ent
 end
 
@@ -833,5 +840,14 @@ end
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			Ent:Remove();
+			return
+		end
+		ply:AddCount("CAP_ships", Ent);
+	end
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

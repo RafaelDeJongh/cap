@@ -311,6 +311,7 @@ stargate_supergate = admin,superadmin,add_shield
 [tool_groups_only]
 
 # Disabled ents
+# example: stargate_sg1 = true
 [cap_disabled_ent]
 
 # Disabled sweps

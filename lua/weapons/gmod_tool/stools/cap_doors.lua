@@ -38,7 +38,7 @@ function TOOL:LeftClick(t)
 	local diff_text = util.tobool(self:GetClientNumber("diff_text"));
 	local doormodel = model:lower();
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
-	else model = "models/Madman07/doors/atl_frame.mdl"; end
+	else model = "models/madman07/doors/atl_frame.mdl"; end
 
 	if(not self:CheckLimit()) then return false end;
 	local e = self:SpawnSENT(p,t,model,toggle, diff_text, doormodel);
@@ -48,8 +48,9 @@ function TOOL:LeftClick(t)
 	self:AddCleanup(p,c,e);
 
 	e.DoorModel = doormodel;
+	if (IsValid(e.Door)) then e.Door:SetAngles(e:GetAngles()) end -- fix
 	if (model == "models/madman07/doors/atl_frame.mdl") then
-		if diff_text then e:SetMaterial("Madman07/doors/atlwall_red"); end
+		if diff_text then e:SetMaterial("madman07/doors/atlwall_red"); end
 	end
 	if (model == "models/madman07/doors/dest_frame.mdl") then e:SoundType(1);
 	else e:SoundType(2); end

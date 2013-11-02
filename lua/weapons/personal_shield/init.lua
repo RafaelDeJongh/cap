@@ -109,7 +109,7 @@ timer.Create("StarGate.PersonalShield.Think",0.1,0,
 
 					if v.pShielded then
 						if strength < 100 then
-							strength = math.Clamp(strength-0.5, 0, 100)
+							strength = math.Clamp(strength-0.2, 0, 100)
 						end
 
 						if strength == 0 then
@@ -118,7 +118,7 @@ timer.Create("StarGate.PersonalShield.Think",0.1,0,
 						end
 					else
 						if strength < 100 then
-							strength = math.Clamp(strength+1, 0, 100)
+							strength = math.Clamp(strength+0.5, 0, 100)
 						end
 					end
 

@@ -168,10 +168,12 @@ function StarGate.InstalledOnClient()
 	if (StarGate.InstalledOnCl!=nil) then return StarGate.InstalledOnCl; end -- cache
 	StarGate.InstalledOnCl = false;
 	local addonlist = {}
-	for _,v in pairs(GetAddonList(true)) do
-		for k,c in pairs(GetAddonInfo(v)) do
-			if (k == "Name") then
-				table.insert(addonlist, c);
+	if (GetAddonList!=nil) then
+		for _,v in pairs(GetAddonList(true)) do
+			for k,c in pairs(GetAddonInfo(v)) do
+				if (k == "Name") then
+					table.insert(addonlist, c);
+				end
 			end
 		end
 	end

@@ -16,9 +16,9 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-EFFECT.Material = Material("Zup/Stargate/eventhorizon_establish");
+EFFECT.Material = Material("zup/stargate/eventhorizon_establish");
 -- Taken from the collapse effect. Looks also cool on opening sequence
-EFFECT.Collapse = Material("Zup/Stargate/eh_closing"); -- Thanks to flyboi who sent me this good material! (We will play it reversed!)
+EFFECT.Collapse = Material("zup/stargate/eh_closing"); -- Thanks to flyboi who sent me this good material! (We will play it reversed!)
 --################# Init @aVoN
 function EFFECT:Init(data)
 	if (not StarGate.VisualsMisc("cl_stargate_effects",true)) then return end
@@ -57,9 +57,19 @@ function EFFECT:Render()
 	end
 	if(not self.Draw) then return end; -- Stops crashing ppl
 	if(CurTime()-self.Spawned < self.Delay/3) then return end;
+
+	-- test fix for client crash
+	if (self.Collapse:GetName()!="zup/stargate/eh_closing") then
+		self.Collapse = Material("zup/stargate/eh_closing");
+	end
+	if (self.Material:GetName()!="zup/stargate/eventhorizon_establish") then
+		self.Material = Material("zup/stargate/eventhorizon_establish");
+	end
+
 	self.StartedCollapse = self.StartedCollapse or CurTime();
 	local frame = math.floor((CurTime()-self.StartedCollapse)*self.FrameRate);
-	if(frame <= self.FrameEnd) then
+	local frm = self.FrameEnd-frame; -- fix for crash
+	if(frame <= self.FrameEnd and self.Collapse:GetName()=="zup/stargate/eh_closing" and frm>=0 and frm<=17) then
 		local pos = self.Entity:GetPos();
 		local normal = self.Entity:GetForward();
 		-- Took me 3 hours to figure out how to manually animate a texture. Well, that's the solution

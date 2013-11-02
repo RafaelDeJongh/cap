@@ -27,7 +27,8 @@
 		{"Shield Core", "shieldcore",1},
 		{"Sodan Obelisk", "sod_obelisk", 4},
 		{"Ancient Obelisk", "anc_obelisk", 4},
-		{"MCD", "mcd", 1}
+		{"MCD", "mcd", 1},
+		{"CAP Ships", "ships", 10},
 	}
 	local wepssett = {
 		{"AG-3 Charge Time", "ag3_weapon", 60},
@@ -83,6 +84,7 @@
 	CreateConVar( "stargate_dhd_ring", "1", {FCVAR_ARCHIVE} )
 	CreateConVar( "stargate_different_dial_menu", "0", {FCVAR_ARCHIVE} )
 	CreateConVar( "stargate_gatespawner_enabled", "1", {FCVAR_ARCHIVE} )
+	CreateConVar( "stargate_random_address", "1", {FCVAR_ARCHIVE} )
 	local count = cvars.GetConVarCallbacks("stargate_gatespawner_enabled") or {}; -- add callback only once
 	if (table.Count(count)==0) then
 		cvars.AddChangeCallback("stargate_gatespawner_enabled", function(CVar, PreviousValue, NewValue)

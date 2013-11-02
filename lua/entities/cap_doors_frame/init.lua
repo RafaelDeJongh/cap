@@ -32,14 +32,14 @@ function ENT:Initialize()
 
 	if (self.DoorModel) then
 		local ent = ents.Create("cap_doors");
-		ent:SetAngles(self:GetAngles());
+		--ent:SetAngles(self:GetAngles());
 		ent:SetPos(self:GetPos());
 		ent:SetModel(self.DoorModel);
 		ent:Spawn();
 		ent:Activate();
 		constraint.NoCollide(self, ent, 0, 0 ); -- be sure it wont flip out!
-		ent:SetAngles(self:GetAngles());
-		ent:SetPos(self:GetPos());
+		--ent:SetAngles(self:GetAngles());
+		--ent:SetPos(self:GetPos());
 		constraint.Weld(self,ent,0,0,0,true)
 		ent.Delay = 2.5;
 		ent.Sound = false;

@@ -1483,3 +1483,11 @@ function ENT:IsSelfDial()
 	end
 	return false;
 end
+
+function ENT:DialFailSound()
+	if (self.Sounds.Fail_NC and self.Entity:GetWire("Chevron",0,true)==0) then
+		self.Entity:EmitSound(self.Sounds.Fail_NC,90,math.random(90,92));
+	else
+		self.Entity:EmitSound(self.Sounds.Fail,90,math.random(95,105));
+	end
+end

@@ -37,7 +37,7 @@ function EFFECT:Init(data)
 		Size=35, -- Base or startsize
 		GrowCoefficient=4, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
 		Length=3600, --Units long? 385.826 inches/second is gravity
-		Density=500, -- Amount of particles
+		Density=1800, -- Amount of particles
 		Radius=1600, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
 		Roll=0, --Roll, how much roll each particle has at start
 		RollS=1.0, --Roll Speed

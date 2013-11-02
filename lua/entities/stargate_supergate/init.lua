@@ -27,7 +27,7 @@ include("modules/dialling.lua");
 ENT.Sounds = {
 	Dial=Sound("stargate/supergate/supergate.wav"),
 	Ring=Sound("stargate/gate_roll.mp3"),
-	Open=Sound("stargate/gate_open.mp3"),
+	Open=Sound("stargate/sg1/open.mp3"),
 	Travel=Sound("stargate/gate_travel.mp3"),
 	Close=Sound("stargate/gate_close.mp3"),
 	ChevronDHD=Sound("stargate/chevron_dhd.mp3"),

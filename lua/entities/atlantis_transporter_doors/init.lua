@@ -13,10 +13,10 @@ include("shared.lua");
 
 function ENT:Initialize()
 	self.Entity:SetName("Atlantis Doors");
+	self.Entity:SetModel("models/Madman07/doors/atl_door2_part.mdl");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
-	--self.Entity:SetModel("models/Madman07/doors/atl_door2.mdl");
 	self.CanDoAnim = true;
 	self.Delay = 2.0;
 	self.Sound = true;
@@ -48,7 +48,12 @@ function ENT:Toggle()
 		self:SetPlaybackRate(self.PlaybackRate);
 		if self.Open then
 			timer.Create("Close2"..self:EntIndex(),self.Delay,1,function()
-				self.Open = false;
+				if (IsValid(self)) then
+					self.Open = false;
+					umsg.Start("StarGate.AtlantisTP.ClipStop");
+						umsg.Entity(self);
+					umsg.End()
+				end
 			end);
 			if (IsValid(self.BaseTP)) then
 				self.BaseTP:SetWire("Doors Opened",0);
@@ -65,6 +70,9 @@ function ENT:Toggle()
 			if (IsValid(self.BaseTP)) then
 				self.BaseTP:SetWire("Doors Opened",1);
 			end
+			umsg.Start("StarGate.AtlantisTP.ClipStart");
+				umsg.Entity(self);
+			umsg.End()
 			self:SetNotSolid(true);
 			self:ResetSequence(self:LookupSequence("open")); -- play the sequence
 			if self.Sound then

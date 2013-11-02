@@ -149,7 +149,8 @@ function SWEP:Think()
 						local class = e:GetClass();
 						if class == "npc_manhack" then return end;
 						if class == "npc_rollermine" then return end;
-						e:SetHealth(e:Health()-1);
+						--e:SetHealth(e:Health()-1);
+						e:TakeDamage(1,self.Owner);
 						self.Owner:SetHealth(self.Owner:Health()+1);
 						if col > 90 then
 							col = col - 0.2;
@@ -161,26 +162,17 @@ function SWEP:Think()
 							self.SoundTime = CurTime()+2;
 						end
 					elseif e:IsPlayer() then
-						e:SetHealth(e:Health()-1);
-						self.Owner:SetHealth(self.Owner:Health()+1);
+						--e:SetHealth(e:Health()-1);
+						e:TakeDamage(1,self.Owner);
+						if (not e.pShielded) then
+							self.Owner:SetHealth(self.Owner:Health()+1);
+						end
 						if (not self.Sound) then
 							self.Owner:EmitSound(self.Sounds.feeling,100,100);
 							self.Sound = true;
 							self.SoundTime = CurTime()+2;
 						end
 					end
-				end
-			end
-			if e:Health() < 1 then
-				if e:IsNPC() then
-					e:SetNPCState(NPC_STATE_DEAD);
-					timer.Simple(30, function()
-						if IsValid(e) then
-							e:Remove(); -- Remove corpse after 30 seconds
-						end
-					end);
-				elseif e:IsPlayer() then
-					e:Kill();
 				end
 			end
 		end

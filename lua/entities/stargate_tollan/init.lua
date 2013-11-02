@@ -31,7 +31,7 @@ ENT.Models = {
 }
 -- Sounds
 ENT.Sounds = {
-	Open=Sound("stargate/gate_open.mp3"),
+	Open=Sound("stargate/sg1/open.mp3"),
 	Travel=Sound("stargate/gate_travel.mp3"),
 	Close=Sound("stargate/gate_close.mp3"),
 	ChevronDHD=Sound("stargate/dhd_sg1.mp3"),

@@ -46,6 +46,13 @@ ENT.Sounds = {
 
 function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn it @RononDex
 	if (!tr.HitWorld) then return end;
+
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(p:GetCount("CAP_ships")+1 > PropLimit) then
+		p:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local e = ents.Create("sg_vehicle_f302");
 	e:SetPos(tr.HitPos + Vector(0,0,115));
 	e:SetAngles(Angle(0,p:GetAimVector():Angle().Yaw,0));
@@ -58,6 +65,7 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	e:Turrets(); -- Spawn turrets
 	e:SpawnWheels();
 	e:SetWire("Health",e:GetNetworkedInt("health"));
+	p:AddCount("CAP_ships", e)
 	return e;
 end
 
@@ -801,8 +809,6 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	local dupeInfo = Ent.EntityMods.F302DupeInfo
 
-	print_r(CreatedEntities)
-
 	if (dupeInfo.Wheels) then
 		self.Wheels = CreatedEntities[dupeInfo.Wheels];
 	end
@@ -812,6 +818,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	end
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_ships", Ent);
+	end
 
 	self:CockpitSpawn() -- Spawn the cockpit
 	self:SpawnSeats(); -- Spawn the seats

@@ -8,10 +8,12 @@ StarGate_Group = StarGate_Group or {};
 
 local addonlist = {}
 
-for _,v in pairs(GetAddonList(true)) do
-	for k,c in pairs(GetAddonInfo(v)) do
-		if (k == "Name") then
-			table.insert(addonlist, c);
+if (GetAddonList!=nil) then
+	for _,v in pairs(GetAddonList(true)) do
+		for k,c in pairs(GetAddonInfo(v)) do
+			if (k == "Name") then
+				table.insert(addonlist, c);
+			end
 		end
 	end
 end
@@ -203,7 +205,7 @@ if (CLIENT) then
 end
 
 -- just to be sure
-if (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" )) then
+if (GetAddonList!=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" ))) then
 	status = "Error";
 	MsgN("Status: "..status)
 	table.insert(StarGate_Group.ErrorMSG, "The Stargate Group System has been found on your system. Please remove it.");
@@ -290,7 +292,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<427 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<428 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -412,6 +414,7 @@ function StarGate_Group.ShowError(ply,cl)
 			MsgN("================================");
 			MsgN("Carter Addon Pack Error:"); MsgN("-------");
 			if (IsValid(ply)) then
+				MsgN("Player: "..ply:Name());
 				ply:SendLua( "MsgN(\"================================\")");
 				ply:SendLua("MsgN(\"Carter Addon Pack Error:\")"); ply:SendLua("MsgN(\"-------\")");
 			end

@@ -77,7 +77,7 @@ end
 
 function ENT:EffectThink()
     if(IsValid(self.Gate) and self.WireLight>=0)then
-        if(self.Gate.NewActive and (self.Gate.__LastChevron==8 and not self.Gate.__ChevronLocked or self.Gate.__LastChevron==9 or self.Gate.__LastChevron==-9 or self.WireLight==1 and (self.Gate.__ChevronLocked or self.Gate.__LastChevron<-6)) or self.WireLight>=2)then
+        if(self.Gate.NewActive and (self.Gate:GetWire("Chevron",0,true)==8 and self.Gate:GetWire("Chevron Locked",0,true)==0 or self.Gate:GetWire("Chevron",0,true)==9 or self.Gate:GetWire("Chevron",0,true)==-9 or self.WireLight==1 and (self.Gate:GetWire("Chevron Locked",0,true)==1 or self.Gate:GetWire("Chevron",0,true)<-6)) or self.WireLight>=2)then
 			if (math.random(0,1)==1) then
 				self:CreateBeam();
 				if (math.random(0,1)==1) then

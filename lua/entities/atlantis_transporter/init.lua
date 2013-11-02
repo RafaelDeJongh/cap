@@ -76,29 +76,33 @@ function ENT:Initialize()
 end
 
 function ENT:ToggleDoors()
-	if IsValid(self.Doors) then
-		self.Doors:Toggle()
+	if IsValid(self.Doors[1]) then
+		self.Doors[1]:Toggle()
+	end
+	if IsValid(self.Doors[2]) then
+		self.Doors[2]:Toggle()
 	end
 end
 
 function ENT:IsDoorsOpen()
-	if IsValid(self.Doors) then
-		return self.Doors.Open
+	if IsValid(self.Doors[1]) then
+		return self.Doors[1].Open
 	else
 		return false
 	end
 end
 
 function ENT:IsDoorsBusy()
-	if IsValid(self.Doors) then
-		return not self.Doors.CanDoAnim
+	if IsValid(self.Doors[1]) then
+		return not self.Doors[1].CanDoAnim
 	else
 		return false
 	end
 end
 
 function ENT:OnRemove()
-	if (IsValid(self.Doors)) then self.Doors:Remove() end
+	if (IsValid(self.Doors[1])) then self.Doors[1]:Remove() end
+	if (IsValid(self.Doors[2])) then self.Doors[2]:Remove() end
 	net.Start("UpdateAtlTP")
 	net.WriteInt(self:EntIndex(),16)
 	net.WriteInt(0,4)
@@ -110,21 +114,32 @@ function ENT:CreateDoors(spawner,protect)
 	local d = ents.Create("atlantis_transporter_doors");
 	local e = self.Entity
 	d:SetPos(e:GetPos()+e:GetForward()*(-0.5)+e:GetUp()*(-3)+e:GetRight()*(-1));
-	d:SetAngles(e:GetAngles()+Angle(0,180,0));
-	d:SetModel("models/Madman07/doors/atl_door2.mdl")
-	--d:SetParent(self.Entity);
+	d:SetAngles(e:GetAngles()+Angle(0,90,0));
 	d:Spawn();
 	d:Activate();
 	d:DrawShadow(false)
 	d.BaseTP = self;
+	local d2 = ents.Create("atlantis_transporter_doors");
+	d2:SetPos(e:GetPos()+e:GetForward()*(-0.5)+e:GetUp()*(-3)+e:GetRight()*(-1));
+	d2:SetAngles(e:GetAngles()+Angle(0,270,0));
+	d2:Spawn();
+	d2:Activate();
+	d2:DrawShadow(false)
+	d2.BaseTP = self;
+	d2.Sound = false;
 	--constraint.NoCollide(e,d,0,0);
 	--constraint.NoCollide(d,game.GetWorld(),0,0);
 	constraint.Weld(d,e,0,0,0,true)  -- i don't want use weld here
-	self.Doors=d
-	self.DoorPhys = self.Doors:GetPhysicsObject();
-	if(IsValid(self.DoorPhys))then
-		self.DoorPhys:EnableMotion(false);
-		self.DoorPhys:SetMass(100);
+	constraint.Weld(d2,e,0,0,0,true)  -- i don't want use weld here
+	self.Doors={d,d2}
+	self.DoorPhys = {self.Doors[1]:GetPhysicsObject(),self.Doors[2]:GetPhysicsObject()}
+	if(IsValid(self.DoorPhys[1]))then
+		self.DoorPhys[1]:EnableMotion(false);
+		self.DoorPhys[1]:SetMass(100);
+	end
+	if(IsValid(self.DoorPhys[2]))then
+		self.DoorPhys[2]:EnableMotion(false);
+		self.DoorPhys[2]:SetMass(100);
 	end
 
 	local d = ents.Create("cap_doors_contr");
@@ -334,12 +349,15 @@ function ENT:Think()
 	end
 
 	-- fix for physics
-	if (IsValid(self.Phys) and IsValid(self.DoorPhys)) then
-        local mot,dmot = self.Phys:IsMotionEnabled(),self.DoorPhys:IsMotionEnabled();
+	if (IsValid(self.Phys) and IsValid(self.DoorPhys[1]) and IsValid(self.DoorPhys[2])) then
+        local mot,dmot = self.Phys:IsMotionEnabled(),self.DoorPhys[1]:IsMotionEnabled();
+
 		if (not mot and dmot) then
-			self.DoorPhys:EnableMotion(false);
+			self.DoorPhys[1]:EnableMotion(false);
+			self.DoorPhys[2]:EnableMotion(false);
 		elseif (mot and not dmot) then
-			self.DoorPhys:EnableMotion(true);
+			self.DoorPhys[1]:EnableMotion(true);
+			self.DoorPhys[2]:EnableMotion(true);
 		end
 
 		--self.DoorPhys:SetPos(self.Doors:GetPos());
@@ -552,8 +570,8 @@ end
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
-	if (IsValid(self.Doors)) then
-		dupeInfo.Doors = self.Doors:EntIndex();
+	if (IsValid(self.Doors[1]) and IsValid(self.Doors[2])) then
+		dupeInfo.Doors = {self.Doors[1]:EntIndex(),self.Doors[2]:EntIndex()};
 	end
 
 	if (IsValid(self.Button1)) then
@@ -573,15 +591,20 @@ end
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local dupeInfo = Ent.EntityMods.AtlantisTPDupeInfo
 
-	if (dupeInfo.Doors) then
-		self.Doors = CreatedEntities[dupeInfo.Doors];
-		self.Doors:DrawShadow(false);
-		self.Doors.BaseTP = self;
-		--self.Doors:SetParent(self);
-		self.DoorPhys = self.Doors:GetPhysicsObject();
-		if(IsValid(self.DoorPhys))then
+	if (dupeInfo.Doors and dupeInfo.Doors[1] and dupeInfo.Doors[2]) then
+		self.Doors = {CreatedEntities[dupeInfo.Doors[1]],CreatedEntities[dupeInfo.Doors[2]]};
+		self.Doors[1]:DrawShadow(false);
+		self.Doors[1].BaseTP = self;
+		self.Doors[2]:DrawShadow(false);
+		self.Doors[2].BaseTP = self;
+		self.DoorPhys = {self.Doors[1]:GetPhysicsObject(),self.Doors[2]:GetPhysicsObject()};
+		if(IsValid(self.DoorPhys[1]))then
 			--self.DoorPhys:EnableMotion(true);
-			self.DoorPhys:SetMass(100);
+			self.DoorPhys[1]:SetMass(100);
+		end
+		if(IsValid(self.DoorPhys[2]))then
+			--self.DoorPhys:EnableMotion(true);
+			self.DoorPhys[2]:SetMass(100);
 		end
 	end
 

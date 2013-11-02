@@ -68,23 +68,26 @@ for _,v in pairs(engine.GetAddons()) do
 	end
 end
 
-if (file.Exists("lua/cap_ver.lua","GAME")) then
-	StarGate.CapVer = tonumber(file.Read("lua/cap_ver.lua","GAME"));
-elseif(file.Exists("addons/cap/ver.txt","GAME")) then -- for old clients compatibility in mp
-	StarGate.CapVer = tonumber(file.Read("addons/cap/ver.txt","GAME"));
-elseif (StarGate.Workshop and CLIENT) then
-	StarGate.CapVer = 413; -- just for old workshop clients compatibility in mp, can be removed later
-end
+local function CheckVersion()
+	if (file.Exists("lua/cap_ver.lua","GAME")) then
+		StarGate.CapVer = tonumber(file.Read("lua/cap_ver.lua","GAME"));
+	elseif(file.Exists("addons/cap/ver.txt","GAME")) then -- for old clients compatibility in mp
+		StarGate.CapVer = tonumber(file.Read("addons/cap/ver.txt","GAME"));
+	elseif (StarGate.Workshop and CLIENT) then
+		StarGate.CapVer = 413; -- just for old workshop clients compatibility in mp, can be removed later
+	end
 
-if (SERVER) then
-	local capver = CreateConVar("stargate_cap_version",StarGate.CapVer,{FCVAR_GAMEDLL,FCVAR_NOTIFY});
-	if (capver:GetInt()!=StarGate.CapVer) then
-		RunConsoleCommand("stargate_cap_version", tostring(StarGate.CapVer))
+	if (SERVER) then
+		local capver = CreateConVar("stargate_cap_version",StarGate.CapVer,{FCVAR_GAMEDLL,FCVAR_NOTIFY});
+		if (capver:GetInt()!=StarGate.CapVer) then
+			RunConsoleCommand("stargate_cap_version", tostring(StarGate.CapVer))
+		end
 	end
 end
 
 --################# Loads the libraries @aVoN
 function StarGate.Load()
+	CheckVersion();
 	MsgN("=======================================================");
 	MsgN("Stargate Carter Addon Pack: Initializing");
 	if (StarGate.WorkShop) then

@@ -60,6 +60,14 @@ ENT.Gibs={
 
 --############### Makes it spawn
 function ENT:SpawnFunction(pl, tr)
+	if (!tr.HitWorld) then return end
+
+	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+	if(pl:GetCount("CAP_ships")+1 > PropLimit) then
+		pl:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local e = ents.Create("puddle_jumper");
 	e:SetPos(tr.HitPos + Vector(0,0,60));
 	e:SetAngles(Angle(0,pl:GetAimVector():Angle().Yaw,0));
@@ -73,6 +81,7 @@ function ENT:SpawnFunction(pl, tr)
 	e:SpawnShieldGen()
 	e.Owner = pl;
 
+    pl:AddCount("CAP_ships",e)
 	pl:Give("weapon_jumper_remote");
 	return e;
 end
@@ -495,6 +504,16 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self:SpawnShieldGen()
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
+		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+		ply:AddCount("CAP_ships", Ent);
+	end
 
 	self.Owner = ply;
 	self:SetVar("Owner",ply);

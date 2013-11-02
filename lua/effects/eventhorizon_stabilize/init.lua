@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-EFFECT.Material = Material("Zup/Stargate/eventhorizon_establish");
+EFFECT.Material = Material("zup/stargate/eventhorizon_establish");
 --################# Init @aVoN
 function EFFECT:Init(data)
 	if (not StarGate.VisualsMisc("cl_stargate_effects",true)) then return end
@@ -56,6 +56,11 @@ function EFFECT:Render()
 		return;
 	end
 	if(not self.Draw) then return end; -- Stops crashing ppl
+
+	if (self.Material:GetName()!="zup/stargate/eventhorizon_establish") then
+		self.Material = Material("zup/stargate/eventhorizon_establish");
+	end
+
 	local mul = 1;
 	local diff = self.LifeTime-self.FadeTime;
 	if(diff+self.Spawned < CurTime()) then

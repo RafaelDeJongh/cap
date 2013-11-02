@@ -33,10 +33,10 @@ function EFFECT:Init(data)
 	end
 
 	self.Data = {
-		Time=1.6, -- Time to draw the vortex
+		Time=2.0, -- Time to draw the vortex
 		Size=2, -- Base or startsize
 		GrowCoefficient=3.5, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
-		Length=240, --Units long? 385.826 inches/second is gravity
+		Length=120, --Units long? 385.826 inches/second is gravity
 		Density=500, -- Amount of particles
 		Radius=18, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
 		Roll=0, --Roll, how much roll each particle has at start

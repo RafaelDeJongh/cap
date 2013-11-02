@@ -25,7 +25,6 @@
 EFFECT.Material = Material("zup/stargate/effect_03");
 --################# Init @aVoN
 function EFFECT:Init(data)
-	if (not file.Exists("materials/zup/stargate/effect_03.vmt","GAME")) then return end;
 	if(not StarGate.VisualsMisc("cl_stargate_ripple")) then return end;
 	local e = data:GetEntity()
 	if(not (e and e:IsValid())) then return end;

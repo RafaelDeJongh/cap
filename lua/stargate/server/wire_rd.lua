@@ -266,15 +266,20 @@ function StarGate.WireRD.SetWire(self,key,value)
 end
 
 --################# Gets a Wire value @aVoN
-function StarGate.WireRD.GetWire(self,key,default)
+function StarGate.WireRD.GetWire(self,key,default,out)
 	if(WireAddon) then
-		if(self.Inputs and self.Inputs[key] and self.Inputs[key].Value) then
-			return self.Inputs[key].Value or default or WireLib.DT[self.Inputs[key].Type].Zero;
+		if (out) then
+			if(self.Outputs and self.Outputs[key] and self.Outputs[key].Value) then
+				return self.Outputs[key].Value or default or WireLib.DT[self.Outputs[key].Type].Zero;
+			end
+		else
+			if(self.Inputs and self.Inputs[key] and self.Inputs[key].Value) then
+				return self.Inputs[key].Value or default or WireLib.DT[self.Inputs[key].Type].Zero;
+			end
 		end
 	end
 	return default or 0; -- Error. Either wire is not installed or the input is not SET. Return the default value instead
 end
-
 
 --##############################
 --  Resource Distribution Handling

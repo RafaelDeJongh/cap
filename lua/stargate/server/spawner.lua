@@ -267,11 +267,11 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 						e:SetNWBool("ActInf_SG1_EH",true);
 					end
 					if (v.chevlight ~= nil and v.chevlight ~="") then
-						e.SpChevLight = true;
+						e.ChevLight = true;
 						e:SetNWBool("ActMChevL",true);
 					end
 					if (v.classic ~= nil and v.classic ~="") then
-						e.SpClassic = true;
+						e.Classic = true;
 						e:SetNWBool("ActMCl",true);
 					end
 				elseif (IsDHD) then
