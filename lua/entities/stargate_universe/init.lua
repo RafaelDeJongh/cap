@@ -588,6 +588,7 @@ function ENT:SetSpeed(speed,speed2)
 			self.Gate.Moving = false;
 			self.WireEncodeSymbol = "";
 			self.WireLockSymbol = "";
+			self.Entity:SetNWBool("ActRotRingL",false);
         end
 	end
 end
@@ -677,9 +678,9 @@ end
 --##############################################################################################################
 
 --################# Wire input @aVoN
-function ENT:TriggerInput(k,v,mobile,mdhd)
+function ENT:TriggerInput(k,v,mobile,mdhd,ignore)
 	self:TriggerInputDefault(k,v,mobile,mdhd);
-	if(k == "Rotate Ring" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
+	if(k == "Rotate Ring" and not self.Active and (not self.NewActive or self.WireManualDial) and (not self.WireBlock or ignore)) then
 		if (v >= 1) then
 			if (self:CheckEnergy(true,true) or self.WireManualDial) then
 				self.WireSpin = true;
@@ -768,13 +769,43 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		end
 	elseif(k == "Force Encode Symbol" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
 		if (v != "" and v:len()==1 and not self.Gate.Moving) then
-			self:TriggerInput("Rotate Ring",1,mobile,mdhd);
-			self.WireEncodeSymbol = v;
+			if (self:GetWire("Chevron",0,true)==0) then
+				self.WireManualDial = true;
+				local action = self.Sequence:New();
+				action = self.Sequence:SeqFirstActivation(t);
+				self:RunActions(action);
+				timer.Simple(1.4,function()
+					if (IsValid(self)) then
+						self:TriggerInput("Rotate Ring",1,mobile,mdhd,true);
+						self.WireEncodeSymbol = v;
+						self.Entity:SetWire("Dialing Symbol",v);
+					end
+				end)
+			else
+				self:TriggerInput("Rotate Ring",1,mobile,mdhd);
+				self.WireEncodeSymbol = v;
+				self.Entity:SetWire("Dialing Symbol",v);
+			end
 		end
 	elseif(k == "Force Lock Symbol" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
 		if (v != "" and v:len()==1 and not self.Gate.Moving) then
-			self:TriggerInput("Rotate Ring",1,mobile,mdhd);
-			self.WireLockSymbol = v;
+			if (self:GetWire("Chevron",0,true)==0) then
+				self.WireManualDial = true;
+				local action = self.Sequence:New();
+				action = self.Sequence:SeqFirstActivation(t);
+				self:RunActions(action);
+				timer.Simple(1.4,function()
+					if (IsValid(self)) then
+						self:TriggerInput("Rotate Ring",1,mobile,mdhd,true);
+						self.WireEncodeSymbol = v;
+						self.Entity:SetWire("Dialing Symbol",v);
+					end
+				end)
+			else
+				self:TriggerInput("Rotate Ring",1,mobile,mdhd);
+				self.WireEncodeSymbol = v;
+				self.Entity:SetWire("Dialing Symbol",v);
+			end
 		end
 	end
 end

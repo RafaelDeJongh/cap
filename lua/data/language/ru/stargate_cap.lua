@@ -160,18 +160,18 @@ stool_harvester = Harvester
 stool_controlpanel = Панель управления
 
 // Stool Names - Energy
-stool_asuran_hub = Асуран ZPM Hub
-stool_atlantis_hub = Атлантис ZPM Hub
+stool_asuran_hub = Асуран МНТ Хаб
+stool_atlantis_hub = Атлантис МНТ Хаб
 stool_naq_gen = Наквадах Генератор MK1/MK2
-stool_sgc_hub = SGC ZPM Hub
-stool_zpm_mk3 = ZPM MK III
+stool_sgc_hub = SGC МНТ Хаб
+stool_zpm_mk3 = МНТ 3 поколения
 stool_naq_bottle = Наквадах бутылка
 
 // Stool Names - Weapons
 stool_drones = Дроны
 stool_naq_bomb = Наквадах Бомба
 stool_staff = Посох джаффа
-stool_tzpm = Подделаный ZPM
+stool_tzpm = Подделаный МНТ
 stool_wh_bomb = Бомба Рейфов
 
 // Stool Names - Ramps
@@ -190,8 +190,8 @@ stool_key_dest = Шатл Судьбы Настройки
 stool_key_teltak = Teltak Настройки
 
 // Stool Global
-stool_autoweld = Autoweld
-stool_autolink = Autolink
+stool_autoweld = Авто-сварка
+stool_autolink = Авто-линк
 
 // Naquadah bomb menu
 entity_naq_bomb = Наквадах Бомба

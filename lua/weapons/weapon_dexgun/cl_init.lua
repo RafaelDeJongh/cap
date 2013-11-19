@@ -29,3 +29,5 @@ function SWEP:DrawHUD()
 	end
 	draw.WordBox(8,ScrW()-188,ScrH()-120,"Mode: "..mode,"Default",Color(0,0,0,80),Color(255,220,0,220));
 end
+
+function SWEP:SecondaryAttack() end

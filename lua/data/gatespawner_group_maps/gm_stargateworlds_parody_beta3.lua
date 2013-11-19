@@ -39,6 +39,7 @@ group=P@
 name=Atlantis
 private=false
 locale=false
+atltype=true
 [stargate]
 classname=stargate_universe
 position=9667.2080 8788.1670 -13404.9688

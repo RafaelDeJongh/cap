@@ -11,3 +11,5 @@ stargate_credits_10 = Changes apply after you restarted GMod
 stargate_credits_11 = Carter's Pack require newest versions of Wire Mod!
 stargate_credits_12 = Carter's Addon Pack is licensed under:
 stargate_credits_13 = Bugs
+stargate_credits_14 = If you like what we've brought here and want to support the developers then you can donate here:
+stargate_credits_15 = Donate

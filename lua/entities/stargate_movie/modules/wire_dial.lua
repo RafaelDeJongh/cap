@@ -2,17 +2,22 @@
 	Wire dialling by AlexALX (c) 2011
 */
 
+--################# Before first chevron sequence by AlexALX
+function ENT.Sequence:SeqFirstActivation()
+	local action = self:New();
+	action:Add({f=self.SetStatus,v={self,false,false,false,true,false},d=0});
+	for i=1,9 do
+		action:Add({f=self.ActivateChevron,v={self,i,false},d=0});
+	end
+	action:Add({f=self.SetChevrons,v={self,0,0},d=0}); -- Wire
+	return action;
+end
+
 --################# Encode chevron sequence by AlexALX
 function ENT.Sequence:SeqEncodeChevron(dialchev, address)
 	local action = self:New();
 	local dialaddress = "";
 	local dialsymbol = "";
-	if (dialchev == 1) then
-		action:Add({f=self.SetStatus,v={self,false,false,false,true,false},d=0});
-		for i=1,9 do
-			action:Add({f=self.ActivateChevron,v={self,i,false},d=0});
-		end
-	end
 	local classicmode = false;
 	local chevlight = false;
 	local sgctype = false;
@@ -50,6 +55,7 @@ function ENT.Sequence:SeqEncodeChevron(dialchev, address)
 		action:Add({f=self.ChevronAnimation,v={self,s,classicmode},d=0}); -- Animate chevron
 		action:Add({f=self.SetWire,v={self,"Chevron",dialchev},d=0}); -- Wire
 		action:Add({f=self.SetWire,v={self,"Dialing Address",dialaddress},d=0}); -- Wire
+		action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 		action:Add({f=self.SetWire,v={self,"Dialed Symbol",dialsymbol},d=0}); -- Wire
 		action:Add({f=self.DHDSetChevronWire,v={self,dialchev},d=0});
 		action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
@@ -59,6 +65,7 @@ function ENT.Sequence:SeqEncodeChevron(dialchev, address)
 		action:Add({f=self.ChevronAnimation,v={self,s,classicmode},d=0}); -- Animate chevron
 		action:Add({f=self.SetWire,v={self,"Chevron",dialchev},d=0}); -- Wire
 		action:Add({f=self.SetWire,v={self,"Dialing Address",dialaddress},d=0}); -- Wire
+		action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 		action:Add({f=self.SetWire,v={self,"Dialed Symbol",dialsymbol},d=0}); -- Wire
 		action:Add({f=self.DHDSetChevronWire,v={self,dialchev},d=0});
 		action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
@@ -158,6 +165,7 @@ function ENT.Sequence:SeqChevron7Lock(dialchev,address,fail,busy)
 
 	if (not fail) then
 		action:Add({f=self.DHDSetChevronWire,v={self,dialchev+1},d=0});
+		action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 	end
 	return action;
 end

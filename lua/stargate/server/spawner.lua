@@ -258,21 +258,25 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 						e.chev_destroyed[9] = util.tobool(v.chevdestroyed9);
 						e.Chevron[9]:Remove();
 					end
-					if (v.sgctype ~= nil and v.sgctype~="") then
+					if (v.sgctype ~= nil and v.sgctype~="" and util.tobool(v.sgctype)==true) then
 						e.RingInbound = true;
 						e:SetNWBool("ActSGCT",true);
 					end
-					if (v.classname=="stargate_infinity" and v.sg1eh ~= nil and v.sg1eh~="") then
+					if (v.classname=="stargate_infinity" and v.sg1eh ~= nil and v.sg1eh~="" and util.tobool(v.sg1eh)==true) then
 						e.InfDefaultEH = true;
 						e:SetNWBool("ActInf_SG1_EH",true);
 					end
-					if (v.chevlight ~= nil and v.chevlight ~="") then
+					if (v.chevlight ~= nil and v.chevlight ~="" and util.tobool(v.chevlight)==true) then
 						e.ChevLight = true;
 						e:SetNWBool("ActMChevL",true);
 					end
-					if (v.classic ~= nil and v.classic ~="") then
+					if (v.classic ~= nil and v.classic ~="" and util.tobool(v.classic)==true) then
 						e.Classic = true;
 						e:SetNWBool("ActMCl",true);
+					end
+					if (v.atltype ~= nil and v.atltype ~="" and util.tobool(v.atltype)==true) then
+						e.AtlType = true;
+						e:SetNWBool("AtlType",true);
 					end
 				elseif (IsDHD) then
 					if(v.destroyed ~= nil and v.destroyed ~= "" and util.tobool(v.destroyed)==true and e:GetClass() != "dhd_concept" and e:GetClass() != "dhd_city") then
@@ -603,11 +607,14 @@ concommand.Add("stargate_gatespawner_createfile",
 					if (v:GetClass()=="stargate_infinity" and v.InfDefaultEH) then
 						f = f .. "sg1eh=true\n";
 					end
-					if (v.ChevLight or v.SpChevLight) then
+					if (v.ChevLight) then
 						f = f .. "chevlight=true\n";
 					end
-					if (v.Classic or v.SpClassic) then
+					if (v.Classic) then
 						f = f .. "classic=true\n";
+					end
+					if (v.AtlType) then
+						f = f .. "atltype=true\n";
 					end
 				end
 			end

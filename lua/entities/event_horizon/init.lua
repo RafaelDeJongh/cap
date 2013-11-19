@@ -143,8 +143,8 @@ function ENT:Initialize()
 	self.Created = CurTime();
 	self.AutoClose = StarGate.CFG:Get("stargate","autoclose",true);
 	self.HorizonRadius = self.Entity:BoundingRadius(); -- Just needed for effects
-	self.OpeningDelay = 0.8; -- This time decides when the script starts it's opening effect after it played the opening sound
-	self.OpenTime = 3.0;
+	self.OpeningDelay = 1.5; -- This time decides when the script starts it's opening effect after it played the opening sound
+	self.OpenTime = 2.2;
 	self.Holding = {}; -- A player holds this Entity: We are not going to teleport it until he stopped holding it!
 	self.DoNotDestroy = {}; -- A contraption just got teleported to this event horizon but hasn't exited it yet. This prevents the receiving EH from destroying this contraption!
 	self.OpenEffect = GetConVar("stargate_open_effect"):GetBool(); -- Need to place up here so we have the variable ready
@@ -257,31 +257,41 @@ function ENT:Open()
            end
         end
         local e = self.Entity;
+		local gt = 0;
 
+		local class = self:GetParent():GetClass();
 		local nox_type = self:GetParent().NoxDialingType; // let it spawn without kawoosh, like nox/asgard/cassandra can do
     	if (nox_type) then
-			self.OpeningDelay = 0.87; -- This time decides when the script starts it's opening effect after it played the opening sound
+			self.OpeningDelay = 0.87;
 			self.OpenTime = 0.9;
-    	elseif (self:GetParent():GetClass()=="stargate_orlin") then
-			self.OpeningDelay = 0.8; -- This time decides when the script starts it's opening effect after it played the opening sound
-			self.OpenTime = 2.5;
-    	elseif (self:GetParent():GetClass()=="stargate_supergate") then
-			self.OpeningDelay = 0.8; -- This time decides when the script starts it's opening effect after it played the opening sound
+    	elseif (class=="stargate_orlin") then
+			self.OpeningDelay = 0.8;
+			self.OpenTime = 2.2;
+    	elseif (class=="stargate_supergate") then
+			self.OpeningDelay = 0.8;
 			self.OpenTime = 5.5;
-    	elseif (self:GetParent():GetClass()=="stargate_universe") then
-			self.OpeningDelay = 0.8; -- This time decides when the script starts it's opening effect after it played the opening sound
-			self.OpenTime = 2.6;
+    	elseif (class=="stargate_universe") then
+			self.OpeningDelay = 0.8;
+			self.OpenTime = 2.2;
+    	elseif (class=="stargate_atlantis") then
+			self.OpeningDelay = 0.9;
+			self.OpenTime = 2.2;
+    	elseif (class=="stargate_movie" and not self:GetParent().Classic) then
+			self.OpeningDelay = 0.8;
+			self.OpenTime = 2.5;
     	else
-			self.OpeningDelay = 0.8; -- This time decides when the script starts it's opening effect after it played the opening sound
-			self.OpenTime = 3.0;
+			self.OpeningDelay = 1.5;
+			self.OpenTime = 2.2;
+			gt = 1;
 		end
 
         --##### This effect simply is the eventhorizon creation effect. It's NOT the kawoosh!
 		if self.OpenEffect then
 			local fx = EffectData();
 			fx:SetEntity(e);
+			fx:SetRadius(gt);
 			fx:SetOrigin(e:GetPos());
-			fx:SetScale(self.OpeningDelay+0.1); -- The additional delay stops the effect from stopping to early so the other (below) is getting started to late (Noticabel by a short flicker)
+			fx:SetScale(self.OpeningDelay+0.2); -- The additional delay stops the effect from stopping to early so the other (below) is getting started to late (Noticabel by a short flicker)
 			util.Effect("eventhorizon_open",fx,true,true);
 		end
 		if (nox_type) then
@@ -356,7 +366,8 @@ function ENT:Open()
 					fx:SetEntity(e);
 					--##################### @ Llapp
 					if(self.Entity:GetParent():GetClass()=="stargate_orlin")then
-					    util.Effect("stargate_kawoosh_orlin",fx,true,true);
+						fx:SetRadius(2);
+					    util.Effect("stargate_kawoosh",fx,true,true);
 					    -- This will kill people
 					    local pos = self.Entity:GetPos();
 					    local normal = self.Entity:GetForward();
@@ -365,7 +376,8 @@ function ENT:Open()
 					    self:EHDissolve(pos+3*radius*normal,radius);
 					    self:EHDissolve(pos+5*radius*normal,radius);
 					elseif(self.Entity:GetParent():GetClass()=="stargate_supergate")then
-					    util.Effect("stargate_kawoosh_supergate",fx,true,true);
+						fx:SetRadius(3);
+					    util.Effect("stargate_kawoosh",fx,true,true);
 					    -- This will kill people
 					    local pos = self.Entity:GetPos();
 					    local normal = self.Entity:GetForward();
@@ -376,7 +388,8 @@ function ENT:Open()
 					elseif(self.Entity:GetParent():GetClass()=="stargate_movie" and not self.Entity:GetParent().Classic)then
 						local fx2 = EffectData();
 						fx2:SetEntity(e);
-					    util.Effect("stargate_kawoosh_movie",fx,true,true);
+						fx:SetRadius(4);
+					    util.Effect("stargate_kawoosh",fx,true,true);
 					    -- This will kill people
 					    local pos = self.Entity:GetPos();
 					    local normal = self.Entity:GetForward();
@@ -385,17 +398,18 @@ function ENT:Open()
 							self:EHDissolve(pos-radius*normal,radius);
 							local fx = EffectData()
 							fx:SetEntity(e);
-							util.Effect("stargate_kawoosh_movie_back",fx,true,true);
+							util.Effect("stargate_kawoosh_movie",fx,true,true);
 						end	end);
 					    self:EHDissolve(pos+radius*normal,radius);
 					    self:EHDissolve(pos+3*radius*normal,radius);
 					    self:EHDissolve(pos+5*radius*normal,radius);
 					else
 						if (self.Entity:GetParent():GetClass()=="stargate_universe") then
-							util.Effect("stargate_kawoosh_universe",fx,true,true);
+							fx:SetRadius(1);
 						else
-						    util.Effect("stargate_kawoosh",fx,true,true);
-					    end
+							fx:SetRadius(0);
+						end
+						util.Effect("stargate_kawoosh",fx,true,true);
 					    -- This will kill people
 					    local pos = self.Entity:GetPos();
 					    local normal = self.Entity:GetForward();
@@ -435,16 +449,16 @@ function ENT:EHDissolve(pos,radius)
 			e:Fire("hurt","",0.12*i);
 		end
 		e:Fire("kill","",4.4);
-	elseif (IsValid(self:GetParent()) and self:GetParent():GetClass()=="stargate_universe") then
+	elseif (IsValid(self:GetParent()) and self:GetParent():GetClass()=="stargate_movie" and not self:GetParent().Classic) then
 		for i=0,16 do
 			e:Fire("hurt","",0.12*i);
 		end
 		e:Fire("kill","",2.0);
 	else
-		for i=0,18 do
+		for i=0,12 do
 			e:Fire("hurt","",0.12*i);
 		end
-		e:Fire("kill","",2.5);
+		e:Fire("kill","",1.5);
 	end
 	-- Start dissolving the crap!
 	if(StarGate.CFG:Get("stargate","disintegrate",true)) then
@@ -521,6 +535,7 @@ function ENT:Shutdown(override)
 	--self:StopSound(self.Sounds.Idle,0.4);
 	self.Entity:SetColor(Color(255,255,255,255));
 	if (self.IdleSound) then self.IdleSound:Stop() end
+	timer.Remove("EventHorizonEffect"..self.Entity:EntIndex());
 	timer.Remove("EventHorizonOpening"..self.Entity:EntIndex());
 	self.ShuttingDown = true;
 	self.ShuttingDownKill = true;

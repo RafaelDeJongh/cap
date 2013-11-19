@@ -163,9 +163,11 @@ function SWEP:Think()
 						end
 					elseif e:IsPlayer() then
 						--e:SetHealth(e:Health()-1);
-						e:TakeDamage(1,self.Owner);
-						if (not e.pShielded) then
-							self.Owner:SetHealth(self.Owner:Health()+1);
+						if (not e:HasGodMode()) then
+							e:TakeDamage(1,self.Owner);
+							if (not e.pShielded) then
+								self.Owner:SetHealth(self.Owner:Health()+1);
+							end
 						end
 						if (not self.Sound) then
 							self.Owner:EmitSound(self.Sounds.feeling,100,100);

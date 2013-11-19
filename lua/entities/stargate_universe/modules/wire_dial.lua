@@ -2,6 +2,19 @@
 	Wire dialling by AlexALX (c) 2011
 */
 
+--################# Before first chevron sequence by AlexALX
+function ENT.Sequence:SeqFirstActivation()
+	local action = self:New();
+	action:Add({f=self.BlockWire,v={self,true},d=0}); -- Block wire
+	action:Add({f=self.SetStatus,v={self,false,false,false,true,false},d=0});
+	action:Add({f=self.SetDialMode,v={self,false,true},d=0});
+	action:Add({f=self.ActivateSymbols,v={self,true},d=0}); -- deactivate all symbols
+	action:Add({f=self.ChangeSkin,v={self,1, false},d=0});
+	action:Add({f=self.EmitSound,v={self.Entity,self.Sounds.Activate,90,math.random(95,100)},d=0});
+	action:Add({f=self.SguRampSetSkin,v={self,false},d=1.4}); -- change the sgu ramp skin
+	return action;
+end
+
 --################# Encode chevron sequence by AlexALX
 function ENT.Sequence:SeqEncodeChevron(dialchev, address)
 	local action = self:New();
@@ -15,22 +28,13 @@ function ENT.Sequence:SeqEncodeChevron(dialchev, address)
 			end
 		end
 	end
-	if (dialchev == 1) then
-		action:Add({f=self.SetStatus,v={self,false,false,false,true,false},d=0});
-		action:Add({f=self.SetDialMode,v={self,false,true},d=0});
-	end
 	action:Add({f=self.BlockWire,v={self,true},d=0}); -- Block wire
-	if (dialchev == 1) then
-		action:Add({f=self.ActivateSymbols,v={self,true},d=0}); -- deactivate all symbols
-		action:Add({f=self.ChangeSkin,v={self,1, false},d=0});
-		action:Add({f=self.EmitSound,v={self.Entity,self.Sounds.Activate,90,math.random(95,100)},d=0});
-		action:Add({f=self.SguRampSetSkin,v={self,false},d=0}); -- change the sgu ramp skin
-	end
 
 	action:Add({f=self.ChevronSound,v={self,dialchev},d=0});
 	action:Add({f=self.DHDSetChevronWire,v={self,dialchev},d=0});
 	action:Add({f=self.SetWire,v={self,"Chevron",dialchev},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialing Address",dialaddress},d=0}); -- Wire
+	action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialed Symbol",dialsymbol},d=0}); -- Wire
 	action:Add({f=self.BearingSetSkin,v={self,true},d=0}); -- change the bearing skin
 	action:Add({f=self.ChangeSkin,v={self,dialchev+1, false, dialsymbol},d=1}); -- change the sgu skin
@@ -70,6 +74,7 @@ function ENT.Sequence:SeqChevron7Lock(dialchev,address,fail,busy)
 		if (fail) then
 			action:Add({f=self.SetWire,v={self,"Chevron",-dialchev},d=0}); -- Wire
 		else
+			action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 			action:Add({f=self.DHDSetChevronWire,v={self,dialchev+1},d=0});
 		end
 	end

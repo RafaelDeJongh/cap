@@ -63,7 +63,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		local t = self.Entity.Target;
 		local add = 0.0;
 		if (IsValid(t)) then
-			add = self:GetDelay(inbound,fast,chevs,t:GetClass());
+			add = self:GetDelay(inbound,fast,chevs,t:GetClass(),t.Classic);
 		end
 		if (inbound and not fast and IsValid(t) and self:IsNewDial(t:GetClass())) then
 			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling

@@ -19,7 +19,7 @@ local function EngageEffect(ply)
 	local fx = EffectData()
 	fx:SetEntity(ply)
 	fx:SetScale(1)
-	util.Effect("pShield", fx)
+	util.Effect("pShield", fx, true, true)
 end
 
 local function DisengageEffect(ply)
@@ -27,7 +27,7 @@ local function DisengageEffect(ply)
 	local fx = EffectData()
 	fx:SetEntity(ply)
 	fx:SetScale(0)
-	util.Effect("pShield", fx)
+	util.Effect("pShield", fx, true, true)
 end
 
 local function HitEffect(pos, ply)
@@ -38,7 +38,7 @@ local function HitEffect(pos, ply)
 		local fx = EffectData()
 		fx:SetEntity(ply)
 		fx:SetOrigin(pos)
-		util.Effect("pShield_Hit", fx)
+		util.Effect("pShield_Hit", fx, true, true)
 	end
 end
 

@@ -26,22 +26,59 @@ function EFFECT:Init(data)
 	self.Entity:SetPos(pos);
 	self.Entity:SetParent(e);
 
-	if StarGate.VisualsMisc("cl_kawoosh_material",true) then
-		self.Smoke = ("particle/Smoke01_L")
+	local g = math.Round(data:GetRadius());
+
+	if (g==1) then
+		if StarGate.VisualsMisc("cl_kawoosh_material",true) then
+			self.Smoke = ("particle/Smoke01_L_U")
+		else
+			self.Smoke = ("particle/Smoke01_G")
+		end
 	else
-		self.Smoke = ("particle/Smoke01_G")
+		if StarGate.VisualsMisc("cl_kawoosh_material",true) then
+			self.Smoke = ("particle/Smoke01_L")
+		else
+			self.Smoke = ("particle/Smoke01_G")
+		end
 	end
 
 	self.Data = {
-		Time=2.4, -- Time to draw the vortex
+		Time=1.6, -- Time to draw the vortex
 		Size=4, -- Base or startsize
 		GrowCoefficient=3.5, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
-		Length=320, --Units long? 385.826 inches/second is gravity
+		Length=500, --Units long? 385.826 inches/second is gravity
 		Density=500, -- Amount of particles
 		Radius=55, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
 		Roll=0, --Roll, how much roll each particle has at start
 		RollS=1.0, --Roll Speed
 	}
+	if (g==2) then
+		self.Data.Size = 2;
+		self.Data.Length = 200;
+		self.Data.Radius = 18;
+	elseif (g==3) then
+		self.Data = {
+			Time=4.6, -- Time to draw the vortex
+			Size=35, -- Base or startsize
+			GrowCoefficient=4, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
+			Length=3600, --Units long? 385.826 inches/second is gravity
+			Density=1800, -- Amount of particles
+			Radius=1600, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
+			Roll=0, --Roll, how much roll each particle has at start
+			RollS=1.0, --Roll Speed
+		}
+	elseif (g==4) then
+		self.Data = {
+			Time=2.1, -- Time to draw the vortex
+			Size=4, -- Base or startsize
+			GrowCoefficient=3.5, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
+			Length=350, --Units long? 385.826 inches/second is gravity
+			Density=500, -- Amount of particles
+			Radius=55, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
+			Roll=0, --Roll, how much roll each particle has at start
+			RollS=1.0, --Roll Speed
+		}
+	end
 
 	local emitter = ParticleEmitter(pos);
 	local ang = e:GetAngles(); ang.p = ang.p + 90;
@@ -69,7 +106,11 @@ function EFFECT:Init(data)
 			particle:SetRollDelta(math.Rand((-1*self.Data.RollS),self.Data.RollS)); --How fast it rolls
 			particle:SetGravity(-1*forward*self.Data.Length*ParticleDensity*mul);
 			particle:SetVelocity(forward*self.Data.Length*ParticleDensity);
-			particle:SetColor(180,225,255);
+			if (g==1) then
+				particle:SetColor(209,218,234);
+			else
+				particle:SetColor(180,225,255);
+			end
 			--180,225,255
 			--200,235,255 to light
 		end

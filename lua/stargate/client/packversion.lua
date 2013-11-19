@@ -24,14 +24,11 @@ function StarGate.Update_Check(Panel)
 		VGUI:SetImage("icon16/exclamation.png");
 		VGUI:SetURL(StarGate.HTTP.BUGS);
 		Panel:AddPanel(VGUI);
-		Panel:Help("");
 
 		local VGUImg = vgui.Create("DImage",Panel)
 		VGUImg:SetSize(210,210);
 		VGUImg:SetImage("gui/update_checker/cap");
 		Panel:AddPanel(VGUImg);
-
-		Panel:Help("");
 
 		if (StarGate.LATEST_VERSION == 0) then
 			Panel:Help(SGLanguage.GetMessage("stargate_credits_03")):SetTextColor(ORANGE);
@@ -51,9 +48,6 @@ function StarGate.Update_Check(Panel)
 			end
 		end
 
-		Panel:Help("");
-		Panel:Help("");
-
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetText("www.sg-carterpack.com");
 		VGUI:SetImage("icon16/star.png");
@@ -71,13 +65,16 @@ function StarGate.Update_Check(Panel)
 		VGUImg:SetSize(210,210);
 		VGUImg:SetImage("gui/update_checker/cap");
 		Panel:AddPanel(VGUImg);
-		Panel:Help("");
 
 		Panel:Help(SGLanguage.GetMessage("stargate_credits_08"));
 		Panel:CheckBox(SGLanguage.GetMessage("stargate_credits_09"),"cl_has_internet"):SetToolTip(SGLanguage.GetMessage("stargate_credits_10"));
 	end
-
-	Panel:Help("");
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_14"));
+	local VGUI = vgui.Create("SHelpButton",Panel);
+	VGUI:SetText(SGLanguage.GetMessage("stargate_credits_15"));
+	VGUI:SetImage("icon16/money_add.png");
+	VGUI:SetURL(StarGate.HTTP.DONATE,true);
+	Panel:AddPanel(VGUI);
 	Panel:Help(SGLanguage.GetMessage("stargate_credits_11"));
 	Panel:Help("");
 	Panel:Help(SGLanguage.GetMessage("stargate_credits_12"));

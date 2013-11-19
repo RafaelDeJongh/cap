@@ -74,7 +74,7 @@ function ENT:Think()
 						if(CombatDamageSystem) then
 							cds_disintigratepos(EntsPos[k], 1, self.Entity)
 						elseif(gcombat) then
-							gcombat.nrghit(k, 100000, 100000, EntsPos[k], EntsPos[k])
+							gcombat.nrghit(e, 100000, 100000, EntsPos[k], EntsPos[k])
 						else
 							e:TakeDamage(100000, self.Entity, self.Entity)
 						end

@@ -80,6 +80,10 @@ function ENT:Initialize()
 	self:AddRing();
 	self:AddChevron();
 	self.SpinLight = 1;
+	self.AtlType = false;
+	self.AtlTypeAct = false;
+
+	timer.Create("AtlTypeThink"..self:EntIndex(), 5.0, 0, function() if IsValid(self) then self:AtlTypeThink() end end);
 end
 
 --#################  Called when stargate_group_system changed
@@ -131,7 +135,7 @@ function ENT:ChangeSystemType(groupsystem)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Turn on ring light","Activate chevron numbers [STRING]","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Turn on ring light","Activate chevron numbers [STRING]","Disable Menu","Atlantis Type");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -178,14 +182,26 @@ function ENT:AddRing()
 		e:DrawShadow(false);
 		e:Spawn();
 		e:Activate();
+		e:SetRenderMode(RENDERMODE_TRANSALPHA);
 		self.Ring.Incoming[i] = e;
 	end
 end
 
 --################# Turns on a light on the ring @aVoN
-function ENT:RingLight(light,inbound,shutdown)
+function ENT:RingLight(light,inbound,shutdown,atlantis)
 	local ring = self.Ring.Dial;
 	if(inbound) then ring = self.Ring.Incoming end;
+	if (atlantis) then
+		for i=1,2 do
+			ring[i]:SetColor(Color(255,255,255,100));
+		end
+		self.AtlTypeAct = true;
+	else
+		for i=1,2 do
+			ring[i]:SetColor(Color(255,255,255,255));
+		end
+		self.AtlTypeAct = false;
+	end
 	local part = 1;
 	if(light < 0) then
 		light = light + 36;
@@ -266,8 +282,11 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActChevronsL",false);
 		end
 	elseif(k == "Turn on ring light" and not self.NewActive) then
-		if (v >= 1 and self:CheckEnergy(true,true)) then
+		if (v >= 2 and self:CheckEnergy(true,true)) then
 			self:RingLight(36,true);
+			self.Entity:SetNWBool("ActRingL",true);
+		elseif (v == 1 and self:CheckEnergy(true,true)) then
+			self:RingLight(36,true,false,true);
 			self.Entity:SetNWBool("ActRingL",true);
 		else
 			self:RingLight(0,true);
@@ -278,6 +297,10 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 	elseif(k == "Disable Menu") then
 		self.DisMenu = util.tobool(v);
 		self.Entity:SetNWBool("DisMenu",util.tobool(v));
+	elseif(k == "Atlantis Type") then
+		self.AtlType = util.tobool(v);
+		self.Entity:SetNWBool("AtlType",util.tobool(v));
+		self:AtlTypeThink();
 	end
 end
 
@@ -321,6 +344,7 @@ function ENT:OnRemove()
 	StarGate.StopUpdateGateTemperatures(self);
 	if timer.Exists("LowPriorityThink"..self:EntIndex()) then timer.Remove("LowPriorityThink"..self:EntIndex()) end
 	if timer.Exists("ConvarsThink"..self:EntIndex()) then timer.Remove("ConvarsThink"..self:EntIndex()) end
+	if timer.Exists("AtlTypeThink"..self:EntIndex()) then timer.Remove("AtlTypeThink"..self:EntIndex()) end
 
 	self:Close(); -- Close the horizon
 	self:StopActions(); -- Stop all actions and sounds
@@ -353,6 +377,24 @@ function ENT:RingSound(play)
 	end
 end
 
+function ENT:AtlTypeThink()
+	if (not self.Active and not self.NewActive) then
+		if (self.AtlType) then
+			if (self.AtlTypeAct) then
+				if (not self:CheckEnergy(true,true)) then
+					self:RingLight(0,true,true);
+				end
+			else
+				if (self:CheckEnergy(true,true)) then
+					self:RingLight(36,true,false,true);
+				end
+			end
+		elseif (self.AtlTypeAct) then
+			self:RingLight(0,true,true);
+		end
+	end
+end
+
 --################# Stops the gate's lights
 function ENT:Shutdown(fail,play_sound)
 	if(not (self and self.RingLight)) then return end;
@@ -368,4 +410,7 @@ function ENT:Shutdown(fail,play_sound)
 		self.Entity:SetNWBool("ActRingL",false);
 	end
 	self:RingSound(false);
+	if (self.AtlType and self:CheckEnergy(true,true)) then
+		self:RingLight(36,true,false,true);
+	end
 end

@@ -288,3 +288,64 @@ properties.Add( "Stargate.DHD.Atl.Off",
 					end
 
 });
+
+properties.Add( "Stargate.DHD.Glyphs.On",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_18"),
+	Order		=	-102,
+	MenuIcon	=	"icon16/plugin_add.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisGlyphs",false)) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:SetNWBool("DisGlyphs",false);
+					end
+
+});
+
+properties.Add( "Stargate.DHD.Glyphs.Off",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_18d"),
+	Order		=	-102,
+	MenuIcon	=	"icon16/plugin_delete.png",
+
+	Filter		=	function( self, ent, ply )
+
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisGlyphs",false)) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:SetNWBool("DisGlyphs",true);
+					end
+
+});

@@ -35,7 +35,14 @@ function EFFECT:Init(data)
 	self.Entity:SetParent(e);
 	self.LifeTime = data:GetScale(); -- How long does the effect last?
 	self.Entity:SetColor(Color(255,255,255,1)); -- Make us nearly invisible (but not completely or it wont be drawn!)
+
+	local g = math.Round(data:GetRadius());
 	self.Delay = 0.5;
+	self.EffDelay = 0.16;
+	if (g==1) then
+		self.Delay = 1.26;
+		self.EffDelay = 0.76;
+	end
 	self.Spawned = CurTime();
 	self.Parent = e;
 	e.CurrentHorizonEffect = self.Entity;
@@ -56,7 +63,7 @@ function EFFECT:Render()
 		return;
 	end
 	if(not self.Draw) then return end; -- Stops crashing ppl
-	if(CurTime()-self.Spawned < self.Delay/3) then return end;
+	--if(CurTime()-self.Spawned < self.Delay/3) then return end;
 
 	-- test fix for client crash
 	if (self.Collapse:GetName()!="zup/stargate/eh_closing") then
@@ -66,7 +73,7 @@ function EFFECT:Render()
 		self.Material = Material("zup/stargate/eventhorizon_establish");
 	end
 
-	self.StartedCollapse = self.StartedCollapse or CurTime();
+	self.StartedCollapse = self.StartedCollapse or CurTime()+self.EffDelay;
 	local frame = math.floor((CurTime()-self.StartedCollapse)*self.FrameRate);
 	local frm = self.FrameEnd-frame; -- fix for crash
 	if(frame <= self.FrameEnd and self.Collapse:GetName()=="zup/stargate/eh_closing" and frm>=0 and frm<=17) then
@@ -91,7 +98,7 @@ function EFFECT:Render()
 			if(self.Parent and self.Parent:IsValid()) then
 				self.Parent:SetAlpha(math.Clamp(mul*50,1,100));
 			end
-		end   */
+		end */
 		-- don't know what this should do, but in gmod13 it create bug
 	end
 end

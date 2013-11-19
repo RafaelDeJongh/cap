@@ -20,6 +20,15 @@ function ENT:CheckWireSymbol(symbol)
 	return true;
 end
 
+--################# First activation function by AlexALX
+function ENT:FirstActivation()
+	self.WireManualDial = true;
+	self.Outbound = true;
+	local action = self.Sequence:New();
+	action = self.Sequence:SeqFirstActivation(n,true);
+	self:RunActions(action);
+end
+
 --################# Encode chevron function by AlexALX
 function ENT:EncodeChevron()
 	self.WireManualDial = true;
@@ -34,8 +43,11 @@ function ENT:EncodeChevron()
 		self:RunActions(action);
 	else
 		local action = self.Sequence:New();
+		if (n==0 and not self.WireManualDial) then
+			action = self.Sequence:SeqFirstActivation();
+		end
 		table.insert(self.WireDialledAddress, self.RingSymbol);
-		action = self.Sequence:SeqEncodeChevron(n+1, self.WireDialledAddress);
+		action = action + self.Sequence:SeqEncodeChevron(n+1, self.WireDialledAddress);
 		self:RunActions(action);
 	end
 end
@@ -152,11 +164,12 @@ function ENT:WireActivateStargate(inbound)
 					fail = true;
 				end
 				if(not DEBUG and not fail) then -- No debug, no instant open
+					local dly = self:GetDelaySG1(self.Target:GetClass(),self.Target.Classic);
 					if (not inbound) then
-						action = self.Sequence:InstantOpen(nil,0,true,inbound,true) + action;
+						action = self.Sequence:InstantOpen(nil,0 + dly,true,inbound,true) + action;
 						action = self.Sequence:SeqChevron7Lock(#self.DialledAddress-1, self.DialledAddress) + action;
 					else
-						action = self.Sequence:InstantOpen(nil,2.0,false,inbound,true) + action;
+						action = self.Sequence:InstantOpen(nil,2.0 + dly,false,inbound,true) + action;
 					end
 				end
 			else

@@ -57,6 +57,9 @@ function StarGate.Init()
 	-- Wire?
 	if(WireAddon or #file.Find("weapons/gmod_tool/stools/wire.lua","LUA") == 1) then
 		StarGate.HasWire = true;
+		if (file.IsDir("expression2","DATA") and not file.IsDir("expression2/cap_shared","DATA")) then
+			file.CreateDir("expression2/cap_shared");
+		end
 	else
 		StarGate.HasWire = false;
 	end

@@ -27,7 +27,7 @@ function ENT:Initialize()
 		phys:EnableMotion(false);
 		phys:SetMass(1000);
 	end
-	self:CreateWireInputs("Deactivate ZPM 1","Deactivate ZPM 2","Deactivate ZPM 3","Eject ZPM 1","Eject ZPM 2","Eject ZPM 3","Unhide ZPM Text");
+	self:CreateWireInputs("Deactivate ZPM 1","Deactivate ZPM 2","Deactivate ZPM 3","Eject ZPM 1","Eject ZPM 2","Eject ZPM 3","Unhide ZPM Text","Disable Use");
 	self:CreateWireOutputs("Active","ZPM Hub %","ZPM Hub Energy","ZPM 1 %","ZPM 2 %","ZPM 3 %");
 
 	self.CanEject = true;
@@ -100,7 +100,8 @@ function ENT:Touch(ent)
 				ent:SetUseType(SIMPLE_USE);
 				ent.Use = function()
 					local constr = constraint.FindConstraint(self,"Weld");
-					if (constr and IsValid(constr.Entity[1].Entity)) then
+					if (constr and IsValid(constr.Entity[1].Entity) and constr.Entity[1].Entity.UseZPM) then
+						if (constr.Entity[1].Entity:GetWire("Disable Use")>0) then return end
 						constr.Entity[1].Entity:UseZPM(i);
 					end
 				end
@@ -362,6 +363,7 @@ function ENT:HubUnlink(ent)
 end
 
  function ENT:Use()
+ 	if (self:GetWire("Disable Use")>0) then return end
     local val = false;
 	for i=1,3 do
         if((self.ZPMs[i].IsValid and self.ZPMs[i].Dist == 1)) then

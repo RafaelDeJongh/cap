@@ -33,11 +33,11 @@ function EFFECT:Init(data)
 	end
 
 	self.Data = {
-		Time=2.25, -- Time to draw the vortex
+		Time=2.4, -- Time to draw the vortex
 		Size=4, -- Base or startsize
-		GrowCoefficient=3.5, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
-		Length=350, --Units long? 385.826 inches/second is gravity
-		Density=500, -- Amount of particles
+		GrowCoefficient=3, -- Size multiplier, how much bigger particles at the end of the kawoosh are compaired to the base
+		Length=100, --Units long? 385.826 inches/second is gravity
+		Density=200, -- Amount of particles
 		Radius=55, --Radius of the kawooshes cyclinder... how "fat" the kawoosh is overall.. if that makes any sense
 		Roll=0, --Roll, how much roll each particle has at start
 		RollS=1.0, --Roll Speed
@@ -46,7 +46,7 @@ function EFFECT:Init(data)
 	local emitter = ParticleEmitter(pos);
 	local ang = e:GetAngles(); ang.p = ang.p + 90;
 	local startsize = self.Data.Size*((self.Data.GrowCoefficient^1.5 - 1)*self.Data.Density/self.Data.Density + 1);
-	local forward = e:GetForward();
+	local forward = e:GetForward()*(-1);
 	local mul = 2/self.Data.Time; -- Multiplies the velocity and gravity of the particles if we change the speed
 	--################### Add out particles
 	for i=0,self.Data.Density do

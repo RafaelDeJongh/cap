@@ -26,7 +26,7 @@ function ENT:Initialize()
 	self.GDOStatus = 0;
 	self.GDOText = "";
 
-	self:CreateWireInputs("Iris Control", "GDO Status", "GDO Text [STRING]","Auto-close","Don't Auto-Open","Close time")
+	self:CreateWireInputs("Iris Control", "GDO Status", "GDO Text [STRING]","Auto-close","Don't Auto-Open","Close time","Disable Menu Mode")
 	self:CreateWireOutputs("Incoming Wormhole", "Code Status", "Gate Active", "Received Code", "Code Description [STRING]", "Iris Active")
 
 end
@@ -56,6 +56,7 @@ function ENT:SpawnFunction( ply, tr )
 	ent:SetPos(tr.HitPos+Vector(0,0,20));
 	ent:Spawn();
 	ent:Activate();
+	ent.Owner = ply;
 
 	local phys = ent:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false) end
@@ -66,6 +67,8 @@ end
 util.AddNetworkString("gdopc_sendinfo")
 
 function ENT:Use(ply)
+	if (self:GetWire("Disable Menu Mode",0)>=2) then return end
+	if (self:GetWire("Disable Menu Mode",0)==1 and self.Owner!=ply) then return end
 	net.Start("gdopc_sendinfo")
 	net.WriteEntity(self)
 	net.WriteInt(self.closetime,4)
@@ -81,14 +84,18 @@ end
 
 function ENT:Touch(ent)
 	if self.LockedGate == self.Entity then
-		if (string.find(ent:GetClass(), "stargate") or string.find(ent:GetClass(), "iris")) then
-			local gate, iris = self:FindGate()
-			if iris ~= nil and gate ~= nil and gate:IsValid() and iris:IsValid() and iris:GetOwner() == self:GetOwner() then
-				self.LockedGate = gate
-				self.LockedIris = iris
-				local ed = EffectData()
- 					ed:SetEntity( self.Entity )
- 				util.Effect( "propspawn", ed, true, true )
+		if (string.find(ent:GetClass(), "stargate")) then
+			local gate = self:FindGate()
+			if IsValid(gate) and gate==ent and not IsValid(gate.LockedIrisComp) then
+				local iris = gate:GetIris();
+				if iris:IsValid() then
+					self.LockedGate = gate
+					self.LockedIris = iris
+					gate.LockedIrisComp = self;
+					local ed = EffectData()
+	 					ed:SetEntity( self.Entity )
+	 				util.Effect( "propspawn", ed, true, true )
+ 				end
 			end
 		end
 	end
@@ -104,19 +111,17 @@ function ENT:Think()
 		iris = self.LockedIris
 	end
 	if IsValid(gate) and IsValid(iris) then
-		if iris:GetOwner() == self:GetOwner() then
-			if not gate.Outbound and (gate.IsOpen or gate.NewActive) then
-				if self.autoclose and not self.didclose then
-					if not iris.IsActivated and (not iris:IsBusy() or gate.NoxDialingType) then
-						iris:Toggle()
-						self.didclose = true	--We won't close the iris again until then next time the gate is active
-					end
+		if not gate.Outbound and (gate.IsOpen or gate.NewActive) then
+			if self.autoclose and not self.didclose then
+				if not iris.IsActivated and (not iris:IsBusy() or gate.NoxDialingType) then
+					iris:Toggle()
+					self.didclose = true	--We won't close the iris again until then next time the gate is active
 				end
-			else
-				self.wireCode = 0;
-				self.CodeStatus = 0
-				self.wireDesc = "";
 			end
+		else
+			self.wireCode = 0;
+			self.CodeStatus = 0
+			self.wireDesc = "";
 		end
 
 		if not (gate.IsOpen or gate.NewActive) and self.didclose and iris.IsActivated then
@@ -156,6 +161,9 @@ function ENT:Think()
 			self:SetWire("Received Code", self.wireCode)
 			self:SetWire("Code Description", self.wireDesc)
 
+	else
+		self.LockedGate = self.Entity;
+		self.LockedIris = self.Entity;
 	end
 
 	self.Entity:NextThink(CurTime()+0.5)
@@ -227,7 +235,6 @@ local function ReceiveCodes(len, player)
         		codes[k] = v
         	end
 		end
-		print_r(codes);
 		ent.Codes = codes;
 	end
 end
@@ -243,21 +250,15 @@ function ENT:FindGate()  -- from aVoN's DHD
 	local dist = 1000
 	local pos = self.Entity:GetPos()
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate) then
+		if(v.IsStargate and (not IsValid(v.LockedIrisComp) or v.LockedIrisComp==self)) then
 			local sg_dist = (pos - v:GetPos()):Length()
 			if(dist >= sg_dist) then
 				dist = sg_dist
 				gate = v
-			end
-		end
-	end
-	dist = 1000
-	for _,v in pairs(ents.FindByClass("*_iris")) do
-		if(v.IsIris) then
-			local i_dist = (pos - v:GetPos()):Length()
-			if(dist >= i_dist) then
-				dist = i_dist
-				iris = v
+				local ir = v:GetIris();
+				if (IsValid(ir)) then
+					iris = ir;
+				end
 			end
 		end
 	end
@@ -327,6 +328,12 @@ function ENT:RecieveIrisCode(code)
 	return ret
 end
 
+function ENT:OnRemove()
+	if (self.LockedGate!=self) then
+		self.LockedGate.LockedIrisComp = nil;
+	end
+end
+
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
@@ -361,8 +368,12 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (dupeInfo.LockedIris) then
 		self.LockedIris = CreatedEntities[dupeInfo.LockedIris];
 	end
-	if (dupeInfo.LockedGate) then
+	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
 		self.LockedGate = CreatedEntities[dupeInfo.LockedGate];
+		CreatedEntities[dupeInfo.LockedGate].LockedIrisComp = self;
+	end
+	if (IsValid(ply)) then
+		self.Owner = ply;
 	end
 
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)

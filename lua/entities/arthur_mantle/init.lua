@@ -27,7 +27,6 @@ function ENT:Initialize()
 
 	self.Entity:SetUseType(SIMPLE_USE);
 
-	self.CloackedPlayers = {};
 	self.Entity:Fire("skin",1);
 
 	self.Entity:SetNetworkedEntity("Arthur",self.Entity);
@@ -60,60 +59,49 @@ end
 function ENT:Use(ply)
 
 	if IsValid(ply) then
-		if table.HasValue(self.CloackedPlayers, ply:EntIndex()) then -- uncloack
+		if (ply:GetNetworkedBool("ArthurCloaked", false)) then -- uncloack
 
 			ply:SetNetworkedBool("ArthurCloaked",false);
 
-			local new_t = {};
-			for _,v in pairs(self.CloackedPlayers) do
-				if(v ~= ply:EntIndex()) then
-					table.insert(new_t,v);
-				end
-			end
-			self.CloackedPlayers=new_t;
-
 			ply:SetCollisionGroup(COLLISION_GROUP_PLAYER);
 			ply:SetNoTarget(false)
-			self.Entity:SetNetworkedString("CloackedPlayers",string.Implode(",",self.CloackedPlayers));
 			self.Entity:EmitSound(self.Sounds.Enter,90,math.random(97,103));
-			self.Entity:Fire("skin",1);
+			--self.Entity:Fire("skin",1);
 
 			local fx = EffectData();
 				fx:SetOrigin(ply:GetShootPos()+ply:GetAimVector()*10);
 				fx:SetEntity(ply);
-			util.Effect("arthur_cloak",fx,true);
+			util.Effect("arthur_cloak",fx,true,true);
 
 			local fx2 = EffectData();
 				fx2:SetEntity(ply);
-			util.Effect("arthur_cloak_light",fx2,true);
+			util.Effect("arthur_cloak_light",fx2,true,true);
 
 			local fx3 = EffectData();
 				fx3:SetEntity(self.Entity);
-			util.Effect("arthur_cloak_light",fx3,true);
+			util.Effect("arthur_cloak_light",fx3,true,true);
 
 		else -- cloack
 
 			ply:SetNetworkedBool("ArthurCloaked",true);
-			table.insert(self.CloackedPlayers, ply:EntIndex());
 
 			ply:SetCollisionGroup(COLLISION_GROUP_WORLD);
 			ply:SetNoTarget(true)
-			self.Entity:SetNetworkedString("CloackedPlayers",string.Implode(",",self.CloackedPlayers));
 			self.Entity:EmitSound(self.Sounds.Enter,90,math.random(97,103));
-			self.Entity:Fire("skin",0);
+			--self.Entity:Fire("skin",0);
 
 			local fx = EffectData();
 				fx:SetOrigin(ply:GetShootPos()+ply:GetAimVector()*10);
 				fx:SetEntity(ply);
-			util.Effect("arthur_cloak",fx,true);
+			util.Effect("arthur_cloak",fx,true,true);
 
 			local fx2 = EffectData();
 				fx2:SetEntity(ply);
-			util.Effect("arthur_cloak_light",fx2,true);
+			util.Effect("arthur_cloak_light",fx2,true,true);
 
 			local fx3 = EffectData();
 				fx3:SetEntity(self.Entity);
-			util.Effect("arthur_cloak_light",fx3,true);
+			util.Effect("arthur_cloak_light",fx3,true,true);
 
 		end
 
@@ -124,9 +112,19 @@ end
 local function playerDies( victim, weapon, killer )
 	if (victim:GetNetworkedBool("ArthurCloaked", false)) then
 		victim:SetNetworkedBool("ArthurCloaked",false);
+		timer.Simple(0.1,function()
+			if (IsValid(p)) then
+				victim:SetNWBool("ArthurCloaked",nil);
+			end
+		end)
+		victim:SetNoTarget(false);
 	end
 end
 hook.Add( "PlayerDeath", "StarGate.Arthur", playerDies )
+
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS
+end
 
 -----------------------------------DUPLICATOR----------------------------------
 

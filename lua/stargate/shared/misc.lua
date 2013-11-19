@@ -174,6 +174,7 @@ StarGate.SpawnList.Misc = {
 	"models/MarkJaw/dhd_new/dhd.mdl",
 	"models/MarkJaw/dhd_new/dhd_base.mdl",
 	"models/MarkJaw/dhd_new/dhd_open.mdl",
+	"models/MarkJaw/sgc_starmap/sgc_starmap.mdl",
 	"models/Boba_Fett/ramps/sgu_ramp/floor_chev.mdl",
 	"models/AlexALX/Stargate_Cebt/sgtbase.mdl",
 	"models/pyro_overloader/overloader.mdl",

@@ -56,7 +56,7 @@ function SWEP:DoCloakEffect()
 	local fx = EffectData();
 	fx:SetOrigin(self.Owner:GetShootPos()+self.Owner:GetAimVector()*10);
 	fx:SetEntity(self.Owner);
-	util.Effect("sodan_cloak",fx,true);
+	util.Effect("sodan_cloak",fx,true,true);
 end
 
 --################### Removes a bit health "due to the radiation" the cloak emits to get away phaseshifted insects,worms etc (which are the EVIL himself) @aVoN
@@ -89,6 +89,11 @@ hook.Add("PlayerDeath","StarGate.SodanCloaking.PlayerDeath",
 	function(p)
 		if(IsValid(p)) then
 			p:SetNWBool("pCloaked",false);
+			timer.Simple(0.1,function()
+				if (IsValid(p)) then
+					p:SetNWBool("pCloaked",nil);
+				end
+			end)
 			p:SetNoTarget(false);
 		end
 	end

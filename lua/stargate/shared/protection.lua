@@ -42,7 +42,7 @@ function StarGate.Hook.CanTool(p,t,m)
 		local allow = hook.Call("StarGate.Player.CanToolOnProtectedGate",GAMEMODE,p,e,m);
 		if(allow == true) then return end; -- He can!
 		if(allow == false) then return false end; -- He cant!
-		if(m:find("dev_link") or (m:find("link_tool") or m:find("auto_link_tool")) and Environments or m:find("wire") or ((m == "goauld_iris" or m == "stargate_iris") and (p:IsAdmin() or p:IsSuperAdmin()))) then return end;
+		if(m:find("dev_link") or (m:find("link_tool") and Environments) or (m=="wire" or m=="wire_adv" or m=="wire_debugger") or ((m == "goauld_iris" or m == "stargate_iris") and (p:IsAdmin() or p:IsSuperAdmin()))) then return end;
 		return false;
 	end
 end

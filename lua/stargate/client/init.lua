@@ -26,7 +26,8 @@ StarGate.HTTP = {
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
-	CREDITS = "http://sg-carterpack.com/wiki/"
+	CREDITS = "http://sg-carterpack.com/wiki/",
+	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest"
 };
 StarGate.LATEST_VERSION = 0;
 StarGate.CURRENT_VERSION = 0;

@@ -6,6 +6,8 @@ if(file.Exists("materials/VGUI/weapons/cloak_inventory.vmt","GAME")) then
 end
 
 --################### Think @Catdaemon
+-- code moved to arthur_mantle
+/*
 hook.Add("Think","StarGate.SodanCloaking.Think",
 	function()
 		local cloaked_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
@@ -24,7 +26,7 @@ hook.Add("Think","StarGate.SodanCloaking.Think",
 								p.__SGCloakMaterial = p:GetMaterial();
 							end
 							p:SetMaterial("models/effects/vol_light001");
-						end*/
+						end*
 						a = 0;
 						p.__HasBeenCloaked = true;
 					elseif(a == 0 and p.__HasBeenCloaked) then -- If he is uncloaked but still at 0 alpha, make him visible back again (Failsafe) - But do this only, if WE have cloaked him
@@ -42,7 +44,7 @@ hook.Add("Think","StarGate.SodanCloaking.Think",
 			end
 		end
 	end
-);
+); */
 
 --################### Color override @Catdaemon
 local BlurEdges = Material("bluredges");

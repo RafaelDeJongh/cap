@@ -811,7 +811,7 @@ function ENT:FindGateGalaxy(no_target,addr)
 end
 
 -- Set the Dial Delay @Llapp, recode by AlexALX
-function ENT:GetDelay(inbound,fast,chevs,tgate)
+function ENT:GetDelay(inbound,fast,chevs,tgate,classic)
 	local e = self.Entity:GetClass();
 	local g = "stargate_";
 	local add = 0;
@@ -850,8 +850,27 @@ function ENT:GetDelay(inbound,fast,chevs,tgate)
 		    add = 0.3;
 		end
 	end
+	add = add + self:GetDelaySG1(tgate,classic);
 	--print(e.." "..tostring(add).." "..tgate)
 	return add;
+end
+
+function ENT:GetDelaySG1(tgate,classic)
+	local e = self.Entity:GetClass();
+	local g = "stargate_";
+
+	-- if movie has classic mode, then eh work like on sg1 gate.
+	if (e == g.."movie" and self.Entity.Classic) then
+		e = g.."sg1";
+	end
+	if (tgate == g.."movie" and classic) then
+		tgate = g.."sg1";
+	end
+
+	if ((tgate == g.."sg1"||tgate == g.."infinity"||tgate == g.."tollan") and e != g.."sg1" and e != g.."infinity" and e != g.."tollan") then
+		return 0.65;
+	end
+	return 0;
 end
 
 --##################################
@@ -1305,13 +1324,21 @@ function ENT:IsBlocked(only_by_iris,no_open,only_block)
 	return false;
 end
 
--- for e2 lib by AlexALX
-function ENT:IrisToggle()
+-- for iris comp by AlexALX
+function ENT:GetIris()
 	for _,v in pairs(ents.FindInSphere(self.Entity:GetPos(),10)) do
 		if(v.IsIris) then
-			v:Toggle();
-			break;
+			return v;
 		end
+	end
+	return NULL;
+end
+
+-- for e2 lib by AlexALX
+function ENT:IrisToggle()
+	local iris = self:GetIris();
+	if (IsValid(iris)) then
+		iris:Toggle();
 	end
 end
 

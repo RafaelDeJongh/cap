@@ -444,13 +444,14 @@ function ENT:OnButtActivateStargate(inbound)
 						fail = true;
 					end
 					if(not DEBUG and not fail) then -- No debug, no instant open
+						local dly = 0.5 + self:GetDelaySG1(self.Target:GetClass(),self.Target.Classic);
 						if (self.OnButtLock) then
 							local act = action;
 							action = self.Sequence:New();
-							action:Add({f=self.FakeDelay,v={self},d=0.5});
+							action:Add({f=self.FakeDelay,v={self},d=dly});
 							action = action + act;
 						else
-							action = self.Sequence:InstantOpen(nil,0.5,true,inbound) + action;
+							action = self.Sequence:InstantOpen(nil,dly,true,inbound) + action;
 						end
 					end
 				else

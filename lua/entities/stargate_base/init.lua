@@ -656,17 +656,18 @@ function ENT:WireOutput(k,v)
 end
 
 function ENT:FindDHD()
+	if (IsValid(self.LockedDHD)) then return {self.LockedDHD} end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	for _,v in pairs(ents.FindByClass("dhd_*")) do
-		if (v.IsGroupDHD and self.DHDRange) then
+		if (v.IsGroupDHD and self.DHDRange and (not IsValid(v.LockedGate) or v.LockedGate==self.Entity)) then
 			local e_pos = v:GetPos();
 			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
 			if(dist <= self.DHDRange) then
 				-- Check, if this DHD really belongs to this gate
 				local add = true;
 				for _,gate in pairs(self:GetAllGates()) do
-					if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
+					if(gate ~= self.Entity and (not IsValid(gate.LockedDHD) or gate.LockedDHD==v) and (gate:GetPos() - e_pos):Length() < dist) then
 						add = false;
 						break;
 					end

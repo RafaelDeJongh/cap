@@ -90,16 +90,17 @@ function SWEP:SVPrimaryAttack()
 	end
 end
 
-function SWEP:Reload()
-
+function SWEP:SecondaryAttack()
+	local p = self.Owner;
+	if (not IsValid(p)) then return end
 	if self.NextUse < CurTime() then
 		if not self.Stun then
 			self.Stun = true;
-			self:EmitSound(self.Sounds.Deploy,100,115);
+			p:EmitSound(self.Sounds.Deploy,100,115);
 			self:SetNetworkedInt("Mode",1);
 		else
 			self.Stun = false;
-			self:EmitSound(self.Sounds.Deploy,100,105);
+			p:EmitSound(self.Sounds.Deploy,100,105);
 			self:SetNWInt("Mode",2);
 		end
 		self.NextUse = CurTime() + 1;

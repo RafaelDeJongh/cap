@@ -79,6 +79,7 @@ function ENT:Think()
 	local x = self.blackHoleMass/500;
 	local phys = self.Entity:GetPhysicsObject()
 	phys:ApplyForceCenter( Vector(0,0,0) )
+	phys:Wake() -- fix on freeze
 	self:SetNetworkedInt("mass", x);
 
 	self.Entity:NextThink(CurTime() + 1)

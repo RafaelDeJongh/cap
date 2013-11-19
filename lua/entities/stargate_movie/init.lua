@@ -399,6 +399,7 @@ function ENT:ActivateRing(b,classic,loop,fast)
 		self.Ring.WireMoving = false;
 		self.WireEncodeSymbol = "";
 		self.WireLockSymbol = "";
+		self.Entity:SetNWBool("ActRotRingL",false);
 	end
 end
 
@@ -840,16 +841,31 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		end
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
+			if (self:GetWire("Chevron",0,true)==0) then
+				self.WireManualDial = true;
+				local action = self.Sequence:New();
+				action = self.Sequence:SeqFirstActivation();
+				self:RunActions(action);
+			end
 			self.Ring.WireMoving = true;
 			self:ActivateRing(true);
+			self.Entity:SetNWBool("ActRotRingL",true);
 			self.WireEncodeSymbol = v;
+			self.Entity:SetWire("Dialing Symbol",v);
 		end
 	elseif(k == "Lock Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
+			if (self:GetWire("Chevron",0,true)==0) then
+				self.WireManualDial = true;
+				local action = self.Sequence:New();
+				action = self.Sequence:SeqFirstActivation();
+				self:RunActions(action);
+			end
 			self.Ring.WireMoving = true;
 			self.Entity:SetNWBool("ActRotRingL",true);
 			self:ActivateRing(true);
 			self.WireLockSymbol = v;
+			self.Entity:SetWire("Dialing Symbol",v);
 		end
 	end
 end

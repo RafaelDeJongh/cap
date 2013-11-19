@@ -16,9 +16,6 @@ end
 -- Fix for file.* function not finding files from legacy addon system in data folder (needed for other addons like wiremod, for find cap e2 chips etc).
 local file_Open = file.Open
 local file_Find = file.Find
-local file_IsDir = file.IsDir
-local file_Exists = file.Exists
-local file_Size = file.Size
 
 -- need keep old way for compatibility with other mods (including wiremod)
 function file.Open(path,mode,param)
@@ -30,8 +27,11 @@ function file.Open(path,mode,param)
 	else
 		dir = param
 	end
-	if (dir:upper()=="DATA" and not file_Exists(path,dir) and (mode=="r" or mode=="rb")) then
-		return file_Open("data/"..path,mode,"GAME");
+	if (dir:upper()=="DATA" and not file.Exists(path,dir) and (mode=="r" or mode=="rb")) then
+		-- special workaround for workshop and e2
+		if (path and path:lower():find("^expression2/cap_shared/(.*).lua$")) then
+			return file_Open("lua/data/"..path,mode,"GAME");
+		end
 	end
 	return file_Open(path,mode,dir);
 end
@@ -40,47 +40,22 @@ function file.Find(path,dir,order)
 	if (path==nil or dir==nil) then return {},{} end
 	if (dir:upper()=="DATA") then
 		local files,folders = file_Find(path,dir,order);
-		local fi,fo = file_Find("data/"..path,"GAME",order);
-		if (fi) then
-			for _,d in pairs(fi) do
-				if (not table.HasValue(files,d)) then
-					table.insert(files,d);
+		-- ugly workaround for workshop...
+		if (path and path:lower()=="expression2/cap_shared/*") then
+			local fi = file_Find("lua/data/expression2/cap_shared/*","GAME");
+            if (fi) then
+	 			for k,d in pairs(fi) do
+					if (not table.HasValue(files,d)) then
+						table.insert(files,d);
+					end
 				end
-			end
-		end
-		if (fo) then
-			for _,d in pairs(fo) do
-				if (not table.HasValue(folders,d)) then
-					table.insert(folders,d);
-				end
-			end
+            end
 		end
 		-- i know, order will not work correct in this case, later will fix probably
 		return files,folders;
 	else
 		return file_Find(path,dir,order);
 	end
-end
-
-function file.IsDir(path,dir)
-	if (path==nil or dir==nil or type(dir)!="string") then return false end
-	local tmp = file_IsDir(path,dir);
-	if (dir:upper()=="DATA" and not tmp) then tmp = file_IsDir("data/"..path,"GAME"); end
-	return tmp;
-end
-
-function file.Exists(path,dir)
-	if (path==nil or dir==nil or type(dir)!="string") then return false end
-	local tmp = file_Exists(path,dir);
-	if (dir:upper()=="DATA" and not tmp) then tmp = file_Exists("data/"..path,"GAME"); end
-	return tmp;
-end
-
-function file.Size(path,dir)
-	if (path==nil or dir==nil or type(dir)!="string") then return -1 end
-	local tmp = file_Exists(path,dir);
-	if (dir:upper()=="DATA" and not tmp) then tmp = file_Size("data/"..path,"GAME"); end
-	return file_Size(path,dir);
 end
 
 function Vertex( pos, u, v, normal )
@@ -107,7 +82,7 @@ function GetAddonInfo(addon)
 		local file = file.Read("addons/"..addon.."/addon.txt","GAME");
 		if (file) then
 			local lines = string.Explode("\n", file);
-			for _,l in pairs(lines) do
+			for k,l in pairs(lines) do
 				local line = string.Trim(l);
 				if (line=="") then continue; end
 				local inf = string.Explode("\"", line);

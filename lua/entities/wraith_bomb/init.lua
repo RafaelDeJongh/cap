@@ -121,7 +121,7 @@ function ENT:Stun( Ent )
 				Ragdoll:Activate()
 				--Kill the player when their ragdoll is destroyed, in case a Stargate eats it or something...
 				Ragdoll:CallOnRemove( "RagdollRemoved", function()
-					if IsValid( Ent ) and Ent.Stunned then
+					if IsValid( Ent ) and Ent.Stunned and not Ent:HasGodMode() then
 						if timer.Exists( "EnergyPulseStun"..EntID ) then
 							timer.Destroy( "EnergyPulseStun"..EntID )
 						end
@@ -142,7 +142,7 @@ function ENT:Stun( Ent )
 
 				--Damage hook to transfer damage on the ragdoll to the player, killing them if necessary.
 				hook.Add( "EntityTakeDamage", "StunRagdollDamage"..EntID, function( ent, dmginfo )
-					if ent == Ragdoll and Ent.Stunned then
+					if ent == Ragdoll and Ent.Stunned and not Ent:HasGodMode() then
 						local amount = dmginfo:GetDamage();
 						if dmginfo:GetDamageType() == 1 then
 							amount = amount * 0.05

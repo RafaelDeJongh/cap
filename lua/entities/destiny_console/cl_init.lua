@@ -290,6 +290,7 @@ function VGUI:Init()
 	textF:SetSize(80, 20);
 	textF:SetPos(370, 70);
 	textF:SetText("");
+	textF:SetAllowNonAsciiCharacters(true)
 	self.textF = textF;
 
 	local textG = vgui.Create('DTextEntry', DermaPanel);

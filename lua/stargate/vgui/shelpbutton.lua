@@ -46,6 +46,9 @@ end
 local VGUI;
 --################# Open the HELP @aVoN
 function PANEL:OnMousePressed()
+	if (self.Steam and self.URL) then
+		gui.OpenURL(self.URL); return
+	end
 	VGUI = VGUI or vgui.Create("SHTMLHelp");
 	if(self.URL) then
 		VGUI:SetURL(self.URL);
@@ -77,8 +80,9 @@ function PANEL:SetHelp(help)
 end
 
 --################# Sets the URL - If set, "SetHelp" won't be used! OVERRIDE! @aVoN
-function PANEL:SetURL(url)
+function PANEL:SetURL(url,steam)
 	self.URL = url;
+	self.Steam = steam;
 end
 
 --################# Paint @aVoN

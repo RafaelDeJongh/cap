@@ -61,3 +61,7 @@ stargate_c_tool_16 = Включить свет шевронов
 stargate_c_tool_16d = Выключить свет шевронов
 stargate_c_tool_17 = Включить SG1 Текстуру горизонта
 stargate_c_tool_17d = Выключить SG1 Текстуру горизонта
+stargate_c_tool_18 = Включить буквы
+stargate_c_tool_18d = Выключить буквы
+stargate_c_tool_19 = Атлантис Тип
+stargate_c_tool_19d = Выключить Атлантис Тип

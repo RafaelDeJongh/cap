@@ -69,7 +69,7 @@ function ENT:BressButton()
 		end
 	else
 		local door = self:FindDoor();
-		if IsValid(door) then door:Toggle(); end
+		if IsValid(door) and (door.NoButtons==0 or door.Owner==self.Owner) then door:Toggle(); end
 	end
 end
 
@@ -78,7 +78,7 @@ function ENT:FindDoor()
 	local dist = 1000;
 	local pos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("cap_doors_frame")) do
-		if (v.NoButtons) then continue end
+		if (v.NoButtons==2) then continue end
 		local door_dist = (pos - v:GetPos()):Length();
 		if(dist >= door_dist) then
 			dist = door_dist;

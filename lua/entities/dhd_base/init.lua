@@ -160,11 +160,11 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.WireNoSound = false;
 	if (self.IsDHDSg1) then
-		self:CreateWireInputs("Press Button","Disable Menu","Disable Ring Rotation","Wire Disable DHD Sound");
+		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Disable Ring Rotation","Wire Disable DHD Sound");
 	elseif (self.IsDHDAtl) then
-		self:CreateWireInputs("Press Button","Disable Menu","Slow Mode","Wire Disable DHD Sound");
+		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Slow Mode","Wire Disable DHD Sound");
 	else
-		self:CreateWireInputs("Press Button","Disable Menu","Wire Disable DHD Sound");
+		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Wire Disable DHD Sound");
 	end
 	local dhd = {"dhd_atlantis","dhd_universe","dhd_infinity"}
 	for i=1,3 do
@@ -195,6 +195,7 @@ function ENT:Initialize()
 		end
 	end
 	self.DisRingRotate = false;
+	self.LockedGate = NULL;
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
 end
 
@@ -216,6 +217,7 @@ function ENT:SpawnChevron()
 		e:Spawn();
 		e:Activate();
 		self.Chevron[i] = e;
+		--e.Symbol = table.KeyFromValue( self.ChevronNumber, i )
 		e:SetDerive(self.Entity); -- Derive Material/Color from "Parent"
 		e:Fire("skin",self.SkinNumber);
 	end
@@ -249,6 +251,9 @@ function ENT:OnRemove()
 	if timer.Exists("RandomClose"..self:EntIndex()) then timer.Destroy("RandomClose"..self:EntIndex()); end
 	if timer.Exists("LightThink"..self:EntIndex()) then timer.Remove("LightThink"..self:EntIndex()) end
 	if not self.Destroyed and self.Chevron then for _,v in pairs(self.Chevron) do v:Remove() end end
+	if (IsValid(self.LockedGate)) then
+		self.LockedGate.LockedDHD = nil;
+	end
 	self.Entity:Remove()
 end
 
@@ -285,6 +290,12 @@ function ENT:TriggerInput(k,v)
 		else
 			self.DisRingRotate = false;
 			self.Entity:SetNWBool("DisRingRotate",false);
+		end
+	elseif (k == "Disable Glyphs") then
+		if (v >= 1) then
+			self.Entity:SetNWBool("DisGlyphs",true);
+		else
+			self.Entity:SetNWBool("DisGlyphs",false);
 		end
 	elseif (k == "Wire Disable DHD Sound") then
 		if (v>0) then
@@ -423,14 +434,30 @@ function ENT:OnTakeDamage(dmg)
 
 end
 
+function ENT:Touch(ent)
+	if not IsValid(self.LockedGate) then
+		if (string.find(ent:GetClass(), "stargate")) then
+			local gate = self:FindGate()
+			if IsValid(gate) and gate==ent and not IsValid(gate.LockedDHD) then
+				self.LockedGate = gate
+				gate.LockedDHD = self.Entity;
+				local ed = EffectData()
+ 					ed:SetEntity( self.Entity )
+ 				util.Effect( "propspawn", ed, true, true )
+			end
+		end
+	end
+end
+
 --################# Finds a gate @aVoN
 function ENT:FindGate()
+	if (IsValid(self.LockedGate)) then return self.LockedGate end
 	local gate;
 	local dist = self.Range;
 	if (dist==nil) then return NULL end
 	local pos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate and v:GetClass() != "stargate_supergate") then
+		if(v.IsStargate and v:GetClass() != "stargate_supergate" and (not IsValid(v.LockedDHD) or v.LockedDHD==self.Entity)) then
 			local sg_dist = (pos - v:GetPos()):Length();
 			if(dist >= sg_dist) then
 				dist = sg_dist;
@@ -907,5 +934,26 @@ end
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
+end
+
+function ENT:PreEntityCopy()
+	local dupeInfo = {};
+
+	dupeInfo.LockedGate = self.LockedGate:EntIndex();
+
+    duplicator.StoreEntityModifier(self, "StarGateDHDInfo", dupeInfo)
+	StarGate.WireRD.PreEntityCopy(self);
+end
+
+function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
+	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	local dupeInfo = Ent.EntityMods.StarGateDHDInfo
+	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
+		self.LockedGate = CreatedEntities[dupeInfo.LockedGate];
+		CreatedEntities[dupeInfo.LockedGate].LockedDHD = self.Entity;
+	end
+
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

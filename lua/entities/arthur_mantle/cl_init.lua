@@ -22,52 +22,87 @@ local font = {
 }
 surface.CreateFont("Glyphs", font);
 
-function ENT:Think()
-
-	local cloaked_self = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
-	for _,p in pairs(player.GetAll()) do
-		local cloaked = p:GetNetworkedBool("ArthurCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
-		local sodan_cloaked = p:GetNWBool("pCloaked",NULL); -- sodan thing
-		if(cloaked ~= NULL) then
-			local weapon = p:GetActiveWeapon();
-			local color = p:GetColor();
-			local r,g,b,a = color.r,color.g,color.b,color.a;
-			if cloaked_self then
-				if cloaked then a = 255;
-				elseif sodan_cloaked then a = 255 end
-			else
-				if cloaked then
-					/*if (p.__HasBeenCloaked==nil or p.__HasBeenCloaked==false) then
-						if (p.__SGCloakMaterial and p.__SGCloakMaterial!="models/effects/vol_light001") then
-							p.__SGCloakMaterial = p:GetMaterial();
-						end
-						p:SetMaterial("models/effects/vol_light001");
-					end*/
-					a = 0;
-					p.__HasBeenCloaked = true;
-				elseif (a == 0 and p.__HasBeenCloaked) then -- If he is uncloaked but still at 0 alpha, make him visible back again (Failsafe) - But do this only, if WE have cloaked him
-					a = 255;
-					p.__HasBeenCloaked = false;
-					--if (p.__SGCloakMaterial!=nil) then if (p.__SGCloakMaterial=="models/effects/vol_light001") then p:SetMaterial(""); else p:SetMaterial(p.__SGCloakMaterial); end end
+-- Damn, recoded this myself for fix stupid bugs with flashlight and cloak. I hope now all works fine (c) AlexALX
+hook.Add("Think","StarGate.ArthurCloaking.Think",
+	function()
+		local cloaked_self = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
+		local sodan_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
+		for k,p in pairs(player.GetHumans()) do
+			local cloaked = p:GetNWBool("ArthurCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
+			local sodan_cloaked = p:GetNWBool("pCloaked",NULL); -- sodan thing
+			if(cloaked ~= NULL or sodan_cloaked ~= NULL) then
+				if (cloaked==NULL) then cloaked = false end
+				if (sodan_cloaked==NULL) then sodan_cloaked = false end
+				local weapon = p:GetActiveWeapon();
+				local color = p:GetColor();
+				local r,g,b,a = color.r,color.g,color.b,color.a;
+				local c = false;
+				if (cloaked_self and sodan_self) then
+					if (cloaked or sodan_cloaked) then a = 255; end
+				elseif(cloaked_self) then
+					if (cloaked and not sodan_cloaked) then a = 255; elseif (sodan_cloaked) then a = 0; c = true; end
+				elseif(sodan_self) then
+					if (sodan_cloaked and not cloaked) then a = 255; elseif (cloaked) then a = 0; c = true; end
+				else
+					if (cloaked or sodan_cloaked) then a = 0; c = true end
 				end
-			end
-			p:SetRenderMode( RENDERMODE_TRANSALPHA );
-			p:SetColor(Color(r,g,b,a)); -- Cloak, lol
-			if(IsValid(weapon)) then
-				weapon:SetRenderMode( RENDERMODE_TRANSALPHA )
-				weapon:SetColor(Color(255,255,255,a)); -- Cloak his weapon too
+				if (c and p.__SGCloakMaterial==nil) then
+					p.__SGCloakMaterial = p:GetMaterial();
+					p:SetMaterial("models/effects/vol_light001");
+				elseif (not c and p.__SGCloakMaterial!=nil) then
+					a = 255;
+					if (p.__SGCloakMaterial=="models/effects/vol_light001") then
+						p:SetMaterial("");
+					else
+						p:SetMaterial(p.__SGCloakMaterial);
+					end
+					p.__SGCloakMaterial = nil;
+				end
+				p:SetRenderMode( RENDERMODE_TRANSALPHA );
+				p:SetColor(Color(r,g,b,a)); -- Cloak, lol
+				if(IsValid(weapon)) then
+					weapon:SetRenderMode( RENDERMODE_TRANSALPHA )
+					weapon:SetColor(Color(255,255,255,a)); -- Cloak his weapon too
+				end
+			elseif(p.__SGCloakMaterial!=nil) then
+				local color = p:GetColor();
+				local r,g,b = color.r,color.g,color.b;
+				local weapon = p:GetActiveWeapon();
+				if (p.__SGCloakMaterial=="models/effects/vol_light001") then
+					p:SetMaterial("");
+				else
+					p:SetMaterial(p.__SGCloakMaterial);
+				end
+				p.__SGCloakMaterial = nil;
+				p:SetRenderMode( RENDERMODE_TRANSALPHA );
+				p:SetColor(Color(r,g,b,255));
+				if(IsValid(weapon)) then
+					weapon:SetRenderMode( RENDERMODE_TRANSALPHA )
+					weapon:SetColor(Color(255,255,255,255)); -- Cloak his weapon too
+				end
 			end
 		end
 	end
+);
+
+function ENT:Think()
+
+	local cloak = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
+	if cloak and self:GetSkin()==1 then
+		self:SetSkin(0);
+	elseif not cloak and self:GetSkin()==0 then
+		self:SetSkin(1);
+	end
+
+	self.Entity:NextThink(CurTime() + 0.5)
+	return true
 end
 
 function ENT:Draw()
 
 	self.Entity:DrawModel();
 
-	local players = self.Entity:GetNWString("CloackedPlayers"):TrimExplode(",");
-
-	if table.HasValue(players, tostring(  LocalPlayer():EntIndex()  )  ) then
+	if LocalPlayer():GetNetworkedBool("ArthurCloaked",false) then
 
 		local pos = self.Entity:GetPos() + self.Entity:GetUp()*50
 		local ang = self.Entity:GetAngles();

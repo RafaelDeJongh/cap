@@ -49,7 +49,7 @@ function EFFECT:Init(data)
 	self.Vis	= util.GetPixelVisibleHandle()
 	self.Emitter = ParticleEmitter(self.StartPos)
 
-	if (not IsValid(self.Emitter)) then self:Remove(); return end
+	if (not self.Emitter) then self:Remove(); return end
 
 	self.Entity:SetModel(Model("models/zup/shields/1024_shield.mdl"))
 	self.Entity:SetPos(self.StartPos)
