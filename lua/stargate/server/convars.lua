@@ -29,6 +29,7 @@
 		{"Ancient Obelisk", "anc_obelisk", 4},
 		{"MCD", "mcd", 1},
 		{"CAP Ships", "ships", 10},
+		{"Iris Computer", "iris_comp", 2},
 	}
 	local wepssett = {
 		{"AG-3 Charge Time", "ag3_weapon", 60},
@@ -111,7 +112,6 @@
 	end
 	CreateConVar( "stargate_physics_clipping", "1", {FCVAR_ARCHIVE} )
 	CreateConVar( "stargate_model_clipping", "1", {FCVAR_ARCHIVE} )
-	CreateConVar( "stargate_open_effect", "1", {FCVAR_ARCHIVE} )
 
 	CreateConVar( "stargate_group_system", "1", { FCVAR_NOTIFY, FCVAR_GAMEDLL, FCVAR_ARCHIVE } )
 	local count = cvars.GetConVarCallbacks("stargate_group_system") or {}; -- add callback only once

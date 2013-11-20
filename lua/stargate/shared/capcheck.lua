@@ -39,6 +39,36 @@ if (SERVER) then
 	util.AddNetworkString( "CL_CAP_ERROR" );
 end
 
+StarGate.CAP_WS_ADDONS = {"Carter Addon Pack: Atlantis", "Carter Addon Pack: CapBuild", "Carter Addon Pack: CatWalkBuild", "Carter Addon Pack: DHD",
+	"Carter Addon Pack: DHD Extra", "Carter Addon Pack: Extra Materials", "Carter Addon Pack: Life Support", "Carter Addon Pack: Maps",
+	"Carter Addon Pack: Event Horizons", "Carter Addon Pack: Optional Ramps Pack", "Carter Addon Pack: Player Models", "Carter Addon Pack: Player Weapons",
+	"Carter Addon Pack: Props", "Carter Addon Pack: Ramps Important", "Carter Addon Pack: Ramps Pack", "Carter Addon Pack: Resources",
+	"Carter Addon Pack: Ring Ramps", "Carter Addon Pack: Rings", "Carter Addon Pack: Shields if Protection", "Carter Addon Pack: Sounds",
+	"Carter Addon Pack: Stargate", "Carter Addon Pack: Stargate Extras", "Carter Addon Pack: Stargate Universe", "Carter Addon Pack: Stargate Universe Extras",
+	"Carter Addon Pack: Supergate", "Carter Addon Pack: Tool Weapons", "Carter Addon Pack: Vehicles Pack1", "Carter Addon Pack: Vehicles Pack2", "Carter Addon Pack: Weapons",
+}
+
+local ws_addonlist = {}
+local cap_installed = false;
+
+for _,v in pairs(engine.GetAddons()) do
+	if (v.mounted) then
+		table.insert(ws_addonlist, v.title);
+		if (table.HasValue(StarGate.CAP_WS_ADDONS, v.title)) then cap_installed = true end
+	end
+end
+
+local ws_cache = false;
+local function Workshop_res_Check()
+	if (ws_cache) then return ws_cache; end
+	local ret = StarGate.CAP_WS_ADDONS;
+	for k,v in pairs(ret) do
+		if table.HasValue(ws_addonlist, v) then table.remove(ret,k); end
+	end
+	ws_cache = ret;
+	return ret;
+end
+
 if (CLIENT) then
 
 	local function CAP_dxlevel()
@@ -104,7 +134,15 @@ if (CLIENT) then
 			if (k!=1) then
 				text = text.."<br><br>";
 			end
-			text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..k.."</b><br>"..SGLanguage.GetMessage(v);
+			if (v=="sg_err_09") then
+				local adds = "";
+				for t,a in pairs(Workshop_res_Check()) do
+					adds = adds.."<br>"..a
+				end
+				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v,adds);
+			else
+				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v);
+			end
 		end
 
 		surface.PlaySound( "buttons/button2.wav" );
@@ -213,46 +251,9 @@ if (GetAddonList!=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_gr
 	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
 end
 
-local ws_addonlist = {}
-local cap_installed = false;
-
-for _,v in pairs(engine.GetAddons()) do
-	if (v.mounted) then
-		table.insert(ws_addonlist, v.title);
-		if (v.title:find("Carter Addon Pack:")) then cap_installed = true end
-	end
-end
-
 local function Workshop_res_Installed()
-	if (table.HasValue(ws_addonlist, "Carter Addon Pack: Atlantis")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: CapBuild")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: CatWalkBuild")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: DHD")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: DHD Extra")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Extra Materials")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Life Support")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Maps")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Event Horizons")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Optional Ramps Pack")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Player Models")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Player Weapons")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Props")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Ramps Important")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Ramps Pack")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Resources")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Ring Ramps")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Rings")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Shields and Protection")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Sounds")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Stargate")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Stargate Extras")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Stargate Universe")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Stargate Universe Extras")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Supergate")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Tool Weapons")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Vehicles Pack1")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Vehicles Pack2")
-	and table.HasValue(ws_addonlist, "Carter Addon Pack: Weapons")) then
+	local adds = Workshop_res_Check();
+	if (table.Count(adds)==0) then
 		return true;
 	end
 	return false;
@@ -292,7 +293,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<429 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<430 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)

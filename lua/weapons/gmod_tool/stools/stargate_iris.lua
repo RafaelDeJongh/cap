@@ -84,6 +84,10 @@ function TOOL:LeftClick(t)
 		e:SetAngles(t.Entity:GetAngles());
 		stargate = true;
 	end
+	e.GateLink = t.Entity;
+	if (t.Entity.GateSpawnerSpawned) then
+		e:IrisProtection();
+	end
 	e:Toggle(true); -- Always spawn an iris/shield closed! (true means close no matter if we have not enough energy)
 	--[[
 	if(util.tobool(self:GetClientNumber("autolink"))) then

@@ -61,10 +61,12 @@ function EFFECT:Init(data)
 	end
 	-- ######################## Decal on the wall
 	-- display red glow only if its ronon gun @ AlexALX
-	if (self.Color.r == 255 and math.random(0,2)==1) then
-		util.Decal("RedGlowFade",pos+norm*10,pos-norm*10);
+	if (StarGate.VisualsWeapons("cl_staff_scorch")) then
+		if (self.Color.r == 255 and math.random(0,2)==1) then
+			util.Decal("RedGlowFade",pos+norm*10,pos-norm*10);
+		end
+		util.Decal("SmallScorch",pos+norm*10,pos-norm*10);
 	end
-	util.Decal("SmallScorch",pos+norm*10,pos-norm*10);
 	-- ######################## Smoke
 	if(data:GetScale() ~= -1 and StarGate.VisualsWeapons("cl_staff_smoke")) then
 		-- ######################## Smoke "AI" - do not add too much of long lasting smoke!
@@ -106,13 +108,15 @@ function EFFECT:Init(data)
 	-- ######################## Dynamic light
 	if(StarGate.VisualsWeapons("cl_staff_dynlights")) then
 		local dynlight = DynamicLight(0);
-		dynlight.Pos = pos;
-		dynlight.Size = 300+size*500;
-		dynlight.Decay = 300;
-		dynlight.R = self.Color.r;
-		dynlight.G = self.Color.g;
-		dynlight.B = self.Color.b;
-		dynlight.DieTime = CurTime()+1;
+		if (dynlight) then
+			dynlight.Pos = pos;
+			dynlight.Size = 300;
+			dynlight.Decay = 300;
+			dynlight.R = self.Color.r;
+			dynlight.G = self.Color.g;
+			dynlight.B = self.Color.b;
+			dynlight.DieTime = CurTime()+1;
+		end
 	end
 end
 

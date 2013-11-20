@@ -47,9 +47,12 @@ function TOOL:LeftClick(t)
 			end
 		end
 	end
+	e.GateLink = t.Entity;
+	if (t.Entity.GateSpawnerSpawned) then
+		e:IrisProtection();
+	end
 	e:SetPos(t.Entity:GetPos());
 	e:SetAngles(t.Entity:GetAngles());
-	t.Entity.Iris = e
 	e.NextAction = CurTime()
 	if(not e.IsActivated)then
 		e:Toggle(true);

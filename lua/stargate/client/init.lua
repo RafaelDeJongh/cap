@@ -26,7 +26,7 @@ StarGate.HTTP = {
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "http://www.sg-carterpack.com/",
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
-	CREDITS = "http://sg-carterpack.com/wiki/",
+	CREDITS = "http://sg-carterpack.com/wiki/#credits",
 	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest"
 };
 StarGate.LATEST_VERSION = 0;
@@ -63,6 +63,12 @@ function StarGate.Hook.GetInternetStatus(_,key)
 		net.WriteTable(StarGate_Group.ErrorMSG);
 		net.WriteTable(StarGate_Group.ErrorMSG_HTML);
 		net.SendToServer();
+		timer.Create("CL_CAP_ERROR",1200.0,0,function()
+			net.Start("CL_CAP_ERROR");
+			net.WriteTable(StarGate_Group.ErrorMSG);
+			net.WriteTable(StarGate_Group.ErrorMSG_HTML);
+			net.SendToServer();
+		end);
 	end
 
 	local mode = InternetCheck:GetString();
@@ -183,7 +189,7 @@ function StarGate.InstalledOnClient()
 	for _,v in pairs(engine.GetAddons()) do
 		if (v.mounted) then
 			table.insert(ws_addonlist, v.title);
-			if (v.title:find("Carter Addon Pack:")) then cap_installed = true end
+			if (table.HasValue(StarGate.CAP_WS_ADDONS or {}, v.title)) then cap_installed = true end
 		end
 	end
 	if (table.HasValue(ws_addonlist,"Stargate Carter Addon Pack") or cap_installed) then StarGate.InstalledOnCl = true; return true end

@@ -519,7 +519,7 @@ end
 function ENT:CreateBeam()
    inBeamInfo = EffectData()
 	 inBeamInfo:SetEntity(self.Entity)
-	 util.Effect("InBeam", inBeamInfo)
+	 util.Effect("InBeam", inBeamInfo,true,true)
 
    local gateMarker = StarGate.GetGateMarker(self.localGate)
 

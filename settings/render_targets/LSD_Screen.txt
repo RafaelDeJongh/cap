@@ -1,6 +1,0 @@
-"Screen_RT1"
-{
-	"Name"		"LSD_Screen"
-	"Width"		"512"
-	"Height"	"1024"
-}

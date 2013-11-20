@@ -37,37 +37,36 @@ function StarGate.ShuttleSettings(Panel)
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
 		{
-			Name = "Movement",
+			Name = SGLanguage.GetMessage("key_move_title"),
 			Keys = {
-				{"Move forward","FWD"},
-				{"Strafe Left","LEFT"},
-				{"Strafe right","RIGHT"},
-				{"Move Up","UP"},
-				{"Move Down","DOWN"},
+				{SGLanguage.GetMessage("key_move_forward"),"FWD"},
+				{SGLanguage.GetMessage("key_move_left"),"LEFT"},
+				{SGLanguage.GetMessage("key_move_right"),"RIGHT"},
+				{SGLanguage.GetMessage("key_move_up"),"UP"},
+				{SGLanguage.GetMessage("key_move_down"),"DOWN"},
 			},
 		},
 		{
-			Name = "Combat",
+			Name = SGLanguage.GetMessage("key_combat_title"),
 			Keys = {
-				{"Primary attack","FIRE"},
+				{SGLanguage.GetMessage("key_combat_primary"),"FIRE"},
 			},
 		},
 		{
-			Name = "Special Actions",
+			Name = SGLanguage.GetMessage("key_act_title"),
 			Keys = {
-				{"Selfdestruct","BOOM"},
-				{"Toggle Shield","SHIELD"},
-				{"Exit","EXIT"},
+				{SGLanguage.GetMessage("key_act_destruct"),"BOOM"},
+				{SGLanguage.GetMessage("key_act_shield"),"SHIELD"},
+				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
 			},
 		},
 		{
-			Name = "View",
+			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
-			--	{"Toggle thirdperson view","VIEW"},
-				{"Zoom in","Z+"},
-				{"Zoom out","Z-"},
-				{"Move view up","A+"},
-				{"Move view down","A-"},
+				{SGLanguage.GetMessage("key_view_zoomin"),"Z+"},
+				{SGLanguage.GetMessage("key_view_zoomout"),"Z-"},
+				{SGLanguage.GetMessage("key_view_up"),"A+"},
+				{SGLanguage.GetMessage("key_view_down"),"A-"},
 			},
 		},
 	}

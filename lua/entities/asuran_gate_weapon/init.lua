@@ -477,7 +477,7 @@ function ENT:CreateBeam()
 
 		inBeamInfo = EffectData()
 			inBeamInfo:SetEntity(self.Entity)
-		util.Effect("GateWeapon_beams", inBeamInfo)
+		util.Effect("GateWeapon_beams", inBeamInfo,true,true)
 
 		local energyBeam = ents.Create("energy_laser");
 		energyBeam.Owner = self.Entity;

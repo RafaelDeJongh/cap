@@ -37,36 +37,34 @@ function StarGate.DeathGliderSettings(Panel)
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
 		{
-			Name = "Movement",
+			Name = SGLanguage.GetMessage("key_move_title"),
 			Keys = {
-				{"Move forward","FWD"},
-				{"Roll left","RL"},
-				{"Roll right","RR"},
-				{"Reset Roll","RROLL"},
+				{SGLanguage.GetMessage("key_move_forward"),"FWD"},
+				{SGLanguage.GetMessage("key_roll_left"),"RL"},
+				{SGLanguage.GetMessage("key_roll_right"),"RR"},
+				{SGLanguage.GetMessage("key_roll_reset"),"RROLL"},
 			},
 		},
 		{
-			Name = "Combat",
+			Name = SGLanguage.GetMessage("key_combat_title"),
 			Keys = {
-				{"Primary attack","FIRE"},
+				{SGLanguage.GetMessage("key_combat_primary"),"FIRE"},
 			},
 		},
 		{
-			Name = "Actions",
+			Name = SGLanguage.GetMessage("key_act_title"),
 			Keys = {
-				{"Selfdestruct","BOOM"},
-				{"Exit","EXIT"},
+				{SGLanguage.GetMessage("key_act_destruct"),"BOOM"},
+				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
 			},
 		},
 		{
-			Name = "View",
+			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
-			--	{"Toggle thirdperson view","VIEW"},
-			--	{"Hide HUD","HIDE"},
-				{"Zoom in","Z+"},
-				{"Zoom out","Z-"},
-				{"Move view up","A+"},
-				{"Move view down","A-"},
+				{SGLanguage.GetMessage("key_view_zoomin"),"Z+"},
+				{SGLanguage.GetMessage("key_view_zoomout"),"Z-"},
+				{SGLanguage.GetMessage("key_view_up"),"A+"},
+				{SGLanguage.GetMessage("key_view_down"),"A-"},
 			},
 		},
 	}

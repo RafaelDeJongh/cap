@@ -56,6 +56,3 @@ CreateClientConVar("cl_asuran_laser",1,true,false);
 CreateClientConVar("cl_asuran_dynlights",0,true,false);
 CreateClientConVar("cl_dakara_rings",1,true,false);
 CreateClientConVar("cl_dakara_refract",1,true,false);
-CreateClientConVar("cl_oribeam_particle",1,true,false);
-CreateClientConVar("cl_oribeam_refract",1,true,false);
-CreateClientConVar("cl_oribeam_dynlights",0,true,false);

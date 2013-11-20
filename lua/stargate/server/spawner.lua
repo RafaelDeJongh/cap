@@ -25,6 +25,7 @@ if not SERVER then return end; -- Just to be sure
 StarGate.GateSpawner = {};
 StarGate.GateSpawner.Props = {}; -- Any props, attached to a stargate/ring
 StarGate.GateSpawner.Gates = {}; -- Gates
+StarGate.GateSpawner.Iris = {}; -- Iris
 StarGate.GateSpawner.DHDs = {}; -- DHDs
 StarGate.GateSpawner.MDHDs = {}; -- Mobile DHDs
 StarGate.GateSpawner.Ents = {};
@@ -54,6 +55,7 @@ function StarGate.GateSpawner.LoadConfig()
 		StarGate.GateSpawner.Version = ((ini.gatespawner or {})[1] or {}).version; -- To determine the spawnheight
 		StarGate.GateSpawner.Props = ini.prop_physics or {};
 		StarGate.GateSpawner.Gates = ini.stargate or {};
+		StarGate.GateSpawner.Iris = ini.iris or {};
 		StarGate.GateSpawner.DHDs = ini.dhd or {};
 		StarGate.GateSpawner.MDHDs = ini.mobile_dhd or {};
 		StarGate.GateSpawner.DestinyTimer = ini.destiny_timer or {}; -- Carter Stuff
@@ -100,10 +102,10 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 		e.GateSpawnerProtected = protect;
 		e:SetNetworkedBool("GateSpawnerProtected",protect);
 		local pos = Vector(unpack(v.position:TrimExplode(" ")));
-		local IsGate = v.classname:find("stargate_");
+		local IsGate = v.classname:find("stargate_") and not v.classname:find("iris");
 		local IsGroupGate = (v.classname:find("stargate_") and v.classname != "stargate_supergate");
+		local IsIris = v.classname:find("iris");
 		local IsDHD = v.classname:find("dhd_");
-
 		local IsRing = v.classname:find("ring_base_");
 		local IsRingP = v.classname:find("ring_panel_");
 		local IsRingAncient = v.classname:find("ring_base_ancient");
@@ -114,9 +116,6 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 
 		local IsSGULightUp = v.classname:find("bearing") or v.classname:find("floorchevron");
 
-		if(not StarGate.GateSpawner.Version and IsGate) then
-			pos = pos + Vector(0,0,87); -- Or gate would stuck in the ground
-		end
 		e.CDSIgnore = true; -- Fixes Combat Damage System destroying Ramps - http://mantis.39051.vs.webtropia.com/view.php?id=45
 		e:SetPos(pos);
 		-- Set model (if not a gate and valid key exists)
@@ -190,7 +189,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 				end
 				-- freeze stuff now
 				local phys = e:GetPhysicsObject();
-				if(phys:IsValid()) then phys:EnableMotion(false); end
+				if(IsValid(phys)) then phys:EnableMotion(false); end
 				-- Set the address of a gate
 				if (IsGate) then
 					if(v.address and v.address ~= "") then
@@ -278,6 +277,22 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 						e.AtlType = true;
 						e:SetNWBool("AtlType",true);
 					end
+				elseif (IsIris) then
+					for _,v in pairs(ents.FindInSphere(e:GetPos(),10)) do
+						if(v.IsStargate) then
+							local const=constraint.Weld(e, v, 0, 0, 0, false);
+							e.GateLink = v;
+						elseif(v.IsIris and not v.GateSpawnerSpawned) then
+							v:Remove();
+						end
+					end
+					e.NextAction = CurTime();
+					e:SetTrigger(false);
+					e:SetNoDraw(true);
+					e.LastMoveable = false;
+					e:SetCollisionGroup(COLLISION_GROUP_WORLD);
+					e:SetSolid(SOLID_NONE);
+					e:IrisProtection();
 				elseif (IsDHD) then
 					if(v.destroyed ~= nil and v.destroyed ~= "" and util.tobool(v.destroyed)==true and e:GetClass() != "dhd_concept" and e:GetClass() != "dhd_city") then
 						e.Healthh = 0;
@@ -301,7 +316,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 				elseif (IsSGULightUp) then -- Weld sgu stuff to nearest gates
 					for _,v in pairs(ents.FindInSphere(pos, 200)) do
 						if (IsValid(v) and v.IsStargate and v:GetClass() == "stargate_universe") then
-							local const=constraint.Weld(e, v,0, 0, 0, sgu_weld_manager);
+							local const=constraint.Weld(e, v, 0, 0, 0);
 						end
 					end
 				elseif(IsGravityController) then
@@ -311,7 +326,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 					// weld to the gates
 					for _,sg in pairs(ents.FindInSphere(pos, 200)) do
 						if (IsValid(sg) and sg.IsStargate) then
-							local const=constraint.Weld(e, sg, 0, 0, 0, systemmanager)
+							local const=constraint.Weld(e, sg, 0, 0, 0, false)
 							local nocollide=constraint.NoCollide( e, sg, 0, 0)
 							-- fix by AlexALX
 							sg.GateSpawnerGrav = sg.GateSpawnerGrav or {};
@@ -379,6 +394,7 @@ end
 function StarGate.GateSpawner.Reset()
 	StarGate.GateSpawner.Props = {};
 	StarGate.GateSpawner.Gates = {}; -- Gates
+	StarGate.GateSpawner.Iris = {}; -- Iris
 	StarGate.GateSpawner.DHDs = {}; -- DHDs
 	StarGate.GateSpawner.MDHDs = {}; -- Mobile DHDs
 	StarGate.GateSpawner.Ents = {};
@@ -401,6 +417,7 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 	-- First, remove all previous gate_spawner gates.
 	local remove = {
 		ents.FindByClass("stargate_*"),
+		ents.FindByClass("*_iris"),
 		ents.FindByClass("dhd_*"),
 		ents.FindByClass("mobile_dhd"),
 		ents.FindByClass("ring_*"),
@@ -414,6 +431,7 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 		ents.FindByClass("ramp_2"),
 		ents.FindByClass("future_ramp"),
 		ents.FindByClass("sgc_ramp"),
+		ents.FindByClass("icarus_ramp"),
 		ents.FindByClass("sgu_ramp"),
 		ents.FindByClass("goauld_ramp"),
 		ents.FindByClass("gravitycontroller"),
@@ -452,6 +470,10 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 				i = i + 1;
 			end
 			for _,v in pairs(StarGate.GateSpawner.Gates) do
+				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
+				i = i + 1;
+			end
+			for _,v in pairs(StarGate.GateSpawner.Iris) do
 				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
 				i = i + 1;
 			end
@@ -618,6 +640,11 @@ concommand.Add("stargate_gatespawner_createfile",
 					end
 				end
 			end
+			for _,v in pairs(ents.FindByClass("*_iris")) do
+				if (v.IsIris) then
+					f = f .. "[iris]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+				end
+			end
 			for _,v in pairs(ents.FindByClass("dhd_*")) do
 				if (v:GetClass()!="dhd_city" and v:GetClass()!="dhd_concept") then
 					f = f .. "[dhd]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\ndestroyed="..tostring(v.Destroyed).."\n";
@@ -703,6 +730,9 @@ concommand.Add("stargate_gatespawner_createfile",
 			end
 			for _,v in pairs(ents.FindByClass("sgc_ramp")) do
 				f = f .. "[ramp]\nclassname=sgc_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			end
+			for _,v in pairs(ents.FindByClass("icarus_ramp")) do
+				f = f .. "[ramp]\nclassname=icarus_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
 			end
 			for _,v in pairs(ents.FindByClass("future_ramp")) do
 				f = f .. "[ramp]\nclassname=future_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";

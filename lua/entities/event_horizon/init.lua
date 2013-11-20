@@ -147,7 +147,7 @@ function ENT:Initialize()
 	self.OpenTime = 2.2;
 	self.Holding = {}; -- A player holds this Entity: We are not going to teleport it until he stopped holding it!
 	self.DoNotDestroy = {}; -- A contraption just got teleported to this event horizon but hasn't exited it yet. This prevents the receiving EH from destroying this contraption!
-	self.OpenEffect = GetConVar("stargate_open_effect"):GetBool(); -- Need to place up here so we have the variable ready
+	self.OpenEffect = true; -- Need to place up here so we have the variable ready
 	self:Open(); -- Let us open :D
 
 	self.CollisionGroup = {};

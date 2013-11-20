@@ -186,6 +186,23 @@ local function StarGate_CloseAll(ply)
 end
 concommand.Add("stargate_close_all",StarGate_CloseAll);
 
+local function StarGate_OpenAll(ply)
+	if (IsValid(ply) and not ply:IsAdmin()) then ply:PrintMessage( HUD_PRINTCONSOLE, "Yor are not admin!"); return end
+	timer.Simple(0.1,function()
+		for k,v in pairs(ents.FindByClass("*_iris")) do
+			if (v.IsIris) then
+				v:TrueActivate(true);
+			end
+		end
+	end);
+	if (IsValid(ply)) then
+		ply:PrintMessage( HUD_PRINTCONSOLE, "All iris is opened!");
+	else
+		print("All iris is opened!");
+	end
+end
+concommand.Add("stargate_open_all_iris",StarGate_OpenAll);
+
 local function CanPlayerSpawnSENT( player, EntityName )
 
 	-- Is this in the SpawnableEntities list?

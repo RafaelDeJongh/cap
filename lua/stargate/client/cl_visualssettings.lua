@@ -1,7 +1,7 @@
 function StarGate.MiscVisualSettings(Panel)
-	local high = "Frame Burst: High";
-	local medium = "Frame Burst: Medium";
-	local low = "Frame Burst: Low";
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
 
 	Panel:ClearControls();
 	-- The HELP Button
@@ -12,50 +12,50 @@ function StarGate.MiscVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox("Draw Effects","cl_stargate_visualsmisc"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
+	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsmisc"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
 	Panel:Help("");
 	-- Stargates
-	Panel:Help("Stargate");
-	Panel:CheckBox("Dynamic Lights","cl_stargate_dynlights"):SetToolTip(high);
+	Panel:Help(SGLanguage.GetMessage("stool_cat"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_dynlights"):SetToolTip(high);
 	if (file.Exists("materials/zup/stargate/effect_03.vmt","GAME")) then
-		Panel:CheckBox("Draw ripple on the Eventhorizon","cl_stargate_ripple"):SetToolTip(medium);
+		Panel:CheckBox(SGLanguage.GetMessage("vis_ripple"),"cl_stargate_ripple"):SetToolTip(medium);
     end
-    Panel:CheckBox("Draw kawoosh enter effect on stargate open","cl_stargate_kenter"):SetToolTip(low);
-	Panel:CheckBox("Use New Kawoosh Material", "cl_kawoosh_material"):SetToolTip("Fps Drop: Nil, Just changes the Material of the Kawoosh");
-	Panel:CheckBox("Draw Open/Close Effects", "cl_stargate_effects"):SetToolTip("Fps Drop: Medium, can prevent game crash in mp (for tests)");
+    Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_eff"),"cl_stargate_kenter"):SetToolTip(low);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_mat"), "cl_kawoosh_material"):SetToolTip(SGLanguage.GetMessage("vis_kawoosh_mat_desc"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_stargate_eff"), "cl_stargate_effects"):SetToolTip(SGLanguage.GetMessage("vis_stargate_eff_desc",medium));
 	-- Shield
-	Panel:Help("Shield");
-	Panel:CheckBox("Dynamic Lights","cl_shield_dynlights"):SetToolTip(high);
-	Panel:CheckBox("Shield Bubble","cl_shield_bubble"):SetToolTip(medium);
-	Panel:CheckBox("Hit Refraction","cl_shield_hitradius"):SetToolTip(medium);
-	Panel:CheckBox("Hit Effect","cl_shield_hiteffect"):SetToolTip(low);
+	Panel:Help(SGLanguage.GetMessage("stool_shield"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_shield_dynlights"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_shield_bubble"),"cl_shield_bubble"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_refl"),"cl_shield_hitradius"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_shield_hiteffect"):SetToolTip(low);
+	-- Atl Shield
+	Panel:Help(SGLanguage.GetMessage("vis_atl_shield"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_refl"), "cl_shieldcore_refract"):SetToolTip(SGLanguage.GetMessage("vis_refl_desc",low));
 	-- Harvester
-	Panel:Help("Wraith Harvester");
-	Panel:CheckBox("Dynamic Lights","cl_harvester_dynlights"):SetToolTip(high);
+	Panel:Help(SGLanguage.GetMessage("stool_harvester"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_harvester_dynlights"):SetToolTip(high);
 	-- Cloaking
-	Panel:Help("Cloaking");
-	Panel:CheckBox("Draw Effect when passing Field","cl_cloaking_hitshader"):SetToolTip(high);
-	Panel:CheckBox("Cloaking Effect","cl_cloaking_shader"):SetToolTip(medium);
+	Panel:Help(SGLanguage.GetMessage("stool_cloak"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_pass"),"cl_cloaking_hitshader"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_eff"),"cl_cloaking_shader"):SetToolTip(medium);
 	-- SuperGate
 	Panel:Help("Supergate");
-	Panel:CheckBox("Dynamic lights", "cl_supergate_dynlights"):SetToolTip(high)	;
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"):SetToolTip(high);
 	-- Apple Core
-	Panel:Help("Apple Core");
-	Panel:CheckBox("Dynamic Lights", "cl_applecore_light"):SetToolTip(high);
-	Panel:CheckBox("Smoke", "cl_applecore_smoke"):SetToolTip(medium);
-	-- Atl Shield
-	Panel:Help("Atlantis Shield");
-	Panel:CheckBox("Refraction", "cl_shieldcore_refract"):SetToolTip("Fps Drop: Small, Removes Refraction, leave just shield material");
+	Panel:Help(SGLanguage.GetMessage("entity_apple_core"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_applecore_light"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"), "cl_applecore_smoke"):SetToolTip(medium);
 	-- Huds
-	Panel:Help("HUD");
-	Panel:CheckBox("Draw HUD on energy devices", "cl_draw_huds"):SetToolTip("Fps Drop: Small, disables hud dwawing for zpms, zpmhubs, naq-gens.");
-	Panel:CheckBox("Draw Letters on DHD", "cl_dhd_letters"):SetToolTip("Fps Drop: Small, disables letters dwawing on dhd's.");
+	Panel:Help(SGLanguage.GetMessage("vis_hud_title"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hud_energy"), "cl_draw_huds"):SetToolTip(SGLanguage.GetMessage("vis_hud_energy_desc",low));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dhd_glyphs"), "cl_dhd_letters"):SetToolTip(SGLanguage.GetMessage("vis_dhd_glyphs_desc",low));
 end
 
 function StarGate.ShipVisualSettings(Panel)
-	local high = "Frame Burst: High";
-	local medium = "Frame Burst: Medium";
-	local low = "Frame Burst: Low";
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
 
 	Panel:ClearControls();
 	-- The HELP Button
@@ -66,34 +66,33 @@ function StarGate.ShipVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox("Draw Effects","cl_stargate_visualsship"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
+	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsship"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
 	Panel:Help("");
 	-- Jumper
-	Panel:Help("Puddle Jumper");
-	Panel:CheckBox("Dynamic Lights", "cl_jumper_dynlights"):SetToolTip(high);
-	Panel:CheckBox("Heatwave", "cl_jumper_heatwave"):SetToolTip(medium);
-	Panel:CheckBox("Sprites", "cl_jumper_sprites"):SetToolTip(medium);
+	Panel:Help(SGLanguage.GetMessage("entity_jumper"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_jumper_dynlights"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_jumper_heatwave"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_jumper_sprites"):SetToolTip(medium);
 	-- F302
-	Panel:Help("F302");
-	Panel:CheckBox("Heatwave", "cl_F302_heatwave"):SetToolTip(medium);
-	Panel:CheckBox("Sprites", "cl_F302_sprites"):SetToolTip(medium);
+	Panel:Help(SGLanguage.GetMessage("entity_f302"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_F302_heatwave"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_F302_sprites"):SetToolTip(medium);
 	-- Shuttle
-	Panel:Help("Destiny Shuttle");
-	Panel:CheckBox("Heatwave", "cl_shuttle_heatwave"):SetToolTip(medium);
-	Panel:CheckBox("Sprites", "cl_shuttle_sprites"):SetToolTip(medium);
+	Panel:Help(SGLanguage.GetMessage("entity_dest_shuttle"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_shuttle_heatwave"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_shuttle_sprites"):SetToolTip(medium);
 	-- Wraith Dart
-	Panel:Help("Wraith Dart");
-	Panel:CheckBox("Heatwave", "cl_dart_heatwave"):SetToolTip(medium);
-
+	Panel:Help(SGLanguage.GetMessage("entity_dart"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_dart_heatwave"):SetToolTip(medium);
 	-- Control Chair
-	Panel:Help("Control Chair");
-	Panel:CheckBox("Dynamic Lights", "cl_chair_dynlights"):SetToolTip(high);
+	Panel:Help(SGLanguage.GetMessage("entity_control_chair"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_chair_dynlights"):SetToolTip(high);
 end
 
 function StarGate.WeaponVisualSettings(Panel)
-	local high = "Frame Burst: High";
-	local medium = "Frame Burst: Medium";
-	local low = "Frame Burst: Low";
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
 
 	Panel:ClearControls();
 	-- The HELP Button
@@ -104,49 +103,45 @@ function StarGate.WeaponVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox("Draw Effects","cl_stargate_visualsweapon"):SetToolTip("Turning this off will disable all settings below. When it's on, the settings below will be used");
+	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsweapon"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
 	Panel:Help("");
 	-- Staff Weapon and Dexgun
-	Panel:Help("Staff Weapon, Ronon's Gun, Ori Staff, Destiny Cannons, Tollana Cannon");
-	Panel:CheckBox("Dynamic Lights when hitting","cl_staff_dynlights"):SetToolTip(high);
-	Panel:CheckBox("Dynamic Lights while flying","cl_staff_dynlights_flight"):SetToolTip(high);
-	Panel:CheckBox("Smoke","cl_staff_smoke"):SetToolTip(medium);
-	Panel:CheckBox("Scorch on Walls","cl_staff_scorch"):SetToolTip(low);
+	Panel:Help(SGLanguage.GetMessage("vis_weap_title"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_dyn_light"),"cl_staff_dynlights"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_fly_dyn_light"),"cl_staff_dynlights_flight"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"),"cl_staff_smoke"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_wall"),"cl_staff_scorch"):SetToolTip(low);
 	-- Zat'nik'tel
-	Panel:Help("Zat'nik'tel");
-	Panel:CheckBox("Dynamic Lights","cl_zat_dynlights"):SetToolTip(high);
-	Panel:CheckBox("Hit Effect","cl_zat_hiteffect"):SetToolTip(medium);
-	Panel:CheckBox("Dissolve Effect","cl_zat_dissolveeffect"):SetToolTip(medium);
+	Panel:Help(SGLanguage.GetMessage("weapon_zat"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_zat_dynlights"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_zat_hiteffect"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_diss_eff"),"cl_zat_dissolveeffect"):SetToolTip(medium);
 	-- Drones
-	Panel:Help("Drone");
-	Panel:CheckBox("Glow","cl_drone_glow"):SetToolTip(low);
+	Panel:Help(SGLanguage.GetMessage("stool_drones"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_glow"),"cl_drone_glow"):SetToolTip(low);
 	-- Naquadah Bomb
-	Panel:Help("Naquadah Bomb");
-	Panel:CheckBox("SunBeams", "cl_gate_nuke_sunbeams"):SetToolTip("Requires SM v2, "..high);
-	Panel:CheckBox("Particle rings", "cl_gate_nuke_rings"):SetToolTip(high);
-	Panel:CheckBox("Shielded Particles", "cl_gate_nuke_shieldrings"):SetToolTip(high.." Prevents particles from spawning in shield");
-	Panel:CheckBox("Plasma", "cl_gate_nuke_plasma"):SetToolTip(low.." This effects the one below.");
-	Panel:CheckBox("Plasma Dynamic Lighting", "cl_gate_nuke_dynlights"):SetToolTip(medium.." This one is effected by the one above");
+	Panel:Help(SGLanguage.GetMessage("stool_naq_bomb"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_sunbeams"), "cl_gate_nuke_sunbeams"):SetToolTip(SGLanguage.GetMessage("vis_sunbeams_desc",high));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_gate_nuke_rings"):SetToolTip(high);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_shield_part"), "cl_gate_nuke_shieldrings"):SetToolTip(SGLanguage.GetMessage("vis_shield_part_desc",high));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_plasma"), "cl_gate_nuke_plasma"):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",low));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_plasma_light"), "cl_gate_nuke_dynlights"):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",medium));
 	-- Stargate Overloader
-	Panel:Help("Stargate Overloader");
-	Panel:CheckBox("Refraction Ring Pulse", "cl_overloader_refract"):SetToolTip("Fps Drop: Medium");
-	Panel:CheckBox("Particle rings", "cl_overloader_particle"):SetToolTip(medium);
-	Panel:CheckBox("Dynamic Lights", "cl_overloader_dynlights"):SetToolTip(high);
-		-- Asuran Gun
-	Panel:Help("Asuran Gate Weapon");
-	Panel:CheckBox("Small lasers", "cl_asuran_laser"):SetToolTip(low);
-	Panel:CheckBox("Dynamic Lights", "cl_asuran_dynlights"):SetToolTip(high);
+	Panel:Help(SGLanguage.GetMessage("entity_overloader"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_refl_rings"), "cl_overloader_refract"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_overloader_particle"):SetToolTip(medium);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_overloader_dynlights"):SetToolTip(high);
+	-- Asuran Gun
+	Panel:Help(SGLanguage.GetMessage("entity_asuran_weapon"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_sm_laser"), "cl_asuran_laser"):SetToolTip(low);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_asuran_dynlights"):SetToolTip(high);
 	-- Dakara Super Weapon
-	Panel:Help("Dakara Super Weapon");
-	Panel:CheckBox("Charge up rings", "cl_dakara_rings"):SetToolTip(low);
-	Panel:CheckBox("Refraction spheres", "cl_dakara_refract"):SetToolTip(medium);
-	-- Ori Beam Weapon
-	Panel:Help("Ori Beam Weapon");
-	Panel:CheckBox("Particle Trail", "cl_oribeam_particle"):SetToolTip(low);
-	Panel:CheckBox("Refraction Trail", "cl_oribeam_refract"):SetToolTip(medium);
-	Panel:CheckBox("Dynamic lights", "cl_oribeam_dynlights"):SetToolTip(high);
+	Panel:Help(SGLanguage.GetMessage("entity_dakara"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_charge_up"), "cl_dakara_rings"):SetToolTip(low);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_refl_sphere"), "cl_dakara_refract"):SetToolTip(medium);
 end
 
+/*
 function CAP_NotLegal()
 	if StarGate.HasInternet then
 		local LegalFrame = vgui.Create("DFrame");
@@ -201,4 +196,4 @@ function CAP_NotLegal()
 
 	end
 end
-concommand.Add("CAP_NotLegal",CAP_NotLegal)
+concommand.Add("CAP_NotLegal",CAP_NotLegal)*/

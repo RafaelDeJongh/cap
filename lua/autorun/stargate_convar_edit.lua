@@ -37,7 +37,6 @@ local group_convars = {
 	"stargate_dhd_ring",
 	"stargate_physics_clipping",
 	"stargate_model_clipping",
-	"stargate_open_effect",
 	"stargate_random_address",
 }
 
@@ -128,7 +127,6 @@ function Group_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_menu_34b"), "stargate_gatespawner_protect", 1},
 		{SGLanguage.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
 		{SGLanguage.GetMessage("stargate_menu_38"), "stargate_model_clipping", 1},
-		{SGLanguage.GetMessage("stargate_menu_39"), "stargate_open_effect", 1},
 		{SGLanguage.GetMessage("stargate_menu_41"), "stargate_random_address", 1},
 	}
 
@@ -185,8 +183,8 @@ function Group_Convar_OpenNet()
 		draw.RoundedBox( bor, 10-diff, 35-diff, 180+2*diff, 265+2*diff, col);
 		draw.RoundedBox( bor, 10, 35, 180, 265, col2);
 
-		draw.RoundedBox( bor, 200-diff, 35-diff, 180+2*diff, 181+2*diff, col);
-		draw.RoundedBox( bor, 200, 35, 180, 181, col2);
+		draw.RoundedBox( bor, 200-diff, 35-diff, 180+2*diff, 167+2*diff, col);
+		draw.RoundedBox( bor, 200, 35, 180, 167, col2);
 
 		draw.RoundedBox( bor, 390-diff, 35-diff, 160+2*diff, 65+2*diff, col);
 		draw.RoundedBox( bor, 390, 35, 160, 65, col2);
@@ -223,7 +221,7 @@ function Group_Convar_OpenNet()
 		i = i + 1;
 
 		local box = vgui.Create( "DCheckBoxLabel" , GroupConvarFrame);
-		box:SetPos(15, 40+14*i);
+		box:SetPos(15, 40+15*i);
 		box:SetText(val[1]);
 		box.Label:SetFont("OldDefaultSmall");
 		if (val[4]==1) then
@@ -263,7 +261,7 @@ function Group_Convar_OpenNet()
 		end
 	end
 
-	local offset = 40+14*i;
+	local offset = 40+15*i;
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
@@ -303,7 +301,7 @@ function Group_Convar_OpenNet()
 		i = i + 1;
 
 		local box = vgui.Create( "DCheckBoxLabel" , GroupConvarFrame);
-		box:SetPos(205, 40+17*i);
+		box:SetPos(205, 40+15*i);
 		box:SetText(val[1]);
 		box.Label:SetFont("OldDefaultSmall");
 		if (val[4]==1) then
@@ -337,7 +335,7 @@ function Group_Convar_OpenNet()
 		end
 	end
 
-	local offset = 40+17*i;
+	local offset = 40+15*i;
 
 	local laber = vgui.Create( "DLabel" , GroupConvarFrame);
 	laber:SetFont("OldDefaultSmall");
@@ -367,17 +365,27 @@ function Group_Convar_OpenNet()
 	local closeall = vgui.Create("DButton", GroupConvarFrame);
     closeall:SetText(SGLanguage.GetMessage("stargate_menu_37"));
     closeall:SetPos(210, offset+65);
-    closeall:SetSize(160, 33);
+    closeall:SetSize(160, 25);
 	closeall.DoClick = function ( btn )
 		GroupSetConvar("stargate_close_all");
 		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_37b"), NOTIFY_GENERIC, 5);
 		surface.PlaySound( "buttons/button9.wav" );
 	end
 
+	local closeall = vgui.Create("DButton", GroupConvarFrame);
+    closeall:SetText(SGLanguage.GetMessage("stargate_menu_42"));
+    closeall:SetPos(210, offset+95);
+    closeall:SetSize(160, 25);
+	closeall.DoClick = function ( btn )
+		GroupSetConvar("stargate_open_all_iris");
+		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_42b"), NOTIFY_GENERIC, 5);
+		surface.PlaySound( "buttons/button9.wav" );
+	end
+
 	local dospawner = vgui.Create("DButton", GroupConvarFrame);
     dospawner:SetText(SGLanguage.GetMessage("stargate_menu_19"));
-    dospawner:SetPos(210, offset+105);
-    dospawner:SetSize(160, 33);
+    dospawner:SetPos(210, offset+125);
+    dospawner:SetSize(160, 25);
 	dospawner.DoClick = function ( btn )
 		GroupSetConvar("stargate_gatespawner_createfile");
 		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_menu_20"), NOTIFY_GENERIC, 5);

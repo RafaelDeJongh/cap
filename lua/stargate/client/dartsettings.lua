@@ -37,35 +37,35 @@ function StarGate.DartSettings(Panel)
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
 		{
-			Name = "Movement",
+			Name = SGLanguage.GetMessage("key_move_title"),
 			Keys = {
-				{"Move forward","FWD"},
-				{"Boost","SPD"},
+				{SGLanguage.GetMessage("key_move_forward"),"FWD"},
+				{SGLanguage.GetMessage("key_move_boost"),"SPD"},
 			},
 		},
 		{
-			Name = "Combat",
+			Name = SGLanguage.GetMessage("key_combat_title"),
 			Keys = {
-				{"Primary attack","FIRE"},
+				{SGLanguage.GetMessage("key_combat_primary"),"FIRE"},
 			},
 		},
 		{
-			Name = "Special Actions",
+			Name = SGLanguage.GetMessage("key_act_title"),
 			Keys = {
-				{"Selfdestruct","BOOM"},
-				{"Toggle Harvester","SUCK"},
-				{"Spit","SPIT"},
-				{"DHD","DHD"},
-				{"Exit","EXIT"},
+				{SGLanguage.GetMessage("key_act_destruct"),"BOOM"},
+				{SGLanguage.GetMessage("key_act_harv"),"SUCK"},
+				{SGLanguage.GetMessage("key_act_spit"),"SPIT"},
+				{SGLanguage.GetMessage("key_act_dhd"),"DHD"},
+				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
 			},
 		},
 		{
-			Name = "View",
+			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
-				{"Zoom in","Z+"},
-				{"Zoom out","Z-"},
-				{"Move view up","A+"},
-				{"Move view down","A-"},
+				{SGLanguage.GetMessage("key_view_zoomin"),"Z+"},
+				{SGLanguage.GetMessage("key_view_zoomout"),"Z-"},
+				{SGLanguage.GetMessage("key_view_up"),"A+"},
+				{SGLanguage.GetMessage("key_view_down"),"A-"},
 			},
 		},
 	}

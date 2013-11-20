@@ -50,8 +50,29 @@ function ENT:Initialize()
 
 	self.IsActivated = false;
 	self:SetNetworkedVector("Col", Vector(200,100,0));
+	self.GateLink = NULL;
+	timer.Create("StarGateIrisCheck"..self:EntIndex(),10.0,0,function()
+		local remove = true;
+		if (IsValid(self) and IsValid(self.GateLink) and constraint.HasConstraints(self)) then
+			local entities = StarGate.GetConstrainedEnts(self,2);
+			if(entities) then
+				for k,v in pairs(entities) do
+					if(v.IsStargate and v==self.GateLink) then
+						remove = false;
+					end
+				end
+			end
+		else
+			remove = true;
+		end
+		if (remove) then self:Remove(); end
+	end);
 
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
+end
+
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS
 end
 
 function ENT:Think()
@@ -110,6 +131,8 @@ function ENT:OnRemove()
 	for _,v in pairs(self.Sounds) do
 		self.Entity:StopSound(v);
 	end
+	timer.Remove("StarGateIrisCheck"..self:EntIndex());
+	timer.Remove("StarGateIrisProtCheck"..self:EntIndex());
 end
 
 function ENT:OnTakeDamage(  dmginfo )
@@ -298,4 +321,51 @@ function ENT:TriggerInput(k,v)
 	elseif (k == "Toggle") then
 		self:Toggle();
 	end
+end
+
+function ENT:PreEntityCopy()
+	local dupeInfo = {};
+	if (IsValid(self.GateLink)) then
+		dupeInfo.Gate = self.GateLink:EntIndex();
+	end
+	duplicator.StoreEntityModifier(self, "Iris", dupeInfo);
+	StarGate.WireRD.PreEntityCopy(self)
+end
+
+function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
+	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	if (Ent.EntityMods.Iris) then
+		if (Ent.EntityMods.Iris.Gate) then
+			self.GateLink = CreatedEntities[Ent.EntityMods.Iris.Gate] or NULL;
+		end
+	end
+	StarGate.WireRD.PostEntityPaste(self,Player,Ent,CreatedEntities)
+end
+
+function ENT:IrisProtection()
+	local ent = self.Entity;
+	timer.Create("StargateIrisProtCheck"..self:EntIndex(),30.0,0,function()
+		if (IsValid(ent)) then
+			if (ent.IsActivated) then
+				local dist = 1000
+				local pos = ent:GetPos()
+				local open = true;
+				for _,v in pairs(ents.FindByClass("iris_computer")) do
+					if(v.LockedIris==ent) then
+						open = false;
+						break;
+					elseif(v.LockedIris==v) then
+						local ir_dist = (pos - v:GetPos()):Length()
+						if(dist >= ir_dist) then
+							open = false;
+							break;
+						end
+					end
+				end
+				if (open) then
+					ent:Toggle();
+				end
+			end
+		end
+	end);
 end

@@ -37,22 +37,22 @@ function StarGate.MALPSettings(Panel)
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
 		{
-			Name = "Movement",
+			Name = SGLanguage.GetMessage("key_move_title"),
 			Keys = {
-				{"Move forward","FWD"},
-				{"Turn Left","LEFT"},
-				{"Turn Right","RIGHT"},
-				{"Move Back","BACK"},
+				{SGLanguage.GetMessage("key_move_forward"),"FWD"},
+				{SGLanguage.GetMessage("key_turn_left"),"LEFT"},
+				{SGLanguage.GetMessage("key_turn_right"),"RIGHT"},
+				{SGLanguage.GetMessage("key_move_back"),"BACK"},
 			},
 		},
 
 		{
-			Name = "View",
+			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
-				{"Camera Left","CAMLEFT"},
-				{"Camera Right","CAMRIGHT"},
-				{"Camera Up","CAMUP"},
-				{"Camera Down","CAMDOWN"},
+				{SGLanguage.GetMessage("key_cam_left"),"CAMLEFT"},
+				{SGLanguage.GetMessage("key_cam_right"),"CAMRIGHT"},
+				{SGLanguage.GetMessage("key_cam_up"),"CAMUP"},
+				{SGLanguage.GetMessage("key_cam_down"),"CAMDOWN"},
 			},
 		},
 	}

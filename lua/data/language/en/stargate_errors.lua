@@ -10,7 +10,12 @@ sg_err_05 = The CAP Resource folder has not been found on your system.<br>Please
 sg_err_06 = Your GMod is out of date, please update it.
 sg_err_07 = Wiremod has not been found or is incorrectly installed.<br>Please make sure to install <b>wiremod</b> from the <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>workshop</a> or the git/svn version.
 sg_err_08 = Sorry, Garry's Mod 13 beta isn't supported anymore.<br>Please make use of the normal Garry's Mod that already came out of the beta.
-sg_err_09 = Please subscribe to all workshop addons to make CAP functional.<br>Press the <b>"Subscribe to all"</b> button which can be found in this <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=180077636'>Collection Link</a>.
+sg_err_09 =[[Please subscribe to all workshop addons to make CAP functional.
+<br>Press the <b>"Subscribe to all"</b> button which can be found in this <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=180077636'>Collection Link</a>.
+<br>
+<br>Also probably some parts can get corrupted or not downloaded properly:
+%s
+]]
 sg_err_10 = You've got the Github version of cap_resources installed.<br>Please remove the cap_resources folder manually in your addon folder when you're subscribed to the Carter Addon Pack Workshop Collection.
 sg_err_11 =[[ The custom fonts are not installed, you will have to download the following file from our site and then install it in your addons folder:
 <br>

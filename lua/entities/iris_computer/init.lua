@@ -49,6 +49,12 @@ end
 function ENT:SpawnFunction( ply, tr )
 	if ( !tr.Hit ) then return end
 
+	local PropLimit = GetConVar("CAP_iris_comp_max"):GetInt()
+	if(ply:GetCount("CAP_iris_comp")+1 > PropLimit) then
+		ply:SendLua("GAMEMODE:AddNotify(\"Iris computer limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
+
 	local ang = ply:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360;
 
 	local ent = ents.Create("iris_computer");
@@ -57,6 +63,7 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Spawn();
 	ent:Activate();
 	ent.Owner = ply;
+	ply:AddCount("CAP_iris_comp", ent)
 
 	local phys = ent:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false) end
@@ -351,6 +358,16 @@ end
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	if (IsValid(ply)) then
+		local PropLimit = GetConVar("CAP_iris_comp_max"):GetInt()
+		if(ply:GetCount("CAP_iris_comp")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Iris computer limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			Ent:Remove();
+			return
+		end
+		ply:AddCount("CAP_iris_comp", Ent);
+	end
 
 	local dupeInfo = Ent.EntityMods.StarGateIrisCompInfo
 	if (dupeInfo.Codes) then
