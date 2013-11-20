@@ -230,6 +230,7 @@ function ENT:Toggle(ignore_energy)
 			self.IsActivated = false
 			self:SetWire("Activated",false);
 		else
+			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsCompuper()) then return end
 			if(self.HasRD) then
 				local gate = self:FindGate();
 				if IsValid(gate) and gate.IsStargate and not gate:HaveEnergy(true,true) then if (self.Sounds and self.Sounds.Fail) then self.Entity:EmitSound(self.Sounds.Fail,90,math.random(90,110)); end return end
@@ -271,6 +272,7 @@ function ENT:TrueActivate(deactivate,wire)
 			self.IsActivated = false
 			self:SetWire("Activated",false);
 		elseif (not self.IsActivated and not deactivate) then
+			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsCompuper()) then return end
 			if(self.HasRD and self.Entity:GetModel() == "models/zup/stargate/sga_shield.mdl") then
 				local gate = self:FindGate();
 				if IsValid(gate) and gate.IsStargate and not gate:HaveEnergy(true,true) then return end
@@ -342,26 +344,34 @@ function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
 	StarGate.WireRD.PostEntityPaste(self,Player,Ent,CreatedEntities)
 end
 
+function ENT:IsCompuper()
+	local dist = 1000
+	local pos = self:GetPos()
+	local ret = false;
+	for _,v in pairs(ents.FindByClass("iris_computer")) do
+		if(v.LockedIris==self) then
+			ret = true;
+			break;
+		elseif(v.LockedIris==v) then
+			local ir_dist = (pos - v:GetPos()):Length()
+			if(dist >= ir_dist) then
+				ret = true;
+				break;
+			end
+		end
+	end
+	return ret;
+end
+
 function ENT:IrisProtection()
 	local ent = self.Entity;
-	timer.Create("StargateIrisProtCheck"..self:EntIndex(),30.0,0,function()
+	timer.Create("StargateIrisProtCheck"..self:EntIndex(),15.0,0,function()
 		if (IsValid(ent)) then
 			if (ent.IsActivated) then
 				local dist = 1000
 				local pos = ent:GetPos()
 				local open = true;
-				for _,v in pairs(ents.FindByClass("iris_computer")) do
-					if(v.LockedIris==ent) then
-						open = false;
-						break;
-					elseif(v.LockedIris==v) then
-						local ir_dist = (pos - v:GetPos()):Length()
-						if(dist >= ir_dist) then
-							open = false;
-							break;
-						end
-					end
-				end
+				if (ent:IsCompuper()) then open = false end
 				if (open) then
 					ent:Toggle();
 				end
