@@ -43,7 +43,7 @@ StarGate.CAP_WS_ADDONS = {"Carter Addon Pack: Atlantis", "Carter Addon Pack: Cap
 	"Carter Addon Pack: DHD Extra", "Carter Addon Pack: Extra Materials", "Carter Addon Pack: Life Support", "Carter Addon Pack: Maps",
 	"Carter Addon Pack: Event Horizons", "Carter Addon Pack: Optional Ramps Pack", "Carter Addon Pack: Player Models", "Carter Addon Pack: Player Weapons",
 	"Carter Addon Pack: Props", "Carter Addon Pack: Ramps Important", "Carter Addon Pack: Ramps Pack", "Carter Addon Pack: Resources",
-	"Carter Addon Pack: Ring Ramps", "Carter Addon Pack: Rings", "Carter Addon Pack: Shields if Protection", "Carter Addon Pack: Sounds",
+	"Carter Addon Pack: Ring Ramps", "Carter Addon Pack: Rings", "Carter Addon Pack: Shields and Protection", "Carter Addon Pack: Sounds",
 	"Carter Addon Pack: Stargate", "Carter Addon Pack: Stargate Extras", "Carter Addon Pack: Stargate Universe", "Carter Addon Pack: Stargate Universe Extras",
 	"Carter Addon Pack: Supergate", "Carter Addon Pack: Tool Weapons", "Carter Addon Pack: Vehicles Pack1", "Carter Addon Pack: Vehicles Pack2", "Carter Addon Pack: Weapons",
 }
@@ -54,16 +54,17 @@ local cap_installed = false;
 for _,v in pairs(engine.GetAddons()) do
 	if (v.mounted) then
 		table.insert(ws_addonlist, v.title);
-		if (table.HasValue(StarGate.CAP_WS_ADDONS, v.title)) then cap_installed = true end
+		if (not cap_installed and table.HasValue(StarGate.CAP_WS_ADDONS, v.title)) then cap_installed = true end
 	end
 end
 
 local ws_cache = false;
 local function Workshop_res_Check()
 	if (ws_cache) then return ws_cache; end
-	local ret = StarGate.CAP_WS_ADDONS;
-	for k,v in pairs(ret) do
-		if table.HasValue(ws_addonlist, v) then table.remove(ret,k); end
+	local tmp = StarGate.CAP_WS_ADDONS;
+	local ret = {}; -- damn, if use table.remove directly in loop, it work incorrect.
+	for k,v in pairs(tmp) do
+		if not table.HasValue(ws_addonlist, v) then table.insert(ret,v); end
 	end
 	ws_cache = ret;
 	return ret;
@@ -246,9 +247,9 @@ end
 if (GetAddonList!=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_groups" ) or table.HasValue( GetAddonList(true), "z_cap_sg_groups" ))) then
 	status = "Error";
 	MsgN("Status: "..status)
-	table.insert(StarGate_Group.ErrorMSG, "The Stargate Group System has been found on your system. Please remove it.");
+	table.insert(StarGate_Group.ErrorMSG, {"The Stargate Group System has been found on your system. Please remove it.","01"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_01");
-	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	MsgN("Error #01\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
 local function Workshop_res_Installed()
@@ -264,9 +265,10 @@ if (Workshop_res_Installed() and not table.HasValue( addonlist, "Carter Addon Pa
 		status = "Error";
 		MsgN("Status: "..status)
 	end
-	table.insert(StarGate_Group.ErrorMSG, "The custom fonts are not installed, please follow the instructions in the motd to install the custom fonts.");
+	table.insert(StarGate_Group.ErrorMSG, {"The custom fonts are not installed, please follow the instructions in the motd to install the custom fonts.","11"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_11");
-	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	MsgN("-------");
+	MsgN("Error #11\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 if (not StarGate.WorkShop) then
 	if (cap_installed and not Workshop_res_Installed()) then
@@ -274,49 +276,55 @@ if (not StarGate.WorkShop) then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Please subscribe to all workshop addons to make CAP functional.");
+		table.insert(StarGate_Group.ErrorMSG, {"Please subscribe to all workshop addons to make CAP functional.","09"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_09");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "You've got the Github version of cap_resources installed.");
+		table.insert(StarGate_Group.ErrorMSG, {"You've got the Github version of cap_resources installed.","10"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_10");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (not Workshop_res_Installed() and (not table.HasValue( addonlist, "Carter Addon Pack" ) or not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.");
+		table.insert(StarGate_Group.ErrorMSG, {"Carter Addon Pack is incorrectly installed.\\nMake sure you downloaded cap and cap_resources folders and placed the folders correctly.","02"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<430 and (game.SinglePlayer() or SERVER)) then
+		MsgN("-------");
+		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+	elseif (not cap_ver or cap_ver==0 or cap_ver<432 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "The addon version file is corrupt.\\nPlease remove and redownload the file cap/lua/cap_ver.lua.");
+		table.insert(StarGate_Group.ErrorMSG, {"The addon version file is corrupt.\\nPlease remove and redownload the file cap/lua/cap_ver.lua.","03"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_03");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #03\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG, {"The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.","04"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #04\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Cap_resources folder is outdated!\\nPlease update it.");
+		table.insert(StarGate_Group.ErrorMSG, {"Cap_resources folder is outdated!\\nPlease update it.","12"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_12");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #12\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 else
 	if (cap_installed and not Workshop_res_Installed()) then
@@ -324,41 +332,46 @@ else
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Please subscribe to all workshop addons to make CAP functional.");
+		table.insert(StarGate_Group.ErrorMSG, {"Please subscribe to all workshop addons to make CAP functional.","09"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_09");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Please download all the resources from steam workshop collection or from github.");
+		table.insert(StarGate_Group.ErrorMSG, {"Please download all the resources from steam workshop collection or from github.","05"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_05");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #05\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (not cap_installed and table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and cap_res<cap_res_req) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "Cap_resources folder is outdated!\\nPlease update it.");
+		table.insert(StarGate_Group.ErrorMSG, {"Cap_resources folder is outdated!\\nPlease update it.","12"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_12");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #12\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Resource pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG, {"The Git version of the Resource pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.","13"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_13");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( addonlist, "Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, "The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.");
+		table.insert(StarGate_Group.ErrorMSG, {"The Git version of the Code pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.","04"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_04");
-		MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+		MsgN("-------");
+		MsgN("Error #04\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 end
 
@@ -367,25 +380,28 @@ if (VERSION<130912) then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
-	table.insert(StarGate_Group.ErrorMSG, "Your GMod is out of date, please update it.");
+	table.insert(StarGate_Group.ErrorMSG, {"Your GMod is out of date, please update it.","06"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_06");
-	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	MsgN("-------");
+	MsgN("Error #06\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end if (not WireAddon and #file.Find("weapons/gmod_tool/stools/wire.lua","LUA") == 0) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
-	table.insert(StarGate_Group.ErrorMSG, "Wiremod has not been found or is incorrectly installed.");
+	table.insert(StarGate_Group.ErrorMSG, {"Wiremod has not been found or is incorrectly installed.","07"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_07");
-	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	MsgN("-------");
+	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
-	table.insert(StarGate_Group.ErrorMSG, "Sorry, Garry's Mod 13 beta isn't supported anymore.\\nPlease make use of the normal Garry's Mod that already came out of the beta.");
+	table.insert(StarGate_Group.ErrorMSG, {"Sorry, Garry's Mod 13 beta isn't supported anymore.\\nPlease make use of the normal Garry's Mod that already came out of the beta.","08"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_08");
-	MsgN("Error: "..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)]:Replace("\\n","\n"));
+	MsgN("-------");
+	MsgN("Error #08\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 if (status != "Error") then
 	MsgN("Status: "..status)
@@ -425,9 +441,9 @@ function StarGate_Group.ShowError(ply,cl)
 				ply:SendLua("MsgN(\"-------\")");
 			end
 		end
-		Msg(v:Replace("\\n","\n").."\n");
+		Msg("Error #"..v[2].."\n"..v[1]:Replace("\\n","\n").."\n");
 		if (IsValid(ply)) then
-			ply:SendLua("Msg(\""..v.."\\n\")");
+			ply:SendLua("Msg(\"Error #"..v[2].."\\n"..v[1].."\\n\")");
 		end
 	end
 	MsgN("================================");

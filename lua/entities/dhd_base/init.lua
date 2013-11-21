@@ -194,6 +194,7 @@ function ENT:Initialize()
 			self:AddChevron(chev,true,true);
 		end
 	end
+	util.PrecacheModel(self.ModelBroken); -- fix for delay on first broke
 	self.DisRingRotate = false;
 	self.LockedGate = NULL;
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
