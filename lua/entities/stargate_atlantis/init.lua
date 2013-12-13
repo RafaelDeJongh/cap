@@ -414,3 +414,7 @@ function ENT:Shutdown(fail,play_sound)
 		self:RingLight(36,true,false,true);
 	end
 end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_atlantis", StarGate.CAP_GmodDuplicator, "Data" )
+end

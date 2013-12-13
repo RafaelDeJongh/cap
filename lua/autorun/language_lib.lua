@@ -36,7 +36,7 @@ if (CLIENT) then
 end
 
 if (Gmod13Lib==nil) then
-	include("a_gmod_beta.lua")
+	include("a_gmod13.lua")
 end
 
 LANGParser = {};
@@ -70,7 +70,8 @@ end
 function LANGParser:StripComment(line)
 	local found_comment = line:find("[/][/]");
 	if(found_comment) then
-		if (line:sub(found_comment-3,found_comment-1)!="tp:") then
+		local link = line:sub(found_comment-3,found_comment-1);
+		if (link!="tp:" and link!="ps:") then
 			line = line:sub(1,found_comment-1):Trim(); -- Removes any non neccessayry stuff
 		end
 	end

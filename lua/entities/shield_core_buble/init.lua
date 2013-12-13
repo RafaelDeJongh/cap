@@ -8,6 +8,8 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
+ENT.CAP_NotSave = true;
+
 AddCSLuaFile("modules/bullets.lua");
 AddCSLuaFile("modules/sphere.lua");
 AddCSLuaFile("modules/box.lua");

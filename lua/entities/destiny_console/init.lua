@@ -56,6 +56,8 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Range = StarGate.CFG:Get("mobile_dhd","range",3000);
+	self.DHDRange = self.Range;
+	self:SetNetworkedInt("DHDRange",self.DHDRange);
 
 	local outputs = {
 		"1","2","3","4",
@@ -125,6 +127,7 @@ function ENT:Initialize()
 	self.Entity:SetNetworkedInt("Wire",self.WireDisplay);
 	self:SpawnButtons();
 	self:SetNetworkedEntity("Screen",self.Screen);
+	self.LockedGate = NULL;
 end
 
 function ENT:SpawnButtons()
@@ -184,6 +187,30 @@ function ENT:SpawnFunction( ply, tr )
 end
 
 -----------------------------------WIRE----------------------------------
+
+function ENT:Touch(ent)
+	if not IsValid(self.LockedGate) then
+		if (string.find(ent:GetClass(), "stargate")) then
+			local gate = StarGate.FindGate(self, self.Range);
+			if IsValid(gate) and gate==ent and not IsValid(gate.LockedDestC) then
+				self.LockedGate = gate;
+				self:SetNWEntity("LockedGate",gate);
+				gate.LockedDestC = self;
+				gate:SetNWEntity("LockedDestC",self);
+				local ed = EffectData()
+ 					ed:SetEntity( self )
+ 				util.Effect( "propspawn", ed, true, true )
+			end
+		end
+	end
+end
+
+function ENT:OnRemove()
+	if (IsValid(self.LockedGate)) then
+		self.LockedGate.LockedDestC = nil;
+		self.LockedGate:SetNWEntity("LockedDestC",NULL);
+	end
+end
 
 function ENT:TriggerInput(variable, value)
 	if (variable == "Name A") then self.ScreenTextA = value; self.Entity:SetNetworkedString("NameA",value)
@@ -375,7 +402,12 @@ end
 
 function ENT:OpenMenu(p)
 	if(not IsValid(p)) then return end;
-	local e = StarGate.FindGate(self.Entity, self.Range);
+	local e
+	if (IsValid(self.LockedGate)) then
+		e = self.LockedGate;
+	else
+		e = StarGate.FindGate(self.Entity, self.Range);
+	end
 	if(not IsValid(e)) then return end;
 	if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
 	umsg.Start("StarGate.OpenDialMenuDHD",p);
@@ -397,6 +429,8 @@ function ENT:PreEntityCopy()
 	if WireAddon then
 		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Entity )
 	end
+
+	dupeInfo.LockedGate = self.LockedGate:EntIndex();
 
 	dupeInfo.ScreenTextA = self.ScreenTextA;
 	dupeInfo.ScreenTextB = self.ScreenTextB;
@@ -434,6 +468,13 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.DestConDupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end
 
+	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
+		self.LockedGate = CreatedEntities[dupeInfo.LockedGate];
+		self:SetNWEntity("LockedGate",self.LockedGate);
+		CreatedEntities[dupeInfo.LockedGate].LockedDestC = self.Entity;
+		CreatedEntities[dupeInfo.LockedGate]:SetNWEntity("LockedDestC",self.Entity);
+	end
+
 	self.ScreenTextA = dupeInfo.ScreenTextA;
 	self.ScreenTextB = dupeInfo.ScreenTextB;
 	self.ScreenTextC = dupeInfo.ScreenTextC;
@@ -457,4 +498,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		ply:AddCount("CAP_destcon", self.Entity)
 	end
 
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "destiny_console", StarGate.CAP_GmodDuplicator, "Data" )
 end

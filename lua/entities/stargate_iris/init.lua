@@ -36,8 +36,9 @@ function ENT:Initialize()
 	if(not self:RegisterModules()) then self.Entity:Remove() return end; -- We are not valid!
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
-	self.Entity:SetSolid(SOLID_VPHYSICS);
+	self.Entity:SetTrigger(false);
 	self.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD);
+	self.Entity:SetSolid(SOLID_NONE);
 	self.Entity:DrawShadow(false);
 	self.Entity:SetNoDraw(true);
 	self:CreateWireInputs("Activate","Toggle");
@@ -168,7 +169,7 @@ function ENT:Toggle(ignore_energy)
 			self.IsActivated = false
 			self:SetWire("Activated",false);
 		else
-			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsCompuper()) then return end
+			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsComputer()) then return end
 			if(self.HasRD and self.Entity:GetModel() == "models/zup/stargate/sga_shield.mdl") then
 				local gate = self:FindGate();
 				if IsValid(gate) and gate.IsStargate and not gate:HaveEnergy(true,true) then if (self.Action and self.Action.Sounds and self.Action.Sounds.Fail) then self.Entity:EmitSound(self.Action.Sounds.Fail,90,math.random(90,110)); end return end
@@ -208,7 +209,12 @@ function ENT:TrueActivate(deactivate,wire)
 			self.IsActivated = false
 			self:SetWire("Activated",false);
 		elseif (not self.IsActivated and not deactivate) then
-			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsCompuper()) then return end
+			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsComputer()) then
+				if (IsValid(self.Owner)) then
+					--p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"iris_protection\"), NOTIFY_GENERIC, 5); surface.PlaySound( \"buttons/button9.wav\" )");
+				end
+				return
+			end
 			if(self.HasRD and self.Entity:GetModel() == "models/zup/stargate/sga_shield.mdl") then
 				local gate = self:FindGate();
 				if IsValid(gate) and gate.IsStargate and not gate:HaveEnergy(true,true) then return end
@@ -236,7 +242,7 @@ end
 --################# Touch @aVoN
 function ENT:Touch(e)
 	if(self.AllowTouch and self.AllowTouch + 0.1 > CurTime()) then
-		if(e:IsPlayer() or e:IsNPC()) then
+		if(e:IsPlayer() and not e:HasGodMode() or e:IsNPC()) then
 			e:SetHealth(1);
 			e:TakeDamage(10,self.Entity);
 		end
@@ -284,7 +290,7 @@ function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
 	StarGate.WireRD.PostEntityPaste(self,Player,Ent,CreatedEntities)
 end
 
-function ENT:IsCompuper()
+function ENT:IsComputer()
 	local dist = 1000
 	local pos = self:GetPos()
 	local ret = false;
@@ -311,7 +317,7 @@ function ENT:IrisProtection()
 				local dist = 1000
 				local pos = ent:GetPos()
 				local open = true;
-				if (ent:IsCompuper()) then open = false end
+				if (ent:IsComputer()) then open = false end
 				if (open) then
 					ent:Toggle();
 				end

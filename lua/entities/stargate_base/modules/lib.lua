@@ -357,6 +357,7 @@ function ENT:WormHoleJump()
 		self.Target = gate;
 		self.Jumping = true;
 		gate.Jumping = true;
+		gate.Outbound = false;
 
 		local action = gate.Sequence:New();
 
@@ -368,6 +369,8 @@ function ENT:WormHoleJump()
 
 		action = action + gate.Sequence:OpenGate();
 		gate:RunActions(action);
+
+		self:SubFlicker(false,true);
 
 		-- little delay or it will give us nil
 		timer.Simple(0.3,function()
@@ -395,17 +398,18 @@ end
 
 --################# Find's all DHD's which may call this gate @aVoN
 function ENT:FindDHD()
+	if (IsValid(self.LockedDHD)) then return {self.LockedDHD} end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	for _,v in pairs(ents.FindByClass("dhd_*")) do
-		if (v.IsGroupDHD and self.DHDRange) then
+		if (v.IsGroupDHD and self.DHDRange and (not IsValid(v.LockedGate) or v.LockedGate==self.Entity)) then
 			local e_pos = v:GetPos();
 			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
 			if(dist <= self.DHDRange) then
 				-- Check, if this DHD really belongs to this gate
 				local add = true;
 				for _,gate in pairs(self:GetAllGates()) do
-					if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
+					if(gate ~= self.Entity and (not IsValid(gate.LockedDHD) or gate.LockedDHD==v) and (gate:GetPos() - e_pos):Length() < dist) then
 						add = false;
 						break;
 					end
@@ -421,6 +425,9 @@ end
 
 --################# Find's special DHD's which may power this gate @Mad
 function ENT:FindPowerDHD()
+	if (IsValid(self.LockedDHD) and (not self.LockedDHD.Destroyed or util.tobool(GetConVar("stargate_dhd_destroyed_energy"):GetInt()))) then return {self.LockedDHD} end
+	if (IsValid(self.LockedMDHD)) then return {self.LockedMDHD} end
+	if (IsValid(self.LockedDestC)) then return {self.LockedDestC} end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	local posibble_dhd = {}
@@ -429,7 +436,7 @@ function ENT:FindPowerDHD()
 	table.Add(posibble_dhd, ents.FindByClass("goauld_dhd_prop"));
 	table.Add(posibble_dhd, ents.FindByClass("gravitycontroller"));
 	table.Add(posibble_dhd, ents.FindByClass("destiny_console"));
-	table.Add(posibble_dhd, ents.FindByClass("dhd_*"));
+	table.Add(posibble_dhd, self:FindDHD());
 
 	-- ramp energy for sgu @Llapp
 	if(self.Entity:GetClass() == "stargate_universe")then
@@ -444,13 +451,16 @@ function ENT:FindPowerDHD()
 	end
 
 	for _,v in pairs(posibble_dhd) do
+		if (v:GetClass()=="dhd_city" or IsValid(v.LockedGate) and v.LockedGate!=self.Entity) then continue end
 		local e_pos = v:GetPos();
 		local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
-		if(dist <= self.DHDRange) then
+		local range = self.DHDRange or 1000;
+		if(dist <= range) then
 			-- Check, if this DHD really belongs to this gate
 			local add = true;
 			for _,gate in pairs(self:GetAllGates()) do
-				if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
+				if(gate ~= self.Entity and (not IsValid(gate.LockedMDHD) or gate.LockedMDHD==v)
+				 and (not IsValid(gate.LockedDestC) or gate.LockedDestC==v) and (gate:GetPos() - e_pos):Length() < dist) then
 					add = false;
 					break;
 				end
@@ -637,7 +647,7 @@ function ENT:FindGate(no_target,addr)
 					) then
 						table.insert(gates,v);
 					end
-				elseif(#dialadr == 10 and string.Implode("",a)=="W2F5YR6I*DIAL") then
+				elseif(#dialadr == 10 and string.Implode("",a)=="E7?M2IX9*DIAL") then
 					table.insert(gates,v);
 				end
 			end
@@ -759,7 +769,7 @@ function ENT:FindGateGalaxy(no_target,addr)
 					) then
 						table.insert(gates,v);
 					end
-				elseif(#dialadr == 10 and string.Implode("",a)=="W2F5YR6I*DIAL") then
+				elseif(#dialadr == 10 and string.Implode("",a)=="E7?M2IX9*DIAL") then
 					table.insert(gates,v);
 				end
 			end

@@ -436,14 +436,14 @@ function RingTickInfinity()
 	for k,self in pairs(ents.FindByClass("stargate_infinity")) do
 		if (IsValid(self.Ring)) then
 			if (self.Outbound and self.Ring.Moving and self.DiallingSymbol != "") then
-				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))--+3;
+				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
 				local isconcept = self.IsConcept;
 				if (angle<0) then angle = angle+360; end
 				local symbols = self.SymbolsLock;
 				if (isconcept) then symbols = self.SymbolsLockConcept; end
 				local need = tonumber(symbols[tonumber(self.DiallingSymbol) or self.DiallingSymbol]);
 				if (!need) then self:AbortDialling(); self.Ring.Moving = false; else
-					--need = need+3;
+					need = need+3;
 					local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
 					if (stop and not self.Shutingdown) then
 						self.Entity:ActivateRing(false,true);
@@ -453,7 +453,7 @@ function RingTickInfinity()
 					end
 					local reset = true;
 					for k, v in pairs(symbols) do
-						--v = v+3;
+						v = v+3;
 						local symbol = self:StopFormula(angle,v,18.9,14.9);
 						if (symbol) then
 							self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
@@ -822,4 +822,8 @@ function ENT:Shutdown() -- It is called at the end of ENT:Close or ENT.Sequence:
 		self.Entity:SetNWBool("ActRotRingL",false);
 		self:SetWire("Ring Symbol",""); -- Wire
 	end
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_infinity", StarGate.CAP_GmodDuplicator, "Data" )
 end

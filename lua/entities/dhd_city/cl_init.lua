@@ -29,6 +29,8 @@ function ENT:Draw()
 	self.Entity:DrawModel();
 	if (not StarGate.VisualsMisc("cl_dhd_letters",true)) then return end
 	if self.Entity:GetNetworkedInt("DHD_LETTERS",0)<=0 then return end
+	if self:GetNetworkedBool("DisGlyphs",false) then return end
+	if not self:GetNetworkedBool("HasEnergy",false) then return end
 	local a = self.Entity:GetAngles();
 	-- ################# Get the chevrons
 	local address = self.Entity:GetNetworkedString("ADDRESS"):TrimExplode(",");

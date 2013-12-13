@@ -78,6 +78,9 @@ disintegrate = true
 dial_blocked = false
 # Block dialling only if world is blocking gate? (map walls, floor, ground etc, not player props/ents)
 world_blocked = false
+# How many damage should be taken before do wormhole jump? (one cap weapon shoot is around 70-100 damage)
+# set to 0 for disable this feature
+wormholejump = 3000
 
 #### DHD config
 [dhd]
@@ -289,6 +292,10 @@ classnames = physgun_beam, gmod_ghost
 [gate_overloader]
 energyCapacity = 580000
 coolingPerCycle = 300
+
+#### molecular_construction_device
+[MCD]
+allow_tzmp = true
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu

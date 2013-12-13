@@ -11,11 +11,12 @@ end
 function ENT:CheckWireSymbol(symbol)
 	local groupsystem = GetConVar("stargate_group_system"):GetBool();
 	local secret = false;
-	if (symbol=="*" and #self.WireDialledAddress==8 and string.Implode("",self.WireDialledAddress)=="W2F5YR6I") then secret = true end
+	if (symbol=="*" and #self.WireDialledAddress==8 and string.Implode("",self.WireDialledAddress)=="E7?M2IX9"
+	or symbol=="?" and #self.WireDialledAddress==2 and string.Implode("",self.WireDialledAddress)=="E7") then secret = true end
 	if (groupsystem) then
-		if (symbol=="*" and not secret or symbol=="!" or symbol=="?") then return false; end
+		if ((symbol=="*" or symbol=="?") and not secret or symbol=="!") then return false; end
 	else
-		if (symbol=="*" and not secret or symbol=="0" or symbol=="?") then return false; end
+		if ((symbol=="*" or symbol=="?") and not secret or symbol=="0") then return false; end
 	end
 	return true;
 end
@@ -31,7 +32,6 @@ end
 
 --################# Encode chevron function by AlexALX
 function ENT:EncodeChevron()
-	self.WireManualDial = true;
 	local n = table.getn(self.WireDialledAddress);
 	local candialg = GetConVar("stargate_candial_groups_wire"):GetInt()
 	local allowed_symbols = 8
@@ -44,7 +44,10 @@ function ENT:EncodeChevron()
 	else
 		local action = self.Sequence:New();
 		if (n==0 and not self.WireManualDial) then
-			action = self.Sequence:SeqFirstActivation();
+			self:FirstActivation();
+			self.WireManualDial = true;
+		elseif (n>0) then
+			self.WireManualDial = true;
 		end
 		table.insert(self.WireDialledAddress, self.RingSymbol);
 		action = action + self.Sequence:SeqEncodeChevron(n+1, self.WireDialledAddress);
@@ -126,7 +129,7 @@ function ENT:WireActivateStargate(inbound)
 		else
 			if(inbound or (self.DialledAddress and (#self.DialledAddress >= 8 and #self.DialledAddress <= 10) and (inbound or not self:IsBlocked(nil,nil,true)))) then
 				local secret = false;
-				if(#self.DialledAddress == 10 and string.Implode("",self.DialledAddress)=="W2F5YR6I*DIAL") then secret = true; end
+				if(#self.DialledAddress == 10 and string.Implode("",self.DialledAddress)=="E7?M2IX9*DIAL") then secret = true; end
 				if(IsValid(e) and e.IsStargate and not (e.IsOpen or e.Dialling == true) or secret) then
 					action = self.Sequence:OpenGate();
 					--################# And open the other gate

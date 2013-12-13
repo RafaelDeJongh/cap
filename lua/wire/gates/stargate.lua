@@ -471,4 +471,54 @@ GateActions["GetAtlantisTPList"] = {
 	end
 }
 
+GateActions["GetUnstable"] = {
+	name = "Get stargate unstable status",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if IsValid(Ent) and Ent.IsStargate and IsValid(Ent.EventHorizon) and Ent.EventHorizon.Unstable then
+			return 1
+		else
+			return 0
+		end
+	end,
+	label = function(Out)
+		return string.format ("Unstable = %q", Out)
+	end
+}
+
+GateActions["GetRingAngle"] = {
+	name = "Get stargate ring angle",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if not IsValid(Ent) or not Ent.IsStargate then return -1 end
+		local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"};
+		local class = Ent:GetClass();
+		if (not table.HasValue(vg,class)) then return -1 end
+		if (class=="stargate_universe") then
+			if (IsValid(Ent.Gate)) then
+				local angle = tonumber(math.NormalizeAngle(Ent.Gate:GetLocalAngles().r));
+				if (angle<0) then angle = angle+360; end;
+				return angle;
+			end
+			return -1;
+		else
+			if (IsValid(Ent.Ring)) then
+				local angle = tonumber(math.NormalizeAngle(Ent.Ring:GetLocalAngles().r));
+				if (angle<0) then angle = angle+360; end;
+				return angle;
+			end
+			return -1;
+		end
+	end,
+	label = function(Out)
+		return string.format ("Ring Angle = %q", Out)
+	end
+}
+
 GateActions()

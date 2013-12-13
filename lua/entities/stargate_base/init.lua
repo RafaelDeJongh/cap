@@ -68,6 +68,8 @@ function ENT:Initialize()
 	self.DHDRange = StarGate.CFG:Get("dhd","range",1000); -- Maximum range a DHD can be in before the gate says "Hey, you do not belong to me, get the fuck out"
 	self.DialBlocked = StarGate.CFG:Get("stargate","dial_blocked",false);
 	self.DialBlockedWorld = StarGate.CFG:Get("stargate","world_blocked",false);
+	self.WormHoleJumpNDMG = StarGate.CFG:Get("stargate","wormholejump",3000);
+	self.WormHoleJumpDMG = 0;
 	self:SetNetworkedInt("DHDRange",self.DHDRange);
 	--################# General defines and inits
 	self:RegisterSequenceTable(); -- Register a "Copy" of the self.Sequence table, so out sequence won't be mixed between Atlantis/SG1 gates
@@ -213,6 +215,7 @@ function ENT:LowPriorityThink()
 		end
 	end
 	if not self.IsOpen and self.Jumped then self.Jumped = false; end
+	if not self.IsOpen and self.WormHoleJumpDMG>0 then self.WormHoleJumpDMG = 0; end
 	if (self.HasRD) then
 		local energy = self.Entity:GetResource("energy");
 		if (self.Entity:GetNetworkedInt("RD_ENERGY",0) != energy) then
@@ -323,7 +326,7 @@ function ENT:OnTakeDamage(dmg)
 	if (dmg:GetAttacker():GetClass() == "point_hurt" || dmg:GetAttacker():GetClass() == "kawoosh_hurt" || self:GetClass()=="stargate_orlin") then return end
 	local damage = dmg:GetDamage();
 
-	if((dmg:GetDamageType() == DMG_BLAST or dmg:GetDamageType() == DMG_CLUB) and not self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect"):GetInt()) or self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect_spawner"):GetInt()))then
+	if(dmg:GetDamageType() == DMG_BLAST and (not self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect"):GetInt()) or self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect_spawner"):GetInt())))then
 		local class = self.Entity:GetClass();
 		if (class!="stargate_supergate" and class!="stargate_universe" and class!="stargate_orlin") then
 			for i=1,9 do
@@ -358,19 +361,41 @@ function ENT:OnTakeDamage(dmg)
 		end
 	end
 
-	if (damage<=30) then
-		self:Flicker(1);
-	elseif (damage>30 and damage<=60) then
-		self:Flicker(2);
-	elseif (damage>60) then
-		self:Flicker(3);
+	if (dmg:GetDamageType() == DMG_BLAST) then
+		if (self.WormHoleJumpNDMG>0 and IsValid(self.EventHorizon) and self.EventHorizon:IsOpen() and self.Outbound and not self.Jumped) then
+			if (self.WormHoleJumpDMG>self.WormHoleJumpNDMG) then
+				--if (math.random(1,2)==1) then
+				--	self:AbortDialling();
+				--else
+					self:WormHoleJump();
+				--end
+				self.WormHoleJumpDMG = 0;
+				return
+			else
+				self.WormHoleJumpDMG = self.WormHoleJumpDMG + damage*math.Rand(0.5,1.1); -- bit randomise
+			end
+		end
+
+		if (damage<=30) then
+			self:Flicker(1);
+		elseif (damage>30 and damage<=60) then
+			self:Flicker(2);
+		elseif (damage>60) then
+			self:Flicker(3);
+		end
 	end
 
 	// WormholeJump call is in gate_nuke
 end
 
-function ENT:SubFlicker(target)
+function ENT:SubFlicker(target,jump)
 	if (not IsValid(self.Entity)) then return end
+	local delay = 0.5;
+	if (jump) then
+		if (self.EventHorizon.Unstable) then return end
+		delay = 4.0;
+	end
+	if (self.Jumping and not jump) then return end
 	if(self.Entity:GetClass() == "stargate_universe")then
 	    self.EventHorizon:SetMaterial("sgu/effect_shock.vmt");
 	elseif(self.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH)then
@@ -397,7 +422,8 @@ function ENT:SubFlicker(target)
 		self.Target.EventHorizon:BufferEmpty();
 		self.Target:EmitSound(self.UnstableSound,90,math.random(97,103));
 	end
-	timer.Simple(0.5,function()
+	timer.Simple(delay,function()
+		if (self.Jumping) then return end
 	    if(IsValid(self.EventHorizon) and self.EventHorizon:IsOpen())then
 			if(self.Entity:GetClass() == "stargate_universe")then
 				self.EventHorizon:SetMaterial("sgu/effect_02.vmt");
@@ -633,52 +659,30 @@ end
 
 --################# Wire ouput - Relay to a mobile DHD @aVoN
 function ENT:WireOutput(k,v)
-	if (not self.DHDRange || not IsValid(self.Entity)) then return end
-	local pos = self.Entity:GetPos();
-	for _,e in pairs(ents.FindByClass("mobile_dhd")) do
-		if(IsValid(e)) then
-			local e_pos = e:GetPos();
-			local dist = (e_pos - pos):Length();
-		 	if (dist <= self.DHDRange) then
-				local add = true;
-				for _,gate in pairs(self:GetAllGates()) do
-					if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
-						add = false;
-						break;
+	if (not self.DHDRange or not IsValid(self.Entity)) then return end
+	if (IsValid(self.LockedMDHD)) then
+		self.LockedMDHD:SetWire(k,v);
+	else
+		local pos = self.Entity:GetPos();
+		for _,e in pairs(ents.FindByClass("mobile_dhd")) do
+			if(IsValid(e) and not IsValid(e.LockedGate)) then
+				local e_pos = e:GetPos();
+				local dist = (e_pos - pos):Length();
+			 	if (dist <= self.DHDRange) then
+					local add = true;
+					for _,gate in pairs(self:GetAllGates()) do
+						if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist and not IsValid(gate.LockedMDHD)) then
+							add = false;
+							break;
+						end
 					end
-				end
-				if(add) then
-					e:SetWire(k,v);
-				end
-		 	end
-		end
-	end
-end
-
-function ENT:FindDHD()
-	if (IsValid(self.LockedDHD)) then return {self.LockedDHD} end
-	local pos = self.Entity:GetPos();
-	local dhd = {};
-	for _,v in pairs(ents.FindByClass("dhd_*")) do
-		if (v.IsGroupDHD and self.DHDRange and (not IsValid(v.LockedGate) or v.LockedGate==self.Entity)) then
-			local e_pos = v:GetPos();
-			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
-			if(dist <= self.DHDRange) then
-				-- Check, if this DHD really belongs to this gate
-				local add = true;
-				for _,gate in pairs(self:GetAllGates()) do
-					if(gate ~= self.Entity and (not IsValid(gate.LockedDHD) or gate.LockedDHD==v) and (gate:GetPos() - e_pos):Length() < dist) then
-						add = false;
-						break;
+					if(add) then
+						e:SetWire(k,v);
 					end
-				end
-				if(add) then
-					table.insert(dhd,v);
-				end
+			 	end
 			end
 		end
 	end
-	return dhd;
 end
 
 --################# If DHD is concept added by AlexALX

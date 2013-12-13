@@ -1,7 +1,7 @@
-"AddonInfo"
+﻿"AddonInfo"
 {
 	"name"				"Carter Addon Pack" 
-	"version"			"2.0"
+	"version"			"3.0"
 	"author_name"		"Rafaël De Jongh, Madman07, Llapp, locotus_1, AlexALX"
 	"author_email"		"info@sg-carterpack.com"
 	"author_url"		"www.sg-carterpack.com"

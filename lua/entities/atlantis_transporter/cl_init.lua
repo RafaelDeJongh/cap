@@ -50,6 +50,10 @@ net.Receive( "UpdateAtlTP" , function(len)
 	end
 end );
 
+net.Receive( "RemoveAtlTPList", function(len)
+	AtlTP_GetAll = {}
+end );
+
 local PANEL = {}
 
 function PANEL:Init()

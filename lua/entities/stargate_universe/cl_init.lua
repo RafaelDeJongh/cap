@@ -81,6 +81,7 @@ function ENT:OnRemove()
 end
 
 function ENT:FindDestinyConsole()
+	if (IsValid(self:GetNWEntity("LockedDestC"))) then return {self:GetNWEntity("LockedDestC")} end
 	local pos = self.Entity:GetPos();
 	local destinyconsole = {};
 	for _,v in pairs(ents.FindByClass("destiny_console")) do

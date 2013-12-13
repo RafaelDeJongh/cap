@@ -57,6 +57,11 @@ local function StarGateRemoveFromList( len )
 end
 net.Receive( "RemoveGateFromListSelect" , StarGateRemoveFromList );
 
+local function StarGateRemoveList( len )
+	StarGate_GetAll = {};
+end
+net.Receive( "RemoveGateListSelect" , StarGateRemoveList );
+
 local Panel_Images = {
 	Search = "icon16/application_form_magnify.png",
 	Refresh = "icon16/arrow_refresh.png",

@@ -394,6 +394,7 @@ function ENT:Rotation(sse)
     local spr = self.Speroll;
 	local e = self.Entity;
 	local g = self.Gate;
+	if (not IsValid(g)) then return end
 	local speed,speed2,speed3,speed4 = 0.02,0.18,0.22,1;
 	if (self.WireSpin and not self.WireSpinSpeed) then speed,speed2,speed3,speed4 = 0.01, 0.09, 0.11, 0.5; end
 	if(sse == 1 and spr < speed4 and spr > -speed)then
@@ -1052,4 +1053,8 @@ function ENT:Close(ignore,fast)
 	action:Add({f=self.SpinFailChecker,v={self,false},d=0});
 	action:Add({f=self.SetShutdown,v={self,false},d=0});
 	self:RunActions(action);
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_universe", StarGate.CAP_GmodDuplicator, "Data" )
 end

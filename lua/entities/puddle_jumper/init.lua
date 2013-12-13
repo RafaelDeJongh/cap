@@ -83,6 +83,7 @@ function ENT:SpawnFunction(pl, tr)
 
     pl:AddCount("CAP_ships",e)
 	pl:Give("weapon_jumper_remote");
+	pl:SelectWeapon("weapon_jumper_remote")
 	return e;
 end
 
@@ -518,4 +519,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.Owner = ply;
 	self:SetVar("Owner",ply);
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "puddle_jumper", StarGate.CAP_GmodDuplicator, "Data" )
 end

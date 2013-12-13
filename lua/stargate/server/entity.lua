@@ -163,6 +163,35 @@ function StarGate.GetConstrainedEnts(ent,max_passes,passes,entities,cons)
 	return table.ClearKeys(entities),table.ClearKeys(cons);
 end
 
+-- Fix for gmod duplicator and gmod saving system by AlexALX
+-- it will not save stage of entity, but fix all bugs with crashes or broken duplications.
+function StarGate.CAP_GmodDuplicator(ply,Data)
+	Data.Class = scripted_ents.Get(Data.Class).ClassName
+
+	local ent = ents.Create( Data.Class )
+	if not IsValid(ent) then return false end
+
+	if ( Data.Model ) then ent:SetModel( Data.Model ) end
+	if ( Data.Angle ) then ent:SetAngles( Data.Angle ) end
+	if ( Data.Pos ) then ent:SetPos( Data.Pos ) end
+	if ( Data.ModelScale ) then ent:SetModelScale( Data.ModelScale, 0 ) end
+	if ( Data.ColGroup ) then ent:SetCollisionGroup( Data.ColGroup ) end
+	if ( Data.Name ) then ent:SetName( Data.Name ) end
+
+	if (Data.GateSpawnerSpawned and Data.GateSpawnerID) then
+		ent.GateSpawnerSpawned = true;
+		ent:SetNetworkedBool("GateSpawnerSpawned",true);
+		ent.GateSpawnerID = Data.GateSpawnerID;
+	end
+
+	--duplicator.DoGeneric( ent, data )
+	ent:Spawn()
+	ent:Activate()
+	duplicator.DoGenericPhysics( ent, ply, Data )
+
+	return ent;
+end
+
 --##################################
 -- 				Deriving Entity Material/Color
 --##################################

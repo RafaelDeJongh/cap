@@ -9,6 +9,7 @@ TOOL.ClientConVar['model'] = StarGate.Ramps.AnimDefault[1];
 local entityName = "anim_ramps"
 TOOL.Entity.Class = "anim_ramps";
 TOOL.Entity.Limit = StarGate.CFG:Get("anim_ramps","limit",10);
+TOOL.CustomSpawnCode = true;
 
 TOOL.Topic["name"] = "Ramp Spawner";
 TOOL.Topic["desc"] = "Creates a Ramp";
@@ -40,14 +41,16 @@ end
 
 if(SERVER) then
     function TOOL:MakeEntity(ply, position, angle, model)
-		if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(ply); return
-		elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
-			Msg("Carter Addon Pack - Unknown Error\n");
-			ply:SendLua("Msg(\"Carter Addon Pack - Unknown Error\\n\")");
-			ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-			return;
+    	if (IsValid(ply)) then
+			if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(ply); return
+			elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
+				Msg("Carter Addon Pack - Unknown Error\n");
+				ply:SendLua("Msg(\"Carter Addon Pack - Unknown Error\\n\")");
+				ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+				return;
+			end
+			if (StarGate.NotSpawnable("anim_ramps",ply,"tool")) then return end
 		end
-		if (StarGate.NotSpawnable("anim_ramps",ply,"tool")) then return end
 
         local class = "";
 		local pos = Vector(0,0,0);
@@ -75,7 +78,9 @@ if(SERVER) then
         entity:SetVar("Owner", ply)
         entity:SetModel(model)
         entity:Spawn()
-        ply:AddCount("CAP_anim_ramps", entity);
+        if (IsValid(ply)) then
+        	ply:AddCount("CAP_anim_ramps", entity);
+        end
         return entity
     end
 end

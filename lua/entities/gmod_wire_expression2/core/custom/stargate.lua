@@ -264,6 +264,68 @@ e2function number wirelink:stargateActive()
 	end
 end
 
+e2function number entity:stargateUnstable()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	if IsValid(this.EventHorizon) and this.EventHorizon.Unstable then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function number wirelink:stargateUnstable()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	if IsValid(this.EventHorizon) and this.EventHorizon.Unstable then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function number entity:stargateGetRingAngle()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"};
+	local class = this:GetClass();
+	if (not table.HasValue(vg,class)) then return -1 end
+	if (class=="stargate_universe") then
+		if (IsValid(this.Gate)) then
+			local angle = tonumber(math.NormalizeAngle(this.Gate:GetLocalAngles().r));
+			if (angle<0) then angle = angle+360; end;
+			return angle;
+		end
+		return -1;
+	else
+		if (IsValid(this.Ring)) then
+			local angle = tonumber(math.NormalizeAngle(this.Ring:GetLocalAngles().r));
+			if (angle<0) then angle = angle+360; end;
+			return angle;
+		end
+		return -1;
+	end
+end
+
+e2function number wirelink:stargateGetRingAngle()
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"};
+	local class = this:GetClass();
+	if (not table.HasValue(vg,class)) then return -1 end
+	if (class=="stargate_universe") then
+		if (IsValid(this.Gate)) then
+			local angle = tonumber(math.NormalizeAngle(this.Gate:GetLocalAngles().r));
+			if (angle<0) then angle = angle+360; end;
+			return angle;
+		end
+		return -1;
+	else
+		if (IsValid(this.Ring)) then
+			local angle = tonumber(math.NormalizeAngle(this.Ring:GetLocalAngles().r));
+			if (angle<0) then angle = angle+360; end;
+			return angle;
+		end
+		return -1;
+	end
+end
+
 e2function number entity:stargateOverload()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if (this.isOverloading) then

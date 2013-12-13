@@ -57,6 +57,11 @@ local function StarGateRemoveFromList( len )
 end
 net.Receive( "RemoveGateFromList" , StarGateRemoveFromList );
 
+local function StarGateRemoveList( len )
+	StarGate_GetAll = {};
+end
+net.Receive( "RemoveGateList" , StarGateRemoveList );
+
 local Panel_Images = {
 	Valid = "icon16/accept.png",
 	Invalid = "icon16/cancel.png",

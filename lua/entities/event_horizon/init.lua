@@ -37,6 +37,7 @@ local BUFFER = {InBuffer = {}};
 ENT.IgnoreTouch = true; -- This tells the physical objects like drones or staff not to collide with the eventhorizon (= no explode on them)
 ENT.CDSIgnore = true; -- Fixes Combat Damage System destroying this entity
 ENT.DrawEnterEffectTime = 0;
+ENT.CAP_NotSave = true;
 
 ENT.Model = Model("models/zup/stargate/stargate_horizon.mdl");
 ENT.Sounds = {
@@ -104,6 +105,7 @@ BUFFER.ClipIgnore = {
 	"prop_combine_ball",
 	"grenade_helicopter",
 	"prop_ragdoll",
+	"black_hole_power",
 }
 
 --################# SENT CODE ###############
@@ -269,7 +271,7 @@ function ENT:Open()
 			self.OpenTime = 2.2;
     	elseif (class=="stargate_supergate") then
 			self.OpeningDelay = 0.8;
-			self.OpenTime = 5.5;
+			self.OpenTime = 5.3;
     	elseif (class=="stargate_universe") then
 			self.OpeningDelay = 0.8;
 			self.OpenTime = 2.2;
@@ -471,7 +473,7 @@ function ENT:DissolveEntities(pos,radius)
 	if (self.Attached==nil) then return end
 	local name = "EH_DISSOLVE_"..self:EntIndex();
 	for _,v in pairs(ents.FindInSphere(pos,radius)) do
-		if v:GetClass()=="stargate_*" then
+		/*if v.IsGroupStargate then
 			v:Remove()
 			if IsValid(v) then
 				local e = ents.Create("gate_nuke");
@@ -480,10 +482,23 @@ function ENT:DissolveEntities(pos,radius)
 				e:Spawn()
 				e:Activate()
 			end
-			self.Parent:Remove();
-		end
+			v:Remove();
+		end*/
 		if(not (self.Attached[v] or v.GateSpawnerSpawned or v.NoDissolve)) then
 			if(v:GetMoveType() == 6 and not self.Attached[v:GetParent()] and not self.Attached[v:GetDerive()]) then
+				if (constraint.HasConstraints(v)) then
+					local entities = StarGate.GetConstrainedEnts(v,2);
+					local cont = false;
+					if(entities) then
+						for c,b in pairs(entities) do
+							if(b:IsWorld()) then
+								cont = true;
+								break;
+							end
+						end
+					end
+					if (cont) then continue end
+				end
 				local phys = v:GetPhysicsObject();
 				local class = v:GetClass();
 				local mdl = v:GetModel(); -- We are searching e.g. for map entities (func_brush etc): Models with an "*" in it's modelname are such things
@@ -1387,7 +1402,7 @@ function BUFFER:EmptyBuffer(EventHorizon)
 	if(IsValid(EventHorizon)) then
 		for k,v in pairs(self.InBuffer) do
 			if(IsValid(k)) then
-				if(k:IsPlayer() or k:IsNPC()) then
+				if(k:IsPlayer() and not k:HasGodMode() or k:IsNPC()) then
 					k:KillSilent();
 				else
 					k:Remove();
@@ -1400,6 +1415,6 @@ end
 --############### What should we ignore @RononDex
 function BUFFER:ClipShouldIgnore(ent)
 	local class = ent:GetClass()
-	if (table.HasValue(self.ClipIgnore,class) || table.HasValue(self.ClipIgnore,ent:GetModel()) || StarGate.RampOffset.Gates[ent:GetModel()] || ent.GateSpawnerSpawned || string.find(class,"stargate_")) then return true end
+	if (table.HasValue(self.ClipIgnore,class) || table.HasValue(self.ClipIgnore,ent:GetModel()) || StarGate.RampOffset.Gates[ent:GetModel()] || ent.GateSpawnerSpawned || string.find(class,"stargate_") || ent.CAP_EH_NoTouch) then return true end
 	return false
 end

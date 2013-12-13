@@ -836,3 +836,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self:Turrets(); -- Spawn turrets
 	self:SpawnWheels(self.Wheels);
 end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "sg_vehicle_f302", StarGate.CAP_GmodDuplicator, "Data" )
+end

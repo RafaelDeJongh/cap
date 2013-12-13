@@ -76,6 +76,7 @@ function EFFECT:SpawnLightning()
 end
 
 function EFFECT:Render()
+	if (not self.AimVector) then return end
 	local ANGLE = self.AimVector:Angle()
 	local fw = ANGLE:Forward()
 	local up = ANGLE:Up()

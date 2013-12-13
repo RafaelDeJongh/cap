@@ -5,6 +5,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_gravc");
 TOOL.Category="Tech";
 TOOL.Tab = "Stargate";
 TOOL.Entity.Class = "gravitycontroller";
+TOOL.CustomSpawnCode = true;
 
 TOOL.AddToMenu = false; -- Tell gmod not to add it. We will do it manually later!
 TOOL.Command=nil;
@@ -165,22 +166,39 @@ end
 
 if SERVER then
     CreateConVar('sbox_maxgravitycontroller', StarGate.CFG:Get("gravitycontroller","limit",15))
-	function MakeGravitycontroller(ply, Ang, Pos, tbl)
+	function MakeGravitycontroller(ply, Ang, Pos, tbl, Data)
 
-		if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(ply); return
-		elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
-			Msg("Carter Addon Pack - Unknown Error\n");
-			ply:SendLua("Msg(\"Carter Addon Pack - Unknown Error\\n\")");
-			ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-			return;
+		if (IsValid(ply)) then
+			if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(ply); return
+			elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
+				Msg("Carter Addon Pack - Unknown Error\n");
+				ply:SendLua("Msg(\"Carter Addon Pack - Unknown Error\\n\")");
+				ply:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+				return;
+			end
+			if (StarGate.NotSpawnable("gravitycontroller",ply,"tool")) then return end
 		end
-		if (StarGate.NotSpawnable("gravitycontroller",ply,"tool")) then return end
 
 		local ent=ents.Create('gravitycontroller')
 		if !ent:IsValid() then return false end
 		ent:SetAngles(Ang)
 		ent:SetPos(Pos)
-		ent.ConTable=table.Copy(tbl)
+		if (tbl and table.Count(tbl)>0) then
+			ent.ConTable=table.Copy(tbl)
+		elseif (Data and Data.ConTable) then
+			ent.ConTable = Data.ConTable
+			tbl = Data.ConTable;
+		end
+		if (game.SinglePlayer()) then
+			ply = player.GetByID(1);
+		end
+
+		if (Data and Data.GateSpawnerSpawned and Data.GateSpawnerID) then
+			ent.GateSpawnerSpawned = true;
+			ent:SetNetworkedBool("GateSpawnerSpawned",true);
+			ent.GateSpawnerID = Data.GateSpawnerID;
+		end
+
 		ent:Spawn()
 		ent:SetVar('Owner',ply)
 		numpad.OnDown(ply, tbl["iActivateKey"][2], 'FireGravitycontroller', ent)
@@ -195,7 +213,7 @@ if SERVER then
 			numpad.OnUp(ply, tbl["iKeyDown"][2], 'GoStop', ent)
 			ent.StartVector=ent:WorldToLocal(Pos-Vector(0,0,1))
 			ent:SetNetworkedVector("startvector", ent.StartVector)
-		else
+		elseif (IsValid(ent:GetPhysicsObject())) then
 			ent:GetPhysicsObject():SetMass(200)
 		end
 		local ttable={
@@ -205,10 +223,12 @@ if SERVER then
 			tbl=tbl,
 		}
 		table.Merge(ent:GetTable(), ttable)
-		ply:AddCount('gravcontroller', ent)
+		if (IsValid(ply)) then
+			ply:AddCount('gravcontroller', ent)
+		end
 		return ent
 	end
-	duplicator.RegisterEntityClass("gravitycontroller", MakeGravitycontroller, "Ang", "Pos", "tbl")
+	duplicator.RegisterEntityClass("gravitycontroller", MakeGravitycontroller, "Ang", "Pos", "tbl", "Data")
 end
 
 if CLIENT then

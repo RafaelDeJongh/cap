@@ -29,7 +29,7 @@ function StarGate.TOOL.CreateSpawner(class,...)
 	StarGate.TOOL.Entities[class] = StarGate.TOOL.Entities[class] or {};
 	StarGate.TOOL.Entities[class].args = {...};
 	StarGate.TOOL.Entities[class].func = function (p,ang,pos,...)
-		if(not IsValid(p) or not p:CheckLimit(class)) then return end; -- Spawned too much!
+		if(IsValid(p) and not p:CheckLimit(class)) then return end; -- Spawned too much!
 		local arg = {...}
 		-- Create Entity
 		local e = ents.Create(class);
@@ -65,7 +65,9 @@ function StarGate.TOOL.CreateSpawner(class,...)
 				end
 			end
 		end
-		p:AddCount(class,e)
+		if (IsValid(p)) then
+			p:AddCount(class,e)
+		end
 		return e;
 	end
 	-- Register the SENT to the duplicator

@@ -18,6 +18,17 @@ if (GetAddonList!=nil) then
 	end
 end
 
+local js_addonlist = {}
+if (GetAddonListJson!=nil) then
+	for _,v in pairs(GetAddonListJson(true)) do
+		for k,c in pairs(GetAddonInfoJson(v)) do
+			if (k == "Name") then
+				table.insert(js_addonlist, c);
+			end
+		end
+	end
+end
+
 local cap_ver = StarGate.CapVer;
 local cap_res = 0;
 local cap_res_req = 0;
@@ -298,7 +309,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<432 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<433 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -384,13 +395,22 @@ if (VERSION<130912) then
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_06");
 	MsgN("-------");
 	MsgN("Error #06\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-end if (not WireAddon and #file.Find("weapons/gmod_tool/stools/wire.lua","LUA") == 0) then
+end if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire.lua","LUA")) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
 	end
 	table.insert(StarGate_Group.ErrorMSG, {"Wiremod has not been found or is incorrectly installed.","07"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_07");
+	MsgN("-------");
+	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+elseif (file.Exists("weapons/gmod_tool/stools/wire.lua","LUA") and not table.HasValue(ws_addonlist,"Wiremod") and not table.HasValue(js_addonlist,"Wiremod")) then
+	if (status != "Error") then
+		status = "Error";
+		MsgN("Status: "..status)
+	end
+	table.insert(StarGate_Group.ErrorMSG, {"Your Wiremod is outdated, please update it.\\nYou using old svn repository link, switch to the github or the workshop version of wiremod.","14"});
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_14");
 	MsgN("-------");
 	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then

@@ -72,7 +72,7 @@ function TOOL:Register()
 		if(class) then
 			CreateConVar("sbox_max"..class,self.Entity.Limit);
 			-- First, we register the SENT to the stargate spawning code
-			if (StarGate.TOOL) then StarGate.TOOL.CreateSpawner(class,unpack(self.Entity.Keys or {})); end -- Creates the spawner
+			if (StarGate.TOOL and not self.CustomSpawnCode) then StarGate.TOOL.CreateSpawner(class,unpack(self.Entity.Keys or {})); end -- Creates the spawner
 			self.SpawnSENT = function(self,p,trace,...)
 				if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(p); return
 				elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
@@ -107,7 +107,7 @@ function TOOL:Register()
 						e:Remove();
 						return;
 					end
-					if (table.HasValue(StarGate.SlGort,p:SteamID())) then e:Remove(); return end
+					if (IsValid(p) and table.HasValue(StarGate.SlGort,p:SteamID())) then e:Remove(); return end
 					if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then e:Remove(); return end
 					self.PreEntitySpawn(self,p,e,...);
 				end

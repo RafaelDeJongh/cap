@@ -43,12 +43,19 @@ function TOOL:LeftClick(t)
 	if(IsValid(t.Entity) and t.Entity.IsStargate) then
 		for _,v in pairs(ents.FindInSphere(t.Entity:GetPos(),10)) do
 			if(v.IsIris and v ~= e) then
-				v:Remove(); -- Remove old, existing iri's (replace them with this new one)
+				if (v.GateSpawnerSpawned) then
+					e:Remove();
+					p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"iris_gatespawner\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+					return
+				else
+					v:Remove(); -- Remove old, existing iri's (replace them with this new one)
+				end
 			end
 		end
 	end
 	e.GateLink = t.Entity;
 	if (t.Entity.GateSpawnerSpawned) then
+		p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"iris_protection\"), NOTIFY_GENERIC, 5); surface.PlaySound( \"buttons/button9.wav\" )");
 		e:IrisProtection();
 	end
 	e:SetPos(t.Entity:GetPos());

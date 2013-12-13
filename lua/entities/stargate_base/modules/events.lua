@@ -64,7 +64,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound)
 	local action = self:New();
 	local delay = 1.5;
 	if(instant_stop) then delay = 0 end;
-	action:Add({f=self.SetStatus,v={self,false,true,true},d=0}); -- We need to keep in "dialling" mode to get around with conflicts
+	action:Add({f=self.SetStatus,v={self,false,true,false},d=0}); -- We need to keep in "dialling" mode to get around with conflicts
 	if(self.Entity.Active or play_sound) then
 		action:Add({f=self.DialFailSound,v={self.Entity},d=0});-- Fail sound
 	end
@@ -469,9 +469,17 @@ function ENT:OnButtActivateStargate(inbound)
 	end
 end
 
-function ENT:OnButtLockStargate()
+function ENT:OnButtLockStargate(oldtarget)
 	local e = self.Target; -- Quick reference (keeps code shorter)
 	local action = e.Sequence:New();
+	if(IsValid(oldtarget) and oldtarget!=self.Target) then
+		if(IsValid(oldtarget.Target) and oldtarget.Target == self.Entity) then
+			oldtarget:StopActions();
+			-- FIXME: CHECK IF THIS IS A BUG!
+			--oldtarget:Close();
+			oldtarget:EmergencyShutdown(true,false);
+		end
+	end
 	if(IsValid(e) and e.IsStargate and not (e.IsOpen or e.Dialling == true or self:IsBlocked(nil,nil,true))) then
 		action = e.Sequence:InstantOpen(nil,0.2,true,true);
 		--self:StopActions();

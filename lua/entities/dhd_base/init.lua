@@ -251,9 +251,11 @@ function ENT:OnRemove()
 	if timer.Exists("Flicker2"..self:EntIndex()) then timer.Destroy("Flicker2"..self:EntIndex()); end
 	if timer.Exists("RandomClose"..self:EntIndex()) then timer.Destroy("RandomClose"..self:EntIndex()); end
 	if timer.Exists("LightThink"..self:EntIndex()) then timer.Remove("LightThink"..self:EntIndex()) end
+	if timer.Exists("EnergyThink"..self:EntIndex()) then timer.Remove("EnergyThink"..self:EntIndex()) end
 	if not self.Destroyed and self.Chevron then for _,v in pairs(self.Chevron) do v:Remove() end end
 	if (IsValid(self.LockedGate)) then
 		self.LockedGate.LockedDHD = nil;
+		self.LockedGate:SetNWEntity("LockedDHD",NULL);
 	end
 	self.Entity:Remove()
 end
@@ -404,6 +406,8 @@ function ENT:OnTakeDamage(dmg)
 	local damage = dmg:GetDamage();
 	local class = self:GetClass();
 
+	if (dmg:GetDamageType() != DMG_BLAST) then return end
+
 	if(not self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_dhd_protect"):GetInt()) or self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_dhd_protect_spawner"):GetInt()))then
 		self.Healthh = self.Healthh - damage/4;
 		if (self.Healthh < 1 and class != "dhd_concept" and class != "dhd_city") then self.Entity:DestroyEffect() end
@@ -440,8 +444,10 @@ function ENT:Touch(ent)
 		if (string.find(ent:GetClass(), "stargate")) then
 			local gate = self:FindGate()
 			if IsValid(gate) and gate==ent and not IsValid(gate.LockedDHD) then
-				self.LockedGate = gate
+				self.LockedGate = gate;
+				self:SetNWEntity("LockedGate",gate);
 				gate.LockedDHD = self.Entity;
+				gate:SetNWEntity("LockedDHD",self.Entity);
 				local ed = EffectData()
  					ed:SetEntity( self.Entity )
  				util.Effect( "propspawn", ed, true, true )
@@ -615,6 +621,7 @@ end
 -- This function is also used by the USE function and the ConCommand which is getting triggered by the GUI click
 function ENT:PressButton(btn, nolightup, no_menu)
 	if (self.busy or self.Destroyed) then return end
+	if self:GetClass()=="dhd_city" and not self:GetNetworkedBool("HasEnergy",false) then return end
 	local e = self:FindGate();
 	if not IsValid(e) then return end
 	if (GetConVar("stargate_dhd_close_incoming"):GetInt()==0 and e.IsOpen and not e.Outbound) then return end -- if incoming, then we can do nothign
@@ -723,6 +730,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 						table.insert(self.DialledAddress,"DIAL");
 					end
 					e.DialledAddress = self.DialledAddress;
+					local oldtarget = e.Target;
 					if (not e:OnButtCheckStargate()) then
 						fail = true
 						if (btn=="DIAL") then lightup = false end
@@ -744,12 +752,12 @@ function ENT:PressButton(btn, nolightup, no_menu)
 						timer.Create(self.Entity:EntIndex().."DelayDialLock2", dly, 1, function()
 							if not IsValid(self) or not IsValid(e) then return end
 							if (lightup==true and fail==false and IsValid(e.Target) and not (e.Target.IsOpen or e.Target.Dialling == true or e.Target:IsBlocked(nil,nil,true))) then
-								e:OnButtLockStargate()
+								e:OnButtLockStargate(oldtarget)
 							end
 						end);
 					else
 						if (lightup==true and fail==false and IsValid(e.Target) and not (e.Target.IsOpen or e.Target.Dialling == true or e.Target:IsBlocked(nil,nil,true))) then
-							e:OnButtLockStargate()
+							e:OnButtLockStargate(oldtarget)
 						end
 					end
 					e.DialledAddress = {};
@@ -933,11 +941,6 @@ function ENT:CartersRampsDHD(t)
 	end
 end
 
-function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
-	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
-end
-
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
@@ -953,7 +956,9 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local dupeInfo = Ent.EntityMods.StarGateDHDInfo
 	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
 		self.LockedGate = CreatedEntities[dupeInfo.LockedGate];
+		self:SetNWEntity("LockedGate",self.LockedGate);
 		CreatedEntities[dupeInfo.LockedGate].LockedDHD = self.Entity;
+		CreatedEntities[dupeInfo.LockedGate]:SetNWEntity("LockedDHD",self.Entity);
 	end
 
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)

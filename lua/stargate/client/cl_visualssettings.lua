@@ -12,40 +12,65 @@ function StarGate.MiscVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsmisc"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsmisc");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
 	Panel:Help("");
 	-- Stargates
-	Panel:Help(SGLanguage.GetMessage("stool_cat"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:Help(SGLanguage.GetMessage("stool_cat")));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	if (file.Exists("materials/zup/stargate/effect_03.vmt","GAME")) then
-		Panel:CheckBox(SGLanguage.GetMessage("vis_ripple"),"cl_stargate_ripple"):SetToolTip(medium);
+		table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_ripple"),"cl_stargate_ripple"));
+		table.GetLastValue(disable):SetToolTip(medium);
     end
-    Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_eff"),"cl_stargate_kenter"):SetToolTip(low);
+    table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_eff"),"cl_stargate_kenter"));
+    table.GetLastValue(disable):SetToolTip(low);
 	Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_mat"), "cl_kawoosh_material"):SetToolTip(SGLanguage.GetMessage("vis_kawoosh_mat_desc"));
 	Panel:CheckBox(SGLanguage.GetMessage("vis_stargate_eff"), "cl_stargate_effects"):SetToolTip(SGLanguage.GetMessage("vis_stargate_eff_desc",medium));
 	-- Shield
 	Panel:Help(SGLanguage.GetMessage("stool_shield"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_shield_dynlights"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_shield_bubble"),"cl_shield_bubble"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_refl"),"cl_shield_hitradius"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_shield_hiteffect"):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_shield_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_shield_bubble"),"cl_shield_bubble"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_refl"),"cl_shield_hitradius"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_shield_hiteffect"));
+	table.GetLastValue(disable):SetToolTip(low);
 	-- Atl Shield
 	Panel:Help(SGLanguage.GetMessage("vis_atl_shield"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_refl"), "cl_shieldcore_refract"):SetToolTip(SGLanguage.GetMessage("vis_refl_desc",low));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl"), "cl_shieldcore_refract"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_refl_desc",low));
 	-- Harvester
 	Panel:Help(SGLanguage.GetMessage("stool_harvester"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_harvester_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_harvester_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	-- Cloaking
 	Panel:Help(SGLanguage.GetMessage("stool_cloak"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_pass"),"cl_cloaking_hitshader"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_eff"),"cl_cloaking_shader"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_pass"),"cl_cloaking_hitshader"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_eff"),"cl_cloaking_shader"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- SuperGate
 	Panel:Help("Supergate");
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	-- Apple Core
 	Panel:Help(SGLanguage.GetMessage("entity_apple_core"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_applecore_light"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"), "cl_applecore_smoke"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_applecore_light"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"), "cl_applecore_smoke"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- Huds
 	Panel:Help(SGLanguage.GetMessage("vis_hud_title"));
 	Panel:CheckBox(SGLanguage.GetMessage("vis_hud_energy"), "cl_draw_huds"):SetToolTip(SGLanguage.GetMessage("vis_hud_energy_desc",low));
@@ -66,27 +91,47 @@ function StarGate.ShipVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsship"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsship");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
 	Panel:Help("");
 	-- Jumper
 	Panel:Help(SGLanguage.GetMessage("entity_jumper"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_jumper_dynlights"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_jumper_heatwave"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_jumper_sprites"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_jumper_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_jumper_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_jumper_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- F302
 	Panel:Help(SGLanguage.GetMessage("entity_f302"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_F302_heatwave"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_F302_sprites"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_F302_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_F302_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- Shuttle
 	Panel:Help(SGLanguage.GetMessage("entity_dest_shuttle"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_shuttle_heatwave"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_shuttle_sprites"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_shuttle_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_shuttle_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- Wraith Dart
 	Panel:Help(SGLanguage.GetMessage("entity_dart"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_dart_heatwave"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_dart_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- Control Chair
 	Panel:Help(SGLanguage.GetMessage("entity_control_chair"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_chair_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_chair_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 end
 
 function StarGate.WeaponVisualSettings(Panel)
@@ -103,42 +148,73 @@ function StarGate.WeaponVisualSettings(Panel)
 		Panel:AddPanel(VGUI);
 	end */
 	-- Configuration
-	Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsweapon"):SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsweapon");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
 	Panel:Help("");
 	-- Staff Weapon and Dexgun
 	Panel:Help(SGLanguage.GetMessage("vis_weap_title"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_dyn_light"),"cl_staff_dynlights"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_fly_dyn_light"),"cl_staff_dynlights_flight"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"),"cl_staff_smoke"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_wall"),"cl_staff_scorch"):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_dyn_light"),"cl_staff_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_fly_dyn_light"),"cl_staff_dynlights_flight"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"),"cl_staff_smoke"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_wall"),"cl_staff_scorch"));
+	table.GetLastValue(disable):SetToolTip(low);
 	-- Zat'nik'tel
 	Panel:Help(SGLanguage.GetMessage("weapon_zat"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_zat_dynlights"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_zat_hiteffect"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_diss_eff"),"cl_zat_dissolveeffect"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_zat_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_zat_hiteffect"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_diss_eff"),"cl_zat_dissolveeffect"));
+	table.GetLastValue(disable):SetToolTip(medium);
 	-- Drones
 	Panel:Help(SGLanguage.GetMessage("stool_drones"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_glow"),"cl_drone_glow"):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_glow"),"cl_drone_glow"));
+	table.GetLastValue(disable):SetToolTip(low);
 	-- Naquadah Bomb
 	Panel:Help(SGLanguage.GetMessage("stool_naq_bomb"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_sunbeams"), "cl_gate_nuke_sunbeams"):SetToolTip(SGLanguage.GetMessage("vis_sunbeams_desc",high));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_gate_nuke_rings"):SetToolTip(high);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_shield_part"), "cl_gate_nuke_shieldrings"):SetToolTip(SGLanguage.GetMessage("vis_shield_part_desc",high));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_plasma"), "cl_gate_nuke_plasma"):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",low));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_plasma_light"), "cl_gate_nuke_dynlights"):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",medium));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sunbeams"), "cl_gate_nuke_sunbeams"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_sunbeams_desc",high));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_gate_nuke_rings"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_shield_part"), "cl_gate_nuke_shieldrings"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_shield_part_desc",high));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_plasma"), "cl_gate_nuke_plasma"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",low));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_plasma_light"), "cl_gate_nuke_dynlights"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",medium));
 	-- Stargate Overloader
 	Panel:Help(SGLanguage.GetMessage("entity_overloader"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_refl_rings"), "cl_overloader_refract"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_overloader_particle"):SetToolTip(medium);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_overloader_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl_rings"), "cl_overloader_refract"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_overloader_particle"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_overloader_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	-- Asuran Gun
 	Panel:Help(SGLanguage.GetMessage("entity_asuran_weapon"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_sm_laser"), "cl_asuran_laser"):SetToolTip(low);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_asuran_dynlights"):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sm_laser"), "cl_asuran_laser"));
+	table.GetLastValue(disable):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_asuran_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	-- Dakara Super Weapon
 	Panel:Help(SGLanguage.GetMessage("entity_dakara"));
-	Panel:CheckBox(SGLanguage.GetMessage("vis_charge_up"), "cl_dakara_rings"):SetToolTip(low);
-	Panel:CheckBox(SGLanguage.GetMessage("vis_refl_sphere"), "cl_dakara_refract"):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_charge_up"), "cl_dakara_rings"));
+	table.GetLastValue(disable):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl_sphere"), "cl_dakara_refract"));
+	table.GetLastValue(disable):SetToolTip(medium);
 end
 
 /*

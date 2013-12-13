@@ -425,7 +425,13 @@ concommand.Add( "cap_spawnswep", function( ply, cmd, args ) CAP_Spawn_Weapon( pl
 
 function StarGate.NotSpawnable(class,player,mode)
 	if (not mode) then mode = "ent" end
-	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); return true end
+	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then
+		if (IsValid(player)) then
+			player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		end
+		return true
+	end
+	if (not IsValid(player)) then return false end
 	if ( StarGate.CFG:Get(mode.."_groups_only",class,false)) then
 		local tbl = StarGate.CFG:Get(mode.."_groups_only",class,""):TrimExplode(",");
 		local disallow = true;

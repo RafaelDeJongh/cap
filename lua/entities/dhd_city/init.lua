@@ -163,18 +163,31 @@ function ENT:Initialize()
 	self:Fire("SetBodyGroup",1);
 	self.Light = false;
 	timer.Create("LightThink"..self:EntIndex(), 0.5, 0, function() if IsValid(self.Entity) then self:LightThink() end end);
+	timer.Create("EnergyThink"..self:EntIndex(), 3.0, 0, function() if IsValid(self.Entity) then self:EnergyThink() end end);
+	self:EnergyThink();
 end
 
 function ENT:LightThink()
 	if (not IsValid(self.Entity)) then return end
 	local ply = StarGate.FindPlayer(self.Entity:GetPos(), 300);
 
-	if (ply and not self.Light) then
+	if (ply and not self.Light and self:GetNWBool("HasEnergy",false)) then
 		self.Light = true;
 		self.Entity:SetSkin(1);
-	elseif (not ply and self.Light) then
+	elseif (not ply and self.Light or self.Light and not self:GetNWBool("HasEnergy",false)) then
 		self.Light = false;
 		self.Entity:SetSkin(0);
+	end
+end
+
+function ENT:EnergyThink()
+	if (not IsValid(self.Entity)) then return end
+
+	local e = self:FindGate();
+	if (IsValid(e) and e:CheckEnergy(true,true)) then
+		self:SetNWBool("HasEnergy",true);
+	else
+		self:SetNWBool("HasEnergy",false);
 	end
 end
 
@@ -199,3 +212,6 @@ function ENT:Use(p)
 	return false;
 end
 
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "dhd_city", StarGate.CAP_GmodDuplicator, "Data" )
+end

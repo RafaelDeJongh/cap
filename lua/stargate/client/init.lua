@@ -22,9 +22,13 @@
 
 --################# Header ###################
 StarGate.HTTP = {
+	FORUM = "http://sg-carterpack.com/forum/",
 	BUGS = "http://sg-carterpack.com/forum/support/",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "http://www.sg-carterpack.com/",
+	NEWS = "http://sg-carterpack.com/category/news/",
+	WIKI = "http://sg-carterpack.com/wiki/",
+	MULTI = "http://sg-carterpack.com/forums/forum/support/multi-language-support/", -- this is used by default for all languages, if not defined another url in language file.
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
 	CREDITS = "http://sg-carterpack.com/wiki/#credits",
 	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest"

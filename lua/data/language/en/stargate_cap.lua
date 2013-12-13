@@ -269,6 +269,8 @@ cap_group_tool = This tool is not allowed for you!
 cap_disabled_ent = This entity is disabled on server!
 cap_disabled_swep = This weapon is disabled on server!
 cap_disabled_tool = This tool is disabled on server!
+iris_gatespawner = You can't override gatespawner iris! Spawn iris computer for control it.
+iris_protection = Iris successfully added to gatespawner gate! Spawn iris computer for control it.
 
 // gatespawner
 sg_gtsp_title = Gatespawner Creator
@@ -281,6 +283,32 @@ File: <u>garrysmod\data\%s.txt</u>
 <br><b>Note:</b> You have to change the file extensions from ".txt" to ".lua".
 <br>If you're unfamiliar about this process please make use of <b>Google</b>.
 ]]
+
+// iris computer
+iriscomp_title = Iris Computer Menu
+iriscomp_code = Iris Code
+iriscomp_desc = Description
+iriscomp_time = Close Time
+iriscomp_time_desc = The time in seconds the iris will stay open after a correct code is sent. Set to 0 to stay open forever.
+iriscomp_close = Auto-close?
+iriscomp_close_desc = If checked, the iris will close as soon as an incoming connection is established.
+iriscomp_open = Don't Auto-open?
+iriscomp_open_desc = If checked, the iris will not open until the wire input tells it to.
+iriscomp_cancel = Cancel
+iriscomp_toggle = Toggle Iris
+iriscomp_ok = Ok
+
+// spawn menu info
+spawninfo_title = Information
+spawninfo_load = Loading...
+spawninfo_news = News
+spawninfo_wiki = Wiki
+spawninfo_forum = Support Forum
+spawninfo_multi = Multi-language support
+// you can create own language support thread in this forum and replace url with your link
+spawninfo_multi_url = http://sg-carterpack.com/forums/forum/support/multi-language-support/
+spawninfo_fp = Facepunch Thread
+spawninfo_donate = Donate
 
 // huds
 hud_status = Status
@@ -388,7 +416,9 @@ key_view_zoomout = Zoom out
 key_view_up = Move view up
 key_view_down = Move view down
 key_view_toggle = Toggle View Perspective
+key_cam_view = View from camera
 key_cam_left = Camera Left
 key_cam_right = Camera Right
 key_cam_up = Camera Up
 key_cam_down = Camera Down
+key_cam_reset = Reset camera

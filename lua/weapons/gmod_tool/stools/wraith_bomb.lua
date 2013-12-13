@@ -31,13 +31,15 @@ function TOOL:LeftClick(t)
 	if(not self:CheckLimit()) then return false end;
 
 	local model = self:GetClientInfo("model");
-	local power = self:GetClientInfo("power")
-	local time = self:GetClientNumber("timer")
-	local yield = self:GetClientNumber("yield")
+	local power = tonumber(self:GetClientInfo("power"))
+	local time = tonumber(self:GetClientNumber("timer"))
+	local yield = tonumber(self:GetClientNumber("yield"))
 	local weld = util.tobool(self:GetClientNumber("autoweld"))
 
 	if not p:IsAdmin() then
 		yield = math.Clamp(yield, 100, 500)
+		time = math.Clamp(time, 5, 60)
+		power = math.Clamp(power, 5, 30)
 	end
 
 	local e = self:SpawnSENT(p,t,model,power,time,yield,autoweld);

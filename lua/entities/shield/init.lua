@@ -27,6 +27,7 @@ include("modules/bullets.lua");
 ENT.Sounds = {Hit=Sound("shields/shield_hit.mp3")};
 ENT.NotTeleportable = true;
 ENT.NoDissolve = true;
+ENT.CAP_NotSave = true;
 ENT.CDSIgnore = true; -- CDS Immunity
 function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invulnarability!
 

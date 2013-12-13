@@ -18,7 +18,7 @@
 if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 ENT.Type = "anim"
 ENT.Base = "dhd_base"
-ENT.PrintName = "DHD Group (City)"
+ENT.PrintName = "DHD (City)"
 ENT.Author = "aVoN, Madman07, ZsDaniel, Boba Fett, AlexALX"
 ENT.Category = "Stargate Carter Addon Pack: Gates and Rings"
 ENT.WireDebugName = "DHD (City)"

@@ -20,6 +20,8 @@ StarGate.Trace:Add("tokra_shield",
 	end
 );
 
+ENT.CAP_NotSave = true;
+
 -----------------------------------INIT----------------------------------
 
 function ENT:Initialize()

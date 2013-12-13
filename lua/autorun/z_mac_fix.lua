@@ -8,13 +8,13 @@
 -- file name should start at z_ or it will not help correctly
 
 if SERVER then
-	AddCSLuaFile( "autorun/z_mac_fix.lua" )
+	AddCSLuaFile()
 end
 
 if (Gmod13Lib==nil) then
-	include("autorun/a_gmod_beta.lua")
+	include("a_gmod13.lua")
 end
---  Maybe not needed anymore? not sure. But this file still needed for include a_gmod_beta on linux server first.
+--  Maybe not needed anymore? not sure. But this file still needed for include a_gmod13 on linux server first.
 /*
 if (system.IsOSX()) then
 	local file_FindInLua = file.FindInLua

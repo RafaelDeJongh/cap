@@ -42,7 +42,7 @@ end
 --################# Think @aVoN
 function EFFECT:Think()
 	local valid = (self.Draw and (self.Spawned+self.LifeTime) > CurTime());
-	if(not valid and IsValid(self.Parent)) then
+	if(not valid and IsValid(self.Parent) and self.Parent.SetAlpha) then
 		self.Parent:SetAlpha(255); -- May fix that bug where the EH gets opened and stays "half invisible"
 		--self.Parent.AllowBacksideDrawing = true; -- This tells the "EH-Backside" only to draw at 150
 	end

@@ -502,3 +502,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound)
 	action:Add({f=self.SetShutdown,v={self,false},d=0});
 	return action;
 end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_orlin", StarGate.CAP_GmodDuplicator, "Data" )
+end

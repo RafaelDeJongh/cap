@@ -28,3 +28,13 @@ sg_err_11 =[[ Шрифты CAP не установлены, вы должны с
 ]]
 sg_err_12 = Папка cap_resources устарела!<br>Пожалуйста, обновите её.
 sg_err_13 = Установлена Git версия ресурсов от Carter Addon Pack.<br>Пожалуйста удалите их для предотвращения возможных ошибок.<br>Или удалите workshop версию.
+sg_err_14 = [[Ваш Wiremod устарел, пожалуйста обновите его.
+<br>Вы используете <b>старый svn репозиторий</b>, перейдите на github или <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>workshop</a></b> версию wiremod'а.
+<br>
+<br>Старая svn ссылка (устаревшая): <u>https://svn.code.sf.net/p/wiremod/code/trunk/wire</u>
+<br>Новая github ссылка: <u>https://github.com/wiremod/wire</u>
+<br>Новая svn ссылка: <u>https://github.com/wiremod/wire/trunk</u>
+<br>Workshop: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>http://steamcommunity.com/sharedfiles/filedetails/?id=160250458</a>
+<br>
+<br>Примечание: если вы откроете svn ссылку в браузере, то вы увидите ошибку, скопируйте и вставте в ваш svn клиент как url репозитория!
+]]

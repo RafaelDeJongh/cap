@@ -416,15 +416,19 @@ function ENT:DestroyEntity(e)
 	if(not IsValid(e)) then return end;
 	if(e:IsPlayer()) then
 		e:SetParent(); -- Unparent, when he is maybe parented to a SENT
-		e:StripWeapons();
-		e:KillSilent();
+		if (not e:HasGodMode()) then
+			e:StripWeapons();
+			e:KillSilent();
+		end
 	else
 		if(e:IsVehicle()) then
 			-- If it's a vehicle, kill the driver of it
 			for _,v in pairs(player.GetAll()) do
 				if(v:GetParent() == e) then
-					v:StripWeapons();
-					v:KillSilent();
+					if (not v:HasGodMode()) then
+						v:StripWeapons();
+						v:KillSilent();
+					end
 					break;
 				end
 			end

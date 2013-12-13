@@ -49,10 +49,12 @@ function StarGate.MALPSettings(Panel)
 		{
 			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
+				{SGLanguage.GetMessage("key_cam_view"),"VIEW"},
 				{SGLanguage.GetMessage("key_cam_left"),"CAMLEFT"},
 				{SGLanguage.GetMessage("key_cam_right"),"CAMRIGHT"},
 				{SGLanguage.GetMessage("key_cam_up"),"CAMUP"},
 				{SGLanguage.GetMessage("key_cam_down"),"CAMDOWN"},
+				{SGLanguage.GetMessage("key_cam_reset"),"RESETCAM"},
 			},
 		},
 	}

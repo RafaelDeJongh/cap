@@ -131,6 +131,7 @@ function ENT:CreateDoors(spawner,protect)
 	--constraint.NoCollide(d,game.GetWorld(),0,0);
 	constraint.Weld(d,e,0,0,0,true)  -- i don't want use weld here
 	constraint.Weld(d2,e,0,0,0,true)  -- i don't want use weld here
+	constraint.NoCollide(d,d2,0,0,0,true)
 	self.Doors={d,d2}
 	self.DoorPhys = {self.Doors[1]:GetPhysicsObject(),self.Doors[2]:GetPhysicsObject()}
 	if(IsValid(self.DoorPhys[1]))then
@@ -160,7 +161,7 @@ function ENT:CreateDoors(spawner,protect)
 	d.AtlTP = self;
 	d.AtlDoor = self.Doors;
 	constraint.NoCollide(e,d,0,0);
-	constraint.NoCollide(d,game.GetWorld(),0,0);
+	--constraint.NoCollide(d,game.GetWorld(),0,0);
 	--constraint.Weld(d,e,0,0,0,true)
 	self.Button1=d
 
@@ -182,7 +183,7 @@ function ENT:CreateDoors(spawner,protect)
 	d.AtlTP = self;
 	d.AtlDoor = self.Doors;
 	constraint.NoCollide(e,d,0,0);
-	constraint.NoCollide(d,game.GetWorld(),0,0);
+	--constraint.NoCollide(d,game.GetWorld(),0,0);
 	--constraint.Weld(d,e,0,0,0,true)
 	self.Button2=d
 end
@@ -201,7 +202,6 @@ function ENT:SetAtlName(name,wire,ply)
 		end
 	end
 	self.TName=name;
-	self.TPrivate = private;
 	net.Start("UpdateAtlTP")
 	net.WriteInt(self:EntIndex(),16)
 	net.WriteInt(1,4)
@@ -583,6 +583,7 @@ function ENT:PreEntityCopy()
 	end
 
 	dupeInfo.Name = self.TName;
+	dupeInfo.Private = self.TPrivate;
 
 	duplicator.StoreEntityModifier(self, "AtlantisTPDupeInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self)
@@ -627,8 +628,15 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.TName = dupeInfo.Name or "";
 	self:SetNetworkedString("TName",self.TName);
 
+	self.TPrivate = dupeInfo.Private or false;
+
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	self:OnReloaded();
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "atlantis_transporter", StarGate.CAP_GmodDuplicator, "Data" )
 end
 
 function ENT:WireGetAddresses()

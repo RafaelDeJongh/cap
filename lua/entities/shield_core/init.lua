@@ -540,3 +540,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 
 end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "shield_core", StarGate.CAP_GmodDuplicator, "Data" )
+end

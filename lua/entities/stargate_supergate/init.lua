@@ -46,12 +46,11 @@ function ENT:Initialize()
 
 	util.PrecacheModel("models/Iziraider/supergate/segment.mdl");
 	util.PrecacheModel("models/Iziraider/supergate/electric.mdl");
+	self.Entity:SetModel("models/Iziraider/supergate/circle.mdl");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
-
-	self.Entity:SetModel("models/Iziraider/supergate/circle.mdl");
-	self.Entity:SetColor(Color(1,1,1,1));
+	self.Entity:SetColor(Color(0,0,0,0));
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 	self.Segments = {};
 	self.EffectSegments = {};
@@ -82,6 +81,7 @@ function ENT:Initialize()
 		block:Spawn();
 		block:Activate();
 		block:SetParent(ent);
+		--block.CAP_NotSave = true;
 
 		local ed = EffectData()
 			ed:SetEntity(block)
@@ -97,6 +97,7 @@ function ENT:Initialize()
 		effblock:Spawn();
 		effblock:Activate();
 		effblock:SetParent(ent);
+		--effblock.CAP_NotSave = true;
 
 		table.insert(self.EffectSegments, effblock)
 		i = i + 1;
@@ -316,4 +317,8 @@ function ENT:DisActivateLights(instant,fail)
 
 		end
 	end
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_supergate", StarGate.CAP_GmodDuplicator, "Data" )
 end

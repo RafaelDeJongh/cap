@@ -244,3 +244,7 @@ function ENT:Shutdown()
 		self.Entity:SetNWBool("ActChevronsL",false);
 	end
 end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_tollan", StarGate.CAP_GmodDuplicator, "Data" )
+end

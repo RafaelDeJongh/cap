@@ -265,17 +265,18 @@ hook.Add("HUDPaint","StarGate.Hook.HUDPaint.ShowAddressAndGroupAndName",
 
 --################# Find's all DHD's which may call this gate @aVoN
 function ENT:FindDHD()
+	if (IsValid(self:GetNWEntity("LockedDHD"))) then return {self:GetNWEntity("LockedDHD")} end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	for _,v in pairs(ents.FindByClass("dhd_*")) do
-		if (v.IsGroupDHD) then
+		if (v.IsGroupDHD and (not IsValid(v:GetNWEntity("LockedGate")) or v:GetNWEntity("LockedGate")==self.Entity)) then
 			local e_pos = v:GetPos();
 			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
 			if(dist <= self.Entity:GetNetworkedInt("DHDRange",1000)) then
 				-- Check, if this DHD really belongs to this gate
 				local add = true;
 				for _,gate in pairs(self:GetAllGates()) do
-					if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
+					if(gate ~= self.Entity and (not IsValid(gate:GetNWEntity("LockedDHD")) or gate:GetNWEntity("LockedDHD")==v) and (gate:GetPos() - e_pos):Length() < dist) then
 						add = false;
 						break;
 					end
@@ -291,6 +292,9 @@ end
 
 --################# Find's special DHD's which may power this gate @Mad
 function ENT:FindPowerDHD()
+	if (IsValid(self:GetNWEntity("LockedDHD")) and (not self:GetNWEntity("LockedDHD"):GetNWBool("Destroyed",false) or util.tobool(self.Entity:GetNetworkedInt("SG_ENERGY_DHD_K")))) then return {self:GetNWEntity("LockedDHD")} end
+	if (IsValid(self:GetNWEntity("LockedMDHD"))) then return {self:GetNWEntity("LockedMDHD")} end
+	if (IsValid(self:GetNWEntity("LockedDestC"))) then return {self:GetNWEntity("LockedDestC")} end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	local posibble_dhd = {}
@@ -299,7 +303,7 @@ function ENT:FindPowerDHD()
 	table.Add(posibble_dhd, ents.FindByClass("goauld_dhd_prop"));
 	table.Add(posibble_dhd, ents.FindByClass("gravitycontroller"));
 	table.Add(posibble_dhd, ents.FindByClass("destiny_console"));
-	table.Add(posibble_dhd, ents.FindByClass("dhd_*"));
+	table.Add(posibble_dhd, self:FindDHD());
 
 	-- ramp energy for sgu
 	if(self.Entity:GetClass() == "stargate_universe")then
@@ -325,13 +329,15 @@ function ENT:FindPowerDHD()
 	end
 
 	for _,v in pairs(posibble_dhd) do
+		if (v:GetClass()=="dhd_city" or IsValid(v:GetNWEntity("LockedGate")) and v:GetNWEntity("LockedGate")!=self.Entity) then continue end
 		local e_pos = v:GetPos();
 		local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
 		if(dist <= self.Entity:GetNetworkedInt("DHDRange",1000)) then
 			-- Check, if this DHD really belongs to this gate
 			local add = true;
 			for _,gate in pairs(self:GetAllGates()) do
-				if(gate ~= self.Entity and (gate:GetPos() - e_pos):Length() < dist) then
+				if(gate ~= self.Entity and (not IsValid(gate:GetNWEntity("LockedMDHD")) or gate:GetNWEntity("LockedMDHD")==v)
+				and (not IsValid(gate:GetNWEntity("LockedDestC")) or gate:GetNWEntity("LockedDestC")==v) and (gate:GetPos() - e_pos):Length() < dist) then
 					add = false;
 					break;
 				end

@@ -41,6 +41,7 @@ StarGate.GateSpawner.Brazier = {};
 StarGate.GateSpawner.GravityController = {};
 StarGate.GateSpawner.AtlantisTransporter = {};
 StarGate.GateSpawner.Spawned = false;
+StarGate.GateSpawner.Block = false;
 
 -- ############### Load config @aVoN
 function StarGate.GateSpawner.LoadConfig()
@@ -90,7 +91,8 @@ local function GateSpawner_CheckModule(class,model)
 end  */
 
 -- ############### Spawning function @aVoN
-function StarGate.GateSpawner.Spawn(v,protect,k)
+function StarGate.GateSpawner.Spawn(v,protect,k,k2)
+	if (StarGate.GateSpawner.Block) then return nil end
 	if(v.position and v.classname) then
 		if (StarGate_Group and StarGate_Group.Error == true or StarGate_Group==nil or StarGate_Group.Error==nil) then return end
 		--if (not GateSpawner_CheckModule(v.classname,v.model)) then return end
@@ -175,6 +177,12 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
 		end
 		if(IsGateBearing) then
 			e:SetModel("models/Iziraider/gatebearing/bearing.mdl");
+		end
+
+		if (k2) then
+			e.GateSpawnerID = k2;
+		else
+			e.GateSpawnerID = k+1;
 		end
 
 		-- Spawn the gate a bit later. And we need to spawn it before anyone sets the angles, or it will look weird
@@ -362,6 +370,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k)
                 	end
 				end
 				if (v.__id and e:GetClass()=="prop_physics") then
+					duplicator.StoreEntityModifier(e, "GateSpawnerProp", {GateSpawner=true,ID=e.GateSpawnerID} )
 					for _,vv in pairs(ents.FindByClass("stargate_*")) do
 						if(vv.__id == v.__id) then
 							constraint.Weld(e,vv,0,0,0,true);
@@ -414,43 +423,44 @@ end
 
 -- ############### Initial spawn handling @aVoN
 function StarGate.GateSpawner.InitialSpawn(reload)
-	-- First, remove all previous gate_spawner gates.
-	local remove = {
-		ents.FindByClass("stargate_*"),
-		ents.FindByClass("*_iris"),
-		ents.FindByClass("dhd_*"),
-		ents.FindByClass("mobile_dhd"),
-		ents.FindByClass("ring_*"),
-		ents.FindByClass("bearing"),
-		ents.FindByClass("brazier"),
-		ents.FindByClass("floorchevron"),
-		ents.FindByClass("destiny_timer"),
-		ents.FindByClass("destiny_console"),
-		ents.FindByClass("kino_dispenser"),
-		ents.FindByClass("ramp"),
-		ents.FindByClass("ramp_2"),
-		ents.FindByClass("future_ramp"),
-		ents.FindByClass("sgc_ramp"),
-		ents.FindByClass("icarus_ramp"),
-		ents.FindByClass("sgu_ramp"),
-		ents.FindByClass("goauld_ramp"),
-		ents.FindByClass("gravitycontroller"),
-		ents.FindByClass("atlantis_transporter"),
-		ents.FindByClass("prop_physics"),
-	};
-	for _,v in pairs(remove) do
-		for _,e in pairs(v) do
-			if(e.GateSpawnerSpawned) then
-				e:Remove();
+	if (not StarGate.GateSpawner.Block) then
+		-- First, remove all previous gate_spawner gates.
+		local remove = {
+			ents.FindByClass("stargate_*"),
+			ents.FindByClass("goauld_iris"),
+			ents.FindByClass("dhd_*"),
+			ents.FindByClass("mobile_dhd"),
+			ents.FindByClass("ring_*"),
+			ents.FindByClass("bearing"),
+			ents.FindByClass("brazier"),
+			ents.FindByClass("floorchevron"),
+			ents.FindByClass("destiny_timer"),
+			ents.FindByClass("destiny_console"),
+			ents.FindByClass("kino_dispenser"),
+			ents.FindByClass("ramp"),
+			ents.FindByClass("ramp_2"),
+			ents.FindByClass("future_ramp"),
+			ents.FindByClass("sgc_ramp"),
+			ents.FindByClass("icarus_ramp"),
+			ents.FindByClass("sgu_ramp"),
+			ents.FindByClass("goauld_ramp"),
+			ents.FindByClass("gravitycontroller"),
+			ents.FindByClass("atlantis_transporter"),
+			ents.FindByClass("prop_physics"),
+		};
+		for _,v in pairs(remove) do
+			for _,e in pairs(v) do
+				if(e.GateSpawnerSpawned) then
+					e:Remove();
+				end
 			end
 		end
 	end
 	if(not StarGate.GateSpawner.Spawned or reload) then
 		if (reload) then StarGate.GateSpawner.Reset(); end
 		if (GetConVar("stargate_gatespawner_enabled"):GetBool() and StarGate.GateSpawner.LoadConfig()) then
-			-- FIXME: Add config for enabled/disabled again
-			-- sorry old or wrong gatespawner
 			StarGate.GateSpawner.Spawned = true;
+			-- sorry old or wrong gatespawner
 			local groupsystem = GetConVar("stargate_group_system"):GetBool();
 			if (StarGate.GateSpawner.Version == "3" and groupsystem) then
 				ErrorNoHalt("StarGate GateSpawner Error:\nYour gatespawner file is for Galaxy System, it is not compatible with Group System.\nPlease create new gatespawner or switch to Galaxy System.\n"); return
@@ -525,8 +535,6 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
 				i = i + 1;
 			end
-
-			StarGate.GateSpawner.Spawned = true;
 		end
 	end
 end
@@ -537,19 +545,18 @@ function StarGate.GateSpawner.AutoRespawn()
 	if(DEBUG) then return end;
 	--if(StarGate.spawner_enabled and StarGate.spawner_autorespawn) then
 	if (StarGate.GateSpawner.Spawned) then
-		local add = {};
+		--local add = {};
 		local i = 0; -- For delayed spawning
 		for k,v in pairs(StarGate.GateSpawner.Ents) do
 			local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 			if(not v.Entity or not v.Entity:IsValid()) then
-				table.insert(add,{Entity=StarGate.GateSpawner.Spawn(v.SpawnData,protect,i),SpawnData=v.SpawnData});
+				StarGate.GateSpawner.Ents[k] = {Entity=StarGate.GateSpawner.Spawn(v.SpawnData,protect,i,k),SpawnData=v.SpawnData};
 				i = i + 1;
-				StarGate.GateSpawner.Ents[k] = nil;
 			end
 		end
-		for _,v in pairs(add) do
+		/*for _,v in pairs(add) do
 			table.insert(StarGate.GateSpawner.Ents,v);
-		end
+		end*/
 	end
 end
 
@@ -786,3 +793,87 @@ concommand.Add("stargate_gatespawner_reload",
 		end
 	end
 );
+
+util.AddNetworkString("RemoveGateList")
+util.AddNetworkString("RemoveGateListSelect")
+util.AddNetworkString("RemoveAtlTPList")
+
+-- so much time spend for fix gatespawner with gmod saving system...
+function StarGate.GateSpawner.Restored()
+	-- fix for addresses
+	net.Start( "RemoveGateList" )
+		net.WriteBit(true)
+	net.Broadcast()
+	net.Start( "RemoveGateListSelect" )
+		net.WriteBit(true)
+	net.Broadcast()
+	net.Start( "RemoveAtlTPList" )
+		net.WriteBit(true)
+	net.Broadcast()
+
+	local dly = 0.15;
+	if (not StarGate.GateSpawner.Spawned) then
+		dly = 3.5;
+		StarGate.GateSpawner.Block = true;
+	end
+	StarGate.GateSpawner.Spawned = false;
+	timer.Simple(dly,function()
+		local check = {
+			ents.FindByClass("stargate_*"),
+			ents.FindByClass("goauld_iris"),
+			ents.FindByClass("dhd_*"),
+			ents.FindByClass("mobile_dhd"),
+			ents.FindByClass("ring_*"),
+			ents.FindByClass("bearing"),
+			ents.FindByClass("brazier"),
+			ents.FindByClass("floorchevron"),
+			ents.FindByClass("destiny_timer"),
+			ents.FindByClass("destiny_console"),
+			ents.FindByClass("kino_dispenser"),
+			ents.FindByClass("ramp"),
+			ents.FindByClass("ramp_2"),
+			ents.FindByClass("future_ramp"),
+			ents.FindByClass("sgc_ramp"),
+			ents.FindByClass("icarus_ramp"),
+			ents.FindByClass("sgu_ramp"),
+			ents.FindByClass("goauld_ramp"),
+			ents.FindByClass("gravitycontroller"),
+			ents.FindByClass("atlantis_transporter"),
+			ents.FindByClass("prop_physics"),
+		};
+		local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
+		for _,v in pairs(check) do
+			for _,e in pairs(v) do
+				if (e:GetClass()=="prop_physics") then
+					local tbl = e.EntityMods;
+					if (tbl and tbl.GateSpawnerProp) then
+						tbl = tbl.GateSpawnerProp;
+						if(tbl.GateSpawner and tbl.ID) then
+							if (StarGate.GateSpawner.Ents[tbl.ID]) then
+								StarGate.GateSpawner.Ents[tbl.ID].Entity = e;
+								e.GateSpawnerSpawned = true;
+								e:SetNetworkedBool("GateSpawnerSpawned",true);
+								e.GateSpawnerID = tbl.ID;
+								e.GateSpawnerProtected = protect;
+								e:SetNetworkedBool("GateSpawnerProtected",protect);
+							end
+						end
+					end
+				else
+					if(e.GateSpawnerSpawned and e.GateSpawnerID) then
+						if (StarGate.GateSpawner.Ents[e.GateSpawnerID]) then
+							StarGate.GateSpawner.Ents[e.GateSpawnerID].Entity = e;
+							e.GateSpawnerProtected = protect;
+							e:SetNetworkedBool("GateSpawnerProtected",protect);
+						end
+					end
+					if (e.IsIris and IsValid(e.GateLink) and (e.GateSpawnerSpawned or e.GateLink.GateSpawnerSpawned)) then
+						e:IrisProtection();
+					end
+				end
+			end
+		end
+		StarGate.GateSpawner.Spawned = true;
+		StarGate.GateSpawner.Block = false;
+	end);
+end

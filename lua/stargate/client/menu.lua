@@ -393,8 +393,8 @@ hook.Add( "StargateTab", "AddEntityContent", function( pnlContent, tree, node )
 	if (StarGate.CheckModule("misc")) then
 	local node = tree:AddNode( SGLanguage.GetMessage("cap_prop_cat"), "icon16/folder.png", true );
 
-	node.DoPopulate = function(self)
-
+	--node.DoPopulate = function(self)
+  		local self = node;
 		-- If we've already populated it - forget it.
 		if ( self.PropPanel ) then return end
 
@@ -436,19 +436,62 @@ hook.Add( "StargateTab", "AddEntityContent", function( pnlContent, tree, node )
 				end
 			end
 		end
-	end
-
+	--end
+    /*
 	-- If we click on the node populate it and switch to it.
 	node.DoClick = function( self )
 
 		self:DoPopulate()
 		--pnlContent:SwitchPanel( self.PropPanel );
-		/*local FirstNode = node:GetChildNode( 0 )
+		local FirstNode = node:GetChildNode( 0 )
 		if ( IsValid( FirstNode ) ) then
 			FirstNode:InternalDoClick()
-		end  */
+		end
 
+	end */
 	end
+
+	local node = tree:AddNode( SGLanguage.GetMessage("spawninfo_title"), "icon16/information.png", true );
+
+	local multi_url = SGLanguage.GetMessage("spawninfo_multi_url");
+	if (not SGLanguage.ValidMessage("spawninfo_multi_url")) then
+		multi_url = StarGate.HTTP.MULTI;
+	end
+	local cats = {
+		{SGLanguage.GetMessage("spawninfo_news"),StarGate.HTTP.NEWS,"icon16/newspaper.png"},
+		{SGLanguage.GetMessage("spawninfo_wiki"),StarGate.HTTP.WIKI,"icon16/page_white_text.png"},
+		{SGLanguage.GetMessage("spawninfo_forum"),StarGate.HTTP.FORUM,"icon16/group.png"},
+		{SGLanguage.GetMessage("spawninfo_multi"),multi_url,"icon16/user_go.png"},
+		{SGLanguage.GetMessage("spawninfo_fp"),StarGate.HTTP.FACEPUNCH,"icon16/transmit_blue.png"},
+		{SGLanguage.GetMessage("spawninfo_donate"),StarGate.HTTP.DONATE,"icon16/money_add.png"},
+	}
+
+	for k,v in pairs(cats) do
+		local panel = node:AddNode( v[1], v[3] );
+		-- this code is buggy, can't understand why i can't enter data into textbox, so using steam browser instead.
+		/*panel.DoPopulate = function(self)
+			if ( self.PropPanel ) then return end
+			self.PropPanel = vgui.Create("EditablePanel",pnlContent);
+			self.PropPanel:Dock(FILL);
+			self.PropPanel.Label = vgui.Create("DLabel",self.PropPanel);
+			self.PropPanel.Label:SetText(SGLanguage.GetMessage("spawninfo_load"));
+			self.PropPanel.Label:SetColor(Color(0,0,0,255));
+			self.PropPanel.Label:SizeToContents();
+			self.PropPanel.Paint = function(self,w,h)
+				draw.RoundedBox(0,0,0,w,h,Color(255,255,255,255));
+				self.Label:SetPos(w/2-10,h/2-10);
+			end
+			self.HTML = vgui.Create("DHTML",self.PropPanel);
+			self.HTML:Dock(FILL);
+			self.HTML:SetKeyBoardInputEnabled(true);
+			self.HTML:SetMouseInputEnabled(true);
+		end*/
+		panel.DoClick = function( self )
+			--self:DoPopulate()
+			--self.HTML:OpenURL(v[2]);
+			--pnlContent:SwitchPanel( self.PropPanel );
+			gui.OpenURL(v[2]);
+		end
 	end
 
 	-- Select the first node
@@ -459,9 +502,97 @@ hook.Add( "StargateTab", "AddEntityContent", function( pnlContent, tree, node )
 
 end )
 
+local info_page = [[<html>
+	<head>
+		<style type='text/css'>
+			* {margin: 0; padding: 0;}
+			body {background-color: #1a1a1a; font-family: Verdana, Geneva, sans-serif; color: #e5e5e5;}
+			a:link {text-decoration: underline; color: #fff;}
+			a:visited {text-decoration: underline; color: #e5e5e5;}
+			a:active {text-decoration: underline;}
+			a:hover {text-decoration: underline; color: #fff;}
+			#nav {padding: 8px 0; margin: 0; text-align: center; width: auto; border-top: 2px #fff solid; border-bottom: 2px #fff solid;}
+			#nav li {display: inline-block; ist-style-type: none;}
+			#nav a {text-decoration: none;}
+			#article { margin: 0 auto; margin: 20px;}
+			#article h2 {text-align: left; margin: 20px 0 20px 10px;}
+			#article p {margin: 10px 10px 20px 20px;}
+		</style>
+		</head>
+		<body>
+            <ul id="nav">
+                <li><a href="http://sg-carterpack.com/">Home</a> |</li>
+                <li><a href="http://sg-carterpack.com/download/">Download</a> |</li>
+                <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
+                <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
+                <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
+            </ul>
+        <div id="article">
+         <h2>Missing Addon: The Stargate Carter Addon Pack</h2>
+    <p>
+    You're currently playing on a server that makes use of the Carter Addon Pack that you currently do not have installed.<br>
+    To play on this server with all the functions made possible by the Carter Addons Pack please continue reading for more information.
+    </p>
+    	<h2>Download Instructions</h2>
+    <p>
+    You can download The Stargate Carter Addon Pack directly from the workshop by subscribing to this collection: <a href="http://steamcommunity.com/sharedfiles/filedetails/?id=180077636">http://steamcommunity.com/sharedfiles/filedetails/?id=180077636</a>
+    </p>
+    <p>
+    After subscribing and downloading all the items you should be able to make use of all the functions included in the Carter Addon Pack.
+    </p>
+    <p>
+    For a full explenation on how to install this addon and its requirements please visit the <a href="http://sg-carterpack.com/download/">Download page on sg-carterpack.com</a>. This page will provide all the information required to download CAP completely through the Steam Workshop or Github.
+    </p>
+    	<h2>What is The Stargate Carter Addon Pack?</h2>
+    <p>
+    Stargate Carter Pack more commonly known as Carter's Addon Pack or CAP is an addon for Garry's mod that adds new content elements to the game, all based off the Stargate franchise from the 1995 film to the late Stargate Universe. Carter's Addon Pack gives the most impressive array of Stargate elements for Garry's Mod, allowing much more diversity &amp; variations for Stargate gameplay in Garry's Mod.
+    </p>
+    <p>
+    CAP (Carter's Addon Pack) covers many themes found in Stargate, such as Lantean technology, Asgard technology and many others, without forgetting the devices and weapons found and seen in the Stargate shows, which often became deadly threats or powerful assets to the people of Stargate Command, Atlantis and Destiny.
+    </p>
+    <p>
+    From piloting a starship to building bases, the Stargate Carter Pack provides players with great replayability, creativity, &amp; even devices for machines.
+    </p>
+    <p>
+    Updates and news can be found on the CAP Homepage located here:<br><a href="http://sg-carterpack.com">http://sg-carterpack.com</a> <br>
+    The Download page can be found with a full installation instruction here:<br><a href="http://sg-carterpack.com/download">http://sg-carterpack.com/download</a><br>
+    More information can be found on the CAP WIKI located here:<br><a href="http://sg-carterpack.com/wiki">http://sg-carterpack.com/wiki</a><br>
+    Having troubles or want to report a bug then visit our dedicated Forum:<br><a href="http://sg-carterpack.com/forum">http://sg-carterpack.com/forum</a>
+    </p>
+        </div>
+	</body>
+</html>]];
+
 --################# Adds the tab to the spawnmenu @aVoN
 function StarGate.Hook.AddToolTab()
-	if(not StarGate.Installed or not StarGate.InstalledOnClient()) then return end;
+	if(not StarGate.Installed or not StarGate.InstalledOnClient()) then
+		local cat_name = "Stargate";
+		spawnmenu.AddCreationTab(cat_name,function()
+			local Frame = vgui.Create("EditablePanel");
+			--Frame.Paint = function() end
+
+			local HTML = vgui.Create("DHTML",Frame);
+			local HTMLControls = vgui.Create("EditablePanel",Frame);
+			HTMLControls:Dock(TOP);
+			HTMLControls:SetHeight(36);
+
+			local HomeButton = vgui.Create( "DImageButton", HTMLControls )
+			HomeButton.HTML = HTML;
+			HomeButton:SetSize( 32, 32 )
+			HomeButton:SetMaterial( "gui/HTML/home" )
+			HomeButton:Dock( LEFT )
+			HomeButton:DockMargin( 0, 2, 0, 2 )
+			HomeButton.DoClick = function(self) if (self.HTML) then self.HTML:SetHTML(info_page); end end
+
+			HTML:SetKeyBoardInputEnabled(true);
+			HTML:SetMouseInputEnabled(true);
+			HTML:SetHTML(info_page);
+			HTML:Dock(FILL);
+			return Frame;
+		end, "icon16/cog_delete.png", 60 )
+
+		return
+	end
 	-- Add Tab
 	-- local logo;
 	-- if(file.Exists("materials/gui/cap_logo","GAME")) then logo = "gui/cap_logo" end;

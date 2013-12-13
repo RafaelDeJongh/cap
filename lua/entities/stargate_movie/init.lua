@@ -461,7 +461,7 @@ function RingTickMovie()
 	for _,self in pairs(ents.FindByClass("stargate_movie")) do
 		if (IsValid(self.Ring)) then
 			if (self.Outbound and self.Ring.Moving and self.DiallingSymbol != "" and self.DiallingChevron != "") then
-				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))--+3;
+				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
 				local isconcept = self.IsConcept;
 				if (angle<0) then angle = angle+360; end
 				local angle2 = angle;
@@ -469,7 +469,7 @@ function RingTickMovie()
 				if (isconcept) then symbols = self.SymbolsLockConcept; end
 				local need = tonumber(symbols[tonumber(self.DiallingSymbol) or self.DiallingSymbol]);
 				if (!need) then self:AbortDialling(); self.Ring.Moving = false; else
-					--need = need+3;
+					need = need+3;
 					local chevron = tonumber(self.DiallingChevron);
 					if (chevron <= 3) then
 						need = need - (40*chevron);
@@ -501,7 +501,7 @@ function RingTickMovie()
 					local reset = true;
 					local reset2 = true;
 					for k, v in pairs(symbols) do
-						--v = v+3;
+						v = v+3;
 						local symbol = self:StopFormula(angle2,v,18.9,14.9);
 						if (symbol) then
 							self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
@@ -1030,4 +1030,8 @@ function ENT:DialFailSound()
 	else
 		self.Entity:EmitSound(self.Sounds.Fail,90,math.random(87,88));
 	end
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "stargate_movie", StarGate.CAP_GmodDuplicator, "Data" )
 end

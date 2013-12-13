@@ -83,6 +83,24 @@ function StarGate.Hook.PlayerShouldTakeDamage(p,a)
 end
 hook.Add("PlayerShouldTakeDamage","StarGate.Hook.PlayerShouldTakeDamage",StarGate.Hook.PlayerShouldTakeDamage);
 
+--################# Fix for pickup disabled/disallowed swep.
+function StarGate.Hook.PlayerCanPickupWeapon(p,w)
+	if (not IsValid(p) or not IsValid(w)) then return end
+	if (StarGate.CFG:Get("cap_disabled_swep",w:GetClass(),false)) then return false end
+	if (StarGate.CFG:Get("swep_groups_only",w:GetClass(),false)) then
+		local tbl = StarGate.CFG:Get("swep_groups_only",w:GetClass(),""):TrimExplode(",");
+		local disallow = true;
+		for k,v in pairs(tbl) do
+			if (v=="add_shield") then continue end
+			if (p:IsUserGroup(v)) then
+				disallow = false; break;
+			end
+		end
+		if (disallow) then return false; end
+	end
+end
+hook.Add("PlayerCanPickupWeapon","StarGate.Hook.PlayerCanPickupWeapon",StarGate.Hook.PlayerCanPickupWeapon);
+
 end
 
 -- disable usage C tool menu for gatespawner ents

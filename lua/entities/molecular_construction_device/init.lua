@@ -255,11 +255,6 @@ function ENT:ProgressIdle()
 
 end
 
-function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
-	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
-end
-
 util.AddNetworkString("MCD")
 
 net.Receive("MCD",function(len,ply)
@@ -268,6 +263,9 @@ net.Receive("MCD",function(len,ply)
 
     local entities = {"tollan_disabler","cloaking_generator","shield_generator","jamming_device","tampered_zpm","zpm_mk3"}
     local class = net.ReadString()
+    if (class=="tampered_zpm" and not StarGate.CFG:Get("MCD","allow_tzmp",false)) then
+ 		class = "zpm_mk3";
+    end
     local e = ents.Create(class);
     self.Undone = true;
     self.Object = class;
@@ -360,4 +358,8 @@ function ENT:PostEntityPaste(player, Ent,CreatedEntities)
 	end
 	player:AddCount("CAP_mcd", self.Entity)
 	StarGate.WireRD.PostEntityPaste(self,player,Ent,CreatedEntities)
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "molecular_construction_device", StarGate.CAP_GmodDuplicator, "Data" )
 end
