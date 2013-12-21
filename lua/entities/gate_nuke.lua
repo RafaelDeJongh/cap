@@ -78,8 +78,11 @@ function ENT:Initialize()
 				v:Fire("kill","","0.1")
 			elseif v:IsPlayer() then
 				if v:Alive() and not v:HasGodMode() then
-					v:SetModel("models/player/charple.mdl")
-					v:Kill()
+					local allow = hook.Call("StarGate.GateNuke.KillPlayer",nil,v);
+					if (allow==nil or allow) then
+						v:SetModel("models/player/charple.mdl")
+						v:Kill()
+					end
 				end
 			end
 		end
@@ -112,7 +115,8 @@ function ENT:Initialize()
 	end
 
 	-- General big damage thing.
-	util.BlastDamage(self.Entity, self.Entity, self.SplodePos, blastradius, 41*self.Scale)
+	--util.BlastDamage(self.Entity, self.Entity, self.SplodePos, blastradius, 41*self.Scale)
+	-- this creating bugs that kill player in shield, we still have damage in think function so...
 
 	-- Set up some final Varibles
 	self.Time = CurTime()
@@ -170,6 +174,9 @@ function ENT:Think()
 		local vecang	= dir:GetNormal()
 		local Damage	= self.BaseDamage/(4*math.pi*self.SplodeDist^2)
 		local class	= v:GetClass()
+
+		local allow = hook.Call("StarGate.GateNuke.DamageEnt",nil,v);
+		if (allow==false) then continue end
 
 		if self.Rel < 5 then
 			if Damage >= 250  then

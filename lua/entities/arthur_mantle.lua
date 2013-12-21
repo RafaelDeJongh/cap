@@ -135,6 +135,7 @@ local function playerDies( victim, weapon, killer )
 	end
 end
 hook.Add( "PlayerDeath", "StarGate.Arthur", playerDies )
+hook.Add( "PlayerSilentDeath", "StarGate.Arthur", playerDies )
 
 function ENT:UpdateTransmitState()
 	return TRANSMIT_ALWAYS

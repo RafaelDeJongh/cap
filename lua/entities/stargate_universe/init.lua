@@ -683,7 +683,7 @@ function ENT:TriggerInput(k,v,mobile,mdhd,ignore)
 	self:TriggerInputDefault(k,v,mobile,mdhd);
 	if(k == "Rotate Ring" and not self.Active and (not self.NewActive or self.WireManualDial) and (not self.WireBlock or ignore)) then
 		if (v >= 1) then
-			if (self:CheckEnergy(true,true) or self.WireManualDial) then
+			if (not self.WireSpin and (self:CheckEnergy(true,true) or self.WireManualDial)) then
 				self.WireSpin = true;
 				if (self.WireSpinDir) then
 					self.WireSpinDir = false;
@@ -967,6 +967,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 		action:Add({f=self.ActivateSymbols,v={self,true},d=0}); -- lights off of symbols
 		action:Add({f=self.BearingSetSkin,v={self,false},d=0}); -- change the bearing skin
 		action:Add({f=self.SguRampSetSkin,v={self,false,true},d=0}); -- change the sgu ramp skin
+
 		local number=0;
 	    if(self.Entity:GetNetworkedEntity( "SpinNumber", number ))then
 	        number = self.Entity:GetNetworkedEntity( "SpinNumber", number );
@@ -975,6 +976,9 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 		if(number==2 or number==4 or number==6 or number==8)then
 		    lightdelay = 1.6;
 		end
+		action:Add({f=self.SetWire,v={self,"Dialing Address",""},d=0}); -- Wire
+		action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
+		action:Add({f=self.SetWire,v={self,"Dialed Symbol",""},d=0}); -- Wire
 	    action:Add({f=self.ActivateLights,v={self,false},d=lightdelay}); -- lights off of chevs -- verbessern
 		if(self.Outbound or fail)then -- and self.SpinBack
 		    if(not self.DialType.Fast)then

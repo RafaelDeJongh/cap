@@ -31,7 +31,7 @@ private=false
 locale=false
 [stargate]
 classname=stargate_sg1
-position=9476.5137 4117.6445 -7612.1094
+position=9706.5137 4117.6445 -7612.1094
 angles=0.014 90.016 -0.003
 address=EARTH0
 group=M@
@@ -77,7 +77,7 @@ angles=13.259 103.217 -8.353
 destroyed=false
 [dhd]
 classname=dhd_sg1
-position=9677.5186 4297.4868 -7777.2388
+position=9877.5186 4297.4868 -7777.2388
 angles=15.000 83.040 0.000
 destroyed=false
 [ramp]
@@ -92,7 +92,7 @@ angles=0.388 104.129 -3.991
 model=models/boba_fett/ramps/ramp5.mdl
 [ramp]
 classname=ramp
-position=9476.5127 4117.6470 -7602.1094
+position=9706.5127 4117.6470 -7602.1094
 angles=0.014 90.016 -0.003
 model=models/zup/ramps/brick_01.mdl
 [ramp]

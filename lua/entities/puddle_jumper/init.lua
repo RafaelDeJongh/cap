@@ -475,6 +475,18 @@ hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
 	end
 end)
 
+hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
+	local Jumper = p:GetNetworkedEntity("jumper");
+	if(Jumper.Inflight) then
+		if(Jumper.Pilot==p) then
+			Jumper:ExitJumper();
+			if(not(Jumper.Done)) then
+				Jumper:DoKill();
+			end
+		end
+	end
+end)
+
 function ENT:PreEntityCopy()
 	local dupeInfo = {}
 

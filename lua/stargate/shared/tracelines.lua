@@ -146,8 +146,8 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 			return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal);
 		end
 	end
-end	
-		
+end
+
 --################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
 function StarGate.Trace:New(start,dir,ignore)
 	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less reouces!)
@@ -172,7 +172,7 @@ function StarGate.Trace:New(start,dir,ignore)
 	local norm_world = dir:GetNormal(); -- Get Normal of the dir vector (world coordinates!)
 	-- We need to sort all entities first according to their distance to the trace-start, or we hit a prop behind a prop instead of the one infront
 	-- Problem noticed by Lynix here: http://img140.imageshack.us/img140/7589/gmflatgrass0017bj9.jpg
-	local traced_entities = {} -- Lynix modification 
+	local traced_entities = {} -- Lynix modification
 
 	for e,_ in pairs(self.Entities) do
 		if(not quick_ignore[e]) then
@@ -181,7 +181,7 @@ function StarGate.Trace:New(start,dir,ignore)
 				local v = self.Entities[e]; -- The real values now, update by the if above!
 				local pos = e:WorldToLocal(start);
 				local in_box = false;
-				
+
 				if (class == "shield_core_buble") then
 					in_box = StarGate.IsInShieldCore(e, start);
 				else
@@ -238,7 +238,7 @@ function StarGate.Trace:New(start,dir,ignore)
 						trace.Fraction = hit.Fraction;
 						trace.HitNormal = e:LocalToWorld(hit.HitNormal)-e_pos;
 						trace.Entity = e;
-						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification 
+						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification
 						--break;
 					end
 					if(hit2) then
@@ -257,10 +257,10 @@ function StarGate.Trace:New(start,dir,ignore)
 						trace.Fraction = hit2.Fraction;
 						trace.HitNormal = hit2.HitNormal;
 						trace.Entity = e;
-						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification 
+						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification
 						--break;
 					end
-					
+
 				end
 			end
 		end

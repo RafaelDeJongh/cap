@@ -64,6 +64,7 @@ ENT.NoTouchTeleport = {
 	"weapon_striderbuster",
 	"grenade_spit",
 	"prop_ragdoll",
+	"horizon_missile",
 }
 
 -- These entities are immune against autoclose and should also never avoid an autoclose event if to near to a gate
@@ -130,6 +131,9 @@ function ENT:Initialize()
 		end
 		if(parent.Sounds and parent.Sounds.Close) then
 			self.Sounds.Close = parent.Sounds.Close;
+		end
+		if (parent.GateSpawnerSpawned) then
+			self.GateSpawnerSpawned = true;
 		end
 	end
 
@@ -445,6 +449,7 @@ function ENT:EHDissolve(pos,radius)
 	e:SetKeyValue("DamageType",bit.bor(DMG_DISSOLVE, DMG_BLAST));
 	e:SetPos(pos);
 	e:SetParent(self.Entity);
+	if (self.GateSpawnerSpawned) then e.GateSpawnerSpawned = true; end
 	e:Spawn();
 	if (IsValid(self:GetParent()) and self:GetParent():GetClass()=="stargate_supergate") then
 		for i=0,36 do
@@ -651,7 +656,7 @@ function ENT:StartTouch(e)
 		if (self.PhysClip) then
 			e:SetCustomCollisionCheck(true);
 		end
-		if(not e:IsPlayer() and not e:IsNPC() and not string.find(e:GetClass(),"grenade") and not e:IsWeapon() and not string.find(e:GetClass(),"rpg") and not table.HasValue(self.NoTouchTeleport,e:GetClass())) then
+		if(not e:IsPlayer() and not e:IsNPC() and not string.find(e:GetClass(),"grenade") and not e:IsWeapon() and not string.find(e:GetClass(),"rpg") and not table.HasValue(self.NoTouchTeleport,e:GetClass()) and not e.CAP_EH_NoTouchTeleport) then
 			if not table.HasValue(BUFFER.ClipIgnore,e:GetClass()) then
 				BUFFER:StartTouch(self.Entity,e)
 			end
@@ -1103,7 +1108,7 @@ local MinValue = {"xmin","ymin","zmin"};
 --############### What happens when we first touch the EH? Clip maybe? @RononDex
 function BUFFER:StartTouch(EventHorizon,e)
 
-	if(not IsValid(e) or self:ClipShouldIgnore(e)) then return end; -- Not valid or ignore
+	if(not IsValid(e) or self:ClipShouldIgnore(e,true)) then return end; -- Not valid or ignore
 	if(not IsValid(e.___EventHorizon)) then e.___EventHorizon = EventHorizon end;
 	if(not IsValid(EventHorizon)) then return end;
 	if(EventHorizon.ShuttingDown and not EventHorizon.ShuttingDownKill) then return; end
@@ -1260,7 +1265,7 @@ function BUFFER:EndTouch(EventHorizon,e,ignore,tdir)
 	local attached = EventHorizon:GetEntitiesForTeleport(e);
 	if(not(IsValid(e))) then return end;
 	if(not IsValid(EventHorizon)) then return end;
-	if(self:ClipShouldIgnore(e)) then return end;
+	if(self:ClipShouldIgnore(e,true)) then return end;
     local notouch = false;
 
 	for k,v in pairs (EventHorizon.ClipBuffer) do
@@ -1413,8 +1418,24 @@ function BUFFER:EmptyBuffer(EventHorizon)
 end
 
 --############### What should we ignore @RononDex
-function BUFFER:ClipShouldIgnore(ent)
+function BUFFER:ClipShouldIgnore(ent,reset_cache)
 	local class = ent:GetClass()
 	if (table.HasValue(self.ClipIgnore,class) || table.HasValue(self.ClipIgnore,ent:GetModel()) || StarGate.RampOffset.Gates[ent:GetModel()] || ent.GateSpawnerSpawned || string.find(class,"stargate_") || ent.CAP_EH_NoTouch) then return true end
+	if (reset_cache) then ent.__EHConstCache = nil; end
+	if (ent.__EHConstCache!=nil) then return ent.__EHConstCache end
+	-- adding cache for save performance
+	ent.__EHConstCache = false;
+	if (constraint.HasConstraints(ent)) then
+		local entities = StarGate.GetConstrainedEnts(ent,2);
+		if(entities) then
+			for k,v in pairs(entities) do
+				if(v:IsWorld()) then
+					ent.__EHConstCache = true;
+					return true;
+				end
+			end
+		end
+	end
+
 	return false
 end

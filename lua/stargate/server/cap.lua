@@ -96,6 +96,29 @@ function StarGate.IsInShieldCore(ent, core)
 	end
 end
 
+-- added by AlexALX for nuke explosions
+-- anywat it bit buggy with shield core somewhy, wrong angles or so
+function StarGate.IsInShield(ent)
+	local pos = ent:GetPos();
+	local shields = {"shield_generator","ship_shield_generator","shield_core_buble"}
+
+	for b,s in pairs(shields) do
+		for c,v in pairs(ents.FindByClass(s)) do
+			local sh_dist = (pos - v:GetPos()):Length();
+			if (s=="shield_generator" or s=="ship_shield_generator") then
+				if (not v.Depleted and v:Enabled() and sh_dist<=v.Size) then
+					return true;
+				end
+			else
+				if (not v.Depleted and v.Enabled and StarGate.IsInShieldCore(ent,v)) then
+					return true;
+				end
+			end
+		end
+	end
+	return false;
+end
+
 function StarGate.GetMultipleOwner(ent) // Ugly, no validation, but works :p
 	local own = ent;
 	if IsValid(own) then

@@ -174,6 +174,7 @@ if (SERVER) then
 		end
 	end
 	hook.Add( "PlayerDeath", "StarGate.Adrenaline", playerDies )
+	hook.Add( "PlayerSilentDeath", "StarGate.Adrenaline", playerDies )
 end
 
 

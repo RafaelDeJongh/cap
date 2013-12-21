@@ -2,11 +2,13 @@
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Ramps"
-ENT.Author = "Llapp "
+ENT.Author = "Llapp"
 ENT.Category = "Stargate Carter Addon Pack"
 
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
+
+ENT.IsRamp = true
 
 if SERVER then
 

@@ -409,7 +409,7 @@ elseif (file.Exists("weapons/gmod_tool/stools/wire.lua","LUA") and not table.Has
 		status = "Error";
 		MsgN("Status: "..status)
 	end
-	table.insert(StarGate_Group.ErrorMSG, {"Your Wiremod is outdated, please update it.\\nYou using old svn repository link, switch to the github or the workshop version of wiremod.","14"});
+	table.insert(StarGate_Group.ErrorMSG, {"Your Wiremod is outdated, please update it.\\nYou're using an older repository of the Wiremod SVN.\\nWe suggest you to switch to the newer github or Steam Workshop version of Wiremod.","14"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_14");
 	MsgN("-------");
 	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));

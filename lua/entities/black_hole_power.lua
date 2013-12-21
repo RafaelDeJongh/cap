@@ -101,10 +101,10 @@ function ENT:Initialize()
 		Wire_TriggerOutput(self.Entity, "Resource Amount", self.MaxAmount)
 	end
 
-	self.Sounds.LoopSound = CreateSound(self.Entity, self.Sounds.Loop);
-	if self.Sounds.LoopSound then
-		self.Sounds.LoopSound:Play();
-		self.Sounds.LoopSound:SetSoundLevel(140);
+	self.LoopSound = CreateSound(self.Entity, self.Sounds.Loop);
+	if self.LoopSound then
+		self.LoopSound:Play();
+		self.LoopSound:SetSoundLevel(140);
 	end
 end
 
@@ -130,8 +130,8 @@ end
 
 function ENT:OnRemove()
 	StarGate.WireRD.OnRemove(self);
-	if self.Sounds.LoopSound then
-		self.Sounds.LoopSound:Stop();
+	if self.LoopSound then
+		self.LoopSound:Stop();
 	end
 end
 
@@ -139,6 +139,10 @@ end
 function ENT:StartTouch(ent)
 	if IsValid(ent) then
 		if (ent:GetClass() == "black_hole_power") then return end
+
+		local allow = hook.Call("StarGate.BlackHole.RemoveEnt",nil,ent,self);
+		if (allow==false) then return end
+
 		local phys = ent:GetPhysicsObject()
 		if(phys:IsValid()) then
 			local mass = phys:GetMass()
@@ -150,7 +154,7 @@ function ENT:StartTouch(ent)
 			elseif (ent:IsNPC()) then
 				ent:SetNPCState(NPC_STATE_DEAD);
 			else
-				if (not ent:CreatedByMap() and not ent.GateSpawnerSpawned) then
+				if (not ent:CreatedByMap() and not ent.GateSpawnerSpawned and not ent.CAP_NoBlackHole) then
 					ent:Remove()
 				else
 					return false;
@@ -185,6 +189,10 @@ function ENT:PhysicsUpdate()
 
 	for entKey,entVal in pairs(inRange) do
 		if(not table.HasValue(self.Disallow,entVal:GetClass())) then
+
+			local allow = hook.Call("StarGate.BlackHole.PushEnt",nil,entVal,self);
+			if (allow==false) then continue end
+
 			local entLocation = entVal:GetPos()
 
 			local difference = myPosition - entLocation

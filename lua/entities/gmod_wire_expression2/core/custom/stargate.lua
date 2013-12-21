@@ -326,6 +326,103 @@ e2function number wirelink:stargateGetRingAngle()
 	end
 end
 
+-- Not sure, but probably this functions is shit... also workaround for gatespawner
+-- or maybe this will start new era for e2 coders not sure...
+
+e2function number wirelink:stargateGetWire(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return -1 end
+	local ret = this:GetWire(name,-1,true);
+	if (type(ret)=="number") then
+		return ret;
+	end
+	return -1;
+end
+
+e2function string wirelink:stargateGetWireString(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return "" end
+	local ret = this:GetWire(name,"",true);
+	if (type(ret)=="string") then
+		return ret;
+	end
+	return "";
+end
+
+e2function vector wirelink:stargateGetWireVector(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return {0,0,0} end
+	local ret = this:GetWire(name,"",true);
+	if (type(ret)=="Vector") then
+		return {ret.x,ret.y,ret.z};
+	end
+	return {0,0,0};
+end
+
+e2function vector wirelink:stargateGetWireEntity(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return NULL end
+	local ret = this:GetWire(name,NULL,true);
+	if (IsValid(ret)) then
+		return ret;
+	end
+	return NULL;
+end
+
+e2function number wirelink:stargateGetWireInput(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return -1 end
+	local ret = this:GetWire(name,-1);
+	if (type(ret)=="number") then
+		return ret;
+	end
+	return -1;
+end
+
+e2function string wirelink:stargateGetWireStringInput(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return "" end
+	local ret = this:GetWire(name,"");
+	if (type(ret)=="string") then
+		return ret;
+	end
+	return "";
+end
+
+e2function vector wirelink:stargateGetWireVectorInput(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return {0,0,0} end
+	local ret = this:GetWire(name,"");
+	if (type(ret)=="Vector") then
+		return {ret.x,ret.y,ret.z};
+	end
+	return {0,0,0};
+end
+
+e2function vector wirelink:stargateGetWireEntityInput(string name)
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return NULL end
+	local ret = this:GetWire(name,NULL);
+	if (IsValid(ret)) then
+		return ret;
+	end
+	return NULL;
+end
+
+e2function void wirelink:stargateSetWire(string name, number value)
+	if not IsValid(this) or not this.SetWire or not this.CreateWireInputs then return end
+	this:SetWire(name,value,true);
+end
+
+e2function void wirelink:stargateSetWire(string name, string value)
+	if not IsValid(this) or not this.SetWire or not this.CreateWireInputs then return end
+	this:SetWire(name,value,true);
+end
+
+e2function void wirelink:stargateSetWire(string name, vector value)
+	if not IsValid(this) or not this.SetWire or not this.CreateWireInputs then return end
+	this:SetWire(name,Vector(value[1],value[2],value[3]),true);
+end
+
+e2function void wirelink:stargateSetWire(string name, entity value)
+	if not IsValid(this) or not this.SetWire or not this.CreateWireInputs then return end
+	this:SetWire(name,value,true);
+end
+
+-- end
+
 e2function number entity:stargateOverload()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if (this.isOverloading) then

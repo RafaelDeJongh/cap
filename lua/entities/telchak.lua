@@ -107,7 +107,7 @@ function ENT:Think(ply)
 			if (IsValid(v) and not table.HasValue(self.SickPlayers, v)) then
 
 				local len = (v:GetPos() - self.Entity:GetPos()):Length();
-				if v:IsPlayer() then
+				if v:IsPlayer() and not v:HasGodMode() then
 
 					if (len < 300) then
 
@@ -198,6 +198,7 @@ local function playerDies( victim, weapon, killer )
 	end
 end
 hook.Add( "PlayerDeath", "StarGate.Telchak", playerDies )
+hook.Add( "PlayerSilentDeath", "StarGate.Telchak", playerDies )
 
 -----------------------------------DUPLICATOR----------------------------------
 

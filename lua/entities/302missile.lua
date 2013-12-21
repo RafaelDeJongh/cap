@@ -79,7 +79,7 @@ function ENT:Draw()
 end
 
 function ENT:ThrusterEffect()
-
+	if (not self:GetAttachment(self:LookupAttachment("Engine"))==nil) then return end
 	local pos = self:GetAttachment(self:LookupAttachment("Engine")).Pos
 	local roll = math.Rand(-90,90)
 	local normal = (self.Entity:GetForward() * -1):GetNormalized()

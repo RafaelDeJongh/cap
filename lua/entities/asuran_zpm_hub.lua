@@ -47,7 +47,7 @@ function ENT:Initialize()
 		phys:EnableMotion(false);
 		phys:SetMass(1000);
 	end
-	self:CreateWireInputs("Deactivate ZPM","Eject ZPM","Disable Use");
+	self:CreateWireInputs("Deactivate ZPM","Eject ZPM","Disable Use","Disable Sound");
 	self:CreateWireOutputs("Active","ZPM Hub %","ZPM Hub Energy");
 
 	self.CanEject = true;
@@ -137,6 +137,16 @@ function ENT:TriggerInput(variable, value)
 		self.ZPM.Dir = value;
 	elseif (variable == "Eject ZPM") then
 		self.ZPM.Eject = value;
+	elseif (variable == "Disable Sound") then
+		if(value>0) then
+			self.IdleSound:Stop()
+		else
+			if (self.Active) then
+				self.IdleSound:ChangePitch(85,0);
+				self.IdleSound:SetSoundLevel(70);
+				self.IdleSound:PlayEx(1,86);
+			end
+		end
 	end
 end
 
@@ -239,12 +249,14 @@ function ENT:Think()
 		percent = 0;
 	end
 
-	if (self.IdleS) then
-		self.IdleSound:ChangePitch(85,0);
-		self.IdleSound:SetSoundLevel(70);
-		self.IdleSound:PlayEx(1,86);
-	else
-		self.IdleSound:Stop()
+	if (self:GetWire("Disable Sound",0)<1) then
+		if (self.IdleS) then
+			self.IdleSound:ChangePitch(85,0);
+			self.IdleSound:SetSoundLevel(70);
+			self.IdleSound:PlayEx(1,86);
+		else
+			self.IdleSound:Stop()
+		end
 	end
 
 	if IsValid(self.ZPM.Ent) and self.ZPM.Dist == 0 then
@@ -422,13 +434,13 @@ function ENT:SetRange(range)
 end
 
 function ENT:OnRemove()
+	StarGate.WireRD.OnRemove(self);
+
 	if (self.ZPM.IsValid) then
 		self:EjectZPM();
 	end
 
 	self.IdleSound:Stop()
-
-	StarGate.WireRD.OnRemove(self);
 end
 
 function ENT:PreEntityCopy()

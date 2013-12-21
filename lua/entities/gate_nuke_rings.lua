@@ -77,8 +77,11 @@ function ENT:Think()
 				if (dis < self.Rad+150) and (dis > self.Rad-150) then
 					if e:IsPlayer() then
 						if e:Alive() and not e:HasGodMode() then
-							e:SetModel("models/player/charple.mdl")
-							e:Kill()
+							local allow = hook.Call("StarGate.GateNuke.KillPlayer",nil,e);
+							if (allow==nil or allow) then
+								e:SetModel("models/player/charple.mdl")
+								e:Kill()
+							end
 						end
 					else
 						if(CombatDamageSystem) then

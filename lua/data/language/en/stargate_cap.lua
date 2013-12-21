@@ -269,8 +269,8 @@ cap_group_tool = This tool is not allowed for you!
 cap_disabled_ent = This entity is disabled on server!
 cap_disabled_swep = This weapon is disabled on server!
 cap_disabled_tool = This tool is disabled on server!
-iris_gatespawner = You can't override gatespawner iris! Spawn iris computer for control it.
-iris_protection = Iris successfully added to gatespawner gate! Spawn iris computer for control it.
+iris_gatespawner = You can't override the gatespawner's iris! Spawn an iris computer to control it.
+iris_protection = Iris has been successfully added to the gatespawner's stargate, spawn an iris computer to control it.
 
 // gatespawner
 sg_gtsp_title = Gatespawner Creator

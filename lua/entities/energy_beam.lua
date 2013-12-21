@@ -523,7 +523,7 @@ function ENT:Extend()
    if(IsValid2(hitEnt)) then
       self:DebugMsg("has hit entity ", hitEnt)
 
-      if(hitEnt:GetClass() == "shield") then
+      if(hitEnt:GetClass() == "shield" or hitEnt:GetClass() == "ship_shield") then
          hitEnt:Hit(self.Entity, hitPos, self.Damage.amount * self.Ftime, self.trace.Normal * -1)
 	  elseif(hitEnt:GetClass() == "shield_core_buble") then
          hitEnt:Hit(self.Entity, hitPos, self.Damage.amount * self.Ftime, self.trace.Normal * -1)

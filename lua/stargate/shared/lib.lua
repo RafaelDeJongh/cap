@@ -20,36 +20,13 @@
 --#########################################
 
 StarGate.String = {};
---################# Explodes a string and trims the results (This function is from my SySLib) @aVoN
--- From http://luanet.net/lua/function/explode because garrys string.Explode just recognizes ONE character. Another "DownSide" of garry's Explode function is, you can't use it as MyString:Explode() :(
-local function explode(s,sep)
-	if(not s) then return s end; -- Fixes issues when giving nil-values
-	local sep = sep or " "; -- Fixes issues when giving nil-values
-	local t = {};
-	if(sep == "") then -- Stops infinite loops
-		for i=1,s:len() do
-			table.insert(t,s:sub(i,i));
-		end
-	else
-	 	local pos = 0;
-		for k,v in function() return s:find(sep,pos,true) end do -- for each divider found
-			table.insert(t,s:sub(pos,k-1)); -- Attach chars left of current divider
-			pos = v + 1;-- Jump past current divider
-		end
-		table.insert(t,s:sub(pos)) -- Attach chars right of last divider
-	end
-	return t;
-end
-string.explode = explode; -- Our function, which can be run as MyString:explode()
-string.Explode = function(sep,s) return explode(s,sep) end; -- Enhances garry's explode function
-
 --################# Explodes a string and trims the results @aVoN
 function StarGate.String.TrimExplode(s,sep)
 	if(sep and s:find(sep)) then
 		if(type(s) == "string") then
 			s=s:gsub("^[%s]+","");
 		end
-		local r = explode(s,sep);
+		local r = string.Explode(sep,s);
 		for k,v in pairs(r) do
 			if(type(v) == "string") then
 				r[k] = v:Trim();

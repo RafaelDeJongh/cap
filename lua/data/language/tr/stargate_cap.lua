@@ -13,7 +13,7 @@ ring_error = Bu adres geçerli değil !
 // Weapon Entities
 entity_weapon_cat = Silahlar
 entity_ag3 = AG-3 Satellite
-entity_asgard_beam = Asgard Beam Weapon
+entity_asgard_beam = Asgard Enerji Silahi
 entity_asgard_ashen_def = Ashen Savunma Sistemi
 entity_asuran_satellite = Asuran Satellite
 entity_dakara = Dakara Silahı
@@ -41,12 +41,12 @@ directional_nuke_menu_c = İptal
 // Ship Entities
 entity_ships_cat = Gemiler
 entity_daedalus = BC-304 Daedalus
-entity_control_chair = Kontrol Sandalyesi
+entity_control_chair = Kontrol Koltugu
 entity_gate_glider = Gate Glider
 entity_death_glider = Death Glider
 entity_dest_shuttle = Destiny Shuttle
 entity_f302 = F-302
-entity_jumper = Puddle Jumper
+entity_jumper = Dalgic
 entity_teltak = TelTak
 entity_dart = Wraith Dart
 
@@ -67,11 +67,11 @@ entity_lant_holo = Lantean Hologramı
 entity_malp = MALP
 entity_mcd = MCD
 entity_mcd_full = Molecular Construction Device
-entity_shield_core = Shield Jeneratörü
+entity_shield_core = Kalkan Jeneratörü
 entity_ship_hangar = Gemi Hangarı
 entity_iris_comp = Stargate Iris Bilgisayarı
-entity_stone = Stone
-entity_stone_tablet = Stone Tablet
+entity_stone = Taş
+entity_stone_tablet = Taş tablet
 entity_telchak = Telchak healing device
 entity_atlantist = Atlantis Taşıyıcısı
 
@@ -111,9 +111,11 @@ weapon_misc_malp = MALP Remote
 weapon_misc_shield = Kişisel Kalkan
 weapon_misc_ring = Halka Çalıştırıcı
 weapon_misc_sodan = Sodan Saati
-weapon_misc_gdo = Stargate GDO
+weapon_misc_gdo = Yildiz Gecidi GDO
 weapon_misc_nox = Nox Elleri
 weapon_misc_nox_desc = Sol Tıklama: Stargate çeviri menüsü, Sağ Tıklama: Arkadaşlarını İyileştirir.
+weapon_misc_adrenaline = Adrenalin Vurusu
+weapon_misc_atl_medkit = Atlantis Ilk Yardim Kiti
 
 // Stools Cats
 stool_cat = Stargate
@@ -158,17 +160,18 @@ stool_harvester = Harvester
 stool_controlpanel = Kontrol Paneli
 
 // Stool Names - Energy
-stool_asuran_hub = Asuran SNM Slotu
-stool_atlantis_hub = Atlantis SNM Slotu
-stool_naq_gen = Naquadah Jeneratöru MK1/MK2
-stool_sgc_hub = SGC SNM Slotu
+stool_asuran_hub = Asuran SNM Yuvasi
+stool_atlantis_hub = Atlantis SNM Yuvasi
+stool_naq_gen = Naquada Generator MK1/MK2
+stool_sgc_hub = SGC SNM Yuvasi
 stool_zpm_mk3 = SNM MK III
+stool_naq_bottle = Naquadah Kaynagi
 
 // Stool Names - Weapons
 stool_drones = Dronlar
 stool_naq_bomb = Naquadah Bombasi
 stool_staff = Staff Silahi
-stool_tzpm = Tampered SNM
+stool_tzpm = Bozuk SNM
 stool_wh_bomb = Wraith Stun Bomb
 
 // Stool Names - Ramps
@@ -201,7 +204,7 @@ naq_stool_menu_d = Sarj Süresi:
 naq_stool_menu_h = HUD
 naq_stool_menu_h_d = Bombanin uzerinde Hud goruntuleme veya gizleme(Lucian bombasinda calismaz)
 naq_stool_menu_c = Cart
-naq_stool_menu_c_d = Spawn with cart. (Sadece Tauri bombasinda calisir)
+naq_stool_menu_c_d = Tasinabilir (Sadece Tauri bombasinda calisir)
 naq_stool_menu_a_d = Bombayı Otomatik Weldle. If it's spawned with cart, then bomb won't be welded (except cart).
 
 // Dakara
@@ -260,9 +263,150 @@ cap_prop_cat1 = Çeşitli
 cap_prop_cat2 = Cap Build
 cap_prop_cat3 = Catwalk Build
 cap_menu_author = Yazar
-cap_admin_ent = Bu entity sadece adminler içindir !
-cap_admin_swep = Bu silah sadece adminler içindir !
-cap_admin_tool = Bi araç sadece adminler içindir !
-cap_disabled_ent = Bu entity serverde yasaklanmıştır !
-cap_disabled_swep = Bu silah serverde yasaklanmıştır !
-cap_disabled_tool = Bu araç serverde yasaklanmıştır !
+cap_group_ent = Bu eklenti senin icin yasak!
+cap_group_swep = Bu silah senin icin yasak!
+cap_group_tool = Bu arac senin icin yasak!
+cap_disabled_ent = Bu eklenti serverde yasaklanmistir!
+cap_disabled_swep = Bu silah serverde yasaklanmistir!
+cap_disabled_tool = Bu arac serverde yasaklanmistir!
+iris_gatespawner = You can't override gatespawner iris! Spawn iris computer for control it.
+iris_protection = Iris successfully added to gatespawner gate! Spawn iris computer for control it.
+
+// iris computer
+iriscomp_title = Iris Bilgisayar Menusu
+iriscomp_code = Iris Kodu
+iriscomp_desc = Açiklama
+iriscomp_time = Kapanma Süresi
+iriscomp_time_desc = The time in seconds the iris will stay open after a correct code is sent. Set to 0 to stay open forever.
+iriscomp_close = Otomatik Kapat ?
+iriscomp_close_desc = If checked, the iris will close as soon as an incoming connection is established.
+iriscomp_open = Don't Auto-open?
+iriscomp_open_desc = If checked, the iris will not open until the wire input tells it to.
+iriscomp_cancel = İptal
+iriscomp_toggle = Irisi Aç
+iriscomp_ok = Ok
+
+// spawn menu info
+spawninfo_title = Açıklama
+spawninfo_load = Yükleniyor...
+spawninfo_news = Yeni Haberler
+spawninfo_wiki = Wiki
+spawninfo_forum = Destek Forumu
+spawninfo_multi = Multi-Dil Yarımı
+// you can create own language support thread in this forum and replace url with your link
+spawninfo_multi_url = http://sg-carterpack.com/forums/forum/support/multi-language-support/
+spawninfo_fp = Facepunch Thread
+spawninfo_donate = Ödeme Yap
+
+// huds
+hud_status = Statü
+hud_energy = Enerji
+hud_capacity = Capacity
+hud_capacities = Capacities
+hud_naquadah = Naquadah
+hud_sts_active = Aktif
+hud_sts_inactive = Bağlı Değil
+hud_sts_connected = Bağlandi
+hud_sts_disconnected = Bağlantı Kesildi
+hud_sts_depleted = Tükendi
+
+// visual settings
+vis_fps_high = Kare Kalitesi: Yüksek Panpa
+vis_fps_medium = Kare Kalitesi: Ortasi Yeter
+vis_fps_low = Kare Kalitesi: Kasiyo Düşük
+vis_title = Draw Effects
+vis_title_desc = Turning this off will disable all settings below. When it's on, the settings below will be used
+vis_dyn_light = Dynamic Lights
+vis_ripple = Draw ripple on the Eventhorizon
+vis_kawoosh_eff = Draw kawoosh enter effect on stargate open
+vis_kawoosh_mat = Use New Kawoosh Material
+vis_kawoosh_mat_desc = Frame Burst: Nil, Just changes the Material of the Kawoosh
+vis_stargate_eff = Draw Open/Close Effects
+vis_stargate_eff_desc = %s, can prevent game crash in mp (for tests)
+vis_shield_bubble = Kalkan Kubbesi
+vis_hit_refl = Hit Refraction
+vis_hit_eff = Hit Effect
+vis_cloak_pass = Draw Effect when passing Field
+vis_cloak_eff = Görünmezlik Efekti
+vis_smoke = Duman
+vis_atl_shield = Atlantis Kalkanı
+vis_refl = Refraction
+vis_refl_desc = %s, Removes Refraction, leave just shield material
+vis_hud_title = HUD
+vis_hud_energy = Draw HUD on energy devices
+vis_hud_energy_desc = %s, disables hud dwawing for zpms, zpmhubs, naq-gens.
+vis_dhd_glyphs = Draw Letters on DHD
+vis_dhd_glyphs_desc = %s, disables letters dwawing on dhd's.
+vis_heatwave = Heatwave
+vis_sprites = Sprites
+vis_weap_title = Staff Weapon, Ronon's Gun, Ori Staff, Destiny Cannons, Tollan Ion Cannon
+vis_hit_dyn_light = Dynamic Lights when hitting
+vis_fly_dyn_light = Dynamic Lights while flying
+vis_wall = Scorch on Walls
+vis_diss_eff = Dissolve Effect
+vis_glow = Glow
+vis_sunbeams = SunBeams
+vis_sunbeams_desc = %s, Requires SM v2
+vis_part_rings = Particle rings
+vis_shield_part = Shielded Particles
+vis_shield_part_desc = %s, Prevents particles from spawning in shield
+vis_plasma = Plasma
+vis_plasma_light = Plasma Dynamic Lighting
+vis_plasma_desc = %s, This one is affected by the one above
+vis_refl_rings = Refraction Ring Pulse
+vis_sm_laser = Small lasers
+vis_charge_up = Charge up rings
+vis_refl_sphere = Refraction spheres
+
+// keybinder
+key_move_title = Movement
+key_move_forward = Move forward
+key_move_left = Move Left (Strafe)
+key_move_right = Move Right (Strafe)
+key_turn_left = Turn Left
+key_turn_right = Turn Right
+key_move_back = Move Back
+key_move_up = Move Up
+key_move_down = Move Down
+key_roll_left = Roll left
+key_roll_right = Roll right
+key_roll_reset = Reset Roll
+key_air_brake = Air Brake
+key_move_boost = Boost
+key_combat_title = Combat
+key_combat_primary = Primary attack
+key_combat_drones = Fire Drones
+key_track_drones = Track Drones
+key_track_missiles = Track Missiles
+key_combat_toggle = Toggle Primary Attack
+key_act_title = Special Actions
+key_act_destruct = Selfdestruct
+key_act_dhd = Toggle DHD
+key_act_harv = Toggle Harvester
+key_act_spit = Spit
+key_act_eject = Ejector Seat
+key_act_wheels = Toggle Wheels
+key_act_flares = Flares
+key_act_exit = Exit
+key_act_cloak = Toggle Cloak
+key_act_pods = Toggle Pods
+key_act_weapon = Toggle Weapon Pods
+key_act_door = Toggle Door
+key_act_light = Toggle Light
+key_act_shield = Toggle Shield
+key_act_standby = Engine Standby
+key_act_land = Landing Mode
+key_act_hyper = HiperUzay
+key_view_title = View
+key_view_hud = Hide HUD
+key_view_zoomin = Zoom in
+key_view_zoomout = Zoom out
+key_view_up = Move view up
+key_view_down = Move view down
+key_view_toggle = Toggle View Perspective
+key_cam_view = View from camera
+key_cam_left = Kamera Sola
+key_cam_right = Kamera Saga
+key_cam_up = Kamera Yukari
+key_cam_down = Kamera Asa
+key_cam_reset = Reset camera

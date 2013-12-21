@@ -28,13 +28,13 @@ sg_err_11 =[[ The custom fonts are not installed, you will have to download the 
 ]]
 sg_err_12 = Cap_resources folder is outdated!<br>Please update it.
 sg_err_13 = The Git version of the Resource pack from Carter Addon Pack is installed.<br>Please remove this to prevent possible problems.<br>Or remove the workshop version.
-sg_err_14 = [[Your Wiremod is outdated, please update it.
-<br>You using <b>old svn repository link</b>, switch to the github or the <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>workshop</a></b> version of wiremod.
+sg_err_14 = [[Your Wiremod is outdated, please update it to make the Carter Addon Pack fully functional.
+<br>You're using an <b>older repository</b> of the Wiremod SVN, we suggest you to switch to the newer github or <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>Steam Workshop</a></b> version of Wiremod.
 <br>
-<br>Old svn link (outdated): <u>https://svn.code.sf.net/p/wiremod/code/trunk/wire</u>
-<br>New github link: <u>https://github.com/wiremod/wire</u>
-<br>New svn link: <u>https://github.com/wiremod/wire/trunk</u>
-<br>Workshop: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>http://steamcommunity.com/sharedfiles/filedetails/?id=160250458</a>
+<br>Outdated SVN Link: <u>https://svn.code.sf.net/p/wiremod/code/trunk/wire</u>
+<br>New SVN Link: <u>https://github.com/wiremod/wire/trunk</u>
+<br>Github Link: <u>https://github.com/wiremod/wire</u>
+<br>Steam Workshop Link: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>http://steamcommunity.com/sharedfiles/filedetails/?id=160250458</a>
 <br>
-<br>Note: if you open svn link in browser, you will get error, copy and paste to svn client as checkout url!
+<br>Note: If you open the svn link in a normal browser you will receive an error page. Use the above mentioned SVN links to checkout the repository with your SVN client.
 ]]

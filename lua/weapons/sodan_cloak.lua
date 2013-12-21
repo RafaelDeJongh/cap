@@ -132,6 +132,20 @@ hook.Add("PlayerDeath","StarGate.SodanCloaking.PlayerDeath",
 	end
 );
 
+hook.Add("PlayerSilentDeath","StarGate.SodanCloaking.PlayerDeath",
+	function(p)
+		if(IsValid(p)) then
+			p:SetNWBool("pCloaked",false);
+			timer.Simple(0.1,function()
+				if (IsValid(p)) then
+					p:SetNWBool("pCloaked",nil);
+				end
+			end)
+			p:SetNoTarget(false);
+		end
+	end
+);
+
 end
 
 if CLIENT then

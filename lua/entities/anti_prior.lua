@@ -47,9 +47,10 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	self.IsOn = false;
-	self.Radius = math.random(600, 800);
+	self.Radius = 800; --math.random(600, 800); sorry disable this, because added hook, lazy to make it with radius...
 	if WireAddon then
 		self.Inputs = WireLib.CreateInputs( self.Entity, {"Activate"});
+		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Activated"});
 	end
 
 end
@@ -79,8 +80,10 @@ end
 function ENT:Use()
 	if self.IsOn==false then
 		self.IsOn=true;
+		self:SetWire("Activated",1);
 	else
 		self.IsOn=false;
+		self:SetWire("Activated",0);
 	end
 end
 
@@ -88,7 +91,14 @@ end
 --################################Wire @ assassin21
 
 function ENT:TriggerInput(variable, value)
-	if (variable == "Activate") then self.IsOn = util.tobool(value) end
+	if (variable == "Activate") then
+		self.IsOn = util.tobool(value)
+		if (self.IsOn) then
+			self:SetWire("Activated",1);
+		else
+			self:SetWire("Activated",0);
+		end
+	end
 end
 
 --################################Think @ assassin21
@@ -98,7 +108,9 @@ function ENT:Think()
 		local e = ents.FindInSphere(self:GetPos(), self.Radius);
 			for _,v in pairs(e) do
 				if v:IsPlayer() and v:GetMoveType() == MOVETYPE_NOCLIP then
-					if v != self.Owner then
+					if v != self.Owner and not v:HasGodMode() then
+						local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,v,self);
+						if (allow==false) then continue end
 						v:SetMoveType(MOVETYPE_WALK)
 					end
 				end
@@ -111,9 +123,22 @@ function ENT:Think()
 		self.Entity:Fire("skin",0);
 	end
 
-	self.Entity:NextThink(CurTime() + 0.1)
+	self.Entity:NextThink(CurTime() + 0.5)
 	return true
 end
+
+hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
+	if (noclip) then
+		if (ply:HasGodMode()) then return end
+		local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,self);
+		if (allow==false) then return false end
+		for k,v in pairs(ents.FindInSphere(ply:GetPos(),800)) do
+			if (v:GetClass()=="anti_prior" and v.IsOn and ply!=v.Owner) then
+				return false;
+			end
+		end
+	end
+end )
 
 -----------------------------------DUPLICATOR----------------------------------
 

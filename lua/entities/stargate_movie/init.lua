@@ -725,7 +725,7 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 	self:TriggerInputDefault(k,v,mobile,mdhd);
 	if(k == "Rotate Ring" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v >= 1) then
-			if (self:CheckEnergy(true,true) or self.WireManualDial) then
+			if (IsValid(self.Ring) and not self.Ring.WireMoving and (self:CheckEnergy(true,true) or self.WireManualDial)) then
 				self:ActivateRing(true,false,true);
 				self.Entity:SetNWBool("ActRotRingL",true);
 			end

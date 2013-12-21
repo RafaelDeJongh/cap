@@ -137,16 +137,19 @@ function SWEP:DoShoot()
 				if(v ~= self.Owner) then
 					local phys = v:GetPhysicsObject();
 					if(phys:IsValid()) then
-						if(v:IsNPC() or v:IsPlayer()) then
-							if(v:IsPlayer()) then
-								v:SetMoveType(MOVETYPE_WALK);
+						local allow = hook.Call("StarGate.HandDevice.Push",nil,v,p);
+						if (allow==nil or allow) then
+							if(v:IsNPC() or v:IsPlayer() and not v:HasGodMode()) then
+								if(v:IsPlayer()) then
+									v:SetMoveType(MOVETYPE_WALK);
+								end
+								v:SetVelocity(direction);
 							end
-							v:SetVelocity(direction);
+							if(v.TakeDamage) then
+								v:TakeDamage(70,p);
+							end
+							phys:ApplyForceOffset(direction,pos);
 						end
-						if(v.TakeDamage) then
-							v:TakeDamage(70,p);
-						end
-						phys:ApplyForceOffset(direction,pos);
 					end
 				end
 			end

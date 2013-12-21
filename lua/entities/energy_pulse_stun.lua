@@ -168,6 +168,10 @@ function ENT:Stun( Ent )
 	self.Entity:SetCollisionBounds( -1 * Vector(1,1,1), Vector(1,1,1) )
 
 	if IsValid( Ent ) then
+
+		local allow = hook.Call("StarGate.Player.Stun",nil,Ent,self.Owner);
+		if (allow==false) then return end
+
 		if Ent:IsPlayer() and not Ent:HasGodMode() then
 			if not Ent.Stunned then
 				local model = Ent:GetModel()

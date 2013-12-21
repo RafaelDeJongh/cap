@@ -112,7 +112,7 @@ function ENT:UpdateEndPos()
 
 				if IsValid(ent) then
 					local class = ent:GetClass();
-					if (class == "shield" or class == "shield_core_buble" or class == "ship_shield") then
+					if (class == "shield" or class == "shield_core_buble" or class == "ship_shield" and (not IsValid(ent.Parent) or not ent.Parent.Depleted)) then
 						ent:Hit(self.Entity, self.StargateTrace.HitPos, 3, self.StargateTrace.HitNormal);
 						self:DoUsualHit();
 						self:SetNWVector("EndPos",self.StargateTrace.HitPos);

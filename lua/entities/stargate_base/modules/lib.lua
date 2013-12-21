@@ -120,7 +120,7 @@ function ENT:SetStatus(b,u,do_not_set_wire_active,newactive,fast)
 		self.Active = active;
 		if (newactive and not do_not_set_wire_active) then
 			self.NewActive = true;
-			self:SetWire("Active",true);
+			self:SetWire("Active",1);
 		else
 			self.NewActive = active;
 			self:SetWire("Active",active);
@@ -1270,15 +1270,15 @@ concommand.Add("_StarGate.SetValue",
 			elseif(c == "Dial" and d2) then
 				local b = util.tobool(d);
 				if(e:GetClass() == "stargate_orlin") then b = true end; -- SGA is ALWAYS dialling fast! - FIXME: Add new dialling to this gate (with the new sounds!)
-				if (e.NoxDialingType == true) then //nox dialing type
+				/*if (e.NoxDialingType == true) then //nox dialing type
 					e:NoxDialGate(d2);
-				else
+				else */
 					e:DialGate(d2,b);
-				end
+				--end
 				hook.Call("StarGate.Player.DialledGate",GAMEMODE,p,e,d2,b);
 			elseif(c == "NoxDial") then
 				e:NoxDialGate(d);
-				hook.Call("StarGate.Player.DialledGate",GAMEMODE,p,e,d,true);
+				hook.Call("StarGate.Player.DialledGate",GAMEMODE,p,e,d,true,true);
 			elseif(c == "AbortDialling") then
 				e:AbortDialling();
 				hook.Call("StarGate.Player.ClosedGate",GAMEMODE,p,e);
@@ -1446,6 +1446,9 @@ function ENT:AbortDialling()
 	-- Do not allow closing, if the eventhorizon is currently establishing (Or you will have massive bugs)
 	if(IsValid(self.EventHorizon)) then
 		if(not self.EventHorizon:IsOpen()) then return end;
+	end
+	if(IsValid(self.Target) and IsValid(self.Target.EventHorizon)) then
+		if(not self.Target.EventHorizon:IsOpen()) then return end;
 	end
 	if(self.IsOpen) then
 		self:DeactivateStargate(true);

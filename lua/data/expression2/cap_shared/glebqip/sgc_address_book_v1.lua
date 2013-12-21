@@ -1,11 +1,11 @@
-# Version 1.0
-# Author glebqip(RUS)
-# Created 30.11.13 Updated 08.02.13
-# This is Stargate Address Book from first 2 Stargate-SG1 seasons.
-# This chip need a wire_expression2_unlimited 1, wire_egp_max_bytes_per_seconds 13000 and on server.
+#Version 1.5
+#Author glebqip(RUS)
+#Created 30.11.13 Updated 20.02.13
+#This is Stargate Address Book from first 2 Stargate-SG1 seasons.
+#This chip need a wire_expression2_unlimited 1, wire_egp_max_bytes_per_seconds 13000 and on server.
 # Support thread: http://sg-carterpack.com/forums/topic/sgc-dialing-computer-v1-e2/
-@name SGC Address Book v1 keyboard
-@inputs DPL Start W:wirelink SG:wirelink KeyDP Key NewCol
+@name SGC Address Book v1.0
+@inputs DPL Start W:wirelink SG:wirelink KeyDP KeyDPUser:entity Key NewCol
 @outputs AddressBook:string True
 @persist RAM Pip Load1 LoadOver Loaded RB Loaded1 STD2:string STD STD1 IDs1
 @persist I1:table Day:string Month:string Year:string Hours:string Min:string Sec:string ChrA:string Pos:vector2
@@ -78,7 +78,7 @@ if(clk("LD5")&!->KeyDP){
 W:egpSetText(5,"Error! Keyboard not detected! Waiting keyboard connect.") if(!Pip){timer("errpip",1) Pip=1} W:egpColor(5,vec(255,0,0)) timer("LD5",1000)}
 if(clk("LD5")&->KeyDP){W:egpSetText(5,"Keyboard... OK!") W:egpColor(5,vec(255,255,255)) Pip=0 timer("LD6",randint(800,1300))}
 if(egpMaxObjects()<196&~KeyDP&KeyDP==13&IDs1){IDsOverride=1 IDs1=0}
-if(clk("LD6")&egpMaxObjects()>196&!IDsOverride){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") W:egpColor(6,vec(255,255,255)) timer("LD7",randint(50,300)) Pip=0}
+if(clk("LD6")&egpMaxObjects()>=196&!IDsOverride){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") W:egpColor(6,vec(255,255,255)) timer("LD7",randint(50,300)) Pip=0}
 if(clk("LD6")&(egpMaxObjects()<196&IDsOverride)){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's Override ID's protection!") W:egpColor(6,vec(255,255,0)) timer("LD7",randint(50,300)) Pip=0}
 if(clk("LD6")&egpMaxObjects()<196&!IDsOverride){IDs1=1 W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's. Need a 196 ID's. Waiting a wire_egp_max_objects 196!") if(!Pip){timer("errpip",1) Pip=1} timer("LD6",150) W:egpColor(6,vec(255,0,0))}
 if(clk("LD7")&!->SG){if(!Pip){timer("errpip",1) Pip=1} W:egpSetText(7,"Can't connect to Address Database!!!") W:egpColor(7,vec(255,0,0)) timer("LD7",100)}
@@ -236,7 +236,7 @@ W:egpFont(132+I,"Stargate Address Glyphs Concept",19)}
 for(I=0,6){(W:egpBox(197+I,vec2(2,119+(I)*31),vec2(426,30))) W:egpColor(197+I,vec(0,0,0))}
 }
 if(Loaded){
-if(~KeyDP&KeyDP==9){RB++ timer("RBTR",200) if(RB==2){timer("shutdown",1) Loaded=-1 RB=0 }}
+if(~KeyDP&KeyDP==9&((KeyDPUser==owner()&->KeyDPUser)|(!->KeyDPUser))){RB++ timer("RBTR",200) if(RB==2){timer("shutdown",1) Loaded=-1 RB=0 }}
 if(clk("RBTR")&RB>0){RB=0}
 if(~Key&Key){W:entity():soundPlay(0,1,"alexalx/glebqip/click"+randint(1,4)+".mp3")}
 if(~Key|clk("Loaded")|clk("REL")|~NewCol){

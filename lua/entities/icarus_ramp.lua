@@ -9,6 +9,8 @@ ENT.Category = "Stargate Carter Addon Pack"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
+ENT.IsRamp = true
+
 if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end

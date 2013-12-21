@@ -82,11 +82,14 @@ function ENT:Detonate()
 	timer.Simple(self.Timer, function()
 		if (not IsValid(e)) then return end
 		for _,v in pairs(ents.FindInSphere(e:GetPos(),e.Yield)) do
-			if IsValid(v) then
-				if v:IsPlayer() then
-					e:Stun(v);
-				elseif v:IsNPC() then
-					e:Stun(v);
+			local allow = hook.Call("StarGate.WraithBomb.Stun",nil,v,e);
+			if (allow==nil or allow) then
+				if IsValid(v) then
+					if v:IsPlayer() then
+						e:Stun(v);
+					elseif v:IsNPC() then
+						e:Stun(v);
+					end
 				end
 			end
 		end

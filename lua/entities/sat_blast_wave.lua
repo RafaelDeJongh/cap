@@ -75,7 +75,8 @@ function ENT:Initialize()
 	end
 
 	-- General big damage thing.
-	util.BlastDamage(self.Entity, self.Entity, self.SplodePos, 2300, 4100)
+	--util.BlastDamage(self.Entity, self.Entity, self.SplodePos, 2300, 4100)
+	-- this creating bugs that kill player in shield, we still have damage in think function so...
 
 end
 
@@ -86,6 +87,10 @@ function ENT:Think()
 
 	for k,v in pairs(ents.FindInSphere(self.Entity:GetPos(), self.Radius )) do
 		if IsValid(v) then
+
+			local allow = hook.Call("StarGate.SatBlast.DamageEnt",nil,v);
+			if (allow==false) then continue end
+
 			local zrange = v:GetPos().z - self.Entity:GetPos().z;
 			if (zrange < 500 and zrange > -500) then
 

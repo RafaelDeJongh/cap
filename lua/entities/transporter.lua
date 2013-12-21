@@ -110,6 +110,8 @@ function ENT:FindObjects(pos,quick)
 	for _,e in pairs(ents.FindInSphere(pos,130)) do
 		if(e:IsValid()) then
 			-- Only players?
+			local allow = hook.Call("StarGate.Transporter.TeleportEnt",nil,e,self);
+			if (allow==false) then continue end
 			if(e:IsPlayer() or e:IsNPC()) then
 				objects[e] = e
 			-- Everything?

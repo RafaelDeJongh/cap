@@ -389,6 +389,7 @@ function playerDies( victim, weapon, killer )
      end
 end
 hook.Add( "PlayerDeath", "SG.VEH.playerDies", playerDies )
+hook.Add( "PlayerSilentDeath", "SG.VEH.playerDies", playerDies )
 
 end
 

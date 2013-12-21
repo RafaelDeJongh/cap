@@ -334,6 +334,7 @@ function ENT:DoRings()
 
 	for i=1,5 do
 		self.Rings[i]=ents.Create("ring_ring")
+		self.Rings[i].GateSpawnerSpawned = self.GateSpawnerSpawned
 		self.Rings[i]:SetModel(self.RingModel)
 		if (dir==-1) then
 			self.Rings[i]:SetPos(self.Entity:GetPos()+Vector(0,0,15))

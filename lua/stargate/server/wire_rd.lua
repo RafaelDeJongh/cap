@@ -238,28 +238,50 @@ function StarGate.WireRD.CreateWireInputs(self,...)
 end
 
 --################# Sets a Wire value @aVoN
-function StarGate.WireRD.SetWire(self,key,value)
+function StarGate.WireRD.SetWire(self,key,value,inp)
 	if(WireAddon) then
-		-- Special interaction to modify datatypes
-		if(self.Outputs and self.Outputs[key]) then
-			local datatype = self.Outputs[key].Type;
-			if(datatype == "NORMAL") then
-				-- Supports bools and converts them to numbers
-				if(value == true) then
-					value = 1;
-				elseif(value == false) then
-					value = 0;
+		if (inp) then
+			-- Special interaction to modify datatypes
+			if(self.Inputs and self.Inputs[key]) then
+				local datatype = self.Inputs[key].Type;
+				if(datatype == "NORMAL") then
+					-- Supports bools and converts them to numbers
+					if(value == true) then
+						value = 1;
+					elseif(value == false) then
+						value = 0;
+					end
+					-- If still not a number, make it a num now!
+					value = tonumber(value);
+				elseif(datatype == "STRING") then
+					value = tostring(value);
 				end
-				-- If still not a number, make it a num now!
-				value = tonumber(value);
-			elseif(datatype == "STRING") then
-				value = tostring(value);
 			end
-		end
-		if(value ~= nil) then
-			WireLib.TriggerOutput(self.Entity,key,value);
-			if(self.WireOutput) then
-				self:WireOutput(key,value);
+			if(value ~= nil) then
+				WireLib.TriggerInput(self.Entity,key,value);
+			end
+		else
+			-- Special interaction to modify datatypes
+			if(self.Outputs and self.Outputs[key]) then
+				local datatype = self.Outputs[key].Type;
+				if(datatype == "NORMAL") then
+					-- Supports bools and converts them to numbers
+					if(value == true) then
+						value = 1;
+					elseif(value == false) then
+						value = 0;
+					end
+					-- If still not a number, make it a num now!
+					value = tonumber(value);
+				elseif(datatype == "STRING") then
+					value = tostring(value);
+				end
+			end
+			if(value ~= nil) then
+				WireLib.TriggerOutput(self.Entity,key,value);
+				if(self.WireOutput) then
+					self:WireOutput(key,value);
+				end
 			end
 		end
 	end

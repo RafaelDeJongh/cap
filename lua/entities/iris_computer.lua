@@ -200,7 +200,9 @@ function ENT:TriggerInput(iname, value)
 		iris = self.LockedIris
 	end
 	if (iname == "Iris Control" and IsValid(iris)) then
-		iris:Toggle()
+		if (value>0 and not iris.IsActivated or value<=0 and iris.IsActivated) then
+			iris:Toggle()
+		end
 		if value == 0 and self.closetime ~= 0 then
 			timer.Simple(self.closetime, function() AutoClose(self) end)
 		end
@@ -341,7 +343,7 @@ function ENT:RecieveIrisCode(code)
 	self.Busy = true;
 
 	timer.Remove("_sgiriscode"..self:EntIndex())
-	timer.Create("_sgiriscode"..self:EntIndex(), 4.9, 0 , function()
+	timer.Create("_sgiriscode"..self:EntIndex(), 4.2, 0 , function()
 		if (IsValid(self)) then
 			self.wireCode = 0;
 			self.wireDesc = "";

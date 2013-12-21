@@ -201,7 +201,9 @@ function ENT:EmergencyShutdown(dont_clear_address,instant_stop)
 	if(not self.IsOpen) then
 		self:StopActions(); -- Stop all previous actions
 		if(self.Dialling) then
-			self:RunActions(self.Sequence:DialFail(instant_stop)); -- Add dialfail sequence
+			if (self.Active or self.NewActive) then
+				self:RunActions(self.Sequence:DialFail(instant_stop,false)); -- Add dialfail sequence
+			end
 			if(IsValid(self.Target)) then
 				self.Target.NoxDialingType = false;
 				self.Target.NoxIrisReactivated = false;
@@ -261,6 +263,7 @@ function ENT:ActivateStargate(inbound,fast)
 	self.NoxDialingType = false;
 	self.NoxIrisReactivated = false;
 	if (self.HasRD and not self:CheckEnergy(true) and not self.Dialling and not inbound) then
+		self.Outbound = true;
 		local action = self.Sequence:New();
 		action = self.Sequence:DialFail(nil,true);
 		self:RunActions(action);
@@ -331,6 +334,7 @@ function ENT:NoxActivateStargate(inbound)
 	self:CheckConnection();
 	self.NoxDialingType = true;
 	if (self.HasRD and not self:CheckEnergy(true) and not self.Dialling and not inbound or not IsValid(e) and not self:IsSelfDial()) then
+		self.Outbound = true;
 		local action = self.Sequence:New();
 		action = self.Sequence:DialFail(nil,true);
 		self:RunActions(action);
@@ -392,6 +396,7 @@ function ENT:OnButtActivateStargate(inbound)
 	self:CheckConnection() -- prepare power calculations
 	self.NoxDialingType = false;
 	if (self.HasRD and not self:CheckEnergy() and not inbound or not inbound and IsValid(e) and not e.OnButtLock) then
+		self.Outbound = true;
 		local action = self.Sequence:New();
 		local busy = false;
 		if (IsValid(e) and self:CheckEnergy() and e.IsStargate and (e.IsOpen or e.Dialling == true or e:IsBlocked(nil,nil,true)) and not inbound or self:IsSelfDial() or self:IsBlocked(nil,nil,true)) then

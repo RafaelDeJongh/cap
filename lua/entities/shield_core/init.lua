@@ -184,6 +184,8 @@ function ENT:OnRemove()
 	if IsValid(self.Shield) then self.Shield:Remove() end
 	if timer.Exists("Anim"..self:EntIndex()) then timer.Destroy("Anim"..self:EntIndex()); end
 	if IsValid(self.Entity) then self.Entity:Remove(); end
+	if IsValid(self.Camera) then self.Camera:Remove(); end
+	if IsValid(self.Player) then self.Player:SetViewEntity(self.Player); end
 end
 
 function ENT:Use(ply)

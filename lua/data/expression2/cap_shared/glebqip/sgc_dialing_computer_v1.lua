@@ -1,29 +1,42 @@
-# Version 1.0
+# Version 1.5
 # Author glebqip(RUS)
-# Created 23.11.13 Updated 08.12.13
+# Created 23.11.13 Updated 20.12.13
 # This is Stargate Dialing Computer from first 2 Stargate-SG1 seasons, called as V1.
-# This chip need a wire_expression2_unlimited 1, wire_egp_max_bytes_per_seconds 13000 and wire_egp_max_objects 420 on server.
+# This chip need a wire_expression2_unlimited 1, wire_egp_max_bytes_per_seconds 13000 and wire_egp_max_objects 440 on server.
 # Support thread: http://sg-carterpack.com/forums/topic/sgc-dialing-computer-v1-e2/
 
 @name SGC Dialing Computer v1.0
-@inputs  Start W:wirelink SG:wirelink NewCol AnotherSound Key AddressBook:string
-@outputs DPL True DialString:string DialingMode StartStringDial Close RotateRing RingSpeedMode ActivateChevronNumbers:string Iris Overload
+@inputs  Start W:wirelink SG:wirelink NewCol AnotherSound Key KeyUser:entity AddressBook:string
+@outputs DPL True Iris Overload
 @persist ANG I1 I2 Min Linked Painted ETO Time OvMin:string OvSec:string OvPercent
 @persist RAM RAMM:string Load1 Pip IDs1 IDsOverride RingDiag RB DiagOver LoadOver RBT Loaded1 STD STD1 STD2:string
-@inputs  Active Open Inbound Chevron ChevronLocked RingSymbol:string RingRotation DialingAdress:string DialMode DialingSymbol:string DialedSymbol:string
-@persist Loaded Unstable Cond Cond2 Alpha2 Color DTL Chev2 DialingAdress1:string Chevron1 Alpha3 B1 Chev AN1 Alpha4 Alpha5 G1 G2 G3 G4 G5 G6 G7 G8 G9  Q B C D EnteredAdress:string ChrA:string Correct DSMB Chevr8 Chevr9 DType:table RandNum:table EAn
-@persist RingAngle AA1 Text1:table Text2:table Text1pos:table Text2pos:table Text1col:table Text2col:table Text1size:table Text2size:table A112:string Col1:vector
+@persist DialString:string DialingMode StartStringDial Close RotateRing RingSpeedMode ActivateChevronNumbers:string
+@persist Active Open Inbound Chevron ChevronLocked RingSymbol:string RingRotation DialingAdress:string DialMode DialingSymbol:string DialedSymbol:string
+@persist RingStopCheck AdrBlock Loaded Unstable Cond Cond2 Alpha2 Color DTL Chev2 DialingAdress1:string Chevron1 Alpha3 B1 Chev AN1 Alpha4 Alpha5 G1 G2 G3 G4 G5 G6 G7 G8 G9  Q B C D EnteredAdress:string ChrA:string Correct DSMB Chevr8 Chevr9 DType:table RandNum:table EAn
+@persist CHKRM RingAngle AA1 Text1:table Text2:table Text1pos:table Text2pos:table Text1col:table Text2col:table Text1size:table Text2size:table A112:string Col1:vector
 @trigger
 if(~W&->W){reset()}
 if(first()|dupefinished()|clk("shutdown1")){W:egpClear() Loaded1=0}
+if(first()|dupefinished()|~SG){SG:stargateSetWire("SGC Type",1) SG:stargateSetWire("Set Point of Origin",1)}
 function number even(CHET)
 {
 if(CHET%2!=0){return 1} else {return 0}
 }
+Active=SG:stargateGetWire("Active")
+Open=SG:stargateGetWire("Open")
+Inbound=SG:stargateGetWire("Inbound")
+Chevron=SG:stargateGetWire("Chevron")
+ChevronLocked=SG:stargateGetWire("Chevron Locked")
+RingSymbol=SG:stargateGetWireString("Ring Symbol")
+RingRotation=SG:stargateGetWire("Ring Rotation")
+DialingAdress=SG:stargateGetWireString("Dialing Address")
+DialingSymbol=SG:stargateGetWireString("Dialing Symbol")
+DialedSymbol=SG:stargateGetWireString("Dialed Symbol")
+DialMode=SG:stargateGetWire("Dialing Mode")
 ##Startup simulating
 #30000
 if(Loaded!=2){
-if(((~Start|first()|dupefinished())&Start)&Loaded1==0)
+if((($Start|first()|dupefinished())&Start)&Loaded1==0)
 {
 DPL=0
 if(Start<=1&!RBT){DiagOver=0 LoadOver=0}
@@ -37,6 +50,7 @@ timer("LD01",randint(100,2000))
 Loaded=0
 Loaded1=1
 }
+if(Loaded==0){
 if(clk("LD01")){soundVolume(12,0.6) soundPlay(12,10,"synth/square_440.wav") timer("STPS",100) timer("LD1",randint(1000,2500))}
 if(clk("STPS")){soundVolume(12,0) soundStop(12,0)}
 if(!Loaded&!LoadOver){
@@ -47,44 +61,45 @@ W:egpSetText(2,"CPU:detecting...") timer("LD21",randint(300,600))}
 if(clk("LD21")&maxquota()>80000){Pip=0 W:egpSetText(2,"CPU:"+maxquota():toString()+" OPS OK!") W:egpColor(2,vec(255,255,255)) timer("LD3",randint(150,300))}
 if(clk("LD21")&maxquota()<=80000){W:egpSetText(2,"CPU:"+maxquota():toString()+" OPS CPU IS TO SLOW TO WORK! WAIT A wire_expression2_unlimited 1") if(!Pip){timer("errpip",1) Pip=1} W:egpColor(2,vec(255,0,0)) timer("LD12",100)}
 if(clk("LD3")&RAM<ceil(egpMaxObjects()/128)*256){
-RAM+=randint(128,512)/10*(egpMaxObjects()/420)
+RAM+=randint(128,512)/10*(egpMaxObjects()/440)
 W:egpSetText(3,"RAM:"+ceil(RAM)+"MB") timer("LD3",randint(100,200))}
 if(clk("LD3")&RAM>=ceil(egpMaxObjects()/128)*256){timer("LD4",1000) W:egpSetText(3,"RAM:"+toString(ceil(egpMaxObjects()/128)*256)+" OK!")}
 if(clk("LD4")){W:egpSetText(4,"GPUSpeed:"+egpMaxUmsgPerSecond():toString()+" BPS OK!") timer("LD5",randint(150,300))}
 if(clk("LD5")&!->Key){
 W:egpSetText(5,"Error! Keyboard not detected! Waiting keyboard connect.") if(!Pip){timer("errpip",1) Pip=1} W:egpColor(5,vec(255,0,0)) timer("LD5",1000)}
 if(clk("LD5")&->Key){W:egpSetText(5,"Keyboard... OK!") W:egpColor(5,vec(255,255,255)) Pip=0 timer("LD6",randint(800,1300))}
-if(egpMaxObjects()<420&~Key&Key==13&IDs1){IDsOverride=1 IDs1=0}
-if(clk("LD6")&egpMaxObjects()>420&!IDsOverride){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") W:egpColor(6,vec(255,255,255)) timer("LD7",randint(150,300)) Pip=0}
-if(clk("LD6")&(egpMaxObjects()<420&IDsOverride)){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's Override ID's protection!") W:egpColor(6,vec(255,255,0)) timer("LD7",randint(50,300)) Pip=0}
-if(clk("LD6")&egpMaxObjects()<420&!IDsOverride){IDs1=1 W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's. Need a 420 ID's. Waiting a wire_egp_max_objects 420!") if(!Pip){timer("errpip",1) Pip=1} timer("LD6",150) W:egpColor(6,vec(255,0,0))}
+if(egpMaxObjects()<440&~Key&Key==13&IDs1){IDsOverride=1 IDs1=0}
+if(clk("LD6")&egpMaxObjects()>=440&!IDsOverride){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") W:egpColor(6,vec(255,255,255)) timer("LD7",randint(150,300)) Pip=0}
+if(clk("LD6")&(egpMaxObjects()<440&IDsOverride)){W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's Override ID's protection!") W:egpColor(6,vec(255,255,0)) timer("LD7",randint(50,300)) Pip=0}
+if(clk("LD6")&egpMaxObjects()<440&!IDsOverride){IDs1=1 W:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's. Need a 440 ID's. Waiting a wire_egp_max_objects 440!") if(!Pip){timer("errpip",1) Pip=1} timer("LD6",150) W:egpColor(6,vec(255,0,0))}
 if(!DiagOver){
 if(clk("LD7")){RAM=0 W:egpSetText(7,"open diagnostic.str") timer("LD8",3000)}
 if(clk("LD8")){ W:egpSetText(8,"Diagnostic Programm build 1.241.15 v1 07.12.13 is loading...") timer("LD9",randint(100,300))}
 if(clk("LD9")&Load1<100){Load1+=randint(4,12) W:egpSetText(8,"Diagnostic Programm build 1.241.15 v1 07.12.13 is loading... "+Load1+"%") timer("LD9",randint(50,700))}}
-if(Load1>=100){Load1=0 W:egpSetText(8,"Diagnostic Programm build 1.241.15 v1 07.12.13 is loading... 100%") timer("Loaded1",randint(50,700)) Loaded=1}}
+if(Load1>=100){Load1=0 W:egpSetText(8,"Diagnostic Programm build 1.241.15 v1 07.12.13 is loading... 100%") Loaded=1 timer("Loaded1",randint(50,700))}}
 if(!Loaded&DiagOver){
 if(clk("LD7")){RAM=0 W:egpSetText(7,"open dialingprogramm.str") timer("LD8",3000)}
 if(clk("LD8")){ W:egpSetText(8,"Dialing Programm build 1.241.15 v1 07.12.13 is loading...") timer("LD9",randint(100,300))}
 if(clk("LD9")&Load1<100){Load1+=randint(4,12) W:egpSetText(8,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... "+Load1+"%") timer("LD9",randint(50,700))}
-if(Load1>=100){Load1=0 W:egpSetText(8,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") timer("Loaded",randint(50,700)) Loaded=2}}
+if(Load1>=100){Load1=0 W:egpSetText(8,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") Loaded=2 timer("Loaded",randint(50,700))}}
 if(!Loaded&LoadOver){
 if(clk("LD1")){W:egpSetText(1,"Dialing Programm build 1.241.15 v1 07.12.13 is loading...") timer("LD11",randint(100,300))}
 if(clk("LD11")&Loaded!=2&Load1<100){Load1+=randint(4,12) W:egpSetText(1,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... "+Load1+"%") timer("LD11",randint(50,700))}
-if(Load1>=100){Load1=0 W:egpSetText(1,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") timer("Loaded",randint(50,700)) Loaded=2}}
+if(Load1>=100){Load1=0 W:egpSetText(1,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") Loaded=2 timer("Loaded",randint(50,700))}}}
 ##/startup simulating
 ##diag
+if(Loaded==1){
 if(clk("Loaded1")){
 W:egpClear()
 for(I=0,4){W:egpText(1+I,"",vec2(5,10+I*12)) W:egpAlign(1+I,0,1) W:egpFont(1+I,"Console",15)}
 timer("DG1",500)}
 if(clk("DG1")){W:egpSetText(1,"Diangonstic...") W:egpColor(1,vec(0,255,0)) timer("DG2",randint(200,600))}
-if(clk("DG2")&(!->ActivateChevronNumbers|!->SG|!->RotateRing|!->DialString|!->StartStringDial|!->Close|!->DialingMode|!->Active|!->Open|!->Inbound|!->Chevron|!->ChevronLocked|!->RingRotation|!->DialMode|!->RingSymbol|!->DialingAdress|!->DialingSymbol|!->DialedSymbol))
-{W:egpSetText(2,"Not connected correctly to stargate!!! Waiting...") W:egpColor(2,vec(255,0,0)) if(!Pip){timer("errpip",1) Pip=1} timer("DG2",500)}
+#if(clk("DG2")&(!->ActivateChevronNumbers|!->SG|!->RotateRing|!->DialString|!->StartStringDial|!->Close|!->DialingMode|!->Active|!->Open|!->Inbound|!->Chevron|!->ChevronLocked|!->RingRotation|!->DialMode|!->RingSymbol|!->DialingAdress|!->DialingSymbol|!->DialedSymbol))
+#{W:egpSetText(2,"Not connected correctly to stargate!!! Waiting...") W:egpColor(2,vec(255,0,0)) if(!Pip){timer("errpip",1) Pip=1} timer("DG2",500)}
 elseif(clk("DG2")){Pip=0 W:egpSetText(2,"Connected to stargate! Starting diagnostic...") W:egpColor(2,vec(0,255,0)) timer("DG3",randint(200,700))}
-if(clk("DG3")&RingDiag!=2&RingDiag!=11){W:egpSetText(3,"Ring diagnostic") RotateRing=1 W:egpColor(3,vec(255,255,255)) timer("DG31",10) RingDiag=1 timer("RDG",500)}
-if(clk("RDG")&RotateRing){RingDiag=11}
-if(clk("DG31")&!RingRotation&RingDiag!=2&RingDiag!=11){W:egpSetText(3,"Ring is blocked! Maybe not enough energy!") if(!Pip){timer("errpip",1) Pip=1 RingDiag=0} RotateRing++ if(RotateRing>1){RotateRing=0} W:egpColor(3,vec(255,0,0)) timer("DG31",500)}
+if(clk("DG3")&RingDiag!=2&RingDiag!=11){W:egpSetText(3,"Ring diagnostic") RotateRing=1 W:egpColor(3,vec(255,255,255)) timer("DG31",10) if(RingRotation){RingDiag=11}else{RingDiag=1} timer("RDG",500)}
+if(clk("RDG")&RingDiag!=2&(RingDiag==11|RotateRing)){RingDiag=11 if(Active){RotateRing=0}else{RotateRing=1} timer("RDG",100)}
+if(clk("DG31")&!RingRotation&RingDiag!=2&RingDiag!=11){RingDiag=12 W:egpSetText(3,"Ring is blocked! Maybe not enough energy!") if(!Pip){timer("errpip",1) Pip=1 RingDiag=0} RotateRing++ if(RotateRing>=2){RotateRing=0} W:egpColor(3,vec(255,0,0)) timer("DG31",500)}
 if(clk("DG31")&RingRotation&RingDiag!=2&RingDiag!=11){timer("DG3",10)}
 if(RingDiag==11&RingRotation&RingSymbol=="#"){RingDiag=2 W:egpSetText(3,"Ring diagnostic OK!") W:egpColor(3,vec(0,255,0)) RingDiag=2 RotateRing=0 timer("DG4",randint(500,2500))}
 if(clk("DG4")){W:egpSetText(4,"Chevron diagnostic") W:egpColor(4,vec(255,255,255)) ActivateChevronNumbers="" RotateRing=1 timer("DG41",randint(500,2500))}
@@ -92,7 +107,7 @@ if(clk("DG41")&RingDiag!=22&ActivateChevronNumbers!="1111111111"){ActivateChevro
 if(clk("DG41")&ActivateChevronNumbers=="1111111111"){W:egpSetText(4,"Chevron diagnostic OK!") W:egpColor(4,vec(0,255,0)) ActivateChevronNumbers="" RotateRing=0 timer("DG5",randint(500,2500)) RingDiag=22}
 if(clk("DG5")){ W:egpSetText(5,"Dialing Programm build 1.241.15 v1 07.12.13 is loading...") timer("DG51",randint(100,300))}
 if(clk("DG51")&Loaded!=2&Load1<100){Load1+=randint(4,12) W:egpSetText(5,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... "+Load1+"%") timer("DG51",randint(50,700))}
-if(Load1>=100){Load1=0 W:egpSetText(5,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") timer("Loaded",randint(50,700)) Loaded=2}}
+if(Load1>=100){Load1=0 W:egpSetText(5,"Dialing Programm build 1.241.15 v1 07.12.13 is loading... 100%") Loaded=2 timer("Loaded",randint(50,700))}}}
 if(clk("shutdown")){
 STD1=randint(30,80)
 W:egpClear()
@@ -103,7 +118,7 @@ timer("STD1",randint(50,500))}
 if(clk("STD1")&STD<=STD1){STD2+="." if(STD2:length()>3){STD2=""} W:egpSetText(1,"Shutting down"+STD2) STD++ timer("STD1",150)}
 if(clk("STD1")&STD>STD1){Loaded=0 timer("shutdown1",1)}
 ##/diag
-if(clk("Loaded")&(egpMaxObjects()>420|IDsOverride)){
+if(clk("Loaded")&(egpMaxObjects()>=440|IDsOverride)){
 ChrA="qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890@#*"
 RBT=0
 W:egpClear()
@@ -115,16 +130,16 @@ DType[2,string]="NOX DIALING"
 Text1["000",string]="IDLE"
 Text1["010",string]="SEQUENCE"
 Text2["010",string]="IN PROGRESS"
-Text1["010#",string]="SEQUENCE"
-Text2["010#",string]="COMPLETE"
+Text1["0101",string]="SEQUENCE"
+Text2["0101",string]="COMPLETE"
 Text1["110",string]="LOCKED"
 Text1["011",string]="OFFWORLD ACTIVATION"
 Text1["111",string]="OFFWORLD ACTIVATION"
 Text1pos["000",vector2]=vec2(266,372)
 Text1pos["010",vector2]=vec2(330,374)
 Text2pos["010",vector2]=vec2(330,398)
-Text1pos["010#",vector2]=vec2(330,374)
-Text2pos["010#",vector2]=vec2(330,398)
+Text1pos["0101",vector2]=vec2(330,374)
+Text2pos["0101",vector2]=vec2(330,398)
 Text1pos["110",vector2]=vec2(328,388)
 Text1pos["011",vector2]=vec2(256,227)
 Text1pos["111",vector2]=vec2(256,227)
@@ -134,15 +149,15 @@ Text1col["111",vector]=vec(255,0,0)
 Text1size["000",number]=30
 Text1size["010",number]=26
 Text2size["010",number]=26
-Text1size["010#",number]=26
-Text2size["010#",number]=35
+Text1size["0101",number]=26
+Text2size["0101",number]=35
 Text1size["110",number]=50
 Text1size["011",number]=30
 Text1size["111",number]=30
 for(I=0,16){RandNum[I+1,string]=""}
-print("This chip needs 420 ID's. This server have "+egpMaxObjects()+" ID's")
+print("This chip needs 440 ID's. This server have "+egpMaxObjects()+" ID's")
 print("This chip needs more than 13000 BPS. This server have "+egpMaxUmsgPerSecond()+" BPS")
-hint("This chip needs 420 ID's. This server have "+egpMaxObjects()+" ID's",10)
+hint("This chip needs 440 ID's. This server have "+egpMaxObjects()+" ID's",10)
 hint("This chip needs more than 13000 BPS. This server have "+egpMaxUmsgPerSecond()+" BPS",10)
 True=1
 DialingMode=0
@@ -264,11 +279,18 @@ W:egpLine(106,vec2(64,356),vec2(64,347))
 
 W:egpCircleOutline(107,vec2(256,225),vec2(100,100))
 #
-for(I=0,6)
+#[for(I=0,6)
 {
 I2=I2+1
 W:egpCircleOutline(108+I,vec2(256,225),vec2(123+I/2,123+I/2))
-}
+}]#
+
+W:egpCircleOutline(108,vec2(256,225),vec2(126,126))
+W:egpSize(108,3)
+W:egpFidelity(108,36)
+W:egpCircleOutline(109,vec2(256,225),vec2(126,126))
+W:egpSize(109,3) W:egpAngle(109,46)
+W:egpFidelity(109,36)
 
 #W:egpCircleOutline(108,vec2(256,225),vec2(125,125))
 #W:egpCircleOutline(109,vec2(256,225),vec2(125,126))
@@ -277,22 +299,20 @@ W:egpCircleOutline(108+I,vec2(256,225),vec2(123+I/2,123+I/2))
 #W:egpCircleOutline(112,vec2(256,225),vec2(127,127))
 #W:egpCircleOutline(113,vec2(256,225),vec2(127,128))
 #W:egpCircleOutline(114,vec2(256,225),vec2(128,128))
-W:egpCircleOutline(115,vec2(256,225),vec2(103,103))
-W:egpCircleOutline(116,vec2(256,225),vec2(113,113))
+W:egpCircleOutline(110,vec2(256,225),vec2(103,103))
+W:egpCircleOutline(111,vec2(256,225),vec2(113,113))
 #
 for(I=1,40){
-W:egpLine(117+I,vec2(sin(180-(360/39)*I),cos(180-(360/39)*I))*100.3,vec2(sin(180-(360/39)*I),cos(180-(360/39)*I))*127)
+W:egpLine(112+I,vec2(sin(180-(360/40)*I),cos(180-(360/40)*I))*100.3,vec2(sin(180-(360/40)*I),cos(180-(360/40)*I))*127)
 #W:egpSize(156+I,2)
-W:egpParent(117+I,108) } W:egpAngle(108,round(180/39))
+W:egpParent(112+I,108)} W:egpAngle(108,4.6)
 for(I=1,40){
-W:egpLine(159+I,vec2(sin(180-(360/39)*I),cos(180-(360/39)*I))*104.3,vec2(sin(180-(360/39)*I),cos(180-(360/39)*I))*114.3)
-W:egpSize(159+I,1)
-if(NewCol){W:egpColor(159+I,vec(208,208,144))} if(!NewCol){W:egpColor(159+I,vec(255,255,255))}
-W:egpParent(159+I,116) } W:egpAngle(116,round(180/39)) W:egpAngle(105,round(180/39))
+W:egpLine(154+I,vec2(sin(180-(360/40)*I),cos(180-(360/40)*I))*104.3,vec2(sin(180-(360/40)*I),cos(180-(360/40)*I))*114.3)
+W:egpSize(154+I,1)
+#if(NewCol){W:egpColor(154+I,vec(208,208,144))} if(!NewCol){W:egpColor(154+I,vec(255,255,255))}
+W:egpParent(154+I,110)} W:egpAngle(110,4.6) W:egpAngle(111,4.6)
 #interval(100)
 #ANG++
-W:egpAngle(115,ANG)
-W:egpAngle(116,ANG)
 #chev1
 W:egpBox(202,vec2(336,125),vec2(6,6))
 W:egpAngle(202,-35)
@@ -477,8 +497,8 @@ W:egpMaterial(394+I,"gui/gradient_up")
 }
 for(I=0,16){
 #W:egpText(412+I,toString(RandNum[I,number]),vec2(8,92+45*I))
-W:egpText(412+I,RandNum[I+1,string],vec2(9,101+10*I))
-W:egpAlign(412+I,0,1)
+W:egpText(412+I,RandNum[I+1,string],vec2(86,101+10*I))
+W:egpAlign(412+I,2,1)
 W:egpFont(412+I,"Marlett",13)
 }
 W:egpText(408,"",vec2(260,110+1*1.06))
@@ -517,10 +537,15 @@ W:egpAlpha(403,0)
 W:egpAlpha(404,0)
 W:egpAlpha(405,0)
 W:egpAlpha(406,0)
-timer("draw",1)
+W:egpText(409,DType[0,string],vec2(256,75))
+W:egpAlign(409,1,1)
+W:egpFont(409,"Marlett",30)
+timer("draw",100)
 }
 if(~NewCol){timer("draw",1)}
-if(clk("draw")&egpMaxObjects()>=420){
+if(clk("draw")&egpMaxObjects()>=440){
+if(NewCol){W:egpColor(409,vec(0,153,154))}
+if(!NewCol){W:egpColor(409,vec(0,153,184))}
 W:egpColor(35,vec(255,0,0))
 W:egpColor(36,vec(255,0,0))
 if(!NewCol){
@@ -528,8 +553,8 @@ W:egpColor(410,vec(0,153,184))
 W:egpColor(411,vec(0,153,184))
 for(I=2,428)
 {
-if(I<=17|(I>26&I<115)|(I>117&I<158)|(I>17&I<28)|(I>34&I<37)|(I>335&I<343)){W:egpColor(I,vec(0,153,184))}
-if((I>114&I<117)|(I>160&I<200)|(I>=202&I<336)|(I>411&I<429)){W:egpColor(I,vec(255,255,255))}
+if(I<=17|(I>26&I<110)|(I>111&I<154)|(I>17&I<28)|(I>34&I<37)|(I>335&I<343)){W:egpColor(I,vec(0,153,184))}
+if((I>109&I<112)|(I>153&I<200)|(I>=202&I<336)|(I>411&I<429)){W:egpColor(I,vec(255,255,255))}
 if((I>17&I<27)){W:egpColor(I,vec(12,96,104))}
 if(I>393&I<403){W:egpColor(I,vec(0,153,184))}
 }
@@ -539,18 +564,18 @@ W:egpColor(410,vec(0,153,154))
 W:egpColor(411,vec(0,153,154))
 for(I=2,428)
 {
-if(I<=17|(I>26&I<115)|(I>117&I<158)|(I>34&I<37)|(I>335&I<343)|(I>411&I<429)){W:egpColor(I,vec(0,153,154))}
-if((I>114&I<117)|(I>160&I<200)|(I>=202&I<336)){W:egpColor(I,vec(208,208,144))}
+if(I<=17|(I>26&I<110)|(I>111&I<154)|(I>34&I<37)|(I>335&I<343)|(I>411&I<429)){W:egpColor(I,vec(0,153,154))}
+if((I>109&I<112)|(I>153&I<200)|(I>=202&I<336)){W:egpColor(I,vec(208,208,144))}
 if((I>17&I<27)){W:egpColor(I,vec(12,94,76))}
 if(I>393&I<403){W:egpColor(I,vec(0,153,154))}
 }
 }
 }
-if(clk("Loaded")&egpMaxObjects()<420&!IDsOverride){
+if(clk("Loaded")&egpMaxObjects()<440&!IDsOverride){
 Loaded=-1
-print("This chip needs 420 ID's. This server have "+egpMaxObjects()+" ID's")
+print("This chip needs 440 ID's. This server have "+egpMaxObjects()+" ID's")
 print("This chip needs more than 13000 BPS. This server have "+egpMaxUmsgPerSecond()+" BPS")
-hint("This chip needs 420 ID's. This server have "+egpMaxObjects()+" ID's",10)
+hint("This chip needs 440 ID's. This server have "+egpMaxObjects()+" ID's",10)
 hint("This chip needs more than 13000 BPS. This server have "+egpMaxUmsgPerSecond()+" BPS",10)
 W:egpClear()
 W:egpDrawTopLeft(1)
@@ -567,7 +592,7 @@ W:egpText(4,"SERVER HAVE ONLY "+egpMaxObjects()+" ID's!",vec2(256,112))
 W:egpAlign(4,1,1)
 W:egpFont(4,"Marlett",35)
 W:egpColor(4,vec(255,0,0))
-W:egpText(5,"YOU NEED A 420 ID's!",vec2(256,138))
+W:egpText(5,"YOU NEED A 440 ID's!",vec2(256,138))
 W:egpAlign(5,1,1)
 W:egpFont(5,"Marlett",35)
 W:egpColor(5,vec(255,0,0))
@@ -575,7 +600,7 @@ W:egpText(6,"NEED ENTER A:",vec2(256,168))
 W:egpAlign(6,1,1)
 W:egpFont(6,"Marlett",35)
 W:egpColor(6,vec(255,0,0))
-W:egpText(7,"wire_egp_max_objects 420",vec2(256,191))
+W:egpText(7,"wire_egp_max_objects 440",vec2(256,191))
 W:egpAlign(7,1,1)
 W:egpFont(7,"Marlett",35)
 W:egpColor(7,vec(255,0,0))
@@ -598,20 +623,18 @@ timer("warning",500)
 if(clk("warning")){W:egpAlpha(3,0) W:egpAlpha(10,0) W:egpAlpha(11,0) timer("warning2",500)}
 if(clk("warning2")){W:egpAlpha(3,255) W:egpAlpha(10,255) W:egpAlpha(11,255)  timer("warning",500)}
 if(Loaded==2){
-if((~Active|$Unstable)&Active&!Unstable){Cond=0.3} if((~Active|$Unstable)&!Unstable&!Active|clk("Loaded")){Cond=0.7}
-if((~Active|$Unstable)&Active&!Unstable){Cond2=0.6} if((~Active|$Unstable)&!Unstable&!Active|clk("Loaded")){Cond2=0.9}
-#OvMin=toString(round(Time/100))
-if(Time>0){OvSec=toString( Time % 60)} else {OvSec="00"}
-if(Time>0){OvMin=toString(floor(Time/60))} else {OvMin="00"}
-if(OvMin:length()==1){OvMin="0"+OvMin}
-if(OvSec:length()==1){OvSec="0"+OvSec}
-#hint(toString(Time/0.6),10)
-#hint(toString(Time/3600),10)
+if(($Active|changed(Unstable))&Active&!Unstable){Cond=0.3} if(($Active|changed(Unstable))&!Unstable&!Active|clk("Loaded")){Cond=0.7}
+if(($Active|changed(Unstable))&Active&!Unstable){Cond2=0.6} if(($Active|changed(Unstable))&!Unstable&!Active|clk("Loaded")){Cond2=0.9}
+if(changed(Time)&Time>0){OvSec=toString( Time % 60)} if(changed(Time)&Time<=0){OvSec="00"}
+if(changed(Time)&Time>0){OvMin=toString(floor(Time/60))} if(changed(Time)&Time<=0){OvMin="00"}
+if(changed(Time)&OvMin:length()==1){OvMin="0"+OvMin}
+if(changed(Time)&OvSec:length()==1){OvSec="0"+OvSec}
 if(~Key&Key&Key!=127){
 if(EnteredAdress:length()<9&!Active){if((ChrA:find(toChar(Key))&!EnteredAdress:find(toChar(Key):upper())&toChar(Key)!="#"&!EnteredAdress:find("#"))|(ChrA:find(toChar(Key))&toChar(Key)=="#"&EnteredAdress:length()>5&EnteredAdress:length()<9&!EnteredAdress:find("#"))){
 EnteredAdress+=toChar(Key):upper()}}
-} if(~Key&Key==127&!Active){EnteredAdress=EnteredAdress:left(EnteredAdress:length()-1)}
-local AdrBlock=0
+} if(~Key&Key==127&!Active){CHKRM=1 EnteredAdress=EnteredAdress:left(EnteredAdress:length()-1) timer("CHKRM",500)}
+if(~Key&Key!=127&!Active){CHKRM=0 stoptimer("CHKRM")}
+if(clk("CHKRM")){EnteredAdress=""}
 if(~AddressBook&AddressBook:length()>0&!Active&EnteredAdress!=AddressBook){EnteredAdress=AddressBook AdrBlock=1} if(~AddressBook&AddressBook:length()==0|Active){AdrBlock=0}
 if(~AddressBook&AddressBook:length()>0&!Active&EnteredAdress==AddressBook&!AdrBlock){DialString=EnteredAdress timer("SSDT",100)}
 if(~Key&Key==13&!Correct&EnteredAdress:length()>5&EnteredAdress:length()<9&!EnteredAdress:find("#")){EnteredAdress=EnteredAdress+"#"}
@@ -622,10 +645,10 @@ if(~Key&Key==61){Iris=1}else{Iris=0}
 if(~Key&Key==129){DialingMode=0}
 if(~Key&Key==130){DialingMode=1}
 if(~Key&Key==131){DialingMode=2}
-if(~Key&Key==9){RB++ timer("RBTR",200) if(RB==2){timer("shutdown",1) Loaded=-1 RB=0 RBT=1}}
+if(~Key&Key==9&((KeyUser==owner()&->KeyUser)|(!->KeyUser))){RB++ timer("RBTR",200) if(RB==2){timer("shutdown",1) Loaded=-1 RB=0 RBT=1}}
 if(clk("RBTR")&RB>0){RB=0}
-if(!Active){for(I=0,8){W:egpSetText(367+I,EnteredAdress[I+1])}}
-if(~Active&Active){EnteredAdress="" for(I=0,8){W:egpSetText(367+I,EnteredAdress[I+1])}}
+if((~Key|clk("CHKRM")|clk("Loaded"))&!Active){for(I=0,8){W:egpSetText(367+I,EnteredAdress[I+1])}}
+if($Active&Active){EnteredAdress="" for(I=0,8){W:egpSetText(367+I,EnteredAdress[I+1])}}
 if(clk("Loaded")){timer("kvadratiki1",200) timer("kvadratiki2",500) timer("RC",50)
 for(I=0,8)
 {
@@ -633,7 +656,9 @@ W:egpBoxOutline(28+I,vec2(441,93+I*45),vec2(65,43))
 W:egpAlpha(35,0)
 W:egpAlpha(36,0)
 }}
-if(clk("RC")){RingAngle=SG:stargateGetRingAngle()+13 W:egpAngle(115,RingAngle) W:egpAngle(116,RingAngle) if(Active){timer("RC",50)}else{timer("RC",100)}}
+if($RingRotation&RingRotation){RingStopCheck=0 timer("RC",50)}
+if(clk("RSC")&!RingRotation){RingStopCheck=1}
+if(clk("RC")&!RingStopCheck){RingAngle=SG:stargateGetRingAngle()+4.6 W:egpAngle(110,RingAngle) W:egpAngle(111,RingAngle) timer("RC",50) if(RingRotation==0){timer("RSC",1000)}}
 #if(RingRotation==1){timer("I3-",100)} if(clk("I3+")){ANG=ANG+2.5 W:egpAngle(115,ANG) W:egpAngle(116,ANG)}
 #if(RingRotation==-1){timer("I3+",100)} if(clk("I3-")){ANG=ANG-2.5 W:egpAngle(115,ANG) W:egpAngle(116,ANG)}
 if(clk("kvadratiki1")){
@@ -648,11 +673,11 @@ if(Alpha3>=240){ B1=0 }
 if(Alpha3<=0){ B1=1 }
 W:egpAlpha(387,Alpha3)
 W:egpAlpha(388,Alpha3)
-if(~Open&Active&Open&!Inbound){ W:egpAlpha(391,0) W:egpAlpha(392,0)}
+if($Open&Active&Open&!Inbound){ W:egpAlpha(391,0) W:egpAlpha(392,0)}
 if(Active&Open&!Inbound){W:egpAlpha(389,Alpha3) W:egpAlpha(390,Alpha3)
 }elseif(Active&Inbound){ W:egpAlpha(389,Alpha3) W:egpAlpha(390,Alpha3) W:egpAlpha(391,Alpha3) W:egpAlpha(392,Alpha3)}
-if((~Active|~Open|!Inbound)&!Open&!Inbound){ W:egpAlpha(389,0) W:egpAlpha(390,0) W:egpAlpha(391,0) W:egpAlpha(392,0)}
-if(((EnteredAdress:length()>=7&EnteredAdress[EnteredAdress:length()]=="#")|EnteredAdress[9]=="T")&!Active){W:egpAlpha(407,Alpha3)}else{W:egpAlpha(407,0)}
+if(($Active|$Open|!Inbound)&!Open&!Inbound){ W:egpAlpha(389,0) W:egpAlpha(390,0) W:egpAlpha(391,0) W:egpAlpha(392,0)}
+if(Correct){W:egpAlpha(407,Alpha3)}else{W:egpAlpha(407,0)}
 W:egpAlpha(431,Alpha3)
 if(Active){
 if(random()>0.3&G1<48){G1=G1+random(13,15)} if(G1>47){G1=0}
@@ -685,19 +710,21 @@ W:egpSetText(412+I,RandNum[I+1,string])
 }}
 if(clk("kvadratiki2")){for(I=343,366){if(random()>Cond2){Alpha2=255}else{Alpha2=0} W:egpAlpha(I,Alpha2)} timer("kvadratiki2",500)}
 if(DialMode==0){
-if((DialingSymbol==RingSymbol&RingRotation==0&Chev<101)|(DialingSymbol=="#"&RingSymbol=="#"&Chev<101)){
-if((~RingRotation&!RingRotation)|(DialingSymbol=="#"&RingSymbol=="#"&Chev==0)){ W:egpSetText(408,"") W:egpSize(393,vec2(0,0)) timer("chev",100) W:egpAlpha(408,255) W:egpAlpha(393,255)}
+if((DialingSymbol==RingSymbol&RingRotation==0&Chev<101&Chevron<8)|
+(DialingSymbol=="#"&RingSymbol=="#"&Chevron<8&Chev<101)|
+(DialingSymbol==RingSymbol&Chevron>=8&Chev<101)){
+if(($RingRotation&!RingRotation)|(DialingSymbol=="#"&RingSymbol=="#"&Chev==0)|(DialingSymbol==RingSymbol&Chevron>=8&Chev==0)){ W:egpSetText(408,"") W:egpSize(393,vec2(0,0)) timer("chev",100) W:egpAlpha(408,255) W:egpAlpha(393,255)}
 if(clk("chev")&!AN1){
 Chev2=0
 W:egpSetText(408,RingSymbol)
 W:egpPos(408,vec2(260,110+Chev*1.06))
 W:egpSize(408,Chev*1.3)
 if(AnotherSound){
-if(Chev==0&DialingSymbol!="#"){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locked.wav") soundVolume(2,0.6) timer("enc",1500)}
-if(Chev==0&DialingSymbol=="#"){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locked.wav") soundVolume(2,0.6) timer("enc",1100)} }
+if(Chev==0&(DialingSymbol!="#"&Chevron<8)){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locked.wav") soundVolume(2,0.6) timer("enc",1500)}
+if(Chev==0&((DialingSymbol=="#"&Chevron<8)|(Chevron>=8))){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locked.wav") soundVolume(2,0.6) timer("enc",1100)} }
 if(!AnotherSound){
-if(Chev==0&DialingSymbol!="#"){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locking.wav") soundVolume(2,0.6) timer("enc",1500)}
-if(Chev==0&DialingSymbol=="#"){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locking.wav") soundVolume(2,0.6) timer("enc",1100)} }
+if(Chev==0&(DialingSymbol!="#"&Chevron<8)){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locking.wav") soundVolume(2,0.6) timer("enc",1500)}
+if(Chev==0&((DialingSymbol=="#"&Chevron<8)|(Chevron>=8))){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locking.wav") soundVolume(2,0.6) timer("enc",1100)} }
 Chev+=15
 local BoxMin=vec2((Chev-5)*3.23,(Chev-5)*2.67)
 W:egpPos(393,vec2(-4,20)-BoxMin/2)
@@ -706,7 +733,7 @@ timer("chev",100)
 }}
 if(clk("enc")){W:entity():soundPlay(2,1,"alexalx/glebqip/dp_locked.wav") soundVolume(2,0.6)}
 if(RingSymbol!=""&RingSymbol==DialedSymbol&Chev2<90){
-if(~DialedSymbol&RingSymbol!=""&RingSymbol==DialedSymbol&Chev2<90){timer("chev2",100)}
+if(changed(DialedSymbol)&RingSymbol!=""&RingSymbol==DialedSymbol&Chev2<90){timer("chev2",100)}
 if(clk("chev2")&AN1<2){
 Chev=0
 AN1=1
@@ -719,48 +746,48 @@ W:egpPos(393,vec2(0,0)-BoxMin2/2)
 W:egpSize(393,BoxMin2)
 Alpha4=100-Chev2*1.5 if(Alpha4<0){Alpha4=0}
 W:egpAlpha(393,Alpha4)
-if(Chev2>=90){W:entity():soundPlay(1,1,"alexalx/glebqip/dp_encoded.wav") soundVolume(1,0.6) if(DialedSymbol=="#"){timer("compl0",1)} W:egpAlpha(393,0) W:egpAlpha(408,0) DialingAdress1=DialingAdress1+DialedSymbol AN1=2 Chevron1++ W:egpAlpha(408,0) W:egpAlpha(393,0)}
+if(Chev2>=90){W:entity():soundPlay(1,1,"alexalx/glebqip/dp_encoded.wav") soundVolume(1,0.6) if((DialedSymbol=="#"&Chevron<9)|Chevron==9){timer("compl0",1)} W:egpAlpha(393,0) W:egpAlpha(408,0) DialingAdress1=DialingAdress1+DialedSymbol AN1=2 Chevron1++ W:egpAlpha(408,0) W:egpAlpha(393,0)}
 timer("chev2",100)
 }}}
-if(~Active&!Active){Chev2=0 Chev=0 AN1=2 W:egpAlpha(393,0) W:egpAlpha(408,0)}
-if(~RingRotation&RingRotation!=0){AN1=0}
+if($Active&!Active){Chev2=0 Chev=0 AN1=2 W:egpAlpha(393,0) W:egpAlpha(408,0)}
+if($RingRotation&RingRotation!=0){AN1=0}
 if(!Inbound&DialMode==0&Active){
-if($Chevron1&Chevron1==1){for(I=0,10){W:egpColor(202+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==2){for(I=0,10){W:egpColor(213+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==3){for(I=0,10){W:egpColor(224+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==4){for(I=0,10){W:egpColor(235+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==5){for(I=0,10){W:egpColor(246+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==6){for(I=0,10){W:egpColor(257+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==7){for(I=0,9){W:egpColor(268+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==8){for(I=0,10){W:egpColor(278+I,vec(255,0,0))}}
-if($Chevron1&Chevron1==9){for(I=0,10){W:egpColor(289+I,vec(255,0,0))}}}
+if(changed(Chevron1)&Chevron1==1){for(I=0,10){W:egpColor(202+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==2){for(I=0,10){W:egpColor(213+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==3){for(I=0,10){W:egpColor(224+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==4){for(I=0,10){W:egpColor(235+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==5){for(I=0,10){W:egpColor(246+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==6){for(I=0,10){W:egpColor(257+I,vec(255,0,0))}}
+if(changed(Chevron1)&ChevronLocked){for(I=0,9){W:egpColor(268+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==7&!ChevronLocked){for(I=0,10){W:egpColor(278+I,vec(255,0,0))}}
+if(changed(Chevron1)&Chevron1==8&!ChevronLocked){for(I=0,10){W:egpColor(289+I,vec(255,0,0))}}}
 if((Inbound|DialMode!=0)&Active){
-if(~Chevron&Chevron>=1){for(I=0,10){W:egpColor(202+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=2){for(I=0,10){W:egpColor(213+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=3){for(I=0,10){W:egpColor(224+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=4){for(I=0,10){W:egpColor(235+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=5){for(I=0,10){W:egpColor(246+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=6){for(I=0,10){W:egpColor(257+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=7){for(I=0,9){W:egpColor(268+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=8){for(I=0,10){W:egpColor(278+I,vec(255,0,0))}}
-if(~Chevron&Chevron>=9){for(I=0,10){W:egpColor(289+I,vec(255,0,0))}}}
-if(~Active&!Active){for(I=0,97){if(NewCol){W:egpColor(202+I,vec(208,208,144))} if(!NewCol){W:egpColor(202+I,vec(255,255,255))}}}
-if(Chevron>0){if(DialMode==0&!Inbound){W:egpSetText(367+Chevron-1,DialingAdress1[Chevron])}
-elseif(!Inbound){W:egpSetText(367+Chevron-1,DialingAdress[Chevron])}}
-if(!Inbound&DialMode==0){W:egpAlpha(378+Chevron1-1,255)}
-if(Inbound|DialMode!=0){W:egpAlpha(378+Chevron-1,255)}
-if(~Active&Active==0){Chevron1=0 DialingAdress1="" W:egpAlpha(366,0) for(I=0,8){W:egpSetText(367+I,"") W:egpAlpha(378+I,0)}}
-if(!Active){for(I=0,8){W:egpAlpha(378+I,0)}}
-if(Active&!Open&!Inbound&DialedSymbol=="#"){A112=toString(Open)+toString(Active)+toString(Inbound)+DialedSymbol}else{A112=toString(Open)+toString(Active)+toString(Inbound)}
+if($Chevron&Chevron>=1){for(I=0,10){W:egpColor(202+I,vec(255,0,0))}}
+if($Chevron&Chevron>=2){for(I=0,10){W:egpColor(213+I,vec(255,0,0))}}
+if($Chevron&Chevron>=3){for(I=0,10){W:egpColor(224+I,vec(255,0,0))}}
+if($Chevron&Chevron>=4){for(I=0,10){W:egpColor(235+I,vec(255,0,0))}}
+if($Chevron&Chevron>=5){for(I=0,10){W:egpColor(246+I,vec(255,0,0))}}
+if($Chevron&Chevron>=6){for(I=0,10){W:egpColor(257+I,vec(255,0,0))}}
+if($Chevron&ChevronLocked){for(I=0,9){W:egpColor(268+I,vec(255,0,0))}}
+if($Chevron&Chevron>=7&!ChevronLocked){for(I=0,10){W:egpColor(278+I,vec(255,0,0))}}
+if($Chevron&Chevron>=8&!ChevronLocked){for(I=0,10){W:egpColor(289+I,vec(255,0,0))}}}
+if($Active&!Active){for(I=0,97){if(NewCol){W:egpColor(202+I,vec(208,208,144))} if(!NewCol){W:egpColor(202+I,vec(255,255,255))}}}
+if(changed(Chevron1)&Chevron1>0){if(DialMode==0&!Inbound){W:egpSetText(367+Chevron-1,DialingAdress1[Chevron])}}
+if(changed(DialingAdress)&Chevron>0){if(DialMode!=0&!Inbound){W:egpSetText(367+Chevron-1,DialingAdress[Chevron])}}
+if(changed(Chevron1)&!Inbound&DialMode==0&Active){W:egpAlpha(378+Chevron1-1,255)}
+if($Chevron&Inbound|DialMode!=0&Active){W:egpAlpha(378+Chevron-1,255)}
+if($Active&Active==0){Chevron1=0 DialingAdress1="" W:egpAlpha(366,0) for(I=0,8){W:egpSetText(367+I,"") W:egpAlpha(378+I,0)}}
+#if(!Active){for(I=0,8){W:egpAlpha(378+I,0)}}
 if(clk("Loaded")|~NewCol){
 if(NewCol){Col1=vec(0,153,154)} if(!NewCol){Col1=vec(0,153,184)}
 Text1col["000",vector]=Col1
 Text2col["000",vector]=Col1
 Text1col["010",vector]=Col1
 Text2col["010",vector]=Col1
-Text1col["010#",vector]=Col1
-Text2col["010#",vector]=Col1}
-if(clk("Loaded")|~Open|~Active|~Inbound|~DialedSymbol|~NewCol){
+Text1col["0101",vector]=Col1
+Text2col["0101",vector]=Col1}
+if(clk("Loaded")|$Open|$Active|$Inbound|changed(DialedSymbol)|~NewCol){
+if(Active&!Open&!Inbound&(DialedSymbol=="#"|Chevron==9)){A112=toString(Open)+toString(Active)+toString(Inbound)+toString(DialedSymbol=="#"|Chevron==9)}else{A112=toString(Open)+toString(Active)+toString(Inbound)}
 W:egpSetText(387,Text1[A112,string])
 W:egpPos(387,Text1pos[A112,vector2])
 W:egpColor(387,Text1col[A112,vector])
@@ -782,11 +809,11 @@ W:egpAlpha(390,255)
 W:egpAlpha(391,255)
 W:egpAlpha(392,255)
 W:egpPos(389,vec2(98,95)) W:egpSize(389,vec2(43,43))
-W:egpPos(390,vec2(374,95)) W:egpSize(390,vec2(43,45))
-W:egpPos(391,vec2(98,312)) W:egpSize(389,vec2(43,45))
-W:egpPos(392,vec2(374,321)) W:egpSize(390,vec2(43,45))}else{
+W:egpPos(390,vec2(372,95)) W:egpSize(390,vec2(43,45))
+W:egpPos(391,vec2(98,311)) W:egpSize(389,vec2(43,45))
+W:egpPos(392,vec2(372,311)) W:egpSize(390,vec2(43,45))}else{
 W:egpAlpha(389,0) W:egpAlpha(390,0) W:egpAlpha(391,0) W:egpAlpha(392,0)}}
-if(~Open){
+if($Open){
 if(!Open){Min=0}
 if(Open){Min=1}
 #chev1
@@ -824,9 +851,8 @@ W:egpPos(280,vec2(296-Min*1,330-Min*3))
 W:egpPos(289,vec2(214-Min*0,346+Min*4))
 W:egpPos(291,vec2(220+Min*0,330-Min*3))
 }
-EAn=EnteredAdress:length()
-if($EAn){
-if(((EnteredAdress:length()>=7&EnteredAdress[EnteredAdress:length()]=="#")|EnteredAdress[9]=="T")&!Active)
+if(changed(EnteredAdress)){
+if(((EnteredAdress:length()<9&EnteredAdress[EnteredAdress:length()]=="#")|EnteredAdress:length()==9)&!Active)
 {
 Correct=1
 W:egpAlpha(403,255)
@@ -838,6 +864,8 @@ if(!NewCol){W:egpColor(404,vec(0,153,184)) W:egpColor(405,vec(0,153,184)) W:egpC
 else{
 W:egpAlpha(403,0) W:egpAlpha(404,0) W:egpAlpha(405,0) W:egpAlpha(406,0) Correct=0
 }}
+#if(clk("kvadratiki1")){
+if(Correct){W:egpAlpha(407,Alpha3)} if(changed(Correct)&!Correct){W:egpAlpha(407,0)}#}
 if(DialMode==0){
 if(Chevron1==7&DialedSymbol!="#"){Chevr8=1}
 if(Chevron1==7&DialedSymbol=="#"&DialingSymbol!="#"&Chevr8!=1){Chevr8=0}
@@ -850,7 +878,7 @@ if(Chevron==8&DialedSymbol!="#"){Chevr9=1}
 if(Chevron==8&DialedSymbol=="#"&DialingSymbol!="#"){Chevr9=0}}
 if(Chevron<7&Chevron1<7){Chevr8=0}
 if(Chevron<8&Chevron1<8){Chevr9=0}
-if(~DialedSymbol&Active&!Open&!Inbound&DialedSymbol=="#"&DialMode>0){timer("compl0",1)} if(!Active|Inbound){for(I=0,8){W:egpAlpha(18+I,0)}}# soundStop(3,0)}
+if(changed(DialedSymbol)&Active&!Open&!Inbound&((DialedSymbol=="#"&Chevron<9)|Chevron==9)&DialMode>0){timer("compl0",1)} if(!Active|Inbound){for(I=0,8){W:egpAlpha(18+I,0)}}# soundStop(3,0)}
 if(clk("compl0")){for(I=0,Chevron-1){W:egpAlpha(18+I,255)} timer("compl1",200) W:entity():soundPlay(3,500,"alexalx/glebqip/dp_lock.wav") soundVolume(3,0.6)} #W:entity():soundPlay(3,500,"SGDP/v1/DP/lock1.wav")}
 if(clk("compl1")){for(I=0,Chevron-1){W:egpAlpha(18+I,0)} timer("compl2",200) soundStop(3,0)}
 if(clk("compl2")){for(I=0,Chevron-1){W:egpAlpha(18+I,255)} timer("compl3",200) W:entity():soundPlay(3,500,"alexalx/glebqip/dp_lock.wav") soundVolume(3,0.6)}
@@ -881,14 +909,10 @@ I2++
 W:egpBox(201,vec2(441,449),vec2(65,43-I2))
 W:egpColor(201,vec(0,0,0))
 } if(!Chevr9){W:egpRemove(201) W:egpAlpha(36,0) I2=0 if(Chevr8&!Chevr9){W:egpBoxOutline(2,vec2(1,85),vec2(511,378))} if(!Chevr8&!Chevr9&AA1){W:egpBoxOutline(2,vec2(1,85),vec2(511,334)) AA1=0}
-if(!Inbound){W:egpText(409,DType[DialingMode,string],vec2(256,75))}else{W:egpText(409,DType[0,string],vec2(256,75))}
-W:egpAlign(409,1,1)
-W:egpFont(409,"Marlett",30)
-if(NewCol){W:egpColor(409,vec(0,153,154))}
-if(!NewCol){W:egpColor(409,vec(0,153,184))}
+if(($Inbound|changed(DialingMode))&!Inbound){W:egpText(409,DType[DialingMode,string],vec2(256,75))} if($Inbound&Inbound){W:egpText(409,DType[0,string],vec2(256,75))}
 if(~Key&Key){W:entity():soundPlay(0,1,"alexalx/glebqip/click"+randint(1,4)+".mp3")}
-if(DialMode!=0&!Inbound){if(~Chevron&Chevron>0){W:entity():soundPlay(1,1,"alexalx/glebqip/dp_encoded.wav") soundVolume(1,0.6) timer("sstop",200)}} if(clk("sstop")){soundStop(1,0)}
-if($Overload&Overload>0){
+if(DialMode!=0&!Inbound){if($Chevron&Chevron>0){W:entity():soundPlay(1,1,"alexalx/glebqip/dp_encoded.wav") soundVolume(1,0.6) timer("sstop",200)}} if(clk("sstop")){soundStop(1,0)}
+if(changed(Overload)&Overload>0){
 W:egpBox(429,vec2(124,125),vec2(264,133))
 W:egpColor(429,vec(0,0,0))
 W:egpBoxOutline(430,vec2(124,125),vec2(264,133))
@@ -922,19 +946,45 @@ W:egpBox(438,vec2(144+even(floor(OvPercent/100*224)),268),vec2(floor(OvPercent/1
 W:egpBoxOutline(439,vec2(144,268),vec2(224,45))
 W:egpColor(439,vec(255,0,0))
 }
-if(Overload>0&$Time){
-W:egpText(435,OvMin+"M"+OvSec+"S",vec2(250,220))
-if(Time>240){W:egpText(432,"HIGH LEVEL OF ENERGY FLUX",vec2(256,183))}
-if(Time<=240){W:egpText(432,"CRITICAL LEVEL OF ENERGY FLUX",vec2(256,183))}}
-if(Overload>0&$OvPercent){
+if(Overload>0&(changed(Time)|changed(Overload))){
+if(Overload==2)
+{
+W:egpSetText(433,"STARGATE DESTROYING")
+W:egpSetText(432,"ENERGY FLUX IS CRITICALLY")
+W:egpSetText(434,"WITHIN")
+W:egpSetText(435,"00M"+30+"S")
+}
+if(Overload==1)
+{
+W:egpSetText(433,"STARGATE WILL BE DESTROYED")
+W:egpSetText(434,"AFTER")
+if(Time>240){W:egpSetText(432,"HIGH LEVEL OF ENERGY FLUX")}
+if(Time<=240){W:egpSetText(432,"CRITICAL LEVEL OF ENERGY FLUX")}
+W:egpSetText(435,OvMin+"M"+OvSec+"S")
+}
+}
+if(Overload>0&changed(OvPercent)){
 W:egpBoxOutline(437,vec2(124,258),vec2(264,65))
 W:egpBox(438,vec2(144+even(floor(OvPercent/100*224)),268),vec2(floor(OvPercent/100*224),45))
 W:egpColor(438,vec(OvPercent/100*255,255-OvPercent/100*255,0))}
-if(($Overload&!Overload)|(clk("Loaded"))){W:egpRemove(429) W:egpRemove(430) W:egpRemove(431) W:egpRemove(432) W:egpRemove(433) W:egpRemove(434) W:egpRemove(435) W:egpRemove(436) W:egpRemove(437) W:egpRemove(438) W:egpRemove(439)}
+if((changed(Overload)&!Overload)|(clk("Loaded"))){W:egpRemove(429) W:egpRemove(430) W:egpRemove(431) W:egpRemove(432) W:egpRemove(433) W:egpRemove(434) W:egpRemove(435) W:egpRemove(436) W:egpRemove(437) W:egpRemove(438) W:egpRemove(439)}
 }}
+else
+{
+if(first()|dupefinished()|clk("shutdown1")){timer("LCHK",100)}
+if(clk("LCHK")){if(Active){Close=1}else{Close=0} timer("LCHK",100)}
+}
 if(clk("errpip")){soundVolume(12,0.6) soundPlay(12,10,"synth/square_440.wav") timer("errpip1",200)}
 if(clk("errpip1")){soundVolume(12,0) soundStop(12,0) timer("errpip2",200)}
 if(clk("errpip2")){soundVolume(12,0.6) soundPlay(12,10,"synth/square_440.wav") timer("errpip3",200)}
 if(clk("errpip3")){soundVolume(12,0) soundStop(12,0) timer("errpip4",200)}
 if(clk("errpip4")){soundVolume(12,0.6) soundPlay(12,10,"synth/square_440.wav") timer("errpip5",200)}
 if(clk("errpip5")){soundVolume(12,0) soundStop(12,0)}
+if(changed(DialString)){SG:stargateSetWire("Dial String",DialString)}
+if(changed(DialingMode)){SG:stargateSetWire("Dial Mode",DialingMode)}
+if(changed(StartStringDial)){SG:stargateSetWire("Start String Dial",StartStringDial)}
+if(changed(Close)){SG:stargateSetWire("Close",Close)}
+if(changed(RotateRing)){SG:stargateSetWire("Rotate Ring",RotateRing)}
+if(changed(RingSpeedMode)){SG:stargateSetWire("Ring Speed Mode",RingSpeedMode)}
+if(changed(ActivateChevronNumbers)){SG:stargateSetWire("Activate chevron numbers",ActivateChevronNumbers)}
+

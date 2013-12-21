@@ -364,11 +364,11 @@ function ENT:OnTakeDamage(dmg)
 	if (dmg:GetDamageType() == DMG_BLAST) then
 		if (self.WormHoleJumpNDMG>0 and IsValid(self.EventHorizon) and self.EventHorizon:IsOpen() and self.Outbound and not self.Jumped) then
 			if (self.WormHoleJumpDMG>self.WormHoleJumpNDMG) then
-				--if (math.random(1,2)==1) then
-				--	self:AbortDialling();
-				--else
+				if (math.random(1,4)==4) then
+					self:AbortDialling();
+				else
 					self:WormHoleJump();
-				--end
+				end
 				self.WormHoleJumpDMG = 0;
 				return
 			else
@@ -738,7 +738,7 @@ end
 function ENT:CheckRamp()
 	if (self.Entity:GetClass()=="stargate_orlin"||self.Entity:GetClass()=="stargate_supergate") then return false; end;
 	for _,e in pairs(ents.FindInSphere(self.Entity:GetPos(),100)) do
-		if (StarGate.Ramps.Anim[e:GetModel()] || StarGate.Ramps.NonAnim[e:GetModel()]) then
+		if (e.IsRamp) then
 			constraint.Weld(self.Entity,e,0,0,0,true);
 			break;
 		end

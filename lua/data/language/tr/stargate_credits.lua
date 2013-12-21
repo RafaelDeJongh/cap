@@ -11,3 +11,5 @@ stargate_credits_10 = Değişiklikler gmodu yeniden başlattıktan sonra aktif o
 stargate_credits_11 = Carter's Pack yeni bir wiremod versiyonu algılamadı
 stargate_credits_12 = Carter's Addon Pack lisanlanmıştır:
 stargate_credits_13 = Buglar
+stargate_credits_14 = If you like what we've brought here and want to support the developers then you can donate here:
+stargate_credits_15 = Donate

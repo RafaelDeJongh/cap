@@ -87,6 +87,11 @@ function ENT:DisintegrateTargets()
    for _, entity in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do
       local isValidTarget = (self:IsValidTarget(entity) && entity:GetPhysicsObject():IsValid()) -- So it doesn't dissolve stuff like info player start.
 
+		if (isValidTarget) then
+			local allow = hook.Call("StarGate.DarakaWave.Disintegrate",nil,entity,self);
+			if (allow==false) then continue end
+		end
+
       if isValidTarget then
          for _, immuneEnt in pairs(self.immuneEnts) do
             if (entity == immuneEnt) then

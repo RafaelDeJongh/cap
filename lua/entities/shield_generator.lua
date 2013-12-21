@@ -262,6 +262,15 @@ function ENT:Use(p)
 	end
 end
 
+local function cap_shield_nuke(ent)
+	if (not IsValid(ent)) then return end
+	if (StarGate.IsInShield(ent)) then return false end
+end
+
+hook.Add("StarGate.GateNuke.DamageEnt","CAP.Shield.Nuke",cap_shield_nuke);
+hook.Add("StarGate.GateNuke.KillPlayer","CAP.Shield.Nuke",cap_shield_nuke);
+hook.Add("StarGate.SatBlast.DamageEnt","CAP.Shield.Nuke",cap_shield_nuke);
+
 end
 
 if CLIENT then

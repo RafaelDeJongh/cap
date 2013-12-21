@@ -370,4 +370,7 @@ if(meta and not meta.__GodEnable) then
 	hook.Add("PlayerDeath","Player.Death.ResetGod",function(ply)
 		ply.__pGodMode = false;
 	end)
+	hook.Add("PlayerSilentDeath","Player.Death.ResetGod",function(ply)
+		ply.__pGodMode = false;
+	end)
 end

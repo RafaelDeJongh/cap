@@ -35,6 +35,19 @@ hook.Add("PlayerDeath", "DeathEvent", function(victim, weapon, killer)
 	end
 end)
 
+hook.Add("PlayerSilentDeath", "DeathEvent", function(victim, weapon, killer)
+
+	 if (IsValid(victim) and victim.zapMode and victim.zapMode >= 1 ) then
+		victim.zapMode = 0
+		timer.Destroy("SpeedResetZap2")
+		timer.Destroy("zapModeReset2")
+		timer.Destroy("SpeedResetZap3")
+		timer.Destroy("zapModeReset3")
+
+		GAMEMODE:SetPlayerSpeed(victim, 250, 500)
+	end
+end)
+
 function ENT:Explode()
 
 	self:Blast("energy_explosion",self:GetPos(),self,Vector(1,1,1), false);

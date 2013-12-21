@@ -305,6 +305,7 @@ function PlayerDeath_Stone(ply) -- What happen if one of connected player will d
 	end
 end
 hook.Add( "PlayerDeath", "PlayerDeath_Stone", PlayerDeath_Stone )
+hook.Add( "PlayerSilentDeath", "PlayerDeath_Stone", PlayerDeath_Stone )
 
 -----------------------------------FIND----------------------------------
 

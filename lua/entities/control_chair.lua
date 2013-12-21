@@ -283,13 +283,14 @@ end
 function ENT:EndTouch()	self.Touching = false end
 
 function ENT:Think()
-
-	umsg.Start("ControlChair",self.Pilot)
-		umsg.Bool(self.Controlling)
-		umsg.Bool(self.Enabled)
-		umsg.Short(self.DroneCount)
-		umsg.Entity(self.Chair)
-	umsg.End()
+	if (IsValid(self.Pilot)) then
+		umsg.Start("ControlChair",self.Pilot)
+			umsg.Bool(self.Controlling)
+			umsg.Bool(self.Enabled)
+			umsg.Short(self.DroneCount)
+			umsg.Entity(self.Chair)
+		umsg.End()
+	end
 
 	if(self.Controlling) then
 		if(self.Enabled) then
@@ -297,7 +298,7 @@ function ENT:Think()
 		end
 	end
 
-	if(self.Controlling) then
+	if(self.Controlling and IsValid(self.Pilot)) then
 		if(self.Pilot:KeyDown(IN_FORWARD)) then
 			if(self.Enabled) then
 				self:Anims("open")
@@ -332,7 +333,7 @@ function ENT:Think()
 		end
 	end
 
-	if(self.Controlling) then
+	if(self.Controlling and IsValid(self.Pilot)) then
 		if(self.Pilot:KeyDown(IN_USE)) then
 			if(self.NextUse<CurTime()) then
 				if self.Enabled then

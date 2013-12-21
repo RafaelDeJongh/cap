@@ -48,9 +48,6 @@ function ENT:Initialize()
 	self.Entity:SetName("Shield Buble");
 	self.Created = CurTime();
 	self.Entity:SetRenderMode(RENDERMODE_NONE)
-	self.Entity:SetMoveType(MOVETYPE_NONE);
-	self.Entity:SetSolid(SOLID_VPHYSICS);
-	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:DrawShadow(false);
 	self.Entity:SetNotSolid(true);
 	self.Entity:SetTrigger(true); -- The most important thing: Makes the shield trigger Touch() events, even when it's not solid
@@ -82,6 +79,10 @@ function ENT:Initialize()
 	self.Entity:SetNWString("shield_model", model);
 	self.Parent:SetNWString("shield_model", model);
 	--print(model)
+
+	self.Entity:SetMoveType(MOVETYPE_NONE);
+	self.Entity:SetSolid(SOLID_VPHYSICS);
+	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 
 	self.nocollide = {};
 	self.HasHitShield = {};
