@@ -93,7 +93,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.BaseClass.Initialize(self)
 
 	self.Vehicle = "Teltac";
-	self.EntHealth = 3000;
+	self.EntHealth = 6000;
 	self.BlastMaxVel = 10000000;
 	self.Blasts = {};
 	self.BlastCount = 0;
