@@ -52,6 +52,7 @@ function ENT:SpawnFunction(ply, tr) --######## Pretty useless unless we can spaw
 	e:Activate()
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	ply:AddCount("CAP_ships", e)
+	e.Owner = ply;
 	return e
 end
 ENT.Sounds={
@@ -68,7 +69,8 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetNetworkedInt("health",500)
+	self.EntHealth = 2000
+	self:SetNetworkedInt("health",self.EntHealth)
 	self:SetUseType(SIMPLE_USE)
 	self:StartMotionController()
 	self:SpawnChairs()

@@ -68,7 +68,7 @@ private=false
 locale=true
 [stargate]
 classname=stargate_tollan
-position=-694.3487 359.9252 190.4140
+position=-894.3487 359.9252 190.4140
 angles=-0.000 -0.840 0.000
 address=TOLAN1
 group=M@
@@ -102,7 +102,7 @@ angles=15.000 89.281 -0.000
 destroyed=true
 [dhd]
 classname=dhd_infinity
-position=-256.4914 209.0311 49.2313
+position=-506.4914 209.0311 49.2313
 angles=15.000 -7.080 -0.000
 destroyed=false
 [ring_panel]
@@ -144,6 +144,6 @@ angles=-0.061 85.783 179.984
 address=5
 [ramp]
 classname=ramp
-position=-514.3680 357.2860 64.4140
+position=-714.3680 357.2860 64.4140
 angles=-0.000 -0.840 0.000
 model=models/boba_fett/ramps/ramp11.mdl

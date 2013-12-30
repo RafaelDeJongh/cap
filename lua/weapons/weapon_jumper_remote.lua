@@ -43,7 +43,11 @@ function SWEP:PrimaryAttack()
 		if(IsValid(v)) then
 			if(v.Owner==self.Owner) then
 				if(not(self.Owner:KeyDown(IN_USE))) then
-					v:ToggleCloak()
+					if (IsValid(v.Shields) and v.Shields:Enabled()) then
+                        v:ToggleShield()
+					else
+						v:ToggleCloak()
+					end
 				end
 			end
 		end

@@ -246,10 +246,10 @@ function ENT:Think(ply)
 		if(ship_dist < self.Range) then
 			local health = v:GetNetworkedInt("health");
 			health = health + 5;
-			if (v:GetClass()=="sg_vehicle_teltac") then
-				if (health > 3000) then health = 3000; end
+			if (v.EntHealth) then
+				if (health > v.EntHealth) then health = v.EntHealth; end
 			else
-				if (health > 500) then health = 500; end
+				if (health > 300) then health = 300; end
 			end
 			v:SetNetworkedInt("health", health);
 			v:SetWire("Health",health);

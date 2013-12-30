@@ -43,7 +43,7 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	if (WireAddon) then
-		self.Inputs = WireLib.CreateInputs( self.Entity, {"Count","Reset","Minutes","Seconds"});
+		self.Inputs = WireLib.CreateInputs( self.Entity, {"Count","Reset","Minutes","Seconds","Normal Font"});
 		self.Outputs = WireLib.CreateOutputs( self.Entity, {"End", "Close Stargate","Minutes","Seconds"});
 	end
 
@@ -92,6 +92,7 @@ function ENT:TriggerInput(variable, value)
 	elseif (variable == "Reset") then self.WireReset = value;
 	elseif (variable == "Minutes") then self.WireMinutes = math.Clamp(value, 0, 59);
 	elseif (variable == "Seconds") then self.WireSeconds = math.Clamp(value, 0, 59);
+	elseif (variable == "Normal Font") then self:SetNWBool("Font",util.tobool(value));
 	end
 end
 
@@ -228,6 +229,15 @@ local font = {
 }
 surface.CreateFont("AncientsT", font);
 
+local font = {
+	font = "quiver",
+	size = 90,
+	weight = 400,
+	antialias = true,
+	additive = true,
+}
+surface.CreateFont("DigitalTimer", font)
+
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 ENT.Category = SGLanguage.GetMessage("entity_main_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_dest_timer");
@@ -248,10 +258,16 @@ function ENT:Draw()
 	if (Time < 11) then Col = Color(225,50,50,255) end;
 
 	local TimeStr = string.ToMinutesSeconds(Time);
-	surface.SetFont("AncientsT");
+	--surface.SetFont("AncientsT");
+
+	local font = "AncientsT";
+	if (self:GetNWBool("Font",false)) then
+		font = "DigitalTimer"
+		pos = self.Entity:GetPos() + self.Entity:GetUp()*2.5 - self.Entity:GetForward()*3.2;
+	end
 
 	cam.Start3D2D(pos, ang, 0.07 );
-		draw.DrawText(TimeStr, "Ancients", 0, 0, Col, TEXT_ALIGN_CENTER );
+		draw.DrawText(TimeStr, font, 0, 0, Col, TEXT_ALIGN_CENTER );
 	cam.End3D2D();
 
 end

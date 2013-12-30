@@ -69,7 +69,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 
 	self.Vehicle = "DeathGlider";
 	--self.BaseClass.Initialize(self,self.Vehicle,self.FlightVars,self.FlightPhys,self.Accel)
-	self.EntHealth = 300;
+	self.EntHealth = 300
 	self.BlastMaxVel = 10000000;
 	self.Blasts = {};
 	self.BlastCount = 0;

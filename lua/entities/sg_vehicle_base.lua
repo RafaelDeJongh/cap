@@ -376,6 +376,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 			return
 		end
 		ply:AddCount("CAP_ships", Ent);
+		Ent.Owner = ply;
 	end
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end

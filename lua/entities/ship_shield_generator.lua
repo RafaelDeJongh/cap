@@ -59,7 +59,7 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_NONE);
 	self.Entity:SetRenderMode(RENDERMODE_NONE)
 	self.Entity:SetModel("models/micropro/shield_gen.mdl");
-	self.StrengthMultiplier = {1,1,1}; -- The first argument is the strength multiplier, the second is the regeneration multiplier. The third value is the "raw" value n, set by SetMultiplier(n) This will get set by the TOOL
+	self.StrengthMultiplier = {2,2,2}; -- The first argument is the strength multiplier, the second is the regeneration multiplier. The third value is the "raw" value n, set by SetMultiplier(n) This will get set by the TOOL
 	self.Strength = 100; -- Start with 100% Strength by default
 	self.RestoreMultiplier = StarGate.CFG:Get("shield","restore_multiplier",1); -- How fast can it restore it's health?
 	self.StrengthConfigMultiplier = StarGate.CFG:Get("shield","strength_multiplier",1); -- Doing this value higher will make the shiels stronger (look at the config)
@@ -160,6 +160,7 @@ function ENT:Think()
 				self.Shield:SetTrigger(true);
 				self.Shield:SetNWBool("depleted",false); -- For the traceline class - Clientside
 				self.Shield:AddAthmosphere();
+				self.Shield:SetNotSolid(false);
 			end
 		end
 	end

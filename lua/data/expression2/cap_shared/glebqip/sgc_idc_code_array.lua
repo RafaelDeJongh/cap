@@ -1,4 +1,4 @@
-# Version 1.0
+# Version 1.1
 # Author glebqip(RUS)
 # Created 23.11.13
 # This is SGC IDC Code array
@@ -8,9 +8,14 @@
 
 @name SGC IDC code array
 @inputs
-@outputs IDC:table
-@persist
+@outputs
+@persist IDC:table GT:gtable
 @trigger
-if(~IDC&->IDC){reset()}
-if(dupefinished()){reset()}
+if(dupefinished()){reset() gTable("SIca_"+entity():id()):clear()}
+interval(1000)
+
 #IDC[71629571282112,array]=array(1,"SG-1")
+
+GT = gTable("SIca_"+entity():id())
+GT[1,string]="SIcav1"
+GT[2,table]=IDC

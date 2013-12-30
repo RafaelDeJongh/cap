@@ -260,8 +260,6 @@ function VGUI:Init()
 	MenuButtonCreate.DoClick = function ( btn )
 	    if(ComboBox:GetSelected()[1] and ComboBox:GetSelected())then
 	        local value = ComboBox:GetSelected()[1]:GetValue(1);
-			local zpm = {"tampered_zpm",
-			             "zpm_mk3",}
 		    local models = {"models/micropro/shield_gen.mdl",
 			                "models/Iziraider/disabler/disabler.mdl",
 							"",}
@@ -269,7 +267,7 @@ function VGUI:Init()
                 		   "Shield Generator:shield_generator:"..models[1],
 						   "Jamming Device:jamming_device:"..models[1],
 						   "Telchak:telchak:"..models[3],
-						   "ZPM MK3:"..zpm[math.random(1,2)]..":"..models[3],
+						   "ZPM MK3:zpm_mk3:"..models[3],
 						   "Tollan Disabler:tollan_disabler:"..models[2],
 						   --"Anti Preori Device:anti_prior:"..models[3],
 						   "Naquadah Gen MK1:naquadah_generator:"..models[3],

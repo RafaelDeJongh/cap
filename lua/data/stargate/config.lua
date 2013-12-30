@@ -296,6 +296,8 @@ coolingPerCycle = 300
 #### molecular_construction_device
 [MCD]
 allow_tzmp = true
+tzmp_chance = 2
+# if chance = 2, then this means 50%, 3 will mean 33%, etc. 1 = always
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu

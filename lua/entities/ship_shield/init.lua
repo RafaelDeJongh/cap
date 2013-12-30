@@ -49,8 +49,6 @@ function ENT:Initialize()
 	self.Created = CurTime();
 	self.Entity:SetRenderMode(RENDERMODE_NONE)
 	self.Entity:DrawShadow(false);
-	self.Entity:SetNotSolid(true);
-	self.Entity:SetTrigger(true); -- The most important thing: Makes the shield trigger Touch() events, even when it's not solid
 
 	self.Parent = self.Entity:GetParent()
 	self.IsJumper = false;
@@ -83,6 +81,11 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_NONE);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
+	self.Entity:SetTrigger(true); -- The most important thing: Makes the shield trigger Touch() events, even when it's not solid
+	--self.Entity:SetNotSolid(true);
+
+	local offset = Vector(500,500,500);
+	self.Entity:SetCollisionBounds(-1*offset,offset);
 
 	self.nocollide = {};
 	self.HasHitShield = {};
@@ -155,6 +158,15 @@ function ENT:Initialize()
 	local phys = self.Entity:GetPhysicsObject()
 	if(phys:IsValid()) then
 		phys:EnableCollisions(false);
+	end
+end
+
+function ENT:OnTakeDamage(dmginfo)
+	if(not IsValid(self.Parent)) then return end;
+	local e = dmginfo:GetAttacker();
+	if (IsValid(e)) then
+		local pos = dmginfo:GetDamagePosition();
+		self:Hit(e,pos,0,(e:GetPos()-pos):GetNormalized());
 	end
 end
 
@@ -276,6 +288,7 @@ function ENT:Touch(e,override)
 			self:DrawBubbleEffect(true); -- Set turnoff effect
 			self.Parent:EmitSound(self.Parent.Sounds.Disengage,90,math.random(90,110));
 			self.Parent.Depleted = true;
+			self.Entity:SetNotSolid(true);
 			self.Entity:SetNWBool("depleted",true); -- For the traceline class - Clientside
 			self.Entity:SetTrigger(false);
 			self:RemoveAthmosphere();
@@ -336,14 +349,14 @@ function ENT:Reflect(e,do_not_draw_hit)
 		phys:Wake();
 		-- Now apply force!
 		phys:ApplyForceOffset(normal*phys:GetMass()*1000,e_pos-20*normal);
-	elseif(class == "rpg_missile") then
+	/*elseif(class == "rpg_missile") then
 		e:SetLocalVelocity(normal*1000);
 		e:SetAngles(normal:Angle());
 		e:SetHealth(0); -- Take his health
 		-- Shoot a bullet on it (Catdaemons Idea), to make it fall down
 		self.Entity:FireBullets({Num=1,Src=e_pos,Dir=Vector(0,0,0),Spread=Vector(0,0,0),Tracer=0,Force=1,Damage=100});
 		e.IgnoreShield = true; -- Do not register it anymore
-	else
+	else*/
 		local vel = normal*600;
 		if(class=="crossbow_bolt") then
 			vel = normal*1000;
@@ -482,6 +495,7 @@ function ENT:Think()
 		if(self.Parent.planet) then gravity = self.Parent.gravity or 0 end;
 		SB_Update_Environment(self.Athmosphere,self.Size,gravity,1,1,288);
 	end
+
 	self.Entity:NextThink(CurTime()+1);
 	return true
 end
@@ -501,9 +515,19 @@ function ENT:Hit(e,pos,dmg,normal)
 			self:DrawBubbleEffect(true); -- Set close effect (we are depleted!
 			self.Parent:EmitSound(self.Parent.Sounds.Disengage,90,math.random(90,110));
 			self.Parent.Depleted = true;
+			self.Entity:SetNotSolid(true);
 			self.Entity:SetNWBool("depleted",true); -- For the traceline class - Clientside
 			self.Entity:SetTrigger(false);
 			self:RemoveAthmosphere();
+		end
+	end
+end
+
+-- fix for get into ship when shield enabled
+function ENT:Use(ply)
+	if (IsValid(self.Parent) and IsValid(self.Parent.Owner) and IsValid(self.Parent.Owner.Owner)) then
+		if (ply==self.Parent.Owner.Owner) then
+			self.Parent.Owner:ToggleShield();
 		end
 	end
 end

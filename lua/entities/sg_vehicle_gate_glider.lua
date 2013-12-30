@@ -62,7 +62,8 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetNetworkedInt("health",300)
+	self.EntHealth = 300
+	self:SetNetworkedInt("health",self.EntHealth)
 	self:SetUseType(SIMPLE_USE)
 	self:StartMotionController()
 

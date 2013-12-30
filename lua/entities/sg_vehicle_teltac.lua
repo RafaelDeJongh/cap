@@ -85,6 +85,7 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	pl:Give("weapon_ringcaller");
 	pl:AddCount("CAP_ships", e)
+	e.Owner = pl;
 	return e;
 end
 
@@ -93,7 +94,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.BaseClass.Initialize(self)
 
 	self.Vehicle = "Teltac";
-	self.EntHealth = 3000;
+	self.EntHealth = 20000;
 	self.BlastMaxVel = 10000000;
 	self.Blasts = {};
 	self.BlastCount = 0;
@@ -133,6 +134,8 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.CanCloak = true;
 	self.CanDoCloak = true;
 	self.ImmuneOwner = true;
+
+	self.RingBusy = false;
 
 	self.HoverPos = self:GetPos();
 	self.HoverAlways = true;	 -- let me hover always :)
@@ -208,9 +211,11 @@ function ENT:Think()
 		if(self.Inflight and not self.LandingMode) then
 			self.InRing.Busy = true;
 			self.OutRing.Busy = true;
-		elseif((self.LandingMode and self.Inflight) or not self.Inflight) then
+			self.RingBusy = true;
+		elseif(((self.LandingMode and self.Inflight) or not self.Inflight) and self.RingBusy) then
 			self.InRing.Busy = false;
 			self.OutRing.Busy = false;
+			self.RingBusy = false;
 		end
 	end
 

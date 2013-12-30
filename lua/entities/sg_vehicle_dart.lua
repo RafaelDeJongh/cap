@@ -63,7 +63,8 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetNetworkedInt("health",300)
+	self.EntHealth = 500
+	self:SetNetworkedInt("health",self.EntHealth)
 	self.Roll=0
 	self.On=0
 	self:SetUseType(SIMPLE_USE)
@@ -101,6 +102,14 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 		phys:SetMass(10000) --@Madman07 well i set model mass for 1500
 	end
 
+	timer.Create("SGDartHealth"..self:EntIndex(),1,0,function()
+		if (not IsValid(self)) then return end
+		local health = self:GetNetworkedInt("health");
+		health = health + 2.5;
+		if (health > 500) then health = 500; end
+		self:SetNetworkedInt("health", health);
+		self:SetWire("Health",health);
+	end);
 end
 
 function ENT:OnTakeDamage(dmg) --########## Darts aren't invincible are they? @RononDex
@@ -114,7 +123,10 @@ function ENT:OnTakeDamage(dmg) --########## Darts aren't invincible are they? @R
 	end
 end
 
-function ENT:OnRemove()	self.BaseClass.OnRemove(self) end --For some reason, it doesn't automatically use this function from the base so we have to tell it to
+function ENT:OnRemove()
+	timer.Remove("SGDartHealth"..self:EntIndex());
+	self.BaseClass.OnRemove(self)
+end --For some reason, it doesn't automatically use this function from the base so we have to tell it to
 
 function ENT:Think() --####### Now let me think... @RononDex
 
@@ -151,6 +163,9 @@ function ENT:Think() --####### Now let me think... @RononDex
 			self.Harvester:Spit()
 		end
 	end
+
+	self.Entity:NextThink(CurTime()+0.25);
+	return true
 end
 
 function ENT:SpawnHarvester()
