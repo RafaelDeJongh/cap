@@ -163,7 +163,9 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 			--local ang = aim:Angle();
 			local ExtraRoll = math.Clamp(math.deg(math.asin(self:WorldToLocal(pos + aim).y)),-45,45); -- Extra-roll - When you move into curves, make the shuttle do little curves too according to aerodynamic effects
 			local mul = math.Clamp((velocity:Length()/1000),0,1); -- More roll, if faster.
+			local oldRoll = ang.Roll;
 			ang.Roll = (ang.Roll + self.Roll - ExtraRoll*mul) % 360;
+			if (ang.Roll!=ang.Roll) then ang.Roll = oldRoll; end -- fix for nan values what cause despawing/crash.
 
 			--########### Calculate our angles and position based on speed
 			FlightPhys.pos = pos+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);

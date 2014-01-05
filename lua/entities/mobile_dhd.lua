@@ -137,7 +137,9 @@ end
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
-	dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	if (IsValid(self.LockedGate)) then
+		dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	end
 
     duplicator.StoreEntityModifier(self, "StarGateMDHDInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self);

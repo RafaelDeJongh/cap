@@ -41,7 +41,7 @@ function ENT:Initialize()
 	self.Busy = false;
 
 	self:CreateWireInputs("Iris Control", "GDO Status", "GDO Text [STRING]","Auto-close","Don't Auto-Open","Close time","Disable Menu Mode")
-	self:CreateWireOutputs("Incoming Wormhole", "Code Status", "Gate Active", "Received Code", "Code Description [STRING]", "Iris Active")
+	self:CreateWireOutputs("Incoming Wormhole", "Code Status", "Gate Active", "Received Code", "Code Description [STRING]", "Iris Active","Busy")
 
 end
 
@@ -340,7 +340,7 @@ function ENT:RecieveIrisCode(code)
 		self.CodeStatus = 2			-- so, that means the code was wrong
 	end
 
-	self.Busy = true;
+	self:SetBusy(true);
 
 	timer.Remove("_sgiriscode"..self:EntIndex())
 	timer.Create("_sgiriscode"..self:EntIndex(), 4.2, 0 , function()
@@ -348,11 +348,16 @@ function ENT:RecieveIrisCode(code)
 			self.wireCode = 0;
 			self.wireDesc = "";
 			self.CodeStatus = 0;
-			self.Busy = false;
+			self:SetBusy(false);
 		end
 	end)
 
 	return ret
+end
+
+function ENT:SetBusy(busy)
+	self.Busy = busy;
+	self:SetWire("Busy",busy);
 end
 
 function ENT:OnRemove()
@@ -445,21 +450,27 @@ local function gdopc_menuhook(len)
 	local DermaPanel = vgui.Create( "DFrame" )
    	DermaPanel:SetPos(ScrW()/2-175, ScrH()/2-100)
    	DermaPanel:SetSize(330, 300)
-	DermaPanel:SetTitle( SGLanguage.GetMessage("iriscomp_title") )
+	--DermaPanel:SetTitle( SGLanguage.GetMessage("iriscomp_title") )
+	DermaPanel:SetTitle("")
    	DermaPanel:SetVisible( true )
    	DermaPanel:SetDraggable( false )
    	DermaPanel:ShowCloseButton( true )
    	DermaPanel:MakePopup()
-	DermaPanel.Paint = function()
+	DermaPanel.Paint = function(self,w,h)
         surface.SetDrawColor( 80, 80, 80, 185 )
-        surface.DrawRect( 0, 0, DermaPanel:GetWide(), DermaPanel:GetTall() )
+        surface.DrawRect( 0, 0, w, h )
     end
-    /* not working anymore
-	local image = vgui.Create("TGAImage" , DermaPanel);
-    image:SetSize(10, 10);
-    image:SetPos(10, 10);
-    image:LoadTGAImage("materials/gui/cap_logo.tga", "MOD");
-    */
+
+	local image = vgui.Create("DImage" , DermaPanel);
+    image:SetSize(16, 16);
+    image:SetPos(5, 5);
+    image:SetImage("gui/cap_logo");
+
+  	local title = vgui.Create( "DLabel", DermaPanel );
+ 	title:SetText(SGLanguage.GetMessage("iriscomp_title"));
+  	title:SetPos( 25, 0 );
+ 	title:SetSize( 400, 25 );
+
 	local codeLabel = vgui.Create("DLabel" , DermaPanel )
 	codeLabel:SetPos(10,25)
 	codeLabel:SetText(SGLanguage.GetMessage("iriscomp_code"))

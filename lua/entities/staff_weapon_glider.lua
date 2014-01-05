@@ -113,14 +113,14 @@ function ENT:FireWeapon()
 	-- Muzzle
 	local fx = EffectData();
 	fx:SetScale(1);
-	fx:SetOrigin(self.Entity:GetPos());
+	fx:SetOrigin(pos);
 	fx:SetEntity(self.Entity);
 	fx:SetAngles(Angle(self.Color.r,self.Color.g,self.Color.b));
 	util.Effect("energy_muzzle",fx,true,true);
 	-- ######################## The shot
 	local e = ents.Create("energy_pulse");
 	e:PrepareBullet(up, 10, 12000, 10, {self.Entity});
-	e:SetPos(self.Entity:GetPos());
+	e:SetPos(pos); -- damn, why getpos if there is fixed pos variable? fix by AlexALX
 	e:SetOwner(self);
 	e.Owner = self;
 	e:Spawn();

@@ -262,7 +262,7 @@ function ENT:GetEntitiesForTeleport(e)
 			if(v:GetClass() == "gmod_spawner") then -- Do not teleport stuff which is attached to an gmod-spawner
 				return {Entity=e,Attached={}};
 			elseif(self:Allowed(v,true)) then -- Valid prop? If not, do not teleport the whole contraption!
-				if(v ~= e) then
+				if(v ~= e and not IsValid(v:GetParent())) then -- test fix for not teleport parents by AlexALX (ent should be teleported with its parent automatically)
 					table.insert(entities,v);
 				end
 			else
@@ -275,7 +275,7 @@ function ENT:GetEntitiesForTeleport(e)
 end
 
 --################# Teleportation function for the EntityTables @aVoN
-function ENT:TeleportEntity(t,base)
+function ENT:TeleportEntity(t,base,basedata)
 	-- Quick reference
 	local g = {self.Entity,self.Target};
 	local pos = t.Position;
@@ -308,6 +308,7 @@ function ENT:TeleportEntity(t,base)
 	else
 		pos.New = base:LocalToWorld(pos.New);
 		vel.New = base:LocalToWorld(vel.New)-base:GetPos();
+		--pos.New = LocalToWorld(pos.New,basedata.Angles.New,basedata.Position.New,basedata.Angles.New);
 	end
 	-- ######### Player teleport
 	if(e:IsPlayer()) then
@@ -403,7 +404,7 @@ function ENT:Teleport(e,block,attached)
 			self:TeleportEntity(entities.Entity,e);
 			-- And now for all attached props too
 			for _,v in pairs(entities.Attached) do
-				local ent = self:TeleportEntity(v,e);
+				local ent = self:TeleportEntity(v,e,entities.Entity);
 				immunity[ent] = true;
 				ent.__StargateTeleport = immunity;
 			end

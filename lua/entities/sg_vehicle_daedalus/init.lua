@@ -682,7 +682,9 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		local AerodynamicRoll = self.Entity:GetAngles().Yaw - self.LastYaw;
 		local max = math.Clamp((velocity:Length()/40),0,60);
+		local oldRoll = self.Angles.Roll;
 		self.Angles.Roll =  -1*AerodynamicRoll*max + self.KeyRoll;
+		if (self.Angles.Roll!=self.Angles.Roll) then self.Angles.Roll = oldRoll; end -- fix for nan values what cause despawing/crash.
 
 		self.LastYaw = self.Entity:GetAngles().Yaw;
 		self.HoverPos = self.Entity:GetPos();
@@ -855,3 +857,13 @@ end
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "sg_vehicle_daedalus", StarGate.CAP_GmodDuplicator, "Data" )
 end
+
+--################# After teleporting it, fix the angles of a player @aVoN
+function ENT.FixAngles(self,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
+	-- Move a players view
+	local diff = Angle(0,ang_delta.y+180,0);
+	if(IsValid(self.Driver)) then
+		self.Driver:SetEyeAngles(self.Driver:GetAimVector():Angle() + diff);
+	end
+end
+StarGate.Teleport:Add("sg_vehicle_daedalus",ENT.FixAngles);

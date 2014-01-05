@@ -28,6 +28,8 @@ ENT.Purpose	= ""
 ENT.Instructions= ""
 list.Set("CAP.Entity", ENT.PrintName, ENT);
 
+ENT.EntHealth = 2000
+
 if SERVER then
 
 --########Header########--
@@ -69,7 +71,6 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
-	self.EntHealth = 2000
 	self:SetNetworkedInt("health",self.EntHealth)
 	self:SetUseType(SIMPLE_USE)
 	self:StartMotionController()
@@ -582,7 +583,8 @@ function PrintHUD()
 	local p = LocalPlayer()
 	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
 	local shuttle = p:GetNetworkedEntity("Shuttle")
-	local health = math.Round(shuttle:GetNWInt("health")/5)
+	if (not IsValid(shuttle)) then return end
+	local health = math.Round(shuttle:GetNWInt("health")/shuttle.EntHealth*100)
 
 	if(IsValid(self)) then
 		if((IsValid(shuttle))and(shuttle==self)) then

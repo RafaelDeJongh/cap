@@ -201,6 +201,21 @@ function ENT:DoTeleport()
 			if playersonly:GetBool() and not ent:IsPlayer() then else
 				if ent:GetPhysicsObject():IsValid() then
 					self.Ents[ent]=true
+					local allow = hook.Call("StarGate.Rings.TeleportEnt",nil,ent,self);
+					if (allow==false) then continue end
+					if (constraint.HasConstraints(ent)) then
+						local entities = StarGate.GetConstrainedEnts(ent,2);
+						local cont = false;
+						if(entities) then
+							for c,b in pairs(entities) do
+								if(b:IsWorld()) then
+									cont = true;
+									break;
+								end
+							end
+						end
+						if (cont) then continue end
+					end
 					local offset=ent:GetPos()-self.Entity:LocalToWorld(self.EndPos)
 					local destination=self.Other:LocalToWorld(self.Other.EndPos)+offset
 

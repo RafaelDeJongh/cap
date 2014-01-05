@@ -49,8 +49,8 @@ function ENT:Initialize()
 	self.IsOn = false;
 	self.Radius = 800; --math.random(600, 800); sorry disable this, because added hook, lazy to make it with radius...
 	if WireAddon then
-		self.Inputs = WireLib.CreateInputs( self.Entity, {"Activate"});
-		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Activated"});
+		self:CreateWireInputs("Activate");
+		self:CreateWireOutputs("Activated");
 	end
 
 end

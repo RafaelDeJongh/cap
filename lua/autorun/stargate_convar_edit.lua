@@ -141,12 +141,13 @@ function Group_Convar_OpenNet()
 	}
 
 	GroupConvarFrame = vgui.Create("DFrame");
-	GroupConvarFrame:SetPos(ScrW()/2-265, ScrH()/2-200);
+	--GroupConvarFrame:SetPos(ScrW()/2-265, ScrH()/2-200);
 	if (GroupGetConvar("stargate_has_rd")!=1) then
 		GroupConvarFrame:SetSize(560,360);
 	else
 		GroupConvarFrame:SetSize(560,310);
 	end
+	GroupConvarFrame:Center();
 	GroupConvarFrame:SetTitle(SGLanguage.GetMessage("stargate_menu_00"));
 	GroupConvarFrame:SetVisible(true);
 	GroupConvarFrame:SetDraggable(false);

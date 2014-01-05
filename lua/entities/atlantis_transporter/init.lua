@@ -438,6 +438,8 @@ function ENT:DoTeleport(target)
 				local rotation_matrix = MMatrix.RotationMatrix(self.Target:GetUp(),0);
 				local pos = self.Target:LocalToWorld(rotation_matrix*self:WorldToLocal(v:GetPos()))
 				if v:IsPlayer() then
+					local allow = hook.Call("StarGate.AtlantisTransporter.TeleportEnt",nil,v,self);
+					if (allow==false) then self.Ents[v]=true; continue end
 					local ang = v:GetAimVector():Angle();
 					local ang2 = self.Target:GetAngles().y-self:GetAngles().y;
 					-- fix by AlexALX
@@ -453,7 +455,22 @@ function ENT:DoTeleport(target)
 					self.EntsTP[v] = true;
 					self.Target.Fail = false;
 				elseif (self:CanTeleport(v) and IsValid(v:GetPhysicsObject()) or v:IsNPC()) then
-					self.Ents[v]=true
+					self.Ents[v]=true;
+					local allow = hook.Call("StarGate.AtlantisTransporter.TeleportEnt",nil,v,self);
+					if (allow==false) then continue end
+					if (constraint.HasConstraints(v)) then
+						local entities = StarGate.GetConstrainedEnts(v,2);
+						local cont = false;
+						if(entities) then
+							for c,b in pairs(entities) do
+								if(b:IsWorld()) then
+									cont = true;
+									break;
+								end
+							end
+						end
+						if (cont) then continue end
+					end
 					local ang = v:GetAngles();
 					local ang2 = self.Target:GetAngles().y-self:GetAngles().y;
 					local ent = v;

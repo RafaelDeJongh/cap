@@ -276,7 +276,9 @@ function ENT:PhysicsSimulate( phys, deltatime )--############## Flight code@ Ron
 		local ang = aim:Angle();
 		local ExtraRoll = math.Clamp(math.deg(math.asin(self:WorldToLocal(pos + aim).y)),-25,25); -- Extra-roll - When you move into curves, make the shuttle do little curves too according to aerodynamic effects
 		local mul = math.Clamp((velocity:Length()/1700),0,1); -- More roll, if faster.
+		local oldRoll = ang.Roll;
 		ang.Roll = (ang.Roll + self.Roll - ExtraRoll*mul) % 360;
+		if (ang.Roll!=ang.Roll) then ang.Roll = oldRoll; end -- fix for nan values what cause despawing/crash.
 
 		if(self.Pilot:KeyDown(self.Vehicle,"LAND")) then
 			self.LandingMode = true;
@@ -293,7 +295,6 @@ function ENT:PhysicsSimulate( phys, deltatime )--############## Flight code@ Ron
 		FlightPhys.pos = self:GetPos()+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);
 
 		self.Pilot:SetPos(pos);
-
 		phys:ComputeShadowControl(FlightPhys);
 	end
 	if (not self.Inflight and self.HoverAlways) then
@@ -327,7 +328,11 @@ function ENT.FixAngles(self,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
 		self.Pilot:SetEyeAngles(self.Pilot:GetAimVector():Angle() + diff);
 	end
 end
-StarGate.Teleport:Add("sg_vehicle_*",ENT.FixAngles);
+
+-- damn, this not work with mask...
+for k,v in pairs({sg_vehicle_dart,"sg_vehicle_gate_glider","sg_vehicle_glider","sg_vehicle_shuttle","sg_vehicle_f302","sg_vehicle_teltac"}) do
+	StarGate.Teleport:Add(v,ENT.FixAngles);
+end
 
 --########## Run the anim that's set in the arguements @RononDex
 function ENT:Anims(e,anim,playback_rate,delay,nosound,sound)

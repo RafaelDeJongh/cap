@@ -3,6 +3,8 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
+
 ENT.Type 			= "anim"
 ENT.Base 			= "base_anim"
 ENT.PrintName		= "Lantean Holo"
@@ -29,6 +31,8 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
+
+	self:CreateWireOutputs("Activated");
 
 	self.Touching = 0;
 	self.SoundLoop = CreateSound(self,self.Sounds.Idle);
@@ -66,17 +70,17 @@ function ENT:StartTouch(ent)
 		self.SoundLoop:Play();
 		self.SoundLoop:SetSoundLevel(85);
 		self.Touching = self.Touching+1;
-		if (self.Touching == 1) then self:SetNetworkedBool("Display", true); end
-		if timer.Exists(self.Entity:EntIndex().."NotTouch") then timer.Destroy(self.Entity:EntIndex().."NotTouch"); end
+		if (self.Touching == 1) then self:SetNetworkedBool("Display", true); self:SetWire("Activated",true); end
+		if timer.Exists(self:EntIndex().."NotTouch") then timer.Destroy(self:EntIndex().."NotTouch"); end
 	end
 end
 
 function ENT:EndTouch(ent)
 	if ent:IsPlayer() then
 		self.Touching = self.Touching-1;
-		timer.Create( self.Entity:EntIndex().."NotTouch", 1, 1, function()
-			if IsValid(self.Entity) then
-				if (self.Touching == 0) then self:SetNWBool("Display", false); end
+		timer.Create( self:EntIndex().."NotTouch", 1, 1, function()
+			if IsValid(self) then
+				if (self.Touching == 0) then self:SetNWBool("Display", false); self:SetWire("Activated",false); end
 				self.SoundLoop:FadeOut(1);
 			end
 		end);

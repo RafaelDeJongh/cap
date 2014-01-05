@@ -430,7 +430,9 @@ function ENT:PreEntityCopy()
 		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Entity )
 	end
 
-	dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	if (IsValid(self.LockedGate)) then
+		dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	end
 
 	dupeInfo.ScreenTextA = self.ScreenTextA;
 	dupeInfo.ScreenTextB = self.ScreenTextB;

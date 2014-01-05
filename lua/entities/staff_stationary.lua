@@ -223,6 +223,11 @@ function ENT:PhysicsUpdate( phys, deltatime )
 			dampfactor 		= 0.8;
 			deltatime 		= deltatime;
 		}
+
+		if (self.CannPhys.angle!=self.CannPhys.angle) then
+			self.CannPhys.angle = phys:GetAngles(); -- prevent nan value and despawn
+		end
+
 		Cannon:ComputeShadowControl(self.CannPhys);
 	end
 

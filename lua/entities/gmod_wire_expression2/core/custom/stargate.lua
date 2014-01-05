@@ -5,6 +5,8 @@
 if (E2Lib==nil) then return end
 E2Lib.RegisterExtension("stargate", true)
 
+__e2setcost( 1 )
+
 e2function string entity:stargateAddress()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return "" end
 	return this:GetGateAddress() or ""
@@ -14,6 +16,8 @@ e2function string wirelink:stargateAddress()
 	if not IsValid(this) or not this.IsStargate then return "" end
 	return this:GetGateAddress() or ""
 end
+
+__e2setcost( 5 )
 
 e2function void entity:stargateSetAddress(string address)
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return end
@@ -25,6 +29,8 @@ e2function void wirelink:stargateSetAddress(string address)
 	this:SetGateAddress(address)
 end
 
+__e2setcost( 1 )
+
 e2function string entity:stargateGroup()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return "" end
 	return this:GetGateGroup() or ""
@@ -35,6 +41,8 @@ e2function string wirelink:stargateGroup()
 	return this:GetGateGroup() or ""
 end
 
+__e2setcost( 5 )
+
 e2function void entity:stargateSetGroup(string group)
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetGateGroup(group)
@@ -44,6 +52,8 @@ e2function void wirelink:stargateSetGroup(string group)
 	if not IsValid(this) or not this.IsStargate then return end
 	this:SetGateGroup(group)
 end
+
+__e2setcost( 1 )
 
 e2function string entity:stargateName()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return "" end
@@ -264,6 +274,8 @@ e2function number wirelink:stargateActive()
 	end
 end
 
+__e2setcost( 5 )
+
 e2function number entity:stargateUnstable()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if IsValid(this.EventHorizon) and this.EventHorizon.Unstable then
@@ -281,6 +293,8 @@ e2function number wirelink:stargateUnstable()
 		return 0
 	end
 end
+
+__e2setcost( 30 )
 
 e2function number entity:stargateGetRingAngle()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
@@ -328,6 +342,8 @@ end
 
 -- Not sure, but probably this functions is shit... also workaround for gatespawner
 -- or maybe this will start new era for e2 coders not sure...
+
+__e2setcost( 5 )
 
 e2function number wirelink:stargateGetWire(string name)
 	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return -1 end
@@ -423,6 +439,8 @@ end
 
 -- end
 
+__e2setcost( 5 )
+
 e2function number entity:stargateOverload()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if (this.isOverloading) then
@@ -447,6 +465,8 @@ e2function number wirelink:stargateOverload()
 	end
 end
 
+__e2setcost( 10 )
+
 e2function number entity:stargateOverloadPerc()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if (this.excessPower==nil or this.excessPowerLimit==nil) then return 0; end
@@ -462,6 +482,8 @@ e2function number wirelink:stargateOverloadPerc()
 	if (perc>100) then return 100; end
 	return perc;
 end
+
+__e2setcost( 20 )
 
 e2function number entity:stargateOverloadTime()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
@@ -501,6 +523,8 @@ e2function number wirelink:stargateOverloadTime()
 	return perc;
 end
 
+__e2setcost( 10 )
+
 e2function number entity:stargateAsuranBeam()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
 	if (IsValid(this.asuranweapon) and this.asuranweapon.isFiring) then
@@ -518,6 +542,8 @@ e2function number wirelink:stargateAsuranBeam()
 		return 0
 	end
 end
+
+__e2setcost( 5 )
 
 e2function void entity:stargateDial(string address)
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return end
@@ -597,6 +623,8 @@ e2function void wirelink:stargateDHDPressButton(string char)
 	this:TriggerInput("Press Button",char:byte())
 end
 
+__e2setcost( 50 )
+
 e2function number wirelink:stargateGetEnergyFromAddress(string address)
 	if not IsValid(this) or not this.IsStargate then return -2 end
 	return this:WireGetEnergy(address:upper():sub(1,9));
@@ -626,6 +654,8 @@ e2function array entity:stargateAddressList()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return {} end
 	return this:WireGetAddresses();
 end
+
+__e2setcost( 1 )
 
 e2function number stargateSystemType()
 	local ret = GetConVar("stargate_group_system"):GetBool()
@@ -665,6 +695,8 @@ e2function void wirelink:stargateRingSetAddress(string address)
 	if not IsValid(this) or not this.IsRings then return end
 	this:SetRingAddress(address);
 end
+
+__e2setcost( 5 )
 
 e2function void entity:stargateRingDial(string address)
 	if not IsValid(this) or not this.IsRings or this.Busy or not(isOwner(self,this) or self.player:IsAdmin()) then return end
@@ -708,6 +740,8 @@ e2function void wirelink:stargateAsgardTeleport(vector origin, vector dest, numb
 	this:Teleport(Vector(origin[1],origin[2],origin[3]), Vector(dest[1],dest[2],dest[3]));
 end
 
+__e2setcost( 1 )
+
 e2function string wirelink:stargateAtlantisTPGetName()
 	if not IsValid(this) or not this.IsAtlTP then return "" end
 	return this.TName or "";
@@ -733,16 +767,22 @@ e2function void wirelink:stargateAtlantisTPSetPrivate(number bool)
 	this:SetAtlPrivate(bool);
 end
 
+__e2setcost( 5 )
+
 e2function void wirelink:stargateAtlantisTPTeleport(string name)
 	if not IsValid(this) or not this.IsAtlTP then return end
 	this.Destination = name;
 	this:Teleport();
 end
 
+__e2setcost( 10 )
+
 e2function array wirelink:stargateAtlantisTPAddressList()
 	if not IsValid(this) or not this.IsAtlTP then return {} end
 	return this:WireGetAddresses();
 end
+
+__e2setcost( 1 )
 
 e2function string entity:stargateAtlantisTPGetName()
 	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return "" end
@@ -769,13 +809,19 @@ e2function void entity:stargateAtlantisTPSetPrivate(number bool)
 	this:SetAtlPrivate(bool);
 end
 
+__e2setcost( 5 )
+
 e2function void entity:stargateAtlantisTPTeleport(string name)
 	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this.Destination = name;
 	this:Teleport();
 end
 
+__e2setcost( 10 )
+
 e2function array entity:stargateAtlantisTPAddressList()
 	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return {} end
 	return this:WireGetAddresses();
 end
+
+__e2setcost( nil )

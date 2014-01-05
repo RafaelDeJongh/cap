@@ -69,7 +69,7 @@ StarGate.Teleport:Add("rpg_missile",
 	end
 );
 --##### We need to reset a players aimvector, or the shuttle may move back into the gate and will be destroyed, because the players aimvector is still into the old direction
-local function shuttle(e,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
+/*local function shuttle(e,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
 	-- Move a players view
 	if(IsValid(e.Pilot)) then
 		e.Pilot:SetEyeAngles(e.Pilot:GetAimVector():Angle() + Angle(0,ang_delta.y+180,0));
@@ -77,7 +77,7 @@ local function shuttle(e,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
 end
 StarGate.Teleport:Add("shuttle",shuttle);
 StarGate.Teleport:Add("shuttle_viper",shuttle);
-StarGate.Teleport:Add("jumper",shuttle);
+StarGate.Teleport:Add("jumper",shuttle);*/
 --##### Hoverboard
 StarGate.Teleport:Add("modulus_hoverboard",
 	function(e,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)

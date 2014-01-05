@@ -241,8 +241,9 @@ function Cap_Convar_OpenNet()
 	}
 
 	CapConvarFrame = vgui.Create("DFrame");
-	CapConvarFrame:SetPos(ScrW()/2-360, ScrH()/2-325);
+	--CapConvarFrame:SetPos(ScrW()/2-360, ScrH()/2-325);
 	CapConvarFrame:SetSize(760,650);
+	CapConvarFrame:Center();
 	CapConvarFrame:SetTitle(SGLanguage.GetMessage("stargate_cap_menu_00"));
 	CapConvarFrame:SetVisible(true);
 	CapConvarFrame:SetDraggable(false);

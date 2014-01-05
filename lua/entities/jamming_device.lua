@@ -39,7 +39,7 @@ function ENT:Initialize()
 	self.Allow = {};
 
 	if (WireAddon) then
-		self:CreateWireInputs("Active");
+		self:CreateWireInputs("Activate","Set Radius");
 		self:CreateWireOutputs("Activated");
 	end
 
@@ -55,13 +55,15 @@ end
 -----------------------------------WIRE----------------------------------
 
 function ENT:TriggerInput(variable, value)
-	if (variable == "Active") then
+	if (variable == "Activate") then
 		self.IsEnabled = util.tobool(value)
 		if (self.IsEnabled) then
 			self:SetWire("Activated",1);
 		else
 			self:SetWire("Activated",0);
 		end
+	elseif (variable == "Set Radius") then
+		self.Size = math.Clamp(value,1,1024)
 	end
 end
 

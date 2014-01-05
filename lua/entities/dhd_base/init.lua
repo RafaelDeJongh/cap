@@ -217,6 +217,7 @@ function ENT:SpawnChevron()
 		e:SetAngles(ang);
 		e:Spawn();
 		e:Activate();
+		e.CAP_EH_NoTouch = true;
 		self.Chevron[i] = e;
 		--e.Symbol = table.KeyFromValue( self.ChevronNumber, i )
 		e:SetDerive(self.Entity); -- Derive Material/Color from "Parent"
@@ -944,7 +945,9 @@ end
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
-	dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	if (IsValid(self.LockedGate)) then
+		dupeInfo.LockedGate = self.LockedGate:EntIndex();
+	end
 
     duplicator.StoreEntityModifier(self, "StarGateDHDInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self);

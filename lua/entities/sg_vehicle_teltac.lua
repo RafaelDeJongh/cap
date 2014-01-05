@@ -322,6 +322,7 @@ function ENT:SpawnDoor()
 	e:SetRenderMode(RENDERMODE_TRANSALPHA)
 	constraint.Weld(self,e,0,0,0,true)
 	constraint.NoCollide(self,e,0,0)
+	e:SetParent(self);
 	self.Door = e;
 
 end
@@ -512,6 +513,7 @@ function ENT:SpawnDoor2()
 	e:Spawn();
 	e:Activate();
 	constraint.Weld(self,e,0,0,0,true)
+	e:SetParent(self);
 	self.Door2 = e;
 
 	local d = ents.Create("prop_physics");
@@ -521,6 +523,7 @@ function ENT:SpawnDoor2()
 	d:Spawn();
 	d:Activate();
 	constraint.Weld(self,d,0,0,0,true)
+	d:SetParent(self);
 	self.Door3 = d;
 end
 
@@ -568,7 +571,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if dupeInfo.RingPanel then self.RingPanel = CreatedEntities[dupeInfo.RingPanel]; end
 	if dupeInfo.InRing then self.InRing = CreatedEntities[dupeInfo.InRing]; end
 	if dupeInfo.OutRing then self.OutRing = CreatedEntities[dupeInfo.OutRing]; end
-	if dupeInfo.Door then self.Door = CreatedEntities[dupeInfo.Door]; end
+	if dupeInfo.Door then self.Door = CreatedEntities[dupeInfo.Door]; self.Door:SetColor(Color(255,255,255,0)); self.Door:SetRenderMode(RENDERMODE_TRANSALPHA); end
 	if dupeInfo.Door2 then self.Door2 = CreatedEntities[dupeInfo.Door2]; end
 	if dupeInfo.Door3 then self.Door3 = CreatedEntities[dupeInfo.Door3]; end
 

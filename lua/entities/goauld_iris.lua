@@ -310,6 +310,13 @@ function ENT:TrueActivate(deactivate,wire)
 	end
 end
 
+function ENT:IsBusy()
+	if(self.NextAction <= CurTime()) then
+		return false;
+	end
+	return true;
+end
+
 --################# Touch @aVoN
 function ENT:Touch(e)
 	if(self.AllowTouch and self.AllowTouch + 0.1 > CurTime()) then

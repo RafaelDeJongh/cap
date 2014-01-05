@@ -196,7 +196,8 @@ function ENT:Think()
 					end
 				elseif table.HasValue(self.DHDList, class) then
 					if self.Scale > 30 then v:Remove();
-					else v:DestroyEffect()
+					elseif(not v.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_dhd_protect"):GetInt()) or v.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_dhd_protect_spawner"):GetInt()))then
+						v:DestroyEffect()
 					end
 				elseif class == "npc_strider" then --if we've hit a strider...
 					v:Fire("break","","0.3")

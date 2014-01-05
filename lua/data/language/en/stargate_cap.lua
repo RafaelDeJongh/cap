@@ -296,7 +296,54 @@ iriscomp_open = Don't Auto-open?
 iriscomp_open_desc = If checked, the iris will not open until the wire input tells it to.
 iriscomp_cancel = Cancel
 iriscomp_toggle = Toggle Iris
-iriscomp_ok = Ok
+iriscomp_ok = Save
+
+// destiny timer
+destimer_title = Destiny Timer
+destimer_time = Set Time:
+destimer_autostart = Auto-start
+destimer_autostart_desc = Automatic starting counter after stargate opens.
+destimer_autostop = Auto-reset
+destimer_autostop_desc = Automatic reseting counter after stargate closes. Uncheck this if you want manualy start/stop counter.
+destimer_autoclose = Auto-close
+destimer_autoclose_desc = Automatic closes stargate when time is ended.
+destimer_countup = Count up
+destimer_countup_desc = If checked, then counter will count up.
+destimer_font = Normal font
+destimer_font_desc = If checked, then will be used normal font.
+destimer_save = Save
+destimer_start = Start counter
+destimer_stop = Stop counter
+destimer_reset = Reset counter
+destimer_close = Close stargate
+destimer_error = Can't start counter when stargate is closed with auto-reset option!
+
+// asgard transporter
+asgardtp_title = Asgard transporter
+asgardtp_target = Target
+asgardtp_target_desc = Choose target what you want to teleport
+asgardtp_dest = Destination
+asgardtp_dest_desc = Choose where you want to teleport target
+asgardtp_ents = Teleport with ents and props
+asgardtp_ents_desc = Teleport with entities and props near target
+asgardtp_action = Action:
+asgardtp_noact = No action choosed!
+asgardtp_none = No action.
+asgardtp_act = Teleport %s\nto %s
+asgardtp_act2 = Teleport player/npc\nnear %s\nto %s
+asgardtp_acte = with ents and props
+asgardtp_send = Send
+asgardtp_retrieve = Retrieve
+asgardtp_refresh = Refresh list
+asgardtp_type1 = Players
+asgardtp_type2 = NPCs
+asgardtp_type3 = Wire GPS
+asgardtp_busy = Asgard transporter is busy!
+asgardtp_energy = Not enough energy!
+asgardtp_wrong = Wrong coordinates! (maybe not in world?)
+asgardtp_error = Invalid target or destination! (refresh list?)
+asgardtp_jamming = Can't teleport by this coordinates - jamming device online.
+asgardtp_succ = Successful teleportation.
 
 // spawn menu info
 spawninfo_title = Information

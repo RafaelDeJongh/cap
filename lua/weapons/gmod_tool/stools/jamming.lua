@@ -46,7 +46,7 @@ function TOOL:LeftClick(t)
 	local p = self:GetOwner();
 	local model = self:GetClientInfo("model");
 	local toggle = self:GetClientNumber("toggle");
-	local size = self:GetClientNumber("size");
+	local size = math.Clamp(self:GetClientNumber("size"),1,1024);
 	local immunity = self:GetClientNumber("immunity");
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
 		t.Entity:Setup(size, util.tobool(immunity));

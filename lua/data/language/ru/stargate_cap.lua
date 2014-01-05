@@ -298,6 +298,53 @@ iriscomp_cancel = Отмена
 iriscomp_toggle = Открыть/закрыть
 iriscomp_ok = Сохранить
 
+// destiny timer
+destimer_title = Таймер Судьбы
+destimer_time = Время:
+destimer_autostart = Авто-старт
+destimer_autostart_desc = Автоматически запускать отсчёт после открытия врат.
+destimer_autostop = Авто-сброс
+destimer_autostop_desc = Автоматически сбрасывать отсчёт после закрытие врат. Выключите эту опцию если хотите запускать/останавливать отсчёт вручную.
+destimer_autoclose = Авто-закрытие
+destimer_autoclose_desc = Автоматически закрывать врата когда время истекло.
+destimer_countup = Считать до
+destimer_countup_desc = Если установлено, то отсчёт будет от нуля до установленого времени.
+destimer_font = Обычный шрифт
+destimer_font_desc = Если установлено, тогда будет использоваться обычный шрифт.
+destimer_save = Сохранить
+destimer_start = Запустить отсчёт
+destimer_stop = Остановить отсчёт
+destimer_reset = Сбросить
+destimer_close = Закрыть врата
+destimer_error = Невозможно запустить отсчёт когда врата закрыты с опцией авто-сброс!
+
+// asgard transporter
+asgardtp_title = Азгард траспортер
+asgardtp_target = Цель
+asgardtp_target_desc = Выберите цель которую вы хотите телепорировать
+asgardtp_dest = Назначение
+asgardtp_dest_desc = Выберите куда вы хотите отправить цель
+asgardtp_ents = Телепортировать вместе с объектами и пропами
+asgardtp_ents_desc = Телепортировать вместе с объектами и пропами возле цели
+asgardtp_action = Действие:
+asgardtp_noact = Не задано действие!
+asgardtp_none = Действие не задано.
+asgardtp_act = Телепортировать %s\nк %s
+asgardtp_act2 = Телепортировать игрока/npc\nвозле %s\nк %s
+asgardtp_acte = с объектами и пропами
+asgardtp_send = Отправить
+asgardtp_retrieve = Вернуть
+asgardtp_refresh = Обновить списки
+asgardtp_type1 = Игроки
+asgardtp_type2 = NPCs
+asgardtp_type3 = Wire GPS
+asgardtp_busy = Азгард траспотрер занят!
+asgardtp_energy = Недостаточно энергии!
+asgardtp_wrong = Неверные координаты! (может вне мира?)
+asgardtp_error = Неверная цель или назначение! (обновите список?)
+asgardtp_jamming = Не могу телепортировать по этим координатам - включено устройство помех.
+asgardtp_succ = Успешная телепортация.
+
 // spawn menu info
 spawninfo_title = Информация
 spawninfo_load = Загрузка...
