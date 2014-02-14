@@ -463,7 +463,9 @@ function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
 			self.ZPM.Ent:SetUseType(SIMPLE_USE);
 			self.ZPM.Ent.Use = function()
 				local constr = constraint.FindConstraint(self,"Weld");
-				constr.Entity[1].Entity:UseZPM(i);
+				if (IsValid(constr.Entity[1].Entity)) then
+					constr.Entity[1].Entity:UseZPM(i);
+				end
 			end
 			/*if (self.ZPM.Dir==0) then
 				local sequence = self:LookupSequence("idle")

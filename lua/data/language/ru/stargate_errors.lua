@@ -21,7 +21,7 @@ sg_err_11 =[[ Шрифты CAP не установлены, вы должны с
 <br>
 <br><u>http://sg-carterack.com/data/cap_fonts.zip</u>
 <br>p
-<br>Для установки пожалуйста распакуйте содержимое архива и разместите папку cap_fonts внутри "Steam\steamapps\COMMON\GarrysMod\garrysmod\addon".
+<br>Для установки пожалуйста распакуйте содержимое архива и разместите папку cap_fonts внутри "Steam\steamapps\COMMON\GarrysMod\garrysmod\addons".
 <br>После этого вы получите полную и рабочую версию CAP!
 <br>
 <br>Причина по которой вы должны качать шрифты отдельно заключается в том, что GMA workshop аддон не может загружать шрифты автоматически (баг Gmod'а).

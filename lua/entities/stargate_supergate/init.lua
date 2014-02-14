@@ -122,7 +122,7 @@ function ENT:GateWireInputs(groupsystem)
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Dialing Address [STRING]","Dialing Mode","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Dialing Address [STRING]","Dialing Mode","Active Segment","Received [STRING]");
 end
 
 --################# @Madman07, Assassin21
@@ -182,6 +182,7 @@ function ENT:LightUp(Tick)
 	timer.Create( "Effects"..self:EntIndex(), Tick, 72, function()
 		if (IsValid(ent)) then
 			self:Fade(self.EffectSegments[i], true);
+			self:SetWire("Active Segment",i);
 
 			local pos = self.Segments[i]:GetPos();
 			local e = self.Segments[i];
@@ -240,6 +241,7 @@ function ENT:LightUps(Tick)
 	timer.Create( "Effectss"..self:EntIndex(), Tick, 72, function()
 		if (not IsValid(ent)) then return end
 		self:Fades(self.EffectSegments[i], true);
+		self:SetWire("Active Segment",i);
 
 		local pos = self.Segments[i]:GetPos();
 		local e = self.Segments[i];
@@ -298,6 +300,9 @@ end
 --################# @Madman07 Disactivate Light Effect
 function ENT:DisActivateLights(instant,fail)
 	if (not self.Active and not fail) then return; end
+	timer.Destroy("Effectss"..self:EntIndex());
+	timer.Destroy("Effects"..self:EntIndex());
+	timer.Destroy("FadeSegmentss"..self:EntIndex());
 	for i=1, 72 do
 		if (IsValid(self.Entity) and IsValid(self.Segments[i])) then -- because i will use same funciton in some other place
 			self.Entity:SetNetworkedBool("chevron"..i,false);
@@ -306,7 +311,7 @@ function ENT:DisActivateLights(instant,fail)
 
 			local ent = self.Segments[i]:EntIndex();
 			if timer.Exists("Zapping"..ent) then timer.Destroy("Zapping"..ent); end
-			if timer.Exists("Effects") then timer.Destroy("Effects"); end
+			--if timer.Exists("Effects") then timer.Destroy("Effects"); end
 
 			-- we want to fade out or just remove whole gate?
 			if instant then
@@ -317,6 +322,7 @@ function ENT:DisActivateLights(instant,fail)
 
 		end
 	end
+	self:SetWire("Active Segment",0);
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

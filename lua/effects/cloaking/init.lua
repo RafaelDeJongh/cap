@@ -145,7 +145,7 @@ function EFFECT:Render(draw_anyway)
 		self.Entity:DrawModel();
 		if(not self.Draw) then return end;
 		--################### Refract is always limited to time. But not the "always-drawing" above for the owner
-		if(not self.UseShader) then return end;
+		if(not self.UseShader or not self.Material) then return end;
 		self.Material:SetFloat("$refractamount",refract);
 		render.UpdateScreenEffectTexture();
 		render.MaterialOverride(self.Material);

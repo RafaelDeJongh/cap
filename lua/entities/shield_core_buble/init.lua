@@ -9,6 +9,7 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 ENT.CAP_NotSave = true;
+ENT.NoDissolve = true;
 
 AddCSLuaFile("modules/bullets.lua");
 AddCSLuaFile("modules/sphere.lua");

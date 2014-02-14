@@ -21,7 +21,7 @@ sg_err_11 =[[ The custom fonts are not installed, you will have to download the 
 <br>
 <br><u>http://sg-carterpack.com/data/cap_fonts.zip</u>
 <br>
-<br>To install this please unzip the content and place the cap_fonts folder inside "Steam\steamapps\COMMON\GarrysMod\garrysmod\addon".
+<br>To install this please unzip the content and place the cap_fonts folder inside "Steam\steamapps\COMMON\GarrysMod\garrysmod\addons".
 <br>After this you're good to go and fully have CAP Installed!
 <br>
 <br>The reason why you need to download these fonts separated is that the GMA workshop file type doesn't function with custom fonts (Gmod bug).

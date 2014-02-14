@@ -139,7 +139,7 @@ function ENT:GateWireInputs(groupsystem)
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Body Group","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Received [STRING]");
 end
 
 --################# Either allow the player to spawn this or not
@@ -296,7 +296,6 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		else
 			self:RingLight(0,true);
 			self:RingLight(0,false);
-			self:SetWire("Body Group",0);
 			self.Entity:Fire("SetBodyGroup",0,0.05); -- Needs a certain delay
 			self.Entity:SetNWBool("ActRingL",false);
 		end
@@ -325,7 +324,6 @@ function ENT:ActivateChevron(chev,b,inbound,body)
 			    end);
 			end
 			if(not inbound) then
-				self:SetWire("Body Group",body);
 				self.Entity:Fire("SetBodyGroup",body);
 			end
 			if(not inbound and not fast)then
@@ -334,10 +332,8 @@ function ENT:ActivateChevron(chev,b,inbound,body)
 		else
 			self.Chevron[chev]:Fire("skin",2);
 			if(body) then
-				self:SetWire("Body Group",body);
 				self.Entity:Fire("SetBodyGroup",body);
 			else
-				self:SetWire("Body Group",0);
 				self.Entity:Fire("SetBodyGroup",0);
 			end
 			self.Entity:SetNWBool("chevron"..chev,false); -- Dynamic light of the chevron
@@ -412,7 +408,6 @@ function ENT:Shutdown(fail,play_sound)
 		self:RingLight(0,false,true);
 		if (IsValid(self.Entity)) then
 			self.Entity:Fire("SetBodyGroup",0,0.05); -- Needs a certain delay
-			self:SetWire("Body Group",0);
 		end
 	end
 	if (IsValid(self.Entity)) then

@@ -107,6 +107,7 @@ BUFFER.ClipIgnore = {
 	"grenade_helicopter",
 	"prop_ragdoll",
 	"black_hole_power",
+	"shield_core_buble",
 }
 
 --################# SENT CODE ###############
