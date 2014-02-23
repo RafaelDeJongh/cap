@@ -583,7 +583,7 @@ function PrintHUD()
 	local p = LocalPlayer()
 	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
 	local shuttle = p:GetNetworkedEntity("Shuttle")
-	if (not IsValid(shuttle)) then return end
+	if (not IsValid(shuttle) or shuttle.EntHealth==nil) then return end
 	local health = math.Round(shuttle:GetNWInt("health")/shuttle.EntHealth*100)
 
 	if(IsValid(self)) then

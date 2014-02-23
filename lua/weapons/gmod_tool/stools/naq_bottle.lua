@@ -7,7 +7,9 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ener
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";
-TOOL.Name=SGLanguage.GetMessage("stool_naq_bottle");
+if (SGLanguage and SGLanguage.GetMessage) then
+	TOOL.Name=SGLanguage.GetMessage("stool_naq_bottle");
+end
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;

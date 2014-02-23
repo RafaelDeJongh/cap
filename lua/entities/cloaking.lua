@@ -287,7 +287,7 @@ function ENT:Cloak(e,b)
 				e.OldAlpha = color.a; -- So we wont accidently take the color of a cloaked prop when it goes into field, fast out and back into it
 			end
 			e.CloakStart = time;
-			if(self.Parent.ImmuneOwner) then
+			if(self.Parent.ImmuneOwner and not e.CloakNoDraw) then
 				local owner = self.Parent:GetVar("Owner");
 				if(owner and owner:IsValid() and owner:IsPlayer()) then
 					e:SetNWEntity("cloak_player",owner);

@@ -405,7 +405,7 @@ function ENT:Initialize( )
 	--self:SetShouldDrawInViewMode( true )
 	self.FXEmitter = ParticleEmitter( self:GetPos())
 	self.SoundsOn = {}
-	if (self.Sounds.Engine) then
+	if (self.Sounds and self.Sounds.Engine) then
 		self.EngineSound = self.EngineSound or CreateSound(self.Entity,self.Sounds.Engine);
 	end
 end

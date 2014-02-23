@@ -355,8 +355,10 @@ end
 
 if CLIENT then
 
-ENT.Category = SGLanguage.GetMessage("entity_main_cat");
-ENT.PrintName = SGLanguage.GetMessage("entity_sodan_obelisk");
+if (SGLanguage and SGLanguage.GetMessage) then
+	ENT.Category = SGLanguage.GetMessage("entity_main_cat");
+	ENT.PrintName = SGLanguage.GetMessage("entity_sodan_obelisk");
+end
 
 ENT.ButtonPos = {
 	[1] = Vector(22.53, -3.98, 94.35),

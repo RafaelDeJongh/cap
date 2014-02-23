@@ -129,7 +129,7 @@ end
 
 hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 	if (noclip) then
-		if (ply:HasGodMode()) then return end
+		if (not IsValid(ply) or ply:HasGodMode()) then return end
 		local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,self);
 		if (allow==false) then return false end
 		for k,v in pairs(ents.FindInSphere(ply:GetPos(),800)) do

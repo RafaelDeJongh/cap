@@ -26,7 +26,7 @@ end
 
 --################# Loads the config @aVoN
 function StarGate.LoadConfig(p)
-	if(not p or p:IsAdmin() or game.SinglePlayer()) then
+	if(not IsValid(p) or p:IsAdmin() or game.SinglePlayer()) then
 		StarGate.CFG.SYNC = {}; -- They sync keys
 		-- Loads the config only ONE time and not always when I press "sent_reload" (Increases loading times)
 		if(not INIParser) then include("ini_parser.lua") end;

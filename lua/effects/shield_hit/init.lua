@@ -89,7 +89,7 @@ function EFFECT:Render()
 		end
 	end
 	-- The glow effect
-	if(self.DrawEffect) then
+	if(self.DrawEffect and IsValid(self.Parent)) then
 		local color = self.Parent:GetShieldColor();
 		self.Material2:SetVector("$color",Vector(color.r,color.g,color.b));
 		self.Material2:SetFloat("$alpha",math.Clamp(self.Alpha,0,1));

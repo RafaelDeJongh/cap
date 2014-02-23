@@ -957,7 +957,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 
 	local dupeInfo = Ent.EntityMods.StarGateDHDInfo
-	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
+	if (dupeInfo and dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
 		self.LockedGate = CreatedEntities[dupeInfo.LockedGate];
 		self:SetNWEntity("LockedGate",self.LockedGate);
 		CreatedEntities[dupeInfo.LockedGate].LockedDHD = self.Entity;

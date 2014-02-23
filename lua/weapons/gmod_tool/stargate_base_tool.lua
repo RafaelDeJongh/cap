@@ -60,7 +60,7 @@ function TOOL:Register()
 				if(StarGate.HasInternet and self.Mode) then
 					local VGUI = vgui.Create("SHelpButton",Panel);
 					VGUI:SetHelp("stools/#"..self.Mode);
-					VGUI:SetTopic("Help: Tools - "..self.Name);
+					VGUI:SetTopic("Help: Tools - "..(self.Name or class));
 					Panel:AddPanel(VGUI);
 				end
 				self.ControlsPanel(self,Panel); -- Run our Controls Panel Hook!

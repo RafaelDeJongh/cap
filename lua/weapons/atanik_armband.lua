@@ -10,6 +10,9 @@ end
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_atanik");
 SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
+else
+SWEP.PrintName = "Atanik Armband";
+SWEP.Category = "Carter Addon Pack";
 end
 SWEP.Author = "Llapp"
 SWEP.Contact = "llapp612@googlemail.com"
