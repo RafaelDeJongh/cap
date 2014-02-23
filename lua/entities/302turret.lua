@@ -25,6 +25,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_NONE)
 	self:SetMoveType(MOVETYPE_NONE)
 	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetRenderMode(RENDERMODE_TRANSALPHA);
 	self.Firing=false
 	self:SetColor(Color(255,255,255,0))
 end

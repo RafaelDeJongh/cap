@@ -220,6 +220,7 @@ function ENT:OnRemove()
 	if(IsValid(parent)) then
 		parent:SetCollisionGroup(COLLISION_GROUP_NONE);
 	end
+	self:EndTouch()
 end
 
 --################# Set the target GATE (not Event Horizon!!!!!) we are linked to. We need to retrieve the target Horizon later manually
@@ -652,8 +653,17 @@ end
 
 --################# The most important part - Recognizes entering props and teleports them @RononDex
 function ENT:StartTouch(e)
+	local class = e:GetClass();
  	--if (e:GetClass() == "kino_ball") then self:StartTouchPlayersNPCs(e) end
 	if self.ModelClip then
+		if(not IsValid(self.Target)) then
+			if(class=="puddle_jumper" and not self.ShuttingDown) then
+				if(e.Exiting) then
+					e:SetPos(self:GetPos());
+				end
+			end
+		end
+
 		if (self.PhysClip) then
 			e:SetCustomCollisionCheck(true);
 		end
@@ -671,9 +681,19 @@ end
 
 --################# Keeps clipping plane up to date @RononDex
 function ENT:Touch(e)
+	local class = e:GetClass();
 	if self.ModelClip then
 		if not table.HasValue(BUFFER.ClipIgnore,e:GetClass()) then
 			BUFFER:Touch(self.Entity,e)
+		end
+		if(class=="puddle_jumper" and not self.ShuttingDown) then
+			if(not IsValid(self.Target)) then
+				e.Exiting = true;
+				if(IsValid(e.Pilot)) then
+					e.Pilot:SetEyeAngles(self:GetParent():GetAngles());
+				end
+				e:SetAngles(self:GetParent():GetAngles()+Angle(0,0,0));
+			end
 		end
 	end
 end
@@ -831,6 +851,12 @@ function ENT:EndTouch(e)
 	elseif not self.ModelClip then
 		self:EndTouchPlayersNPCs(e)
 		return;
+	end
+
+	if(e:GetClass()=="puddle_jumper") then
+		if(not IsValid(self.Target)) then
+			e.Exiting = false;
+		end
 	end
 
 	local dir = (self:GetPos()-e:GetPos()):GetNormalized();

@@ -336,8 +336,8 @@ function ENT:TeleportEntity(t,base,basedata)
 		ang.p = 0;
 		self:CleanBufferVars(e)
 		e.___dir = 1;
-		e:SetAngles(ang);
 		e:SetPos(pos.New);
+		e:SetAngles(ang);
 		-- ######### Move the bones of the entity
 		if(bones) then
 			for _,v in pairs(bones) do
@@ -357,7 +357,11 @@ function ENT:TeleportEntity(t,base,basedata)
 		e.___dir = 1;
 		local phys = e:GetPhysicsObject();
 		-- ######### Teleport
-		e:SetPos(pos.New);
+		if(e:GetClass()=="puddle_jumper") then
+			e:SetPos(self.Target:GetPos());
+		else
+			e:SetPos(pos.New);
+		end
 		if(e:IsNPC()) then ang.Delta.p = 0 ang.Delta.r = 0 end -- Remove roll and pitch from NPCs
 		e:SetAngles(ang.Old + ang.Delta + Angle(0,180,0));
 		e:SetVelocity(-1*vel.Old+vel.New) -- Substract old velocity and add the new

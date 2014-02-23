@@ -52,6 +52,7 @@ KBD:SetDefaultKey("RROLL","MOUSE3") -- Reset roll
 KBD:SetDefaultKey("CLOAK","ALT") -- Toggle Cloaking
 KBD:SetDefaultKey("DHD","R") -- DHD
 KBD:SetDefaultKey("HIDEHUD","H") -- Hide the pilot's HUD
+KBD:SetDefaultKey("HIDELSD","L") -- Hide the pilot's HUD
 KBD:SetDefaultKey("BOOM","BACKSPACE") -- Selfdestruct
 KBD:SetDefaultKey("DOOR","2") -- Rear Door
 KBD:SetDefaultKey("WEPPODS","Q") -- Weapon Pods
@@ -79,6 +80,7 @@ local View = {
 	Distance = 700,
 	Angle = 200,
 	HideHud = false,
+	HideLSD = false,
 	FirstPerson = false,
 };
 
@@ -115,13 +117,18 @@ function ENT:UpdateJData()
 	self.JData.CanShoot = JData.CanShoot;
 	self.JData.Health = JData.Health;
 	self.JData.Engine = JData.Engine;
+	self.JData.Inflight = JData.Inflight;
 end
 
 function ENT:CreateHUD()
 	if(not (self.HUD and self.HUD.Activate and self.HUD.Deactivate)) then
-		if(self.HUD) then self.HUD:Remove() end; -- Delete invalid but existant previous HUD
-		self.HUD = vgui.Create("JumperHUD",self); -- Player/Passenger indicator
+		if(self.HUD) then self.HUD:Remove() end; -- Delete invalid but existant previous HUD		
+		self.HUD = vgui.Create("JumperHUD",self); -- Player/Passenger indicator		
 		--self.HUD:SetParent(self);
+	end
+	if(not (self.LSD and self.LSD.Activate and self.LSD.Deactivate)) then
+		if(self.LSD) then self.LSD:Remove() end;
+		self.LSD = vgui.Create("JumperLSD",self);
 	end
 end
 
@@ -143,6 +150,8 @@ local function JumperCalcView(Player,Origin,Angles,FieldOfView)
 	local view = {};
 	local p = LocalPlayer();
 	local jumper = p:GetNetworkedEntity("jumper",NULL);
+	local passJumper = p:GetNetworkedEntity("JumperSeat",NULL);
+	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
     if (IsValid(jumper) and p:GetNetworkedBool("isFlyingjumper",false)) then
     	local self = jumper;
 		if(not View.FirstPerson)  then
@@ -159,6 +168,17 @@ local function JumperCalcView(Player,Origin,Angles,FieldOfView)
 			view.fov = FieldOfView + 20
 		end
 		return view;
+	elseif(Passenger) then
+		if(IsValid(passJumper)) then
+			if(passJumper:GetThirdPersonMode()) then
+				local pos = passJumper:GetPos() + View.Angle*passJumper:GetUp() - View.Distance*p:GetAimVector()
+				local face = ((passJumper:GetPos() + Vector(0,0,100))- pos):Angle()
+				view.origin = pos
+				view.angles = face
+				view.fov = nil
+				return view;
+			end
+		end
 	end
 end
 hook.Add("CalcView", "JumperCalcView", JumperCalcView)
@@ -167,6 +187,7 @@ function ENT:OnRemove()
 	self.EngineSound:Stop();
 	self.HoverSound:Stop();
 	self.HUD:Remove();
+	self.LSD:Remove();
 end
 
 
@@ -180,12 +201,58 @@ local function SetData(um) --############# Recieve Data from the Server @RononDe
 	JData.CanShoot = um:ReadBool();
 	JData.Health = um:ReadShort();
 	JData.Engine = um:ReadBool();
+	JData.Inflight = um:ReadBool();
 end
 usermessage.Hook("jumperData", SetData)
 
-function ENT:Draw() self:DrawModel() end
+local invisible = Color(255,255,255,1);
+local visible = Color(255,255,255,255);
+function ENT:Draw()
+	self.BaseClass.Draw(self);
+	if(game.SinglePlayer()) then	
+		local p = LocalPlayer();
+		local Jumper = p:GetNWEntity("jumper");
+		local IsInJumper = (Jumper == self.Entity); -- Is this "LocalPlayer" in/out jumper?
+		local IsDriver = p:GetNWBool("isFlyingjumper",false) and IsInJumper;
+		local Inflight = self:GetNetworkedBool("JumperInflight",false);
+		local Cloaked = self:GetNetworkedBool("Cloaked",false);
+		
 
-local num = 3.5
+		if(IsValid(self)) then
+			if(Cloaked) then
+				if(Inflight and IsInJumper) then
+					if(View.FirstPerson) then
+						self:SetColor(visible);
+						self.RenderGroup = RENDERGROUP_OPAQUE;
+					else
+						self:SetColor(invisible);
+						self.RenderGroup = RENDERGROUP_BOTH;
+					end
+				elseif(Inflight and not p:GetNWBool("isFlyingjumper")) then
+					self:SetColor(invisible);
+					self.RenderGroup = RENDERGROUP_BOTH;
+				else
+					for a,p in pairs(ents.GetAll()) do
+						if(p:IsPlayer()) then
+							if(self:InJumper(p)) then
+								self:SetColor(visible);
+								self.RenderGroup = RENDERGROUP_OPAQUE;
+							else
+								self:SetColor(invisible);
+								self.RenderGroup = RENDERGROUP_BOTH;
+							end
+						end
+					end
+				end		
+			else		
+				self:SetColor(visible);
+				self.RenderGroup = RENDERGROUP_OPAQUE;
+			end
+		end
+	end
+end
+
+local num = 3.3;
 local y = ScrH()/4*num;
 function ENT:Think() --#########################  Overly complex think function @ RononDex,LightDemon,aVoN
 
@@ -194,18 +261,65 @@ function ENT:Think() --#########################  Overly complex think function 
 	local Jumper = p:GetNWEntity("jumper");
 	local IsInJumper = (Jumper == self.Entity); -- Is this "LocalPlayer" in/out jumper?
 	local IsDriver = p:GetNWBool("isFlyingjumper",false) and IsInJumper;
+	local Inflight = self:GetNetworkedBool("JumperInflight",false);
 	local HasDriver = IsDriver or false;
-
-	if self.HUD and IsValid(self.HUD) then
-		if self.HUD.Active then
-			self:UpdateHUD();
+	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
+	local passJumper = p:GetNetworkedEntity("JumperPassenger");
+	local jumperSeat  = p:GetNetworkedEntity("JumperSeat");
+	
+	if(IsDriver and IsInJumper) then
+		if self.HUD and IsValid(self.HUD) then
+			if self.HUD.Active then
+				self:UpdateHUD();
+			end
+		elseif not self.HUD or not self.LSD then
+			self:CreateHUD();
 		end
-	elseif not self.HUD then
-		self:CreateHUD();
+		if(not self.LSD.Active) then
+			if(View.FirstPerson) then
+				self.LSD:Activate();
+			end
+		end		
 	end
-
+	
+	if(game.SinglePlayer()) then
+		local min = self:GetPos()+self:GetForward()*100+self:GetUp()*50+self:GetRight()*50;
+		local max = self:GetPos()-self:GetForward()*190-self:GetUp()*50-self:GetRight()*50;
+		local Cloaked = self:GetNetworkedBool("Cloaked",false);
+		if(IsValid(self) and not Inflight) then
+			for k,v in pairs(ents.FindInBox(min,max)) do
+				local renderm = v:GetRenderMode();
+				if(v:IsPlayer() or v:IsNPC()) then
+					local wep = v:GetActiveWeapon();
+					if(IsValid(wep)) then local wepren = wep:GetRenderMode() end;	
+					if(self:InJumper(v)) then
+						if(Cloaked) then
+							v:SetRenderMode( RENDERMODE_TRANSALPHA )
+							v:SetColor(invisible);
+							if(IsValid(v:GetActiveWeapon())) then
+								wep:SetRenderMode(RENDERMODE_TRANSALPHA);
+								wep:SetColor(invisible);
+							end
+						else
+							if(renderm != v:GetRenderMode()) then
+								v:SetRenderMode(renderm);
+							end
+							v:SetColor(visible);
+							if(IsValid(wep)) then
+								if(wepren != wep:GetRenderMode() and IsValid(wepren)) then
+									wep:SetRenderMode(wepren);
+								end
+								wep:SetColor(visible);
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	
 	self:UpdateJData();
-
+		
 	--###################### View Changers @ RononDex
 	if(HasDriver) then
 		if(p:KeyDown(self.Vehicle,"Z+")) then --In
@@ -224,8 +338,10 @@ function ENT:Think() --#########################  Overly complex think function 
 			if self.NextUse < CurTime() then
 				if View.FirstPerson then
 					View.FirstPerson = false;
+					self.LSD:Deactivate();
 				else
 					View.FirstPerson = true;
+					self.LSD:Activate();
 				end
 				self.NextUse = CurTime() + 1;
 			end
@@ -237,6 +353,17 @@ function ENT:Think() --#########################  Overly complex think function 
 					View.HideHud = false;
 				else
 					View.HideHud = true;
+				end
+				self.NextUse = CurTime() + 1;
+			end
+		end
+		
+		if(p:KeyDown(self.Vehicle,"HIDELSD")) then
+			if self.NextUse < CurTime() then
+				if View.HideLSD then
+					View.HideLSD = false;
+				else
+					View.HideLSD = true;
 				end
 				self.NextUse = CurTime() + 1;
 			end
@@ -312,12 +439,20 @@ function ENT:Think() --#########################  Overly complex think function 
 				if View.FirstPerson then
 					num = math.Approach(num,2.65,0.025)
 				else
-					num = math.Approach(num,3.5,0.025)
+					num = math.Approach(num,3.3,0.025)
+				end
+				if(View.FirstPerson) then
+					if View.HideLSD then
+						self.LSD:Deactivate();
+					else
+						self.LSD:Activate();
+					end
 				end
 				y = ScrH()/4*num
 				self.HUD:SetPos(x,y)
 			else
-				self.HUD:Deactivate()
+				self.HUD:Deactivate();
+				self.LSD:Deactivate();
 			end
 		end
 	end

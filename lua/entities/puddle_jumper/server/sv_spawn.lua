@@ -11,6 +11,7 @@ function ENT:SpawnShieldGen()
 		e:SetSolid(SOLID_NONE)
 		e:SetColor(Color(255,255,255,0))
 		e:SetRenderMode( RENDERMODE_TRANSALPHA );
+		e.JumperPart = true;
 		self.Shields=e
 		e.StrengthMultiplier={0.1,0.5,-5}
 		e:SetShieldColor(1,0.98,0.94)
@@ -55,8 +56,8 @@ function ENT:Status(b,nosound)
 	if(b) then
 		if(not(self:Enabled())) then
 			local e = ents.Create("cloaking")
-			e.Size = 150
-			e:SetPos(self:GetPos()+self:GetForward()*-50)
+			e.Size = 80
+			e:SetPos(self:GetPos()+self:GetForward()*-100)
 			e:SetAngles(self:GetAngles())
 			e:SetParent(self)
 			e:Spawn()
@@ -79,68 +80,107 @@ end
 
 function ENT:SpawnToggleButton()
 
-	local e = ents.Create("jumper_button");
-	e:SetPos(self:GetPos() - self:GetForward()*238 + self:GetRight()*38 + self:GetUp()*12)
-	e:SetAngles(self:GetAngles()+Angle(47.535 ,47 ,39.105))
-	e:Spawn()
-	e:Activate()
-	e:SetParent(self.Entity)
-	e:SetColor(Color(64,65,48,127.5))
-	e:SetRenderMode(RENDERMODE_TRANSALPHA);
-	e.JumperPart = true;
-	e.Parent = self.Entity
-	e.RearDoor = true;
-	e.Bulkhead = false;
-	constraint.Weld(e,self,0,0,0,true)
+	local e = {};
+	for i=1,4 do
+		e[i] = ents.Create("jumper_button");
+		e[i]:Spawn();
+		e[i]:Activate();
+		e[i]:SetParent(self);
+		if(not self.Cloaked) then
+			e[i]:SetColor(Color(64,65,48,127.5));
+		else
+			e[i]:SetColor(Color(255,255,255,0));
+		end
+		e[i]:SetRenderMode(RENDERMODE_TRANSALPHA);
+		e[i].Parent = self;
+		//constraint.Weld(e[i],self,0,0,0,true);
+		e[i].JumperPart = true;
+		self.Buttons[i] = e[i]
+		if(i==1) then
+			e[i].RearDoor = true;
+			e[i].Bulkhead = false;
+			e[i]:SetPos(self:GetPos() - self:GetForward()*238 + self:GetRight()*38 + self:GetUp()*12)
+			e[i]:SetAngles(self:GetAngles()+Angle(47.535 ,47 ,39.105))
+		elseif(i==2) then
+			e[i].RearDoor = true;
+			e[i].Bulkhead = false;
+			e[i]:SetPos(self:GetPos() - self:GetForward()*224 + self:GetRight()*-38 + self:GetUp()*8)
+			e[i]:SetAngles(self:GetAngles()+Angle(47.535 ,47 ,39.105))
+		elseif(i==3) then
+			e[i].RearDoor = false;
+			e[i].Bulkhead = true;
+			e[i]:SetPos(self:GetPos() - self:GetForward()*40 + self:GetRight()*29 + self:GetUp()*12)
+			e[i]:SetAngles(self:GetAngles()+Angle(90 ,0 ,0))
+		elseif(i==4) then
+			e[i].RearDoor = false;
+			e[i].Bulkhead = true;
+			e[i]:SetPos(self:GetPos() - self:GetForward()*32 + self:GetRight()*-29 + self:GetUp()*12)
+			e[i]:SetAngles(self:GetAngles()+Angle(90 ,0 ,0))
+		end
+	end
+end
 
-	local e2 = ents.Create("jumper_button");
-	e2:SetPos(self:GetPos() - self:GetForward()*224 + self:GetRight()*-38 + self:GetUp()*8)
-	e2:SetAngles(self:GetAngles()+Angle(47.535 ,47 ,39.105))
-	e2:Spawn()
-	e2:Activate()
-	e2:SetParent(self.Entity)
-	e2:SetColor(Color(64,65,48,127.5))
-	e2:SetRenderMode(RENDERMODE_TRANSALPHA);
-	e2.JumperPart = true;
-	e2.Parent = self.Entity
-	e2.RearDoor = true;
-	e2.Bulkhead = false;
-	constraint.Weld(e2,self,0,0,0,true)
 
-	local e3 = ents.Create("jumper_button");
-	e3:SetPos(self:GetPos() - self:GetForward()*40 + self:GetRight()*29 + self:GetUp()*12)
-	e3:SetAngles(self:GetAngles()+Angle(90 ,0 ,0))
-	e3:Spawn()
-	e3:Activate()
-	e3:SetParent(self.Entity)
-	e3:SetColor(Color(64,65,48,127.5))
-	e3:SetRenderMode(RENDERMODE_TRANSALPHA);
-	e3.JumperPart = true;
-	e3.Parent = self.Entity
-	e3.RearDoor = false;
-	e3.Bulkhead = true;
-	constraint.Weld(e3,self,0,0,0,true)
+function ENT:SpawnOpenedDoor()
+	local d = ents.Create("prop_physics");
+	d:SetPos(self:GetPos()-self:GetForward()*145+self:GetUp()*140);
+	d:SetModel("models/Iziraider/jumper/gibs/backdoor.mdl");
+	d:SetAngles(self:GetAngles()-Angle(60,0,0));
+	d:SetParent(self);
+	d.JumperPart = true;
+	d:Spawn();
+	d:Activate();
+	d:SetRenderMode(RENDERMODE_TRANSALPHA)
+	d:SetSolid(SOLID_NONE);
+	d:SetColor(Color(255,255,255,0));
+	d:DrawShadow(false);
 
-	local e4 = ents.Create("jumper_button");
-	e4:SetPos(self:GetPos() - self:GetForward()*32 + self:GetRight()*-29 + self:GetUp()*12)
-	e4:SetAngles(self:GetAngles()+Angle(90 ,0 ,0))
-	e4:Spawn()
-	e4:Activate()
-	e4:SetParent(self.Entity)
-	e4:SetColor(Color(64,65,48,127.5))
-	e4:SetRenderMode(RENDERMODE_TRANSALPHA);
-	e4.JumperPart = true;
-	e4.Parent = self.Entity
-	e4.RearDoor = false;
-	e4.Bulkhead = true;
-	constraint.Weld(e4,self,0,0,0,true)
+	constraint.Weld(d,self,0,0,0,true)
+	self.OpenedDoor = d;
+end
 
-	self.Buttons = {
-		B1 = e,
-		B2 = e2,
-		B3 = e3,
-		B4 = e4,
-	}
+function ENT:SpawnSeats()
+	local e ={}
+	self.Seats = {}
+	for i=1,9 do
+		e[i] = ents.Create("prop_vehicle_prisoner_pod");
+		e[i]:SetAngles(self:GetAngles());
+		if(i==1) then
+			e[i]:SetPos(self:GetPos()+self:GetRight()*40+self:GetForward()*-60+self:GetUp()*-30);
+		elseif(i==2) then
+			self:SetAngles(self:GetAngles()+Angle(0,180,0));
+			e[i]:SetPos(self:GetPos()+self:GetRight()*-40+self:GetForward()*-60+self:GetUp()*-30);
+		elseif(i==3) then
+			e[i]:SetPos(self:GetPos()+self:GetRight()*40+self:GetForward()*-95+self:GetUp()*-30);
+		elseif(i==4) then
+			self:SetAngles(self:GetAngles()+Angle(0,180,0));
+			e[i]:SetPos(self:GetPos()+self:GetRight()*-40+self:GetForward()*-95+self:GetUp()*-30);
+		elseif(i==5) then
+			e[i]:SetPos(self:GetPos()+self:GetRight()*40+self:GetForward()*-132+self:GetUp()*-30);
+		elseif(i==6) then
+			self:SetAngles(self:GetAngles()+Angle(0,180,0));
+			e[i]:SetPos(self:GetPos()+self:GetRight()*-40+self:GetForward()*-132+self:GetUp()*-30);
+		elseif(i==7) then
+			e[i]:SetPos(self:GetPos()+self:GetRight()*40+self:GetForward()*-165+self:GetUp()*-30);
+		elseif(i==8) then
+			self:SetAngles(self:GetAngles()+Angle(0,180,0));
+			e[i]:SetPos(self:GetPos()+self:GetRight()*-40+self:GetForward()*-165+self:GetUp()*-30);
+		elseif(i==9) then
+			e[i]:SetAngles(self:GetAngles()+Angle(0,-90,0));
+			e[i]:SetPos(self:GetPos()+self:GetRight()*30+self:GetUp()*-25+self:GetForward()*50);
+			e[i].FrontSeat = true;
+		end
+		e[i]:SetModel("models/nova/airboat_seat.mdl");
+		e[i]:SetRenderMode(RENDERMODE_TRANSALPHA);
+		e[i]:SetColor(Color(255,255,255,0));
+		e[i]:Spawn();
+		e[i]:Activate();
+		e[i]:SetParent(self);
+		e[i].IsJumperSeat = true;
+		e[i].Jumper = self;
+		e[i].CloakNoDraw = true;
+		self.Seats[i] = e[i];
+	end
 
 end
 
@@ -152,11 +192,17 @@ function ENT:RemoveAll()
 		end
 	end
 
-	if IsValid(self.Door or {}) then
+
+	if(IsValid(self.OpenedDoor)) then
+		self.OpenedDoor:Remove();
+	end
+
+
+	if IsValid(self.Door) then
 		self.Door:Remove();
 	end
 
-	if IsValid(self.BulkDoor or {}) then
+	if IsValid(self.BulkDoor) then
 		self.BulkDoor:Remove();
 	end
 end

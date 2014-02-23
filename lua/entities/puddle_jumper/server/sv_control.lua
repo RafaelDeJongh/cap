@@ -29,12 +29,17 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 	self.Accel.RIGHT = 0;
 	self.Accel.UP = 0;
 
-	if (not self.Cloaked) then
-		self:SpawnToggleButton();
-	end
+	self:SetNetworkedBool("JumperInflight",false);	
+	
+	self:SpawnToggleButton();
 	self:SpawnBulkHeadDoor();
 	self:SpawnBackDoor();
-
+	if(self.door) then
+		self.Door:SetSolid(SOLID_NONE);
+	end
+	self:SpawnOpenedDoor();
+	//self:SpawnSeats();
+	
 	self:ToggleRotorwash(false);
 
 	for k,v in pairs(self.PWeapons) do
@@ -95,6 +100,11 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 
 		ply:SetNetworkedBool("isFlyingjumper",true)
 		ply:SetNetworkedEntity("jumper",self)
+		self:SetNetworkedBool("JumperInflight",true);		
+		
+		ply:SetEyeAngles(self:GetAngles());
+		
+		ply:Flashlight(false);
 	end
 	self.Entered=true
 	timer.Simple( 0.75, function()

@@ -458,6 +458,7 @@ key_act_land = Landing Mode
 key_act_hyper = Hyperspace
 key_view_title = View
 key_view_hud = Hide HUD
+key_view_lsd = Hide LSD
 key_view_zoomin = Zoom in
 key_view_zoomout = Zoom out
 key_view_up = Move view up

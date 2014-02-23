@@ -76,6 +76,7 @@ function StarGate.JumperSettings(Panel)
 			Name = SGLanguage.GetMessage("key_view_title"),
 			Keys = {
 				{SGLanguage.GetMessage("key_view_hud"),"HIDEHUD"},
+				{SGLanguage.GetMessage("key_view_lsd"),"HIDELSD"},
 				{SGLanguage.GetMessage("key_view_zoomin"),"Z+"},
 				{SGLanguage.GetMessage("key_view_zoomout"),"Z-"},
 				{SGLanguage.GetMessage("key_view_up"),"A+"},

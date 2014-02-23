@@ -3,7 +3,7 @@ PANEL.Fonts = {};
 local w = ScrW()*0.99;
 local h = (w/4096)*512*(3/4);
 local x = ScrW()/4*0;
-local y = ScrH()/4*3.5
+local y = ScrH()/4*3.5;
 local HUD = surface.GetTextureID("VGUI/HUD/puddle_jumper/J_hud")
 local GREEN = Color(0,255,0,255);
 local RED = Color(255,0,0,255);
@@ -38,7 +38,9 @@ function PANEL:Init()
 		Health = 500,
 		Drones = 0,
 	};
-
+	w = ScrW()*0.99;
+	h = (w/4096)*512*(3/4);
+	font.size = (w/1024)*30
 	self:SetSize(w,h)
 	self:SetPos(x,y)
 	self:SetVisible(false)
@@ -79,37 +81,49 @@ function PANEL:Paint()
 		end
 	end
 	if not self.Data.Engine then Ecolor = RED end; -- Engine Damaged
-
+	
+	local multiply = 0;
+	if(ScrH()==768 and ScrW()==1024) then
+		multiply = 5;
+	elseif(ScrW()==1920 and ScrH()==1080) then
+		multiply = -15;
+	elseif(ScrW()==1600 and ScrH()==900) then
+		multiply = -10;
+	end
+	
 	surface.SetFont("CenterHud")
-	surface.SetTextPos(ScrW()/4*1.92,65)
+	surface.SetTextPos(ScrW()/4*1.92,65-multiply)
 	surface.SetTextColor(Ecolor)
 	surface.DrawText("Engine")
 
-	surface.SetTextPos(ScrW()/4*1.57,30)
+	surface.SetTextPos(ScrW()/4*1.57,30-multiply)
 	surface.SetTextColor(Ccolor)
 	surface.DrawText("Cloak")
 
-	surface.SetTextPos(ScrW()/4*2.27,30)
+	surface.SetTextPos(ScrW()/4*2.27,30-multiply)
 	surface.SetTextColor(Wcolor)
 	surface.DrawText("Weapons")
 
-	surface.SetTextPos(ScrW()/4*1.92,25)
+	surface.SetTextPos(ScrW()/4*1.92,25-multiply)
 	surface.SetTextColor(Scolour)
 	surface.DrawText("Shield")
 
 	surface.SetFont("JumperFont")
-	surface.SetTextPos(ScrW()/4*0.6,35)
+	surface.SetTextPos(ScrW()/4*0.6,35-multiply)
 	surface.SetTextColor(WHITE)
 	if not self.Data.Health then return end
 	surface.DrawText("Hull: "..(math.Round(self.Data.Health/5)).."%")
 
 	surface.SetFont("JumperFont")
-	surface.SetTextPos(ScrW()/4*2.95,35)
+	surface.SetTextPos(ScrW()/4*2.95,35-multiply)
 	surface.SetTextColor(WHITE)
 	surface.DrawText(self.Data.Drones.."/"..(6 - self.Data.Drones))
+	
 
 	return true;
 
+
+	
 end
 
 --################# Activate Panel @aVoN

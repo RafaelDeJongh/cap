@@ -457,6 +457,7 @@ key_act_land = Режим посадки
 key_act_hyper = Гипердвигатель
 key_view_title = Вид
 key_view_hud = Скрыть HUD
+key_view_lsd = Скрыть детектор
 key_view_zoomin = Увеличить
 key_view_zoomout = Уменьшить
 key_view_up = Переместить вид вверх

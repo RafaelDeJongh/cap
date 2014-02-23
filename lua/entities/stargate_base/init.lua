@@ -132,6 +132,15 @@ function ENT:Initialize()
 	self.LastDistance = 0;
 	self.LastEnergy = 0;
 
+	-- for jumper, probably temporarily, fast-code
+	local oldSetWire = self.SetWire;
+	self.SetWire = function(self,k,v,i)
+		if (k=="Dialing Address" and self.Outbound) then
+			self.Entity:SetNetworkedString("DialledAddress",v);
+		end
+		oldSetWire(self,k,v,i);
+	end
+
 	-- I dont like it, but llapp is using think for rotation stuff, so had to do Low Proity think
 	timer.Create("LowPriorityThink"..self:EntIndex(), 0.5, 0, function() if IsValid(self) then self:LowPriorityThink() end end);
 

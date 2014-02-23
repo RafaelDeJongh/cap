@@ -79,6 +79,7 @@ function ENT:SpawnFunction(pl, tr)
 	e:SpawnBulkHeadDoor()
 	e:SpawnToggleButton()
 	e:SpawnShieldGen()
+	//e:SpawnOpenedDoor();
 	e.Owner = pl;
 
     pl:AddCount("CAP_ships",e)
@@ -112,6 +113,10 @@ function ENT:Initialize(ply)
 	self.IsJumper = true;
 	self.Vehicle = "PuddleJumper";
 
+	self.EHAngles = Angle(0,0,0);
+
+	self.Buttons = {}
+
 	self.door = false;
 	self.BulkHead = false;
 
@@ -124,11 +129,12 @@ function ENT:Initialize(ply)
 	self:SetSolid(SOLID_VPHYSICS);
 	self:StartMotionController();
 	self:SetUseType(SIMPLE_USE);
-	self:CreateWireInputs("X","Y","Z","Cloak","Shield","Toggle Light", "AutoDestruct");
+	self:SetRenderMode(RENDERMODE_TRANSALPHA);
+	self:CreateWireInputs("X","Y","Z","Target [VECTOR]","Cloak","Shield","Toggle Light", "AutoDestruct");
 	self:CreateWireOutputs("Shield Strength","Shield Enabled","Health");
 
 	self.Hover = true;
-
+	self:SpawnSeats()
 	--############ Drone vars
 	self.Target=Vector(0,0,0);
 	self.DroneMaxSpeed= 6000;
@@ -144,6 +150,13 @@ function ENT:Initialize(ply)
 		UP=0,
 	};
 
+
+	if(self.HasRD) then
+		if(self.CanHaveLS) then
+			self.grav_plate = 1;
+		end
+	end
+
 	-- Cloak var
 	self.ImmuneOwner = true; -- We can see the jumper when cloaked, no one else can
 
@@ -151,7 +164,7 @@ function ENT:Initialize(ply)
 
 	if(phys:IsValid()) then
 		phys:Wake()
-		phys:SetMass(10000)
+		phys:SetMass(100000)
 	end
 end
 
@@ -163,18 +176,16 @@ function ENT:OnRemove()   --######### @ RononDex
 		end
 	end
 
-	if(IsValid(self.Door)) then
-		self.Door:Remove()
-	end
-
-	-- damn, why it not do this? fix @AlexALX
 	if (IsValid(self.Shields)) then
 		self.Shields:Remove();
 	end
 
-	if(IsValid(self.BulkDoor)) then
-		self.BulkDoor:Remove()
+	for _,v in pairs(self.Seats or {}) do
+		if IsValid(v) then
+			v:Remove();
+		end
 	end
+	self:RemoveAll();
 end
 
 
@@ -185,6 +196,21 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		self:DoKill()
 	end
 
+	if(not self.Inflight) then
+		for k,v in pairs(ents.GetAll()) do
+			if(v:IsPlayer()) then
+				if(self.Cloaked) then
+					if(self:InJumper(v)) then
+						v:SetNoTarget(true);
+					else
+						v:SetNoTarget(false)
+					end
+				else
+					v:SetNoTarget(false);
+				end
+			end
+		end
+	end
 	--####### This sends necessary information to the client
 	if(IsValid(self.Pilot)) then
 		umsg.Start("jumperData", self.Pilot)
@@ -197,6 +223,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			umsg.Bool(self.CanShoot)
 			umsg.Short(self.EntHealth)
 			umsg.Bool(self.Engine)
+			umsg.Bool(self.Inflight)
 		umsg.End()
 	end
 	--####### Keep giving us air, coolant etc.
@@ -207,20 +234,23 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	end
 
 	--######### Apply water pressure damage
-	if(self:WaterLevel()>=1 and self.Shields) then
-		if(not(self.Shields:Enabled())) then
-			self.WaterDamage=true
-			if(not(self.RunningAnimation)) then
-				self:TakeDamage(1)
+	if(self:WaterLevel()>=1) then
+		self:GetPhysicsObject():SetMass(100); //Sink slowly
+		if(self.Shields) then
+			if(not(self.Shields:Enabled())) then
+				self.WaterDamage=true
+				if(not(self.RunningAnimation)) then
+					self:TakeDamage(1)
+				else
+					self:TakeDamage(0.1)
+				end
+				timer.Simple(0.5,function()
+					self.WaterDamage=false
+				end)
 			else
-				self:TakeDamage(0.1)
+				self.Shields.Shield:DrawBubbleEffect(_,true)
+				self.Shields.Strength = (self.Shields.Strength)-5
 			end
-			timer.Simple(0.5,function()
-				self.WaterDamage=false
-			end)
-		else
-			self.Shields.Shield:DrawBubbleEffect(_,true)
-			self.Shields.Strength = (self.Shields.Strength)-5
 		end
 	end
 
@@ -236,6 +266,13 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		end
 	end
 
+		
+	if(IsValid(self.FrontPassenger)) then
+		if(self.FrontPassenger:KeyDown(IN_RELOAD)) then
+			self:OpenDHD(self.FrontPassenger) -- Open DHD for pilot
+		end
+	end
+	
 	--########## Mostly key presses
 	if(IsValid(self.Pilot) and self.Inflight) then
 
@@ -244,14 +281,19 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 				if(self.FinalDrone) then
 					if(self.DroneCount==0) then
 						self.FinalDrone=false
-						self.DroneProp1Fired=false
-						self.DroneProp2Fired=false
-						self.DroneProp3Fired=false
-						self.DroneProp4Fired=false
-						self.DroneProp5Fired=false
-						self.DroneProp6Fired=false
+						for i=1,6 do
+							self.DronePropFired[i] = false;
+						end
 						self:RemoveDrones() -- Make sure that there are no old models
-						self:SpawnDroneProps()
+						if(not self.Cloaked) then
+							self:SpawnDroneProps();
+						end
+					end
+				end
+			elseif(not self.WepPods and self.DroneCount == 0) then
+				for i=1,6 do
+					if(self.DronePropFired[i]) then
+						self.DronePropFired[i] = false;
 					end
 				end
 			end
@@ -412,6 +454,9 @@ function ENT:TriggerInput(k,v) --######### @ RononDex
 	elseif(not self.EyeTrack and k == "Z") then
 		self.PositionSet = true
 		self.Target.z = v
+	elseif(not self.EyeTrack and k =="Target") then
+		self.PositionSet = true;
+		self.Target = v;
 	end
 
 	if(k=="Cloak") then
@@ -473,7 +518,7 @@ hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
 			end
 		end
 	end
-end)
+end);
 
 hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
 	local Jumper = p:GetNetworkedEntity("jumper");
@@ -485,7 +530,36 @@ hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
 			end
 		end
 	end
-end)
+end);
+
+hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
+	if(IsValid(p and v)) then
+		if(v.IsJumperSeat) then
+			local Jumper = v.Jumper;
+			p:SetNetworkedBool("JumperPassenger",false);
+			p:SetNetworkedEntity("JumperSeat",NULL);
+			p:SetPos(Jumper:GetPos()+Jumper:GetUp()*-30+Jumper:GetForward()*-100);
+			if(v.FrontSeat) then
+				v:GetParent().FrontPassenger = NULL;
+			end
+		end
+	end
+end);
+
+hook.Add("PlayerEnteredVehicle","JumperSeatEnter", function(p,v)
+	if(IsValid(v)) then
+		if(IsValid(p) and p:IsPlayer()) then
+			if(v.IsJumperSeat) then
+				p:SetNetworkedEntity("JumperSeat",v);
+				p:SetNetworkedEntity("JumperPassenger",v:GetParent());
+				p:SetNetworkedBool("JumperPassenger",true);
+				if(v.FrontSeat) then
+					v:GetParent().FrontPassenger = p;
+				end
+			end
+		end
+	end
+end);
 
 function ENT:PreEntityCopy()
 	local dupeInfo = {}

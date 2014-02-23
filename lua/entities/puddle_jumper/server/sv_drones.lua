@@ -1,3 +1,11 @@
+ENT.DronePropFired = {
+	D1 = false,
+	D2 = false,
+	D3 = false,
+	D4 = false,
+	D5 = false,
+	D6 = false,
+};
 function ENT:FireDrone()
 
 	if ((self.lastswitch*4)+2<(CurTime()*4) and self.Cloak == nil) then
@@ -8,35 +16,35 @@ function ENT:FireDrone()
 					self.On=2
 					self:LoadDrones(self.DroneProp4:GetPos())
 					self.DroneProp4:Remove()
-					self.DroneProp4Fired=true
+					self.DronePropFired[4]=true
 				end
 			elseif((self.On==2)) then
 				if(IsValid(self.DroneProp3)) then
 					self:LoadDrones(self.DroneProp3:GetPos())
 					self.On=3
 					self.DroneProp3:Remove()
-					self.DroneProp3Fired=true
+					self.DronePropFired[3]=true
 				end
 			elseif(self.On==3) then
 				if(IsValid(self.DroneProp1)) then
 					self:LoadDrones(self.DroneProp1:GetPos())
 					self.On=4
 					self.DroneProp1:Remove()
-					self.DroneProp1Fired=true
+					self.DronePropFired[1]=true
 				end
 			elseif(self.On==4) then
 				if(IsValid(self.DroneProp2)) then
 					self:LoadDrones(self.DroneProp2:GetPos())
 					self.On=5
 					self.DroneProp2:Remove()
-					self.DroneProp2Fired=true
+					self.DronePropFired[2]=true
 				end
 			elseif(self.On==5) then
 				if(IsValid(self.DroneProp6)) then
 					self:LoadDrones(self.DroneProp6:GetPos())
 					self.On=6
 					self.DroneProp6:Remove()
-					self.DroneProp6Fired=true
+					self.DronePropFired[6]=true
 				end
 			elseif(self.On==6) then
 				if(IsValid(self.DroneProp5)) then
@@ -44,7 +52,7 @@ function ENT:FireDrone()
 					self.On=1
 					self.FinalDrone=true
 					self.DroneProp5:Remove()
-					self.DroneProp5Fired=true
+					self.DronePropFired[5]=true
 				end
 				self.DronePropsMade=false
 			end
@@ -112,7 +120,7 @@ function ENT:SpawnDroneProps()
 	local pos = self:GetPos()+self:GetForward()*-50+self:GetUp()*-55
 
 	if(self.DroneCount<6) then
-		if(not(self.DroneProp1Fired)) then
+		if(not(self.DronePropFired[1])) then
 			local e = ents.Create("prop_physics")
 			e:SetModel("models/Zup/Drone/drone.mdl")
 			e:SetPos(pos+self:GetRight()*-97.5+self:GetUp()*21.25+self:GetForward()*50)
@@ -123,12 +131,12 @@ function ENT:SpawnDroneProps()
 			e:Activate()
 			constraint.Weld(e,self,0,0,0,true)
 			self.DroneProp1=e
-			self.DroneProp1Fired=false
+			self.DronePropFired[1]=false
 		end
 	end
 
 	if(self.DroneCount<5) then
-		if(not(self.DroneProp2Fired)) then
+		if(not(self.DronePropFired[2])) then
 			local e2 = ents.Create("prop_physics")
 			e2:SetModel("models/Zup/Drone/drone.mdl")
 			e2:SetPos(pos+self:GetRight()*97.5+self:GetUp()*21.25+self:GetForward()*50)
@@ -139,12 +147,12 @@ function ENT:SpawnDroneProps()
 			e2:Activate()
 			constraint.Weld(e2,self,0,0,0,true)
 			self.DroneProp2=e2
-			self.DroneProp2Fired=false
+			self.DronePropFired[2]=false
 		end
 	end
 
 	if(self.DroneCount<4) then
-		if(not(self.DroneProp3Fired)) then
+		if(not(self.DronePropFired[3])) then
 			local e3 = ents.Create("prop_physics")
 			e3:SetModel("models/Zup/Drone/drone.mdl")
 			e3:SetPos(pos+self:GetRight()*105+self:GetUp()*35.25+self:GetForward()*50)
@@ -155,12 +163,12 @@ function ENT:SpawnDroneProps()
 			e3:Activate()
 			constraint.Weld(e3,self,0,0,0,true)
 			self.DroneProp3=e3
-			self.DroneProp3Fired=false
+			self.DronePropFired[3]=false
 		end
 	end
 
 	if(self.DroneCount<3) then
-		if(not(self.DroneProp4Fired)) then
+		if(not(self.DronePropFired[4])) then
 			local e4 = ents.Create("prop_physics")
 			e4:SetModel("models/Zup/Drone/drone.mdl")
 			e4:SetPos(pos+self:GetRight()*-105+self:GetUp()*35.25+self:GetForward()*50)
@@ -171,12 +179,12 @@ function ENT:SpawnDroneProps()
 			e4:Activate()
 			constraint.Weld(e4,self,0,0,0,true)
 			self.DroneProp4=e4
-			self.DroneProp4Fired=false
+			self.DronePropFired[4]=false
 		end
 	end
 
 	if(self.DroneCount<2) then
-		if(not(self.DroneProp5Fired)) then
+		if(not(self.DronePropFired[5])) then
 			local e5 = ents.Create("prop_physics")
 			e5:SetModel("models/Zup/Drone/drone.mdl")
 			e5:SetPos(pos+self:GetRight()*95.5+self:GetUp()*9.25+self:GetForward()*50)
@@ -187,12 +195,12 @@ function ENT:SpawnDroneProps()
 			e5:Activate()
 			constraint.Weld(e5,self,0,0,0,true)
 			self.DroneProp5=e5
-			self.DroneProp5Fired=false
+			self.DronePropFired[5]=false
 		end
 	end
 
 	if(self.DroneCount<1) then
-		if(not(self.DroneProp6Fired)) then
+		if(not(self.DronePropFired[6])) then
 			local e6 = ents.Create("prop_physics")
 			e6:SetModel("models/Zup/Drone/drone.mdl")
 			e6:SetPos(pos+self:GetRight()*-95.5+self:GetUp()*9.25+self:GetForward()*50)
@@ -203,7 +211,7 @@ function ENT:SpawnDroneProps()
 			e6:Activate()
 			constraint.Weld(e6,self,0,0,0,true)
 			self.DroneProp6=e6
-			self.DroneProp6Fired=false
+			self.DronePropFired[6]=false
 		end
 	end
 	self.DronePropsMade=true

@@ -141,6 +141,10 @@ function ENT:DialGate(address,mode,nox)
 	end
 end
 
+function ENT:GetDialledAddress()
+	return self:GetNetworkedString("DialledAddress",""):upper();
+end
+
 --################# Stops Dialling a Gate or closes it  @aVoN
 function ENT:AbortDialling()
 	LocalPlayer():ConCommand("_StarGate.SetValue "..self.Entity:EntIndex().." AbortDialling true");

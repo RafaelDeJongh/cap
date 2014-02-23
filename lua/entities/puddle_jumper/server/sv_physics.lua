@@ -43,6 +43,7 @@ function ENT:PhysicsCollide(cdat, phys)
 	end
 end
 
+/*
  --############ After teleporting it, fix the angles of a player @aVoN
 function ENT.FixAngles(self,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
 	-- Move a players view
@@ -52,6 +53,7 @@ function ENT.FixAngles(self,pos,ang,vel,old_pos,old_ang,old_vel,ang_delta)
 	end
 end
 StarGate.Teleport:Add("puddle_jumper",ENT.FixAngles)
+*/
 
 --######  TO DO: Fix Jumper Angles after teleporting
 
@@ -169,7 +171,7 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 
 			--########### Calculate our angles and position based on speed
 			FlightPhys.pos = pos+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);
-			FlightPhys.angle			= ang; --+ Vector(90 0, 0)
+			FlightPhys.angle = ang; --+ Vector(90 0, 0)
 			FlightPhys.deltatime		= deltatime;
 
 			self.Pilot:SetPos(pos);

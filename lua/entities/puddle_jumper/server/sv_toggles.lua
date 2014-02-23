@@ -187,6 +187,9 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 		self.door=true
 		if not self.Inflight then
 			self.Door:SetSolid(SOLID_NONE)
+			if(self.HoverAlways) then
+				self.OpenedDoor:SetSolid(SOLID_VPHYSICS);
+			end
 		end
 	else
 		if(self.BulkHead) then
@@ -196,6 +199,9 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 		end
 		self.door=false
 		if not self.Inflight then
+			if(self.HoverAlways) then
+				self.OpenedDoor:SetSolid(SOLID_NONE);
+			end
 			self.Door:SetSolid(SOLID_VPHYSICS)
 		end
 	end
@@ -213,24 +219,60 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 	if(self.CanCloak)then
 		if(self.CanDoCloak)then
 			if(self.Cloaked)then
-				self:Status(false)
+				if(not game.SinglePlayer()) then
+					self:Status(false)
+				else
+					self:EmitSound(self.Sounds.Uncloak,80,math.random(90,110))
+					local fx = EffectData();
+					local pos = self:GetPos();
+					fx:SetOrigin(pos);
+					fx:SetStart(pos);
+					fx:SetEntity(self);
+					fx:SetScale(-2);
+					util.Effect("cloaking",fx,true,true);
+				end
 				if(self.Inflight)then
 					self:ToggleRotorwash(true)
-				else
-					self:SpawnToggleButton()
+				//else
+				//	self:SpawnToggleButton()
 				end
 				if(self.WepPods) then
 					if(not(self.DronePropsMade)) then
 						self:SpawnDroneProps()
 					end
 				end
-				self.Cloaked = false
+
 				self.CanDoCloak=false
 				self.CanShield=true
+				for i=1,4 do
+					if(IsValid(self.Buttons[i])) then
+						self.Buttons[i]:SetColor(Color(64,65,48,127.5));
+					end
+				end
 				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(false); end
-				timer.Simple( 2, function() self.CanDoCloak=true end)
+				timer.Simple( 1.75, function()
+					self.CanDoCloak=true;
+					self.Cloaked = false;
+					self:SetNetworkedBool("Cloaked",false);
+				end);
 			else
-				self:Status(true)
+				if(not game.SinglePlayer()) then
+					self:Status(true)
+				else
+					self:EmitSound(self.Sounds.Cloak,100,math.random(80,100))
+					local fx = EffectData();
+					local pos = self:GetPos();
+					fx:SetOrigin(pos);
+					fx:SetStart(pos);
+					fx:SetEntity(self);
+					fx:SetScale(2);
+					util.Effect("cloaking",fx,true,true);
+				end
+				for i=1,4 do
+					if(IsValid(self.Buttons[i])) then
+						self.Buttons[i]:SetColor(Color(255,255,255,0));
+					end
+				end
 				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(true); end
 				self.Cloaked = true
 				if(self.WepPods) then
@@ -241,11 +283,13 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				if(self.Inflight) then
 					self:ToggleRotorwash(false)
 				end
+				/*
 				for _,v in pairs(self.Buttons or {}) do
 					if IsValid(v) then
 						v:Remove();
 					end
 				end
+				*/
 				self.CanShield=false
 				self:SetNetworkedBool("Cloaked",true)
 				self.CanDoCloak=false

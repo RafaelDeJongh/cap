@@ -11,6 +11,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_zpm_mk3");
 
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
+TOOL.ClientConVar["capacity"] = 100;
 TOOL.ClientConVar["model"] = "models/pg_props/pg_zpm/pg_zpm.mdl";
 TOOL.Entity.Class = "zpm_mk3";
 TOOL.Entity.Keys = {"model"};
@@ -39,6 +40,8 @@ function TOOL:LeftClick(t)
 		self:AutoLink(e,t.Entity);
 	end
 	local c = self:Weld(e,t.Entity,weld);
+	local capacity = self:GetClientInfo("capacity");
+	e.Energy = (e.Energy / 100) * capacity
 	self:AddUndo(p,e,c);
 	self:AddCleanup(p,c,e);
 	return true;
@@ -49,6 +52,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
+	Panel:AddControl("Slider",{Label="Capacity:",Type="Integer",Min=1,Max=100,Command="zpm_mk3_capacity"});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"zpm_mk3_autoweld");
 	if(StarGate.HasResourceDistribution) then
 		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip("Autolink this to resource using Entities?");
