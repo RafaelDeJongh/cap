@@ -266,13 +266,13 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		end
 	end
 
-		
+
 	if(IsValid(self.FrontPassenger)) then
 		if(self.FrontPassenger:KeyDown(IN_RELOAD)) then
 			self:OpenDHD(self.FrontPassenger) -- Open DHD for pilot
 		end
 	end
-	
+
 	--########## Mostly key presses
 	if(IsValid(self.Pilot) and self.Inflight) then
 
@@ -510,7 +510,7 @@ end
 --####### Avoids the annoying bug that i've had since the start. When a player suicides the jumper now blows up @Ronondex
 hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
 	local Jumper = p:GetNetworkedEntity("jumper");
-	if(Jumper.Inflight) then
+	if(IsValid(Jumper) and Jumper.Inflight) then
 		if(Jumper.Pilot==p) then
 			Jumper:ExitJumper();
 			if(not(Jumper.Done)) then
@@ -522,7 +522,7 @@ end);
 
 hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
 	local Jumper = p:GetNetworkedEntity("jumper");
-	if(Jumper.Inflight) then
+	if(IsValid(Jumper) and Jumper.Inflight) then
 		if(Jumper.Pilot==p) then
 			Jumper:ExitJumper();
 			if(not(Jumper.Done)) then
@@ -533,7 +533,7 @@ hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
 end);
 
 hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
-	if(IsValid(p and v)) then
+	if(IsValid(p) and IsValid(v)) then
 		if(v.IsJumperSeat) then
 			local Jumper = v.Jumper;
 			p:SetNetworkedBool("JumperPassenger",false);

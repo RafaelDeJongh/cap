@@ -2,7 +2,7 @@
 	Atlantis ZPM Hub
 	Copyright (C) 2010  Llapp
 */
-if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("energy") or SGLanguage==nil or SGLanguage.GetMessage==nil) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Energy";

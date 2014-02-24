@@ -451,7 +451,7 @@ function ENT:PostEntityPaste(Player, Ent, CreatedEntities)
 		self.ZPM.Ent:SetUseType(SIMPLE_USE);
 		self.ZPM.Ent.Use = function()
 			local constr = constraint.FindConstraint(self,"Weld");
-			if (IsValid(constr.Entity[1].Entity)) then
+			if (constr and IsValid(constr.Entity[1].Entity)) then
 				constr.Entity[1].Entity:UseZPM(i);
 			end
 		end

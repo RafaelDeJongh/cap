@@ -164,9 +164,34 @@ function ENT:Think()
 		end
 	end
 
-	self.gate = self:FindGate(5000)
-	self.pgate = self:FindPlayerGate(5000)
 
+	
+	local dist = (self.Owner:GetPos() - self:GetPos()):Length();	
+	if(dist>5000) then
+		self.gate = self:FindGate(5000)
+		self.pgate = self:FindPlayerGate(5000)
+		if(IsValid(self.pgate)) then
+			if(self.pgate.IsOpen) then
+				self.pgate.EventHorizon.AutoClose = false;
+				self.pgate.DisAutoClose = true;
+				for k,v in pairs(self.gate) do
+					if(v.EventHorizon==self.pgate.EventHorizon.Target) then
+						v.EventHorizon.AutoClose = false;
+						self.pgate.DisAutoClose = true;
+						self.SignalLost = false;
+						UpdateRenderTarget(self.RTCamera);
+					end
+				end
+			else
+				self.SignalLost = true;
+				UpdateRenderTarget(NULL);
+			end
+		end
+	else
+		self.SignalLost = false;
+		UpdateRenderTarget(self.RTCamera);
+	end
+	/*
 	if(IsValid(self.gate)) then
 		if(self.gate.IsOpen) then
 			self.gate.EventHorizon.AutoClose=false
@@ -182,7 +207,7 @@ function ENT:Think()
 			UpdateRenderTarget(NULL)
 		end
 	end
-
+	*/
 	if(IsValid(self.Controler)) then
 		if(self.FirstPerson) then
 
@@ -348,13 +373,13 @@ function ENT:StopSpectate(p)
 end
 
 function ENT:FindGate(dist)  --######### @ aVoN
-	local gate;
+	local gate = {};
 	local pos = self:GetPos();
-	for _,v in pairs(ents.FindByClass("stargate_*")) do -- Find the gates by their class name
+	for k,v in pairs(ents.FindByClass("stargate_*")) do -- Find the gates by their class name
 		local sg_dist = (pos - v:GetPos()):Length();
 		if(dist >= sg_dist) then
 			dist = sg_dist;
-			gate = v;
+			gate[k] = v;
 		end
 	end
 	return gate; -- Returns what we've found, a gate or no gate.

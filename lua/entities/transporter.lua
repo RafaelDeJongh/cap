@@ -195,6 +195,7 @@ end
 --################### Do teleport @aVoN
 -- Helper function. Out here because it's called by a timer. And we do not want to create new function objects everytime we teleport - This fights an issue with GarbageCollection
 local function DoTeleportTimer(e,pos,r,g,b,a,rm)
+	if not IsValid(e) then return end
 	local isplayer = e:IsPlayer();
 	local mtype;
 	if(isplayer) then

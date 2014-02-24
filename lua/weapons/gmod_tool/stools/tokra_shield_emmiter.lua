@@ -2,7 +2,7 @@
 	Tokra Shield Emmiter
 	Copyright (C) 2011  Madman07
 */
-if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices") or SGLanguage==nil or SGLanguage.GetMessage==nil) then return end
 include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
