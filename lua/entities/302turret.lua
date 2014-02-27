@@ -41,7 +41,11 @@ function ENT:Bullets()
 	bullet = {}
 	bullet.Src		= self:GetPos()
 	bullet.Attacker = self
-	bullet.Dir		= self:GetAngles():Forward()
+	if(self.Turret==1) then
+		bullet.Dir		= self:GetAngles():Forward() +	self:GetAngles():Right()*0.1;
+	elseif(self.Turret==2) then
+		bullet.Dir		= self:GetAngles():Forward() +	self:GetAngles():Right()*-0.1;
+	end
 	bullet.Spread		= Vector(0.01,0.01,0.01)
 	bullet.Num		= 3
 	bullet.Damage		= 60

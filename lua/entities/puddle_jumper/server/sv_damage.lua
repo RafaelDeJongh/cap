@@ -48,7 +48,7 @@ function ENT:DoKill(ply)   --######### @ RononDex
 			end
 		end
 	end
-	self.Done=true
+
 	self:Remove()
 end
 
@@ -80,14 +80,14 @@ function ENT:OnTakeDamage(dmg)
 		--#### Disable systems when damaged
 		if(not(self.Done)) then
 
-			self.EntHealth=self.EntHealth-(dmg:GetDamage()/10)
+			self.EntHealth = self.EntHealth-(dmg:GetDamage()/10);
 
 			if((self.EntHealth)<=300) then
 				if(self.Cloaked) then
-					self:ToggleCloak()
+					self:ToggleCloak();
 				end
-				self.CantCloak=true
-				self.CanCloak = false
+				self.CantCloak = true;
+				self.CanCloak = false;
 			end
 
 			if((self.EntHealth)<=250) then

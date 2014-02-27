@@ -656,14 +656,16 @@ function ENT:StartTouch(e)
 	local class = e:GetClass();
  	--if (e:GetClass() == "kino_ball") then self:StartTouchPlayersNPCs(e) end
 	if self.ModelClip then
-		if(not IsValid(self.Target)) then
-			if(class=="puddle_jumper" and not self.ShuttingDown) then
-				if(e.Exiting) then
-					e:SetPos(self:GetPos());
+		if(not self:GetParent().IsSupergate) then
+			if(not IsValid(self.Target)) then
+				if(class=="puddle_jumper" and not self.ShuttingDown) then
+					if(e.Exiting) then
+						e:SetPos(self:GetPos());
+					end
 				end
 			end
 		end
-
+		
 		if (self.PhysClip) then
 			e:SetCustomCollisionCheck(true);
 		end
@@ -686,13 +688,15 @@ function ENT:Touch(e)
 		if not table.HasValue(BUFFER.ClipIgnore,e:GetClass()) then
 			BUFFER:Touch(self.Entity,e)
 		end
-		if(class=="puddle_jumper" and not self.ShuttingDown) then
-			if(not IsValid(self.Target)) then
-				e.Exiting = true;
-				if(IsValid(e.Pilot)) then
-					e.Pilot:SetEyeAngles(self:GetParent():GetAngles());
+		if(not self:GetParent().IsSupergate) then
+			if(class=="puddle_jumper" and not self.ShuttingDown) then
+				if(not IsValid(self.Target)) then
+					e.Exiting = true;
+					if(IsValid(e.Pilot)) then
+						e.Pilot:SetEyeAngles(self:GetParent():GetAngles());
+					end
+					e:SetAngles(self:GetParent():GetAngles()+Angle(0,0,0));
 				end
-				e:SetAngles(self:GetParent():GetAngles()+Angle(0,0,0));
 			end
 		end
 	end
@@ -852,13 +856,15 @@ function ENT:EndTouch(e)
 		self:EndTouchPlayersNPCs(e)
 		return;
 	end
-
-	if(e:GetClass()=="puddle_jumper") then
-		if(not IsValid(self.Target)) then
-			e.Exiting = false;
+	
+	if(not self:GetParent().IsSupergate) then
+		if(e:GetClass()=="puddle_jumper") then
+			if(not IsValid(self.Target)) then
+				e.Exiting = false;
+			end
 		end
 	end
-
+	
 	local dir = (self:GetPos()-e:GetPos()):GetNormalized();
 
 	local temp_dir = 0;

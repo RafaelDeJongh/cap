@@ -358,7 +358,11 @@ function ENT:TeleportEntity(t,base,basedata)
 		local phys = e:GetPhysicsObject();
 		-- ######### Teleport
 		if(e:GetClass()=="puddle_jumper") then
-			e:SetPos(self.Target:GetPos());
+			if(not self:GetParent().IsSupergate) then
+				e:SetPos(self.Target:GetPos());
+			else
+				e:SetPos(pos.New);
+			end
 		else
 			e:SetPos(pos.New);
 		end

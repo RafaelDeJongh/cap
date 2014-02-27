@@ -104,7 +104,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.ExitPos = self:GetPos()+Vector(0,0,120);
 	self.ShouldRotorwash = true;
 
-	self:CreateWireInputs("Hyperspace X","Hyperspace Y","Hyperspace Z","Cloak")
+	self:CreateWireInputs("Hyperspace [VECTOR]","Hyperspace X","Hyperspace Y","Hyperspace Z","Cloak")
 
 	self.CanUse = false;
 
@@ -461,13 +461,18 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 end
 
 function ENT:HyperSpace()
-
-	local Ofs = Vector(self.HyperspacePos.X,self.HyperspacePos.Y,self.HyperspacePos.Z) - self:GetPos()
-
+	local Ofs;
+	if(not self.HyperVector) then
+		Ofs = Vector(self.HyperspacePos.X,self.HyperspacePos.Y,self.HyperspacePos.Z) - self:GetPos()
+	else
+		Ofs = self.HyperspaceVector - self:GetPos();
+	end
 	local fx = EffectData()
 		fx:SetOrigin(self:GetPos())
 		fx:SetEntity(self)
 	util.Effect("propspawn",fx)
+	self:EmitSound("ambient/levels/citadel/weapon_disintegrate2.wav", 500)
+	self:EmitSound("npc/turret_floor/die.wav", 450, 70)
 
 	local ed = EffectData()
 		ed:SetEntity( self )
@@ -475,30 +480,40 @@ function ENT:HyperSpace()
 	util.Effect( "jump_in", ed, true, true );
 
 	local ed = EffectData()
-		ed:SetEntity( self )
-		ed:SetOrigin( self:GetPos() + (Ofs:GetNormalized() * math.Clamp( self:BoundingRadius() * 5, 180, 4092 ) ) )
+		ed:SetEntity(self)
+		ed:SetOrigin(self:GetPos() + (Ofs:GetNormalized() * math.Clamp( self:BoundingRadius() * 5,180,4092)))
 	util.Effect( "jump_out", ed, true, true );
-	self:EmitSound("ambient/levels/citadel/weapon_disintegrate2.wav", 500)
-	self:EmitSound("npc/turret_floor/die.wav", 450, 70)
+
 	if(not(self.DestSet)) then
 		self:SetPos(self:GetPos()+self:GetForward()*7500)
 	else
-		self:SetPos(Vector(self.HyperspacePos.X,self.HyperspacePos.Y,self.HyperspacePos.Z))
-	end
+		if(self.HyperVector) then
+			self:SetPos(self.HyperspaceVector);
+		else
+			self:SetPos(Vector(self.HyperspacePos.X,self.HyperspacePos.Y,self.HyperspacePos.Z));
+		end
+	end		
 end
 
 ENT.HyperspacePos = {}
 function ENT:TriggerInput(k,v)
 
-	if(k=="Hyperspace X") then
+	if(k=="Hyperspace") then
+		self.HyperspaceVector = v;
+		self.HyperVector = true;
+		self.DestSet = true;
+	elseif(k=="Hyperspace X") then
 		self.HyperspacePos.X = v
 		self.DestSet = true;
+		self.HyperVector = false;
 	elseif(k=="Hyperspace Y") then
 		self.HyperspacePos.Y = v
 		self.DestSet = true;
+		self.HyperVector = false;
 	elseif(k=="Hyperspace Z") then
 		self.HyperspacePos.Z = v
 		self.DestSet = true;
+		self.HyperVector = false;
 	elseif(k=="Cloak") then
 		self:ToggleCloak()
 	end

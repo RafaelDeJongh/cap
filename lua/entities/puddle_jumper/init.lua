@@ -417,6 +417,7 @@ function ENT:OpenDHD(p)   --######### @ aVoN
 	net.WriteEntity(e);
 	net.WriteInt(1,8);
 	net.Send(p);
+
 end
 
 function ENT:FindGate(dist)  --######### @ aVoN

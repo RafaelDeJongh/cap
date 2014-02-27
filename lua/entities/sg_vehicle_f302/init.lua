@@ -645,6 +645,7 @@ function ENT:Turrets() --####### Spawn the turret entities @RononDex
 		e:Activate()
 		e:SetParent(self)
 		e:SetOwner(self)
+		e.Turret = 1;
 		e.Parent=self
 		self.Turret = e
 
@@ -655,6 +656,7 @@ function ENT:Turrets() --####### Spawn the turret entities @RononDex
 		e2:Activate()
 		e2:SetParent(self)
 		e2:SetOwner(self)
+		e2.Turret = 2;
 		e2.Parent=self
 		self.Turret2 = e2
 	end

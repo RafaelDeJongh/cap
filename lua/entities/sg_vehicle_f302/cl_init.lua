@@ -104,20 +104,27 @@ function ENT:Effects(b)
 	local roll = math.Rand(-90,90);
 	local normal = (self.Entity:GetForward() * -1):GetNormalized();
 	local Boost = self:GetNetworkedBool("Boost");
-
+	local drawfx;
+	
 	if Boost then return end;
 
-	for _,v in pairs(ATTACHMENTS) do
+	for k,v in pairs(ATTACHMENTS) do
 		local attach = self:GetAttachment(self:LookupAttachment(v));
 		local pos = attach.Pos;
 
 		if((f302)and(f302:IsValid()and(f302==self))) then
-			if((p:KeyDown("F302","FWD"))) then
+			if(v=="EngineR" and p.MissilesDisabled) then
+				drawfx = false;
+			else
+				drawfx = true;
+			end
+			if((p:KeyDown("F302","FWD")) and drawfx) then
+				
 
 				if(StarGate.VisualsShips("cl_F302_sprites")) then
 					local aftbrn = self.FXEmitter:Add("effects/fire_cloud1",pos);
 					aftbrn:SetVelocity(normal*2);
-					aftbrn:SetDieTime(0.06);
+					aftbrn:SetDieTime(0.1);
 					aftbrn:SetStartAlpha(255);
 					aftbrn:SetEndAlpha(100);
 					aftbrn:SetStartSize(30);
@@ -127,7 +134,7 @@ function ENT:Effects(b)
 
 					local aftbrn2 = self.FXEmitter:Add("sprites/orangecore1",pos);
 					aftbrn2:SetVelocity(normal*2);
-					aftbrn2:SetDieTime(0.06);
+					aftbrn2:SetDieTime(0.1);
 					aftbrn2:SetStartAlpha(255);
 					aftbrn2:SetEndAlpha(100);
 					aftbrn2:SetStartSize(30);
@@ -181,7 +188,7 @@ function ENT:BoostFX()
 		if(StarGate.VisualsShips("cl_F302_sprites")) then
 			local fx2 = self.FXEmitter:Add("effects/fire_cloud1",pos);
 			fx2:SetVelocity(normal*2);
-			fx2:SetDieTime(0.1);
+			fx2:SetDieTime(0.3);
 			fx2:SetStartAlpha(255);
 			fx2:SetEndAlpha(255);
 			fx2:SetStartSize(40);

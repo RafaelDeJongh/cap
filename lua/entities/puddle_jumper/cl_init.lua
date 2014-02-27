@@ -341,7 +341,9 @@ function ENT:Think() --#########################  Overly complex think function 
 					self.LSD:Deactivate();
 				else
 					View.FirstPerson = true;
-					self.LSD:Activate();
+					if(IsValid(self.LSD)) then
+						self.LSD:Activate();
+					end
 				end
 				self.NextUse = CurTime() + 1;
 			end

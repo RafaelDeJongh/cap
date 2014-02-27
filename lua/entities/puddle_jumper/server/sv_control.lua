@@ -12,49 +12,49 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self.AllowActivation=false
 		self.Pilot:SetHealth(self.health)
 		self.Pilot:SetMoveType(MOVETYPE_WALK)
-		self:EmitSound(self.Sounds.Shutdown,100,100)
-		self:SetNetworkedEntity("jumper",NULL)
 		--self.Pilot:SetScriptedVehicle(NULL)
 		self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
 		self.Pilot:SetViewEntity(NULL)
+		for k,v in pairs(self.PWeapons) do
+			self.Pilot:Give(tostring(v))
+		end
+		self.Pilot = nil;
 	end
-
-	self.HoverPos = self:GetPos();
-
-	self:RemoveDrones() -- Remove the drone props... SO MANY BUGS BECAUSE OF THESE THINGS!
-	self.Roll=0
-	self.LiftOff = false
-	self.Inflight=false
-	self.Accel.FWD = 0;
-	self.Accel.RIGHT = 0;
-	self.Accel.UP = 0;
-
-	self:SetNetworkedBool("JumperInflight",false);	
 	
-	self:SpawnToggleButton();
-	self:SpawnBulkHeadDoor();
-	self:SpawnBackDoor();
-	if(self.door) then
-		self.Door:SetSolid(SOLID_NONE);
+	if(IsValid(self)) then
+		self:EmitSound(self.Sounds.Shutdown,100,100)
+		self:SetNetworkedEntity("jumper",NULL)
+		self.HoverPos = self:GetPos();
+
+		self:RemoveDrones() -- Remove the drone props... SO MANY BUGS BECAUSE OF THESE THINGS!
+		self.Roll=0
+		self.LiftOff = false
+		self.Inflight=false
+		self.Accel.FWD = 0;
+		self.Accel.RIGHT = 0;
+		self.Accel.UP = 0;
+
+		self:SetNetworkedBool("JumperInflight",false);	
+		
+		self:SpawnToggleButton();
+		self:SpawnBulkHeadDoor();
+		self:SpawnBackDoor();
+		if(self.door) then
+			self.Door:SetSolid(SOLID_NONE);
+		end
+		self:SpawnOpenedDoor();
+		//self:SpawnSeats();
+		
+		self:ToggleRotorwash(false);
+
+		if(self.epodo) then
+			self:TogglePods()
+		end
+		timer.Simple( 0.75, function()
+			self.AllowActivation = true
+		end);
 	end
-	self:SpawnOpenedDoor();
-	//self:SpawnSeats();
-	
-	self:ToggleRotorwash(false);
 
-	for k,v in pairs(self.PWeapons) do
-		self.Pilot:Give(tostring(v))
-	end
-
-	if(self.epodo) then
-		self:TogglePods()
-	end
-
-	self.Pilot = nil;
-
-	timer.Simple( 0.75, function()
-		self.AllowActivation = true
-	end)
 end
 
 function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex

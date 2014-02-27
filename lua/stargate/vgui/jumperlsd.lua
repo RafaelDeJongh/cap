@@ -13,6 +13,8 @@ end
 local dot = surface.GetTextureID("Markjaw/LSD/dot");
 local x,y;
 local sX,sY;
+local gX,gY;
+local vX,vY;
 local s = "";
 local gate = "";
 function PANEL:Paint()
@@ -63,10 +65,10 @@ function PANEL:Paint()
 					sY = v;
 				end
 			end
+			gate = v:GetClass();
+			gate = string.Replace(gate,"_"," ");
+			gate = string.upper(gate);
 			if(pos<2500) then
-				gate = v:GetClass();
-				gate = string.Replace(gate,"_"," ");
-				gate = string.upper(gate);
 				surface.SetFont("Default");
 				surface.SetTextPos(sX+60,sY-60-(pos/75));
 				surface.SetTextColor(Color(255,0,0,255));
@@ -86,7 +88,31 @@ function PANEL:Paint()
 					surface.DrawText("Dialling: "..v:GetDialledAddress());
 					print_r(v.Outputs)
 				end
+			else
+				local gpos = v:GetPos();
+				local tScreen = gpos:ToScreen();
+				for k,v in pairs(tScreen) do
+					if k=="x" then
+						gX = v;
+					elseif k=="y" then
+						gY = v;
+					end	
+				end
+				draw.WordBox(4,gX,gY,gate,"Default", Color(0,0,255,127.5),Color(255,0,0,255) )
 			end
+		/*elseif(v.IsSGVehicle) then
+			if(pos>1000) then
+				local vpos = v:GetPos();
+				local vScreen = vpos:ToScreen();
+				for k,v in pairs(vScreen) do
+					if k=="x" then
+						vX = v;
+					elseif k=="y" then
+						vY = v;
+					end
+				end
+				draw.WordBox(4,vX,vY,v.Vehicle.." (HP: "..v:GetNetworkedInt("health",0)..")","Default", Color(0,0,255,127.5),Color(255,0,0,255) )
+			end*/
 		end
 	end
 	return true;
