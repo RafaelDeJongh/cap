@@ -926,30 +926,10 @@ end
 duplicator.RegisterEntityModifier("StarGate",ENT.DuplicatorEntityModifier);
 
 util.AddNetworkString("RefreshGateList")
-util.AddNetworkString("RefreshGateListSelect")
 util.AddNetworkString("RemoveGateFromList")
-util.AddNetworkString("RemoveGateFromListSelect")
 
 function ENT:RefreshGateList(type,value,typ,pl)
 	net.Start( "RefreshGateList" )
-	net.WriteInt(self.Entity:EntIndex(), 16)
-	net.WriteString(self.Entity:GetClass())
-	net.WriteBit(self.IsGroupStargate)
-	net.WriteString( type );
-	net.WriteString( typ or "" );
-	if (typ=="bool") then
-		net.WriteBit(value)
-	elseif (typ=="vector") then
-		net.WriteVector(value)
-	else
-		net.WriteString(value)
-	end
-	if (pl) then
-		net.Send(pl)
-	else
-		net.Broadcast()
-	end
-	net.Start( "RefreshGateListSelect" )
 	net.WriteInt(self.Entity:EntIndex(), 16)
 	net.WriteString(self.Entity:GetClass())
 	net.WriteBit(self.IsGroupStargate)
@@ -995,9 +975,6 @@ end
 
 function ENT:RemoveGateFromList()
 	net.Start( "RemoveGateFromList" )
-		net.WriteInt(self.Entity:EntIndex(), 16)
-	net.Broadcast()
-	net.Start( "RemoveGateFromListSelect" )
 		net.WriteInt(self.Entity:EntIndex(), 16)
 	net.Broadcast()
 end

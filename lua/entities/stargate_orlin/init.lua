@@ -454,23 +454,23 @@ function ENT:Use(p)
 	if self.Jamming then return end;
 	if(IsValid(p) and p:IsPlayer()) then
 		if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,self.Entity) == false) then return end; -- Not allowed to dial!
-		local dialog = "StarGate.OpenDialMenuDHDGate_Group";
+		local allowed = true;
 		if(hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,p,self.Entity) == false) then
-			dialog = "StarGate.OpenDialMenuDHD_Group"; -- He is not allowed to modify stuff, so show him the normal dialling dialoge!
+			allowed = false; -- He is not allowed to modify stuff, so show him the normal dialling dialoge!
 		elseif(self.GateSpawnerProtected) then -- It's a protected gate. Can this user change it?
-			local allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self.Entity);
+			allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self.Entity);
 			if(allowed == nil) then allowed = (p:IsAdmin() or game.SinglePlayer()) end;
-			if(not allowed) then
-				dialog = "StarGate.OpenDialMenuDHD_Group";
-			end
 		end
-		if (not GetConVar("stargate_group_system"):GetBool()) then
-			dialog = "StarGate.OpenDialMenuDHD_Galaxy";
+		local candialg = GetConVar("stargate_candial_groups_menu"):GetBool();
+		net.Start("StarGate.VGUI.Menu");
+		net.WriteEntity(self.Entity);
+		if (allowed) then
+			net.WriteInt(4,8);
+		else
+			net.WriteInt(2,8);
+			net.WriteBit(candialg);
 		end
-		umsg.Start(dialog,p);
-		umsg.Entity(self.Entity);
-		umsg.End();
-		self.LastUse = time;
+		net.Send(p);
 	end
 end
 

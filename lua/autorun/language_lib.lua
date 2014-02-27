@@ -32,7 +32,6 @@ end
 
 if (CLIENT) then
 	CreateClientConVar( "sg_language", GetConVarString("gmod_language") or "en", true, false )
-	CreateClientConVar( "sg_language_debug", "0", false, false )
 end
 
 if (Gmod13Lib==nil) then

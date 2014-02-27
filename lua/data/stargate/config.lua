@@ -152,16 +152,16 @@ engage_energy = 500
 restore_multiplier = 0.8
 # Thresold in percent after the shield depleted: When the "Strength" of the shield reached that level, it can be turned on again
 restore_thresold = 15
-# Consume multiplier: Make sure, the current shield uses the formula Radius^2*4*Pi/200000 to consume energy. Putting this to high will increase power consume dramatically!
+# Consume multiplier: Make sure, the current shield uses the formula Radius^2*4*Pi/1000000 to consume energy. Putting this to high will increase power consume dramatically!
 consume_multiplier = 1
 # This is the strength multiplier. As higher you set this, as stronger the shield will be
-strength_multiplier = 0.5
+strength_multiplier = 0.75
 # Apply force on the shieldemitter when hit?
 apply_force = true
 # Allow containment usage of the shield? Disable this if mingebags are putting shields around the spawnpoint
 allow_containment = true
 # How big can a shield be at maximum? (Make sure, you aren't setting this value to high, or it WILL crash garrysmod!
-max_size = 1024
+max_size = 2048
 # If a shield is stationary (= not moving around - E.g. on a citiy or planet), this multiplier will make it x times stronger compared to a mobile shield (on ships etc)
 stationary_shield_multiplier = 10
 # What is the shield's spawnlimit?

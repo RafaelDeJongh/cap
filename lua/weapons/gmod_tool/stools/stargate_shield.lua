@@ -37,7 +37,7 @@ TOOL.ClientConVar["g"] = 255;
 TOOL.ClientConVar["b"] = 255;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/micropro/shield_gen.mdl";
-TOOL.MaximumShieldSize = StarGate.CFG:Get("shield","max_size",1024); -- A person generally can spawn 1 shield
+TOOL.MaximumShieldSize = StarGate.CFG:Get("shield","max_size",2048); -- A person generally can spawn 1 shield
 -- Holds modles for a selection in the tooltab and allows individual Angle and Position offsets {Angle=Angle(1,2,3),Position=Vector(1,2,3} for the GhostPreview
 TOOL.List = "StargateShieldModels"; -- The listname of garrys "List" Module we use for models
 list.Set(TOOL.List,"models/micropro/shield_gen.mdl",{}); -- Thanks micropro for this model!

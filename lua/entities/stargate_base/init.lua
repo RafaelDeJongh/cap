@@ -471,6 +471,8 @@ function ENT:Flicker(magnitude)
 	end
 end
 
+util.AddNetworkString("StarGate.VGUI.Menu");
+
 --#################  Use - Open the Dial Menu @aVoN
 function ENT:Use(p)
 	if self.Cooldown or self.jammed then return end;
@@ -478,73 +480,38 @@ function ENT:Use(p)
 		if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,self.Entity) == false) then return end; -- Not allowed to dial!
 		if (self.DisMenu) then return end;
 		local groupmenus = GetConVar("stargate_group_system"):GetBool();
-		local alternatemenu = GetConVar("stargate_different_dial_menu"):GetInt();
-		--local candialg = GetConVar("stargate_candial_groups_menu"):GetInt();
-		if (alternatemenu == 1) then
-			local dialog = "StarGate.OpenDialMenuGate_Group";
-			if(not groupmenus) then
-				dialog = "StarGate.OpenDialMenuGate_Galaxy";
-			end
-			if (self.Entity:GetClass() == "stargate_universe") then
-				if(groupmenus) then
-					dialog = "StarGate.OpenDialMenuGate_GroupSGU";
-				else
-					dialog = "StarGate.OpenDialMenuGate_GalaxySGU";
-				end
-			elseif(self.Entity:GetClass() == "stargate_supergate")then
-			    dialog = "StarGate.OpenDialMenuSuperGate";
-			end
-			if(hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,p,self.Entity) == false) then
-				return false; -- He is not allowed to modify stuff!
-			elseif(self.GateSpawnerProtected) then -- It's a protected gate. Can this user change it?
-				local allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self.Entity);
-				if(allowed == nil) then allowed = (p:IsAdmin() or game.SinglePlayer()) end;
-				if(not allowed) then
-					return false;
-				end
-			end
-			umsg.Start(dialog,p);
-			umsg.Entity(self.Entity);
-			umsg.End();
-			self.LastUse = time;
-		else
-			local dialog = "StarGate.OpenDialMenu_Group";
-			if (self.Entity:GetClass() == "stargate_universe") then
-				if(groupmenus) then
-					dialog = "StarGate.OpenDialMenu_GroupSGU";
-				else
-					dialog = "StarGate.OpenDialMenu_GalaxySGU";
-				end
-			elseif(self.Entity:GetClass() == "stargate_supergate")then
-			    dialog = "StarGate.OpenDialMenu_Super";
-			elseif(not groupmenus) then
-			    dialog = "StarGate.OpenDialMenu_Galaxy";
-			end
-			if(hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,p,self.Entity) == false) then
-				dialog = "StarGate.OpenDialMenuDHDGate_Group"; -- He is not allowed to modify stuff, so show him the normal dialling dialoge!
-				if(self.Entity:GetClass() == "stargate_supergate")then
-			   		dialog = "StarGate.OpenDialMenuDHD";
-				elseif(not groupmenus) then
-			   		dialog = "StarGate.OpenDialMenuDHD_Galaxy";
-				end
-			elseif(self.GateSpawnerProtected) then -- It's a protected gate. Can this user change it?
-				local allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self.Entity);
-				if(allowed == nil) then allowed = (p:IsAdmin() or game.SinglePlayer()) end;
-				if(not allowed) then
-					dialog = "StarGate.OpenDialMenuDHDGate_Group";
-					if(self.Entity:GetClass() == "stargate_supergate")then
-			   			dialog = "StarGate.OpenDialMenuDHD";
-					elseif(not groupmenus) then
-			   			dialog = "StarGate.OpenDialMenuDHD_Galaxy";
-					end
-				end
-			end
+		local alternatemenu = GetConVar("stargate_different_dial_menu"):GetBool();
+		local candialg = GetConVar("stargate_candial_groups_menu"):GetBool();
 
-			umsg.Start(dialog,p);
-			umsg.Entity(self.Entity);
-			umsg.End();
-			self.LastUse = time;
+		local allowed = true;
+		if(hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,p,self.Entity) == false) then
+			-- He is not allowed to modify stuff!
+			if (alternatemenu) then
+				return false; -- no menu
+			else
+				allowed = false;
+			end
+		elseif(self.GateSpawnerProtected) then -- It's a protected gate. Can this user change it?
+			allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self.Entity);
+			if(allowed == nil) then allowed = (p:IsAdmin() or game.SinglePlayer()) end;
+			if(not allowed and alternatemenu) then
+				return false; -- no menu
+			end
 		end
+
+		net.Start("StarGate.VGUI.Menu");
+		net.WriteEntity(self.Entity);
+		if (allowed) then
+			if (alternatemenu) then
+				net.WriteInt(-1,8);
+			else
+				net.WriteInt(0,8);
+			end
+		else
+			net.WriteInt(2,8);
+			net.WriteBit(candialg);
+		end
+		net.Send(p);
 	end
 end
 

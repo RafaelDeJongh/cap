@@ -1,5 +1,5 @@
 local PANEL = {};
-local LSD = surface.GetTextureID("Markjaw/LSD/screen_t");
+local LSD = surface.GetTextureID("Markjaw/LSD/dot");
 
 function PANEL:Init()
 
@@ -76,7 +76,7 @@ function PANEL:Paint()
 				surface.SetTextPos(sX+60,sY-30-(pos/75));
 				surface.DrawText("Address: "..v:GetGateAddress());
 				local posy = 15;
-				if (self.GroupSystem) then
+				if (self.GroupSystem and not v.IsSupergate) then
 					posy = 0;
 					surface.SetTextPos(sX+60,sY-15-(pos/75));
 					surface.DrawText("Group: "..v:GetGateGroup());

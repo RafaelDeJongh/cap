@@ -108,15 +108,10 @@ function ENT:OpenMenu(p)
 	local e = self:FindGate();
 	if(not IsValid(e)) then return end;
 	if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
-	if (e.IsGroupStargate and GetConVar("stargate_group_system"):GetBool()) then
-		umsg.Start("StarGate.OpenDialMenuDHD_Group",p);
-	elseif (e.IsGroupStargate) then
-		umsg.Start("StarGate.OpenDialMenuDHD_Galaxy",p);
-	else
-		umsg.Start("StarGate.OpenDialMenuDHD",p);
-	end
-	umsg.Entity(e);
-	umsg.End();
+	net.Start("StarGate.VGUI.Menu");
+	net.WriteEntity(e);
+	net.WriteInt(1,8);
+	net.Send(p);
 end
 
 --################# Wire input - Relay to the gate @aVoN

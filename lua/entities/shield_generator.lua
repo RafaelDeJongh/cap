@@ -51,7 +51,7 @@ function ENT:Initialize()
 	self.ConsumeMultiplier = StarGate.CFG:Get("shield","consume_multiplier",1); -- As higher this is, as more energy it will take when enabled
 	self.RestoreMultiplier = StarGate.CFG:Get("shield","restore_multiplier",1); -- How fast can it restore it's health?
 	self.StrengthConfigMultiplier = StarGate.CFG:Get("shield","strength_multiplier",1); -- Doing this value higher will make the shiels stronger (look at the config)
-	self.MaxSize = StarGate.CFG:Get("shield","max_size",1024)
+	self.MaxSize = StarGate.CFG:Get("shield","max_size",2048)
 	self.Size = 80;
 	self.RestoreThresold = StarGate.CFG:Get("shield","restore_thresold",15); -- Which powerlevel has the shield to reach again until it works again?
 	self:AddResource("energy",1);
@@ -90,7 +90,7 @@ function ENT:Status(b,nosound)
 	if(b) then
 		if(not self:Enabled()) then
 			local energy = self:GetResource("energy",self.EngageEnergy);
-			self.ConsumeAmmount = math.ceil(((self.Size)^2*math.pi*4)/200000); -- Instead of doing this calculation very second, do it here
+			self.ConsumeAmmount = math.ceil(((self.Size)^2*math.pi*4)/1000000); -- Instead of doing this calculation very second, do it here
 			self.ExtraConsume = math.exp(math.Clamp(self.StrengthMultiplier[3]*1.3,0.2,600));
 			if((not self.Depleted or (self.Strength >= self.RestoreThresold)) and self.Strength > 0 and energy >= self.EngageEnergy) then
 				-- Taking the enagage energy, you will get back later (when turning off the shield)

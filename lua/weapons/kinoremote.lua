@@ -273,9 +273,10 @@ function SWEP:OpenMenu(p)
 	local e = self:FindGate();
 	if(not IsValid(e)) then return end;
 	if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
-	umsg.Start("StarGate.OpenDialMenuDHD",p);
-	umsg.Entity(e);
-	umsg.End();
+	net.Start("StarGate.VGUI.Menu");
+	net.WriteEntity(e);
+	net.WriteInt(1,8);
+	net.Send(p);
 end
 
 --################# Wire input - Relay to the gate @aVoN

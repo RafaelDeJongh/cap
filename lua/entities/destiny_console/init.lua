@@ -410,10 +410,11 @@ function ENT:OpenMenu(p)
 	end
 	if(not IsValid(e)) then return end;
 	if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
-	umsg.Start("StarGate.OpenDialMenuDHD",p);
-	umsg.Entity(e);
-	umsg.Entity(self.Entity);
-	umsg.End();
+	net.Start("StarGate.VGUI.Menu");
+	net.WriteEntity(e);
+	net.WriteInt(2,8);
+	net.WriteBit(true);
+	net.Send(p);
 end
 
 -----------------------------------DUPLICATOR----------------------------------

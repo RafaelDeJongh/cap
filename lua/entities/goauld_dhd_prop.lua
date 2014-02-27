@@ -52,13 +52,10 @@ end
 
 function ENT:DialMenu()
 	//if(self.HasRD) then self.Entity:Power(); end
-	if (GetConVar("stargate_group_system"):GetBool()) then
-		umsg.Start("StarGate.OpenDialMenuDHD_Group",self.Owner);
-	else
-		umsg.Start("StarGate.OpenDialMenuDHD",self.Owner);
-	end
-	umsg.Entity(self.Gates);
-	umsg.End();
+	net.Start("StarGate.VGUI.Menu");
+	net.WriteEntity(self.Gates);
+	net.WriteInt(1,8);
+	net.Send(self.Owner);
 end
 
        /*

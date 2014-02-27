@@ -688,14 +688,13 @@ function ENT:PressButton(btn, nolightup, no_menu)
 		if (num == 0) then
 			-- Open the dialling menu!
 			if (not no_menu and not self.DisMenu and GetConVar("stargate_dhd_menu"):GetInt()>=1) then
-				if (GetConVar("stargate_group_system"):GetBool()) then
-					umsg.Start("StarGate.OpenDialMenuDHD_Group",self.LastPlayer);
-				else
-					umsg.Start("StarGate.OpenDialMenuDHD_Galaxy",self.LastPlayer);
-				end
-				umsg.Entity(e);
-				umsg.Entity(self.Entity);
-				umsg.End();
+				local candialg = GetConVar("stargate_candial_groups_dhd"):GetBool();
+				if (self.Entity:GetClass()=="dhd_city") then candialg = true; end
+				net.Start("StarGate.VGUI.Menu");
+				net.WriteEntity(e);
+				net.WriteInt(2,8);
+				net.WriteBit(candialg);
+				net.Send(self.LastPlayer);
 				self:SetBusy(0.2);
 			end
 			return;

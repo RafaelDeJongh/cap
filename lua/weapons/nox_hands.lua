@@ -63,9 +63,10 @@ function SWEP:PrimaryAttack()
 
 	if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,gate) == false) then return end;
 
-	umsg.Start("StarGate.OpenDialMenuDHDNox",p);
-	umsg.Entity(gate);
-	umsg.End();
+	net.Start("StarGate.VGUI.Menu");
+	net.WriteEntity(gate);
+	net.WriteInt(3,8);
+	net.Send(p);
 
 	self.Weapon:SetNextPrimaryFire(CurTime()+1);
 end
