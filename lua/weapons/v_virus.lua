@@ -68,21 +68,29 @@ function SWEP:SpawnProp()
 	local p = self.Owner;
 	tr = util.TraceLine(util.GetPlayerTrace(p));
 	local pos = tr.HitPos;
-  local ang = p:GetAimVector():Angle();
-  ang.p = 0; ang.r = 0; ang.y = (ang.y+90) % 360;
- 	local ent = ents.Create("virus");
+	local ang = p:GetAimVector():Angle();
+	ang.p = 0; ang.r = 0; ang.y = (ang.y+90) % 360;
 	if(IsValid(tr.Entity))then
-      ang = ang + tr.Entity:GetAngles();
-	   ang.p = 0; ang.r = (ang.r-90) % 360; ang.y = (ang.y+180) % 360;
+     ang = ang + tr.Entity:GetAngles();
+	 ang.p = 0; ang.r = (ang.r+90) % 360; ang.y = (ang.y+180) % 360;
 	end
-	if(IsValid(tr.Entity) and not tr.Entity:GetClass():find("stargate_"))then
+	if(IsValid(tr.Entity) and not tr.Entity:GetClass():find("stargate_") or tr.StartPos:Distance(pos)>75)then
      return;
 	end
+
+	local PropLimit = GetConVar("CAP_agv_max"):GetInt()
+	if(IsValid(p) and p:IsPlayer() and p:GetCount("CAP_agv")+1 > PropLimit) then
+		p:SendLua("GAMEMODE:AddNotify(\"AGV limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return;
+	end
+
+	local ent = ents.Create("virus");
 	ent:SetPos(pos);
 	ent:SetAngles(ang);
 	ent:SetModel("models/Assassin21/AGV/agv.mdl");
 	ent:Spawn();
 	ent:Activate();
+	p:AddCount("CAP_agv", ent)
 	ent.Owner = p;
 	local phys = ent:GetPhysicsObject();
 	if IsValid(phys) then phys:EnableMotion(false) end

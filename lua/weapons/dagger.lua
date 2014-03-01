@@ -3,6 +3,8 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weap
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 SWEP.PrintName = SGLanguage.GetMessage("weapon_dagger");
 SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+else
+SWEP.PrintName = "Dagger";
 end
 SWEP.Author			= "Boba Fett, Madman07";
 SWEP.Contact		= "";

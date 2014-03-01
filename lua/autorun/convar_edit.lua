@@ -33,6 +33,7 @@ local cap_convars = {}
 		{"MCD", "mcd", 1},
 		{"Ships", "ships", 10},
 		{"Iris Computer", "iris_comp", 2},
+		{"AGV", "agv", 2},
 	}
 
 	local convars2 = {
@@ -186,7 +187,8 @@ function Cap_Convar_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_menu_27"), "anc_obelisk", 4},
 		{SGLanguage.GetMessage("entity_mcd"), "mcd", 1},
 		{SGLanguage.GetMessage("stargate_cap_menu_39"), "ships", 10},
-		{SGLanguage.GetMessage("stargate_cap_menu_40"), "iris_comp", 2}
+		{SGLanguage.GetMessage("stargate_cap_menu_40"), "iris_comp", 2},
+		{SGLanguage.GetMessage("weapon_misc_virus"), "agv", 2},
 	}
 	local wepssett = {
 		{SGLanguage.GetMessage("stargate_cap_menu_28"), "ag3_weapon", 60},
@@ -202,7 +204,7 @@ function Cap_Convar_OpenNet()
 	local miscsett = {
 		{SGLanguage.GetMessage("stargate_cap_menu_36"), "CAP_shipshield", 1},
 		{SGLanguage.GetMessage("stargate_cap_menu_37"), "cap_drop_weapons", 1},
-		{SGLanguage.GetMessage("stargate_cap_menu_38"), "cap_ashen_en", 1}
+		{SGLanguage.GetMessage("stargate_cap_menu_38"), "cap_ashen_en", 1},
 	}
 
 	local sboxlimits = {

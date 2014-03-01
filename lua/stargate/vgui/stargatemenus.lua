@@ -93,6 +93,7 @@ end
 
 --################# Set settings aka init panel @ AlexALX
 function PANEL:SetSettings(entity,groupsystem,alternatemenu,candialg)
+	if (not IsValid(entity)) then self:Remove() end
 	self.Entity = entity;
 	self.GroupSystem = groupsystem;
 	self.Alternative = alternatemenu;
@@ -660,7 +661,7 @@ function PANEL:RegisterHooks()
 		if(x ~= ScrW()/2 and y ~= ScrH() and x > 1 and y > 1) then -- Prevents some resnapping bugs
 			self.Data.MouseX,self.Data.MouseY = x,y;
 		end
-		self.Data.DialType = self.VGUI.AddressSelect:GetDialType();
+		if (self.VGUI.AddressSelect) then self.Data.DialType = self.VGUI.AddressSelect:GetDialType(); end
 		local x,y = self:GetPos();
 		self.Data.PosX, self.Data.PosY = x,y;
 		self._Think(self);
@@ -1793,6 +1794,7 @@ function PANEL:Init()
 end
 
 function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
+	if (not IsValid(entity)) then self:Remove() end
 	self.VGUI = {
 		AddressListView=vgui.Create("DListView",self),
 		AddressLabel=vgui.Create("DLabel",self),
@@ -2149,7 +2151,7 @@ end
 
 --################# Perform the layout @aVoN
 function PANEL:PerformLayout(w,h)
-	if (self.VGUI==nil) then return end
+	if (self.VGUI==nil or self.VguiPos==nil) then return end
 	-- The Address List
 	self.VGUI.AddressListView:SetSize(w,h-self.VguiPos[1]);
 	-- Fix a bug in the DListView: We will redraw it's Lines to fit to the altered size!

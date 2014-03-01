@@ -86,7 +86,7 @@ function ENT:FindVirus()
 		if (IsValid(v) and v.IsStargate and v.Viru) then
 			local vpos = v:GetPos();
 			local dist = (vpos - epos):Length();
-			if(dist <= 500) then
+			if(dist <= 200) then
 				self.Gate = v;
 			  v:Viru(true);
 			end
@@ -147,6 +147,10 @@ function ENT:CloakingEffect(e,scale)
 	fx:SetEntity(e);
 	fx:SetScale(scale);
 	util.Effect("cloaking",fx,true,true);
+end
+
+function ENT:PostEntityPaste(ply,Ent,CreatedEntities)
+	self:Remove() -- don't allow spawn duplication of agv
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

@@ -30,6 +30,7 @@
 		{"MCD", "mcd", 1},
 		{"CAP Ships", "ships", 10},
 		{"Iris Computer", "iris_comp", 2},
+		{"AGV", "agv", 2},
 	}
 	local wepssett = {
 		{"AG-3 Charge Time", "ag3_weapon", 60},
