@@ -507,10 +507,12 @@ function ENT:Think(ply)  --############ @  Llapp
 	if IsValid(self.Phys) then
 		self.Phys:EnableGravity(false);
 	end
-	if IsValid(self.Gate:GetPhysicsObject()) then
-		self.Gate:GetPhysicsObject():EnableGravity(false);
+	if(IsValid(self.Gate)) then
+		if IsValid(self.Gate:GetPhysicsObject()) then
+			self.Gate:GetPhysicsObject():EnableGravity(false);
+		end
 	end
-
+	
 	self.Entity:LowPriorityThink();
 	self:NextThink(CurTime()+0.1);
 	return true;

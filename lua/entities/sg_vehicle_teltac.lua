@@ -234,7 +234,12 @@ function ENT:Think()
 				if(self.Accel.FWD == self.MaxSpeed) then
 					if(not self.Pressed) then
 						self.Pressed = true;
-						timer.Simple(1, function() self:HyperSpace(); self.Pressed = false; end);
+						timer.Simple(1, function()
+							if(IsValid(self)) then
+								self:HyperSpace(); 
+								self.Pressed = false; 
+							end 
+						end);
 					end
 				end
 			end

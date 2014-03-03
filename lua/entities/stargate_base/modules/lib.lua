@@ -353,6 +353,7 @@ function ENT:WormHoleJump()
 		if not IsValid(gate) then return end
 
 		old:Close(ignore);
+		old.EventHorizon:Shutdown(true);
 		gate.Target = self;
 		self.Target = gate;
 		self.Jumping = true;

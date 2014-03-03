@@ -176,7 +176,9 @@ function ENT:Think()
 				self.pgate.DisAutoClose = true;
 				for k,v in pairs(self.gate) do
 					if(v.EventHorizon==self.pgate.EventHorizon.Target) then
-						v.EventHorizon.AutoClose = false;
+						if(IsValid(v.EventHorizon)) then
+							v.EventHorizon.AutoClose = false;
+						end
 						self.pgate.DisAutoClose = true;
 						self.SignalLost = false;
 						UpdateRenderTarget(self.RTCamera);

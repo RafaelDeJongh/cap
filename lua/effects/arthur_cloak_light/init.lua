@@ -17,14 +17,17 @@ EFFECT.BearingSprite = StarGate.MaterialFromVMT(
 );
 
 function EFFECT:Init(data)
+
+	if(not IsValid(self.Parent)) then return end;
+
 	self.Parent = data:GetEntity();
 	self.Created = CurTime();
 	self.LifeTime = 1.7;
 	local offset = 500*Vector(1,1,1);
-	self.Entity:SetRenderBounds(-1*offset,offset);
+	self.Parent:SetRenderBounds(-1*offset,offset);
 
 	local dynlight = DynamicLight(math.Rand(0,1000));
-	dynlight.Pos = self.Parent:GetPos()+self.Entity:GetUp()*2;
+	dynlight.Pos = self.Parent:GetPos()+self.Parent:GetUp()*2;
 	dynlight.Size = 500;
 	dynlight.Decay = 500;
 	dynlight.R = 255;

@@ -101,6 +101,7 @@ end
 function SWEP:Think()
 
 	if(self.Owner:KeyDown(IN_USE)) then
+		/* No Longer Included in The Jumper
 		if(self.Owner:KeyDown(IN_ATTACK2)) then
 			timer.Simple(self.Delay, function()
 				for _,v in pairs(ents.FindByClass("puddle_jumper")) do
@@ -112,7 +113,7 @@ function SWEP:Think()
 				end
 			end);
 		end
-
+		*/
 		if(self.Owner:KeyDown(IN_ATTACK)) then
 			timer.Simple(self.Delay, function()
 				for _,v in pairs(ents.FindByClass("puddle_jumper")) do
