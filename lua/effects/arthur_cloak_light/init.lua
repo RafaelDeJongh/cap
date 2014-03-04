@@ -18,9 +18,8 @@ EFFECT.BearingSprite = StarGate.MaterialFromVMT(
 
 function EFFECT:Init(data)
 
-	if(not IsValid(self.Parent)) then return end;
-
 	self.Parent = data:GetEntity();
+	if(not IsValid(self.Parent)) then return end;
 	self.Created = CurTime();
 	self.LifeTime = 1.7;
 	local offset = 500*Vector(1,1,1);
