@@ -583,11 +583,10 @@ function PrintHUD()
 	local p = LocalPlayer()
 	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
 	local shuttle = p:GetNetworkedEntity("Shuttle")
-	if (not IsValid(shuttle) or shuttle.EntHealth==nil) then return end
-	local health = math.Round(shuttle:GetNWInt("health")/2000*100)
-
 	if(IsValid(self)) then
 		if((IsValid(shuttle))and(shuttle==self)) then
+			local health = math.Round(shuttle:GetNWInt("health")/shuttle.EntHealth*100) -- test fix
+
 			draw.WordBox(8,hudpos.healthw,hudpos.healthh, "Hull: "..health.."%","ScoreboardText",Color(50,50,75,100), Color(255,255,255,255))
 			draw.WordBox( 8, hudpos.shieldw, hudpos.shieldh, "Shield: "..self:GetNWInt("shield",100).."%", "ScoreboardText", Color(50,50,75,100), Color(255,255,255,255))
 		end

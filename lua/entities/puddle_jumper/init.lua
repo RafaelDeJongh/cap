@@ -88,6 +88,16 @@ function ENT:SpawnFunction(pl, tr)
 	return e;
 end
 
+function ENT:HangarSpawn(pl)
+	self:SetVar("Owner",pl);
+	-- Spawn the doors
+	self:SpawnBackDoor()
+	self:SpawnBulkHeadDoor()
+	self:SpawnToggleButton()
+	self:SpawnShieldGen()
+	//e:SpawnOpenedDoor();
+end
+
 --################# Over filled Init function @ RononDex
 function ENT:Initialize(ply)
 

@@ -14,6 +14,7 @@ ENT.WireDebugName = "Ships Hangar"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 ENT.AutomaticFrameAdvance = true
+ENT.Untouchable = true
 
 if SERVER then
 
@@ -35,6 +36,7 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	self.Open = false;
+	self.Opened = false;
 	self.Anim = false;
 	self.Speed = 5;
 	self.Weld = constraint.Weld(self,self.Parent,0,0,0,true)
@@ -47,6 +49,7 @@ function ENT:Toggle()
 		self.Anim = true;
 		self:EmitSound(self.Sounds.Door,100,100);
 		self.DoShake = true;
+		self.Opened = not self.Opened;
 		timer.Create(self.Entity:EntIndex().."DoorMove", self.Speed, 1, function()
 			self.Anim = false
 			self.Open = not self.Open;
@@ -64,15 +67,26 @@ function ENT:Think(ply)
 	if self.DoShake then
 		util.ScreenShake(self:GetPos(),1,10,0.5,300);
 	end
+
+	-- fix for physics
+	if (IsValid(self:GetPhysicsObject()) and IsValid(self.Parent) and IsValid(self.Parent:GetPhysicsObject())) then
+		self:GetPhysicsObject():EnableMotion(self.Parent:GetPhysicsObject():IsMotionEnabled())
+	end
+
 end
 
 function ENT:PhysicsUpdate( phys, deltatime )
+	if (not IsValid(self.Parent)) then return end
 	local ang = self.Parent:GetAngles();
 	ang.Yaw = -90-self.Factor*90+ang.Yaw;
+	if (self.Factor>0) then
+		ang.Pich = ang.Pith*(-1);
+		ang.Roll = ang.Roll*(-1);
+	end
 
 
 	local center = self.Parent:GetPos();
-	if (self.Factor > 0) then center = center + self.Parent:GetForward()*15; end
+	if (self.Factor > 0) then center = center + self.Parent:GetForward()*14.1; end
 
 	local side = center + self.Parent:GetRight()*self.Factor*400;
 	local newpos = Vector(0,0,0);

@@ -69,6 +69,15 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	return e;
 end
 
+function ENT:HangarSpawn(pl)
+	self:CockpitSpawn() -- Spawn the cockpit
+	self:SpawnSeats(); -- Spawn the seats
+	self:SpawnRocketClamps(); -- Spawn the rocket clamps
+	self:SpawnMissile(); -- Spawn the missile props
+	self:Turrets(); -- Spawn turrets
+	self:SpawnWheels();
+end
+
 function ENT:Initialize() --######## What happens when it first spawns(Set Model, Physics etc.) @RononDex
 
 	self:SetModel(self.Model);
