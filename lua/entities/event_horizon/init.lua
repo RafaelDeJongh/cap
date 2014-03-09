@@ -1065,65 +1065,67 @@ end
 --################# For the autoclose @aVoN
 function ENT:Think()
 	if(self.DoAutoClose) then
-		-- FIXME: Add config for the autoclose
-		local gate = self.Entity:GetParent();
-		if(IsValid(gate)) then
-			-- Prevents some bugs
-			if(not IsValid(self.Target)) then
-				gate:DeactivateStargate();
-				return;
-			end
-			local close = true;
-			for k,v in pairs(self.Buffer) do
-				if (IsValid(v)) then
-					close = false;
-					break;
-				else
-                   	self.Buffer[k] = nil;
+		if(self:WaterLevel() < 1) then
+			-- FIXME: Add config for the autoclose
+			local gate = self.Entity:GetParent();
+			if(IsValid(gate)) then
+				-- Prevents some bugs
+				if(not IsValid(self.Target)) then
+					gate:DeactivateStargate();
+					return;
 				end
-			end
-			if (IsValid(self.Target)) then
-				for k,v in pairs(self.Target.Buffer) do
+				local close = true;
+				for k,v in pairs(self.Buffer) do
 					if (IsValid(v)) then
 						close = false;
 						break;
 					else
-	                   	self.Target.Buffer[k] = nil;
+						self.Buffer[k] = nil;
 					end
 				end
-			end
-			for _,e in pairs({self.Entity}) do
-				if(close) then
-					local parent = e:GetParent();
-					if(IsValid(parent)) then
-						local constrained = (StarGate.GetConstrainedEnts(parent,3) or {}); -- Constrained props to a stargate SHOULD NEVER keep it open!
-						for _,v in pairs(ents.FindInSphere(e:GetPos(),e:BoundingRadius())) do
-							local class = v:GetClass();
-							if(not table.HasValue(constrained,v) and not table.HasValue(self.AutocloseImmunity,class)) then
-								local vp = v:GetParent(); -- Parents of the object we found
-								local phys = v:GetPhysicsObject();
-								if(
-									(phys:IsValid() and phys:IsMoveable()) and -- Has to be unfrozen/Movable
-									(v ~= e and v ~= parent and not v.IsStargate and not v.IsDHD and not v.GateSpawnerSpawned) and -- General entities
-									(not IsValid(vp) or (vp ~= parent and not vp.IsDHD and not vp.IsStargate and not vp.GateSpawnerSpawned))
-								) then
-									-- Keep the EH open!
-									if(not v:IsPlayer() or v:Alive()) then -- Only if it's a player who is alive
-										close = false;
-										break;
+				if (IsValid(self.Target)) then
+					for k,v in pairs(self.Target.Buffer) do
+						if (IsValid(v)) then
+							close = false;
+							break;
+						else
+							self.Target.Buffer[k] = nil;
+						end
+					end
+				end
+				for _,e in pairs({self.Entity}) do
+					if(close) then
+						local parent = e:GetParent();
+						if(IsValid(parent)) then
+							local constrained = (StarGate.GetConstrainedEnts(parent,3) or {}); -- Constrained props to a stargate SHOULD NEVER keep it open!
+							for _,v in pairs(ents.FindInSphere(e:GetPos(),e:BoundingRadius())) do
+								local class = v:GetClass();
+								if(not table.HasValue(constrained,v) and not table.HasValue(self.AutocloseImmunity,class)) then
+									local vp = v:GetParent(); -- Parents of the object we found
+									local phys = v:GetPhysicsObject();
+									if(
+										(phys:IsValid() and phys:IsMoveable()) and -- Has to be unfrozen/Movable
+										(v ~= e and v ~= parent and not v.IsStargate and not v.IsDHD and not v.GateSpawnerSpawned) and -- General entities
+										(not IsValid(vp) or (vp ~= parent and not vp.IsDHD and not vp.IsStargate and not vp.GateSpawnerSpawned))
+									) then
+										-- Keep the EH open!
+										if(not v:IsPlayer() or v:Alive()) then -- Only if it's a player who is alive
+											close = false;
+											break;
+										end
 									end
 								end
 							end
 						end
 					end
+					if(close)then
+						gate:DeactivateStargate();
+					else
+						-- Check a bit more frequently now!
+						self.Entity:NextThink(CurTime()+0.5);
+						return true;
+					end
 				end
-				if(close)then
-				    gate:DeactivateStargate();
-			    else
-				    -- Check a bit more frequently now!
-				    self.Entity:NextThink(CurTime()+0.5);
-				    return true;
-			    end
 			end
 		end
 	end

@@ -42,6 +42,7 @@ function ENT:Initialize()
 	self.Timer = self.Timer or 5;
 	self.Power = self.Power or 5;
 
+	self.EffectSize = 20;
 
 	local phys = self:GetPhysicsObject();
 	if IsValid(phys) then
@@ -73,38 +74,51 @@ function ENT:Use(p)
 	end
 end
 
-function ENT:Detonate()
-	if (self.Charging) then return end
+function ENT:Effect()
+	local fx = EffectData();
+		fx:SetOrigin(self:GetPos());
+		fx:SetEntity(self);
+		fx:SetScale(self.EffectSize);
+		fx:SetMagnitude(0.1);
+	util.Effect("shield_engage",fx,true,true);
+end
 
-	self.Charging = true;
-	self:SetNetworkedVector("shield_color",Vector(0.69,0.93,0.93))
-	local e = self.Entity;
-	timer.Simple(self.Timer, function()
-		if (not IsValid(e)) then return end
-		for _,v in pairs(ents.FindInSphere(e:GetPos(),e.Yield)) do
-			local allow = hook.Call("StarGate.WraithBomb.Stun",nil,v,e);
-			if (allow==nil or allow) then
-				if IsValid(v) then
-					if v:IsPlayer() then
-						e:Stun(v);
-					elseif v:IsNPC() then
-						e:Stun(v);
+function ENT:Think()
+	
+	if(self.Charging) then
+		self:Effect();
+		if(self.Detonated) then
+			self.EffectSize = math.Approach(self.EffectSize,self.Yield,self.Yield/50);
+			for k,v in pairs(ents.FindInSphere(self:GetPos(),self.EffectSize)) do
+				local allow = hook.Call("StarGate.WraithBomb.Stun",nil,v,self);
+				if (allow==nil or allow) then
+					if IsValid(v) then
+						if v:IsPlayer() then
+							self:Stun(v);
+						elseif v:IsNPC() then
+							self:Stun(v);
+						end
 					end
 				end
 			end
 		end
+	end
+end
+
+function ENT:Detonate()
+	if (self.Charging) then return end
+	
+	self.Charging = true;
+	self:SetNetworkedVector("shield_color",Vector(0.69,0.93,0.93))
+	local e = self.Entity;
+	timer.Simple(self.Timer, function()
+		self.Detonated = true;
+		if (not IsValid(e)) then return end
 		timer.Simple(10.0,function()
 			if (IsValid(e)) then
 				e.Charging = false;
 			end
 		end);
-		local fx = EffectData();
-			fx:SetOrigin(e:GetPos());
-			fx:SetEntity(e);
-			fx:SetScale(self.Yield);
-			fx:SetMagnitude(0.1);
-		util.Effect("shield_engage",fx,true,true);
-
 	end);
 
 end
@@ -190,7 +204,7 @@ function ENT:Stun( Ent )
 					end
 				end )
 
-				timer.Create( "WraithStun"..EntID, 10, 1, function()
+				timer.Create( "WraithStun"..EntID, self.Power, 1, function()
 					if IsValid( Ent ) and Ent.Stunned then
 						Ent.Stunned = nil
 						Ent:SendLua( "LocalPlayer().Stunned = nil" )
@@ -271,7 +285,7 @@ function ENT:Stun( Ent )
 					end
 				end )
 
-				timer.Create( "WraithStun"..EntID, self.Timer, 1, function()
+				timer.Create( "WraithStun"..EntID, self.Power, 1, function()
 					if IsValid( Ent ) and Ent.Stunned then
 						Ent.Stunned = nil
 						Ent:SetNPCState( State )

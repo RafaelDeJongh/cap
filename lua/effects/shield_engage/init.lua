@@ -50,7 +50,11 @@ function EFFECT:Init(data)
 	e.ShieldBubble = self.Entity;
 	--self.Entity:SetParent(e); -- Parent to the shield so it moves along with it
 	-- This above was the old method. Sadly, it looks ugly when the hit effect does the same barrel roll like your ship
-	self.Entity:SetPos(e:GetPos());
+	if(e:GetClass()=="wraith_bomb") then
+		self.Entity:SetPos(e:GetPos()+e:GetUp()*15);
+	else
+		self.Entity:SetPos(e:GetPos());
+	end
 	self.Entity:SetModel(Model("models/Madman07/shields/sphere.mdl"));
 	self.Entity:SetColor(Color(color.x*255,color.y*255,color.z*255,1));
 	self.Entity:SetRenderMode( RENDERMODE_TRANSALPHA );
@@ -76,7 +80,11 @@ end
 function EFFECT:Render()
 	if(not (self.Parent and self.Parent:IsValid())) then self.Draw = nil end;
 	if(not self.Draw) then return end;
-	self.Entity:SetPos(self.Parent:GetPos()); -- Instead of parenting (look in Init why I'm doing it)
+	if(self.Parent:GetClass()=="wraith_bomb") then
+		self.Entity:SetPos(self.Parent:GetPos()+self.Parent:GetUp()*15);
+	else
+		self.Entity:SetPos(self.Parent:GetPos()); -- Instead of parenting (look in Init why I'm doing it)
+	end
 	--################# This is actually the part which makes the effect in different sizes.
 	-- It is created a new render target which's size is simply changed
 	local multiply = (CurTime()-self.Created)/self.LifeTime;
