@@ -15,38 +15,62 @@ if SERVER then
 		self:SetSolid(SOLID_VPHYSICS)
 		self:SetModel("models/boba_fett/tac/w_tac.mdl");
 		self:SetRenderMode(RENDERMODE_NORMAL);
+
+		self.MaxShoots = StarGate.CFG:Get("TAC","max_shoots",50);
+		self.MaxTargets = StarGate.CFG:Get("TAC","max_targets",5);
+		self.ThinkInterval = StarGate.CFG:Get("TAC","shoot_interval",0.5);
+		self.Range = StarGate.CFG:Get("TAC","range",800);
+
+		self.Shoots = 0;
 	end
-	
-	
+
+
 	function ENT:Think()
-		
+
 		if(self.IsThrownTac) then
 			if(self.Stun or self.Kill) then
-				for k,v in pairs(ents.FindInSphere(self:GetPos(),1000)) do
-					if(v:IsPlayer() or v:IsNPC()) then
+				self.Targets = 0;
+				for k,v in pairs(ents.FindInSphere(self:GetPos(),self.Range)) do
+					if(v:IsPlayer() and v:Alive() or v:IsNPC()) then
 						if(IsValid(v)) then
 							if(not (v==self.Owner)) then
 								if(self.Kill) then
-									local bullet = {}
-									bullet.Src		= self:GetPos();
-									bullet.Attacker = self;
-									bullet.Dir		= (v:LocalToWorld(v:OBBCenter()) - self:GetPos()):GetNormal();
-									bullet.Spread		= Vector(0.01,0.01,0.01);
-									bullet.Num		= 1;
-									bullet.Damage		= 200;
-									bullet.Force		= 55;
-									bullet.Tracer		= 1;
-									bullet.TracerName	= "zat_tracer";
-									self:FireBullets(bullet);
+									if (self.MaxTargets>0 and self.Targets>=self.MaxTargets) then
+										return;
+									end
+									local allow = hook.Call("StarGate.Tac.DamagePlayer",nil,v,self);
+									if (allow==nil or allow) then
+										if (self.MaxShoots>0 and self.Shoots>=self.MaxShoots) then
+											self:Destroy();
+											return;
+										end
+										local bullet = {}
+										bullet.Src		= self:GetPos();
+										bullet.Attacker = self;
+										bullet.Dir		= (v:LocalToWorld(v:OBBCenter()) - self:GetPos()):GetNormal();
+										bullet.Spread		= Vector(0.01,0.01,0.01);
+										bullet.Num		= 1;
+										bullet.Damage		= 200;
+										bullet.Force		= 55;
+										bullet.Tracer		= 1;
+										bullet.TracerName	= "zat_tracer";
+										self:FireBullets(bullet);
+										self.Shoots = self.Shoots+1;
+										self.Targets = self.Targets+1;
+									end
 								elseif(self.Stun) then
+									local ent = v;
 									timer.Simple(3, function()
-										if(not v.Stunned) then
+										if(IsValid(ent) and (ent:IsPlayer() and ent:Alive() or ent:IsNPC()) and not ent.Stunned) then
 											if(IsValid(self)) then
-												self:StunEnt(v);
-												self.Stun = false;
-												//timer.Simple(10, function() self:Remove() end);
-												self:ResetSwep();
-												self:Remove();
+												local allow = hook.Call("StarGate.Tac.StunPlayer",nil,ent,self);
+												if (allow==nil or allow) then
+													self:StunEnt(ent);
+													self.Stun = false;
+													//timer.Simple(10, function() self:Remove() end);
+													self:ResetSwep();
+													self:Remove();
+												end
 											end
 										end
 									end);
@@ -56,9 +80,12 @@ if SERVER then
 					end
 				end
 			end
-		end	
+		end
+
+		self:NextThink(CurTime()+self.ThinkInterval)
+		return true
 	end
-	
+
 	function ENT:StartSmoke()
 		if(self.Smoke) then
 			for i=1,6 do
@@ -70,7 +97,7 @@ if SERVER then
 			self:Remove()
 		end
 	end
-	
+
 	--########### Stun the player or NPC @RononDex, Person8880
 	function ENT:StunEnt( Ent )
 
@@ -91,7 +118,7 @@ if SERVER then
 					Ent:SetNWEntity( "StunRagdoll", Ragdoll )
 
 					Ent:SetNWInt("TacStunned",CurTime());
-					
+
 					Ragdoll:SetModel( model )
 					Ragdoll:SetPos( Ent:GetPos() )
 					Ragdoll.Owner = self.Owner
@@ -258,27 +285,30 @@ if SERVER then
 		fx:SetEntity( Ent )
 		util.Effect( "TeslaHitBoxes", fx )
 	end
-	
+
 	function ENT:OnTakeDamage()
-	
+
 		self:Destroy()
-		
+
 	end
-	
+
 	function ENT:Destroy()
 		local e = self;
-			
+
 		for k,v in pairs(ents.FindInSphere(e:GetPos(),200)) do
 			if(IsValid(v)) then
 				if(not (v==self)) then
-					if(v:IsPlayer()) then
-						if(not (v==self.Owner)) then
-							v:Kill();
+					local allow = hook.Call("StarGate.Tac.KillOrDamage",nil,v,self);
+					if (allow==nil or allow) then
+						if(v:IsPlayer()) then
+							if(not (v==self.Owner)) then
+								v:Kill();
+							end
+						elseif(v:IsNPC()) then
+							v:Health(0);
+						else
+							v:TakeDamage(100);
 						end
-					elseif(v:IsNPC()) then
-						v:Health(0);
-					else
-						v:TakeDamage(100);
 					end
 				end
 			end
@@ -288,10 +318,10 @@ if SERVER then
 			fx:SetMagnitude(50);
 		util.Effect("Explosion", fx, true, true);
 		e:Remove();
-		
+
 		self:ResetSwep();
 	end
-	
+
 	function ENT:ResetSwep()
 		local tac = self.Owner:GetWeapon("tac");
 		if(IsValid(tac)) then
@@ -307,13 +337,13 @@ if CLIENT then
 	function ENT:Draw()
 		self:DrawModel();
 	end
-	
+
 	function ENT:Think()
-		
+
 		started = LocalPlayer():GetNWInt("TacStunned");
-		
+
 	end
-	
+
 	function FlashStun()
 		if(not started) then return end;
 		local time = CurTime()-started;

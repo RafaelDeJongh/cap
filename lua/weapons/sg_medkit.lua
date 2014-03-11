@@ -5,7 +5,7 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 	SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
 end
 
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 if (SERVER) then
 	AddCSLuaFile();

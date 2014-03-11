@@ -83,7 +83,7 @@ StarGate.InBox = function(a,b,c) return StarGate.Trace:InBox(a,b,c) end;
 
 --################# Updates the entities OBB Datas @aVoN
 function StarGate.Trace:GetEntityData(e)
-	if(e and e:IsValid()) then
+	if(IsValid(e)) then
 		local time = CurTime();
 		if(not self.Entities[e] or self.Entities[e].Last + 1 < time) then
 			local offset = e:OBBCenter(); -- We need the OBB's relatively to the Entiti's position, not to the OBBCenter

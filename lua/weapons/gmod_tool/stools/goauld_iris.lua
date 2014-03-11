@@ -25,7 +25,7 @@ TOOL.Language["SBoxLimit"] = "Hit the Goauld Iris limit";
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
 	if not IsValid(t.Entity) then return end
-	if (not t.Entity:GetClass():find("stargate_")) then return end;
+	if (not t.Entity:GetClass():find("stargate_") or t.Entity.IsSupergate) then return end;
 	if(CLIENT) then return true end;
 	local p = self:GetOwner();
 	local toggle = self:GetClientNumber("toggle");

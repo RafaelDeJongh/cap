@@ -98,6 +98,7 @@ weapon_staff = Staff Weapon
 weapon_zat = Zat'nik'tel
 weapon_wraith = Wraith Hands
 weapon_wraith_blaster = Wraith Blaster
+weapon_tac = Tac
 
 // Player Misc Weapons
 weapon_misc_cat = Misc Weapons

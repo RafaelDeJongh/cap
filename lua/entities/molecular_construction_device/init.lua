@@ -102,6 +102,13 @@ end
 
 function ENT:Think()
     if(self.Create)then
+    	if (not IsValid(self.Ent)) then
+    		self.Create = false;
+		    self.Entity:SetNWInt("EntProgress",0);
+			self.Entity:SetNWInt("Progress",0);
+		    self.InitCreate = true;
+		    return
+    	end
 	    if(self.InitCreate)then
 		    self.InitCreate = false;
 		    if (self.AtlSkin) then
@@ -289,6 +296,7 @@ net.Receive("MCD",function(len,ply)
 	e:Spawn();
 	e:SetAngles(self.Entity:GetAngles());
 	self.Ent = e;
+	print_r(e)
 	self.Create = true;
 	self.Start = true;
 	self.Ent.Create = true;

@@ -150,7 +150,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		else self.Entity:SoundType(2); end
 	end
 
-	if(Ent.EntityMods and Ent.EntityMods.DupeInfo.WireData) then
+	if(Ent.EntityMods and Ent.EntityMods.DupeInfo.WireData and WireLib) then
 		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.DupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end
 

@@ -19,18 +19,22 @@ sg_err_09 =[[Please subscribe to all the workshop addons to make Carter Addon Pa
 <br>If there are any items from listed above, then make sure that you're subscribed to it and if you are then remove the .gma file from your addons folder and let Steam/Garry's Mod redownload the file.
 ]]
 sg_err_10 = You've got the Github version of cap_resources installed.<br>Please remove the cap_resources folder manually in your addon folder when you're subscribed to the Carter Addon Pack Workshop Collection.
-sg_err_11 =[[ The custom fonts are not installed, you will have to download the following file from our site and then install it in your addons folder:
+sg_err_11 =[[The custom fonts are not installed! You will have to download the following file and install the content into your addons folder:
 <br>
-<br><u>http://sg-carterpack.com/data/cap_fonts.zip</u>
+<br>Cap_fonts: <u>http://sg-carterpack.com/data/cap_fonts.zip</u>
+<br>Github Mirror: <u>https://github.com/RafaelDeJongh/cap_fonts</u>
 <br>
-<br>To install this please unzip the content and place the cap_fonts folder inside "Steam\steamapps\COMMON\GarrysMod\garrysmod\addons".
-<br>After this you're good to go and fully have CAP Installed!
+<br>After it has been properly extracted place the cap_fonts folder inside “Steam\steamapps\COMMON\GarrysMod\garrysmod\addons”.
+<br>After this you’re good to go and fully have CAP Installed!
 <br>
-<br>The reason why you need to download these fonts separated is that the GMA workshop file type doesn't function with custom fonts (Gmod bug).
+<br>If you downloaded the zip file from Github then make sure to rename the folder to cap_fonts!
+<br>Make sure you restart your Garry's Mod after you've installed it!
+<br>
+<br>The reason why you need to download these custom fonts besides the main workshop collection is that the fonts do not function correctly with the GMA Workshop files and we can't find a way around it otherwise than the user to download and install these fonts manually.
 ]]
 sg_err_12 = Cap_resources folder is outdated!<br>Please update it.
 sg_err_13 = The Git version of the Resource pack from Carter Addon Pack is installed.<br>Please remove this to prevent possible problems.<br>Or remove the workshop version.
-sg_err_14 = [[Your Wiremod is outdated, please update it to make the Carter Addon Pack fully functional.
+sg_err_14 =[[Your Wiremod is outdated, please update it to make the Carter Addon Pack fully functional.
 <br>You're using an <b>older repository</b> of the Wiremod SVN, we suggest you to switch to the newer github or <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>Steam Workshop</a></b> version of Wiremod.
 <br>
 <br>Outdated SVN Link: <u>https://svn.code.sf.net/p/wiremod/code/trunk/wire</u>

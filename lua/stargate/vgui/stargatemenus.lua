@@ -1815,6 +1815,9 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 	self.IsSGU = (self.Class=="stargate_universe");
 	self.GroupAllowed = (not self.IsSuper and self.GroupSystem);
 	self.CanDialGroups = candialg;
+	if (entity.GetLocale==nil) then
+		error("entity.GetLocale is nil! Entity:"..tostring(entity));
+	end
 	self.LocalGate = (entity:GetLocale() or not self.CanDialGroups);
 
 	self:SetCookieName("StarGate.SAddressSelect"); -- Just for the checkbox to save the value (it always annoyed me, it losses it after a restart)

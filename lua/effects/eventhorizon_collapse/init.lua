@@ -102,7 +102,9 @@ function EFFECT:Render()
 				return;
 			end
 		else
-			self.Parent:SetAlpha(math.Clamp(255*(1-mul^pow)^0.4,1,255));
+			if (IsValid(self.Parent)) then
+				self.Parent:SetAlpha(math.Clamp(255*(1-mul^pow)^0.4,1,255));
+			end
 			self.Entity:SetColor(Color(185,185,205,math.Clamp((mul^pow)*255,1,255)));
 			render.MaterialOverride(self.Material);
 			self.Entity:DrawModel();

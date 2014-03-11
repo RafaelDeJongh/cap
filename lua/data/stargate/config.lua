@@ -299,6 +299,19 @@ allow_tzmp = true
 tzmp_chance = 2
 # if chance = 2, then this means 50%, 3 will mean 33%, etc. 1 = always
 
+#### Tacluchnatagamuntoron (Tac)
+[TAC]
+# Interval between shoots, in seconds
+shoot_interval = 0.5
+# Maximum targets in one interval for kill mode
+# 0 - unlimited
+max_targets = 5
+# Maximum shoots in kill mode before destroy
+# 0 - unlimited
+max_shoots = 50
+# Target find range
+range = 800
+
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
 # default groups: user, operator, admin, superadmin

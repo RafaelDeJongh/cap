@@ -47,7 +47,7 @@ SWEP.Secondary.Automatic = true;
 SWEP.Secondary.Ammo	= "none";
 
 -- spawnables.
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType("pistol")

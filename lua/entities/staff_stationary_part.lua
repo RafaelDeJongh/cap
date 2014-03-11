@@ -38,8 +38,8 @@ function ENT:Initialize()
 end
 
 
-function ENT:Use(...)
-	self.Base:Use(...);
+function ENT:Use(activator, caller, useType, value)
+	self.Base:Use(activator, caller, useType, value);
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

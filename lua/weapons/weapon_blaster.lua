@@ -30,14 +30,10 @@ SWEP.Secondary.DefaultClip = -1;
 SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo = "none";
 
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
-list.Add("NPCUsableWeapons", {class = "weapon_blaster", title = SWEP.PrintName});
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
+list.Add("NPCUsableWeapons", {class = "weapon_blaster", title = SWEP.PrintName or ""});
 
 SWEP.Sounds = Sound("weapons/wraith_stunner.wav");
-
-if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-list.Set("NPCWeapons","weapon_blaster",SGLanguage.GetMessage("weapon_wraith_blaster"));
-end
 
 function SWEP:Initialize()
 

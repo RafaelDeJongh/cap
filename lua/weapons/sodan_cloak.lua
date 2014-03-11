@@ -46,7 +46,7 @@ SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo = "none";
 
 -- spawnables.
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 if SERVER then
 

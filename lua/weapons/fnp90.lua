@@ -77,7 +77,7 @@ SWEP.Purpose 			= "Shoot them aliens up."
 
 SWEP.Instructions 		= "Left click to fire. Right click to aim through the Red Dot Sight. Use + Right Click to change firing mode"
 
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 list.Add("NPCUsableWeapons", {class = "fnp90", title = SWEP.PrintName});
 
 SWEP.ViewModel 			= "models/Boba_Fett/P90/v_smg_p90.mdl"				-- V model

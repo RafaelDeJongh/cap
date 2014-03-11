@@ -129,8 +129,12 @@ end
 
 hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 	if (noclip) then
-		if (IsValid(ply) and ply.HasGodMode==nil) then
-			Error("ply.HasGodMode is nil! Ply: "..tostring(ply).." Class: "..ply:GetClass());
+		if (IsValid(ply)) then
+			if (ply.HasGodMode==nil) then
+				error("ply.HasGodMode is nil! Ply: "..tostring(ply).." Class: "..ply:GetClass());
+			elseif(type(ply.HasGodMode)!="function") then
+				error("ply.HasGodMode is "..type(ply.HasGodMode)..", not function! Ply: "..tostring(ply).." Class: "..ply:GetClass());
+			end
 		end
 		if (not IsValid(ply) or ply:HasGodMode()) then return end
 		local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,self);

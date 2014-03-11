@@ -39,12 +39,7 @@ SWEP.Sounds = {feeling=Sound("weapons/wraith_feeding.wav"),SwingSound = Sound( "
 
 SWEP.HitDistance = 67
 
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
-
-if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-list.Set("NPCWeapons","weapon_wraith",SGLanguage.GetMessage("weapon_wraith"));
-end
-
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 function SWEP:Deploy()
 	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);

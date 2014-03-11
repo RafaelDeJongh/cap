@@ -6,7 +6,7 @@ end
 SWEP.Author = "RononDex"
 SWEP.Purpose = "Control the MALP"
 SWEP.Instructions = "Primary: Control \n Secondary: Exit"
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 SWEP.Base = "weapon_base"
 SWEP.Slot = 3
 SWEP.SlotPos = 3

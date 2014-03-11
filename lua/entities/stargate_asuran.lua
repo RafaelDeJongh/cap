@@ -380,7 +380,7 @@ function ENT:PhysicsUpdate( phys, deltatime )  --############ @ Madman07 and Lla
     local ang = Angle(90, 00, 0);
 	local pos = self.Entity:GetPos();
 	if (TargetPos == nil) then
-	    AimVec = self.Angles;
+	    AimVec = self.Angles or Angle(90,0,0);
 	else
 	    AimVec = (TargetPos - pos):Angle() + ang;
 	end
@@ -407,7 +407,7 @@ function ENT:PhysicsUpdate( phys, deltatime )  --############ @ Madman07 and Lla
 			maxspeed 		 = 10000000;
 			maxspeeddamp 	 = 400000;
 			dampfactor 		 = 0.6;
-			angle			 =  self.Angles - Angle(90,0,0);
+			angle			 = self.Angles - Angle(90,0,0);
 			deltatime		 = deltatime;
 	    }
 	    Satellite:ComputeShadowControl(self.SatellitePhys);
@@ -512,7 +512,7 @@ function ENT:Think(ply)  --############ @  Llapp
 			self.Gate:GetPhysicsObject():EnableGravity(false);
 		end
 	end
-	
+
 	self.Entity:LowPriorityThink();
 	self:NextThink(CurTime()+0.1);
 	return true;

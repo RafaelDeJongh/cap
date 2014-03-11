@@ -64,7 +64,7 @@ SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo	= "none";
 
 -- spawnables.
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 --################### Find near rings @aVoN
 function SWEP:FindRing()

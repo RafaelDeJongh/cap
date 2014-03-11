@@ -32,6 +32,7 @@ function TOOL:LeftClick(t)
 	local p = self:GetOwner();
 	local model = self:GetClientInfo("model");
 	local e = self:SpawnSENT(p,t,model);
+	if (not IsValid(e)) then return false end
 	local weld = util.tobool(self:GetClientNumber("autoweld"));
 	if(SERVER and t.Entity and t.Entity.ZPMHub) then
 		t.Entity:Touch(e);

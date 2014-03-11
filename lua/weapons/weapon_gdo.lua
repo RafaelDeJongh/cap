@@ -23,7 +23,7 @@ SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
 end
 ------------------------------------------------
 
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 -- First person Model
 SWEP.ViewModel = "models/Madman07/GDO/GDO_v.mdl"
 SWEP.ViewModelFOV = 80

@@ -6,8 +6,9 @@ end
 SWEP.Author = "RononDex, Boba Fett"
 SWEP.Purpose = "Kill the non believers"
 SWEP.Instructions = "Shoot the Non Believers"
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
-list.Add("NPCUsableWeapons", {class = "ori_staff_weapon", title = SWEP.PrintName});
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
+-- Add weapon for NPCs
+list.Add("NPCUsableWeapons", {class = "ori_staff_weapon", title = SWEP.PrintName or ""});
 SWEP.Slot = 3
 SWEP.SlotPos = 3
 SWEP.DrawAmmo	= false
@@ -32,10 +33,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= "none"
 
--- Add weapon for NPCs
-if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-list.Set("NPCWeapons","ori_staff_weapon",SGLanguage.GetMessage("weapon_ori_staff"));
-end
 
 function SWEP:Initialize()
 

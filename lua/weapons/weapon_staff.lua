@@ -46,13 +46,9 @@ SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo = "none";
 
 -- spawnables.
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
-list.Add("NPCUsableWeapons", {class = "weapon_staff", title = SWEP.PrintName});
-
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 -- Add weapon for NPCs
-if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-list.Set("NPCWeapons","weapon_staff",SGLanguage.GetMessage("weapon_staff"));
-end
+list.Add("NPCUsableWeapons", {class = "weapon_staff", title = SWEP.PrintName or ""});
 
 --################### Deploy @aVoN
 function SWEP:Deploy()

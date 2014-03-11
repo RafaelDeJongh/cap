@@ -6,8 +6,8 @@ end
 SWEP.Author = "RononDex"
 SWEP.Purpose = "Kill People"
 SWEP.Instructions = "Shoot First, ask questions later"
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
-list.Add("NPCUsableWeapons", {class = "weapon_asura", title = SWEP.PrintName});
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
+list.Add("NPCUsableWeapons", {class = "weapon_asura", title = SWEP.PrintName or ""});
 SWEP.Slot = 3
 SWEP.SlotPos = 3
 SWEP.DrawAmmo	= false
@@ -31,10 +31,6 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= "none"
-
-if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-list.Set("NPCWeapons","weapon_asura",SGLanguage.GetMessage("weapon_asuran"));
-end
 
 function SWEP:Initialize()
 

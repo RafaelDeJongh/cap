@@ -27,7 +27,7 @@ SWEP.ViewModel = "models/Weapons/V_hands.mdl";
 SWEP.WorldModel = "models/Weapons/w_bugbait.mdl";
 SWEP.ViewModelFOV = 90
 SWEP.AnimPrefix = "melee"
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 
 SWEP.Primary.Delay			= 0.9

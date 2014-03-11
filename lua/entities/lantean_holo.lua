@@ -67,8 +67,10 @@ end
 
 function ENT:StartTouch(ent)
 	if ent:IsPlayer() then
-		self.SoundLoop:Play();
-		self.SoundLoop:SetSoundLevel(85);
+		if (self.SoundLoop) then
+			self.SoundLoop:Play();
+			self.SoundLoop:SetSoundLevel(85);
+		end
 		self.Touching = self.Touching+1;
 		if (self.Touching == 1) then self:SetNetworkedBool("Display", true); self:SetWire("Activated",true); end
 		if timer.Exists(self:EntIndex().."NotTouch") then timer.Destroy(self:EntIndex().."NotTouch"); end
@@ -81,14 +83,18 @@ function ENT:EndTouch(ent)
 		timer.Create( self:EntIndex().."NotTouch", 1, 1, function()
 			if IsValid(self) then
 				if (self.Touching == 0) then self:SetNWBool("Display", false); self:SetWire("Activated",false); end
-				self.SoundLoop:FadeOut(1);
+				if (self.SoundLoop) then
+					self.SoundLoop:FadeOut(1);
+				end
 			end
 		end);
 	end
 end
 
 function ENT:OnRemove()
-	self.SoundLoop:Stop();
+	if (self.SoundLoop) then
+		self.SoundLoop:Stop();
+	end
 end
 
 function ENT:PreEntityCopy()

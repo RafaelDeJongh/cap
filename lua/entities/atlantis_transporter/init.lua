@@ -101,8 +101,10 @@ function ENT:IsDoorsBusy()
 end
 
 function ENT:OnRemove()
-	if (IsValid(self.Doors[1])) then self.Doors[1]:Remove() end
-	if (IsValid(self.Doors[2])) then self.Doors[2]:Remove() end
+	if (self.Doors) then
+		if (IsValid(self.Doors[1])) then self.Doors[1]:Remove() end
+		if (IsValid(self.Doors[2])) then self.Doors[2]:Remove() end
+	end
 	net.Start("UpdateAtlTP")
 	net.WriteInt(self:EntIndex(),16)
 	net.WriteInt(0,4)
@@ -349,7 +351,7 @@ function ENT:Think()
 	end
 
 	-- fix for physics
-	if (IsValid(self.Phys) and IsValid(self.DoorPhys[1]) and IsValid(self.DoorPhys[2])) then
+	if (IsValid(self.Phys) and self.DoorPhys and IsValid(self.DoorPhys[1]) and IsValid(self.DoorPhys[2])) then
         local mot,dmot = self.Phys:IsMotionEnabled(),self.DoorPhys[1]:IsMotionEnabled();
 
 		if (not mot and dmot) then

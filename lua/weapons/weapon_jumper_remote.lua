@@ -6,7 +6,7 @@ end
 SWEP.Author = "RononDex, Boba Fett"
 SWEP.Purpose = "Use features of Jumper"
 SWEP.Instructions = "Primary: Cloak \n Secondary: Door \n Reload: Selfdestruct"
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 SWEP.Base = "weapon_base"
 SWEP.Slot = 3
 SWEP.SlotPos = 3

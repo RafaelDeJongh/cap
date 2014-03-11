@@ -1,5 +1,9 @@
-SWEP.PrintName = "Tac";
-SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapons")) then return end
+
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+	SWEP.PrintName = SGLanguage.GetMessage("weapon_tac");
+	SWEP.Category = SGLanguage.GetMessage("weapon_cat");
+end
 SWEP.Author = "Ronon Dex, Boba Fett";
 SWEP.Contact = "";
 SWEP.Purpose = "";
@@ -25,7 +29,7 @@ SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo	= "none";
 
 -- spawnables.
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 if SERVER then
 
@@ -35,7 +39,7 @@ SWEP.WepMode = 1;
 SWEP.NextUse = CurTime();
 SWEP.Kill = true;
 SWEP.Stun = false;
-SWEP.Smoke = false;	
+SWEP.Smoke = false;
 
 
 function SWEP:PrimaryAttack()
@@ -43,19 +47,19 @@ function SWEP:PrimaryAttack()
 	if(IsValid(self)) then
 		if(self.CanThrow) then
 			self:SendWeaponAnim(ACT_VM_PULLPIN)
-			
+
 			timer.Simple(1,function()
 				if(IsValid(self)) then // Since we're doing this inside a timer we need to make sure we are still valid
 					self:SendWeaponAnim(ACT_VM_THROW);
-					
+
 					local tr = util.TraceLine(util.GetPlayerTrace(self.Owner));
-					
+
 					local e = ents.Create("tac_bomb");
 					e:SetPos(tr.StartPos+Vector(10,10,10));
 					e:SetModel("models/boba_fett/tac/w_tac.mdl");
 					e:Spawn();
 					e:Activate();
-				
+
 					local p = e:GetPhysicsObject()
 					if (IsValid(p)) then
 						p:Wake()
@@ -67,7 +71,7 @@ function SWEP:PrimaryAttack()
 					self.ThrownTac = true;
 					self.Tac = e;
 					e.Owner = self.Owner;
-					
+
 					if(self.Kill) then
 						e.Kill = true;
 					elseif(self.Stun) then
@@ -75,7 +79,7 @@ function SWEP:PrimaryAttack()
 					elseif(self.Smoke) then
 						e.Smoke = true;
 					end
-					
+
 					timer.Simple(1,function()
 						self:SendWeaponAnim(ACT_VM_IDLE) end);
 				end
@@ -90,7 +94,7 @@ function SWEP:PrimaryAttack()
 			end
 		end
 		self:SetNextPrimaryFire(CurTime()+1);
-		
+
 	end
 end
 
@@ -99,12 +103,12 @@ function SWEP:SecondaryAttack()
 
 	if(IsValid(self)) then
 		if(self.ThrownTac) then
-			
+
 			self.Tac:Destroy();
 			self.CanThrow = true;
 			self.ThrownTac = false;
 			self.Tac = NULL;
-			
+
 		end
 	end
 end

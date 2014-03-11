@@ -84,7 +84,7 @@ function ENT:Effect()
 end
 
 function ENT:Think()
-	
+
 	if(self.Charging) then
 		self:Effect();
 		if(self.Detonated) then
@@ -93,9 +93,7 @@ function ENT:Think()
 				local allow = hook.Call("StarGate.WraithBomb.Stun",nil,v,self);
 				if (allow==nil or allow) then
 					if IsValid(v) then
-						if v:IsPlayer() then
-							self:Stun(v);
-						elseif v:IsNPC() then
+						if v:IsPlayer() or v:IsNPC() then
 							self:Stun(v);
 						end
 					end
@@ -106,9 +104,11 @@ function ENT:Think()
 end
 
 function ENT:Detonate()
-	if (self.Charging) then return end
-	
+	if (self.Disabled) then return end
+	self.EffectSize = 20; -- reset old value;
+	self.Detonated = false; -- reset old value
 	self.Charging = true;
+	self.Disabled = true;
 	self:SetNetworkedVector("shield_color",Vector(0.69,0.93,0.93))
 	local e = self.Entity;
 	timer.Simple(self.Timer, function()
@@ -117,6 +117,11 @@ function ENT:Detonate()
 		timer.Simple(10.0,function()
 			if (IsValid(e)) then
 				e.Charging = false;
+			end
+		end);
+		timer.Simple(self.Power+5,function()
+			if (IsValid(e)) then
+				e.Disabled = false;
 			end
 		end);
 	end);

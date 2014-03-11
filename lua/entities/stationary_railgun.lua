@@ -205,7 +205,7 @@ end
 -----------------------------------PHYSIC----------------------------------
 
 function ENT:PhysicsUpdate( phys, deltatime )
-
+	if (not IsValid(self.Cann)) then return end
 	local data = self.Cann:GetAttachment(self.Cann:LookupAttachment("FIRE"))
 	if(not (data and data.Pos)) then return end
 

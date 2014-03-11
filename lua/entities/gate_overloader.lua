@@ -184,7 +184,9 @@ function ENT:PostEntityPaste(player, Ent,CreatedEntities)
 		self.Entity:Remove();
 		return
 	end
-	player:AddCount("CAP_overloader", self.Entity)
+	if (IsValid(player)) then
+		player:AddCount("CAP_overloader", self.Entity)
+	end
 	StarGate.WireRD.PostEntityPaste(self,player,Ent,CreatedEntities)
 end
 

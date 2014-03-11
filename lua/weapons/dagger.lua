@@ -17,7 +17,7 @@ SWEP.DrawAmmo = false;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModelFOV	= 70
 SWEP.ViewModelFlip	= false
-list.Set("CAP.Weapon", SWEP.PrintName, SWEP);
+list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 SWEP.ViewModel      = "models/weapons/v_knife_d.mdl"
 SWEP.WorldModel   = "models/weapons/w_knife_d.mdl"

@@ -98,6 +98,7 @@ weapon_staff = Посох джаффа
 weapon_zat = Зат'ник'тел
 weapon_wraith = Руки рейфов
 weapon_wraith_blaster = Бластер рейфов
+weapon_tac = Tac
 
 // Player Misc Weapons
 weapon_misc_cat = Прочее оружие

@@ -24,7 +24,7 @@ EFFECT.RefractBeam = Material("models/shadertest/predator");
 
 function EFFECT:Init(data)
 	self.Parent	= data:GetEntity();
-	if (not IsValid(self.Parent) or self.Parent.GetLocalGate==nil) then return end
+	if (not IsValid(self.Parent) or self.Parent.GetLocalGate==nil or not IsValid(self.Parent:GetLocalGate())) then return end
 	self.EH	= StarGate.FindEntInsideSphere(self.Parent:GetLocalGate():GetPos(), 10, "event_horizon")[1]	-- Remote Gate
 	self.Beam = self.Parent:GetInboundBeam();
 
