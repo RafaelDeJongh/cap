@@ -150,6 +150,7 @@ function ENT:Initialize()
 	self.Entity:SetColor(Color(255,255,255,0));
 	self.Created = CurTime();
 	self.AutoClose = StarGate.CFG:Get("stargate","autoclose",true);
+	self.WaterNoClose = StarGate.CFG:Get("stargate","water_noclose",true);
 	self.HorizonRadius = self.Entity:BoundingRadius(); -- Just needed for effects
 	self.OpeningDelay = 1.5; -- This time decides when the script starts it's opening effect after it played the opening sound
 	self.OpenTime = 2.2;
@@ -666,7 +667,7 @@ function ENT:StartTouch(e)
 				end
 			end
 		end
-		
+
 		if (self.PhysClip) then
 			e:SetCustomCollisionCheck(true);
 		end
@@ -857,7 +858,7 @@ function ENT:EndTouch(e)
 		self:EndTouchPlayersNPCs(e)
 		return;
 	end
-	
+
 	if(not self:GetParent().IsSupergate) then
 		if(e:GetClass()=="puddle_jumper") then
 			if(not IsValid(self.Target)) then
@@ -865,7 +866,7 @@ function ENT:EndTouch(e)
 			end
 		end
 	end
-	
+
 	local dir = (self:GetPos()-e:GetPos()):GetNormalized();
 
 	local temp_dir = 0;
@@ -1065,7 +1066,7 @@ end
 --################# For the autoclose @aVoN
 function ENT:Think()
 	if(self.DoAutoClose) then
-		if(self:WaterLevel() < 1) then
+		if(not self.WaterNoClose or self:WaterLevel() < 1) then
 			-- FIXME: Add config for the autoclose
 			local gate = self.Entity:GetParent();
 			if(IsValid(gate)) then

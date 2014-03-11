@@ -81,6 +81,8 @@ world_blocked = false
 # How many damage should be taken before do wormhole jump? (one cap weapon shoot is around 70-100 damage)
 # set to 0 for disable this feature
 wormholejump = 3000
+# disable auto close if gate is underwater
+water_noclose = true
 
 #### DHD config
 [dhd]

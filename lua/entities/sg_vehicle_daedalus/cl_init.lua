@@ -466,7 +466,7 @@ function SGDaedalusCalcView(Player, Origin, Angles, FieldOfView)
         local face = Angle(0,0,0);
         local self = LocalPlayer():GetNetworkedEntity("ScriptedVehicle", NULL)
 
-        if((self)and(IsValid(self) and self:GetClass()=="sg_vehicle_daedalus") then
+        if(IsValid(self) and self:GetClass()=="sg_vehicle_daedalus") then
 	        if (LocalPlayer().ViewMode == 0) then
 	                pos = self:GetPos()+self:GetUp()*600+Player:GetAimVector():GetNormal()*-5000;
 	                face = ( ( self:GetPos() + Vector( 0, 0, 100 ) ) - pos ):Angle();
