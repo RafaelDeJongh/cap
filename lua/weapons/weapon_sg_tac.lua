@@ -35,7 +35,7 @@ if SERVER then
 
 SWEP.CanThrow = true;
 SWEP.WepMode = 1;
-//self:SetNWInt("Mode",self.WepMode);
+--self:SetNWInt("Mode",self.WepMode);
 SWEP.NextUse = CurTime();
 SWEP.Kill = true;
 SWEP.Stun = false;
@@ -49,7 +49,7 @@ function SWEP:PrimaryAttack()
 			self:SendWeaponAnim(ACT_VM_PULLPIN)
 
 			timer.Simple(1,function()
-				if(IsValid(self)) then // Since we're doing this inside a timer we need to make sure we are still valid
+				if(IsValid(self)) then -- Since we're doing this inside a timer we need to make sure we are still valid
 					self:SendWeaponAnim(ACT_VM_THROW);
 
 					local tr = util.TraceLine(util.GetPlayerTrace(self.Owner));
@@ -98,7 +98,7 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-/*
+--[[
 function SWEP:SecondaryAttack()
 
 	if(IsValid(self)) then
@@ -112,7 +112,7 @@ function SWEP:SecondaryAttack()
 		end
 	end
 end
-*/
+]]
 
 SWEP.NextUse = CurTime()
 function SWEP:SecondaryAttack()

@@ -323,7 +323,7 @@ if SERVER then
 	end
 
 	function ENT:ResetSwep()
-		local tac = self.Owner:GetWeapon("tac");
+		local tac = self.Owner:GetWeapon("weapon_sg_tac");
 		if(IsValid(tac)) then
 			tac.ThrownTac = false;
 			tac.CanThrow = true;
