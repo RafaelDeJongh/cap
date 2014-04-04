@@ -80,7 +80,7 @@ entity_sodan_obelisk = Содан Обелиск
 sodan_obelisk_menu = Установите пароль для обелиска (только цифры от 1 до 6!):
 
 // Npcs
-npc_cat = NPCs
+npc_cat = Персонажи
 npc_wraith = Рейф
 npc_prior = Приор
 npc_goauld = Гоаулд

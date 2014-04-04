@@ -91,7 +91,7 @@ function EFFECT:Init(data)
 		pt:SetRollDelta(math.random(-2,2));
 		pt:SetColor(self.FlameColor.r,self.FlameColor.g,self.FlameColor.b);
 	end
-	em:Finish();
+	--em:Finish();
 	if(StarGate.VisualsWeapons("cl_staff_scorch")) then
 		util.Decal("Scorch",pos+n*10,pos-n*10);
 	end

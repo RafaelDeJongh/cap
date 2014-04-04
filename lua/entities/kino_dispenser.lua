@@ -40,6 +40,8 @@ function ENT:Initialize()
 
 	self.CanSpawn = true;
 	util.PrecacheModel("models/Boba_Fett/kino/kino.mdl");
+
+	self.MaxKino = StarGate.CFG:Get("kino_dispenser","max_kino",4);
 end
 
 -----------------------------------SPAWN----------------------------------
@@ -106,7 +108,7 @@ function ENT:FindKino(ply)
 		end
 	end
 
-	if (number < 4) then return false
+	if (number < self.MaxKino) then return false
 	else return true end
 end
 

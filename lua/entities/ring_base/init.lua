@@ -253,6 +253,18 @@ function ENT:DoTeleport()
 							bone.Entity:ApplyForceCenter(Vector(0,0,0))
 						end
 					end
+					if ent:GetClass()=="player" then
+						ent.__PreviousMoveType = ent.__PreviousMoveType or ent:GetMoveType();
+						ent:SetMoveType(MOVETYPE_NOCLIP);  -- Needed, or person dont get teleported correctly
+						timer.Simple(0,
+							function()
+								if(IsValid(ent)) then
+									ent:SetMoveType(ent.__PreviousMoveType or 2);
+									ent.__PreviousMoveType = nil;
+								end
+							end
+						);
+					end
 					ent:SetPos(destination)
 					if ent:GetClass()=="player" then
 						umsg.Start("RingTransporterTele", ent)

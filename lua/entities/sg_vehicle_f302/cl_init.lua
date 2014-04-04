@@ -157,7 +157,7 @@ function ENT:Effects(b)
 			end
 		end
 	end
-	self.FXEmitter:Finish();
+	--self.FXEmitter:Finish();
 end
 --########### The "Afterburner" effect @RononDex
 function ENT:BoostFX()
@@ -221,7 +221,7 @@ function ENT:Smoke(b)
 			particle:SetColor(40,40,40);
 			particle:SetRoll(math.Rand(-90,90));
 
-			self.FXEmitter:Finish();
+			--self.FXEmitter:Finish();
 		end
 	end
 end

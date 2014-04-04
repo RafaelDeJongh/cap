@@ -122,7 +122,7 @@ function ENT:ActivateIt(bool)
 		if self.ConTable["bSGAPowerNode"][2]==1 then
 			self.TargetPos=self.Entity:GetPos()
 		end
-		for _, e in pairs(self.ConstrainedEntities) do
+		for k, e in pairs(self.ConstrainedEntities or {}) do
 			if bool and self.Active then
 				self:SetEntGravity(e, true)
 			elseif !bool and !self.Active then

@@ -102,7 +102,7 @@ function ENT:MolecularParticle()
 		    pt:SetEndSize(0.4);
 		    pt:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
 		    pt:VelocityDecay(false);
-		    self.Emitter:Finish();
+		    --self.Emitter:Finish();
 
 			local size = math.random(0.5,0.7);
 			local pt2 = self.Emitter2:Add("sprites/gmdm_pickups/light",self.Ent:GetPos());
@@ -114,7 +114,7 @@ function ENT:MolecularParticle()
 		    pt2:SetEndSize(size);
 		    pt2:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
 		    pt2:VelocityDecay(false);
-			self.Emitter2:Finish();
+			--self.Emitter2:Finish();
 
 			local dynlight2 = DynamicLight(0);
 			dynlight2.Pos = self.Ent:GetPos() - self.Ent:GetUp()*10;

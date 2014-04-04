@@ -26,7 +26,7 @@ function ENT:Smoke(b)
 		particle:SetColor(40,40,40)
 		particle:SetRoll(roll)
 
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 	end
 end
 
@@ -51,7 +51,7 @@ function ENT:JumperEffects(b)
 
 			-- Blue core
 			if(StarGate.VisualsShips("cl_jumper_sprites")) then
-				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-10);
+ 				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-10);
 				particle:SetVelocity(vel - 500*FWD);
 				particle:SetDieTime(0.015);
 				particle:SetStartAlpha(150);
@@ -88,7 +88,7 @@ function ENT:JumperEffects(b)
 				dynlight.DieTime = CurTime()+1;
 			end
 		end
-		self.Emitter:Finish();
+		--self.Emitter:Finish();
 	end
 end
 

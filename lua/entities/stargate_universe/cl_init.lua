@@ -186,7 +186,7 @@ function ENT:SmokeRight()
     particle:SetRoll(roll)
 	particle:SetRollDelta(1)
 	particle:SetAirResistance( 20 );
-	self.Emitter:Finish()
+	--self.Emitter:Finish()
 end
 
 function ENT:SmokeLeft()
@@ -206,7 +206,7 @@ function ENT:SmokeLeft()
     particle:SetRoll(roll)
 	particle:SetRollDelta(1)
 	particle:SetAirResistance( 20 );
-	self.Emitter:Finish()
+	--self.Emitter:Finish()
 end
 
 function ENT:WaveRight()
@@ -226,7 +226,7 @@ function ENT:WaveRight()
     particle:SetRoll(roll)
 	particle:SetRollDelta(1)
 	particle:SetAirResistance( 20 );
-	self.Emitter:Finish()
+	--self.Emitter:Finish()
 end
 
 function ENT:WaveLeft()
@@ -246,7 +246,7 @@ function ENT:WaveLeft()
     particle:SetRoll(roll)
 	particle:SetRollDelta(1)
 	particle:SetAirResistance( 20 );
-	self.Emitter:Finish()
+	--self.Emitter:Finish()
 end
 
 --################# Gets all (valid) gates @aVoN

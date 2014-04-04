@@ -444,6 +444,16 @@ function ENT:DoTeleport(target)
 					if (allow==false) then self.Ents[v]=true; continue end
 					local ang = v:GetAimVector():Angle();
 					local ang2 = self.Target:GetAngles().y-self:GetAngles().y;
+					v.__PreviousMoveType = v.__PreviousMoveType or v:GetMoveType();
+					v:SetMoveType(MOVETYPE_NOCLIP);  -- Needed, or person dont get teleported correctly
+					timer.Simple(0,
+						function()
+							if(IsValid(v)) then
+								v:SetMoveType(v.__PreviousMoveType or 2);
+								v.__PreviousMoveType = nil;
+							end
+						end
+					);
 					-- fix by AlexALX
 					v:SetPos(pos+Vector(0,0,4));
 					if (not v:IsNPC()) then

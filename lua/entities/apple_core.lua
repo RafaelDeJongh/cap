@@ -503,7 +503,7 @@ function ENT:Smoke()
 	particle:SetAirResistance(20);
 	particle:SetGravity(Vector(0,0,-25));
 
-	self.Emitter:Finish();
+	--self.Emitter:Finish();
 end
 
 end

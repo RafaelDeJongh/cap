@@ -330,7 +330,7 @@ function ENT:SmokeTopRight()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(0.1)
 		particle:SetAirResistance( 10 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 function ENT:SmokeTopLeft()
@@ -350,7 +350,7 @@ function ENT:SmokeTopLeft()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(0.1)
 		particle:SetAirResistance( 10 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 end

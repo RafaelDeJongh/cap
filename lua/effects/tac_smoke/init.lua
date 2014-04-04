@@ -44,7 +44,7 @@ function EFFECT:Init( data )
 			
 		end
 		
-	emitter:Finish()
+	--emitter:Finish()
 	
 end
 

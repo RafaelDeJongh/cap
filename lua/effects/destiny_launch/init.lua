@@ -61,7 +61,7 @@ function EFFECT:Init( data )
 		dynlight.DieTime = CurTime()+0.1;
 	end
 
-	em:Finish();
+	--em:Finish();
 
 end
 

@@ -74,7 +74,7 @@ function EFFECT:Init(data)
 			--200,235,255 to light
 		end
 	end
-	emitter:Finish();
+	--emitter:Finish();
 	-- Fixes drawing issues
 	local offset = Vector(1,1,1)*512;
 	self.Entity:SetRenderBounds(-1*offset,offset);

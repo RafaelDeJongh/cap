@@ -121,7 +121,11 @@ function SWEP:SecondaryAttack()
 		local e = self.KinoEnt[self.KinoNumber];
 		if IsValid(e) then
 			self.KinoEntActive.IsControlled = false;
+			self.KinoEntActive.Remote = nil;
+			self.KinoEntActive.Player = nil;
 			self.KinoEntActive = e;
+			self.KinoEntActive.Remote = self;
+			self.KinoEntActive.Player = self.Owner;
 			self.KinoEntActive.IsControlled = true;
 			self.KinoEntActive:SwitchedKino(self.Owner);
 			self.Owner:SetViewEntity(self.KinoEntActive)
@@ -221,31 +225,42 @@ function SWEP:EnterKino()
 	self.StartPos = self.Owner:GetPos();
 	self:EmitSound(self.Sounds.TurnOn, 150);
 	--self.Owner:Spectate( OBS_MODE_FIXED );
+	self.Owner.CAP_KINO_FOV = self.FOV;
+	self.Owner.CAP_KINO_StartPos = self.StartPos;
 	self.Owner:SetObserverMode( OBS_MODE_FIXED )
-	self.Owner:SetMoveType(MOVETYPE_OBSERVER);
+	self.Owner:SetMoveType(MOVETYPE_NONE);
 	--self.Owner:SetPos(self.Owner:GetPos()-Vector(0,0,65));
 	self.Owner:SetEyeAngles(self.KinoEntActive:GetAngles());
 	self.Owner:SetViewEntity(self.KinoEntActive)
 	self.Owner:SetNWEntity("Kino", self.KinoEntActive);
 	self.KinoEntActive:SwitchedKino(self.Owner);
 	self.KinoEntActive.IsControlled = true;
+	self.KinoEntActive.Remote = self;
+	self.KinoEntActive.Player = self.Owner;
 	self.Owner:SetNWBool("KActive", true);
 end
 
 function SWEP:ExitKino()
-	--self.Owner:UnSpectate();
-	self.Owner:SetMoveType(MOVETYPE_VPHYSICS);
-	self.Owner:Spawn();
-	self.Owner:SetFOV(self.FOV,0.3);
-	self.Owner:SetPos(self.StartPos + Vector(0,0,5)); -- whoa it repaired everythin
-	self.Owner:Give("KinoRemote"); -- We get back our wep
-	self.Owner:SelectWeapon("KinoRemote"); -- Finaly, we can hold our wep :)
-	self.Owner:SetViewEntity(self.Owner);
-	self.Owner:SetNWBool("KActive", false);
-	self.Owner:SetNWEntity("Kino", NULL);
+	if (IsValid(self.Owner)) then
+		--self.Owner:UnSpectate();
+		if (self.Owner:Alive()) then
+			self.Owner:SetMoveType(MOVETYPE_WALK);
+			self.Owner:SetObserverMode(OBS_MODE_NONE);
+			self.Owner:Spawn();
+			self.Owner:SetFOV(self.FOV,0.3);
+			self.Owner:SetPos(self.StartPos + Vector(0,0,5)); -- whoa it repaired everythin
+			self.Owner:Give("KinoRemote"); -- We get back our wep
+			self.Owner:SelectWeapon("KinoRemote"); -- Finaly, we can hold our wep :)
+		end
+		self.Owner:SetViewEntity(self.Owner);
+		self.Owner:SetNWBool("KActive", false);
+		self.Owner:SetNWEntity("Kino", NULL);
+	end
 	if IsValid(self.KinoEntActive) then
 		self.KinoEntActive:MoveKino(Vector(0,0,0));
 		self.KinoEntActive.IsControlled = false;
+		self.KinoEntActive.Remote = nil;
+		self.KinoEntActive.Player = nil;
 	end
 	self.KinoEntActive = NULL;
 end

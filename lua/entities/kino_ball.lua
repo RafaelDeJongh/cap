@@ -202,10 +202,41 @@ function ENT:SwitchedKino(ply)
 	self.Entity:SetAngles(ang);
 end
 
+function ENT:ExitKino(ply)
+	if (IsValid(ply)) then
+		if (ply:Alive()) then
+			ply:SetMoveType(MOVETYPE_WALK);
+			ply:SetObserverMode(OBS_MODE_NONE);
+			ply:Spawn();
+			ply:SetFOV(ply.CAP_KINO_FOV or 0,0.3);
+			ply:SetPos(ply.CAP_KINO_StartPos or ply:GetPos() + Vector(0,0,5)); -- whoa it repaired everythin
+		end
+		ply:SetViewEntity(ply);
+		ply:SetNWBool("KActive", false);
+		ply:SetNWEntity("Kino", NULL);
+	end
+	self:MoveKino(Vector(0,0,0));
+	self.IsControlled = false;
+	self.Remote = nil;
+	self.Player = nil;
+end
+
+-- second fix if player dead when kino and swep removed
+hook.Add("PlayerDeath","CAP.Kino.DeathFix",function(ply)
+	if (IsValid(ply)) then
+		ply:SetViewEntity(ply);
+		ply:SetNWBool("KActive", false);
+		ply:SetNWEntity("Kino", NULL)
+	end
+end)
+
 -----------------------------------THINK----------------------------------
 
-function ENT:Think(ply)
+function ENT:Think()
 
+	if ((not IsValid(self.Remote) or not IsValid(self.Remote.Owner)) and IsValid(self.Player) or not IsValid(self.Player) or not self.Player:Alive()) then
+		self:ExitKino(self.Player);
+	end
 	if (self.IsControlled == false) then self.AccSwep = Vector(0,0,0) end
 	if (self.RemoveEnt == true) then self.Entity:OnRemove() end
 

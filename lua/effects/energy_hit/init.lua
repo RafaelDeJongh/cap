@@ -103,7 +103,7 @@ function EFFECT:Init(data)
 			self.LastPos[time] = pos;
 		end
 	end
-	em:Finish();
+	--em:Finish();
 	-- ######################## Dynamic light
 	if(StarGate.VisualsWeapons("cl_staff_dynlights")) then
 		local dynlight = DynamicLight(0);

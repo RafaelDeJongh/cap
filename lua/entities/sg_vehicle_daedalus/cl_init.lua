@@ -436,7 +436,7 @@ function ENT:Effects()
 				-- end
         end
 
-        self.FXEmitter:Finish();
+        --self.FXEmitter:Finish();
 
         -- local pos2 = {};
 

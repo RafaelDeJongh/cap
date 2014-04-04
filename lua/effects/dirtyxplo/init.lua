@@ -130,7 +130,7 @@ function EFFECT:Init( data )
 
 		end
 
-	emitter:Finish()
+	--emitter:Finish()
 end
 
 
@@ -178,7 +178,7 @@ function ParticleThink( part )
 			particle:SetBounce( 0.5 )
 
 		end
-		emitter:Finish()
+		--emitter:Finish()
 	end
 
 	part:SetNextThink( CurTime() + 0.1 )

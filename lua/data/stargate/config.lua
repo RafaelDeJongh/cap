@@ -314,6 +314,11 @@ max_shoots = 50
 # Target find range
 range = 800
 
+# kino dispenser
+[kino_dispenser]
+# maximum kinos per player
+max_kino = 4
+
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
 # default groups: user, operator, admin, superadmin

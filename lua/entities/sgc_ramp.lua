@@ -195,7 +195,7 @@ function ENT:SmokeTopRight()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(1)
 		particle:SetAirResistance( 20 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 function ENT:SmokeTopLeft()
@@ -215,7 +215,7 @@ function ENT:SmokeTopLeft()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(1)
 		particle:SetAirResistance( 20 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 function ENT:SmokeBottomRight()
@@ -235,7 +235,7 @@ function ENT:SmokeBottomRight()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(1)
 		particle:SetAirResistance( 20 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 function ENT:SmokeBottomLeft()
@@ -255,7 +255,7 @@ function ENT:SmokeBottomLeft()
 	    particle:SetRoll(roll)
 		particle:SetRollDelta(1)
 		particle:SetAirResistance( 20 );
-		self.Emitter:Finish()
+		--self.Emitter:Finish()
 end
 
 end

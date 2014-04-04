@@ -127,7 +127,7 @@ function EFFECT:Render()
 			pt:SetRollDelta(math.random(-10,10));
 			pt:SetColor(40,142,255);
 		end
-		em:Finish();
+		--em:Finish();
 	end
 end
 

@@ -260,6 +260,7 @@ if (GetAddonList!=nil and (table.HasValue( GetAddonList(true), "before_cap_sg_gr
 	MsgN("Status: "..status)
 	table.insert(StarGate_Group.ErrorMSG, {"The Stargate Group System has been found on your system. Please remove it.","01"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_01");
+	MsgN("-------");
 	MsgN("Error #01\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
@@ -272,14 +273,28 @@ local function Workshop_res_Installed()
 end
 
 if (Workshop_res_Installed() and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and not table.HasValue( addonlist, "Carter Addon Pack - Fonts" )) then
-	if (status != "Error") then
-		status = "Error";
-		MsgN("Status: "..status)
+	local files_check = {"resource/fonts/anquietas.ttf","resource/fonts/quiver.ttf","resource/fonts/stargate_atlantis.ttf",
+	"resource/fonts/stargate_concept.ttf","resource/fonts/stargate_sg1.ttf","resource/fonts/stargate_universe.ttf"}
+	local manual = true;
+	for k,v in pairs(files_check) do
+		if (not file.Exists(v,"GAME")) then
+			manual = false;
+		end
 	end
-	table.insert(StarGate_Group.ErrorMSG, {"The custom fonts are not installed, please follow the instructions in the motd to install the custom fonts.","11"});
-	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_11");
-	MsgN("-------");
-	MsgN("Error #11\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+	if (manual) then
+		MsgN("---");
+		MsgN("Warning! The custom fonts installed manually and can not work!");
+		MsgN("---");
+	else
+		if (status != "Error") then
+			status = "Error";
+			MsgN("Status: "..status)
+		end
+		table.insert(StarGate_Group.ErrorMSG, {"The custom fonts are not installed, please follow the instructions in the motd to install the custom fonts.","11"});
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_11");
+		MsgN("-------");
+		MsgN("Error #11\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+	end
 end
 if (not StarGate.WorkShop) then
 	if (cap_installed and not Workshop_res_Installed()) then
@@ -386,7 +401,7 @@ else
 	end
 end
 
-if (VERSION<130912) then
+if (VERSION<140404) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)

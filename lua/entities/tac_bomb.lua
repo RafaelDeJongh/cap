@@ -7,6 +7,8 @@ ENT.Spawnable        = false
 ENT.AdminSpawnable   = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
+if (1==1) then return end -- temporary disabled
+
 if SERVER then
 	AddCSLuaFile();
 	function ENT:Initialize()
@@ -301,7 +303,7 @@ if SERVER then
 					local allow = hook.Call("StarGate.Tac.KillOrDamage",nil,v,self);
 					if (allow==nil or allow) then
 						if(v:IsPlayer()) then
-							if(not (v==self.Owner)) then
+							if(not (v==self.Owner) and not v:HasGodMode()) then
 								v:Kill();
 							end
 						elseif(v:IsNPC()) then
@@ -323,7 +325,7 @@ if SERVER then
 	end
 
 	function ENT:ResetSwep()
-		local tac = self.Owner:GetWeapon("tac");
+		local tac = self.Owner:GetWeapon("weapon_sg_tac");
 		if(IsValid(tac)) then
 			tac.ThrownTac = false;
 			tac.CanThrow = true;

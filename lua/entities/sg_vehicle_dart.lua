@@ -349,7 +349,7 @@ function ENT:Effects()
 			heatwv:SetRoll(roll)
 		end
 	end
-	self.FXEmitter:Finish()
+	--self.FXEmitter:Finish()
 end
 
 function ENT:Draw()

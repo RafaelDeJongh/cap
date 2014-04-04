@@ -473,7 +473,7 @@ function ENT:Effects()
 			end
 		end
 	end
-	self.FXEmitter:Finish()
+	--self.FXEmitter:Finish()
 end
 
 function ENT:BoostFX()

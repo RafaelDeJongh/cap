@@ -432,7 +432,7 @@ function ENT:Effects()
 
 	end
 
-	self.FXEmitter:Finish();
+	--self.FXEmitter:Finish();
 end
 
 end

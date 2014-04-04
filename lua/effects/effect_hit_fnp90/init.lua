@@ -58,7 +58,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.Rand(180,480) )
 				particle:SetRollDelta( math.Rand(-1,1) )*/
 
-	emitter:Finish()
+	--emitter:Finish()
 end
 
 function EFFECT:Think( )
