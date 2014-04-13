@@ -26,6 +26,8 @@ include("shared.lua")
 
 function ENT:Initialize()
 
+	self.Vehicle = "Daedalus";
+
 	self.Entity:SetModel("models/Madman07/daedalus/daedalus.mdl");
 	self.Entity:SetName("BC-304 Daedalus");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
@@ -485,9 +487,14 @@ function ENT:FireRocket(num)
 
 	local ent = NULL;
 
+	/*local trace = {}
+		trace.start = self.Driver:GetPos();
+		trace.endpos = self.Driver:GetAimVector() * 10^14;
+		trace.filter = {self.Entity, self.Driver};
+	local tr = util.TraceLine( trace );*/
+
 	local data = self:GetAttachment(self:LookupAttachment(Ratt[num]));
 	if not (data and data.Pos and data.Ang) then return end
-
 
 		ent = ents.Create("302missile");
 		ent.Parent = self;
@@ -499,8 +506,9 @@ function ENT:FireRocket(num)
 		--ent.Owner = self.Entity;
 		ent:SetCollisionGroup(COLLISION_GROUP_PROJECTILE);
 		ent:SetOwner(self.Entity);
-		-- self.Rocket[i] = ent;
-		-- timer.Simple( 1, function() HitTarget end)
+		--ent.Target = tr.HitPos;
+		--timer.Simple( 1, function() if (IsValid(ent)) then ent:SetVelocity(ent.Target:GetNormalized()*self.MissileMaxVel); end end)
+		--self.Rocket[i] = ent;
 
 
 
@@ -518,8 +526,8 @@ function ENT:FireRocket(num)
 		--ent.Owner = self.Entity;
 		ent:SetCollisionGroup(COLLISION_GROUP_PROJECTILE);
 		ent:SetOwner(self.Entity);
-		-- self.Rocket[i] = ent;
-		-- timer.Simple( 1, function() HitTarget end)
+		--timer.Simple( 1, function() HitTarget() end)
+		--self.Rocket[i] = ent;
 
 
 end
@@ -542,6 +550,13 @@ function ENT:Think(ply)
 
 	if (self.Active and IsValid(self.Driver)) then
 
+		for i=1,8 do
+			if (self.Driver:KeyDown(self.Vehicle,tostring(i))) then
+				self:FireRocket(i);
+				break;
+			end
+		end
+
 		-- self:SetNWInt("Hull",math.Round(self.Hull/200));
 		-- self:SetNWInt("Shield",math.Round(self.Strength));
 		-- self:SetNWInt("Power",100);
@@ -550,9 +565,9 @@ function ENT:Think(ply)
 		-- self:SetNWInt("ShieldStatus",self.ShieldsEnable);
 		-- self:SetNWInt("Hyperdrive",0);
 
-		if (self.Driver:KeyDown(IN_USE)) then self.Entity:Exit(); return end
+		if (self.Driver:KeyDown(self.Vehicle,"EXIT")) then self.Entity:Exit(); return end
 
-		if  (self.Driver:KeyDown(IN_RELOAD) and self.Pressed == false) then
+		if  (self.Driver:KeyDown(self.Vehicle,"MODE") and self.Pressed == false) then
 				if (self.TargetMode == 0) then self.TargetMode = 1;
 				elseif (self.TargetMode == 1) then self.TargetMode = 2;
 				else self.TargetMode = 0; end
@@ -575,8 +590,8 @@ function ENT:Think(ply)
 				trace.filter = {self.Entity, self.Driver};
 			local tr = util.TraceLine( trace );
 
-			if self.Driver:KeyDown(IN_ATTACK2) then self:FireAsgard(tr.HitPos) end
-			if (self.Driver:KeyDown(IN_ATTACK)) then self:FireRailgun() end
+			if self.Driver:KeyDown(self.Vehicle,"FIRE2") then self:FireAsgard(tr.HitPos) end
+			if (self.Driver:KeyDown(self.Vehicle,"FIRE")) then self:FireRailgun() end
 
 			self:AimRailgun(tr.HitPos);
 
@@ -605,8 +620,8 @@ function ENT:Think(ply)
 				trace.filter = {self.Entity, self.Driver};
 			local tr = util.TraceLine( trace );
 
-			if self.Driver:KeyDown(IN_ATTACK2) then self:FireAsgard(tr.HitPos) end
-			if (self.Driver:KeyDown(IN_ATTACK)) then self:FireRailgun() end
+			if self.Driver:KeyDown(self.Vehicle,"FIRE2") then self:FireAsgard(tr.HitPos) end
+			if (self.Driver:KeyDown(self.Vehicle,"FIRE")) then self:FireRailgun() end
 
 			self:AimRailgun(tr.HitPos);
 			-- local trace = {}
@@ -634,13 +649,13 @@ function ENT:Think(ply)
 	self.Entity:NextThink( CurTime() + 0.1 )
 	return true
 end
-
+/*
 concommand.Add("Daedalus_FireRocket",function(ply,cmd,args)
 	local self = Entity( args[1] );
 	if (IsValid(self)) then
 		self:FireRocket(tonumber(args[2]));
 	end
-end);
+end);*/
 
 -----------------------------------PHYSIC----------------------------------
 
@@ -654,22 +669,22 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		local up = 0;
 		local acc = 10;
 
-		if (self.Driver:KeyDown(IN_FORWARD)) then speed = 2000;
-		elseif (self.Driver:KeyDown(IN_BACK)) then speed = -500; end
-		if (self.Driver:KeyDown(IN_JUMP)) then speed = 3000; acc = 40; end
+		if (self.Driver:KeyDown(self.Vehicle,"FWD")) then speed = 2000;
+		elseif (self.Driver:KeyDown(self.Vehicle,"BACK")) then speed = -500; end
+		if (self.Driver:KeyDown(self.Vehicle,"SPD")) then speed = 3000; acc = 40; end
 		self.Forw=math.Approach(self.Forw,speed,acc);
 
-		if (self.Driver:KeyDown(IN_SPEED)) then up = 200;
-		elseif (self.Driver:KeyDown(IN_DUCK)) then up = -200; end
+		if (self.Driver:KeyDown(self.Vehicle,"UP")) then up = 300;
+		elseif (self.Driver:KeyDown(self.Vehicle,"DOWN")) then up = -300; end
 		self.GoUp=math.Approach(self.GoUp,up,10);
 
-		if (self.Driver:KeyDown(IN_FORWARD) or self.Driver:KeyDown(IN_BACK) or self.Driver:KeyDown(IN_JUMP)) then
+		if (self.Driver:KeyDown(self.Vehicle,"FWD") or self.Driver:KeyDown(self.Vehicle,"BACK") or self.Driver:KeyDown(self.Vehicle,"SPD")) then
 			local aim = self.Driver:GetAimVector();
 			local ang = aim:Angle();
 			self.Angles.Pitch = math.ApproachAngle(self.Angles.Pitch,ang.Pitch,0.5);
 			self.Angles.Yaw = math.ApproachAngle(self.Angles.Yaw,ang.Yaw,0.5);
-		elseif (self.Driver:KeyDown(IN_MOVELEFT)) then self.Angles.Yaw = self.Angles.Yaw + 0.5;
-		elseif (self.Driver:KeyDown(IN_MOVERIGHT)) then self.Angles.Yaw = self.Angles.Yaw - 0.5; end
+		elseif (self.Driver:KeyDown(self.Vehicle,"LEFT")) then self.Angles.Yaw = self.Angles.Yaw + 0.5;
+		elseif (self.Driver:KeyDown(self.Vehicle,"RIGHT")) then self.Angles.Yaw = self.Angles.Yaw - 0.5; end
 
 		local velocity = self:GetVelocity();
 		if (up != 0) then velocity.z = 0; end
@@ -766,6 +781,7 @@ end
 function ENT:Exit()
 	self.Active = false;
 	if (not IsValid(self.Driver)) then return end
+	StarGate.KeyBoard.ResetKeys(self.Driver,self.Vehicle);
 	self.Driver:UnSpectate();
 	self.Driver:DrawViewModel(true);
 	self.Driver:DrawWorldModel(true);

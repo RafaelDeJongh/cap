@@ -85,7 +85,7 @@ function SWEP:SpawnProp()
 	tr = util.TraceLine(util.GetPlayerTrace(p));
 
 	if not IsValid(tr.Entity) then return end
-	if not tr.Entity:GetClass():find("stargate") then return end
+	if not tr.Entity:GetClass():find("stargate") or not tr.Entity.IsStargate or tr.Entity.IsSupergate then return end
 
 	if (p:GetPos():Distance(tr.HitPos) > 150) then return end
 

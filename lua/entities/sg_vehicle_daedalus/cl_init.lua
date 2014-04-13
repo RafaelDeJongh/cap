@@ -22,6 +22,28 @@ ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_daedalus");
 end
 
+if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+
+local KBD = StarGate.KeyBoard:New("Daedalus")
+KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward
+KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A") -- Move Left
+KBD:SetDefaultKey("RIGHT",StarGate.KeyBoard.BINDS["+moveright"] or "D") -- Move Right
+KBD:SetDefaultKey("BACK",StarGate.KeyBoard.BINDS["+back"] or "S") -- Go backwards
+KBD:SetDefaultKey("UP",StarGate.KeyBoard.BINDS["+jump"] or "SPACE") -- Strafe Up
+KBD:SetDefaultKey("DOWN",StarGate.KeyBoard.BINDS["+duck"] or "CTRL") -- Strafe Down
+KBD:SetDefaultKey("SPD",StarGate.KeyBoard.BINDS["+speed"] or "SHIFT") -- Speed Up
+
+KBD:SetDefaultKey("FIRE",StarGate.KeyBoard.BINDS["+attack"] or "MOUSE1") -- Fire railgun
+KBD:SetDefaultKey("FIRE2",StarGate.KeyBoard.BINDS["+attack2"] or "MOUSE2") -- Fire asgard
+KBD:SetDefaultKey("MODE",StarGate.KeyBoard.BINDS["+reload"] or "R") -- Target mode
+
+KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E") -- Exit
+
+-- rockets
+for i=1,8 do
+	KBD:SetDefaultKey(tostring(i),StarGate.KeyBoard.BINDS["slot"..i] or tostring(i))
+end
+
 --require("datastream")
 
 -- ENT.RenderGroup = RENDERGROUP_BOTH;
@@ -40,6 +62,9 @@ local WepBar = surface.GetTextureID("VGUI/HUD/BC304_HUD/weapons_bar");
 local Pressed = false;
 
 function ENT:Initialize( )
+	self.Vehicle = "Daedalus";
+	self.KBD = self.KBD or KBD:CreateInstance(self);
+
         --self:SetShouldDrawInViewMode( true );
         self.FXEmitter = ParticleEmitter( self:GetPos());
         LocalPlayer().ViewMode = 0;
@@ -75,7 +100,7 @@ function ENT:Initialize( )
 	}
 
 end
-
+/*
 local function KeyPress()
 	local key = "";
 	if input.IsKeyDown(KEY_1) then key = "1";
@@ -95,7 +120,7 @@ local function KeyPress()
 	end
 end
 hook.Add("Think","Daedalus_Rockets",KeyPress)
-
+*/
 function ENT:Think()
 
 	-- local att = {
@@ -114,6 +139,15 @@ function ENT:Think()
 	-- for i=1,10 do
 		-- ParticleEffectAttach("fire_ring_01", PATTACH_POINT_FOLLOW, self.Entity, self:LookupAttachment(att[i]))
 	-- end
+
+	local p = LocalPlayer()
+	local IsDriver = (p:GetNetworkedEntity(self.Vehicle,NULL) == self.Entity);
+
+		if (IsDriver) then
+			self.KBD:SetActive(true)
+		else
+			self.KBD:SetActive(false)
+		end
 
 
         LocalPlayer().ViewMode = self.Entity:GetNetworkedInt("ViewMode");

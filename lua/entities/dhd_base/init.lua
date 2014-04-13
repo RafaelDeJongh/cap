@@ -465,7 +465,7 @@ function ENT:FindGate()
 	if (dist==nil) then return NULL end
 	local pos = self.Entity:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate and v:GetClass() != "stargate_supergate" and (not IsValid(v.LockedDHD) or v.LockedDHD==self.Entity)) then
+		if(v.IsStargate and not v.IsSupergate and (not IsValid(v.LockedDHD) or v.LockedDHD==self.Entity)) then
 			local sg_dist = (pos - v:GetPos()):Length();
 			if(dist >= sg_dist) then
 				dist = sg_dist;

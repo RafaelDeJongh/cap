@@ -42,9 +42,6 @@ StarGate.CURRENT_VERSION = 0;
 --						Internet communication
 --#########################################
 
--- TAC
-local TAC = CreateClientConVar("cl_TAC_agree",0,true,false);
-
 -- Do we have internet?
 local InternetCheck = CreateClientConVar("cl_has_internet",0,true,false); -- Some percentage crashes by this online help check. Now we check this if they crash once during this check, this check will be disabled permanently for them
 StarGate.HasInternet = false;

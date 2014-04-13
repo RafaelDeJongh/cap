@@ -71,6 +71,9 @@ function TOOL:PreEntitySpawn(p,e,model,detcode,abcode,time,yield, hud, cart, aut
 end
 
 function TOOL:PostEntitySpawn(p,e,model,detcode,abcode,time,yield, hud, cart, autoweld)
+	if IsValid(p) and not p:IsAdmin() then
+		yield = math.Clamp(yield, 10, 15)
+	end
 	e:Setup(detcode, abcode, yield, time, hud, cart)
 end
 

@@ -181,6 +181,7 @@ stool_nanim_ramps = Non Animated Ramps
 stool_ring_ramps = Ring Ramps
 
 // Stool Names - Keybinders
+stool_key_daedalus = Daedalus Settings
 stool_key_dart = Wraith Dart Settings
 stool_key_glider = Gate Glider Settings
 stool_key_dglider = Death Glider Settings
@@ -193,6 +194,9 @@ stool_key_teltak = Teltak Settings
 // Stool Global
 stool_autoweld = Autoweld
 stool_autolink = Autolink
+stool_disabled_ship = This ship are disabled on server!
+stool_disabled_tool = This tool are disabled on server!
+stool_disabled_ent = This entity are disabled on server!
 
 // Naquadah bomb menu
 entity_naq_bomb = Naquadah Bomb
@@ -436,6 +440,8 @@ key_move_boost = Boost
 key_combat_title = Combat
 key_combat_primary = Primary attack
 key_combat_drones = Fire Drones
+key_combat_asgard = Asgard Beams
+key_combat_railgun = Railguns
 key_track_drones = Track Drones
 key_track_missiles = Track Missiles
 key_combat_toggle = Toggle Primary Attack
@@ -457,6 +463,7 @@ key_act_shield = Toggle Shield
 key_act_standby = Engine Standby
 key_act_land = Landing Mode
 key_act_hyper = Hyperspace
+key_act_target = Change Target Mode
 key_view_title = View
 key_view_hud = Hide HUD
 key_view_lsd = Hide LSD
@@ -471,3 +478,5 @@ key_cam_right = Camera Right
 key_cam_up = Camera Up
 key_cam_down = Camera Down
 key_cam_reset = Reset camera
+key_rocket_title = Missiles control
+key_rocket = Missile

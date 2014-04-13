@@ -26,6 +26,10 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddMALPKeysettingsConfig",StarGate.Hoo
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.MALPSettings(Panel)
+	if (StarGate.CFG:Get("cap_disabled_ent","malp",false)) then
+		Panel:Help(SGLanguage.GetMessage("stool_disabled_ent"));
+		return
+	end
 	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);

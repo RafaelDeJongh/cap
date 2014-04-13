@@ -151,7 +151,7 @@ function PANEL:SetNewBind(key)
 	self.Edit = nil;
 	self.Layout:SetKey(self.__Key,key);
 	-- Update all other VGUIs
-	for _,v in pairs(self.KeyboardPanels[self.Layout]) do
+	for k,v in pairs(self.KeyboardPanels[self.Layout]) do
 		v:Update();
 	end
 end

@@ -82,7 +82,7 @@ end
 --################# OnRemove @Catdaemon
 function ENT:OnRemove()
 	self.Sound:Stop()
-	self.Entity:Spit(true)
+	self:Spit(true)
 	StarGate.WireRD.OnRemove(self);
 end
 
@@ -95,7 +95,7 @@ function ENT:TriggerInput(k,v)
 			self:TurnOn(false);
 		end
 	elseif(k=="spit" and v == 1) then
-		self.Entity:Spit();
+		self:Spit();
 	end
 end
 
@@ -153,7 +153,7 @@ function ENT:Spit(override)
 	--local trace = util.QuickTrace(pos,self:GetBeamNormal(),self.Entity);
 	local trace = StarGate.Trace:New(pos,self:GetBeamNormal(),self.Entity)
 	for k,v in pairs(self.Ents) do
-		if(k:IsValid()) then
+		if(IsValid(k)) then
 			-- Respawn effect
 			local fx = EffectData();
 			fx:SetStart(pos);

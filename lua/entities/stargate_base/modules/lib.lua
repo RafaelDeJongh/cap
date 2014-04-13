@@ -332,7 +332,7 @@ end
 
 --################# Jump wormhole to nearest gate
 function ENT:WormHoleJump()
-	if (self.IsOpen and self.Outbound and IsValid(self.EventHorizon) and not self.Jumped and self.Entity:GetClass() != "stargate_orlin" and (not IsValid(self.Target) or not self.Target.jammed)) then
+	if (self.IsOpen and self.Outbound and IsValid(self.EventHorizon) and not self.Jumped and self.Entity:GetClass() != "stargate_orlin" and not self.IsSupergate and (not IsValid(self.Target) or not self.Target.jammed)) then
 		local old = self.Target;
 
 		if not IsValid(old) then return end

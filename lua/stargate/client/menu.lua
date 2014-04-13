@@ -565,6 +565,7 @@ local info_page = [[<html>
 
 --################# Adds the tab to the spawnmenu @aVoN
 function StarGate.Hook.AddToolTab()
+
 	if(not StarGate.Installed or not StarGate.InstalledOnClient()) then
 		local cat_name = "Stargate";
 		spawnmenu.AddCreationTab(cat_name,function()
@@ -623,6 +624,7 @@ function StarGate.Hook.AddToolTab()
 
 	-- Keybinders
 	if (StarGate.CheckModule("ships")) then
+		spawnmenu.AddToolMenuOption(cat_name,keys_name,"Daedalus"," "..SGLanguage.GetMessage("stool_key_daedalus"),"","",StarGate.DaedalusSettings);
 		spawnmenu.AddToolMenuOption(cat_name,keys_name,"Dart"," "..SGLanguage.GetMessage("stool_key_dart"),"","",StarGate.DartSettings);
 		spawnmenu.AddToolMenuOption(cat_name,keys_name,"GateGlider"," "..SGLanguage.GetMessage("stool_key_glider"),"","",StarGate.GateGliderSettings);
 		spawnmenu.AddToolMenuOption(cat_name,keys_name,"Death Glider"," "..SGLanguage.GetMessage("stool_key_dglider"),"","",StarGate.DeathGliderSettings);

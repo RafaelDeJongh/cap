@@ -233,12 +233,21 @@ end
 
 if CLIENT then
 	function TOOL.BuildCPanel(CPanel)
+		if (StarGate.CFG:Get("cap_disabled_tool","gravitycontroller",false)) then
+			CPanel:Help(SGLanguage.GetMessage("stool_disabled_tool"));
+			return
+		end
 		CPanel:AddControl("Label", {Text = "Please wait...."})
 	end
 	local updatetime = 0
 	local function UpdatePanel()
 		local CPanel = controlpanel.Get("gravitycontroller")
 		CPanel:Clear()
+
+		if (StarGate.CFG:Get("cap_disabled_tool","gravitycontroller",false)) then
+			CPanel:Help(SGLanguage.GetMessage("stool_disabled_tool"));
+			return
+		end
 
 		if(StarGate.HasInternet) then
 			local VGUI = vgui.Create("SHelpButton",Panel);

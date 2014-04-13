@@ -104,6 +104,11 @@ end
 
 function TOOL.BuildCPanel(panel)
 
+	if (StarGate.CFG:Get("cap_disabled_tool","naq_gen_mks",false)) then
+		panel:Help(SGLanguage.GetMessage("stool_disabled_tool"));
+		return
+	end
+
 	if(StarGate.HasInternet) then
 		local VGUI = vgui.Create("SHelpButton",Panel);
 		VGUI:SetHelp("stools/#naq_gen_mks");

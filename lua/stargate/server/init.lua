@@ -69,14 +69,14 @@ function StarGate.LoadConfig(p)
 						StarGate.CFG.SYNC[name] = StarGate.CFG.SYNC[name] or {};
 						StarGate.CFG.SYNC[name][k] = v;
 					end
-					/* not sure what better - disable it from selecting or show "This tool is disabled on server!" error...
+					-- not sure what better - disable it from selecting or show "This tool is disabled on server!" error...
 					if (name == "cap_disabled_tool") then
 						if (v) then
 							RunConsoleCommand("toolmode_allow_"..k,0)
 						else
 							RunConsoleCommand("toolmode_allow_"..k,1)
 						end
-					end*/
+					end
 				end
 			end
 			if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(NULL,true) end) end -- fix for reload.

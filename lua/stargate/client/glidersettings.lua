@@ -26,6 +26,10 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddDeathGliderKeysettingsConfig",StarG
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.DeathGliderSettings(Panel)
+	if (StarGate.CFG:Get("cap_disabled_ent","sg_vehicle_glider",false)) then
+		Panel:Help(SGLanguage.GetMessage("stool_disabled_ship"));
+		return
+	end
 	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);

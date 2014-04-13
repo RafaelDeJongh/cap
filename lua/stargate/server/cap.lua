@@ -45,16 +45,15 @@ function StarGate.Debug2(msg1, msg2)
 	Msg(msg1.." - "..msg2.."/n");
 end
 
-function StarGate.FindGate(ent, dist)
+function StarGate.FindGate(ent, dist, super)
 	local gate;
 	local pos = ent:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate) then
-			local sg_dist = (pos - v:GetPos()):Length();
-			if(dist >= sg_dist) then
-				dist = sg_dist;
-				gate = v;
-			end
+		if(not v.IsStargate or v.IsSupergate and not super) then continue end
+		local sg_dist = (pos - v:GetPos()):Length();
+		if(dist >= sg_dist) then
+			dist = sg_dist;
+			gate = v;
 		end
 	end
 	return gate;

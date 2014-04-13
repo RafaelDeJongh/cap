@@ -41,8 +41,8 @@ function TOOL:LeftClick(t)
 		self:AutoLink(e,t.Entity);
 	end
 	local c = self:Weld(e,t.Entity,weld);
-	local capacity = self:GetClientInfo("capacity");
-	e.Energy = (e.Energy / 100) * capacity
+	local capacity = tonumber(self:GetClientInfo("capacity"));
+	e.Energy = (e.Energy / 100) * math.Clamp(capacity,1,100)
 	self:AddUndo(p,e,c);
 	self:AddCleanup(p,c,e);
 	return true;
@@ -53,7 +53,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("Slider",{Label="Capacity:",Type="Integer",Min=1,Max=100,Command="zpm_mk3_capacity"});
+	Panel:NumSlider("Capacity:","zpm_mk3_capacity",1,100,0);
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"zpm_mk3_autoweld");
 	if(StarGate.HasResourceDistribution) then
 		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip("Autolink this to resource using Entities?");

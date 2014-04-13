@@ -56,6 +56,10 @@ function TOOL:Register()
 		end
 		if(self.ControlsPanel) then
 			self.BuildCPanel = function(Panel)
+				if (StarGate.CFG:Get("cap_disabled_tool",self.Mode,false)) then
+					Panel:Help(SGLanguage.GetMessage("stool_disabled_tool"));
+					return
+				end
 				-- Add the HELP, if Internet is applied!
 				if(StarGate.HasInternet and self.Mode) then
 					local VGUI = vgui.Create("SHelpButton",Panel);

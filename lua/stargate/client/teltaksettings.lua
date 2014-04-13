@@ -26,6 +26,10 @@ hook.Add("AddToolMenuTabs","StarGate.Hook.AddShuttleKeysettingsConfig",StarGate.
 
 --################ The controls necessary for keybinding @aVoN
 function StarGate.TeltakSettings(Panel)
+	if (StarGate.CFG:Get("cap_disabled_ent","sg_vehicle_teltac",false)) then
+		Panel:Help(SGLanguage.GetMessage("stool_disabled_ship"));
+		return
+	end
 	/*if(StarGate.HasInternet) then
 		-- The HELP Button
 		local VGUI = vgui.Create("SHelpButton",Panel);

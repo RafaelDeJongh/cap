@@ -122,8 +122,8 @@ end
 
 function ENT:CreateHUD()
 	if(not (self.HUD and self.HUD.Activate and self.HUD.Deactivate)) then
-		if(self.HUD) then self.HUD:Remove() end; -- Delete invalid but existant previous HUD		
-		self.HUD = vgui.Create("JumperHUD",self); -- Player/Passenger indicator		
+		if(self.HUD) then self.HUD:Remove() end; -- Delete invalid but existant previous HUD
+		self.HUD = vgui.Create("JumperHUD",self); -- Player/Passenger indicator
 		--self.HUD:SetParent(self);
 	end
 	if(not (self.LSD and self.LSD.Activate and self.LSD.Deactivate)) then
@@ -209,14 +209,14 @@ local invisible = Color(255,255,255,1);
 local visible = Color(255,255,255,255);
 function ENT:Draw()
 	self.BaseClass.Draw(self);
-	if(game.SinglePlayer()) then	
+	if(game.SinglePlayer()) then
 		local p = LocalPlayer();
 		local Jumper = p:GetNWEntity("jumper");
 		local IsInJumper = (Jumper == self.Entity); -- Is this "LocalPlayer" in/out jumper?
 		local IsDriver = p:GetNWBool("isFlyingjumper",false) and IsInJumper;
 		local Inflight = self:GetNetworkedBool("JumperInflight",false);
 		local Cloaked = self:GetNetworkedBool("Cloaked",false);
-		
+
 
 		if(IsValid(self)) then
 			if(Cloaked) then
@@ -243,8 +243,8 @@ function ENT:Draw()
 							end
 						end
 					end
-				end		
-			else		
+				end
+			else
 				self:SetColor(visible);
 				self.RenderGroup = RENDERGROUP_OPAQUE;
 			end
@@ -266,7 +266,7 @@ function ENT:Think() --#########################  Overly complex think function 
 	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
 	local passJumper = p:GetNetworkedEntity("JumperPassenger");
 	local jumperSeat  = p:GetNetworkedEntity("JumperSeat");
-	
+
 	if(IsDriver and IsInJumper) then
 		if self.HUD and IsValid(self.HUD) then
 			if self.HUD.Active then
@@ -279,9 +279,9 @@ function ENT:Think() --#########################  Overly complex think function 
 			if(View.FirstPerson) then
 				self.LSD:Activate();
 			end
-		end		
+		end
 	end
-	
+
 	if(game.SinglePlayer()) then
 		local min = self:GetPos()+self:GetForward()*100+self:GetUp()*50+self:GetRight()*50;
 		local max = self:GetPos()-self:GetForward()*190-self:GetUp()*50-self:GetRight()*50;
@@ -291,7 +291,7 @@ function ENT:Think() --#########################  Overly complex think function 
 				local renderm = v:GetRenderMode();
 				if(v:IsPlayer() or v:IsNPC()) then
 					local wep = v:GetActiveWeapon();
-					if(IsValid(wep)) then local wepren = wep:GetRenderMode() end;	
+					if(IsValid(wep)) then local wepren = wep:GetRenderMode() end;
 					if(self:InJumper(v)) then
 						if(Cloaked) then
 							v:SetRenderMode( RENDERMODE_TRANSALPHA )
@@ -317,9 +317,9 @@ function ENT:Think() --#########################  Overly complex think function 
 			end
 		end
 	end
-	
+
 	self:UpdateJData();
-		
+
 	--###################### View Changers @ RononDex
 	if(HasDriver) then
 		if(p:KeyDown(self.Vehicle,"Z+")) then --In
@@ -359,7 +359,7 @@ function ENT:Think() --#########################  Overly complex think function 
 				self.NextUse = CurTime() + 1;
 			end
 		end
-		
+
 		if(p:KeyDown(self.Vehicle,"HIDELSD")) then
 			if self.NextUse < CurTime() then
 				if View.HideLSD then

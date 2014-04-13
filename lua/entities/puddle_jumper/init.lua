@@ -434,6 +434,7 @@ function ENT:FindGate(dist)  --######### @ aVoN
 	local gate
 	local pos = self:GetPos()
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
+		if (not v.IsStargate or v.IsSupergate) then continue end
 		local sg_dist = (pos - v:GetPos()):Length()
 		if(dist >= sg_dist) then
 			dist = sg_dist

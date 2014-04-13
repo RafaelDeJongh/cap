@@ -181,6 +181,7 @@ stool_nanim_ramps = Статистические Рампы
 stool_ring_ramps = Рампы для колец
 
 // Stool Names - Keybinders
+stool_key_daedalus = Дедал Настройки
 stool_key_dart = Стрела Рейфов Настройки
 stool_key_glider = Gate Glider Настройки
 stool_key_dglider = Death Glider Настройки
@@ -193,6 +194,9 @@ stool_key_teltak = Teltak Настройки
 // Stool Global
 stool_autoweld = Авто-сварка
 stool_autolink = Авто-линк
+stool_disabled_ship = Этот корабль выключен на сервере!
+stool_disabled_tool = Этот предмет выключен на сервере!
+stool_disabled_ent = Этот объект выключен на сервере!
 
 // Naquadah bomb menu
 entity_naq_bomb = Наквадах Бомба
@@ -435,6 +439,8 @@ key_move_boost = Ускорение
 key_combat_title = Сражение
 key_combat_primary = Основная атака
 key_combat_drones = Выпустить дронов
+key_combat_asgard = Оружие азгардов
+key_combat_railgun = Корабельные пушки
 key_track_drones = Задать цель дронам
 key_track_missiles = Задать цель ракетам
 key_combat_toggle = Переключить основную атаку
@@ -456,6 +462,7 @@ key_act_shield = Активировать Щит
 key_act_standby = Включить зависание
 key_act_land = Режим посадки
 key_act_hyper = Гипердвигатель
+key_act_target = Режим прицеливания
 key_view_title = Вид
 key_view_hud = Скрыть HUD
 key_view_lsd = Скрыть детектор
@@ -470,3 +477,5 @@ key_cam_right = Камера вправо
 key_cam_up = Камера вверх
 key_cam_down = Камера вниз
 key_cam_reset = Сбросить вид камеры
+key_rocket_title = Управление ракетами
+key_rocket = Ракета

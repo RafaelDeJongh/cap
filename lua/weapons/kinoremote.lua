@@ -271,12 +271,11 @@ function SWEP:FindGate()
 	local dist = self.Range;
 	local pos = self.Owner:GetPos();
 	for _,v in pairs(ents.FindByClass("stargate_*")) do
-		if(v.IsStargate) then
-			local sg_dist = (pos - v:GetPos()):Length();
-			if(dist >= sg_dist) then
-				dist = sg_dist;
-				gate = v;
-			end
+		if (not v.IsStargate or v.IsSupergate) then continue end
+		local sg_dist = (pos - v:GetPos()):Length();
+		if(dist >= sg_dist) then
+			dist = sg_dist;
+			gate = v;
 		end
 	end
 	return gate;
