@@ -210,13 +210,4 @@ if (SERVER) then
 		end
 		return gmsave_LoadMap(strMapContents, ply);
 	end
-
-	-- Temporary fix for gmod crash with update 13.12.05
-	hook.Add( "InitPostEntity", "cap_crash_fix", function()
-		hook.Add( "EntityRemoved", "nocollide_fix", function( ent )
-			if ( ent:GetClass() == "logic_collision_pair" ) then
-				ent:Fire( "EnableCollisions" )
-			end
-		end )
-	end )
 end

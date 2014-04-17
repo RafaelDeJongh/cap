@@ -272,6 +272,7 @@ function ENT:Stun( Ent )
 				end )
 				--This can be a bit buggy, the NPCs sometimes just stand there for a few seconds then die after being flung around.
 				hook.Add( "EntityTakeDamage", "StunRagdollDamage"..EntID, function( ent, dmginfo )
+					if (not IsValid(Ent)) then return end
 					local amount = dmginfo:GetDamage();
 					if ent == Ragdoll then
 						local NewHP = Ent:Health() - amount

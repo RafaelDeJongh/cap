@@ -798,7 +798,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 						-- Set address, dialling type and start dialling
 						e:OnButtDialGate();
 						-- Send Close UMSG for the dial menu
-						if (not no_menu) then
+						if (not no_menu and IsValid(self.LastPlayer)) then
 							umsg.Start("StarGate.DialMenuDHDClose",self.LastPlayer);
 							umsg.End();
 						end
@@ -838,7 +838,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 							else
 								self:SetBusy(1.5);
 							end
-							if (not no_menu) then
+							if (not no_menu and IsValid(self.LastPlayer)) then
 								umsg.Start("StarGate.DialMenuDHDClose",self.LastPlayer);
 								umsg.End();
 							end
@@ -870,7 +870,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 							-- Set address, dialling type and start dialling
 							e:OnButtDialGate();
 							-- Send Close UMSG for the dial menu
-							if (not no_menu) then
+							if (not no_menu and IsValid(self.LastPlayer)) then
 								umsg.Start("StarGate.DialMenuDHDClose",self.LastPlayer);
 								umsg.End();
 							end

@@ -164,10 +164,11 @@ end
 
 -- Make local to avoid overriding any identically named functions in other scripts
 local function ReceiveDetonationCommand(Player, command, args)
+   if (not args[1]) then return end
    local bomb = ents.GetByIndex(args[1])
 
    --DebugMsg("naquadah_bomb: Received Detonation Code: "..args[2].."\n")
-   if(bomb and bomb.StartDetonation) then
+   if(IsValid(bomb) and bomb.StartDetonation) then
       bomb:StartDetonation(args[2])
    end
 end
@@ -176,10 +177,11 @@ concommand.Add("StartDetonation", ReceiveDetonationCommand)
 
 -- Make local to avoid overriding any identically named functions in other scripts
 local function ReceiveAbortCommand(Player, command, args)
+   if (not args[1]) then return end
    local bomb = ents.GetByIndex(args[1])
 
    --DebugMsg("naquadah_bomb: Received Abort Code: "..args[2].."\n")
-   if(bomb and bomb.AbortDetonation) then
+   if(IsValid(bomb) and bomb.AbortDetonation) then
       bomb:AbortDetonation(args[2])
    end
 end

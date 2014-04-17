@@ -102,6 +102,7 @@ function EFFECT:Render()
 		self.Entity:SetColor(Color(self.Color.r*255,self.Color.g*255,self.Color.b*255,alpha));
 		render.MaterialOverride(self.Materiala);
 		-- Thanks to catdaemon telling me the existance about this function. Makes everything easier compared with difficult cam3D and normal resize
+		size = math.sqrt(size)
 		local mat = Matrix()
 		mat:Scale(Vector(1,1,1)*size)
 		self.Entity:EnableMatrix( "RenderMultiply", mat )

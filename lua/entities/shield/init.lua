@@ -35,7 +35,7 @@ function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invul
 StarGate.Trace:Add("shield",
 	function(e,values,trace,in_box)
 		if(not e.Parent.Depleted) then
-			if((e.Parent.Containment and in_box) or (not e.Parent.Containment and not in_box)) then
+			if((e.Parent.Containment and in_box and e.AllowContainment) or ((not e.Parent.Containment or not e.AllowContainment) and not in_box)) then
 				return true;
 			end
 		end
@@ -130,6 +130,13 @@ function ENT:Initialize()
 	if(phys:IsValid()) then
 		phys:EnableCollisions(false);
 	end
+end
+
+function ENT:IsContainment()
+	if (self.AllowContainment and IsValid(self.Parent) and self.Parent.Containment) then
+		return true
+	end
+	return false;
 end
 
 function ENT:GetTraceSize()

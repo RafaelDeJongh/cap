@@ -119,11 +119,11 @@ function TOOL:LeftClick(t)
 			);
 		end
 		-- THIS FUNCTIONS SAVES THE MODIFIED KEYS TO THE SENT, SO THEY ARE AVAILABLE WHEN COPIED WITH DUPLICATOR!
-		t.Entity:UpdateKeys(_,_,size,immunity,strength,r,g,b,bubble,containment,passing_draw,strength,anti_noclip);
+		t.Entity:UpdateKeys(_,_,size,immunity,strength,r,g,b,bubble,containment,passing_draw,0,anti_noclip);
 		return true;
 	end
 	if(not self:CheckLimit()) then return false end;
-	local e = self:SpawnSENT(p,t,toggle,model,size,immunity,strength,r,g,b,bubble,containment,passing_draw,strength,anti_noclip);
+	local e = self:SpawnSENT(p,t,toggle,model,size,immunity,strength,r,g,b,bubble,containment,passing_draw,0,anti_noclip);
 	if(util.tobool(self:GetClientNumber("autolink"))) then
 		self:AutoLink(e,t.Entity); -- Link to that energy system, if valid
 	end

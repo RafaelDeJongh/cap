@@ -395,7 +395,7 @@ ENT.PrintName = SGLanguage.GetMessage("entity_dest_shuttle");
 end
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("Shuttle")

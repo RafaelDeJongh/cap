@@ -6,7 +6,7 @@ end
 ENT.RenderGroup = RENDERGROUP_BOTH;
 ENT.ViewOverride = true;
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("F302");
@@ -105,7 +105,7 @@ function ENT:Effects(b)
 	local normal = (self.Entity:GetForward() * -1):GetNormalized();
 	local Boost = self:GetNetworkedBool("Boost");
 	local drawfx;
-	
+
 	if Boost then return end;
 
 	for k,v in pairs(ATTACHMENTS) do
@@ -119,7 +119,7 @@ function ENT:Effects(b)
 				drawfx = true;
 			end
 			if((p:KeyDown("F302","FWD")) and drawfx) then
-				
+
 
 				if(StarGate.VisualsShips("cl_F302_sprites")) then
 					local aftbrn = self.FXEmitter:Add("effects/fire_cloud1",pos);

@@ -153,7 +153,7 @@ end
 function ENT:MoveKino(dir)
 
 	local ply = self.Owner;
-
+	if (not IsValid(ply)) then return end
 	if not dir then self.AnglesSwep = ply:EyeAngles() end
 
 	local pos = Vector(0,0,0);

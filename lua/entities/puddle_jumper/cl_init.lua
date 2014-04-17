@@ -24,7 +24,7 @@ ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_jumper") or "Puddle Jumper";
 end
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("PuddleJumper")

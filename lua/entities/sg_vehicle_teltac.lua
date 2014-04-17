@@ -236,9 +236,9 @@ function ENT:Think()
 						self.Pressed = true;
 						timer.Simple(1, function()
 							if(IsValid(self)) then
-								self:HyperSpace(); 
-								self.Pressed = false; 
-							end 
+								self:HyperSpace();
+								self.Pressed = false;
+							end
 						end);
 					end
 				end
@@ -497,7 +497,7 @@ function ENT:HyperSpace()
 		else
 			self:SetPos(Vector(self.HyperspacePos.X,self.HyperspacePos.Y,self.HyperspacePos.Z));
 		end
-	end		
+	end
 end
 
 ENT.HyperspacePos = {}
@@ -629,7 +629,7 @@ ENT.Sounds = {
 	Engine=Sound("vehicles/AlkeshEngine.wav"),
 }
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("Teltac")

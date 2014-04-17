@@ -26,16 +26,12 @@ StarGate.Trace.Classes = StarGate.Trace.Classes or {};
 
 --################# Deephook to ents.Create serverside @aVoN
 if SERVER then
-	StarGate.Trace.entsCreate = StarGate.Trace.entsCreate or ents.Create;
-	function ents.Create(c)
-		if(not c) then return NULL end; -- Fixes crashes
-		if(not StarGate.Trace)then return end;
-		local e = StarGate.Trace.entsCreate(c);
-		if(StarGate.Trace.Classes[c]) then
+	hook.Add("OnEntityCreated","StarGate.OnEntityCreated",function(e)
+		if(not IsValid(e) or not StarGate.Trace) then return end;
+		if(StarGate.Trace.Classes[e:GetClass()]) then
 			StarGate.Trace:GetEntityData(e);
 		end
-		return e;
-	end
+	end)
 end
 
 --################# Add a class to check to the tracesline calculation @aVoN
@@ -184,6 +180,8 @@ function StarGate.Trace:New(start,dir,ignore)
 
 				if (class == "shield_core_buble") then
 					in_box = StarGate.IsInShieldCore(e, start);
+				elseif (class == "shield") then
+					in_box = (e:GetPos():Distance(start)<v.Max.x); -- in sphere! Not box!!! @ AlexALX
 				else
 					in_box = self:InBox(pos,v.Min,v.Max);
 				end
@@ -220,6 +218,13 @@ function StarGate.Trace:New(start,dir,ignore)
 						if(not hit and norm.z ~= 0) then
 							hit = self:CheckCoordinate("z",pos,norm,v.Min,v.Max,len,in_box);
 						end
+
+						-- very ugly, but atleast works, with bugs...
+						-- I have no idea how make function "CheckCoordinate" works with sphere @ AlexALX
+						if (not hit and class=="shield" and not in_box and self:InBox(pos,v.Min,v.Max)) then
+							hit = {HitPos=pos,Fraction=0.8,HitNormal=norm}
+						end
+
 					end
 
 					if(hit) then

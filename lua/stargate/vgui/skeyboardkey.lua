@@ -52,7 +52,7 @@ end
 --################# Update current key @aVoN
 function PANEL:Update()
 	if(self.Layout) then
-		self.Key:SetText(self.Layout:GetKey(self.__Key) or ""); -- if it's KBD_Layout:SetDefaultKey("FWD","KP_INS"), it will set to a given "FWD" the text to "KP_INS"
+		self.Key:SetText((self.Layout:GetKey(self.__Key) or ""):upper()); -- if it's KBD_Layout:SetDefaultKey("FWD","KP_INS"), it will set to a given "FWD" the text to "KP_INS"
 	end
 end
 
@@ -100,8 +100,9 @@ end
 
 --################# He clicked once@aVoN
 function PANEL:OnDoubleClick()
-	StarGate.KeyBoard:GetPressedKey(); -- Most likely, you are holding down the spawnmenu or contextmenu key. This key is ignored once, except you press it again, if we run this once here
+	--StarGate.KeyBoard:GetPressedKey(); -- Most likely, you are holding down the spawnmenu or contextmenu key. This key is ignored once, except you press it again, if we run this once here
 	self.Edit = true;
+	input.StartKeyTrapping();
 	self.Highlight = false;
 end
 
@@ -158,24 +159,11 @@ end
 
 --################# Think - Here, we retrieve the current pressed button @aVoN
 function PANEL:Think()
-	if(not self.Edit) then return end;
+	if(not self.Edit or not input.IsKeyTrapping()) then return end;
 	if(not self.Layout) then return end;
-	if(input.IsKeyDown(KEY_ESCAPE)) then self.Edit = nil return end; -- Sadly, this also opens the "console". No idea how to stop it.
-	local key = StarGate.KeyBoard:GetPressedKey(); -- Currently pressed key
+	local key = input.CheckKeyTrapping(); --StarGate.KeyBoard:GetPressedKey(); -- Currently pressed key
+	if(key == KEY_ESCAPE) then self.Edit = nil return end;
 	if(key) then self:SetNewBind(key) end;
-end
-
---################# Hacky workaround to get mousewheel actions. garry fucked input.IsKeyDown not returning "true" if the wheel is pressed @aVoN
--- http://bugs.garrysmod.com/view.php?id=1695
-function PANEL:OnMouseWheeled(mc)
-	if(not self.Edit) then return end;
-	if(mc == 1) then -- Wheel up
-		self:SetNewBind("MWHEELUP");
-	end
-	if(mc == -1) then -- Wheel down
-		self:SetNewBind("MWHEELDOWN");
-	end
-	return false;
 end
 
 -- Must be called after the gamemode loaded or we get an error

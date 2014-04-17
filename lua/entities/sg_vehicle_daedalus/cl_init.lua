@@ -22,7 +22,7 @@ ENT.Category = SGLanguage.GetMessage("entity_ships_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_daedalus");
 end
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 local KBD = StarGate.KeyBoard:New("Daedalus")
 KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W") -- Forward

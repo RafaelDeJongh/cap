@@ -187,7 +187,7 @@ ENT.Sounds = {
 	Engine=Sound("glider/deathglideridleoutside.wav"),
 }
 
-if (StarGate==nil or StarGate.KeyBoard==nil) then return end
+if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
 local KBD = StarGate.KeyBoard:New("DeathGlider")

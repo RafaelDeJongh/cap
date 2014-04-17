@@ -50,9 +50,9 @@ end
 -- Register EH SENT to the trace class
 if (StarGate.Trace) then StarGate.Trace:Add("event_horizon"); end
 
-if (SERVER) then
 -- We need a fake entity from which we will shoot the teleportet bullet from, otherwise bullet traces looks strange
-local FakeBulletEntity = ents.Create("info_null");
+local FakeBulletEntity = NULL;
+if (SERVER) then FakeBulletEntity = ents.Create("info_null"); end
 
 hook.Add("StarGate.Bullet","StarGate.EHBullet",
 	function(self,bullet,trace)
@@ -116,5 +116,3 @@ hook.Add("StarGate.Bullet","StarGate.EHBullet",
 		end
 	end
 );
-
-end
