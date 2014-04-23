@@ -26,6 +26,13 @@ function StarGate_Settings(Panel)
 			RunConsoleCommand("stargate_system_convars");
 		end
 		Panel:AddPanel(convarsmenu);
+		local convarsmenu = vgui.Create("DButton", Panel);
+	    convarsmenu:SetText(SGLanguage.GetMessage("stargate_settings_02n"));
+	    convarsmenu:SetSize(150, 25);
+		convarsmenu.DoClick = function ( btn )
+			RunConsoleCommand("stargate_settings");
+		end
+		Panel:AddPanel(convarsmenu);
 	end
 	Panel:Help("");
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_06")):SetTextColor(DGREEN);

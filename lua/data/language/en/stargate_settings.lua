@@ -1,5 +1,6 @@
 stargate_settings_01 = CAP Convars/Limits
 stargate_settings_02 = Stargate Convars
+stargate_settings_02n = Settings menu [BETA]
 stargate_settings_03 = Supported languages (code):
 stargate_settings_04 = Note: affects only to stargate vgui menus and some other menus/things (if translated).
 stargate_settings_05 = If you want translate something to your language:\nThen read file "ReadMe.html" in addon folder.

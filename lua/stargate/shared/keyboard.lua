@@ -236,7 +236,7 @@ if (CLIENT) then
 				if (StarGate.WorkShop) then ws = 1; end
 				for _,v in pairs(engine.GetAddons()) do
 					if (v.mounted) then
-						if (v.title:find("Carter Addon Pack:")) then
+						if (table.HasValue(StarGate.CAP_WS_ADDONS or {},v.title)) then
 							if (ws==1) then
 								ws = 2;
 							else

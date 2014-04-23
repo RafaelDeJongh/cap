@@ -203,6 +203,28 @@ local function StarGate_OpenAll(ply)
 end
 concommand.Add("stargate_open_all_iris",StarGate_OpenAll);
 
+local function StarGate_ShutdownShields(ply)
+	if (IsValid(ply) and not ply:IsAdmin()) then ply:PrintMessage( HUD_PRINTCONSOLE, "Yor are not admin!"); return end
+	timer.Simple(0.1,function()
+		for k,v in pairs(ents.FindByClass("shield_generator")) do
+			if (v:Enabled()) then
+				v:Status(false);
+			end
+		end
+		for k,v in pairs(ents.FindByClass("shield_core")) do
+			if (IsValid(v.Shield) and v.Shield.Enabled) then
+				v:Status(false);
+			end
+		end
+	end);
+	if (IsValid(ply)) then
+		ply:PrintMessage( HUD_PRINTCONSOLE, "All shields shutdown!");
+	else
+		print("All shields shutdown!");
+	end
+end
+concommand.Add("stargate_shutdown_shields",StarGate_ShutdownShields);
+
 local function CanPlayerSpawnSENT( player, EntityName )
 
 	-- Is this in the SpawnableEntities list?

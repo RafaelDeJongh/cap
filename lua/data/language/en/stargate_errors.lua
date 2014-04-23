@@ -30,7 +30,10 @@ sg_err_11 =[[ The custom fonts can not be found on your Garry's Mod Installation
 <br>The reason why you need to download these fonts separated is that the GMA workshop file type doesn't function with custom fonts which is a Steam/GMOD error which we as addon creators can't change or find a workaround for.
 ]]
 sg_err_12 = Your Cap_Resources folder is outdated!<br>Please update it to the latest version.
-sg_err_13 = The Github version of the Resources have been detected on your system and might conflict with the workshop version you've subscribed to.<br>Please remove one of both.
+sg_err_13 = [[Old workshop files found.
+<br>Please remove following files inside “Steam\steamapps\COMMON\GarrysMod\garrysmod\addons” folder:
+<br>%s
+]]
 sg_err_14 = [[Your Wiremod is outdated, please update it to the latest version to make the Carter Addon Pack fully functional.
 <br>You're using an <b>older repository</b> of the Wiremod SVN. Therefore we suggest you to switch to the newer github or <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>Steam Workshop</a></b> version.
 <br>

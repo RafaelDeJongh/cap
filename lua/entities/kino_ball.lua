@@ -276,6 +276,23 @@ function ENT:PhysicsUpdate( phys, deltatime )
 
 end
 
+function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
+	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	if (IsValid(ply)) then
+		local PropLimit = StarGate.CFG:Get("kino_dispenser","max_kino",4);
+		if(ply:GetCount("CAP_kino")+1 > PropLimit) then
+			ply:SendLua("GAMEMODE:AddNotify(\"Kino limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
+			return
+		end
+	end
+
+	if (IsValid(ply)) then
+		self.Owner = ply;
+		ply:AddCount("CAP_kino", self.Entity)
+	end
+end
+
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "kino_ball", StarGate.CAP_GmodDuplicator, "Data" )
 end

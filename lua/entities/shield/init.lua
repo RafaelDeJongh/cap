@@ -71,8 +71,9 @@ function ENT:Initialize()
 	if(self.Parent.ImmuneOwner) then
 		self.nocollide[self.Parent.Owner] = true;
 	end
+	self.Entity:SetNWInt("size",self.Size);
 	if(self.Parent.DrawBubble) then
-		self.Entity:SetNWInt("size",self.Size); -- Necessary for the bubble effect.
+		-- Necessary for the bubble effect.
 		local e = self.Entity;
 		-- Wait a little time, until the NW data from above is synched with the client
 		timer.Simple(0.3,
@@ -130,6 +131,11 @@ function ENT:Initialize()
 	if(phys:IsValid()) then
 		phys:EnableCollisions(false);
 	end
+
+	-- for pewpew and other addons
+	local contaiment = false;
+	if (self.AllowContainment and IsValid(self.Parent) and self.Parent.Containment) then contaiment = true end
+	self:SetNWBool("containment",contaiment);
 end
 
 function ENT:IsContainment()

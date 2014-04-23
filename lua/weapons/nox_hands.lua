@@ -76,7 +76,7 @@ function SWEP:SecondaryAttack()
 	if(CLIENT) then return end;
 
 	local tr = self.Owner:GetEyeTrace();
-	if (IsValid(tr.Entity) and tr.Entity:IsPlayer() and tr.HitPos:Distance(self.Owner:GetShootPos()) <= 500) then
+	if (IsValid(tr.Entity) and tr.Entity:IsPlayer() and tr.HitPos:Distance(self.Owner:GetShootPos()) <= 500 and tr.Entity:Health()<150) then
 		tr.Entity:SetHealth(math.Clamp(tr.Entity:Health()+1, 0, 150));
 	end
 	self:SetNextSecondaryFire(CurTime()+0.1);

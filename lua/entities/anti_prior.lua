@@ -127,19 +127,6 @@ function ENT:Think()
 	return true
 end
 
-hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
-	if (noclip) then
-		if (not IsValid(ply) or ply.HasGodMode and ply:HasGodMode()) then return end
-		local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,self);
-		if (allow==false) then return false end
-		for k,v in pairs(ents.FindInSphere(ply:GetPos(),800)) do
-			if (v:GetClass()=="anti_prior" and v.IsOn and ply!=v.Owner) then
-				return false;
-			end
-		end
-	end
-end )
-
 -----------------------------------DUPLICATOR----------------------------------
 
 function ENT:PreEntityCopy()
@@ -182,3 +169,18 @@ if (StarGate and StarGate.CAP_GmodDuplicator) then
 end
 
 end
+
+-- shared hook
+
+hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
+	if (noclip) then
+		if (not IsValid(ply) or ply.HasGodMode and ply:HasGodMode()) then return end
+		local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,self);
+		if (allow==false) then return false end
+		for k,v in pairs(ents.FindInSphere(ply:GetPos(),800)) do
+			if (v:GetClass()=="anti_prior" and v.IsOn and ply!=v.Owner) then
+				return false;
+			end
+		end
+	end
+end )

@@ -27,7 +27,10 @@ sg_err_11 =[[ Custom Fonts nincs telepítve, töltse le innen és telepítse az 
 <br>Azért kell letöltenie ezeket mert a steam műhely(gma)fájlai nem támogassák a saját betűket(pl:csillagkapu jelek) (Gmod hiba).
 ]]
 sg_err_12 = Cap_resources mappa lejárt!<br>Kérem frissítse.
-sg_err_13 = Git verziós cap_resources telepítve.<br>Kérem törölje ezt hogy elhárítsa a problémákat.<br>Vagy törölje a workshop verziót.
+sg_err_13 = [[Old workshop files found.
+<br>Please remove following files inside “Steam\steamapps\COMMON\GarrysMod\garrysmod\addons” folder:
+<br>%s
+]]
 sg_err_14 = [[A Wiremod lejárt, kérem frissítse hogy a CAP jól működjön.
 <br>Ön Régebbi <b>Wiremodot használ</b> régi SVN típust, kérem frissítse a  github verzióra vagy <b><a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'> A Steam Műhely</a></b> verziós Wiremod-ra.
 <br>
