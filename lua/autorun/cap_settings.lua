@@ -129,33 +129,36 @@ table.insert(sg_convars,"cap_ashen_en");
 
 util.AddNetworkString("_sg_convars");
 
-local function SG_Get_Convars(player,command,args)
-	net.Start("_sg_convars")
-	net.WriteInt(table.Count(sg_convars),16);
-	for k,v in pairs(sg_convars) do
-		net.WriteString(v);
-		if (v=="stargate_has_rd") then
-			if (StarGate.HasResourceDistribution) then
-				net.WriteInt(1,16);
+net.Receive("_sg_convars",function(len,ply)
+	if (not IsValid(ply) or not ply:IsAdmin()) then return end
+	local get = util.tobool(net.ReadBit());
+	if (get) then
+		net.Start("_sg_convars")
+		net.WriteInt(table.Count(sg_convars),16);
+		for k,v in pairs(sg_convars) do
+			net.WriteString(v);
+			if (v=="stargate_has_rd") then
+				if (StarGate.HasResourceDistribution) then
+					net.WriteInt(1,16);
+				else
+					net.WriteInt(0,16);
+				end
 			else
-				net.WriteInt(0,16);
+				net.WriteInt(GetConVarNumber(v),16);
+			end
+		end
+		net.Send(ply)
+	else
+		local convar,value = net.ReadString(),net.ReadInt(16);
+		if (convar=="stargate_gatespawner_createfile") then
+			if (StarGate and StarGate.GateSpawner and StarGate.GateSpawner.CreateFile) then
+				StarGate.GateSpawner.CreateFile(ply);
 			end
 		else
-			net.WriteInt(GetConVarNumber(v),16);
+			RunConsoleCommand(convar,value);
 		end
 	end
-	net.Send(player)
-end
-concommand.Add("_sg_get_convars", SG_Get_Convars);
-
-local function SG_Set_Convar(player,command,args)
-	if (player:IsAdmin()) then
-		if (args[1]) then
-			RunConsoleCommand(args[1], args[2]);
-		end
-	end
-end
-concommand.Add("_sg_set_convar", SG_Set_Convar);
+end)
 
 else -- CLIENT
 
@@ -168,7 +171,11 @@ end
 
 local function SGSetConvar(convar,value)
 	if (LocalPlayer():IsAdmin()) then
-		RunConsoleCommand("_sg_set_convar", convar, value);
+		net.Start("_sg_convars")
+		net.WriteBit(false)
+		net.WriteString(convar)
+		net.WriteInt(value or 0,16)
+		net.SendToServer()
 	else
 		GAMEMODE:AddNotify("You are not admin!", NOTIFY_ERROR, 5); surface.PlaySound( "buttons/button2.wav" );
 	end
@@ -179,7 +186,9 @@ local function SG_Settings_Open()
 	if (CapPanel and IsValid(CapPanel)) then CapPanel:Remove() end
 
 	sg_convars = {}
-	RunConsoleCommand("_sg_get_convars")
+	net.Start("_sg_convars")
+	net.WriteBit(true)
+	net.SendToServer()
 end
 
 local function SG_Settings_OpenNet()

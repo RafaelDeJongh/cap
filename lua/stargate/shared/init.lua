@@ -116,11 +116,11 @@ if SERVER then
 
 		hook.Add("PlayerDeath","Player.Death.ResetGod",function(ply)
 			ply.__pGodMode = false;
-			self:SetNWBool("__pGodMode",false)
+			ply:SetNWBool("__pGodMode",false)
 		end)
 		hook.Add("PlayerSilentDeath","Player.Death.ResetGod",function(ply)
 			ply.__pGodMode = false;
-			self:SetNWBool("__pGodMode",false)
+			ply:SetNWBool("__pGodMode",false)
 		end)
 	end
 

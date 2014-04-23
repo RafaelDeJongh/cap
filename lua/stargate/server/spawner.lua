@@ -576,212 +576,211 @@ timer.Create("StarGate.GateSpawner.AutoRespawn",3,0,function() StarGate.GateSpaw
 -- YOU NEED TO BE ADMIN TO PERFORM THIS COMMAND!
 
 -- ############### Gatespawner creation command @aVoN
-concommand.Add("stargate_gatespawner_createfile",
-	function(p)
-		if(not IsValid(p) or p:IsAdmin()) then
-			local f = "[gatespawner]\nversion = 3\n\n\n";
-			local gatefolder = "gatespawner_maps";
-			local groupsystem = false;
-			if (GetConVar("stargate_group_system"):GetBool()) then
-				f = "[gatespawner]\nversion = 3 Group\n\n\n";
-				gatefolder = "gatespawner_group_maps";
-				groupsystem = true;
-			end
-			-- Gates and Attachments
-			local already_added = {};
+function StarGate.GateSpawner.CreateFile(p)
+	if(not IsValid(p) or p:IsAdmin()) then
+		local f = "[gatespawner]\nversion = 3\n\n\n";
+		local gatefolder = "gatespawner_maps";
+		local groupsystem = false;
+		if (GetConVar("stargate_group_system"):GetBool()) then
+			f = "[gatespawner]\nversion = 3 Group\n\n\n";
+			gatefolder = "gatespawner_group_maps";
+			groupsystem = true;
+		end
+		-- Gates and Attachments
+		local already_added = {};
 
-			local props = "";
+		local props = "";
 
-			-- Gates
-			for _,v in pairs(ents.FindByClass("stargate_*")) do
-				if(v.IsStargate) then
-					local blocked = "";
-					if (v:GetBlocked()) then blocked="blocked=true\n"; end
-					if (v.IsGroupStargate and groupsystem) then
-						f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\ngroup="..string.Replace(v:GetGateGroup(),"#","!").."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\nlocale="..tostring(v:GetLocale()).."\n"..blocked;
-						if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
-						for i=1,9 do
-							if (v.chev_destroyed and v.chev_destroyed[i]) then
-								f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
-							end
-						end
-					elseif (v.IsGroupStargate) then
-						f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\ngalaxy="..tostring(v:GetGalaxy()).."\n"..blocked;
-						if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
-						for i=1,9 do
-							if (v.chev_destroyed and v.chev_destroyed[i]) then
-								f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
-							end
-						end
-					else
-						f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\n";
-					end
-					if (v.IsStargate) then
-						local gate = v;
-						local first = true
-						for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
-							if(v ~= gate and v:GetClass() == "prop_physics" and IsValid(v)) then
-								if (first) then
-									f = f .."__id="..gate:EntIndex().."\n"
-									first = false
-								end
-								already_added[v] = true;
-								props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..gate:EntIndex().."\n";
-							end
+		-- Gates
+		for _,v in pairs(ents.FindByClass("stargate_*")) do
+			if(v.IsStargate) then
+				local blocked = "";
+				if (v:GetBlocked()) then blocked="blocked=true\n"; end
+				if (v.IsGroupStargate and groupsystem) then
+					f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\ngroup="..string.Replace(v:GetGateGroup(),"#","!").."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\nlocale="..tostring(v:GetLocale()).."\n"..blocked;
+					if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
+					for i=1,9 do
+						if (v.chev_destroyed and v.chev_destroyed[i]) then
+							f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
 						end
 					end
-					if (v.RingInbound) then
-						f = f .. "sgctype=true\n";
+				elseif (v.IsGroupStargate) then
+					f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\ngalaxy="..tostring(v:GetGalaxy()).."\n"..blocked;
+					if (v.ChevDestroyed) then f = f .. "chevdestroyed="..tostring(v.ChevDestroyed).."\n"; end
+					for i=1,9 do
+						if (v.chev_destroyed and v.chev_destroyed[i]) then
+							f = f .. "chevdestroyed"..i.."="..tostring(v.chev_destroyed[i]).."\n";
+						end
 					end
-					if (v:GetClass()=="stargate_infinity" and v.InfDefaultEH) then
-						f = f .. "sg1eh=true\n";
-					end
-					if (v.ChevLight) then
-						f = f .. "chevlight=true\n";
-					end
-					if (v.Classic) then
-						f = f .. "classic=true\n";
-					end
-					if (v.AtlType) then
-						f = f .. "atltype=true\n";
-					end
-				end
-			end
-			for _,v in pairs(ents.FindByClass("*_iris")) do
-				if (v.IsIris) then
-					f = f .. "[iris]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-				end
-			end
-			for _,v in pairs(ents.FindByClass("dhd_*")) do
-				if (v:GetClass()!="dhd_city" and v:GetClass()!="dhd_concept") then
-					f = f .. "[dhd]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\ndestroyed="..tostring(v.Destroyed).."\n";
 				else
-					f = f .. "[dhd]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+					f = f .. "[stargate]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..v:GetGateAddress().."\nname="..v:GetGateName().."\nprivate="..tostring(v:GetPrivate()).."\n";
 				end
-				if (v.DisRingRotate) then
-					if (v:GetClass()=="dhd_city" or v:GetClass()=="dhd_atlantis") then
-						f = f .. "slowmode=true\n"
-					else
-						f = f .. "disablering=true\n"
-					end
-				end
-			end
-
-			-- Mobile DHDs
-			for _,v in pairs(ents.FindByClass("mobile_dhd")) do
-				f = f .. "[mobile_dhd]\nclassname=mobile_dhd\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-
-			-- Carter Stuff
-			for _,v in pairs(ents.FindByClass("bearing")) do
-				f = f .. "[sgu_stuff]\nclassname=bearing\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("floorchevron")) do
-				f = f .. "[sgu_stuff]\nclassname=floorchevron\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("destiny_timer")) do
-				f = f .. "[destiny_timer]\nclassname=destiny_timer\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("destiny_console")) do
-				f = f .. "[destiny_console]\nclassname=destiny_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("kino_dispenser")) do
-				f = f .. "[kino_dispenser]\nclassname=kino_dispenser\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-
-			-- Rings
-			for _,v in pairs(ents.FindByClass("ring_panel_*")) do
-				f = f .. "[ring_panel]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-				local ringp = v;
-				local first = true
-				for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
-					if(v ~= ringp and v:GetClass() == "prop_physics" and IsValid(v)) then
-						if (first) then
-							f = f .."__id="..ringp:EntIndex().."\n"
-							first = false
+				if (v.IsStargate) then
+					local gate = v;
+					local first = true
+					for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
+						if(v ~= gate and v:GetClass() == "prop_physics" and IsValid(v)) then
+							if (first) then
+								f = f .."__id="..gate:EntIndex().."\n"
+								first = false
+							end
+							already_added[v] = true;
+							props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..gate:EntIndex().."\n";
 						end
-						already_added[v] = true;
-						props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ringp:EntIndex().."\n";
 					end
 				end
-			end
-			for _,v in pairs(ents.FindByClass("ring_base_*")) do
-				f = f .. "[ring_base]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..(v.Address or "").."\n";
-				local ring = v;
-				local first = true
-				for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
-					if(v ~= ring and v:GetClass() == "prop_physics" and IsValid(v)) then
-						if (first) then
-							f = f .."__id="..ring:EntIndex().."\n"
-							first = false
-						end
-						already_added[v] = true;
-						props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ring:EntIndex().."\n";
-					end
+				if (v.RingInbound) then
+					f = f .. "sgctype=true\n";
 				end
-			end
-
-			for _,v in pairs(ents.FindByClass("brazier")) do
-				f = f .. "[brazier]\nclassname=brazier\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-
-			-- Ramps
-			for _,v in pairs(ents.FindByClass("ramp")) do
-				f = f .. "[ramp]\nclassname=ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("ramp_2")) do
-				f = f .. "[ramp]\nclassname=ramp_2\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("sgu_ramp")) do
-				f = f .. "[ramp]\nclassname=sgu_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("sgc_ramp")) do
-				f = f .. "[ramp]\nclassname=sgc_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("icarus_ramp")) do
-				f = f .. "[ramp]\nclassname=icarus_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("future_ramp")) do
-				f = f .. "[ramp]\nclassname=future_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("goauld_ramp")) do
-				f = f .. "[ramp]\nclassname=goauld_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
-			end
-			for _,v in pairs(ents.FindByClass("gravitycontroller")) do
-				if v.ConTable["bSGAPowerNode"][2]==1 then //only nodes with SGAPowerNode Type
-					f = f .. "[gravitycontroller]\nclassname=gravitycontroller\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nsound="..tostring(v.ConTable["sSound"][2]).."\n";
+				if (v:GetClass()=="stargate_infinity" and v.InfDefaultEH) then
+					f = f .. "sg1eh=true\n";
 				end
-			end
-			for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-				f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."private="..tostring(v.TPrivate).."\n";
-				if (v.OnlyClosed) then
-               		f = f .. "onlyclosed=true\n";
-               	end
-				if (v.NoAutoOpen) then
-               		f = f .. "autoopen=false\n";
-               	end
-				if (v.NoAutoClose) then
-               		f = f .. "autoclose=false\n";
-               	end
-			end
-			f = f .. props
-
-			file.Write(game.GetMap():lower()..".txt",f);
-			MsgN("=======================");
-			MsgN("Gatespawner successfully created!");
-			MsgN("File: garrysmod\\data\\"..game.GetMap():lower()..".txt");
-			MsgN("Rename this file to "..game.GetMap():lower()..".lua and move it to garrysmod\\lua\\data\\"..gatefolder.." to make it work.");
-			MsgN("Do not forget to reload the gatespawner or restart the map to have it take effect!");
-			MsgN("=======================");
-			if (IsValid(p)) then
-				net.Start("CAP_GATESPAWNER");
-				net.WriteString(game.GetMap():lower());
-				net.WriteString(gatefolder);
-				net.Send(p);
+				if (v.ChevLight) then
+					f = f .. "chevlight=true\n";
+				end
+				if (v.Classic) then
+					f = f .. "classic=true\n";
+				end
+				if (v.AtlType) then
+					f = f .. "atltype=true\n";
+				end
 			end
 		end
+		for _,v in pairs(ents.FindByClass("*_iris")) do
+			if (v.IsIris) then
+				f = f .. "[iris]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			end
+		end
+		for _,v in pairs(ents.FindByClass("dhd_*")) do
+			if (v:GetClass()!="dhd_city" and v:GetClass()!="dhd_concept") then
+				f = f .. "[dhd]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\ndestroyed="..tostring(v.Destroyed).."\n";
+			else
+				f = f .. "[dhd]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			end
+			if (v.DisRingRotate) then
+				if (v:GetClass()=="dhd_city" or v:GetClass()=="dhd_atlantis") then
+					f = f .. "slowmode=true\n"
+				else
+					f = f .. "disablering=true\n"
+				end
+			end
+		end
+
+		-- Mobile DHDs
+		for _,v in pairs(ents.FindByClass("mobile_dhd")) do
+			f = f .. "[mobile_dhd]\nclassname=mobile_dhd\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+
+		-- Carter Stuff
+		for _,v in pairs(ents.FindByClass("bearing")) do
+			f = f .. "[sgu_stuff]\nclassname=bearing\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("floorchevron")) do
+			f = f .. "[sgu_stuff]\nclassname=floorchevron\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("destiny_timer")) do
+			f = f .. "[destiny_timer]\nclassname=destiny_timer\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("destiny_console")) do
+			f = f .. "[destiny_console]\nclassname=destiny_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("kino_dispenser")) do
+			f = f .. "[kino_dispenser]\nclassname=kino_dispenser\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+
+		-- Rings
+		for _,v in pairs(ents.FindByClass("ring_panel_*")) do
+			f = f .. "[ring_panel]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			local ringp = v;
+			local first = true
+			for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
+				if(v ~= ringp and v:GetClass() == "prop_physics" and IsValid(v)) then
+					if (first) then
+						f = f .."__id="..ringp:EntIndex().."\n"
+						first = false
+					end
+					already_added[v] = true;
+					props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ringp:EntIndex().."\n";
+				end
+			end
+		end
+		for _,v in pairs(ents.FindByClass("ring_base_*")) do
+			f = f .. "[ring_base]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\naddress="..(v.Address or "").."\n";
+			local ring = v;
+			local first = true
+			for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
+				if(v ~= ring and v:GetClass() == "prop_physics" and IsValid(v)) then
+					if (first) then
+						f = f .."__id="..ring:EntIndex().."\n"
+						first = false
+					end
+					already_added[v] = true;
+					props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ring:EntIndex().."\n";
+				end
+			end
+		end
+
+		for _,v in pairs(ents.FindByClass("brazier")) do
+			f = f .. "[brazier]\nclassname=brazier\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+
+		-- Ramps
+		for _,v in pairs(ents.FindByClass("ramp")) do
+			f = f .. "[ramp]\nclassname=ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("ramp_2")) do
+			f = f .. "[ramp]\nclassname=ramp_2\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("sgu_ramp")) do
+			f = f .. "[ramp]\nclassname=sgu_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("sgc_ramp")) do
+			f = f .. "[ramp]\nclassname=sgc_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("icarus_ramp")) do
+			f = f .. "[ramp]\nclassname=icarus_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("future_ramp")) do
+			f = f .. "[ramp]\nclassname=future_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("goauld_ramp")) do
+			f = f .. "[ramp]\nclassname=goauld_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+		end
+		for _,v in pairs(ents.FindByClass("gravitycontroller")) do
+			if v.ConTable["bSGAPowerNode"][2]==1 then //only nodes with SGAPowerNode Type
+				f = f .. "[gravitycontroller]\nclassname=gravitycontroller\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nsound="..tostring(v.ConTable["sSound"][2]).."\n";
+			end
+		end
+		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
+			f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."private="..tostring(v.TPrivate).."\n";
+			if (v.OnlyClosed) then
+              		f = f .. "onlyclosed=true\n";
+              	end
+			if (v.NoAutoOpen) then
+              		f = f .. "autoopen=false\n";
+              	end
+			if (v.NoAutoClose) then
+              		f = f .. "autoclose=false\n";
+              	end
+		end
+		f = f .. props
+
+		file.Write(game.GetMap():lower()..".txt",f);
+		MsgN("=======================");
+		MsgN("Gatespawner successfully created!");
+		MsgN("File: garrysmod\\data\\"..game.GetMap():lower()..".txt");
+		MsgN("Rename this file to "..game.GetMap():lower()..".lua and move it to garrysmod\\lua\\data\\"..gatefolder.." to make it work.");
+		MsgN("Do not forget to reload the gatespawner or restart the map to have it take effect!");
+		MsgN("=======================");
+		if (IsValid(p)) then
+			net.Start("CAP_GATESPAWNER");
+			net.WriteString(game.GetMap():lower());
+			net.WriteString(gatefolder);
+			net.Send(p);
+		end
 	end
-);
+end
+concommand.Add("stargate_gatespawner_createfile",StarGate.GateSpawner.CreateFile);
 
 util.AddNetworkString("CAP_GATESPAWNER");
 
@@ -795,16 +794,12 @@ concommand.Add("stargate_gatespawner_reload",
 );
 
 util.AddNetworkString("RemoveGateList")
-util.AddNetworkString("RemoveGateListSelect")
 util.AddNetworkString("RemoveAtlTPList")
 
 -- so much time spend for fix gatespawner with gmod saving system...
 function StarGate.GateSpawner.Restored()
 	-- fix for addresses
 	net.Start( "RemoveGateList" )
-		net.WriteBit(true)
-	net.Broadcast()
-	net.Start( "RemoveGateListSelect" )
 		net.WriteBit(true)
 	net.Broadcast()
 	net.Start( "RemoveAtlTPList" )

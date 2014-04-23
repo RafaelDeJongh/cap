@@ -81,6 +81,11 @@ local function Workshop_res_Check()
 	return ret;
 end
 
+local oldfiles = {};
+for k,v in pairs(file.Find("addons/carter_addon_pack_*.gma","GAME")) do
+	table.insert(oldfiles,v);
+end
+
 if (CLIENT) then
 
 	local function CAP_dxlevel()
@@ -146,12 +151,16 @@ if (CLIENT) then
 			if (k!=1) then
 				text = text.."<br><br>";
 			end
-			if (v=="sg_err_09") then
+			if (type(v)=="table") then
 				local adds = "";
-				for t,a in pairs(Workshop_res_Check()) do
-					adds = adds.."<br>"..a
+				for t,a in pairs(v[2]) do
+					if (v[1]=="sg_err_09") then
+						adds = adds.."<br>"..a:Replace("Carter Addon Pack:","CAP:");
+					else
+						adds = adds.."<br>"..a;
+					end
 				end
-				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v,adds);
+				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],adds);
 			else
 				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v);
 			end
@@ -303,7 +312,7 @@ if (not StarGate.WorkShop) then
 			MsgN("Status: "..status)
 		end
 		table.insert(StarGate_Group.ErrorMSG, {"Please subscribe to all workshop addons to make CAP functional.","09"});
-		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_09");
+		table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_09",Workshop_res_Check()});
 		MsgN("-------");
 		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	elseif (Workshop_res_Installed() and table.HasValue( addonlist, "Carter Addon Pack - Resources" )) then
@@ -311,7 +320,7 @@ if (not StarGate.WorkShop) then
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, {"You've got the Github version of cap_resources installed.","10"});
+		table.insert(StarGate_Group.ErrorMSG, {"The Github version of the Resources have been detected on your system and might conflict with the workshop version you've subscribed to.\\nPlease remove one of both.","10"});
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_10");
 		MsgN("-------");
 		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
@@ -324,7 +333,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<447 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<449 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -359,7 +368,7 @@ else
 			MsgN("Status: "..status)
 		end
 		table.insert(StarGate_Group.ErrorMSG, {"Please subscribe to all workshop addons to make CAP functional.","09"});
-		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_09");
+		table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_09",Workshop_res_Check()});
 		MsgN("-------");
 		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
@@ -385,10 +394,10 @@ else
 			status = "Error";
 			MsgN("Status: "..status)
 		end
-		table.insert(StarGate_Group.ErrorMSG, {"The Git version of the Resource pack from Carter Addon Pack is installed.\\nPlease remove this to prevent possible problems.\\nOr remove the workshop version.","13"});
-		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_13");
+		table.insert(StarGate_Group.ErrorMSG, {"The Github version of the Resources have been detected on your system and might conflict with the workshop version you've subscribed to.\\nPlease remove one of both.","10"});
+		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_10");
 		MsgN("-------");
-		MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( addonlist, "Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
@@ -401,7 +410,18 @@ else
 	end
 end
 
-if (VERSION<140404) then
+if (table.getn(oldfiles)>0) then
+	if (status != "Error") then
+		status = "Error";
+		MsgN("Status: "..status)
+	end
+	table.insert(StarGate_Group.ErrorMSG, {"Old workshop files found, please remove it.","13"});
+	table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_13",oldfiles});
+	MsgN("-------");
+	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+end
+
+if (VERSION<140419) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
