@@ -52,7 +52,7 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "drone_launcher";
 TOOL.Entity.Keys = {"shoot","explode","track","model","eye_track"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("drone","limit",2);
+TOOL.Entity.Limit = 2;
 
 -- Add the topic texts, you see in the upper left corner
 TOOL.Topic["name"] = "Drone Launcher Spawner";

@@ -57,7 +57,7 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "staff_weapon_glider";
 TOOL.Entity.Keys = {"shoot","explode","model","r","g","b","shaft","explosion","explosion_colorize","add_cannon_velocity"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("staff_stationary","limit",2);
+TOOL.Entity.Limit = 2;
 
 -- Add the topic texts, you see in the upper left corner
 TOOL.Topic["name"] = "Staffweapon Spawner";

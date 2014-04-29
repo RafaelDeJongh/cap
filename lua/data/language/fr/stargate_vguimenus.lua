@@ -37,9 +37,6 @@ stargate_vgui_invalid = Invalide
 stargate_vgui_edit = Édition...
 stargate_vgui_srchtip = Entrez une partie de l'addresse d'une Porte pour la rechercher.
 stargate_vgui_search = Recherche:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 55
-// You can change it to own if word not fit in menu
 // Note: this is comments (after //) so you shouldn't translate it :)
 stargate_vgui_search2 = Chercher Porte
 stargate_vgui_refresh = Actualiser la liste

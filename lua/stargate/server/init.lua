@@ -27,7 +27,15 @@ end
 --################# Loads the config @aVoN
 function StarGate.LoadConfig(p)
 	if(not IsValid(p) or p:IsAdmin() or game.SinglePlayer()) then
+		-- fix for cleaning old values on reload
+		if (StarGate.CFG.Get and type(StarGate.CFG.Get)=="function") then
+			local copy,dcopy = StarGate.CFG.Get,StarGate.CFG.DTOOL;
+			StarGate.CFG = {};
+			StarGate.CFG.Get = copy;
+			StarGate.CFG.DTOOL = dcopy;
+		end
 		StarGate.CFG.SYNC = {}; -- They sync keys
+		StarGate.CFG.DTOOL = StarGate.CFG.DTOOL or {}; -- Disabled tools fix
 		-- Loads the config only ONE time and not always when I press "sent_reload" (Increases loading times)
 		if(not INIParser) then include("ini_parser.lua") end;
 		if (file.Exists("lua/data/stargate/config.lua","GAME")) then
@@ -37,7 +45,7 @@ function StarGate.LoadConfig(p)
 			file.Write("stargate/how to create your own config.txt",file.Read("lua/data/stargate/how to create your own config.lua","GAME"));
 		end
 		local ini = INIParser:new("stargate/config.txt",false);
-		local custom_config = INIParser:new("stargate/user_config.txt",false);
+		local custom_config = INIParser:new("stargate/custom_config.txt",false);
 		-- Merge our custom config with the default one
 		if(custom_config) then
 			for node,datas in pairs(custom_config.nodes) do
@@ -73,14 +81,24 @@ function StarGate.LoadConfig(p)
 					if (name == "cap_disabled_tool") then
 						if (v) then
 							RunConsoleCommand("toolmode_allow_"..k,0)
+							StarGate.CFG.DTOOL[k] = true;
 						else
 							RunConsoleCommand("toolmode_allow_"..k,1)
+							StarGate.CFG.DTOOL[k] = nil;
 						end
 					end
 				end
 			end
-			if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(NULL,true) end) end -- fix for reload.
 		end
+		-- fix for tools
+		local tbl = StarGate.CFG.DTOOL;
+		for k,v in pairs(tbl) do
+			if (not StarGate.CFG["cap_disabled_tool"] or not StarGate.CFG["cap_disabled_tool"][k]) then
+				RunConsoleCommand("toolmode_allow_"..k,1);
+				StarGate.CFG.DTOOL[k] = nil;
+			end
+		end
+		if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(NULL,true) end) end -- fix for reload.
 	end
 end
 StarGate.LoadConfig();
@@ -90,31 +108,40 @@ util.AddNetworkString( "StarGate_CFG" );
 --################# Starts syncing the CFG from the server to the client @aVoN
 function StarGate.Hook.PlayerInitialSpawn(p,reload)
 	-- Now start syncing the config (also tells the client, SGPack is installed - just to be sure)
+	if(p and IsValid(p) and p:IsPlayer() or reload) then
+		net.Start("StarGate_CFG");
+		net.WriteString("_CFG_RELOAD_");
+		if (reload) then
+			net.Broadcast();
+		else
+			net.Send(p);
+		end
+	end
 	for name,data in pairs(StarGate.CFG.SYNC) do
 		if(p and IsValid(p) and p:IsPlayer() or reload) then -- Prevents crashing (must be done everytime we send a umsg!)
 			net.Start("StarGate_CFG");
 			net.WriteString(name); -- Tell the client, what CFG node
-			net.WriteInt(table.Count(data),8); -- Tell the client, how much data will follow (Char goes from -128 to 128). But you seriously shoudln't add more than 20 umsg!
+			net.WriteUInt(table.Count(data),8); -- Tell the client, how much data will follow (Char goes from -128 to 128). But you seriously shoudln't add more than 20 umsg!
 			for k,v in pairs(data) do
 				net.WriteString(k); -- Tell the client, what's the keys name
 				if(type(v) == "boolean") then
-					net.WriteInt(0,8); -- I'm a bool
+					net.WriteUInt(0,8); -- I'm a bool
 					net.WriteBit(v);
 				elseif(type(v) == "string") then
-					net.WriteInt(1,8); -- I'm a string
+					net.WriteUInt(1,8); -- I'm a string
 					net.WriteString(v);
 				else -- I'm a sort of number
 					if(v ~= math.ceil(v)) then -- I'm a float
-						net.WriteInt(2,8);
-						net.WriteFloat(v);
+						net.WriteUInt(2,8);
+						net.WriteDouble(v);
 					elseif(v > -128 and v < 127) then -- I'm a Char
-						net.WriteInt(3,8);
+						net.WriteUInt(3,8);
 						net.WriteInt(v,8);
 					elseif(v > -32768 and v < 32767) then -- I'm a short
-						net.WriteInt(4,8);
+						net.WriteUInt(4,8);
 						net.WriteInt(v,16);
 					else -- I'm a long
-						net.WriteInt(5,8);
+						net.WriteUInt(5,8);
 						net.WriteInt(v,32);
 					end
 				end
@@ -445,6 +472,213 @@ end
 
 concommand.Add( "cap_spawnswep", function( ply, cmd, args ) CAP_Spawn_Weapon( ply, args[1] ) end )
 
+local function InternalSpawnNPC( Player, Position, Normal, Class, Equipment )
+
+	local NPCList = list.Get( "CAP.NPC" )
+	local NPCData = NPCList[ Class ]
+	
+	-- Don't let them spawn this entity if it isn't in our NPC Spawn list.
+	-- We don't want them spawning any entity they like!
+	if ( !NPCData ) then 
+		/*if ( IsValid( Player ) ) then
+			Player:SendLua( "Derma_Message( \"Sorry! You can't spawn that NPC!\" )" )
+		end*/
+	return end
+
+	-- we have own check
+	--if ( NPCData.AdminOnly && !Player:IsAdmin() ) then return end
+
+	local bDropToFloor = false
+		
+	--
+	-- This NPC has to be spawned on a ceiling ( Barnacle )
+	--
+	if ( NPCData.OnCeiling && Vector( 0, 0, -1 ):Dot( Normal ) < 0.95 ) then
+		return nil
+	end
+	
+	--
+	-- This NPC has to be spawned on a floor ( Turrets )
+	--
+	if ( NPCData.OnFloor && Vector( 0, 0, 1 ):Dot( Normal ) < 0.95 ) then
+		return nil
+	else
+		bDropToFloor = true
+	end
+	
+	if ( NPCData.NoDrop ) then bDropToFloor = false end
+	
+	--
+	-- Offset the position
+	--
+	local Offset = NPCData.Offset or 32
+	Position = Position + Normal * Offset
+	
+	-- fix for some weapons, get best variant between two npc classes @ AlexALX
+	local comb_weaps = {"none","weapon_stunstick","weapon_smg1","weapon_ar2","weapon_shotgun","weapon_annabelle","weapon_crossbow","weapon_rpg"}
+	if ( Equipment and table.HasValue(comb_weaps,Equipment) and NPCData.Class=="npc_metropolice") then
+		NPCData.Class = "npc_combine_s";
+	end
+	
+	-- Create NPC
+	local NPC = ents.Create( NPCData.Class )
+	if ( !IsValid( NPC ) ) then return end
+
+	NPC:SetPos( Position )
+	
+	-- Rotate to face player (expected behaviour)
+	local Angles = Angle( 0, 0, 0 )
+	
+		if ( IsValid( Player ) ) then
+			Angles = Player:GetAngles()
+		end
+	
+		Angles.pitch = 0
+		Angles.roll = 0
+		Angles.yaw = Angles.yaw + 180
+
+	if ( NPCData.Rotate ) then Angles = Angles + NPCData.Rotate end
+		
+	NPC:SetAngles( Angles )
+	
+	--
+	-- This NPC has a special model we want to define
+	--
+	if ( NPCData.Model ) then
+		NPC:SetModel( NPCData.Model )
+	end
+	
+	--
+	-- This NPC has a special texture we want to define
+	--
+	if ( NPCData.Material ) then
+		NPC:SetMaterial( NPCData.Material )
+	end
+	
+	--
+	-- Spawn Flags
+	--
+	local SpawnFlags = bit.bor( SF_NPC_FADE_CORPSE, SF_NPC_ALWAYSTHINK )
+	if ( NPCData.SpawnFlags ) then SpawnFlags = bit.bor( SpawnFlags, NPCData.SpawnFlags ) end
+	if ( NPCData.TotalSpawnFlags ) then SpawnFlags = NPCData.TotalSpawnFlags end
+	NPC:SetKeyValue( "spawnflags", SpawnFlags )
+	
+	--
+	-- Optional Key Values
+	--
+	if ( NPCData.KeyValues ) then
+		for k, v in pairs( NPCData.KeyValues ) do
+			NPC:SetKeyValue( k, v )
+		end		
+	end
+	
+	--
+	-- This NPC has a special skin we want to define
+	--
+	if ( NPCData.Skin ) then
+		NPC:SetSkin( NPCData.Skin )
+	end
+	
+	--
+	-- What weapon should this mother be carrying
+	--
+	
+	-- Check if this is a valid entity from the list, or the user is trying to fool us.
+	local valid = false
+	for _, v in pairs( list.Get( "NPCUsableWeapons" ) ) do
+		if v.class == Equipment then valid = true break end
+	end
+	
+	if ( Equipment && Equipment != "none" && valid ) then
+		NPC:SetKeyValue( "additionalequipment", Equipment )
+		NPC.Equipment = Equipment 
+	end
+	
+	DoPropSpawnedEffect( NPC )
+	
+	NPC:Spawn()
+	NPC:Activate()
+	
+	-- special fix... @ AlexALX
+	if (NPCData.Model and NPCData.Class=="npc_metropolice") then
+		NPC:SetModel( NPCData.Model )
+	end
+	
+	if ( bDropToFloor && !NPCData.OnCeiling ) then
+		NPC:DropToFloor()	
+	end
+	
+	return NPC
+	
+end
+
+function CAP_Spawn_NPC( player, NPCClassName, WeaponName, tr )
+
+	if ( !NPCClassName ) then return end
+	
+	if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(player); return false
+	elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
+		Msg("Carter Addon Pack - Unknown Error\n");
+		player:SendLua("Msg(\"Carter Addon Pack - Unknown Error\\n\")");
+		player:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return false;
+	end
+
+	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
+
+	-- Give the gamemode an opportunity to deny spawning
+	if (StarGate.NotSpawnable(NPCClassName,player,"npc")) then return end
+	
+	if ( !gamemode.Call( "PlayerSpawnNPC", player, NPCClassName, WeaponName ) ) then return end
+	
+	if ( !tr ) then
+
+		local vStart = player:GetShootPos()
+		local vForward = player:GetAimVector()
+	
+		local trace = {}
+			trace.start = vStart
+			trace.endpos = vStart + vForward * 2048
+			trace.filter = player
+
+		tr = util.TraceLine( trace )
+
+	end
+	
+	-- Create the NPC is you can.
+	local SpawnedNPC = InternalSpawnNPC( player, tr.HitPos, tr.HitNormal, NPCClassName, WeaponName )
+	if ( !IsValid( SpawnedNPC ) ) then return end
+
+	-- Give the gamemode an opportunity to do whatever
+	if ( IsValid( player ) ) then
+		gamemode.Call( "PlayerSpawnedNPC", player, SpawnedNPC )
+	end
+	
+	-- See if we can find a nice name for this NPC..
+	local NPCList = list.Get( "NPC" )
+	local NiceName = nil
+	if ( NPCList[ NPCClassName ] ) then 
+		NiceName = NPCList[ NPCClassName ].Name
+	end
+
+	-- Add to undo list
+	undo.Create("NPC")
+		undo.SetPlayer( player )
+		undo.AddEntity( SpawnedNPC )
+		if ( NiceName ) then
+			undo.SetCustomUndoText( "Undone "..NiceName )
+		end
+	undo.Finish( "NPC ("..tostring(NPCClassName)..")" )
+	
+	-- And cleanup
+	player:AddCleanup( "npcs", SpawnedNPC )
+	
+	player:SendLua( "achievements.SpawnedNPC()" )
+
+end
+
+concommand.Add( "cap_spawnnpc", function( ply, cmd, args ) CAP_Spawn_NPC( ply, args[1], args[2] ) end )
+
 function StarGate.NotSpawnable(class,player,mode)
 	if (not mode) then mode = "ent" end
 	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then
@@ -454,15 +688,19 @@ function StarGate.NotSpawnable(class,player,mode)
 		return true
 	end
 	if (not IsValid(player)) then return false end
-	if ( StarGate.CFG:Get(mode.."_groups_only",class,false)) then
+	if (StarGate.CFG:Get(mode.."_groups_only",class,false)) then
 		local tbl = StarGate.CFG:Get(mode.."_groups_only",class,""):TrimExplode(",");
 		local disallow = true;
+		local exclude = false;
+		if (table.HasValue(tbl,"exclude_mod")) then exclude = true; disallow = false; end
 		for k,v in pairs(tbl) do
-			if (v=="add_shield") then continue end
+			if (v=="add_shield" or v=="exclude_mod") then continue end
 			if (player:IsUserGroup(v)) then
-				disallow = false; break;
+				disallow = exclude;
+				break;
 			end
 		end
+		if (table.Count(tbl)==0) then disallow = false end
 		if (disallow) then
 			player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_group_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return true;
@@ -472,42 +710,45 @@ function StarGate.NotSpawnable(class,player,mode)
 end
 
 util.AddNetworkString("_SGCUSTOM_GROUPS");
-if (not file.Exists("stargate/custom_groups.txt","DATA") and file.Exists("lua/data/stargate/custom_groups.lua","GAME")) then
-	file.Write("stargate/custom_groups.txt",file.Read("lua/data/stargate/custom_groups.lua","GAME"))
-end
-
-StarGate.CUSTOM_GROUPS = {};
-StarGate.CUSTOM_TYPES = {};
-
-local ini = INIParser:new("stargate/custom_groups.txt",false,false,true);
-if(ini) then
-	if (ini.nodes.stargate_custom_groups and ini.nodes.stargate_custom_groups[1]) then
-		for k,v in pairs(ini.nodes.stargate_custom_groups[1]) do
-			StarGate.CUSTOM_GROUPS[k] = {v};
-		end
+function StarGate.LoadGroupConfig()
+	if (not file.Exists("stargate/custom_groups.txt","DATA") and file.Exists("lua/data/stargate/custom_groups.lua","GAME")) then
+		file.Write("stargate/custom_groups.txt",file.Read("lua/data/stargate/custom_groups.lua","GAME"))
 	end
-	if (ini.nodes.stargate_custom_types and ini.nodes.stargate_custom_types[1]) then
-		for k,v in pairs(ini.nodes.stargate_custom_types[1]) do
-			if (v:find(" !SHARED")) then
-				StarGate.CUSTOM_TYPES[k] = {v:Replace(" !SHARED",""),1};
-			else
-				StarGate.CUSTOM_TYPES[k] = {v};
+
+	StarGate.CUSTOM_GROUPS = {};
+	StarGate.CUSTOM_TYPES = {};
+
+	local ini = INIParser:new("stargate/custom_groups.txt",false,false,true);
+	if(ini) then
+		if (ini.nodes.stargate_custom_groups and ini.nodes.stargate_custom_groups[1]) then
+			for k,v in pairs(ini.nodes.stargate_custom_groups[1]) do
+				StarGate.CUSTOM_GROUPS[k] = {v};
 			end
 		end
+		if (ini.nodes.stargate_custom_types and ini.nodes.stargate_custom_types[1]) then
+			for k,v in pairs(ini.nodes.stargate_custom_types[1]) do
+				if (v:sub(-8)==" !SHARED") then
+					StarGate.CUSTOM_TYPES[k] = {v:sub(0,-9),true};
+				else
+					StarGate.CUSTOM_TYPES[k] = {v};
+				end
+			end
+		end
+
+		hook.Add("PlayerInitialSpawn","SG_INIT_CUSTOM_GROUPS",function(ply)
+			net.Start("_SGCUSTOM_GROUPS");
+			net.WriteTable(StarGate.CUSTOM_GROUPS);
+			net.WriteTable(StarGate.CUSTOM_TYPES);
+			net.Send(ply);
+		end)
+
+		-- if reload config
+		timer.Simple(1.0,function()
+			net.Start("_SGCUSTOM_GROUPS");
+			net.WriteTable(StarGate.CUSTOM_GROUPS);
+			net.WriteTable(StarGate.CUSTOM_TYPES);
+			net.Broadcast();
+		end)
 	end
-
-	hook.Add("PlayerInitialSpawn","SG_INIT_CUSTOM_GROUPS",function(ply)
-		net.Start("_SGCUSTOM_GROUPS");
-		net.WriteTable(StarGate.CUSTOM_GROUPS);
-		net.WriteTable(StarGate.CUSTOM_TYPES);
-		net.Send(ply);
-	end)
-
-	-- if reload config
-	timer.Simple(1.0,function()
-		net.Start("_SGCUSTOM_GROUPS");
-		net.WriteTable(StarGate.CUSTOM_GROUPS);
-		net.WriteTable(StarGate.CUSTOM_TYPES);
-		net.Broadcast();
-	end)
 end
+StarGate.LoadGroupConfig();

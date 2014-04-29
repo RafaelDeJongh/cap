@@ -270,8 +270,8 @@ net.Receive("MCD",function(len,ply)
 
     local entities = {"tollan_disabler","cloaking_generator","shield_generator","jamming_device","tampered_zpm","zpm_mk3"}
     local class = net.ReadString()
-    if (class=="zpm_mk3" and StarGate.CFG:Get("MCD","allow_tzmp",false)) then
-    	local rnd = StarGate.CFG:Get("MCD","tzmp_chance",2);
+    if (class=="zpm_mk3" and StarGate.CFG:Get("mcd","allow_tzmp",false)) then
+    	local rnd = StarGate.CFG:Get("mcd","tzmp_chance",2);
     	if (rnd<1) then rnd = 1 end
     	local rand = math.random(1,rnd);
     	if (rand==1) then

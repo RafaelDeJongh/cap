@@ -123,7 +123,7 @@ end
 --#########################################
 --						Config Part
 --#########################################
-StarGate.CFG = {};
+StarGate.CFG = StarGate.CFG or {};
 --################# Gets a value from the config. When none exists, the default value will be returend @aVoN
 function StarGate.CFG:Get(node,key,default)
 	if(StarGate.CFG[node] and StarGate.CFG[node][key] ~= nil) then

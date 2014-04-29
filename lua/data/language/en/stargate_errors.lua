@@ -31,7 +31,8 @@ sg_err_11 =[[ The custom fonts can not be found on your Garry's Mod Installation
 ]]
 sg_err_12 = Your Cap_Resources folder is outdated!<br>Please update it to the latest version.
 sg_err_13 = [[Old workshop files found.
-<br>Please remove following files inside “Steam\steamapps\COMMON\GarrysMod\garrysmod\addons” folder:
+<br>Please remove following files inside folder:
+<br>"%s"
 <br>%s
 ]]
 sg_err_14 = [[Your Wiremod is outdated, please update it to the latest version to make the Carter Addon Pack fully functional.

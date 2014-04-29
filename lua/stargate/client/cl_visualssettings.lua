@@ -37,6 +37,14 @@ function StarGate.MiscVisualSettings(Panel)
     table.GetLastValue(disable):SetToolTip(low);
 	Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_mat"), "cl_kawoosh_material"):SetToolTip(SGLanguage.GetMessage("vis_kawoosh_mat_desc"));
 	Panel:CheckBox(SGLanguage.GetMessage("vis_stargate_eff"), "cl_stargate_effects"):SetToolTip(SGLanguage.GetMessage("vis_stargate_eff_desc",medium));
+	-- Stargate Universe
+	Panel:Help(SGLanguage.GetMessage("stargate_universe"));	
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_un_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- SuperGate
+	Panel:Help(SGLanguage.GetMessage("stargate_supergate"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
 	-- Shield
 	Panel:Help(SGLanguage.GetMessage("stool_shield"));
 	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_shield_dynlights"));
@@ -61,10 +69,6 @@ function StarGate.MiscVisualSettings(Panel)
 	table.GetLastValue(disable):SetToolTip(high);
 	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_eff"),"cl_cloaking_shader"));
 	table.GetLastValue(disable):SetToolTip(medium);
-	-- SuperGate
-	Panel:Help("Supergate");
-	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"));
-	table.GetLastValue(disable):SetToolTip(high);
 	-- Apple Core
 	Panel:Help(SGLanguage.GetMessage("entity_apple_core"));
 	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_applecore_light"));

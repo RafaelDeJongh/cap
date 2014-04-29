@@ -17,7 +17,7 @@
 */
 INIParser = {};
 -- ############## Loads an ini file (object) @ aVoN
-function INIParser:new(file_,no_autotrim,game_folder,commtype)
+function INIParser:new(file_,no_autotrim,game_folder,commtype,no_msg)
 	local obj = {};
 	setmetatable(obj,self);
 	self.__index = function(t,n)
@@ -46,10 +46,12 @@ function INIParser:new(file_,no_autotrim,game_folder,commtype)
 		end
 		obj.nodes = {}; -- Stores all nodes of the ini
 	else
-		Msg("INIParser:new - File "..file_.." does not exist!\n");
+		if (not no_msg) then
+			Msg("INIParser:new - File "..file_.." does not exist!\n");
+		end
 		return;
 	end
-	obj:parse();
+	obj:parse(no_msg);
 	return obj;
 end
 
@@ -72,7 +74,7 @@ function INIParser:StripQuotes(s)
 end
 
 -- ############## Parses the inifile to a table (void) @ aVoN
-function INIParser:parse()
+function INIParser:parse(no_msg)
 	local exploded = string.Explode("\n",self.content);
 	local nodes = {};
 	local cur_node = "";
@@ -132,7 +134,9 @@ function INIParser:parse()
 		end
 	end
 	self.nodes = nodes;
-	Msg("INIParser:parse - File "..self.file.. " successfully parsed\n");
+	if (not no_msg) then
+		Msg("INIParser:parse - File "..self.file.. " successfully parsed\n");
+	end
 end
 
 -- ############## Either you index the object directly, when you know, which value to index, or you simply get the full INI content (table) @ aVoN

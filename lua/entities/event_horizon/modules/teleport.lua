@@ -428,6 +428,9 @@ function ENT:DestroyEntity(e)
 		if (not e:HasGodMode()) then
 			e:StripWeapons();
 			e:KillSilent();
+			umsg.Start("StarGate.EventHorizon.PlayerKill");
+			umsg.Entity(e);
+			umsg.End();
 		end
 	else
 		if(e:IsVehicle()) then
@@ -437,6 +440,9 @@ function ENT:DestroyEntity(e)
 					if (not v:HasGodMode()) then
 						v:StripWeapons();
 						v:KillSilent();
+						umsg.Start("StarGate.EventHorizon.PlayerKill");
+						umsg.Entity(v);
+						umsg.End();
 					end
 					break;
 				end

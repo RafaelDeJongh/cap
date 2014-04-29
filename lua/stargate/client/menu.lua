@@ -111,7 +111,7 @@ spawnmenu.AddContentType( "cap_npc", function( container, obj )
 						local weapon = obj.weapon;
 						if ( gmod_npcweapon:GetString() != "" ) then weapon = gmod_npcweapon:GetString(); end
 
-						RunConsoleCommand( "gmod_spawnnpc", obj.spawnname, weapon );
+						RunConsoleCommand( "cap_spawnnpc", obj.spawnname, weapon );
 						surface.PlaySound( "ui/buttonclickrelease.wav" )
 					end
 
@@ -123,7 +123,7 @@ spawnmenu.AddContentType( "cap_npc", function( container, obj )
 							if ( gmod_npcweapon:GetString() != "" ) then weapon = gmod_npcweapon:GetString(); end
 
 							menu:AddOption( "Copy to Clipboard", function() SetClipboardText( obj.spawnname ) end )
-							menu:AddOption( "Spawn Using Toolgun", function() RunConsoleCommand( "gmod_tool", "creator" ); RunConsoleCommand( "creator_type", "2" ); RunConsoleCommand( "creator_name", obj.spawnname ); RunConsoleCommand( "creator_arg", weapon ); end )
+							menu:AddOption( "Spawn Using Toolgun", function() RunConsoleCommand( "gmod_tool", "cap_creator" ); RunConsoleCommand( "cap_creator_type", "2" ); RunConsoleCommand( "cap_creator_name", obj.spawnname ); RunConsoleCommand( "cap_creator_arg", weapon ); end )
 						menu:Open()
 
 					end
@@ -271,7 +271,11 @@ local function StargateAddTab(Categorised, pnlContent, tree, node)
 				self.PropPanel:SetTriggerSpawnlistChange( false )
 
 				for name, ent in SortedPairsByMemberValue( v, "Name" ) do
-
+					if (StarGate.CFG:Get(disabled,ent.__ClassName,false)) then continue end
+					local adm_only = false;
+					local tbl = StarGate.CFG:Get(adminonly,ent.__ClassName,""):TrimExplode(",");
+					if (table.HasValue(tbl,"add_shield")) then adm_only = true; end
+					
 					local weapon = "";
 					if ( ent.Weapons ) then
 						weapon = ent.Weapons[1];
@@ -283,6 +287,7 @@ local function StargateAddTab(Categorised, pnlContent, tree, node)
 						spawnname	= ent.__ClassName,
 						material	= "entities/"..ent.__ClassName..".png",
 						weapon		= weapon,
+						admin		= adm_only,
 						author		= ent.Author,
 						admin		= false
 					})

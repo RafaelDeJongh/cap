@@ -81,9 +81,10 @@ local function Workshop_res_Check()
 	return ret;
 end
 
-local oldfiles = {};
+local oldfiles,oldfpath = {},false;
 for k,v in pairs(file.Find("addons/carter_addon_pack_*.gma","GAME")) do
 	table.insert(oldfiles,v);
+	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
 end
 
 if (CLIENT) then
@@ -160,7 +161,11 @@ if (CLIENT) then
 						adds = adds.."<br>"..a;
 					end
 				end
-				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],adds);
+				if (v[1]=="sg_err_13" and v[3]) then
+					text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],v[3],adds);				
+				else
+					text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],adds);
+				end
 			else
 				text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v);
 			end
@@ -169,95 +174,8 @@ if (CLIENT) then
 		surface.PlaySound( "buttons/button2.wav" );
 
 		--local Width, Height = ScrW() * 0.8, ScrH() * 0.8 --Half screen size
-
-		local TACFrame = vgui.Create("DFrame");
-		TACFrame:SetPos(ScrW()/2-400, 50);
-		TACFrame:SetSize(800,ScrH()-100);
-		--TACFrame:SetSize(Width, Height);
-		TACFrame:SetTitle(SGLanguage.GetMessage("sg_err_title"));
-		TACFrame:SetVisible(true);
-		TACFrame:SetDraggable(true);
-		TACFrame:ShowCloseButton(true);
-		TACFrame:SetBackgroundBlur(false);
-		TACFrame:MakePopup();
-		--TACFrame:Center();
-		TACFrame.Paint = function()
-
-			// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
-			local matBlurScreen = Material( "pp/blurscreen" )
-
-			// Background
-			surface.SetMaterial( matBlurScreen )
-			surface.SetDrawColor( 255, 255, 255, 255 )
-
-			matBlurScreen:SetFloat( "$blur", 5 )
-			render.UpdateScreenEffectTexture()
-
-			surface.DrawTexturedRect( -ScrW()/10, -ScrH()/10, ScrW(), ScrH() )
-
-			surface.SetDrawColor( 100, 100, 100, 150 )
-			surface.DrawRect( 0, 0, ScrW(), ScrH() )
-
-			// Border
-			surface.SetDrawColor( 50, 50, 50, 255 )
-			surface.DrawOutlinedRect( 0, 0, TACFrame:GetWide(), TACFrame:GetTall() )
-
-			surface.SetDrawColor( 50, 50, 50, 255 )
-			surface.DrawRect( 20, 35, TACFrame:GetWide() - 40, TACFrame:GetTall() - 55 )
-
-		end
-
-		local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
-		MOTDHTMLFrame:SetPos( 25, 40 )
-		MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 65 )
-
-		local html = [[<html>
-		<head>
-		<style type='text/css'>
-			body {
-				background-color: #171717;
-				background-image: url(http://sg-carterpack.com/wp-content/uploads/2013/09/bg1.jpg);
-				background-repeat: repeat;
-				font-family: Verdana, Geneva, sans-serif;
-				color: #FFF;
-			}
-			a:link {
-				text-decoration: underline;
-				color: #e5e5e5;
-			}
-			a:visited {
-				text-decoration: underline;
-				color: #e5e5e5;
-			}
-			a:active {
-				text-decoration: underline;
-			}
-			a:hover {
-				text-decoration: underline;
-				color: #FFF;
-			}
-			#nav {
-				padding: 0px;
-				margin: 0px;
-				text-align: center;
-			}
-
-			#nav li {
-				display: inline-block;
-				list-style-type: none;
-
-			}
-		</style>
-		</head>
-		<body><hr><ul id="nav">
-			<li><a href="http://sg-carterpack.com/">Home</a> |</li>
-		    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
-		    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
-		    <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
-		</ul><hr>
-		<h2>]]..SGLanguage.GetMessage("sg_err_html_t").."</h2>"..text.."</body></html>";
-
-		MOTDHTMLFrame:SetHTML(html)
+		
+		StarGate.ShowCapMotd(SGLanguage.GetMessage("sg_err_title"),"<h2>"..SGLanguage.GetMessage("sg_err_html_t").."</h2>"..text)
 
 	end )
 
@@ -333,7 +251,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<449 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<450 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -416,7 +334,7 @@ if (table.getn(oldfiles)>0) then
 		MsgN("Status: "..status)
 	end
 	table.insert(StarGate_Group.ErrorMSG, {"Old workshop files found, please remove it.","13"});
-	table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_13",oldfiles});
+	table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_13",oldfiles,oldfpath});
 	MsgN("-------");
 	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end

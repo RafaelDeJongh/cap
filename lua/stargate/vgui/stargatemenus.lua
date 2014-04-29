@@ -806,7 +806,11 @@ function PANEL:SetSettings(entity,groupsystem)
 		self.VGUI.GroupTextEntry = vgui.Create("DMultiChoice",self);
 		self.VGUI.GroupStatus = vgui.Create("DLabel",self);
 
-		self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
+		if (self.IsSGU) then
+			self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_type"));		
+		else
+			self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
+		end
 		self.VGUI.GroupStatus:SetText("");
 	end
 
@@ -1404,7 +1408,7 @@ function PANEL:SetStatusGroup(s,g,no_message,letters,gs)
 end
 
 function PANEL:IsSharedGroup(group)
-	if (group=="U@#" or group=="SGI" or SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[group] and SG_CUSTOM_TYPES[group][2] and SG_CUSTOM_TYPES[group][2]>=1) then return true end
+	if (group=="U@#" or group=="SGI" or SG_CUSTOM_TYPES and SG_CUSTOM_TYPES[group] and SG_CUSTOM_TYPES[group][2]) then return true end
 	return false
 end
 
@@ -1431,7 +1435,8 @@ function PANEL:SetStatusSGU(s,g,no_message,letters,gs)
 					address:find(letters[4]) and
 					address:find(letters[5]) and
 					address:find(letters[6]) and
-					(group:len()==3 or not self:IsSharedGroup(group) and g == group)
+					group:len()==3 or 
+					not self:IsSharedGroup(group) and g == group
 				) then
 					if(tonumber(v.ent) == self.Entity:EntIndex()) then -- We have entered the same/similar address we had before - So we haven't changed anything
 						if (group:find(g)) then
@@ -1521,8 +1526,7 @@ function PANEL:SetStatusSGU(s,g,no_message,letters,gs)
 		local set = true;
 		for _,v in pairs(self:GetGates()) do
 			local group = v.group;
-			if(	not self:IsSharedGroup(group) and g == group
-			) then
+			if(not self:IsSharedGroup(group) and g == group) then
 				valid = false;
 				break;
 			end
@@ -1826,7 +1830,7 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 	self.AllowedSymbols = "[^0-9A-Z@]";
 	self.AllowedSymbolsTxt = "stargate_vgui_dialadr2";
 	self.MaxSymbols = 6;
-	self.VguiPos = {15,172,127};
+	self.VguiPos = {15,132,127};
 	if (self.GroupAllowed) then
 		if (self.LocalGate) then
 			self.AddressColumn = 2;
@@ -1834,7 +1838,7 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 			self.AllowedSymbols = "[^0-9A-Z@]";
 			self.AllowedSymbolsTxt = "stargate_vgui_dialadr2";
 			self.MaxSymbols = 6;
-			self.VguiPos = {15,172,127};
+			self.VguiPos = {15,132,127};
 			self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(128);
 			self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(60);
 			self.VGUI.Width = 60;
@@ -1846,7 +1850,7 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 			self.AllowedSymbols = "[^0-9A-Z@#]";
 			self.AllowedSymbolsTxt = "stargate_vgui_dialadr";
 			self.MaxSymbols = 9;
-			self.VguiPos = {30,182,137};
+			self.VguiPos = {30,142,137};
 			self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_glyphs")):SetFixedWidth(150);
 			self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_address2")):SetFixedWidth(80);
 			self.VGUI.Width = 80;
@@ -1893,13 +1897,16 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 		self:DialGate(List:GetColumnText(self.AddressColumn));
 	end
 
-	local w = 40
-	if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
+	--local w = 40
+	--if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
 
 	-- The Search Label
 	self.VGUI.SearchLabel:SetPos(0,0);
-	self.VGUI.SearchLabel:SetSize(w,self.VGUI.SearchLabel:GetTall());
+	self.VGUI.SearchLabel:SetSize(40,self.VGUI.SearchLabel:GetTall());
 	self.VGUI.SearchLabel:SetText(SGLanguage.GetMessage("stargate_vgui_search"));
+	self.VGUI.SearchLabel:SizeToContentsX();
+	local w,h = self.VGUI.SearchLabel:GetSize();
+	w = w+5;
 
 	-- The Search Field
 	self.VGUI.SearchTextEntry:SetPos(w,0);
@@ -1937,6 +1944,7 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 	--####### Apply Sizes: Address/Dial Fields - Positions set in PerformLayout
 	-- The Address Label
 	self.VGUI.AddressLabel:SetText(SGLanguage.GetMessage("stargate_vgui_address"));
+	self.VGUI.AddressLabel:SizeToContentsX();
 
 	-- The Address TextEntry
 	-- DMultiChoice instead of TextEntry and make it save the recent gate addresses being dialled!
@@ -2072,7 +2080,7 @@ function PANEL:UpdateLocalStage(locale)
 		self.AllowedSymbols = "[^0-9A-Z@#]";
 		self.AllowedSymbolsTxt = "stargate_vgui_dialadr2";
 		self.MaxSymbols = 6;
-		self.VguiPos = {15,172,127};
+		self.VguiPos = {15,132,127};
 		self.VGUI.Width = 60;
 	else
 		self.AddressColumn = 2;
@@ -2080,7 +2088,7 @@ function PANEL:UpdateLocalStage(locale)
 		self.AllowedSymbols = "[^0-9A-Z@#]";
 		self.AllowedSymbolsTxt = "stargate_vgui_dialadr";
 		self.MaxSymbols = 9;
-		self.VguiPos = {30,182,137};
+		self.VguiPos = {30,142,137};
 		self.VGUI.Width = 80;
 	end
 	self.VGUI.AddressMultiChoice.TextEntry:SetTooltip(SGLanguage.GetMessage(self.AllowedSymbolsTxt));
@@ -2157,7 +2165,8 @@ function PANEL:PerformLayout(w,h)
 	-- Fix a bug in the DListView: We will redraw it's Lines to fit to the altered size!
 	self.VGUI.AddressListView:DataLayout();
 	-- The Address Label
-	self.VGUI.AddressLabel:SetPos(w-self.VguiPos[2]+self.Correct_pos,0);
+	local lw,lh = self.VGUI.AddressLabel:GetSize();
+	self.VGUI.AddressLabel:SetPos(w-self.VguiPos[2]+self.Correct_pos-lw,0);
 	-- The Address TextEntry
 	self.VGUI.AddressMultiChoice:SetPos(w-self.VguiPos[3]+self.Correct_pos,0);
 	self.VGUI.DialTypeCheckbox:SetPos(w-55,3);

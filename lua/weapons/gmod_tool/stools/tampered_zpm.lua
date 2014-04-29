@@ -12,7 +12,6 @@ TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["model"] = "models/pg_props/pg_zpm/pg_zpm.mdl";
 TOOL.Entity.Class = "tampered_zpm";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("tampered_zpm","limit",3);
 TOOL.Topic["name"] = "Tampered ZPM Spawner";
 TOOL.Topic["desc"] = "Creates a Tampered ZPM";
 TOOL.Topic[0] = "Left click, to spawn a Tampered ZPM";

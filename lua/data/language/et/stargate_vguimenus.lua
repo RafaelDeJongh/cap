@@ -37,9 +37,6 @@ stargate_vgui_invalid = Keelatud
 stargate_vgui_edit = Muudan...
 stargate_vgui_srchtip = Sisesta Aadressi osad või nimi, et leida tähevärav
 stargate_vgui_search = Otsi:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 40
-// You can change it to own if word not fit in menu
 stargate_vgui_search2 = Otsi Täheväravaid
 stargate_vgui_refresh = Värskenda nimekiri
 stargate_vgui_dialadr = Tähevärava aadress, et valida. See saab ainult sisaldada tähti 0-9,A-Z, @ ja #.

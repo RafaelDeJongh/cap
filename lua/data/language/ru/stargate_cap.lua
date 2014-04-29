@@ -65,7 +65,7 @@ entity_dest_timer = Таймер Судьбы
 entity_kino_dis = Кино Диспенсер
 entity_lant_holo = Lantean Holo
 entity_malp = MALP
-entity_mcd = MCD
+entity_mcd = Молекулярный конструктор (MCD)
 entity_mcd_full = Устройство молекулярного строительства
 entity_shield_core = Ядро щита
 entity_ship_hangar = Ангар Кораблей
@@ -157,7 +157,7 @@ stool_sdhd = DHD Суперврат
 stool_tshield = Токра Излучатель Щита
 stool_tshieldc = Токра Контроллер Щита
 stool_tolland = Блокиратор Оружия Толлан
-stool_harvester = Harvester
+stool_harvester = Собиратель рейфов
 stool_controlpanel = Панель управления
 
 // Stool Names - Energy
@@ -172,7 +172,7 @@ stool_naq_bottle = Наквадах бутылка
 stool_drones = Дроны
 stool_naq_bomb = Наквадах Бомба
 stool_staff = Посох джаффа
-stool_tzpm = Подделаный МНТ
+stool_tzpm = Поддельный МНТ
 stool_wh_bomb = Бомба Рейфов
 
 // Stool Names - Ramps
@@ -243,6 +243,7 @@ atl_tp_error = Это название уже используется!
 
 // Misc
 kawoosh_hurt = Нестабильная Червоточина
+event_horizon = Горизонт Событий
 gate_nuke = Сгорел
 drone_kill = Дрон
 energy_pulse_kill = Энергетический Импульс
@@ -268,12 +269,14 @@ cap_prop_cat1 = Разное
 cap_prop_cat2 = Cap build
 cap_prop_cat3 = Catwalk build
 cap_menu_author = Автор
-cap_group_ent = Это устройство недоступно для вас!
-cap_group_swep = Это оружие недоступно для вас!
-cap_group_tool = Этот инструмент недоступен для вас!
+cap_group_ent = Это устройство недоступно для вашей группы!
+cap_group_swep = Это оружие недоступно для вашей группы!
+cap_group_tool = Этот инструмент недоступен для вашей группы!
+cap_group_npc = Этот персонаж недоступен для вашей группы!
 cap_disabled_ent = Это устройство выключено на сервере!
 cap_disabled_swep = Это оружие выключено на сервере!
 cap_disabled_tool = Этот иструмент выключен на сервере!
+cap_disabled_npc = Этот персонаж выключен на сервере!
 iris_gatespawner = Вы не можете заменить диафрагму gatespawner'а! Создайте компьютер диафрагмы для управления ею.
 iris_protection = Диафрагма успешно добавлена на врата gatespawner'а! Создайте компьютер диафрагмы для управления ею.
 
@@ -341,7 +344,7 @@ asgardtp_send = Отправить
 asgardtp_retrieve = Вернуть
 asgardtp_refresh = Обновить списки
 asgardtp_type1 = Игроки
-asgardtp_type2 = NPCs
+asgardtp_type2 = Персонажи
 asgardtp_type3 = Wire GPS
 asgardtp_busy = Азгард траспотрер занят!
 asgardtp_energy = Недостаточно энергии!

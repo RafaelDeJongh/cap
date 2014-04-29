@@ -107,8 +107,6 @@ maxpasses = 15
 delay = 0.3
 # Drained Energy per Shot? (Life Support)
 energy_per_shot = 100
-# What is the stationary staffweapon's limit?
-limit = 2
 
 #### ZPM config
 #### Please note: changing this values may break energy balance for stargate 8&9 chevron dialling
@@ -117,17 +115,12 @@ limit = 2
 capacity = 88000000
 # How much Zero-Point-Energy can a ZPM convert to "normal" energy?
 energy_capacity = 1000000
-# What is the ZPM's spawnlimit?
-limit = 6
 
 [tampered_zpm]
 # How much Zero-Point-Energy can a ZPM convert to "normal" energy?
 energy_capacity = 5000000
-# What is the ZPM's spawnlimit?
-limit = 3
 
 [naquadah_bottle]
-limit = 5
 capacity = 30000
 energy_capacity = 8000
 
@@ -166,8 +159,6 @@ allow_containment = true
 max_size = 2048
 # If a shield is stationary (= not moving around - E.g. on a citiy or planet), this multiplier will make it x times stronger compared to a mobile shield (on ships etc)
 stationary_shield_multiplier = 10
-# What is the shield's spawnlimit?
-limit = 1
 
 #### Drone launcher config
 [drone]
@@ -191,8 +182,6 @@ max_drones = 5
 energy_per_shot = 200
 # Maxspeed of the drone. Setting this above 6000 will fail and/or crash your game. It also makes the drones fly ugly. My suggestion is 6000
 maxspeed = 6000
-# What is the dronelauncher's spawnlimit?
-limit = 2
 
 #### Catdaemon's Harvester
 [harvester]
@@ -213,8 +202,6 @@ disallowed_entities = prop_door_rotating,stargate_atlantis,stargate_sg1,dhd_atla
 [cloaking]
 # How much energy to consume per second?
 energy = 300
-#How much cloaking generators can a person spawn?
-limit = 1
 # These classnames can't get cloaked
 classnames = cloaking,shield,physgun_beam,Beam_Drawer,predicted_viewmodel,player_manager,bodyque,ai_network,info_player_start,water_lod_control,scene_manager,network,soundent,gmod_ghost,beam_drawer2b,logic_case
 # Theses entities will have 1 alpha instead of 0, because they need to be drawn (e.g. wraith harverster - otherwise, it doesnt has a beam)
@@ -226,10 +213,8 @@ max_size = 1024
 [mobile_dhd]
 # How long is the range you can use it?
 range=3000
-# How much can you spawn?
-limit=3
 
-#### Staffweapon config
+#### RononDex Gun config
 [dexgun]
 # Damage and damageradius
 damage = 200
@@ -237,16 +222,18 @@ radius = 100
 # How much can a dexgun pulse go through breakable objects until it shall die?
 maxpasses = 3
 
-#### Asgard Teleporter config
-[teleporter]
+#### Asgard Transporter config
+[asgard_transporter]
 # These entity types are disallowed to teleportation
 classnames = cloaking,shield,physgun_beam,Beam_Drawer,predicted_viewmodel,player_manager,bodyque,ai_network,info_player_start,water_lod_control,scene_manager,network,soundent,gmod_ghost,beam_drawer2b,logic_case
+# Time between teleportations
+busy_time = 5
 
 #### Black hole config
 [black_hole]
 amount = 500000
 resources = energy,oxygen,nitrogen,water,steam,heavy water,hydrogen,carbon dioxide,liquid nitrogen,hot liquid nitrogen,methane,propane,deuterium,tritium
-disallow = info_player_start,physgun_beam,predicted_viewmodel,black_hole_power,env_sprite,stargate_supergate
+disallow = info_player_start,physgun_beam,predicted_viewmodel,black_hole_power,env_sprite,stargate_supergate,player_manager,bodyque,ai_network
 
 #### Naquadah generator mk1
 [naq_gen_mk1]
@@ -275,7 +262,7 @@ nuke_explode = true
 #### Rings
 [ring]
 # These entity types are disallowed to teleportation
-classnames = physgun_beam, gmod_ghost
+classnames = cloaking,shield,physgun_beam,Beam_Drawer,predicted_viewmodel,player_manager,bodyque,ai_network,info_player_start,water_lod_control,scene_manager,network,soundent,gmod_ghost,beam_drawer2b,logic_case
 
 #### Ring panels
 [ring_panel]
@@ -285,24 +272,23 @@ menu = true
 #### Atlantis transporter
 [atlantis_transporter]
 # These entity types are disallowed to teleportation
-classnames = physgun_beam, gmod_ghost
+classnames = cloaking,shield,physgun_beam,Beam_Drawer,predicted_viewmodel,player_manager,bodyque,ai_network,info_player_start,water_lod_control,scene_manager,network,soundent,gmod_ghost,beam_drawer2b,logic_case
 
 #### Stargate Overloader
 # energyCapacity less value - faster overload, higher value = slower overload
-# energyPerSecond - how much drain energy
 # coolingPerCycle - how fast gate cooling
 [gate_overloader]
 energyCapacity = 580000
 coolingPerCycle = 300
 
 #### molecular_construction_device
-[MCD]
+[mcd]
 allow_tzmp = true
 tzmp_chance = 2
 # if chance = 2, then this means 50%, 3 will mean 33%, etc. 1 = always
 
 #### Tacluchnatagamuntoron (Tac)
-[TAC]
+[tac]
 # Interval between shoots, in seconds
 shoot_interval = 0.5
 # Maximum targets in one interval for kill mode
@@ -321,6 +307,7 @@ max_kino = 4
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
+# add exclude_mod for invert - player should NOT have this group
 # default groups: user, operator, admin, superadmin
 [ent_groups_only]
 ag_3 = admin,superadmin,add_shield
@@ -336,6 +323,9 @@ stargate_supergate = admin,superadmin,add_shield
 # add_shield means add shield icon to spawnmenu
 [swep_groups_only]
 
+# Group-only npcs
+[npc_groups_only]
+
 # Group-only tools
 [tool_groups_only]
 
@@ -345,6 +335,9 @@ stargate_supergate = admin,superadmin,add_shield
 
 # Disabled sweps
 [cap_disabled_swep]
+
+# Disabled npcs
+[cap_disabled_npc]
 
 # Disabled tools
 # Note: tools will still displaying in stargate tab, but player can't use it.

@@ -37,10 +37,6 @@ stargate_vgui_invalid = Geçersiz.
 stargate_vgui_edit = Değiştiriliyor...
 stargate_vgui_srchtip = Bir Geçit bulmak için adres veya ismini girin.
 stargate_vgui_search = Ara:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 40
-// You can change it to own if word not fit in menu
-// Note: this is comments (after //) so you shouldn't translate it :)
 stargate_vgui_search2 = Stargate Ara
 stargate_vgui_refresh = Listeyi Yenile
 stargate_vgui_dialadr = Bir Stargate Adresi Aramak İçin. Sadece bu karakterler içerebilir 0-9,A-Z, @ ve #.

@@ -48,7 +48,7 @@ list.Set(TOOL.List,"models/iziraider/kinoremote/w_kinoremote.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "mobile_dhd";
 TOOL.Entity.Keys = {"toggle","model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("mobile_dhd","limit",3); -- A person generally can spawn 1 mobile dhd
+TOOL.Entity.Limit = 3; -- A person generally can spawn 1 mobile dhd
 
 -- Add the topic texts, you see in the upper left corner
 TOOL.Topic["name"] = "Mobile DHD Spawner";

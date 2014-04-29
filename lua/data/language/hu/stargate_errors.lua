@@ -15,6 +15,8 @@ sg_err_09 =[[Iratkozzon fel az összes workshop-os addon-ra hogy működjön a C
 <br>
 <br>Lehetséges az is hogy néhány fájl rosszul lett letöltve:
 %s
+<br>
+<br>Ha itt van néhány dolog a listáról, akkor győzőgyjön meg arról hogy fel e iratkozott rájuk és ha fel iratkozott akkor törölje a .gma fájlokat az addons mappából majd hagyja hogy a Steam/Garry's Mod újra letöltse.
 ]]
 sg_err_10 = A github verziós cap_resources telepítve.<br>Kérem törölje a  cap_resources mappát ha fel van iratkozva a  the Carter Addon Pack Workshop Kollekcióra.
 sg_err_11 =[[ Custom Fonts nincs telepítve, töltse le innen és telepítse az addons mappába:
@@ -27,8 +29,9 @@ sg_err_11 =[[ Custom Fonts nincs telepítve, töltse le innen és telepítse az 
 <br>Azért kell letöltenie ezeket mert a steam műhely(gma)fájlai nem támogassák a saját betűket(pl:csillagkapu jelek) (Gmod hiba).
 ]]
 sg_err_12 = Cap_resources mappa lejárt!<br>Kérem frissítse.
-sg_err_13 = [[Old workshop files found.
-<br>Please remove following files inside “Steam\steamapps\COMMON\GarrysMod\garrysmod\addons” folder:
+sg_err_13 = [[Régi műhelyi fájlok találhatóak.
+<br>Kérem törölje az alábbi fájlokat a mappából:
+<br>"%s"
 <br>%s
 ]]
 sg_err_14 = [[A Wiremod lejárt, kérem frissítse hogy a CAP jól működjön.

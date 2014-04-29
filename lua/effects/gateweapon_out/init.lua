@@ -38,7 +38,7 @@ function EFFECT:Init(data)
 	self.AimVector	= self.TargetEnt:GetForward();
 	self.Draw		= false;
 
-	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
+	self.Entity:SetRenderBoundsWS(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
 end
 
 function EFFECT:Think()
@@ -47,7 +47,9 @@ function EFFECT:Think()
 	self.AimVector	= self.TargetEnt:GetForward();
 	self.StargateTrace = StarGate.Trace:New(self.StartPos+self.AimVector*5, self.AimVector*1000000000, {self.Parent, self.Target});
 
-	self.Draw = not IsValid(StarGate.FindEntInsideSphere(self.StartPos, 50, "stargate_iris")[1]);
+	local iris = StarGate.FindEntInsideSphere(self.StartPos, 50, "stargate_iris");
+	
+	self.Draw = not (IsValid(iris[1]) and iris[1]:GetNWBool("Activated"));
 	return true
 end
 
@@ -61,15 +63,19 @@ function EFFECT:Render()
 		render.DrawBeam(self.StartPos, self.StargateTrace.HitPos, 260, texcoor, texcoor+self.Length/256, Color(255,0,0,150));
 
 		local pos = self.StartPos + self.AimVector*4;
-		render.SetMaterial(self.GlowMat2);
-		render.DrawQuadEasy(pos, self.AimVector, 1200, 1200);
-		render.SetMaterial(self.GlowMat3);
-		render.DrawQuadEasy(pos, self.AimVector, 700, 700);
+		if (StarGate.LOSVector(EyePos(), pos, {GetViewEntity(),self.Parent}, 10)) then
+			render.SetMaterial(self.GlowMat2);
+			render.DrawQuadEasy(pos, self.AimVector, 1200, 1200);
+			render.SetMaterial(self.GlowMat3);
+			render.DrawQuadEasy(pos, self.AimVector, 700, 700);
+		end
 
 		local pos = self.StargateTrace.HitPos-self.AimVector*5;
-		render.SetMaterial(self.GlowMat2);
-		render.DrawSprite(pos, 800, 800);
-		render.SetMaterial(self.GlowMat3);
-		render.DrawSprite(pos, 900, 900)
+		if (StarGate.LOSVector(EyePos(), pos, {GetViewEntity(),self.Parent}, 10)) then
+			render.SetMaterial(self.GlowMat2);
+			render.DrawSprite(pos, 800, 800);
+			render.SetMaterial(self.GlowMat3);
+			render.DrawSprite(pos, 900, 900)
+		end
 	end;
 end

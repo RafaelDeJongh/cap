@@ -36,7 +36,7 @@ function TOOL:LeftClick( trace, attach )
 	-- type 2 = npc
 	--
 	if ( SERVER && type == 2 ) then
-		Spawn_NPC( self:GetOwner(), name, arg, trace )
+		CAP_Spawn_NPC( self:GetOwner(), name, arg, trace )
 	end
 
 	--

@@ -36,9 +36,6 @@ stargate_vgui_invalid = Nevažeći/a
 stargate_vgui_edit = Uređuje se...
 stargate_vgui_srchtip = Upiši djelove adrese ili imena da nađeš SGate.
 stargate_vgui_search = Traži:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 40
-// You can change it to own if word not fit in menu
 stargate_vgui_search2 = Traži Stargate
 stargate_vgui_refresh = Osvježi listu
 stargate_vgui_dialadr = Adresa za zvanje. Može sadržavati znakove 0-9,A-Z, @ i #.

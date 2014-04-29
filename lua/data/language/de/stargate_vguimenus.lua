@@ -37,10 +37,6 @@ stargate_vgui_invalid = Ungültig
 stargate_vgui_edit = Editiere...
 stargate_vgui_srchtip = Gebe Teile der Adresse oder den Namen ein um das Gate zu finden
 stargate_vgui_search = Suche:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 40
-// You can change it to own if word not fit in menu
-// Note: this is comments (after //) so you shouldn't translate it :)
 stargate_vgui_search2 = Suche Stargate
 stargate_vgui_refresh = Aktualisiere Liste
 stargate_vgui_dialadr = Die zu wählende Adresse vom Stargate. Es kann nur die Zeichen 0-9,A-Z, @ und # enthalten.

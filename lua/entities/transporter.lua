@@ -40,9 +40,10 @@ function ENT:Initialize()
 	self:CreateWireInputs("Origin [VECTOR]","Origin X","Origin Y","Origin Z","Dest [VECTOR]","Dest X","Dest Y","Dest Z","Teleport Everything","Send","Retrieve","Disable Use");
 	self:CreateWireOutputs("Teleport Distance","Targets at Origin","Targets at Destination");
 	self.Disallowed = {};
-	for _,v in pairs(StarGate.CFG:Get("teleporter","classnames",""):TrimExplode(",")) do
+	for _,v in pairs(StarGate.CFG:Get("asgard_transporter","classnames",""):TrimExplode(",")) do
 		self.Disallowed[v:lower()] = true;
 	end
+	self.BusyTime = StarGate.CFG:Get("asgard_transporter","busy_time",5);
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
 		phys:Wake();
@@ -266,7 +267,7 @@ function ENT:Teleport(from,to,ply,gps_ent)
 			return
 		end
 		self:ConsumeResource("energy",needed_energy);
-		self.Next = time + 5;
+		self.Next = time + self.BusyTime;
 
 		if (IsValid(ply)) then
 			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"asgardtp_succ\"), NOTIFY_GENERIC, 4); surface.PlaySound( \"buttons/button9.wav\" )");
@@ -551,6 +552,7 @@ net.Receive("CAP.AsgardTransporter",function(len)
 	DermaPanel.targetType = targetType;
 
 	local targetList = vgui.Create( "DListView", DermaPanel )
+	targetList:SetMultiSelect(false)
 	targetList:SetPos(20, 55)
 	targetList:SetSize(160, 200)
 	targetList:AddColumn(SGLanguage.GetMessage("asgardtp_target"))
@@ -579,6 +581,7 @@ net.Receive("CAP.AsgardTransporter",function(len)
 	end
 	destType:SetToolTip(SGLanguage.GetMessage("asgardtp_dest_desc"));
 	local destList = vgui.Create( "DListView", DermaPanel )
+	destList:SetMultiSelect(false)
 	destList:SetPos(200, 55)
 	destList:SetSize(160, 200)
 	destList:AddColumn(SGLanguage.GetMessage("asgardtp_dest"))

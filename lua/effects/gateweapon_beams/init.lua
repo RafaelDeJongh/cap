@@ -44,7 +44,7 @@ function EFFECT:Init(data)
 	self.Length = 256;
 	self.AimVector = self.EH:GetForward();
 
-	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
+	self.Entity:SetRenderBoundsWS(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
 end
 
 function EFFECT:Think()
@@ -104,16 +104,20 @@ function EFFECT:Render()
 		render.DrawBeam(self.MainStart, self.EndPos, 50, texcoor, texcoor+self.Length/256, Color(255,50,50,150));
 
 		local pos = self.EndPos + self.AimVector*4;
-		render.SetMaterial(self.GlowMat2);
-		render.DrawQuadEasy(pos, self.AimVector, 400, 400);
-		render.SetMaterial(self.GlowMat3);
-		render.DrawQuadEasy(pos, self.AimVector, 450, 450);
+		if (StarGate.LOSVector(EyePos(), pos, {GetViewEntity(),self.EH}, 10)) then
+			render.SetMaterial(self.GlowMat2);
+			render.DrawQuadEasy(pos, self.AimVector, 400, 400);
+			render.SetMaterial(self.GlowMat3);
+			render.DrawQuadEasy(pos, self.AimVector, 450, 450);
+		end
 	end
 
-	render.SetMaterial(self.GlowMat2);
-	render.DrawSprite(self.MainStart, 25, 25, Color(255,50,50,255));
-	render.SetMaterial(self.GlowMat3);
-	render.DrawSprite(self.MainStart, 25, 25, Color(255,50,50,255));
+	if (StarGate.LOSVector(EyePos(), self.MainStart, {GetViewEntity()}, 10)) then
+		render.SetMaterial(self.GlowMat2);
+		render.DrawSprite(self.MainStart, 25, 25, Color(255,50,50,255));
+		render.SetMaterial(self.GlowMat3);
+		render.DrawSprite(self.MainStart, 25, 25, Color(255,50,50,255));
+	end
 
 	if StarGate.VisualsWeapons("cl_asuran_laser") then
 		for _,startbeam in pairs(self.SmallBeamStart) do
@@ -129,10 +133,12 @@ function EFFECT:Render()
 				render.DrawSprite(startbeam, 45, 45, Color(255,255,255,255));
 			end
 
-			render.SetMaterial(self.GlowMat2);
-			render.DrawSprite(startbeam, 30, 30, Color(255,50,50,255));
-			render.SetMaterial(self.GlowMat3);
-			render.DrawSprite(startbeam, 30, 30, Color(255,50,05,255));
+			if (StarGate.LOSVector(EyePos(), startbeam, {GetViewEntity()}, 10)) then
+				render.SetMaterial(self.GlowMat2);
+				render.DrawSprite(startbeam, 30, 30, Color(255,50,50,255));
+				render.SetMaterial(self.GlowMat3);
+				render.DrawSprite(startbeam, 30, 30, Color(255,50,05,255));
+			end
 		end
 	end
 

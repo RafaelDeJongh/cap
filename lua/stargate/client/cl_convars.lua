@@ -6,6 +6,7 @@ CreateClientConVar("cl_stargate_visualsmisc",1,true,false); -- Global - Turns on
 CreateClientConVar("cl_stargate_visualsweapon",1,true,false); -- Global - Turns on or off all visuals which may suck FPS. Turning this to off will turn of all. If it's on, the one below will be used
 
 CreateClientConVar("cl_stargate_dynlights",0,true,false);
+CreateClientConVar("cl_stargate_un_dynlights",0,true,false);
 CreateClientConVar("cl_stargate_ripple",0,true,false);
 CreateClientConVar("cl_stargate_kenter",1,true,false);
 CreateClientConVar("cl_stargate_effects",1,true,false);

@@ -18,10 +18,10 @@ if SERVER then
 		self:SetModel("models/boba_fett/tac/w_tac.mdl");
 		self:SetRenderMode(RENDERMODE_NORMAL);
 
-		self.MaxShoots = StarGate.CFG:Get("TAC","max_shoots",50);
-		self.MaxTargets = StarGate.CFG:Get("TAC","max_targets",5);
-		self.ThinkInterval = StarGate.CFG:Get("TAC","shoot_interval",0.5);
-		self.Range = StarGate.CFG:Get("TAC","range",800);
+		self.MaxShoots = StarGate.CFG:Get("tac","max_shoots",50);
+		self.MaxTargets = StarGate.CFG:Get("tac","max_targets",5);
+		self.ThinkInterval = StarGate.CFG:Get("tac","shoot_interval",0.5);
+		self.Range = StarGate.CFG:Get("tac","range",800);
 
 		self.Shoots = 0;
 	end

@@ -339,7 +339,7 @@ function ENT:Think()
 		end
 	end
 
-   if(self.HasRD) then
+   if(self.HasRD and self.isActive) then
       local energyAvailable = self:GetResource("energy")
       self:ConsumeResource("energy", self.energyPerCycle*100)
       -- If there isn't enough energy left to power the beam for another second, stop firing

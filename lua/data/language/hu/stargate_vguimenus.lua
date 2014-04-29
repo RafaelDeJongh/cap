@@ -37,9 +37,6 @@ stargate_vgui_invalid = Érvénytelen
 stargate_vgui_edit = Módosítás...
 stargate_vgui_srchtip = Adja meg a címet vagy nevet hogy megtalálhassa a kaput!
 stargate_vgui_search = Keresés:
-// Ez az érték a vgui menu szélleségi keresési mező
-stargate_vgui_search_width = 45
-// Megcserélheti ha a betű nem megfelelő a menüben
 stargate_vgui_search2 = Kapu Keresése
 stargate_vgui_refresh = Lista frissítése
 stargate_vgui_dialadr = A csillagkapu címe a tárcsázáshoz.(0-9,A-Z, @ a #. karakterek lehetnek benne )

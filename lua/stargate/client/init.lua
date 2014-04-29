@@ -117,16 +117,26 @@ hook.Add("PlayerBindPress","StarGate.Hook.GetInternetStatus",StarGate.Hook.GetIn
 --################# Getting synced data from the server @aVoN
 function StarGate.CFG.GetSYNC(len)
 	local name = net.ReadString();
+	-- fix for reload
+	if (name=="_CFG_RELOAD_") then
+		if (StarGate.CFG.Get and type(StarGate.CFG.Get)=="function") then
+			local copy = StarGate.CFG.Get;
+			StarGate.CFG = {};
+			StarGate.CFG.Get = copy;
+		end
+		return
+	end
 	StarGate.CFG[name] = {};
-	for i=1,net.ReadInt(8) do
+	local count = net.ReadUInt(8);
+	for i=1,count do
 		local k = net.ReadString();
-		local t = net.ReadInt(8); -- What type are we?
+		local t = net.ReadUInt(8); -- What type are we?
 		if(t == 0) then
 			StarGate.CFG[name][k] = util.tobool(net.ReadBit());
 		elseif(t == 1) then
 			StarGate.CFG[name][k] = net.ReadString();
 		elseif(t == 2) then
-			StarGate.CFG[name][k] = net.ReadFloat();
+			StarGate.CFG[name][k] = net.ReadDouble();
 		elseif(t == 3) then
 			StarGate.CFG[name][k] = net.ReadInt(8);
 		elseif(t == 4) then
@@ -198,17 +208,14 @@ function StarGate.InstalledOnClient()
 	return false;
 end
 
-net.Receive( "CAP_GATESPAWNER", function( length )
-	local map = net.ReadString();
-	local path = net.ReadString();
-
+function StarGate.ShowCapMotd(title,text)
 	local TACFrame = vgui.Create("DFrame");
-	TACFrame:SetPos(ScrW()/2-400, 50);
-	TACFrame:SetSize(800,ScrH()-100);
+	TACFrame:SetPos(50, 50);
+	TACFrame:SetSize(ScrW()-100,ScrH()-100);
 	--TACFrame:SetSize(Width, Height);
-	TACFrame:SetTitle(SGLanguage.GetMessage("sg_gtsp_title"));
+	TACFrame:SetTitle(title);
 	TACFrame:SetVisible(true);
-	TACFrame:SetDraggable(true);
+	TACFrame:SetDraggable(false);
 	TACFrame:ShowCloseButton(true);
 	TACFrame:SetBackgroundBlur(false);
 	TACFrame:MakePopup();
@@ -286,8 +293,14 @@ net.Receive( "CAP_GATESPAWNER", function( length )
 	    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
 	    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
 	    <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
-	</ul><hr>]]..SGLanguage.GetMessage("sg_stsp_text",map,map,path).."</body></html>";
+	</ul><hr>]]..text.."</body></html>";
 
 	MOTDHTMLFrame:SetHTML(html)
+end
 
+net.Receive( "CAP_GATESPAWNER", function( length )
+	local map = net.ReadString();
+	local path = net.ReadString();
+
+	StarGate.ShowCapMotd(SGLanguage.GetMessage("sg_gtsp_title"),SGLanguage.GetMessage("sg_stsp_text",map,map,path))
 end)

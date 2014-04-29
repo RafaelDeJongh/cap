@@ -168,6 +168,7 @@ function ENT:Toggle(ignore_energy)
 			self.Action:Open(deactivate);
 			self.IsActivated = false
 			self:SetWire("Activated",false);
+			self:SetNWBool("Activated",false);
 		else
 			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsComputer()) then return end
 			if(self.HasRD and self.Entity:GetModel() == "models/zup/stargate/sga_shield.mdl") then
@@ -190,6 +191,7 @@ function ENT:Toggle(ignore_energy)
 			self.Action:Close();
 			self.IsActivated = true;
 			self:SetWire("Activated",true);
+			self:SetNWBool("Activated",true);
 		end
 	end
 end
@@ -208,6 +210,7 @@ function ENT:TrueActivate(deactivate,wire)
 			self.Action:Open(not wire);
 			self.IsActivated = false
 			self:SetWire("Activated",false);
+			self:SetNWBool("Activated",false);
 		elseif (not self.IsActivated and not deactivate) then
 			if (not ignore_energy and IsValid(self.GateLink) and self.GateLink.GateSpawnerSpawned and not self:IsComputer()) then
 				if (IsValid(self.Owner)) then
@@ -235,6 +238,7 @@ function ENT:TrueActivate(deactivate,wire)
 			self.Action:Close();
 			self.IsActivated = true;
 			self:SetWire("Activated",true);
+			self:SetNWBool("Activated",true);
 		end
 	end
 end

@@ -39,7 +39,7 @@ SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo = "none";
 
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
-list.Add("NPCUsableWeapons", {class = "weapon_blaster", title = SWEP.PrintName});
+list.Add("NPCUsableWeapons", {class = "wraith_blaster", title = SWEP.PrintName or ""});
 
 SWEP.Sounds = Sound("weapons/wraith_stunner.wav");
 

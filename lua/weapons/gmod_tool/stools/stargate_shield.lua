@@ -58,7 +58,7 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "shield_generator";
 TOOL.Entity.Keys = {"toggle_shield","model","size","immunity","strength_multiplier","r","g","b","bubble","containment","passing_draw","Strength","anti_noclip"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("shield","limit",1); -- A person generally can spawn 1 shield
+TOOL.Entity.Limit = 1; -- A person generally can spawn 1 shield
 
 -- Add the topic texts, you see in the upper left corner
 TOOL.Topic["name"] = "Shield Spawner";

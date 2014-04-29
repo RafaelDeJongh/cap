@@ -51,7 +51,7 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "cloaking_generator";
 TOOL.Entity.Keys = {"toggle_cloak","model","size","immunity","phase_shift","attached"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("cloaking","limit",1);
+TOOL.Entity.Limit = 1;
 
 -- Add the topic texts, you see in the upper left corner
 TOOL.Topic["name"] = "Cloaking Spawner";

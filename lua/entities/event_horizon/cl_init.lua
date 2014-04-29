@@ -3,6 +3,14 @@ include("modules/bullets.lua");
 include("modules/collision.lua");
 
 ENT.RenderGroup = RENDERGROUP_OPAQUE -- This FUCKING THING avoids the clipping bug I have had for ages since stargate BETA 1.0. DAMN!
+if (SGLanguage and SGLanguage.GetMessage) then
+	ENT.PrintName = SGLanguage.GetMessage("event_horizon");
+	language.Add("event_horizon",SGLanguage.GetMessage("event_horizon"))
+end
+
+if(file.Exists("materials/VGUI/weapons/event_horizon_killicon.vmt","GAME")) then
+	killicon.Add("event_horizon","VGUI/weapons/event_horizon_killicon",Color(255,255,255));
+end
 
 --################# Think @aVoN
 function ENT:Think()
@@ -39,7 +47,8 @@ end
 function ENT:Draw()
 	self.BaseClass.Draw(self);
 	local alpha = self.Entity:GetColor().a;
-	if((LocalPlayer():GetShootPos()-self.Entity:GetPos()):DotProduct(self.Entity:GetForward()) < 0) then -- Behind
+	--if((LocalPlayer():GetShootPos()-self.Entity:GetPos()):DotProduct(self.Entity:GetForward()) < 0) then -- Behind
+	if ((EyePos()-self.Entity:GetPos()):DotProduct(self.Entity:GetForward()) < 0) then
 		alpha = math.Clamp(alpha,1,150);
 		-- We are looking from behind on the gate
 	elseif(alpha == 150) then
@@ -139,4 +148,10 @@ usermessage.Hook( "StarGate.EventHorizon.ClipStop", function(um)
 	if(not(IsValid(e))) then return end;
 	e.dir = nil;
 	e:SetRenderClipPlaneEnabled(false);
+end)
+
+usermessage.Hook( "StarGate.EventHorizon.PlayerKill", function(um)
+	local e = um:ReadEntity();
+	if(not(IsValid(e))) then return end;
+	GAMEMODE:AddDeathNotice("#event_horizon",-1,"event_horizon",e:Name(),e:Team());
 end)

@@ -80,7 +80,7 @@ entity_sodan_obelisk = Sodan Obelisk
 sodan_obelisk_menu = Set obelisk password (only numbers from 1 to 6!):
 
 // Npcs
-npc_cat = NPC
+npc_cat = NPCs
 npc_wraith = Wraith
 npc_prior = Prior
 npc_goauld = Goauld
@@ -243,6 +243,7 @@ atl_tp_error = This name already in use!
 
 // Misc
 kawoosh_hurt = Unstable Vortex
+event_horizon = Event Horizon
 gate_nuke = Incinerated
 drone_kill = Drone
 energy_pulse_kill = Energy Pulse
@@ -268,12 +269,14 @@ cap_prop_cat1 = Misc
 cap_prop_cat2 = Cap build
 cap_prop_cat3 = Catwalk build
 cap_menu_author = Author
-cap_group_ent = This entity is not allowed for you!
-cap_group_swep = This weapon is not allowed for you!
-cap_group_tool = This tool is not allowed for you!
+cap_group_ent = This entity is not allowed for your group!
+cap_group_swep = This weapon is not allowed for your group!
+cap_group_tool = This tool is not allowed for your group!
+cap_group_npc = This npc is not allowed for your group!
 cap_disabled_ent = This entity is disabled on server!
 cap_disabled_swep = This weapon is disabled on server!
 cap_disabled_tool = This tool is disabled on server!
+cap_disabled_npc = This npc is disabled on server!
 iris_gatespawner = You can't override the gatespawner's iris! Spawn an iris computer to control it.
 iris_protection = Iris has been successfully added to the gatespawner's stargate, spawn an iris computer to control it.
 

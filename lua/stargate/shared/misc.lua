@@ -46,34 +46,37 @@ if (StarGate.CheckModule("npc")) then
 local NPC =
 {
 	Name = SGLanguage.GetMessage("npc_wraith"),
-	Class = "npc_combine_s",
+	Class = "npc_metropolice",
 	KeyValues = {},
 	Model = "models/pg_props/pg_charaktere/pg_wraith_test.mdl",
 	Health = "300",
 	Category = SGLanguage.GetMessage("npc_cat"),
-	Author = "ProgSys"
+	Author = "ProgSys",
+	Weapons = {"wraith_blaster"}
 }
 
 local NPC2 =
 {
 	Name = SGLanguage.GetMessage("npc_prior"),
-	Class = "npc_combine_s",
+	Class = "npc_metropolice",
 	KeyValues = {},
 	Model = "models/tiny/Playermodels/Prior_PM.mdl",
 	Health = "200",
 	Category = SGLanguage.GetMessage("npc_cat"),
-	Author = "Tiny"
+	Author = "Tiny",
+	Weapons = {"ori_staff_weapon"}
 }
 
 local NPC3 =
 {
 	Name = SGLanguage.GetMessage("npc_goauld"),
-	Class = "npc_combine_s",
+	Class = "npc_metropolice",
 	KeyValues = {},
 	Model = "models/ViktorK/player/anubis.mdl",
 	Health = "200",
 	Category = SGLanguage.GetMessage("npc_cat"),
-	Author = "ViktorK"
+	Author = "ViktorK",
+	Weapons = {"weapon_staff"}
 }
 
 local NPC4 =
@@ -88,14 +91,7 @@ local NPC4 =
 	Weapons = {"fnp90"}
 }
 
-if (SERVER) then
-	-- needed or npc won't spawn
-	list.Set( "NPC", "npc_wraith", NPC )
-	list.Set( "NPC", "npc_prior", NPC2 )
-	list.Set( "NPC", "npc_goauld", NPC3 )
-	list.Set( "NPC", "npc_sg_soldier", NPC4 )
-end
--- this ones needed for add in stargate tab
+-- needed or npc won't spawn + for add in stargate tab
 list.Set( "CAP.NPC", "npc_wraith", NPC )
 list.Set( "CAP.NPC", "npc_prior", NPC2 )
 list.Set( "CAP.NPC", "npc_goauld", NPC3 )

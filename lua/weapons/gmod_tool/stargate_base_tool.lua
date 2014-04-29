@@ -46,6 +46,7 @@ function TOOL:Register()
 	if(self.Language["Cleanup"]) then
 		cleanup.Register(class or self.Mode);
 	end
+	list.Set("CAP.Tool",self.Mode,self);
 	if CLIENT then
 		local d = ".";
 		for k,v in pairs(self.Topic) do

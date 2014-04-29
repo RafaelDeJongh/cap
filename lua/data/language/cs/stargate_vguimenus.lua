@@ -37,9 +37,6 @@ stargate_vgui_invalid = Neplatný
 stargate_vgui_edit = Edituji...
 stargate_vgui_srchtip = Zadejte část adresy nebo jméno pro nalezení brány
 stargate_vgui_search = Hledat:
-// This if width value for vgui menu of search field
-stargate_vgui_search_width = 40
-// You can change it to own if word not fit in menu
 stargate_vgui_search2 = Vyhledat Bránu
 stargate_vgui_refresh = Obnovit seznam
 stargate_vgui_dialadr = Adresa zadávané brány. Může obsahovat pouze 0-9,A-Z, @ a #.
