@@ -1,4 +1,4 @@
-﻿stargate_credits_01 = Készítők
+stargate_credits_01 = Készítők
 stargate_credits_02 = Itt elküldheti a hibákat. Ha nem tudja beírni HTML-Formulákban, látogasd meg %s a böngésződdel.
 stargate_credits_03 = Nem lehet meghatározni az új verziót. Kösse vissza az internetet vagy lépjen kapcsolatba Madman097-el.
 stargate_credits_04 = Nem lehet meghatározni a jelenlegi verziót. Nézze meg hogy rendesen töltötte e le vagy frissítette a capot és hogy létezik e a cap_ver.lua az addons/cap/lua mappában.

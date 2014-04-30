@@ -1,4 +1,4 @@
-﻿global_lang_name = Magyar
+global_lang_name = Magyar
 
 stargate_category = Kapuk és Gyűrűk
 stargate_address = Cím

@@ -1,4 +1,4 @@
-﻿// Gyűrűk
+// Gyűrűk
 ring_ancient = Gyűrűk (Ősi)
 ring_goauld = Gyűrűk(Goauld)
 ring_ori = Gyűrűk (Ori)
@@ -74,6 +74,7 @@ entity_stone = Kő
 entity_stone_tablet = Kőtábla
 entity_telchak = Telchak Gyógyító eszköz
 entity_atlantist = Atlantisz Transzportere
+
 // Sodan obelisk
 entity_sodan_obelisk = Sodan Obeliszk
 sodan_obelisk_menu = Állítsa be az obeliszk jelszavát (Csak számok 1-től 6-ig!):
@@ -241,6 +242,7 @@ atl_tp_error = A név már használatban van!
 
 // Misc
 kawoosh_hurt = Instabill örvény
+event_horizon = Eseményhorizont
 gate_nuke = Elégetett
 drone_kill = Drón
 energy_pulse_kill = Energia-Fegyver
@@ -269,12 +271,13 @@ cap_menu_author = Készítő
 cap_group_ent = Ez az entitás számodra nincs engedélyezve!
 cap_group_swep = Ez a fegyver számodra nincs engedélyezve!
 cap_group_tool = Ez az ezköz számodra nincs engedélyezve!
-cap_disabled_ent = Ez az ezköz ki van kapcsolva a szerveren!
-cap_disabled_swep = Ez az fegyver ki van kapcsolva a szerveren!
-cap_disabled_tool = Ez az ezköz ki van kapcsolva a szerveren!
+cap_group_npc = Ez az npc a te csoportodnak le van tiltva!
+cap_disabled_ent = Ez az ezköz le van tiltva a szerveren!
+cap_disabled_swep = Ez az fegyver le van tiltva a szerveren!
+cap_disabled_tool = Ez az ezköz le van tiltva a szerveren!
+cap_disabled_npc = Ez az npc le van tiltva a szerveren!
 iris_gatespawner = Nem tudod átírni a gatespawner iris-ét! Rakj be egy iris számítógépet hogy tudd irányítani.
 iris_protection = Iris sikeresen hozzáadva a gatespawner kapujához. Rakj be egy iris számítógépet hogy tudd irányítani.
-
 // gatespawner
 sg_gtsp_title = Gatespawner Készítő
 sg_stsp_text =[[<h2>Gatespawner sikeresen elkészítve!</h2>

@@ -537,7 +537,7 @@ local function SG_Settings_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_sbox_26"), "zpm_mk3", 6},
 		{SGLanguage.GetMessage("stool_naq_bottle"), 	"naquadah_bottle", 5},
 	}
-	
+
 	local allowdialgroup = {
 		{SGLanguage.GetMessage("stargate_menu_01"), "stargate_candial_groups_menu", 1},
 		{SGLanguage.GetMessage("stargate_menu_02"), "stargate_candial_groups_dhd", 1},
@@ -567,7 +567,7 @@ local function SG_Settings_OpenNet()
 		{SGLanguage.GetMessage("stargate_menu_31"), "stargate_dhd_menu", 1},
 		{SGLanguage.GetMessage("stargate_menu_32"), "stargate_dhd_letters", 1},
 		{SGLanguage.GetMessage("stargate_menu_35"), "stargate_dhd_ring", 1},
-	}	
+	}
 
 	CapPanel = vgui.Create( "EditablePanel" );
 	CapPanel:SetPaintBackgroundEnabled( false );
@@ -579,6 +579,7 @@ local function SG_Settings_OpenNet()
 	local PropertySheet = vgui.Create( "DPropertySheet", CapPanel )
 	PropertySheet:SetPos( 5, 5 )
 	PropertySheet:SetSize( sizew, sizeh )
+	PropertySheet.tabScroller:DockMargin( 0, 0, 20, 0 )
 	-- fix for fade
 	PropertySheet.CrossFade = function(self, anim, delta, data )
 
@@ -613,13 +614,13 @@ local function SG_Settings_OpenNet()
 	end
 	PropertySheet.animFade = Derma_Anim( "Fade", PropertySheet, PropertySheet.CrossFade )
 
-	PropertySheet.CloseButton = PropertySheet.tabScroller:Add( "DImageButton" )
+	PropertySheet.CloseButton = vgui.Create( "DImageButton", CapPanel)
 	PropertySheet.CloseButton:SetImage( "icon16/circlecross.png" )
 	PropertySheet.CloseButton:SetColor( Color( 10, 10, 10, 200 ) );
-	PropertySheet.CloseButton:DockMargin( 0, 0, 0, 12 )
-	PropertySheet.CloseButton:SetWide( 16 )
-	PropertySheet.CloseButton:SetHeight( 16 )
-	PropertySheet.CloseButton:Dock( RIGHT )
+	--PropertySheet.CloseButton:DockMargin( 0, 0, 0, 12 )
+	PropertySheet.CloseButton:SetSize( 16, 16 )
+	--PropertySheet.CloseButton:Dock( RIGHT )
+	PropertySheet.CloseButton:SetPos(sizew-12,7);
 	PropertySheet.CloseButton.DoClick = function() CapPanel:Remove() end
 
 	local AdminFrame = vgui.Create("DPanel");
@@ -774,7 +775,7 @@ local function SG_Settings_OpenNet()
 	local img = vgui.Create("DImage",frame);
 	img:SetPos(8,0);
 	if (has_energy) then
-		img:SetImage("icon16/accept.png");	
+		img:SetImage("icon16/accept.png");
 	else
 		img:SetImage("icon16/error.png");
 	end
@@ -786,20 +787,20 @@ local function SG_Settings_OpenNet()
 	if (has_energy) then
 		laber:SetText(SGLanguage.GetMessage("stargate_menu_25b"));
 	else
-		laber:SetText(SGLanguage.GetMessage("stargate_menu_25n"));	
+		laber:SetText(SGLanguage.GetMessage("stargate_menu_25n"));
 	end
-	laber:SizeToContents();	
-	
+	laber:SizeToContents();
+
 	frame:SizeToChildren(true,true);
 	frame:SetSize(frame:GetWide()+15,frame:GetTall()+15);
 	frame:SetPos(sizew/2-frame:GetWide()/2,305);
-	
+
 	local x,y = laber:GetSize();
 	laber:SetPos(30,frame:GetTall()/2-y/2);
 	img:SetPos(8,frame:GetTall()/2-7);
-	
+
 	-- End of energy check
-	
+
 	local frame = vgui.Create("DPanel",GroupConvarFrame);
 	frame.Paint = function(self)
 		// Small frames
@@ -811,22 +812,22 @@ local function SG_Settings_OpenNet()
 		draw.RoundedBox( bor, 0, 0, self:GetWide(), self:GetTall(), col);
 		draw.RoundedBox( bor, diff, diff, self:GetWide()-2*diff, self:GetTall()-2*diff, col2);
 	end
-	
+
 	local img = vgui.Create("DImage",frame);
 	img:SetPos(8,0);
 	img:SetImage("icon16/information.png");
 	img:SetSize(16,16);
-	
+
 	local laber = vgui.Create("DLabel",frame);
 	laber:SetFont("OldDefaultSmall");
 	laber:SetPos(30, 0);
-	laber:SetText(SGLanguage.GetMessage("stargate_menu_info"));	
+	laber:SetText(SGLanguage.GetMessage("stargate_menu_info"));
 	laber:SizeToContents();
-	
+
 	frame:SizeToChildren(true,true);
 	frame:SetSize(frame:GetWide()+15,frame:GetTall()+15);
 	frame:SetPos(sizew/2-frame:GetWide()/2,360);
-	
+
 	local x,y = laber:GetSize();
 	laber:SetPos(30,frame:GetTall()/2-y/2);
 	img:SetPos(8,frame:GetTall()/2-7);
@@ -1096,7 +1097,7 @@ local function SG_Settings_OpenNet()
 			SGSetConvar("stargate_group_system", Format("%d", data));
 		--end
 	end
-	
+
 	local img = vgui.Create("DImageButton", GroupConvarFrame)
 	img:SetPos(428,145);
 	img:SetSize(140,140);
@@ -1125,7 +1126,7 @@ local function SG_Settings_OpenNet()
 		draw.RoundedBox( bor, 300-diff, 20-diff, 280+2*diff, sizeh-93+2*diff, col);
 		draw.RoundedBox( bor, 300, 20, 280, sizeh-93, col2);
 	end
-	
+
 	local CapConvarsTbl = {}
 	local function SetCapConvar(typ,id,convar,value)
 		local tbl,cat = limits,"cap_convars";
@@ -1144,7 +1145,7 @@ local function SG_Settings_OpenNet()
 	end
 
 	local limit_sliders = {}
-	
+
 	local DVScrollBar = vgui.Create( "DScrollPanel", CapConvarFrame )
 	DVScrollBar:SetPos(10, 20);
 	DVScrollBar:SetSize(270,sizeh-93);
@@ -1229,7 +1230,7 @@ local function SG_Settings_OpenNet()
 		SetCapConvar("sbox",k,convar,SGGetConvar(convar));
 		i = i + 1;
 	end
-	
+
 	local MiscFrame = vgui.Create("DPanel");
 	MiscFrame.Paint = function(self)
 		// Small frames
@@ -1245,7 +1246,7 @@ local function SG_Settings_OpenNet()
 		draw.RoundedBox( bor, 300-diff, 5-diff, 6+2*diff, 65+2*diff, col);
 		draw.RoundedBox( bor, 300, 5, 280, 65, col2);
 	end
-	
+
 	i = 0;
 	for k,val in pairs(wepssett) do
 		i = i + 1;
@@ -1271,7 +1272,7 @@ local function SG_Settings_OpenNet()
 		end
 		SetCapConvar("weap",k,convar,SGGetConvar(convar));
 	end
-	
+
 	i = 0;
 	for k,val in pairs(miscsett) do
 		i = i + 1;
@@ -1312,7 +1313,7 @@ local function SG_Settings_OpenNet()
 		cfgbutton:SetPos(0, 395);
 		cfgbutton:SetSize(290, 28);
 		cfgbutton.DoClick = function ( btn )
-			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end		
+			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
 			local edit = vgui.Create("DFrame",Frame);
 			edit:SetSize(400,120);
 			edit:SetPos(sizew/2-200,sizeh/2-130);
@@ -1321,17 +1322,17 @@ local function SG_Settings_OpenNet()
 			edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_restore_con"));
 			edit:RequestFocus();
 			lastWarn = edit;
-			
+
 			local label = vgui.Create("DLabel",edit);
 			label:SetPos(35,35);
 			label:SetText(SGLanguage.GetMessage("stargate_cfg_restore_desc_con"));
 			label:SizeToContents();
-			
+
 			local img = vgui.Create("DImage",edit);
 			img:SetPos(10,47);
 			img:SetImage("icon16/error.png");
 			img:SetSize(16,16);
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(40,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_cancel"));
@@ -1339,7 +1340,7 @@ local function SG_Settings_OpenNet()
 			butt.DoClick = function(self)
 				edit:Remove();
 			end
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(210,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_ok"));
@@ -1464,7 +1465,7 @@ local function SG_Settings_OpenNet()
 
 	local CfgRestFrame = vgui.Create("DPanel");
 	CfgRestFrame.Paint = function(self) end
-	
+
 	local lastWarn;
 
 	for i=1,2 do
@@ -1477,7 +1478,7 @@ local function SG_Settings_OpenNet()
 	    cfgbutton:SetPos(0, 363);
 	    cfgbutton:SetSize(187, 25);
 		cfgbutton.DoClick = function ( btn )
-			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end		
+			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
 			local edit = vgui.Create("DFrame",Frame);
 			edit:SetSize(400,120);
 			edit:SetPos(sizew/2-200,sizeh/2-130);
@@ -1486,17 +1487,17 @@ local function SG_Settings_OpenNet()
 			edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_restore"));
 			edit:RequestFocus();
 			lastWarn = edit;
-			
+
 			local label = vgui.Create("DLabel",edit);
 			label:SetPos(35,35);
 			label:SetText(SGLanguage.GetMessage("stargate_cfg_restore_desc"));
 			label:SizeToContents();
-			
+
 			local img = vgui.Create("DImage",edit);
 			img:SetPos(10,47);
 			img:SetImage("icon16/error.png");
 			img:SetSize(16,16);
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(40,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_cancel"));
@@ -1504,7 +1505,7 @@ local function SG_Settings_OpenNet()
 			butt.DoClick = function(self)
 				edit:Remove();
 			end
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(210,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_ok"));
@@ -1539,8 +1540,8 @@ local function SG_Settings_OpenNet()
 	    cfgbutton:SetPos(380, 363);
 	    cfgbutton:SetSize(187, 25);
 		cfgbutton.DoClick = function ( btn )
-			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end		
-			
+			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
+
 			for name,cfg in pairs(CfgFrame.CfgTable) do
 				net.Start("_sg_config")
 				net.WriteUInt(1,8);
@@ -1568,7 +1569,7 @@ local function SG_Settings_OpenNet()
 			net.SendToServer();
 			GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_saved"), NOTIFY_GENERIC, 5);
 			surface.PlaySound( "buttons/button9.wav" );
-			
+
 			local edit = vgui.Create("DFrame",Frame);
 			edit:SetSize(490,120);
 			edit:SetPos(sizew/2-265,sizeh/2-130);
@@ -1577,17 +1578,17 @@ local function SG_Settings_OpenNet()
 			edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_saved"));
 			edit:RequestFocus();
 			lastWarn = edit;
-			
+
 			local label = vgui.Create("DLabel",edit);
 			label:SetPos(35,35);
 			label:SetText(SGLanguage.GetMessage("stargate_cfg_saved_desc"));
 			label:SizeToContents();
-			
+
 			local img = vgui.Create("DImage",edit);
 			img:SetPos(10,47);
 			img:SetImage("icon16/information.png");
 			img:SetSize(16,16);
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(10,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_saved_restart"));
@@ -1598,7 +1599,7 @@ local function SG_Settings_OpenNet()
 				net.SendToServer();
 				edit:Remove();
 			end
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(170,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_saved_reload"));
@@ -1608,7 +1609,7 @@ local function SG_Settings_OpenNet()
 				surface.PlaySound( "buttons/button9.wav" );
 				edit:Remove();
 			end
-			
+
 			local butt = vgui.Create("DButton",edit);
 			butt:SetPos(330,85);
 			butt:SetText(SGLanguage.GetMessage("stargate_cfg_saved_close"));
@@ -1639,7 +1640,7 @@ local function SG_Settings_OpenNet()
 			name_tbl["npc"][k] = v.Name;
 		end
 	end
-	
+
 	name_tbl["tool"] = {};
 	for k,v in pairs(list.Get("CAP.Tool")) do
 		if (v.Name) then
@@ -1656,7 +1657,7 @@ local function SG_Settings_OpenNet()
 	local RestLists,RestListsD = {},{};
 
 	local lastLine;
-	
+
 	for restk,rest in pairs(rest_types) do
 		local lframe = vgui.Create( "DPanel" , RestScrollBar);
 		lframe:SetPos(0, y_pos);
@@ -1956,16 +1957,16 @@ local function SG_Settings_OpenNet()
 			end
 		end
 	end
-	
+
 	local y_pos = 0;
 	local lastLine;
 	local GroupLists = {};
 	local dgrp = {[1]={"M@","P@","I@","OT","O@"},[2]={"U@#","SGI","DST"}};
-	
+
 	for i=1,2 do
 		local grp_type,grp_lang = "stargate_custom_groups","";
 		if (i==2) then grp_type,grp_lang = "stargate_custom_types","u"; end
-		
+
 		local lframe = vgui.Create( "DPanel" , CfgGroupFrame);
 		lframe:SetPos(0, y_pos);
 		lframe:SetSize(567,15);
@@ -1994,7 +1995,7 @@ local function SG_Settings_OpenNet()
 			end
 			local edit = vgui.Create("DFrame",CfgGroupFrame);
 			if (i==2) then
-				edit:SetSize(400,110);			
+				edit:SetSize(400,110);
 			else
 				edit:SetSize(400,90);
 			end
@@ -2003,7 +2004,7 @@ local function SG_Settings_OpenNet()
 			edit:RequestFocus();
 			lastLine = edit;
 			edit.line = data;
-			
+
 			local label = vgui.Create("DLabel",edit);
 			label:SetPos(15,35);
 			label:SetText(SGLanguage.GetMessage("stargate_cfg_grp_add2"..grp_lang));
@@ -2014,7 +2015,7 @@ local function SG_Settings_OpenNet()
 			name:SetSize(370-label:GetWide(),20);
 			name:SetText(nams);
 			name:SetAllowNonAsciiCharacters(true);
-			
+
 			local shared
 			if (i==2) then
 				shared = vgui.Create("DCheckBoxLabel",edit);
@@ -2027,7 +2028,7 @@ local function SG_Settings_OpenNet()
 
 			local butt = vgui.Create("DButton",edit);
 			if (i==2) then
-				butt:SetPos(130,80);			
+				butt:SetPos(130,80);
 			else
 				butt:SetPos(130,60);
 			end
@@ -2073,7 +2074,7 @@ local function SG_Settings_OpenNet()
 			if (lastLine and IsValid(lastLine) and lastLine.Remove) then lastLine:Remove() end
 			local edit = vgui.Create("DFrame",CfgGroupFrame);
 			if (i==2) then
-				edit:SetSize(400,130);			
+				edit:SetSize(400,130);
 			else
 				edit:SetSize(400,110);
 			end
@@ -2081,7 +2082,7 @@ local function SG_Settings_OpenNet()
 			edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_grp_add"..grp_lang));
 			edit:RequestFocus();
 			lastLine = edit;
-			
+
 			local exs_tbl = {}
 			for k,v in pairs(GroupList:GetLines()) do
 				exs_tbl[v:GetColumnText(1)] = true;
@@ -2091,7 +2092,7 @@ local function SG_Settings_OpenNet()
 			label:SetPos(15,30);
 			label:SetText(SGLanguage.GetMessage("stargate_cfg_grp_add1"..grp_lang));
 			label:SizeToContents();
-			
+
 			local warn = vgui.Create("DLabel",edit);
 			warn:SetPos(label:GetWide()+60+(i-1)*10,30);
 			warn:SetText("");
@@ -2101,7 +2102,7 @@ local function SG_Settings_OpenNet()
 			local text = vgui.Create("DTextEntry",edit);
 			text:SetPos(label:GetWide()+20,28);
 			if (i==2) then
-				text:SetSize(40,20);			
+				text:SetSize(40,20);
 			else
 				text:SetSize(30,20);
 			end
@@ -2122,7 +2123,7 @@ local function SG_Settings_OpenNet()
 					if (letters[1]=="#") then text = ""; end
 					if (letters[2]=="#") then text = text:sub(1,1); end
 				end
-				if (table.HasValue(dgrp[i],text) or exs_tbl[text]) then 
+				if (table.HasValue(dgrp[i],text) or exs_tbl[text]) then
 					text = text:sub(1,i);
 					surface.PlaySound("buttons/button2.wav");
 					warn:SetVisible(true);
@@ -2154,10 +2155,10 @@ local function SG_Settings_OpenNet()
 				shared:SetValue(true);
 				shared:SizeToContents();
 			end
-			
+
 			local butt = vgui.Create("DButton",edit);
 			if (i==2) then
-				butt:SetPos(130,100);			
+				butt:SetPos(130,100);
 			else
 				butt:SetPos(130,80);
 			end
@@ -2183,10 +2184,10 @@ local function SG_Settings_OpenNet()
 			end
 
 		end
-		
+
 		y_pos = 180;
 	end
-		
+
 	local cfgbutton = vgui.Create("DButton", CfgGroupFrame);
 	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_grp_reload"));
 	cfgbutton:SetImage("icon16/database_refresh.png");
@@ -2225,7 +2226,7 @@ local function SG_Settings_OpenNet()
 		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_grp_saved"), NOTIFY_GENERIC, 5);
 		surface.PlaySound( "buttons/button9.wav" );
 	end
-	
+
 	CapPanel.CfgGrpEditor = function(self,tbl)
 		CfgGroupFrame.CfgTable = tbl;
 		for cat,cfg in pairs(tbl) do
@@ -2236,7 +2237,7 @@ local function SG_Settings_OpenNet()
 			end
 		end
 	end
-	
+
 	CfgPropertySheet.__SetActiveTab = PropertySheet.SetActiveTab;
 	CfgPropertySheet.SetActiveTab = function(self, active)
 		if (not self.CFGSended and active:GetText()==SGLanguage.GetMessage("stargate_cfg_tab3")) then
@@ -2247,7 +2248,7 @@ local function SG_Settings_OpenNet()
 		end
 		CfgPropertySheet:__SetActiveTab(active);
 	end
-	
+
 	CfgPropertySheet:AddSheet( SGLanguage.GetMessage("stargate_cfg_tab1"), CfgEditorFrame, "icon16/script_edit.png", false, false )
 	CfgPropertySheet:AddSheet( SGLanguage.GetMessage("stargate_cfg_tab2"), CfgRestFrame, "icon16/server_edit.png", false, false )
 	CfgPropertySheet:AddSheet( SGLanguage.GetMessage("stargate_cfg_tab3"), CfgGroupFrame, "icon16/world_edit.png", false, false )
@@ -2262,7 +2263,7 @@ local function SG_Settings_OpenNet()
 		end
 		PropertySheet:__SetActiveTab(active);
 	end
-	
+
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t1"), GroupConvarFrame, "gui/cap_logo", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t2"), CapConvarFrame, "icon16/server.png", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t3"), MiscFrame, "icon16/cog.png", false, false )
@@ -2314,7 +2315,7 @@ net.Receive("_sg_config", function(len)
 	elseif (typ==4) then
 		CFGEditor = {};
 		CFGEditor["stargate_custom_groups"] = {};
-		CFGEditor["stargate_custom_types"] = {};	
+		CFGEditor["stargate_custom_types"] = {};
 	end
 end)
 

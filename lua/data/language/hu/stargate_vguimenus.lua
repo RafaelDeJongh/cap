@@ -1,4 +1,4 @@
-﻿stargate_vgui_address = Cím:
+stargate_vgui_address = Cím:
 stargate_vgui_address2 = Cím
 stargate_vgui_grouptype = Csoport/típus
 stargate_vgui_name = Név:

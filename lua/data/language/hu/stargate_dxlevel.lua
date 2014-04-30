@@ -1,4 +1,4 @@
-﻿stargate_dxlevel_01 = Carter Addon Pack - Figyelmeztetés
+stargate_dxlevel_01 = Carter Addon Pack - Figyelmeztetés
 stargate_dxlevel_02 =[[ Figyelem: az ön gmod-ja DirectX 8.1(vagy kisebb) alatt fut.
 Ez problémát okoz a cap kompatibilitásával.
 Problémák listája:]]

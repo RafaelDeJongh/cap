@@ -26,6 +26,7 @@ function EFFECT:Init(data)
 	self.Parent	= data:GetEntity();
 	if (not IsValid(self.Parent) or self.Parent.GetLocalGate==nil or not IsValid(self.Parent:GetLocalGate())) then return end
 	self.EH	= StarGate.FindEntInsideSphere(self.Parent:GetLocalGate():GetPos(), 10, "event_horizon")[1]	-- Remote Gate
+	if (not IsValid(self.EH)) then return end
 	self.Beam = self.Parent:GetInboundBeam();
 
 	self.MainStart = self.Parent:GetEmitterPos();

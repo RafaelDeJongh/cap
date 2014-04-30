@@ -111,7 +111,7 @@ if SERVER then
 		end
 
 		function meta:HasGodMode()
-		   return self.__pGodMode or self:IsFlagSet(FL_GODMODE);
+		   return self.__pGodMode or self.IsFlagSet and self:IsFlagSet(FL_GODMODE);
 		end
 
 		hook.Add("PlayerDeath","Player.Death.ResetGod",function(ply)
