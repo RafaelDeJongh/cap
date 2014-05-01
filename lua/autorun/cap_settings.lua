@@ -65,18 +65,6 @@ local convars = {
 	{"AGV", "agv", 2},
 }
 
-local convars2 = {
-	{"AG-3 Charge Time", "ag3_weapon", 60},
-	{"AG-3 Health", "ag3_health", 500},
-	{"Ori Satelitte Shield Time", "ori_shield", 120},
-	{"Ori Satelitte Charge Time", "ori_weapon", 60},
-	{"Ori Satelitte Helath", "ori_health", 500},
-	{"Ship Railgun Damage", "shiprail_damage", 10},
-	{"Stationary Railgun Damage", "statrail_damage", 10},
-	{"Atlantis Shield Energy Consumption", "shieldcore_atlfrac", 50},
-	{"Enable Ship Shields", "shipshield", 1},
-}
-
 local sboxlimits = {
 	{"anim_ramps", 10},
 	{"ramp", 50},
@@ -114,10 +102,6 @@ local sboxlimits = {
 
 for _,val in pairs(convars) do
 	table.insert(sg_convars,"CAP_"..val[2].."_max");
-end
-
-for _,val in pairs(convars2) do
-	table.insert(sg_convars,"CAP_"..val[2]);
 end
 
 for _,val in pairs(sboxlimits) do
@@ -486,22 +470,6 @@ local function SG_Settings_OpenNet()
 		{SGLanguage.GetMessage("stargate_cap_menu_40"), "iris_comp", 2},
 		{SGLanguage.GetMessage("weapon_misc_virus"), "agv", 2},
 	}
-	local wepssett = {
-		{SGLanguage.GetMessage("stargate_cap_menu_28"), "ag3_weapon", 60},
-		{SGLanguage.GetMessage("stargate_cap_menu_29"), "ag3_health", 500},
-		{SGLanguage.GetMessage("stargate_cap_menu_30"), "ori_shield", 120},
-		{SGLanguage.GetMessage("stargate_cap_menu_31"), "ori_weapon", 60},
-		{SGLanguage.GetMessage("stargate_cap_menu_32"), "ori_health", 500},
-		{SGLanguage.GetMessage("stargate_cap_menu_33"), "shiprail_damage", 10},
-		{SGLanguage.GetMessage("stargate_cap_menu_34"), "statrail_damage", 10},
-		{SGLanguage.GetMessage("stargate_cap_menu_35"), "shieldcore_atlfrac", 50},
-	}
-
-	local miscsett = {
-		{SGLanguage.GetMessage("stargate_cap_menu_36"), "CAP_shipshield", 1},
-		{SGLanguage.GetMessage("stargate_cap_menu_37"), "cap_drop_weapons", 1},
-		{SGLanguage.GetMessage("stargate_cap_menu_38"), "cap_ashen_en", 1},
-	}
 
 	local sboxlimits = {
 		{SGLanguage.GetMessage("stargate_cap_sbox_01"), "anim_ramps", 10},
@@ -787,7 +755,7 @@ local function SG_Settings_OpenNet()
 	if (has_energy) then
 		laber:SetText(SGLanguage.GetMessage("stargate_menu_25b"));
 	else
-		laber:SetText(SGLanguage.GetMessage("stargate_menu_25n"));
+		laber:SetText(SGLanguage.GetMessage("stargate_menu_25"));
 	end
 	laber:SizeToContents();
 
@@ -1131,8 +1099,6 @@ local function SG_Settings_OpenNet()
 	local function SetCapConvar(typ,id,convar,value)
 		local tbl,cat = limits,"cap_convars";
 		if (typ=="sbox") then tbl,cat = sboxlimits,"cap_convars"; end
-		if (typ=="weap") then tbl,cat = wepssett,"misc_convars"; end
-		if (typ=="misc") then tbl,cat = miscsett,"misc_convars"; end
 		if (not CapConvarsTbl[cat]) then CapConvarsTbl[cat] = {}; end
 		if (tbl[id] and tbl[id][3]) then
 			local val = tonumber(value) or tbl[id][3]
@@ -1231,164 +1197,82 @@ local function SG_Settings_OpenNet()
 		i = i + 1;
 	end
 
-	local MiscFrame = vgui.Create("DPanel");
-	MiscFrame.Paint = function(self)
-		// Small frames
-		local alpha = self:GetAlpha();
-		local col = Color( 170, 170, 170, alpha);
-		local col2 = Color( 100, 100, 100, alpha);
-		local bor = 6;
-		local diff = 2;
+	local Frame = CapConvarFrame;
+	local cfgbutton = vgui.Create("DButton", Frame);
+	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_restore_con"));
+	cfgbutton:SetImage("icon16/server_delete.png");
+	cfgbutton:SetPos(0, 395);
+	cfgbutton:SetSize(290, 28);
+	cfgbutton.DoClick = function ( btn )
+		if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
+		local edit = vgui.Create("DFrame",Frame);
+		edit:SetSize(400,120);
+		edit:SetPos(sizew/2-200,sizeh/2-130);
+		--local x,y = data:GetPos();
+		--edit:SetPos(sizew/2-200,y)
+		edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_restore_con"));
+		edit:RequestFocus();
+		lastWarn = edit;
 
-		draw.RoundedBox( bor, 5-diff, 5-diff, 280+2*diff, 380+2*diff, col);
-		draw.RoundedBox( bor, 5, 5, 280, 380, col2);
+		local label = vgui.Create("DLabel",edit);
+		label:SetPos(35,35);
+		label:SetText(SGLanguage.GetMessage("stargate_cfg_restore_desc_con"));
+		label:SizeToContents();
 
-		draw.RoundedBox( bor, 300-diff, 5-diff, 6+2*diff, 65+2*diff, col);
-		draw.RoundedBox( bor, 300, 5, 280, 65, col2);
-	end
+		local img = vgui.Create("DImage",edit);
+		img:SetPos(10,47);
+		img:SetImage("icon16/error.png");
+		img:SetSize(16,16);
 
-	i = 0;
-	for k,val in pairs(wepssett) do
-		i = i + 1;
-		local convar = "CAP_"..val[2];
-
-		local slider = vgui.Create( "DOldNumSlider" , MiscFrame);
-		slider.ConvarID = k;
-		limit_sliders[convar] = slider;
-		slider:SetPos(10, 20+45*(i-1));
-		slider:SetSize(270, 50);
-		slider:SetText(val[1]);
-		slider:SetMin(0);
-		slider:SetMax(val[3]*5);
-		slider:SetDecimals(0);
-		slider.Wang:SetText(SGGetConvar(convar));
-		slider:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
-		slider.OnValueChanged = function(self, fValue)
-			SGSetConvar(convar, fValue);
-			SetCapConvar("weap",self.ConvarID,convar,fValue);
-		end
-		slider.Wang.OnTextChanged = function(self)
-			slider:ValueChanged(slider.Wang:GetValue());
-		end
-		SetCapConvar("weap",k,convar,SGGetConvar(convar));
-	end
-
-	i = 0;
-	for k,val in pairs(miscsett) do
-		i = i + 1;
-
-		local box = vgui.Create( "DCheckBoxLabel" , MiscFrame);
-		box.ConvarID = k;
-		limit_sliders[val[2]] = box;
-		box:SetPos(305, 20*i-10);
-		box:SetText(val[1]);
-		box:SetValue(SGGetConvar(val[2]));
-		box:SizeToContents();
-		box:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",val[2]));
-		box.Label:SetFont("OldDefaultSmall");
-		box.OnChange = function(self, fValue)
-			local v = 0;
-			if fValue then v = 1; end
-			SGSetConvar(val[2], v);
-			SetCapConvar("misc",self.ConvarID,val[2],fValue);
-		end
-		box.PerformLayout = function(self)
-		    local x = self.m_iIndent or 0
-		    self.Button:SetSize( 14, 14 )
-		    self.Button:SetPos( x, 0 )
-		    if ( self.Label ) then
-		        self.Label:SizeToContents()
-		        self.Label:SetPos( x + 10 + 10, 0 )
-		    end
-		end
-		SetCapConvar("misc",k,val[2],SGGetConvar(val[2]));
-	end
-
-	for i=1,2 do
-		local Frame = CapConvarFrame;
-		if (i==2) then Frame = MiscFrame; end
-		local cfgbutton = vgui.Create("DButton", Frame);
-		cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_restore_con"));
-		cfgbutton:SetImage("icon16/server_delete.png");
-		cfgbutton:SetPos(0, 395);
-		cfgbutton:SetSize(290, 28);
-		cfgbutton.DoClick = function ( btn )
-			if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
-			local edit = vgui.Create("DFrame",Frame);
-			edit:SetSize(400,120);
-			edit:SetPos(sizew/2-200,sizeh/2-130);
-			--local x,y = data:GetPos();
-			--edit:SetPos(sizew/2-200,y)
-			edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_restore_con"));
-			edit:RequestFocus();
-			lastWarn = edit;
-
-			local label = vgui.Create("DLabel",edit);
-			label:SetPos(35,35);
-			label:SetText(SGLanguage.GetMessage("stargate_cfg_restore_desc_con"));
-			label:SizeToContents();
-
-			local img = vgui.Create("DImage",edit);
-			img:SetPos(10,47);
-			img:SetImage("icon16/error.png");
-			img:SetSize(16,16);
-
-			local butt = vgui.Create("DButton",edit);
-			butt:SetPos(40,85);
-			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_cancel"));
-			butt:SetSize(150,25);
-			butt.DoClick = function(self)
-				edit:Remove();
-			end
-
-			local butt = vgui.Create("DButton",edit);
-			butt:SetPos(210,85);
-			butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_ok"));
-			butt:SetSize(150,25);
-			butt.DoClick = function(self)
-				net.Start("_sg_config")
-				net.WriteUInt(10,8);
-				net.SendToServer();
-				for k,val in pairs(limits) do
-					limit_sliders["CAP_"..val[2].."_max"]:SetValue(val[3]);
-				end
-				for k,val in pairs(sboxlimits) do
-					limit_sliders["sbox_max"..val[2]]:SetValue(val[3]);
-				end
-				for k,val in pairs(wepssett) do
-					limit_sliders["CAP_"..val[2]]:SetValue(val[3]);
-				end
-				for k,val in pairs(miscsett) do
-					limit_sliders[val[2]]:SetValue(val[3]);
-				end
-				GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_restored_con"), NOTIFY_GENERIC, 5);
-				surface.PlaySound( "buttons/button9.wav" );
-				edit:Remove();
-			end
-			surface.PlaySound("buttons/button2.wav");
+		local butt = vgui.Create("DButton",edit);
+		butt:SetPos(40,85);
+		butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_cancel"));
+		butt:SetSize(150,25);
+		butt.DoClick = function(self)
+			edit:Remove();
 		end
 
-		local cfgbutton = vgui.Create("DButton", Frame);
-		cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_save_con"));
-		cfgbutton:SetImage("icon16/disk.png");
-		cfgbutton:SetPos(294, 395);
-		cfgbutton:SetSize(290, 28);
-		cfgbutton.DoClick = function ( btn )
-			net.Start("_sg_config");
-			net.WriteUInt(9,8);
-			net.WriteUInt(table.Count(CapConvarsTbl),8);
-			for name,cfg in pairs(CapConvarsTbl) do
-				net.WriteString(name);
-				net.WriteUInt(table.Count(cfg),16);
-				for convar,value in pairs(cfg) do
-					net.WriteString(convar);
-					net.WriteDouble(value);
-				end
-			end
+		local butt = vgui.Create("DButton",edit);
+		butt:SetPos(210,85);
+		butt:SetText(SGLanguage.GetMessage("stargate_cfg_restore_ok"));
+		butt:SetSize(150,25);
+		butt.DoClick = function(self)
+			net.Start("_sg_config")
+			net.WriteUInt(10,8);
 			net.SendToServer();
-			GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_saved_con"), NOTIFY_GENERIC, 5);
+			for k,val in pairs(limits) do
+				limit_sliders["CAP_"..val[2].."_max"]:SetValue(val[3]);
+			end
+			for k,val in pairs(sboxlimits) do
+				limit_sliders["sbox_max"..val[2]]:SetValue(val[3]);
+			end
+			GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_restored_con"), NOTIFY_GENERIC, 5);
 			surface.PlaySound( "buttons/button9.wav" );
+			edit:Remove();
 		end
+		surface.PlaySound("buttons/button2.wav");
+	end
+
+	local cfgbutton = vgui.Create("DButton", Frame);
+	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_save_con"));
+	cfgbutton:SetImage("icon16/disk.png");
+	cfgbutton:SetPos(294, 395);
+	cfgbutton:SetSize(290, 28);
+	cfgbutton.DoClick = function ( btn )
+		net.Start("_sg_config");
+		net.WriteUInt(9,8);
+		net.WriteUInt(table.Count(CapConvarsTbl),8);
+		for name,cfg in pairs(CapConvarsTbl) do
+			net.WriteString(name);
+			net.WriteUInt(table.Count(cfg),16);
+			for convar,value in pairs(cfg) do
+				net.WriteString(convar);
+				net.WriteDouble(value);
+			end
+		end
+		net.SendToServer();
+		GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_saved_con"), NOTIFY_GENERIC, 5);
+		surface.PlaySound( "buttons/button9.wav" );
 	end
 
 	local CfgFrame = vgui.Create("DPanel");
@@ -2266,7 +2150,6 @@ local function SG_Settings_OpenNet()
 
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t1"), GroupConvarFrame, "gui/cap_logo", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t2"), CapConvarFrame, "icon16/server.png", false, false )
-	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t3"), MiscFrame, "icon16/cog.png", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t4"), CfgFrame, "icon16/wrench.png", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t5"), AdminFrame, "icon16/shield.png", false, false )
 end

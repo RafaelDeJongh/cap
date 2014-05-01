@@ -59,7 +59,7 @@ function ENT:Initialize()
 	self.APC = nil;
 	self.APCply = nil;
 
-	self.HealthWep = GetConVar("CAP_ori_health"):GetInt();
+	self.HealthWep = StarGate.CFG:Get("ori_satellite","health",500);
 	self.WepPower = 0;
 	self.Shield = nil;
 	self.Strength = 100;
@@ -275,8 +275,8 @@ function ENT:LowProrityThink()
 	if (self.StrengthShield == 0 and self.Shield and self.Shield:IsValid()) then self.Entity:RemoveShield(); end
 
 	if (CurTime() - self.Time > 1) then
-		local ShieldTime = GetConVar("CAP_ori_shield"):GetInt();
-		local WeaponTime = GetConVar("CAP_ori_weapon"):GetInt();
+		local ShieldTime = StarGate.CFG:Get("ori_satellite","shield_time",120);
+		local WeaponTime = StarGate.CFG:Get("ori_satellite","recharge_time",60);
 
 		self.Time = CurTime();
 		self.WepPower = self.WepPower + 100/WeaponTime;
@@ -410,7 +410,6 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self.Time = CurTime()
 
-	self.HealthWep = GetConVar("CAP_ori_health"):GetInt();
 	self.WepPower = 0;
 	self.Shield = nil;
 	self.Strength = 100;

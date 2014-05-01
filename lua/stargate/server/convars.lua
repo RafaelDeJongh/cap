@@ -38,36 +38,10 @@ local limits = {
 	{"Iris Computer", "iris_comp", 2},
 	{"AGV", "agv", 2},
 }
-local wepssett = {
-	{"AG-3 Charge Time", "ag3_weapon", 60},
-	{"AG-3 Health", "ag3_health", 500},
-	{"Ori Satelitte Shield Time", "ori_shield", 120},
-	{"Ori Satelitte Charge Time", "ori_weapon", 60},
-	{"Ori Satelitte Helath", "ori_health", 500},
-	{"Ship Railgun Damage", "shiprail_damage", 10},
-	{"Stationary Railgun Damage", "statrail_damage", 10},
-	{"Atlantis Shield Energy Consumption", "shieldcore_atlfrac", 50},
-}
-
-local miscsett = {
-	{"Enable Ship Shields", "CAP_shipshield", 1},
-	{"Allow Drop Weapons", "cap_drop_weapons", 1},
-	{"Ashend Defence Require Energy", "cap_ashen_en", 1}
-}
 
 for _,val in pairs(limits) do
 	CreateConVar("CAP_"..val[2].."_max", tostring(val[3]), {FCVAR_NEVER_AS_STRING});
 	StarGate.CAP_Convars["CAP_"..val[2].."_max"] = val[3];
-end
-
-for _,val in pairs(wepssett) do
-	CreateConVar("CAP_"..val[2], tostring(val[3]), {FCVAR_NEVER_AS_STRING});
-	StarGate.CAP_Convars["CAP_"..val[2]] = val[3];
-end
-
-for _,val in pairs(miscsett) do
-	CreateConVar(val[2], tostring(val[3]), {FCVAR_NEVER_AS_STRING});
-	StarGate.CAP_Convars[val[2]] = val[3];
 end
 
 -- From stargate group system by AlexALX
@@ -147,12 +121,10 @@ function StarGate.LoadConvars()
 
 	local ini = INIParser:new("stargate/convars.txt",false);
 	if(ini) then
-		for name,tbl in pairs(ini:get()) do
-			if (tbl[1]) then
-				for k,v in pairs(tbl[1]) do
-					if (StarGate.CAP_Convars[k] or k:find("sbox_max")) then -- for security
-						RunConsoleCommand(k,v);
-					end
+		if (ini.nodes.cap_convars and ini.nodes.cap_convars[1]) then
+			for k,v in pairs(ini.nodes.cap_convars[1]) do
+				if (StarGate.CAP_Convars[k] or k:find("sbox_max")) then -- for security
+					RunConsoleCommand(k,v);
 				end
 			end
 		end

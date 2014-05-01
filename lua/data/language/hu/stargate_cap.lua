@@ -13,7 +13,7 @@ ring_error = Már létezik ilyen nevű gyűrű!
 // Weapon Entities
 entity_weapon_cat = Fegyverek
 entity_ag3 = AG-3 Műhold
-entity_asgard_beam = Asgard Sugár-Fegyver 
+entity_asgard_beam = Asgard Sugár-Fegyver
 entity_asgard_ashen_def = Ashen védelmi rendszer
 entity_asuran_satellite = Asuran Műhold
 entity_dakara = Dakara fegyver
@@ -26,7 +26,7 @@ entity_dest_main = Végzet Fő-fegyvere
 entity_dest_med = Végzet Közepes-fegyvere
 entity_dest_small = Végzet Kis-fegyvere
 entity_minidrone = Mini drón-vető
-entity_ori_beam = Ori Sugár-fegyver 
+entity_ori_beam = Ori Sugár-fegyver
 entity_ori_satellite = Ori Műhold
 entity_shiprail = Hajó sínágyú
 entity_stat_railgun = Mozdulatlan Fegyver
@@ -134,7 +134,7 @@ stool_update_03 = Ha szerveren kapja ezt az üzenetet, mondja meg az admin-nak h
 
 // Stool Names - Beállítások
 stool_credits = Készítők
-stool_settings = Beállítások/Convar-ok
+stool_settings = Beállítások/Nyelv
 stool_weapvis = Fegyverek Vizuális effektusai
 stool_miscvis = Mellékesek Vizuális effektusai
 stool_shipvis = Hajók Vizuális effektusai

@@ -4,7 +4,6 @@ stargate_menu_t3 = Прочие настройки
 stargate_menu_t4 = Редактор конфига
 stargate_menu_t5 = Админ опции
 stargate_menu_hint = Переменная: %s
-stargate_menu_00 = Звёздные врата - Редактирование переменных
 stargate_menu_01 = Меню звёздных врат
 stargate_menu_02 = DHD
 stargate_menu_03 = Wire
@@ -32,8 +31,7 @@ stargate_menu_21 = Уничтожаемые врата
 stargate_menu_22 = Уничтожаемые серв. ЗВ
 stargate_menu_23 = Система Звёздных Врат:
 stargate_menu_24 = Перезагрузка произойдёт примерно через 5 секунд.
-stargate_menu_25 = Примечание: поддержка энергии недоступна.\nНеобходимо установить Life Support и Resource Distribution\nаддоны (версия 2 или 3).
-stargate_menu_25n = Поддержка энергии недоступна!\nНеобходимо установить SpaceBuild или Environments аддон.
+stargate_menu_25 = Поддержка энергии недоступна!\nНеобходимо установить SpaceBuild или Environments аддон.
 stargate_menu_25b = Поддержка энергии успешно включена.\nЭнергия необходима для большинства объектов в CAP!
 stargate_menu_info = Настройки звёздных врат сохраняются автоматически при смене карты или выключении сервера.\nЕсли сервер упал (краш) раньше этого времени, то настройки не сохранятся!\nМеню создано AlexALX © 2014
 stargate_menu_26 = Функция блок. адресов:
@@ -72,7 +70,6 @@ stargate_menu_45 = Gatespawner
 stargate_menu_46 = Лимит устройств
 stargate_menu_47 = Лимит тулов
 stargate_menu_48 = Посетите сайт Carter Addon Pack'а
-stargate_cap_menu_00 = Carter Addon Pack - Редактирование переменных/Лимитов
 stargate_cap_menu_l = Лимит
 stargate_cap_menu_01 = Малая пушка Судьбы
 stargate_cap_menu_02 = Средняя пушка Судьбы
@@ -101,17 +98,6 @@ stargate_cap_menu_24 = Lantean Holo Device
 stargate_cap_menu_25 = Ядро щита
 stargate_cap_menu_26 = Содан Обелиск
 stargate_cap_menu_27 = Обелиск Древних
-stargate_cap_menu_28 = AG-3 - Время зарядки
-stargate_cap_menu_29 = AG-3 - Здоровье
-stargate_cap_menu_30 = Спутник Орай - время щита
-stargate_cap_menu_31 = Спутник Орай - время зарядки
-stargate_cap_menu_32 = Спутник Орай - здоровье
-stargate_cap_menu_33 = Урон корабельной пушки
-stargate_cap_menu_34 = Урон стационарной пушки
-stargate_cap_menu_35 = Атлантис щит - Потр. энергии
-stargate_cap_menu_36 = Включить щиты на кораблях
-stargate_cap_menu_37 = Разрешить выкидывание оружия
-stargate_cap_menu_38 = Сис. защиты Ашен Потре. энергию
 stargate_cap_menu_39 = CAP Корабли
 stargate_cap_menu_40 = Компьютер диафрагмы
 stargate_cap_sbox_01 = Анимированые Рампы
@@ -441,3 +427,39 @@ sg_sets[tac][range] = Радиус поиска целей
 sg_sets[kino_dispenser] = Кино Диспенсер
 sg_sets[kino_dispenser][max_kino] = Максимум кино
 sg_sets[kino_dispenser][max_kino][desc] = Максимум кино на одного игрока
+
+// AG-3
+sg_sets[ag_3] = AG-3 Спутник
+sg_sets[ag_3][health] = Здоровье
+sg_sets[ag_3][recharge_time] = Время зарядки
+sg_sets[ag_3][recharge_time][desc] = Время зарядки, в секундах.
+
+// Ori Satellite
+sg_sets[ori_satellite] = Спутник Орай
+sg_sets[ori_satellite][health] = Здоровье
+sg_sets[ori_satellite][recharge_time] = Время зарядки
+sg_sets[ori_satellite][recharge_time][desc] = Время зарядки, в секундах.
+sg_sets[ori_satellite][shield_time] = Врема зарядки щита
+sg_sets[ori_satellite][shield_time][desc] = Время зарядки щита, в секундах.
+
+// Ship railgun
+sg_sets[ship_railgun] = Корабельная пушка
+
+// Stationary railgun
+sg_sets[stationary_railgun] = Стационарная пушка
+
+// Shield core
+sg_sets[shield_core] = Ядро щита
+sg_sets[shield_core][atlantis_hit] = Атлантис щит энергия
+sg_sets[shield_core][atlantis_hit][desc] = Множитель потребления энергии атлантис щита при попадании.
+
+// Ashen defence
+sg_sets[ashen_defence] = Система защиты Ашен
+sg_sets[ashen_defence][req_energy] = Потребление энергии
+
+// Cap misc
+sg_sets[cap_misc] = Cap Прочее
+sg_sets[cap_misc][allow_drop_weapons] = Разрешить выкидывание оружия
+sg_sets[cap_misc][allow_drop_weapons][desc] = Разрешить выкидывание оружие игроков?
+sg_sets[cap_misc][ship_shield] = Разрешить корабельные щиты
+sg_sets[cap_misc][ship_shield][desc] = Разрешить щиты встроенные в корабли?

@@ -37,7 +37,7 @@ function PANEL:Init()
 	self.VGUI.HelpImage:SetImage("gui/info");
 
 	-- Help Label
-	self.VGUI.HelpLabel:SetPos(23,3);
+	self.VGUI.HelpLabel:SetPos(25,3);
 	self.VGUI.HelpLabel:SetWide(500);
 	self.VGUI.HelpLabel:SetText("Help");
 	self.VGUI.HelpLabel:SetTextColor(Color(0,0,0,255))

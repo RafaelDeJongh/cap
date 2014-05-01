@@ -167,7 +167,7 @@ local function LangNames()
 	local fi,fo = file.Find("lua/data/language/*","GAME");
 	for k,lang in pairs(fo) do
 		if (not file.Exists("lua/data/language/"..lang.."/stargate.lua","GAME")) then continue; end
-		ini = LANGParser:new("lua/data/language/"..lang.."/stargate.lua");
+		local ini = LANGParser:new("lua/data/language/"..lang.."/stargate.lua");
 		if (ini and ini.messages) then
 			for _,v in pairs(ini.messages) do
 				if (v["global_lang_name"]) then lang_names["Name"][lang] = v["global_lang_name"]; lang_names["Lang"][v["global_lang_name"]] = lang; end
@@ -265,6 +265,21 @@ function SGLanguage.GetLanguageFromName(lang)
 	return lang_names["Lang"][lang] or "err";
 end
 
+function SGLanguage.CountMessagesInLanguage(lang)
+	if (not lang) then lang = SGLanguage.GetClientLanguage(); end
+	local langfiles = file.Find("lua/data/language/"..lang.."/*.lua","GAME");
+	local count = 0;
+	for _,f in pairs(langfiles) do
+		local ini = LANGParser:new("lua/data/language/"..lang.."/"..f);
+		if (ini and ini.messages) then
+			for _,v in pairs(ini.messages) do
+				count = count + table.Count(v);
+			end
+		end
+	end
+	return count;
+end
+
 if (CLIENT) then
 	function SGLanguage.ReloadSGLanguages(no_msg)
 		SGLanguage_Messages = {};
@@ -276,7 +291,7 @@ if (CLIENT) then
 end
 
 function SGLanguage.ParseFile(lang, file)
-	ini = LANGParser:new("lua/data/language/"..lang.."/"..file);
+	local ini = LANGParser:new("lua/data/language/"..lang.."/"..file);
 	if (ini and ini.messages) then
 		for _,v in pairs(ini.messages) do
 			for k,m in pairs(v) do

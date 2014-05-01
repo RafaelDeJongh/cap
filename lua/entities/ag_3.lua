@@ -57,7 +57,7 @@ function ENT:Initialize()
 	self.APC = nil;
 	self.APCply = nil;
 
-	self.HealthWep = GetConVar("CAP_ag3_health"):GetInt();
+	self.HealthWep = StarGate.CFG:Get("ag_3","health",500);
 	self.Power = 0;
 
 	self.WireActive = nil;
@@ -264,7 +264,7 @@ function ENT:Think(ply)
 			end
 
 			if (CurTime() - self.Time > 1) then
-				local WeaponTime = GetConVar("CAP_ag3_weapon"):GetInt();
+				local WeaponTime = StarGate.CFG:Get("ag_3","recharge_time",60);
 				self.Time = CurTime();
 				self.Power = self.Power + 100/WeaponTime;
 				self.Power = math.Clamp(self.Power, 0, 100);

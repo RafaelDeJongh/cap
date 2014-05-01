@@ -139,7 +139,7 @@ end
 function ENT:Think(ply)
 
 	local energy = self:GetResource("energy");
-	local en = GetConVar("cap_ashen_en"):GetBool();
+	local en = StarGate.CFG:Get("ashen_defence","req_energy",true);
 
 	if(energy > self.energy_drain or !self.HasRD or !en) then
 

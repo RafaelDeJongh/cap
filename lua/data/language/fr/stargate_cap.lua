@@ -131,7 +131,7 @@ stool_update_03 = Si ce message apparait sur un serveur, Dites à l'admin de met
 
 // Stool Names - Configuration
 stool_credits = Crédits
-stool_settings = Paramètres
+stool_settings = Paramètres/Langue
 stool_weapvis = Graphismes armes
 stool_miscvis = Graphismes autres
 stool_shipvis = Graphismes vaisseaux

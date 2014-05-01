@@ -131,7 +131,7 @@ stool_update_03 = Wenn Sie diese Nachricht auf einem Server finden, sagen Sie de
 
 // Stool Namen - Konfiguration
 stool_credits = Credits
-stool_settings = Einstellungen/Convars
+stool_settings = Einstellungen/Sprache
 stool_weapvis = Waffen Visuell
 stool_miscvis = Sonst. Visuell
 stool_shipvis = Shiff Visuell

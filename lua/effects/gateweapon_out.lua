@@ -48,7 +48,9 @@ function EFFECT:Think()
 	self.StargateTrace = StarGate.Trace:New(self.StartPos+self.AimVector*5, self.AimVector*1000000000, {self.Parent, self.Target});
 
 	local iris = StarGate.FindEntInsideSphere(self.StartPos, 50, "stargate_iris");
-	
+
+	self.Entity:SetRenderBoundsWS(self.StartPos,self.StargateTrace.HitPos);
+
 	self.Draw = not (IsValid(iris[1]) and iris[1]:GetNWBool("Activated"));
 	return true
 end

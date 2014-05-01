@@ -125,7 +125,7 @@ stool_update_03 = Kui sa saaad selle kirja interneti serveris, ütle adminile, e
 
 // Stool Names - Konfiguratsioon
 stool_credits =  Autorid
-stool_settings = Seaded/Muutmised
+stool_settings = Seaded/Keel
 stool_weapvis = Relvade Visuaalsus
 stool_miscvis = Misc Visuaalsus
 stool_shipvis = Laevade Visuaalsus

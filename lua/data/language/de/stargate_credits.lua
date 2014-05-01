@@ -1,6 +1,6 @@
 stargate_credits_01 = Credits
 stargate_credits_02 = Hier kannst du Bugs reporten. Falls du nicht in HTML-Formularen schreiben kannst, besuche %s mit deinem Browser.
-stargate_credits_03 = Konnte neustes BUILD nicht ermitteln. Stellen Sie sicher, dass sie mit dem Internet verbunden sind oder kontaktieren sie Madman097.
+stargate_credits_03 = Konnte neustes BUILD nicht ermitteln. Stellen Sie sicher, dass sie mit dem Internet verbunden sind oder kontaktieren sie CAP Team.
 stargate_credits_04 = Konnte jetziges BUILD nicht ermitteln. Stellen Sie sicher, dass Sie richtig aktualisiert haben und die Datei cap_ver.lua in addons/cap/lua ist.
 stargate_credits_05 = Dein Carter's Pack Addon ist auf dem neusten Stand
 stargate_credits_06 = Dein Stand: %d. Neuster Stand: %d.

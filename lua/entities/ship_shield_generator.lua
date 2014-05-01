@@ -101,7 +101,7 @@ end
 
 --################# Activates or deactivates the shield @aVoN
 function ENT:Status(b,nosound)
-	if (GetConVar("CAP_shipshield"):GetInt() != 1) then return end // disable shield if convar != 1
+	if (not StarGate.CFG:Get("cap_misc","ship_shield",true)) then return end // disable shield if convar != 1
 	if(b) then
 		if(not self:Enabled() and not self.CantBeEnabled) then
 			/*local energy = self:GetResource("energy",self.EngageEnergy);

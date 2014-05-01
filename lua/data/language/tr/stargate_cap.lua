@@ -133,7 +133,7 @@ stool_update_03 = Bir sunucuda bu mesaji aliyorsaniz, admine cap'i guncellemesin
 
 // Stool Names - Config
 stool_credits = Yapımcı
-stool_settings = Ayarlar/Convars
+stool_settings = Ayarlar/Dil
 stool_weapvis = Silah Görselleri
 stool_miscvis = Misc Görselleri
 stool_shipvis = Gemi Görselleri

@@ -1,4 +1,3 @@
-stargate_menu_00 = Carter Addon Pack - Stargate ConVars menu Edicion
 stargate_menu_01 =  Menu Stargate
 stargate_menu_02 = DHD
 stargate_menu_03 = Wire

@@ -1,6 +1,6 @@
 stargate_credits_01 = Crédits
 stargate_credits_02 = Ici, Vous pouvez rapporter tout bugs. si vous ne pouvez taper dans la zone de texte html, visitez %s avec votre navigateur.
-stargate_credits_03 = Impossible de déterminer la dernière version. Verifiez que vous êtes connectés à internet ou contactez Madman097.
+stargate_credits_03 = Impossible de déterminer la dernière version. Verifiez que vous êtes connectés à internet ou contactez CAP Team.
 stargate_credits_04 = Impossible de déterminer votre version. Verifiez que vous avez correctement mis à jour le CAP et que cap_ver.lua est dans addon/cap/lua.
 stargate_credits_05 = Votre CAP est à jour.
 stargate_credits_06 = Votre version: %d. Dernière version: %d.

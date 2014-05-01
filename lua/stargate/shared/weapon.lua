@@ -15,7 +15,7 @@ if (SERVER) then
 
 	-- damn man, this should be only server-side, or there is lags in mp.
 	local function Drop(ply)
-		if (not GetConVar("cap_drop_weapons"):GetBool()) then return end
+		if (not StarGate.CFG:Get("cap_misc","allow_drop_weapons",true)) then return end
 		if(not ply:GetActiveWeapon():IsValid() or ply:IsTyping() or IsValid(ply.WireKeyboard) or ply:InVehicle())then return end
    		local tr = ply:GetEyeTraceNoCursor();
    		local class = ply:GetActiveWeapon():GetClass();

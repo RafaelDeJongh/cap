@@ -28,6 +28,7 @@ function EFFECT:Init(data)
 	self.EH	= StarGate.FindEntInsideSphere(self.Parent:GetLocalGate():GetPos(), 10, "event_horizon")[1]	-- Remote Gate
 	if (not IsValid(self.EH)) then return end
 	self.Beam = self.Parent:GetInboundBeam();
+	self.Parent.BeamEffect = self;
 
 	self.MainStart = self.Parent:GetEmitterPos();
 	self.EndPos	= StarGate.GetEntityCentre(self.EH);
@@ -86,6 +87,8 @@ function EFFECT:Think()
 		dlight.Size = 750;
 		dlight.DieTime = CurTime() + 0.2;
 	end
+
+	self.Entity:SetRenderBoundsWS(self.MainStart,self.EndPos);
 	return true
 end
 

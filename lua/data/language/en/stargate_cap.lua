@@ -134,7 +134,7 @@ stool_update_03 = If you are getting this message on an internet server, tell th
 
 // Stool Names - Config
 stool_credits = Credits
-stool_settings = Settings/Convars
+stool_settings = Settings/Language
 stool_weapvis = Weapons Visuals
 stool_miscvis = Misc Visuals
 stool_shipvis = Ship Visuals

@@ -84,6 +84,10 @@ function ENT:OnRemove()
 	if IsValid(self.StartEntity) then self.StartEntity:Remove(); end
 end
 
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS;
+end
+
 function ENT:Think()
 	if not IsValid(self.Parent) then self.Entity:Remove() end
 

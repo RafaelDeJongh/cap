@@ -4,7 +4,6 @@ stargate_menu_t3 = Misc Convars
 stargate_menu_t4 = Config Editor
 stargate_menu_t5 = Admin Tools
 stargate_menu_hint = Convar: %s
-stargate_menu_00 = Carter Addon Pack - Stargate ConVars Edit Menu
 stargate_menu_01 = Stargate Menu
 stargate_menu_02 = DHD
 stargate_menu_03 = Wire
@@ -32,8 +31,7 @@ stargate_menu_21 = Destroyable Stargates
 stargate_menu_22 = Destroyable server SG's
 stargate_menu_23 = Stargate system:
 stargate_menu_24 = Reloading happens in about 5 seconds.
-stargate_menu_25 = Note: energy support not available.\nYou need to install Life Support and Resource Distribution addons\n(version 2 or 3).
-stargate_menu_25n = Energy support is not available!\nYou need to install the SpaceBuild or the Environments addon.
+stargate_menu_25 = Energy support is not available!\nYou need to install the SpaceBuild or the Environments addon.
 stargate_menu_25b = Energy support is successfully enabled.\nEnergy is required for almost all entities in CAP!
 stargate_menu_info = Stargate convars are saved automatically on each map change or server shut down.\nIf the server crashes before this to happen then the convars will not be saved!\nMenu created by AlexALX © 2014
 stargate_menu_26 = Block address feature:
@@ -72,7 +70,6 @@ stargate_menu_45 = Gatespawner
 stargate_menu_46 = Entity Limits
 stargate_menu_47 = STool Limits
 stargate_menu_48 = Visit Carter Addon Pack site
-stargate_cap_menu_00 = Carter Addon Pack - ConVars Edit Menu
 stargate_cap_menu_l = Limit
 stargate_cap_menu_01 = Destiny Small Turret
 stargate_cap_menu_02 = Destiny Medium Turret
@@ -101,17 +98,6 @@ stargate_cap_menu_24 = Lantean Holo Device
 stargate_cap_menu_25 = Shield Core
 stargate_cap_menu_26 = Sodan Obelisk
 stargate_cap_menu_27 = Ancient Obelisk
-stargate_cap_menu_28 = AG-3 Charge Time
-stargate_cap_menu_29 = AG-3 Health
-stargate_cap_menu_30 = Ori Satellite Shield Time
-stargate_cap_menu_31 = Ori Satellite Charge Time
-stargate_cap_menu_32 = Ori Satellite Health
-stargate_cap_menu_33 = Ship Railgun Damage
-stargate_cap_menu_34 = Stationary Railgun Damage
-stargate_cap_menu_35 = Atlantis Shield Energy Consumption
-stargate_cap_menu_36 = Enable Ship Shields
-stargate_cap_menu_37 = Allow Drop Weapons
-stargate_cap_menu_38 = Ashen Defence Requires Energy
 stargate_cap_menu_39 = CAP Ships
 stargate_cap_menu_40 = Iris computer
 stargate_cap_sbox_01 = Animated ramps
@@ -441,3 +427,39 @@ sg_sets[tac][range] = Target find range
 sg_sets[kino_dispenser] = Kino Dispenser
 sg_sets[kino_dispenser][max_kino] = Maximum kinos
 sg_sets[kino_dispenser][max_kino][desc] = Maximum kinos per player
+
+// AG-3
+sg_sets[ag_3] = AG-3 Satellite
+sg_sets[ag_3][health] = Health
+sg_sets[ag_3][recharge_time] = Charge time
+sg_sets[ag_3][recharge_time][desc] = Charge time, in seconds.
+
+// Ori Satellite
+sg_sets[ori_satellite] = Ori Satellite
+sg_sets[ori_satellite][health] = Health
+sg_sets[ori_satellite][recharge_time] = Charge time
+sg_sets[ori_satellite][recharge_time][desc] = Charge time, in seconds.
+sg_sets[ori_satellite][shield_time] = Shield recharge time
+sg_sets[ori_satellite][shield_time][desc] = Shield charge time, in seconds.
+
+// Ship railgun
+sg_sets[ship_railgun] = Ship Railgun
+
+// Stationary railgun
+sg_sets[stationary_railgun] = Stationary Railgun
+
+// Shield core
+sg_sets[shield_core] = Shield Core
+sg_sets[shield_core][atlantis_hit] = Atlantis Shield Energy
+sg_sets[shield_core][atlantis_hit][desc] = Atlantis Shield Energy consumption multiplier on hit.
+
+// Ashen defence
+sg_sets[ashen_defence] = Ashen Defence
+sg_sets[ashen_defence][req_energy] = Require energy
+
+// Cap misc
+sg_sets[cap_misc] = Cap Miscellaneous
+sg_sets[cap_misc][allow_drop_weapons] = Allow drop weapons
+sg_sets[cap_misc][allow_drop_weapons][desc] = Allow drop player weapons?
+sg_sets[cap_misc][ship_shield] = Allow ship shields
+sg_sets[cap_misc][ship_shield][desc] = Allow shields on cap ships?

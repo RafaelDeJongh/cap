@@ -1,9 +1,10 @@
-stargate_settings_01 = CAP Convars/Limits
-stargate_settings_02 = Stargate Convars
-stargate_settings_02n = Settings menu [BETA]
+stargate_settings_01 = Settings menu
+stargate_settings_02 = Visit this page
+stargate_settings_02t = How to translate Carter Addon Pack
 stargate_settings_03 = Supported languages (code):
-stargate_settings_04 = Note: affects only to stargate vgui menus and some other menus/things (if translated).
-stargate_settings_05 = If you want translate something to your language:\nThen read file "ReadMe.html" in addon folder.
+stargate_settings_04 = Affects to cap menus, entity names and some other things (if translated).
+stargate_settings_05 = If you want translate CAP to your language:
 stargate_settings_06 = Enter your language code:
-stargate_settings_07 = Changes apply after you restarted GMod
-stargate_settings_08 = English translation created by AlexALX.
+stargate_settings_07 = Changes apply after you restart map or gmod.
+stargate_settings_08 = English translation created by CAP Team.
+stargate_settings_09 = Multi-language lib created by AlexALX.

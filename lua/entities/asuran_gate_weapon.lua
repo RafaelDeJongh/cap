@@ -72,6 +72,8 @@ end
 
 if CLIENT then
 
+if (StarGate==nil or StarGate.MaterialFromVMT==nil) then return end
+
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 ENT.Category = SGLanguage.GetMessage("entity_weapon_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_asuran_weapon");
@@ -317,6 +319,14 @@ function ENT:ClearTarget()
 	self:SetLocalGate(nil)
 end
 
+function ENT:UpdateTransmitState()
+	if (self.isFiring) then
+		return TRANSMIT_ALWAYS;
+	else
+		return TRANSMIT_PVS;
+	end
+end
+
 -- Handles state transitions and cools down all stargates
 function ENT:Think()
 	if(self.localGate && self:IsGateValidTarget(self.localGate) == false) then
@@ -524,7 +534,7 @@ end
 
 function ENT:SetIsFiring(isFiring)
 	self.isFiring = util.tobool(isFiring)
-	--self.Entity:SetNetworkedBool("isFiring", self.isFiring)
+	self.Entity:SetNetworkedBool("isFiring", self.isFiring)
 end
 
 function ENT:CreateBeam()
@@ -556,7 +566,7 @@ function ENT:CreateBeam()
 			 return
 		  end
 
-		inBeamInfo = EffectData()
+		local inBeamInfo = EffectData()
 			inBeamInfo:SetEntity(self.Entity)
 		util.Effect("GateWeapon_beams", inBeamInfo,true,true)
 

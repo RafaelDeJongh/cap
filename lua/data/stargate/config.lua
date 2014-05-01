@@ -305,6 +305,38 @@ range = 800
 # maximum kinos per player
 max_kino = 4
 
+# AG-3
+[ag_3]
+health = 500
+recharge_time = 60
+
+# Ori Satellite
+[ori_satellite]
+health = 500
+recharge_time = 60
+shield_time = 120
+
+# Ship railgun
+[ship_railgun]
+damage = 10
+
+# Stationary railgun
+[stationary_railgun]
+damage = 10
+
+# Shield core
+[shield_core]
+atlantis_hit = 50
+
+# Ashen defence
+[ashen_defence]
+req_energy = true
+
+# Cap misc
+[cap_misc]
+allow_drop_weapons = true
+ship_shield = true
+
 # Group-only ents
 # add_shield means add shield icon to spawnmenu
 # add exclude_mod for invert - player should NOT have this group

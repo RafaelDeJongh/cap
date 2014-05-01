@@ -9,26 +9,13 @@ function StarGate_Settings(Panel)
 	local GREEN = Color(0,255,0,255);
 	local ORANGE = Color(255,128,0,255);
 	local RED = Color(255,0,0,255);
-	local DGREEN = Color(0,192,0,255);
+	local DGREEN = Color(0,182,0,255);
 
 	if (LocalPlayer():IsAdmin()) then
 		local convarsmenu = vgui.Create("DButton", Panel);
 	    convarsmenu:SetText(SGLanguage.GetMessage("stargate_settings_01"));
 	    convarsmenu:SetSize(150, 25);
-		convarsmenu.DoClick = function ( btn )
-			RunConsoleCommand("stargate_cap_convars");
-		end
-		Panel:AddPanel(convarsmenu);
-		local convarsmenu = vgui.Create("DButton", Panel);
-	    convarsmenu:SetText(SGLanguage.GetMessage("stargate_settings_02"));
-	    convarsmenu:SetSize(150, 25);
-		convarsmenu.DoClick = function ( btn )
-			RunConsoleCommand("stargate_system_convars");
-		end
-		Panel:AddPanel(convarsmenu);
-		local convarsmenu = vgui.Create("DButton", Panel);
-	    convarsmenu:SetText(SGLanguage.GetMessage("stargate_settings_02n"));
-	    convarsmenu:SetSize(150, 25);
+	    convarsmenu:SetImage("icon16/wrench.png");
 		convarsmenu.DoClick = function ( btn )
 			RunConsoleCommand("stargate_settings");
 		end
@@ -69,20 +56,53 @@ function StarGate_Settings(Panel)
 		end
 	end
 	-- add exists languages
-	local langstext = "";
 	local _,langs = file.Find("lua/data/language/*","GAME");
+	local en_count = SGLanguage.CountMessagesInLanguage("en");
+	local lng_arr = {}
 	for i,lang in pairs(langs) do
-		if (i!=1) then langstext = langstext..", "; end
-		langstext = langstext..SGLanguage.GetLanguageName(lang).." ("..lang..")"
+		local count = math.Round(SGLanguage.CountMessagesInLanguage(lang)*100/en_count);
+		if (count>100) then count = 100-(count-100); -- just in case if some lines was removed, this means outdated translation so not 100%!
+		elseif (count<0) then count = 1; end -- idk if this can happens due to previous check
+		lng_arr[lang] = {SGLanguage.GetLanguageName(lang),count};
 		clientlang:AddChoice(SGLanguage.GetLanguageName(lang));
 	end
 	Panel:AddPanel(clientlang);
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_07"));
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_03")):SetTextColor(DGREEN);
-	Panel:Help(langstext.."."):SetTextColor(DGREEN);
+	local VGUI = vgui.Create("DPanel");
+	VGUI:SetBackgroundColor(Color(120,120,120));
+	local i = 5;
+	for k,v in SortedPairs(lng_arr) do
+		local count = v[2];
+		local col = HSVToColor((count/100)*120,1,0.9);
+		local p = vgui.Create("DLabel",VGUI);
+		p:SetPos(10,i);
+		p:SetText(v[1].." ("..k..") - "..count.."%");
+		p:SetSize(150,15);
+		p:SetAutoStretchVertical(true);
+		p:SetTextColor(col);
+		p:SetTall(10);
+		p:DockMargin(0,0,0,0);
+		i = i+15;
+	end
+	VGUI:SetSize(150,i+5);
+	Panel:AddPanel(VGUI);
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_04"));
 	Panel:Help("");
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_05"));
+	local VGUI = vgui.Create("DButton");
+	VGUI:SetText(SGLanguage.GetMessage("stargate_settings_02"));
+	VGUI:SetImage("icon16/group.png");
+	VGUI:SetSize(150, 25);
+	VGUI.DoClick = function()
+		local help = vgui.Create("SHTMLHelp");
+		help:SetURL("http://sg-carterpack.com/wiki/doc/how-to-translate-cap/");
+		help:SetText(SGLanguage.GetMessage("stargate_settings_02t"));
+		help:SetVisible(true);
+	end
+	Panel:AddPanel(VGUI);
 	Panel:Help("");
 	Panel:Help(SGLanguage.GetMessage("stargate_settings_08"));
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_09"));
 
 end

@@ -350,6 +350,14 @@ function ENT:ClearTarget()
    self:SetLocalGate(nil)
 end
 
+function ENT:UpdateTransmitState()
+	if (self.isFiring) then
+		return TRANSMIT_ALWAYS;
+	else
+		return TRANSMIT_PVS;
+	end
+end
+
 -- Handles state transitions and cools down all stargates
 function ENT:Think()
 

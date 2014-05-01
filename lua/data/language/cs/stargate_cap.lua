@@ -130,7 +130,7 @@ stool_update_03 = Jestli jste obdrželi tuto zprávu na serveru, Informujte admi
 
 // Stool Names - Config
 stool_credits = Kredity
-stool_settings = Nastavení/Convary
+stool_settings = Nastavení/Jazyk
 stool_weapvis = Vizualizace Zbraní
 stool_miscvis = Ostatní Vizualizace
 stool_shipvis = Vizualizace Lodí

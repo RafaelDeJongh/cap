@@ -416,7 +416,7 @@ function ENT:Hit(strength,normal,pos)
 		local energy = self:GetResource("energy");
 
 		-- Make the shield consume more power depending on hit strength
-		local take_energy = math.Clamp(200*math.Clamp(strength,1,40)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),1,10000)*GetConVar("CAP_shieldcore_atlfrac"):GetInt();
+		local take_energy = math.Clamp(200*math.Clamp(strength,1,40)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),1,10000)*StarGate.CFG:Get("shield_core","atlantis_hit",50);
 		self:ConsumeResource("energy",math.Clamp(take_energy,1,energy));
 	else
 		self.Strength = math.Clamp(self.Strength-2*math.Clamp(strength,1,20)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),0,100);

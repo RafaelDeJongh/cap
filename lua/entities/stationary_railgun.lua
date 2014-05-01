@@ -443,7 +443,7 @@ function ENT:Shoot()
 		effectdata:SetScale( 2 )
 	util.Effect( "MuzzleEffect", effectdata )
 
-	local damage = GetConVar("CAP_statrail_damage"):GetInt();
+	local damage = StarGate.CFG:Get("stationary_railgun","damage",10);
 
 	bullet = {}
 	bullet.Src		= self.ShootPos;
