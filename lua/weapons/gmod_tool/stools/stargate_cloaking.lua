@@ -54,15 +54,13 @@ TOOL.Entity.Keys = {"toggle_cloak","model","size","immunity","phase_shift","atta
 TOOL.Entity.Limit = 1;
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Cloaking Spawner";
-TOOL.Topic["desc"] = "Creates a Cloaking Generator";
-TOOL.Topic[0] = "Left click, to spawn a Cloaking Generator";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Cloaking Generator removed";
-TOOL.Language["Cleanup"] = "Cloaking Generators";
-TOOL.Language["Cleaned"] = "Removed all Cloaking Generators";
-TOOL.Language["SBoxLimit"] = "Hit the Cloaking Generator limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_cloaking_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_cloaking_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_cloaking_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_cloaking_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_cloaking_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_cloaking_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_cloaking_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -138,20 +136,20 @@ end
 
 --################# Controlpanel @aVoN
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("Slider",{Label="Size:",Type="Integer",Min=1,Max=1000,Command="stargate_cloaking_size"});
-	Panel:AddControl("Label",{Text="Note: Props which are attached to this are getting cloaked automatically. Just set the size if you really need a field. If you want to cloak attached props only, set the size to 1!"});
+	Panel:AddControl("Slider",{Label=SGLanguage.GetMessage("stool_size"),Type="Integer",Min=1,Max=1000,Command="stargate_cloaking_size"});
+	Panel:AddControl("Label",{Text=SGLanguage.GetMessage("stool_stargate_cloaking_note")});
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="stargate_cloaking_toggle",
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_cloaking_model",Category="",Models=self.Models});
-	Panel:CheckBox("Visible for Owner","stargate_cloaking_immunity"):SetToolTip("When this is enabled, the owner of the cloaking generator can always\nsee his cloaked props");
-	Panel:CheckBox("Phase Shifting","stargate_cloaking_phase_shift"):SetToolTip("Makes all cloaked props nocollide with anything but world");
-	Panel:CheckBox("Cloak Attached","stargate_cloaking_attached"):SetToolTip("If selected, every prop attached to this will get cloaked (Works like the Duplicator), if not only the one in the radius")
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="stargate_cloaking_model",Category="",Models=self.Models});
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_cloaking_ow"),"stargate_cloaking_immunity"):SetToolTip(SGLanguage.GetMessage("stool_stargate_cloaking_ow_desc"));
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_cloaking_nc"),"stargate_cloaking_phase_shift"):SetToolTip(SGLanguage.GetMessage("stool_stargate_cloaking_nc_desc"));
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_cloaking_ca"),"stargate_cloaking_attached"):SetToolTip(SGLanguage.GetMessage("stool_stargate_cloaking_ca_desc"))
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_cloaking_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_cloaking_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_cloaking_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 end
 

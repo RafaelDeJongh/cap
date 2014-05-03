@@ -161,7 +161,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt()
 	if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Shield Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -507,7 +507,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt();
 		if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Shield Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

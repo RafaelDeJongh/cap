@@ -8,16 +8,16 @@ TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar['model'] = StarGate.Ramps.AnimDefault[1];
 local entityName = "anim_ramps"
 TOOL.Entity.Class = "anim_ramps";
-TOOL.Entity.Limit = StarGate.CFG:Get("anim_ramps","limit",10);
+TOOL.Entity.Limit = 10;
 TOOL.CustomSpawnCode = true;
 
-TOOL.Topic["name"] = "Ramp Spawner";
-TOOL.Topic["desc"] = "Creates a Ramp";
-TOOL.Topic[0] = "Left click, to spawn a Ramp";
-TOOL.Language["Undone"] = "Ramp removed";
-TOOL.Language["Cleanup"] = "Ramp";
-TOOL.Language["Cleaned"] = "Removed all Ramps";
-TOOL.Language["SBoxLimit"] = "Hit the Ramp limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_ramp_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_ramp_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_ramp_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_ramp_remove");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_ramp_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_ramp_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_ramp_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -25,7 +25,7 @@ function TOOL:LeftClick(t)
 	if(CLIENT) then return true end;
 	local p = self:GetOwner();
 	if(p:GetCount("CAP_anim_ramps")>=GetConVar("sbox_maxanim_ramps"):GetInt()) then
-		p:SendLua("GAMEMODE:AddNotify(\"Anim ramp limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_ramp_anim_limit\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return false;
 	end
 	local ang = p:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360
@@ -113,7 +113,7 @@ function TOOL.BuildCPanel(panel)
 
    panel:AddControl("PropSelect",
    {
-		Label = "Model:",
+		Label = SGLanguage.GetMessage("stool_model"),
 		ConVar = entityName.."_model",
 		Category = "Stargate",
 		Models = list.Get(entityName.."Models")

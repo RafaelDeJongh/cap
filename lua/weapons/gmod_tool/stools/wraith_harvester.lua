@@ -55,18 +55,16 @@ list.Set(TOOL.List,"models/props_trainstation/trainstation_clock001.mdl",{});
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "wraith_harvester";
 TOOL.Entity.Keys = {"spit","suck","always_down","model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("harvester","limit",1); -- Spawnlimit
+TOOL.Entity.Limit = 1; -- Spawnlimit
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Wraith Harvester";
-TOOL.Topic["desc"] = "Spawns a harvester which can suck up people";
-TOOL.Topic[0] = "Left click, to spawn a harvester, right to update";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Wraith Harvester removed";
-TOOL.Language["Cleanup"] = "Wraith Harvesters";
-TOOL.Language["Cleaned"] = "Removed all Wraith Harvesters";
-TOOL.Language["SBoxLimit"] = "Hit the Wraith Harvesters limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_wraith_harvester_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_wraith_harvester_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_wraith_harvester_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_wraith_harvester_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_wraith_harvester_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_wraith_harvester_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_wraith_harvester_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -128,16 +126,16 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Suck:",
+		Label=SGLanguage.GetMessage("stool_wraith_harvester_suck"),
 		Command="wraith_harvester_suck",
-		Label2="Spit:",
+		Label2=SGLanguage.GetMessage("stool_wraith_harvester_spit"),
 		Command2="wraith_harvester_spit",
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="wraith_harvester_model",Category="",Models=self.Models});
-	Panel:CheckBox("Beam Always Straigth Down","wraith_harvester_always_down");
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="wraith_harvester_model",Category="",Models=self.Models});
+	Panel:CheckBox(SGLanguage.GetMessage("stool_wraith_harvester_beam"),"wraith_harvester_always_down");
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"wraith_harvester_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"wraith_harvester_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"wraith_harvester_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 end
 

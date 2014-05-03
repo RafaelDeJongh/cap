@@ -51,15 +51,13 @@ TOOL.Entity.Keys = {"toggle","model"}; -- These keys will get saved from the dup
 TOOL.Entity.Limit = 3; -- A person generally can spawn 1 mobile dhd
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Mobile DHD Spawner";
-TOOL.Topic["desc"] = "Creates a Mobile DHD";
-TOOL.Topic[0] = "Left click, to spawn a Mobile DHD";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Mobile DHD removed";
-TOOL.Language["Cleanup"] = "Mobile DHDs";
-TOOL.Language["Cleaned"] = "Removed all Mobile DHDs";
-TOOL.Language["SBoxLimit"] = "Hit the Mobile DHD limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_dhd_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_dhd_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_dhd_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_dhd_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_dhd_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_dhd_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_dhd_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -113,14 +111,14 @@ function TOOL:ControlsPanel(Panel)
 	});*/
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="stargate_dhd_toggle",
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_dhd_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="stargate_dhd_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_dhd_autoweld");
 	--[[ -- No LifeSupport added yet
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_dhd_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_dhd_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 	--]]
 end

@@ -127,7 +127,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	local PropLimit = GetConVar("CAP_destmain_max"):GetInt();
 	if(ply:GetCount("CAP_destmain")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Destiny Main Weapons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_dest_main\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -215,7 +215,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_destmain_max"):GetInt()
 		if(ply:GetCount("CAP_destmain_max")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Destiny Main Weapons limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_dest_main\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:OnRemove();
 			return
 		end

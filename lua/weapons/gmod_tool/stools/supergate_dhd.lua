@@ -19,18 +19,16 @@ TOOL.ClientConVar["model"] = "models/Madman07/supergate_dhd/supergate_dhd.mdl";
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "supergate_dhd";
 TOOL.Entity.Keys = {"toggle","model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("supergate_dhd","limit",3);
+TOOL.Entity.Limit = 2;
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Supergate DHD Spawner";
-TOOL.Topic["desc"] = "Creates a Supergate DHD";
-TOOL.Topic[0] = "Left click, to spawn a Supergate DHD";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Supergate DHD removed";
-TOOL.Language["Cleanup"] = "Supergate DHDs";
-TOOL.Language["Cleaned"] = "Removed all Supergate DHDs";
-TOOL.Language["SBoxLimit"] = "Hit the Supergate DHD limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_supergate_dhd_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_supergate_dhd_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_supergate_dhd_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_supergate_dhd_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_supergate_dhd_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_supergate_dhd_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_supergate_dhd_limit");
 --################# Code
 TOOL.Seg = Angle(0,0,0);
 --################# LeftClick Toolaction @aVoN
@@ -44,7 +42,7 @@ function TOOL:LeftClick(t)
 	for _,v in pairs(ents.FindByClass("supergate_dhd")) do
 		if v:GetParent() != nil then
 			if v:GetParent() == t.Entity then
-				 p:SendLua("GAMEMODE:AddNotify(\"Supergate DHD is already exist on this Supergate!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+				 p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_supergate_dhd_exs\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return
 			end
 		end
@@ -54,7 +52,7 @@ function TOOL:LeftClick(t)
 		self.Seg = seg;
 	else
 		return
-		 p:SendLua("GAMEMODE:AddNotify(\"You are not pointing at a Supergate!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		 p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_supergate_dhd_err\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 	end
 	--######## Spawn SENT
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
@@ -91,7 +89,7 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="supergate_dhd_toggle",
 	});
 end

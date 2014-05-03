@@ -14,14 +14,14 @@ TOOL.List = "ASURANZPMHUB";
 list.Set(TOOL.List,"models/pg_props/pg_stargate/pg_asuran_hub.mdl",{Angle=Angle(0,0,0),Position=Vector(0,0,0)});
 TOOL.Entity.Class = "asuran_zpm_hub";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("asuran_zpm_hub","limit",5);
-TOOL.Topic["name"] = "Asuran ZPM Hub Spawner";
-TOOL.Topic["desc"] = "Creates an Asuran ZPM Hub";
-TOOL.Topic[0] = "Left click to spawn an Asuran ZPM Hub";
-TOOL.Language["Undone"] = "Asuran ZPM Hub removed";
-TOOL.Language["Cleanup"] = "Asuran ZPM Hub";
-TOOL.Language["Cleaned"] = "Removed all Asuran ZPM Hubs";
-TOOL.Language["SBoxLimit"] = "Hit the Asuran ZPM Hub limit";
+TOOL.Entity.Limit = 5;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_asuran_zpm_hub_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_asuran_zpm_hub_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -48,7 +48,7 @@ end
 
 function TOOL:ControlsPanel(Panel)
     Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"asuran_zpm_hub_autoweld");
-	Panel:AddControl("Label", {Text = "\nThis is the Asuran ZPM Hub. This tool requires Life Support and Resource Distribution. If you don't have LS/RD, this ZPM Hub is quite useless to you.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_asuran_zpm_hub_fulldesc")})
 end
 
 TOOL:Register();

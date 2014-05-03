@@ -6,9 +6,9 @@ TOOL.ClientConVar[ "arg" ]	= "0"
 
 if ( CLIENT ) then
 
-	language.Add( "Tool.cap_creator.name", "Creator" )
-	language.Add( "Tool.cap_creator.desc", "Spawn an entity from the spawnmenu" )
-	language.Add( "Tool.cap_creator.0", "Click anywhere to create the entity you selected from the spawnmenu" )
+	language.Add( "tool.cap_creator.name", language.GetPhrase("tool.creator.name") )
+	language.Add( "tool.cap_creator.desc", language.GetPhrase("tool.creator.desc") )
+	language.Add( "tool.cap_creator.0", language.GetPhrase("tool.creator.0") )
 
 end
 

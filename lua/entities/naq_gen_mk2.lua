@@ -232,7 +232,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable("naq_gen_mks",ply,"tool")) then self.Entity:Remove(); return end
 	if (IsValid(ply)) then
 		if(ply:GetCount("naq_gen_mks")+1>GetConVar("sbox_maxnaq_gen_mks"):GetInt()) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Naquadah generator limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_naq_gen_mks_limit\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

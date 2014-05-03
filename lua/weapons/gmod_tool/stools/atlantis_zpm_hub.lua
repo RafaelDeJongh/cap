@@ -14,14 +14,14 @@ TOOL.List = "ATLANTISZPMHUB";
 list.Set(TOOL.List,"models/pg_props/pg_zpm/pg_zpm_hub.mdl",{Angle=Angle(0,30%360,0),Position=Vector(0,0,0)});
 TOOL.Entity.Class = "zpmhub";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("zpmhub","limit",5);
-TOOL.Topic["name"] = "Atlantis ZPM Hub Spawner";
-TOOL.Topic["desc"] = "Creates an Atlantis ZPM Hub";
-TOOL.Topic[0] = "Left click to spawn an Atlantis ZPM Hub";
-TOOL.Language["Undone"] = "Atlantis ZPM Hub removed";
-TOOL.Language["Cleanup"] = "Atlantis ZPM Hub";
-TOOL.Language["Cleaned"] = "Removed all Atlantis ZPM Hubs";
-TOOL.Language["SBoxLimit"] = "Hit the Atlantis ZPM Hub limit";
+TOOL.Entity.Limit = 5;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_atlantis_zpm_hub_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -49,7 +49,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("Label", {Text = "\nThis is the Atlantis ZPM Hub. This tool requires LifeSupport and Resource Distribution. If you don't have LS/RD, this ZPM Hub is quite useless to you.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_atlantis_zpm_hub_fulldesc")})
 end
 
 TOOL:Register();

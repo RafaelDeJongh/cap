@@ -286,18 +286,6 @@ iriscomp_cancel = İptal
 iriscomp_toggle = Irisi Aç
 iriscomp_ok = Ok
 
-// spawn menu info
-spawninfo_title = Açıklama
-spawninfo_load = Yükleniyor...
-spawninfo_news = Yeni Haberler
-spawninfo_wiki = Wiki
-spawninfo_forum = Destek Forumu
-spawninfo_multi = Multi-Dil Yarımı
-// you can create own language support thread in this forum and replace url with your link
-spawninfo_multi_url = http://sg-carterpack.com/forums/forum/support/multi-language-support/
-spawninfo_fp = Facepunch Thread
-spawninfo_donate = Ödeme Yap
-
 // huds
 hud_status = Statü
 hud_energy = Enerji

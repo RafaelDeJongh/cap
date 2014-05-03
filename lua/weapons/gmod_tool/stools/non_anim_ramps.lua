@@ -20,14 +20,14 @@ end
 
 TOOL.Entity.Class = "ramp";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("ramp","limit",50);
-TOOL.Topic["name"] = "Ramp Spawner";
-TOOL.Topic["desc"] = "Creates a Ramp";
-TOOL.Topic[0] = "Left click, to spawn a Ramp";
-TOOL.Language["Undone"] = "Ramp removed";
-TOOL.Language["Cleanup"] = "Ramp";
-TOOL.Language["Cleaned"] = "Removed all Ramps";
-TOOL.Language["SBoxLimit"] = "Hit the Ramp limit";
+TOOL.Entity.Limit = 50;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_ramps_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_ramps_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_ramps_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_ramps_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_ramps_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_ramps_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_ramps_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -50,7 +50,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="non_anim_ramps_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="non_anim_ramps_model",Category="",Models=self.Models});
 end
 
 TOOL:Register();

@@ -80,7 +80,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	local PropLimit = GetConVar("CAP_applecore_max"):GetInt()
 	if(ply:GetCount("CAP_applecore")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Apple Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_app_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -278,7 +278,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local PropLimit = GetConVar("CAP_applecore_max"):GetInt();
 	if (IsValid(ply)) then
 		if(ply:GetCount("CAP_applecore")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Apple Core limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_app_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:OnRemove();
 			return
 		end

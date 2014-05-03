@@ -97,6 +97,8 @@ function LANGParser:parse()
 		if (line:sub(1,1):byte()==239) then
 			line = line:sub(4)
 		end
+		--line = line:gsub("([0-9]+%%)","%1%%")); -- support for numbers with percent in translation
+		--line = line:gsub("%s([%%])%s"," %1%% ");
 		if(line ~= "" and not multiline) then -- Only add lines with contents (no commented lines)
 			nodes[cur_node] = nodes[cur_node] or {};
 			local data = string.Explode("=",line);
@@ -170,7 +172,7 @@ local function LangNames()
 		local ini = LANGParser:new("lua/data/language/"..lang.."/stargate.lua");
 		if (ini and ini.messages) then
 			for _,v in pairs(ini.messages) do
-				if (v["global_lang_name"]) then lang_names["Name"][lang] = v["global_lang_name"]; lang_names["Lang"][v["global_lang_name"]] = lang; end
+				if (v["global_lang_name"]) then lang_names["Name"][lang] = v["global_lang_name"]; lang_names["Lang"][v["global_lang_name"]] = lang; break; end
 			end
 		end
 	end
@@ -265,17 +267,22 @@ function SGLanguage.GetLanguageFromName(lang)
 	return lang_names["Lang"][lang] or "err";
 end
 
-function SGLanguage.CountMessagesInLanguage(lang)
+function SGLanguage.CountMessagesInLanguage(lang,return_msgs)
 	if (not lang) then lang = SGLanguage.GetClientLanguage(); end
 	local langfiles = file.Find("lua/data/language/"..lang.."/*.lua","GAME");
-	local count = 0;
+	local count,msgs = 0,{};
 	for _,f in pairs(langfiles) do
 		local ini = LANGParser:new("lua/data/language/"..lang.."/"..f);
-		if (ini and ini.messages) then
-			for _,v in pairs(ini.messages) do
-				count = count + table.Count(v);
+		if (ini and ini.messages and ini.messages[1]) then
+			for k,v in pairs(ini.messages[1]) do
+				--count = count + table.Count(v);
+				msgs[k] = v;
 			end
 		end
+	end
+	count = table.Count(msgs);
+	if (return_msgs) then
+		return count,msgs;
 	end
 	return count;
 end

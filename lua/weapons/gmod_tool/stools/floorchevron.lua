@@ -11,14 +11,14 @@ list.Set(TOOL.List,"models/The_Sniper_9/Universe/Stargate/floorchevron.mdl",{});
 list.Set(TOOL.List,"models/Boba_Fett/ramps/sgu_ramp/floor_chev.mdl",{});
 TOOL.Entity.Class = "floorchevron";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("floorchevron","limit",10);
-TOOL.Topic["name"] = "Floor Chevron Spawner";
-TOOL.Topic["desc"] = "Creates a Floor Chevron";
-TOOL.Topic[0] = "Left click, to spawn a Floor Chevron";
-TOOL.Language["Undone"] = "Floor Chevron removed";
-TOOL.Language["Cleanup"] = "Floor Chevron";
-TOOL.Language["Cleaned"] = "Removed all Floor Chevrons";
-TOOL.Language["SBoxLimit"] = "Hit the Floor Chevron limit";
+TOOL.Entity.Limit = 10;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_floorchevron_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_floorchevron_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_floorchevron_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_floorchevron_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_floorchevron_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_floorchevron_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_floorchevron_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -30,12 +30,12 @@ function TOOL:LeftClick(t)
 	end
 	if(not self:CheckLimit()) then return false end;
 	if(not IsValid(t.Entity) or not t.Entity:GetClass():find("stargate_universe")) then
-	    p:SendLua("GAMEMODE:AddNotify(\"Target is not a Stargate Universe!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_floorchevron_err\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 	    return
 	end
 	for _,v in pairs(StarGate.GetConstrainedEnts(t.Entity,2) or {}) do
 		if(IsValid(v) and v:GetClass():find("floorchevron")) then
-		   p:SendLua("GAMEMODE:AddNotify(\"Floor Chevron is exist on this Stargate!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		   p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_floorchevron_exs\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		   return
 		end
 	end
@@ -56,8 +56,8 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-    Panel:AddControl("PropSelect",{Label="Model",ConVar="floorchevron_model",Category="",Models=self.Models});
-	Panel:AddControl("Label", {Text = "\nDiscription:\n\nChevron on the Floor that turns on when the last Symbol has locked and then the Gate kawooshes.",})
+    Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="floorchevron_model",Category="",Models=self.Models});
+	Panel:AddControl("Label", {Text = "\n"..SGLanguage.GetMessage("stool_desc").."\n\n"..SGLanguage.GetMessage("stool_floorchevron_fulldesc"),})
 end
 
 TOOL:Register();

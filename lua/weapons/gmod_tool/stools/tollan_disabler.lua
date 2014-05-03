@@ -32,14 +32,14 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 
 TOOL.Entity.Class = "tollan_disabler";
 TOOL.Entity.Keys = {"model","toggle","size","immunity"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("tollan_disabler","limit",2);
-TOOL.Topic["name"] = "Tollan Weapon Disabler Spawner";
-TOOL.Topic["desc"] = "Creates a Weapon Disabler";
-TOOL.Topic[0] = "Left click, to spawn or update a Weapon Disabler";
-TOOL.Language["Undone"] = "Weapon Disabler removed";
-TOOL.Language["Cleanup"] = "Weapon Disabler";
-TOOL.Language["Cleaned"] = "Removed all Weapon Disablers";
-TOOL.Language["SBoxLimit"] = "Hit the Weapon Disabler limit";
+TOOL.Entity.Limit = 2;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_tollan_disabler_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_tollan_disabler_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_tollan_disabler_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_tollan_disabler_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_tollan_disabler_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_tollan_disabler_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_tollan_disabler_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -75,14 +75,14 @@ function TOOL:PostEntitySpawn(p,e,model,toggle, size, immunity)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="tollan_disabler_model",Category="",Models=self.Models});
-	Panel:NumSlider("Size:","tollan_disabler_size",100,1024,0);
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="tollan_disabler_model",Category="",Models=self.Models});
+	Panel:NumSlider(SGLanguage.GetMessage("stool_size"),"tollan_disabler_size",100,1024,0);
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="tollan_disabler_toggle",
 	});
-	Panel:CheckBox("Immunity","tollan_disabler_immunity"):SetToolTip("Note: Immunity allows you to use your weapons, if disabler is online");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_immunity"),"tollan_disabler_immunity"):SetToolTip(SGLanguage.GetMessage("stool_tollan_disabler_imm"));
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"tollan_disabler_autoweld");
 end
 

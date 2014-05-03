@@ -20,7 +20,6 @@
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship")) then return end
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
-AddCSLuaFile("client/cl_effects.lua")
 include("shared.lua")
 include("server/sv_toggles.lua")
 include("server/sv_drones.lua")
@@ -64,7 +63,7 @@ function ENT:SpawnFunction(pl, tr)
 
 	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
 	if(pl:GetCount("CAP_ships")+1 > PropLimit) then
-		pl:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		pl:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ships\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -602,7 +601,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
 		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ships\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

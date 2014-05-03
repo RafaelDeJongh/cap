@@ -18,7 +18,7 @@
 
 -- Help Button
 
-PANEL = {};
+local PANEL = {};
 
 --################# Inits @aVoN
 function PANEL:Init()
@@ -39,7 +39,7 @@ function PANEL:Init()
 	-- Help Label
 	self.VGUI.HelpLabel:SetPos(25,3);
 	self.VGUI.HelpLabel:SetWide(500);
-	self.VGUI.HelpLabel:SetText("Help");
+	self.VGUI.HelpLabel:SetText(SGLanguage.GetMessage("stool_help"));
 	self.VGUI.HelpLabel:SetTextColor(Color(0,0,0,255))
 end
 
@@ -49,7 +49,8 @@ function PANEL:OnMousePressed()
 	if (self.Steam and self.URL) then
 		gui.OpenURL(self.URL); return
 	end
-	VGUI = VGUI or vgui.Create("SHTMLHelp");
+	if (VGUI and VGUI.Remove) then VGUI:Remove(); end
+	VGUI = vgui.Create("SHTMLHelp");
 	if(self.URL) then
 		VGUI:SetURL(self.URL);
 	else

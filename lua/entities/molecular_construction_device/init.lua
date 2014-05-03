@@ -71,7 +71,7 @@ function ENT:SpawnFunction(p,t)
 	if (IsValid(p)) then
 		local PropLimit = GetConVar("CAP_mcd_max"):GetInt()
 		if(p:GetCount("CAP_mcd")+1 > PropLimit) then
-			p:SendLua("GAMEMODE:AddNotify(\"Gate Overloader limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_mcd\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return
 		end
 	end
@@ -365,7 +365,7 @@ function ENT:PostEntityPaste(player, Ent,CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	local PropLimit = GetConVar("CAP_mcd_max"):GetInt()
 	if(IsValid(player) and player:IsPlayer() and player:GetCount("CAP_mcd")+1 > PropLimit) then
-		player:SendLua("GAMEMODE:AddNotify(\"MCD limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_mcd\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		self.Entity:Remove();
 		return
 	end

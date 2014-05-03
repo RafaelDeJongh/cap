@@ -77,7 +77,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	local PropLimit = GetConVar("CAP_asgbeam_max"):GetInt()
 	if(ply:GetCount("CAP_asgbeam")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"Asgard Beams limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_asgard_beam\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -197,7 +197,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local PropLimit = GetConVar("CAP_asgbeam_max"):GetInt()
 	if (IsValid(ply)) then
 		if(ply:GetCount("CAP_asgbeam")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Asgard Beams limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_asgard_beam\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

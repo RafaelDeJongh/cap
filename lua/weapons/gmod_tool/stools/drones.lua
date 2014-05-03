@@ -55,15 +55,13 @@ TOOL.Entity.Keys = {"shoot","explode","track","model","eye_track"}; -- These key
 TOOL.Entity.Limit = 2;
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Drone Launcher Spawner";
-TOOL.Topic["desc"] = "Spawns a drone launcher";
-TOOL.Topic[0] = "Left click, to spawn a drone launcher";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Drone launcher removed";
-TOOL.Language["Cleanup"] = "Drone launchers";
-TOOL.Language["Cleaned"] = "Removed all drone launchers";
-TOOL.Language["SBoxLimit"] = "Hit the drone launcher limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_drones_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_drones_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_drones_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_drones_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_drones_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_drones_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_drones_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -121,9 +119,9 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Shoot:",
+		Label=SGLanguage.GetMessage("stool_drones_shoot"),
 		Command="drones_shoot",
-		Label2="Kill Drones:",
+		Label2=SGLanguage.GetMessage("stool_drones_kill"),
 		Command2="drones_explode",
 	});
 	local auto_track = StarGate.CFG:Get("drone","auto_track");
@@ -132,30 +130,30 @@ function TOOL:ControlsPanel(Panel)
 		-- Allow both tracking
 		Panel:AddControl("Numpad",{
 			ButtonSize=22,
-			Label="Track Target:",
+			Label=SGLanguage.GetMessage("stool_drones_track"),
 			Command="drones_track",
-			Label2="Eye Track:",
+			Label2=SGLanguage.GetMessage("stool_drones_eye_track"),
 			Command2="drones_eye_track",
 		});
 	elseif(auto_track) then
 		-- Only autotrack
 		Panel:AddControl("Numpad",{
 			ButtonSize=22,
-			Label="Track Target:",
+			Label=SGLanguage.GetMessage("stool_drones_track"),
 			Command="drones_track",
 		});
 	elseif(eye_track) then
 		-- Only eye track
 		Panel:AddControl("Numpad",{
 			ButtonSize=22,
-			Label="Eye Track:",
+			Label=SGLanguage.GetMessage("stool_drones_eye_track"),
 			Command="drones_eye_track",
 		});
 	end
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="drones_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="drones_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"drones_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"drones_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"drones_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 end
 

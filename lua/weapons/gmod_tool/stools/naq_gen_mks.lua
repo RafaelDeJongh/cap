@@ -14,15 +14,15 @@ local models =
 TOOL.ClientConVar['model'] = models[2]
 local entityName = "naq_gen_mks"
 TOOL.Entity.Class = "naq_gen_mks";
-TOOL.Entity.Limit = StarGate.CFG:Get("naq_gen_mks","limit",10);
+TOOL.Entity.Limit = 10;
 
-TOOL.Topic["name"] = "Naquada Generator Spawner";
-TOOL.Topic["desc"] = "Creates a Naquada Generator";
-TOOL.Topic[0] = "Left click, to spawn a Naquada Generator. Right lick - refill 25% (once in 30 seconds).";
-TOOL.Language["Undone"] = "Naquada Generator removed";
-TOOL.Language["Cleanup"] = "Naquada Generator";
-TOOL.Language["Cleaned"] = "Removed all Naquada Generators";
-TOOL.Language["SBoxLimit"] = "Hit the Naquada Generator limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_naq_gen_mks_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_naq_gen_mks_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_naq_gen_mks_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_naq_gen_mks_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_naq_gen_mks_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_naq_gen_mks_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_naq_gen_mks_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -30,7 +30,7 @@ function TOOL:LeftClick(t)
 	if(CLIENT) then return true end;
 	local p = self:GetOwner();
 	if(p:GetCount("naq_gen_mks")>=GetConVar("sbox_maxnaq_gen_mks"):GetInt()) then
-		p:SendLua("GAMEMODE:AddNotify(\"Naquadah generator limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_naq_gen_mks_limit\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return false;
 	end
 	local ang = p:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360
@@ -118,7 +118,7 @@ function TOOL.BuildCPanel(panel)
 
     panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"naq_gen_mks_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_gen_mks_autolink"):SetToolTip("Autolink this to resource using Entities?");
+		panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_gen_mks_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 	panel:AddControl("Header",
    {
@@ -134,13 +134,13 @@ function TOOL.BuildCPanel(panel)
 
    panel:AddControl("PropSelect",
    {
-		Label = "Model:",
+		Label = SGLanguage.GetMessage("stool_model"),
 		ConVar = entityName.."_model",
 		Category = "Stargate",
 		Models = list.Get(entityName.."Models")
    })
 
-   panel:AddControl("Label", {Text = "\nThis tool is the Naquadah Generator tool. The tool will provide you with a Mark 1 or Mark 2 Naquadah Generator, beacuse the MK1 got less power than the MK2 its still useful. This tool is in use for LifeSupport and Resource Distribution. If you don't got LS/RD this Zpm Hub is quite useless for you.",})
+   panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_naq_gen_mks_fulldesc"),})
 end
 --[[
 function TOOL:ControlsPanel(Panel)

@@ -10,7 +10,7 @@ TOOL.CustomSpawnCode = true;
 TOOL.AddToMenu = false; -- Tell gmod not to add it. We will do it manually later!
 TOOL.Command=nil;
 TOOL.ConfigName="";
-
+/*
 models = {
 	{ 'Teapot', 'models/props_interiors/pot01a.mdl' },
 	{ 'Pot', 'models/props_interiors/pot02a.mdl' },
@@ -20,7 +20,7 @@ models = {
 	{ 'Hover Drive', 'models//props_c17/utilityconducter001.mdl' },
 	{ 'Big Hover Drive', 'models/props_wasteland/laundry_washer003.mdl' },
 	{ 'SpacegatePowernode', 'models/Cebt/sga_pwnode.mdl' },
-}
+} */
 
 TOOL.List = "GravControllerModels"
 list.Set(TOOL.List,"models/props_docks/dock01_cleat01a.mdl",{})
@@ -39,7 +39,7 @@ list.Set(TOOL.List,"models/props_junk/metal_paintcan001a.mdl",{})
 list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{})
 list.Set(TOOL.List,"models/Cebt/sga_pwnode.mdl",{})
 
-loopsounds = {
+local loopsounds = {
 	{'no sound', ''},
 	{'scanner', 'npc/scanner/combat_scan_loop2.wav'},
 	{'heli rotor', 'NPC_CombineGunship.RotorSound'},
@@ -84,14 +84,14 @@ for s, v in pairs(convtable) do
 end
 
 if (CLIENT) then
-	language.Add('gravitycontroller', 'Gravity Controller')
-	language.Add('Tool.gravitycontroller.name', "Gravity Controller Creator")
-	language.Add('Tool.gravitycontroller.desc', 'Build Starships without hoverballs, or simply use it for stabilizing your stuff')
-	language.Add('Tool.gravitycontroller.0', 'Click where you would like to create a Gravity Controller, click on one to update it.')
-	language.Add('Undone_gravitycontroller', 'Gravity Controller Undone')
-	language.Add('Cleanup_gravitycontroller', 'Gravity Controller')
-	language.Add('Cleaned_gravitycontroller', 'Cleaned up all Gravity Controllers')
-	language.Add('SBoxLimit_gravitycontroller', 'Maximum amount of Gravity Controllers reached')
+	language.Add('gravitycontroller', SGLanguage.GetMessage("stool_gravc"))
+	TOOL.Topic["name"] = SGLanguage.GetMessage("stool_gravitycontroller_spawner");
+	TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_gravitycontroller_create");
+	TOOL.Topic[0] = SGLanguage.GetMessage("stool_gravitycontroller_desc");
+	TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_gravitycontroller_undone");
+	TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_gravitycontroller_cleanup");
+	TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_gravitycontroller_cleaned");
+	TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_gravitycontroller_limit");
 end
 
 local sgapowernd={
@@ -165,7 +165,7 @@ function TOOL:LeftClick(trace)
 end
 
 if SERVER then
-    CreateConVar('sbox_maxgravitycontroller', StarGate.CFG:Get("gravitycontroller","limit",15))
+    CreateConVar('sbox_maxgravitycontroller', 15)
 	function MakeGravitycontroller(ply, Ang, Pos, tbl, Data)
 
 		if (IsValid(ply)) then
@@ -237,7 +237,7 @@ if CLIENT then
 			CPanel:Help(SGLanguage.GetMessage("stool_disabled_tool"));
 			return
 		end
-		CPanel:AddControl("Label", {Text = "Please wait...."})
+		CPanel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_gravitycontroller_wait")})
 	end
 	local updatetime = 0
 	local function UpdatePanel()
@@ -259,19 +259,19 @@ if CLIENT then
 		--CPanel:AddHeader()
 		--CPanel:AddDefaultControls()
 		CPanel:AddControl( "PropSelect", {
-			Label = "Model",
+			Label = SGLanguage.GetMessage("stool_model"),
 			ConVar = "gravitycontroller_sModel",
 			Category = "",
 			Models = list.Get("GravControllerModels")
 		})
 		CPanel:AddControl("TextBox", {
-			Label = "Modelpath",
+			Label = SGLanguage.GetMessage("stool_gravitycontroller_mp"),
 			MaxLength = 300,
 			Text = "path_of_model.mdl",
 			Command = "gravitycontroller_sModel",
 		})
-		combo = {}
-		combo.Label = 'Sound'
+		local combo = {}
+		combo.Label = SGLanguage.GetMessage("stool_gravitycontroller_so")
 		combo.MenuButton = 0
 		combo.Folder = "settings/gravitycontroller/"
 		combo.Options = {}
@@ -279,45 +279,45 @@ if CLIENT then
 			combo.Options[v[1]] = {gravitycontroller_sSound = v[2]}
 		end
 		CPanel:AddControl("Label", {Text = ""})
-		CPanel:AddControl("Label", {Text = "Sound"})
+		CPanel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_gravitycontroller_so")})
 		CPanel:AddControl('ComboBox', combo)
 		CPanel:AddControl("TextBox", {
-			Label = "Soundpath",
+			Label = SGLanguage.GetMessage("stool_gravitycontroller_sp"),
 			MaxLength = 300,
 			Text = "path_of_sound",
 			Command = "gravitycontroller_sSound",
 		})
 		CPanel:AddControl("Label", {Text = ""})
-		CPanel:CheckBox("Draw sprite","gravitycontroller_bDrawSprite")
+		CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_ds"),"gravitycontroller_bDrawSprite")
 		if convtable["bSGAPowerNode"][2] != 1 then
 			CPanel:AddControl('Slider', {
-				Label = 'Weight (0: Model Default)',
+				Label = SGLanguage.GetMessage("stool_gravitycontroller_we"),
 				Type = "Float",
 				Min = 0,
 				Max = 500,
 				Command = 'gravitycontroller_fWeight'
-			})
+			}):SetToolTip(SGLanguage.GetMessage("stool_gravitycontroller_we_desc"));
 			CPanel:AddControl("Label", {Text = ""})
-			CPanel:CheckBox("Brake Only (Don't change gravity)","gravitycontroller_bBrakeOnly")
-			CPanel:CheckBox("Always Brake","gravitycontroller_bAlwaysBrake")
-			CPanel:CheckBox("Global Airbrake","gravitycontroller_bGlobalBrake")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_bo"),"gravitycontroller_bBrakeOnly")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_ab"),"gravitycontroller_bAlwaysBrake")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_ga"),"gravitycontroller_bGlobalBrake")
 			if convtable["bGlobalBrake"][2] == 0 then
 				CPanel:AddControl('Slider', {
-					Label = 'Brake X',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_bx"),
 					Type = "Float",
 					Min = 0,
 					Max = 100,
 					Command = 'gravitycontroller_fAirbrakeX'
 				})
 				CPanel:AddControl('Slider', {
-					Label = 'Brake Y',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_by"),
 					Type = "Float",
 					Min = 0,
 					Max = 100,
 					Command = 'gravitycontroller_fAirbrakeY'
 				})
 				CPanel:AddControl('Slider', {
-					Label = 'Brake Z',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_bz"),
 					Type = "Float",
 					Min = 0,
 					Max = 100,
@@ -325,17 +325,17 @@ if CLIENT then
 				})
 			else
 				CPanel:AddControl('Slider', {
-					Label = 'Global Brake',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_gb"),
 					Type = "Float",
 					Min = 0,
 					Max = 100,
 					Command = "gravitycontroller_fBrakePercent"
 				})
 			end
-			CPanel:CheckBox("Angle Brake (buggy sometimes)","gravitycontroller_bAngularBrake")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_ant"),"gravitycontroller_bAngularBrake")
 			if convtable["bAngularBrake"][2] == 1 then
 				CPanel:AddControl('Slider', {
-					Label = 'Angle Brake',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_an"),
 					Type = "Float",
 					Min = 0,
 					Max = 100,
@@ -345,22 +345,22 @@ if CLIENT then
 			CPanel:AddControl("Label", {Text = ""})
 			CPanel:AddControl("Numpad", {
 				ButtonSize = "22",
-				Label = "Activate",
+				Label = SGLanguage.GetMessage("stool_activate"),
 				Command = "gravitycontroller_iActivateKey",
-				Label2 = 'Hovermode',
+				Label2 = SGLanguage.GetMessage("stool_gravitycontroller_ho"),
 				Command2 = "gravitycontroller_iKeyHover",
 			})
 			if convtable["bRelativeToGrnd"][2]==0 then
 				CPanel:AddControl('Numpad', {
 					ButtonSize = '22',
-					Label = 'Hover Up',
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_hu"),
 					Command = "gravitycontroller_iKeyUp",
-					Label2 = 'Hover Down',
+					Label2 = SGLanguage.GetMessage("stool_gravitycontroller_hd"),
 					Command2 = "gravitycontroller_iKeyDown",
 				})
 			end
 			CPanel:AddControl("Slider", {
-				Label = "Hover Speed",
+				Label = SGLanguage.GetMessage("stool_gravitycontroller_hs"),
 				Type = "Float",
 				Min = 0.01,
 				Max = 10,
@@ -369,31 +369,31 @@ if CLIENT then
 			CPanel:CheckBox("Hover relative to ground","gravitycontroller_bRelativeToGrnd")
 			if convtable["bRelativeToGrnd"][2] == 1 then
 				CPanel:AddControl("Slider", {
-					Label = "Height above ground",
+					Label = SGLanguage.GetMessage("stool_gravitycontroller_ha"),
 					Type = "Float",
 					Min = 1,
 					Max = 100,
 					Command = "gravitycontroller_fHeightAboveGrnd"
-				})
+				}):SetToolTip(SGLanguage.GetMessage("stool_gravitycontroller_ha"));
 			end
 			CPanel:AddControl("Label", {Text = ""})
-			CPanel:CheckBox("Hovermode Description","gravitycontroller_bSHHoverDesc")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_hmd"),"gravitycontroller_bSHHoverDesc")
 			if convtable["bSHHoverDesc"][2] == 1 then
-				CPanel:AddControl("Label", {Text = "The GC will act like a hoverball. It will automatically balance all GC's from a contrapion. That means, once activated, everyone of them will have the same target height. So be sure they are all on the same height when you add them to your ship!"})
+				CPanel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_gravitycontroller_hmd_desc")})
 			end
-			CPanel:CheckBox("Local Brake Description","gravitycontroller_bSHLocalDesc")
+			CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_lbd"),"gravitycontroller_bSHLocalDesc")
 			if convtable["bSHLocalDesc"][2] == 1 then
-				CPanel:AddControl("Label", {Text = "If you enable that, the GC will brake seperate on every axis. If you set every but one axis to 100, it will 'slide' along that axis. So if you want your ship not to brake as hard forward as it should sideways or upwards, this is for you!"})
+				CPanel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_gravitycontroller_lbd_desc")})
 			end
 		else
 			CPanel:AddControl("Label", {Text = ""})
 			CPanel:AddControl("Numpad", {
 				ButtonSize = "22",
-				Label = "Activate",
+				Label = SGLanguage.GetMessage("stool_activate"),
 				Command = "gravitycontroller_iActivateKey",
 			})
 		end
-		CPanel:CheckBox("SGA Powernode Mode","gravitycontroller_bSGAPowerNode")
+		CPanel:CheckBox(SGLanguage.GetMessage("stool_gravitycontroller_sga"),"gravitycontroller_bSGAPowerNode")
 	end
 	--usermessage.Hook("UpdateGravControllerPanel", updatepanel)
 	local lastupdate=0

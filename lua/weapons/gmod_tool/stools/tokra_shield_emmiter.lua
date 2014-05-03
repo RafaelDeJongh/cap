@@ -13,14 +13,14 @@ TOOL.ClientConVar["model"] = "models/Madman07/tokra_shield/generator.mdl";
 
 TOOL.Entity.Class = "tokra_emmiter";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("tokra_shield","limit",2);
-TOOL.Topic["name"] = "Tokra Shield Emmiter Spawner";
-TOOL.Topic["desc"] = "Creates a Tokra Shield Emmiter";
-TOOL.Topic[0] = "Left click, to spawn Tokra Shield Emmiter";
-TOOL.Language["Undone"] = "Tokra Shield Emmiter removed";
-TOOL.Language["Cleanup"] = "Tokra Shield Emmiters";
-TOOL.Language["Cleaned"] = "Removed all Tokra Shield Emmiters";
-TOOL.Language["SBoxLimit"] = "Hit the Tokra Shield Emmiters limit";
+TOOL.Entity.Limit = 2;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_tokra_shield_emmiter_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;

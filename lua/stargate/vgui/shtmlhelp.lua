@@ -79,8 +79,9 @@ function PANEL:Paint(w,h)
 	if(self.FadeOut) then
 		alpha = 1-alpha;
 		if(alpha == 0) then
-			self:_SetVisible(false);
-			self.FadeOut = nil;
+			--self:_SetVisible(false);
+			--self.FadeOut = nil;
+			self:Remove();
 		end
 	end
 	draw.RoundedBox(10,0,0,w,h,Color(16,16,16,160*alpha));

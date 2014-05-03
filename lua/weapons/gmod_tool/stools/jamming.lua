@@ -31,14 +31,14 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 
 TOOL.Entity.Class = "jamming_device";
 TOOL.Entity.Keys = {"model","toggle","size","immunity"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("jamming_device","limit",5);
-TOOL.Topic["name"] = "Jamming Device Spawner";
-TOOL.Topic["desc"] = "Creates a Jamming Device";
-TOOL.Topic[0] = "Left click, to spawn or update a Jamming Device";
-TOOL.Language["Undone"] = "Jamming Device removed";
-TOOL.Language["Cleanup"] = "Jamming Device";
-TOOL.Language["Cleaned"] = "Removed all Jamming Devices";
-TOOL.Language["SBoxLimit"] = "Hit the Jamming Device limit";
+TOOL.Entity.Limit = 5;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_jamming_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_jamming_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_jamming_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_jamming_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_jamming_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_jamming_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_jamming_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -74,14 +74,14 @@ function TOOL:PostEntitySpawn(p,e,model,toggle, size, immunity)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="jamming_model",Category="",Models=self.Models});
-	Panel:NumSlider("Size:","jamming_size",100,1024,0);
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="jamming_model",Category="",Models=self.Models});
+	Panel:NumSlider(SGLanguage.GetMessage("stool_size"),"jamming_size",100,1024,0);
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="jamming_toggle",
 	});
-	Panel:CheckBox("Immunity","jamming_immunity"):SetToolTip("Note: Immunity allows you to beam even if jamming is online");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_immunity"),"jamming_immunity"):SetToolTip(SGLanguage.GetMessage("stool_jamming_imm_desc"));
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"jamming_autoweld");
 end
 

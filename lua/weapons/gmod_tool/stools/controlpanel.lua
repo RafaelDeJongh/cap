@@ -20,14 +20,14 @@ list.Set(TOOL.List,"models/madman07/ring_panel/ancient/panel.mdl",{Angle=Angle(2
 
 TOOL.Entity.Class = "control_panel";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("control_panel","limit",10);
-TOOL.Topic["name"] = "Control Panel Spawner";
-TOOL.Topic["desc"] = "Creates a Control Panel";
-TOOL.Topic[0] = "Left click, to spawn Control Panel";
-TOOL.Language["Undone"] = "Control Panel removed";
-TOOL.Language["Cleanup"] = "Control Panels";
-TOOL.Language["Cleaned"] = "Removed all Control Panels";
-TOOL.Language["SBoxLimit"] = "Hit the Control Panels limit";
+TOOL.Entity.Limit = 10;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_controlpanel_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_controlpanel_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_controlpanel_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_controlpanel_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_controlpanel_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_controlpanel_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_controlpanel_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and (t.Entity:IsPlayer() or t.Entity:IsNPC() or t.Entity:GetClass() == self.Entity.Class)) then return false end;
@@ -48,7 +48,7 @@ function TOOL:PreEntitySpawn(p,e,model,toggle)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="controlpanel_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="controlpanel_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"controlpanel_autoweld");
 end
 

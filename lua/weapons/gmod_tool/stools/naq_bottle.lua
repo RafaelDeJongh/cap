@@ -17,13 +17,13 @@ TOOL.ClientConVar["model"] = "models/sandeno/naquadah_bottle.mdl";
 TOOL.Entity.Class = "naquadah_bottle";
 TOOL.Entity.Keys = {"model"};
 TOOL.Entity.Limit = 5;
-TOOL.Topic["name"] = "Naquadah bottle Spawner";
-TOOL.Topic["desc"] = "Creates a Naquadah bottle";
-TOOL.Topic[0] = "Left click, to spawn a Naquadah bottle";
-TOOL.Language["Undone"] = "Naquadah bottle removed";
-TOOL.Language["Cleanup"] = "Naquadah bottles";
-TOOL.Language["Cleaned"] = "Removed all Naquadah bottles";
-TOOL.Language["SBoxLimit"] = "Hit the Naquadah bottle limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_naq_bottle_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_naq_bottle_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_naq_bottle_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_naq_bottle_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_naq_bottle_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_naq_bottle_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_naq_bottle_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -50,9 +50,9 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"naq_bottle_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_bottle_autolink"):SetToolTip("Autolink this to resource using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"naq_bottle_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
-	Panel:AddControl("Label", {Text = "\nThis is the Naquadah bottle, this tool is in use for LifeSupport and Resource Distribution. If you don't got LS/RD this Naquadah bottle is quite useless for you.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_naq_bottle_fulldesc"),})
 end
 
 TOOL:Register();

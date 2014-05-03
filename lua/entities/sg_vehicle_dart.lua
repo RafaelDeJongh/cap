@@ -43,7 +43,7 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	if (!tr.HitWorld) then return end
 	local PropLimit = GetConVar("CAP_ships_max"):GetInt()
 	if(p:GetCount("CAP_ships")+1 > PropLimit) then
-		p:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ships\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 

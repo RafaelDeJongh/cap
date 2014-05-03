@@ -114,7 +114,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	local PropLimit = GetConVar("CAP_ag3_max"):GetInt()
 	if(ply:GetCount("CAP_ag3")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(\"AG-3 Satellites limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ag3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end
 
@@ -149,7 +149,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local PropLimit = GetConVar("CAP_ag3_max"):GetInt()
 	if (IsValid(ply)) then
 		if(ply:GetCount("CAP_ag3")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"AG-3 Satellites limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ag3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

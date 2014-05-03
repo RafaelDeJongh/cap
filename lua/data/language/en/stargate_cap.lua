@@ -32,7 +32,7 @@ entity_shiprail = Ship Railgun
 entity_stat_railgun = Stationary Railgun
 entity_staff_weapon = Stationary Staff Weapon
 
-//Shaped Charge
+// Shaped Charge
 entity_directional_nuke = Shaped Charge
 directional_nuke_menu_t = Shaped Charge Timer
 directional_nuke_menu_d = Seconds to explosion:
@@ -194,9 +194,18 @@ stool_key_teltak = Teltak Settings
 // Stool Global
 stool_autoweld = Autoweld
 stool_autolink = Autolink
+stool_autolink_desc = Autolink this to resouce node using Entities?
 stool_disabled_ship = This ship are disabled on server!
 stool_disabled_tool = This tool are disabled on server!
 stool_disabled_ent = This entity are disabled on server!
+stool_model = Model:
+stool_size = Size:
+stool_toggle = Toggle:
+stool_desc = Description:
+stool_activate = Activate:
+stool_deactivate = Deactivate:
+stool_immunity = Immunity
+stool_help = Help
 
 // Naquadah bomb menu
 entity_naq_bomb = Naquadah Bomb
@@ -211,6 +220,8 @@ naq_stool_menu_h_d = Display or hide HUD on bomb. (Does not show on Lucian Bomb)
 naq_stool_menu_c = Cart
 naq_stool_menu_c_d = Spawn with cart. (Only works with Tauri bomb)
 naq_stool_menu_a_d = Autoweld bomb to stuff. If it's spawned with cart, then bomb won't be welded (except cart).
+naq_stool_menu_code = Enter the code you wish to use to detonate the bomb.
+naq_stool_menu_abort = Enter the code you wish to use to abort the detonation.
 
 // Dakara
 ancient_control_panel = Ancient Control Panel
@@ -353,18 +364,6 @@ asgardtp_error = Invalid target or destination! (refresh list?)
 asgardtp_jamming = Can't teleport by this coordinates - jamming device online.
 asgardtp_succ = Successful teleportation.
 
-// spawn menu info
-spawninfo_title = Information
-spawninfo_load = Loading...
-spawninfo_news = News
-spawninfo_wiki = Wiki
-spawninfo_forum = Support Forum
-spawninfo_multi = Multi-language support
-// you can create own language support thread in this forum and replace url with your link
-spawninfo_multi_url = http://sg-carterpack.com/forums/forum/support/multi-language-support/
-spawninfo_fp = Facepunch Thread
-spawninfo_donate = Donate
-
 // huds
 hud_status = Status
 hud_energy = Energy
@@ -376,6 +375,9 @@ hud_sts_inactive = Inactive
 hud_sts_connected = Connected
 hud_sts_disconnected = Disconnected
 hud_sts_depleted = Depleted
+
+// jumper hud
+jumper_hud_dial = Dialling:
 
 // visual settings
 vis_fps_high = Frame Burst: High
@@ -483,3 +485,34 @@ key_cam_down = Camera Down
 key_cam_reset = Reset camera
 key_rocket_title = Missiles control
 key_rocket = Missile
+
+// Limits reached
+entity_limit_ag3 = AG-3 Satellites limit reached!
+entity_limit_anc_obelisk = Ancient Obelisk limit reached!
+entity_limit_app_core = Apple Core limit reached!
+entity_limit_asgard_beam = Asgard Beams limit reached!
+entity_limit_asuran_weap = Asuran Gate Weapon limit reached!
+entity_limit_dakara = Dakara Building limit reached!
+entity_limit_dest_console = Destiny Console limit reached!
+entity_limit_shaped = Shaped Charge limit reached!
+entity_limit_overloader = Gate Overloader limit reached!
+entity_limit_horizon = Horizon Missiles limit reached!
+entity_limit_iris_pc = Iris computer limit reached!
+entity_limit_kino = Kino limit reached!
+entity_limit_kino_dis = KINO Dispenser limit reached!
+entity_limit_holo = Lantean Holo limit reached!
+entity_limit_drone_laun = Drone Launchers limit reached!
+entity_limit_minidrone = Minidrone Platform limit reached!
+entity_limit_mcd = MCD limit reached!
+entity_limit_ori_beam = Ori Beam Cannon limit reached!
+entity_limit_ori_sat = Ori Satellites limit reached!
+entity_limit_ships = Ships limit reached!
+entity_limit_dest_main = Destiny Main Weapons limit reached!
+entity_limit_dest_med = Destiny Medium Turrets limit reached!
+entity_limit_dest_tur = Destiny Turrets limit reached!
+entity_limit_ship_rail = Ship Railguns limit reached!
+entity_limit_toll_ion = Tollana Ion Cannons limit reached!
+entity_limit_shield_core = Shield Core limit reached!
+entity_limit_sod_obelisk = Sodan Obelisk limit reached!
+entity_limit_staff_stat = Staff Stationary limit reached!
+entity_limit_stat_rail = Stationary Railguns limit reached!

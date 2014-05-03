@@ -23,14 +23,14 @@ TOOL.ClientConVar["hud"] = 0;
 TOOL.ClientConVar["cart"] = 1;
 TOOL.Entity.Class = "naquadah_bomb";
 TOOL.Entity.Keys = {"model","detonationCode","abortCode","chargeTime","yield", "hud", "cart", "autoweld"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("naquadah_bomb","limit",1);
-TOOL.Topic["name"] = "Naquadah Bomb Spawner";
-TOOL.Topic["desc"] = "Creates a naquadah-powered explosive device";
-TOOL.Topic[0] = "Left click to create the bomb";
-TOOL.Language["Undone"] = "Naquadah Bomb Undone";
-TOOL.Language["Cleanup"] = "Naquadah Bombs";
-TOOL.Language["Cleaned"] = "Removed all naquadah bombs";
-TOOL.Language["SBoxLimit"] = "Maximum number of naquadah bombs created";
+TOOL.Entity.Limit = 1;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_naqbomb_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_naqbomb_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_naqbomb_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_naqbomb_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_naqbomb_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_naqbomb_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_naqbomb_limit");
 
 
 
@@ -78,17 +78,17 @@ function TOOL:PostEntitySpawn(p,e,model,detcode,abcode,time,yield, hud, cart, au
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="naqbomb_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="naqbomb_model",Category="",Models=self.Models});
 	Panel:AddControl("TextBox",
    {
 		Label = SGLanguage.GetMessage("naq_bomb_menu_02"),
-		Description = "Enter the code you wish to use to detonate the bomb, NOTE: If you use anything other than numbers you will not be able to detonate via wire.",
+		Description = SGLanguage.GetMessage("naq_stool_menu_code"),
 		Command = "naqbomb_detonationCode",
 	})
 	Panel:AddControl("TextBox",
    {
 		Label = SGLanguage.GetMessage("naq_bomb_menu_02a"),
-		Description = "Enter the code you wish to use to abort the detonation, NOTE: Using letters may result in not being able to trigger via wire",
+		Description = SGLanguage.GetMessage("naq_stool_menu_abort"),
 		Command = "naqbomb_abortCode",
 	})
 	Panel:NumSlider(SGLanguage.GetMessage("naq_stool_menu_y"),"naqbomb_yield",10,100,0);

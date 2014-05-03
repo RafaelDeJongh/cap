@@ -68,7 +68,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("sbox_maxanim_ramps"):GetInt()
 		if(ply:GetCount("CAP_anim_ramps")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Anim ramps limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_ramp_anim_limit\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

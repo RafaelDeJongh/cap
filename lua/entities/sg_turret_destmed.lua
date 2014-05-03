@@ -96,7 +96,7 @@ function ENT:SpawnFunction( ply, tr )
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_destmedium_max"):GetInt()
 		if(ply:GetCount("CAP_destmedium")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Destiny Medium Turrets limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_dest_med\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return
 		end
 	end
@@ -176,7 +176,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_destmedium_max"):GetInt()
 		if(ply:GetCount("CAP_destmedium_max")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Destiny Medium Turrets limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_dest_med\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

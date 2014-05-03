@@ -46,7 +46,7 @@ function EFFECT:Init(data)
 	self.Length = 256;
 	self.AimVector = self.EH:GetForward();
 
-	self.Entity:SetRenderBoundsWS(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
+	self.Entity:SetRenderBoundsWS(self.MainStart,self.EndPos);
 end
 
 function EFFECT:Think()

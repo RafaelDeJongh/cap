@@ -16,14 +16,14 @@ list.Set(TOOL.List,"models/ZsDaniel/atlantis_console/console.mdl",{});
 
 TOOL.Entity.Class = "cap_console";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("cap_console","limit",50);
-TOOL.Topic["name"] = "Console Spawner";
-TOOL.Topic["desc"] = "Creates a Console";
-TOOL.Topic[0] = "Left click, to spawn or update a Console";
-TOOL.Language["Undone"] = "Console removed";
-TOOL.Language["Cleanup"] = "Consoles";
-TOOL.Language["Cleaned"] = "Removed all Consoles";
-TOOL.Language["SBoxLimit"] = "Hit the Consoles limit";
+TOOL.Entity.Limit = 50;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_cappanel_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_cappanel_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_cappanel_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_cappanel_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_cappanel_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_cappanel_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_cappanel_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -43,7 +43,7 @@ function TOOL:PreEntitySpawn(p,e,model,toggle)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="cappanel_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="cappanel_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cappanel_autoweld");
 end
 

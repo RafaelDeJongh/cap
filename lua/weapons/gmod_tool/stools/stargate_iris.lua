@@ -43,29 +43,33 @@ TOOL.Entity.Class = "stargate_iris";
 TOOL.Entity.Keys = {"model","toogle","activate","deactivate","IsActivated"}; -- These keys will get saved from the duplicator
 -- The default offset Angle, the sent should additional rotated - For Ghostpreview, when something looks strange
 -- Optionally you can also do this for special models in TOOL.Models. E.g. ["my_model"] = {Angle=Angle(1,2,3)},
-TOOL.Entity.Limit = StarGate.CFG:Get("iris","limit",10);
+TOOL.Entity.Limit = 10;
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Iris Spawner";
-TOOL.Topic["desc"] = "Creats an Iris or Shield for a Stargate";
-TOOL.Topic[0] = "Left click to spawn and Iris or Shields";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Iris/Shield removed";
-TOOL.Language["Cleanup"] = "Iris/Shields";
-TOOL.Language["Cleaned"] = "Removed all Iris/Shield";
-TOOL.Language["SBoxLimit"] = "Hit the Iris/Shield limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_iris_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_iris_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_iris_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_iris_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_iris_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_iris_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_iris_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
-	if not IsValid(t.Entity) then return end
-	if (not t.Entity:GetClass():find("stargate_") or t.Entity.IsSupergate) then return end;
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then return false end;
 	if(CLIENT) then return true end;
 	if(not self:CheckLimit()) then return false end;
 	local p = self:GetOwner();
+	if(not IsValid(t.Entity) or not t.Entity.IsStargate) then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    return
+	end
+	if(t.Entity.IsSupergate or t.Entity:GetClass()=="stargate_orlin") then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err2\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    return
+	end
 	--######## Spawn SENT
 	local toggle = self:GetClientNumber("toggle");
 	local activate = self:GetClientNumber("activate");
@@ -135,21 +139,21 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="stargate_iris_toggle",
 	});
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Activate:",
+		Label=SGLanguage.GetMessage("stool_activate"),
 		Command="stargate_iris_activate",
-		Label2="Deactivate:",
+		Label2=SGLanguage.GetMessage("stool_deactivate"),
 		Command2="stargate_iris_deactivate",
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_iris_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="stargate_iris_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_iris_autoweld");
 	--[[
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_iris_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_iris_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 	--]]
 end

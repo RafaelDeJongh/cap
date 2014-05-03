@@ -12,14 +12,14 @@ TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["model"] = "models/Madman07/ashen_defence/ashen_defence.mdl";
 TOOL.Entity.Class = "ashen_defence";
 TOOL.Entity.Keys = {"autoweld"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("ashen_defence","limit",10);
-TOOL.Topic["name"] = "Ashen Defence System Spawner";
-TOOL.Topic["desc"] = "Creates an Ashen Defence System";
-TOOL.Topic[0] = "Left click to create the system";
-TOOL.Language["Undone"] = "Ashen Defence System Undone";
-TOOL.Language["Cleanup"] = "Ashen Defence Systems";
-TOOL.Language["Cleaned"] = "Removed all Ashen Defence Systems";
-TOOL.Language["SBoxLimit"] = "Maximum number of Ashen Defence Systems created";
+TOOL.Entity.Limit = 10;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_ashen_defence_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_ashen_defence_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_ashen_defence_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_ashen_defence_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_ashen_defence_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_ashen_defence_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_ashen_defence_limit");
 
 
 

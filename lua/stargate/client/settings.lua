@@ -57,12 +57,16 @@ function StarGate_Settings(Panel)
 	end
 	-- add exists languages
 	local _,langs = file.Find("lua/data/language/*","GAME");
-	local en_count = SGLanguage.CountMessagesInLanguage("en");
+	local en_count,en_msgs = SGLanguage.CountMessagesInLanguage("en",true);
 	local lng_arr = {}
 	for i,lang in pairs(langs) do
-		local count = math.Round(SGLanguage.CountMessagesInLanguage(lang)*100/en_count);
-		if (count>100) then count = 100-(count-100); -- just in case if some lines was removed, this means outdated translation so not 100%!
-		elseif (count<0) then count = 1; end -- idk if this can happens due to previous check
+		local count,msgs = SGLanguage.CountMessagesInLanguage(lang,true);
+		if (lang!="en"/* and (not msgs["global_lang_similar"] or msgs["global_lang_similar"]=="false")*/) then
+			for k,v in pairs(msgs) do
+				if (not en_msgs[k]/* or v==en_msgs[k]*/) then count = count-1; end -- stop cheating!
+			end
+		end
+		count = math.Round(count*100/en_count);
 		lng_arr[lang] = {SGLanguage.GetLanguageName(lang),count};
 		clientlang:AddChoice(SGLanguage.GetLanguageName(lang));
 	end

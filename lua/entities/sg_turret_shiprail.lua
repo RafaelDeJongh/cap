@@ -50,7 +50,7 @@ function ENT:SpawnFunction( ply, tr )
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
 		if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ship_rail\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return
 		end
 	end
@@ -112,7 +112,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = GetConVar("CAP_shiprail_max"):GetInt()
 		if(ply:GetCount("CAP_shiprail")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Ship Railguns limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ship_rail\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

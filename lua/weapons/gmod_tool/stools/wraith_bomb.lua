@@ -15,14 +15,14 @@ TOOL.ClientConVar["autoweld"] = 0;
 
 TOOL.Entity.Class = "wraith_bomb";
 TOOL.Entity.Keys = {"model","power","yield", "timer","autoweld"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("wraith_bomb","limit",1);
-TOOL.Topic["name"] = "Wraith Bomb Spawner";
-TOOL.Topic["desc"] = "Creates a Wraith Stun Bomb";
-TOOL.Topic[0] = "Left click to create the bomb";
-TOOL.Language["Undone"] = "Wraith Bomb Undone";
-TOOL.Language["Cleanup"] = "Wraith Bombs";
-TOOL.Language["Cleaned"] = "Removed all Wraith Bombs";
-TOOL.Language["SBoxLimit"] = "Maximum number of Wraith Bombs created";
+TOOL.Entity.Limit = 1;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_wraith_bomb_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_wraith_bomb_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_wraith_bomb_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_wraith_bomb_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_wraith_bomb_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_wraith_bomb_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_wraith_bomb_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -67,9 +67,9 @@ function TOOL:PostEntitySpawn(p,e,model,power,time,yield,autoweld)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:NumSlider("Yield","wraith_bomb_yield",100,1000,0);
-	Panel:NumSlider("Timer","wraith_bomb_timer",5,60,0);
-	Panel:NumSlider("Power","wraith_bomb_power",5,30,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_wraith_bomb_yield"),"wraith_bomb_yield",100,1000,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_wraith_bomb_timer"),"wraith_bomb_timer",5,60,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_wraith_bomb_power"),"wraith_bomb_power",5,30,0);
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"wraith_bomb_autoweld"):SetToolTip("Autoweld");
 end
 

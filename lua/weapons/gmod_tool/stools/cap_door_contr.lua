@@ -16,14 +16,14 @@ list.Set(TOOL.List,"models/Boba_Fett/props/buttons/atlantis_button.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_contr";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("cap_doors_controller","limit",10);
-TOOL.Topic["name"] = "Door Controller Spawner";
-TOOL.Topic["desc"] = "Creates a Door Controller";
-TOOL.Topic[0] = "Left click, to spawn or update a Door Controller";
-TOOL.Language["Undone"] = "Door Controller removed";
-TOOL.Language["Cleanup"] = "Door Controllers";
-TOOL.Language["Cleaned"] = "Removed all Door Controllers";
-TOOL.Language["SBoxLimit"] = "Hit the Door Controllers limit";
+TOOL.Entity.Limit = 10;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_cap_door_contr_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_cap_door_contr_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_cap_door_contr_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_cap_door_contr_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_cap_door_contr_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_cap_door_contr_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_cap_door_contr_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -44,7 +44,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="cap_door_contr_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="cap_door_contr_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cap_door_contr_autoweld");
 end
 

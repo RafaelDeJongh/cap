@@ -12,13 +12,14 @@ TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["model"] = "models/pg_props/pg_zpm/pg_zpm.mdl";
 TOOL.Entity.Class = "tampered_zpm";
 TOOL.Entity.Keys = {"model"};
-TOOL.Topic["name"] = "Tampered ZPM Spawner";
-TOOL.Topic["desc"] = "Creates a Tampered ZPM";
-TOOL.Topic[0] = "Left click, to spawn a Tampered ZPM";
-TOOL.Language["Undone"] = "Tampered ZPM removed";
-TOOL.Language["Cleanup"] = "Tampered ZPM";
-TOOL.Language["Cleaned"] = "Removed all Tampered ZPMs";
-TOOL.Language["SBoxLimit"] = "Hit the Tampered ZPM limit";
+TOOL.Entity.Limit = 3;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_tampered_zpm_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_tampered_zpm_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_tampered_zpm_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_tampered_zpm_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_tampered_zpm_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_tampered_zpm_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_tampered_zpm_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -47,10 +48,10 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"tampered_zpm_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"tampered_zpm_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"tampered_zpm_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
-	Panel:AddControl("Label", {Text = "\nThis is the Tampered Zpm, this tool is in use for LifeSupport and Resource Distribution. If you don't got LS/RD this Tampered Zpm is quite useless for you.",})
-	Panel:AddControl("Label", {Text = "\nDiscription:\n\nCamulus discovered a ZPM in an Ancient outpost. Unable to use it himself, he coated it with a volatile compound that would react explosively to an electrical charge. He led the Tau'ri to it in the hopes that they would destroy themselves. Bill Lee discovered the compound by mistake when it became necessary to flood the base with gamma radiation. The estimated blast radius of the ZPM, which held a roughly 50% charge, could have possibly encompassed the entire solar system, and at the very least would have completely destroyed Earth. (SG1: \"Zero Hour\") Efforts were made to remove the compound, but the first test of the ZPM destroyed it and the planet it was on.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_tampered_zpm_fulldesc"),})
+	Panel:AddControl("Label", {Text = "\n"..SGLanguage.GetMessage("stool_desc").."\n\n"..SGLanguage.GetMessage("stool_tampered_zpm_fulldesc2"),})
 end
 
 TOOL:Register();

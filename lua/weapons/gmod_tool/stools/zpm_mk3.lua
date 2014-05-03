@@ -16,13 +16,13 @@ TOOL.ClientConVar["model"] = "models/pg_props/pg_zpm/pg_zpm.mdl";
 TOOL.Entity.Class = "zpm_mk3";
 TOOL.Entity.Keys = {"model"};
 TOOL.Entity.Limit = 6;
-TOOL.Topic["name"] = "ZPM MK III Spawner";
-TOOL.Topic["desc"] = "Creates a Zero Point Module";
-TOOL.Topic[0] = "Left click, to spawn a ZPM MK III";
-TOOL.Language["Undone"] = "Zero Point Module removed";
-TOOL.Language["Cleanup"] = "Zero Point Modules";
-TOOL.Language["Cleaned"] = "Removed all Zero Point Modules";
-TOOL.Language["SBoxLimit"] = "Hit the Zero Point Module limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_zpm_mk3_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_zpm_mk3_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_zpm_mk3_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_zpm_mk3_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_zpm_mk3_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_zpm_mk3_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_zpm_mk3_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -53,12 +53,12 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:NumSlider("Capacity:","zpm_mk3_capacity",1,100,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_zpm_mk3_capacity"),"zpm_mk3_capacity",1,100,0);
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"zpm_mk3_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip("Autolink this to resource using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"zpm_mk3_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
-	Panel:AddControl("Label", {Text = "\nThis is the Zpm MK3, this tool is in use for LifeSupport and Resource Distribution. If you don't got LS/RD this Zpm MK3 is quite useless for you.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_zpm_mk3_fulldesc")})
 end
 
 TOOL:Register();

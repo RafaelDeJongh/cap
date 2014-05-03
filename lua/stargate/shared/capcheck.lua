@@ -143,10 +143,7 @@ if (CLIENT) then
 		Msg("-------\nWarning: your gmod running under DirectX 8.1 or lower.\nThis will cause compatibility problems with Carter Addon Pack.\nList of problems:\n* No kawoosh when stargate opens.\n* White boxes on huds.\n* Universe stargate have always all glyphs enabled.\n* Some other glitches.\nPlease Run gmod under dxlevel 90 or higher (95 recommended).\nThis can be changed with convar mat_dxlevel.\n-------\n")
 	end
 
-	net.Receive( "CAP_ERROR", function( length )
-		local tbl = net.ReadTable();
-		if (table.Count(tbl)==0) then return end
-
+	local function CAP_ShowError(tbl)
 		local text = "";
 		for k,v in pairs(tbl) do
 			if (k!=1) then
@@ -162,7 +159,7 @@ if (CLIENT) then
 					end
 				end
 				if (v[1]=="sg_err_13" and v[3]) then
-					text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],v[3],adds);				
+					text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],v[3],adds);
 				else
 					text = text.."<b>"..SGLanguage.GetMessage("sg_err_n").." #"..v[1]:gsub("[^0-9]","").."</b><br>"..SGLanguage.GetMessage(v[1],adds);
 				end
@@ -174,10 +171,47 @@ if (CLIENT) then
 		surface.PlaySound( "buttons/button2.wav" );
 
 		--local Width, Height = ScrW() * 0.8, ScrH() * 0.8 --Half screen size
-		
+
 		StarGate.ShowCapMotd(SGLanguage.GetMessage("sg_err_title"),"<h2>"..SGLanguage.GetMessage("sg_err_html_t").."</h2>"..text)
 
-	end )
+	end
+
+	net.Receive( "CAP_ERROR", function( length )
+		local tbl = net.ReadTable();
+		if (table.Count(tbl)==0) then return end
+		CAP_ShowError(tbl);
+	end)
+
+	local function CAP_DebugError(ply,cmd,args)
+		local tbl = {};
+		local err = 0;
+		if (args[1]) then err = math.Clamp(tonumber(args[1]),0,13); end
+		if (err>0) then
+			if (err<10) then err = "0"..err end
+			if (err==13) then
+				table.insert(tbl,{"sg_err_"..err,{"_FILE_1_","_FILE_2_","_FILE_3_","_FILE_X_"},"_SYSTEM_PATH_"});
+			elseif (err=="09") then
+				table.insert(tbl,{"sg_err_"..err,{"_ADDON_1_","_ADDON_2_","_ADDON_3_","_ADDON_X_"}});
+			else
+				table.insert(tbl,"sg_err_"..err);
+			end
+			CAP_ShowError(tbl);
+		else
+			for i=1,13 do
+				local err = i;
+				if (err<10) then err = "0"..err end
+				if (err==13) then
+					table.insert(tbl,{"sg_err_"..err,{"_FILE_1_","_FILE_2_","_FILE_3_","_FILE_X_"},"_SYSTEM_PATH_"});
+				elseif (err=="09") then
+					table.insert(tbl,{"sg_err_"..err,{"_ADDON_1_","_ADDON_2_","_ADDON_3_","_ADDON_X_"}});
+				else
+					table.insert(tbl,"sg_err_"..err);
+				end
+			end
+			CAP_ShowError(tbl);
+		end
+	end
+	concommand.Add("CAP_debugerror",CAP_DebugError)
 
 end
 

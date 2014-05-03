@@ -65,27 +65,29 @@ function PANEL:Paint()
 					sY = v;
 				end
 			end
-			gate = v:GetClass();
-			gate = string.Replace(gate,"_"," ");
-			gate = string.upper(gate);
+			gate = v.PrintName or v:GetClass();
 			if(pos<2500) then
 				surface.SetFont("Default");
 				surface.SetTextPos(sX+60,sY-60-(pos/75));
 				surface.SetTextColor(Color(255,0,0,255));
 				surface.DrawText(gate);
 				surface.SetTextPos(sX+60,sY-45-(pos/75));
-				surface.DrawText("Name: "..v:GetGateName());
+				surface.DrawText(SGLanguage.GetMessage("stargate_vgui_name").." "..v:GetGateName());
 				surface.SetTextPos(sX+60,sY-30-(pos/75));
-				surface.DrawText("Address: "..v:GetGateAddress());
+				surface.DrawText(SGLanguage.GetMessage("stargate_vgui_address").." "..v:GetGateAddress());
 				local posy = 15;
 				if (self.GroupSystem and not v.IsSupergate) then
 					posy = 0;
 					surface.SetTextPos(sX+60,sY-15-(pos/75));
-					surface.DrawText("Group: "..v:GetGateGroup());
+					if (v:GetClass()=="stargate_universe") then
+						surface.DrawText(SGLanguage.GetMessage("stargate_vgui_type").." "..v:GetGateGroup());
+					else
+						surface.DrawText(SGLanguage.GetMessage("stargate_vgui_group").." "..v:GetGateGroup());
+					end
 				end
-				if(not(v:GetDialledAddress()=="")) then
+				if(v:GetDialledAddress()!="") then
 					surface.SetTextPos(sX+60,sY-posy-(pos/75));
-					surface.DrawText("Dialling: "..v:GetDialledAddress());
+					surface.DrawText(SGLanguage.GetMessage("jumper_hud_dial").." "..v:GetDialledAddress());
 					print_r(v.Outputs)
 				end
 			else
@@ -96,7 +98,7 @@ function PANEL:Paint()
 						gX = v;
 					elseif k=="y" then
 						gY = v;
-					end	
+					end
 				end
 				draw.WordBox(4,gX,gY,gate,"Default", Color(0,0,255,127.5),Color(255,0,0,255) )
 			end

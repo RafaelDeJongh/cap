@@ -13,26 +13,30 @@ TOOL.ClientConVar["deactivate"] = 13;
 
 TOOL.Entity.Class = "goauld_iris";
 TOOL.Entity.Keys = {"toggle","activate","deactivate","IsActivated"}; -- These keys will get saved from the duplicator
-TOOL.Entity.Limit = StarGate.CFG:Get("goauld_iris","limit",5);
-TOOL.Topic["name"] = "Goauld Iris Spawner";
-TOOL.Topic["desc"] = "Creates a Goauld Iris";
-TOOL.Topic[0] = "Left click, to spawn or update a Goauld Iris";
-TOOL.Language["Undone"] = "Goauld Iris removed";
-TOOL.Language["Cleanup"] = "Goauld Iris";
-TOOL.Language["Cleaned"] = "Removed all Goauld Irises";
-TOOL.Language["SBoxLimit"] = "Hit the Goauld Iris limit";
+TOOL.Entity.Limit = 5;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_goauld_iris_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_goauld_iris_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_goauld_iris_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_goauld_iris_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_goauld_iris_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_goauld_iris_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_goauld_iris_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
-	if not IsValid(t.Entity) then return end
-	if (not t.Entity:GetClass():find("stargate_") or t.Entity.IsSupergate) then return end;
 	if(CLIENT) then return true end;
 	local p = self:GetOwner();
 	local toggle = self:GetClientNumber("toggle");
 	local activate = self:GetClientNumber("activate");
 	local deactivate = self:GetClientNumber("deactivate");
-	if not IsValid(t.Entity) then return end
-	if (not t.Entity:GetClass():find("stargate_")) then return end;
+	if(not IsValid(t.Entity) or not t.Entity.IsStargate) then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    return
+	end
+	if(t.Entity.IsSupergate or t.Entity:GetClass()=="stargate_orlin") then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err2\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    return
+	end
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
 		return true;
 	end
@@ -88,14 +92,14 @@ end
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="goauld_iris_toggle",
 	});
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Activate:",
+		Label=SGLanguage.GetMessage("stool_activate"),
 		Command="goauld_iris_activate",
-		Label2="Deactivate:",
+		Label2=SGLanguage.GetMessage("stool_deactivate"),
 		Command2="goauld_iris_deactivate",
 	});
 end

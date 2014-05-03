@@ -14,14 +14,14 @@ TOOL.List = "SGCZPMHUB";
 list.Set(TOOL.List,"models/micropro/zpmslot/zpm_slot.mdl",{Angle=Angle(0,180,0),Position=Vector(0,0,0)});
 TOOL.Entity.Class = "sgc_zpm_hub";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("sgc_zpm_hub","limit",5);
-TOOL.Topic["name"] = "SGC ZPM Hub Spawner";
-TOOL.Topic["desc"] = "Creates a SGC ZPM Hub";
-TOOL.Topic[0] = "Left click to spawn a SGC ZPM Hub";
-TOOL.Language["Undone"] = "SGC ZPM Hub removed";
-TOOL.Language["Cleanup"] = "SGC ZPM Hub";
-TOOL.Language["Cleaned"] = "Removed all SGC ZPM Hubs";
-TOOL.Language["SBoxLimit"] = "Hit the SGC ZPM Hub limit";
+TOOL.Entity.Limit = 5;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_sgc_zpm_hub_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_sgc_zpm_hub_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -48,7 +48,7 @@ end
 
 function TOOL:ControlsPanel(Panel)
     Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"sgc_zpm_hub_autoweld");
-	Panel:AddControl("Label", {Text = "\nThis is the Stargate Command ZPM Hub. This tool requires Life Support and Resource Distribution. If you don't have LS/RD, this ZPM Hub is quite useless to you.",})
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_sgc_zpm_hub_fulldesc"),})
 end
 
 TOOL:Register();

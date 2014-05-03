@@ -61,15 +61,13 @@ TOOL.Entity.Keys = {"toggle_shield","model","size","immunity","strength_multipli
 TOOL.Entity.Limit = 1; -- A person generally can spawn 1 shield
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Shield Spawner";
-TOOL.Topic["desc"] = "Creates a Shield";
-TOOL.Topic[0] = "Left click, to spawn a Shield";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Shield removed";
-TOOL.Language["Cleanup"] = "Shields";
-TOOL.Language["Cleaned"] = "Removed all Shields";
-TOOL.Language["SBoxLimit"] = "Hit the Shield limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_shield_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_shield_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_shield_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_shield_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_shield_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_shield_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_shield_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -162,7 +160,7 @@ end
 --################# Controlpanel @aVoN
 function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("ComboBox",{
-		Label="Presets",
+		Text="Presets",
 		MenuButton=1,
 		Folder="stargate_shield",
 		Options={
@@ -185,15 +183,15 @@ function TOOL:ControlsPanel(Panel)
 		},
 		CVars=self:GetSettingsNames(),
 	});
-	Panel:NumSlider("Size:","stargate_shield_size",100,self.MaximumShieldSize,0);
-	Panel:NumSlider("Faster - Stronger","stargate_shield_strength",-5,5,2):SetToolTip("Note: Increasing the Strength will result into slower Regeneration and more Energy Usage");
+	Panel:NumSlider(SGLanguage.GetMessage("stool_size"),"stargate_shield_size",100,self.MaximumShieldSize,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_stargate_shield_str"),"stargate_shield_strength",-5,5,2):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_str_desc"));
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Toggle:",
+		Label=SGLanguage.GetMessage("stool_toggle"),
 		Command="stargate_shield_toggle",
 	});
 	Panel:AddControl("Color",{
-		Label = "Color",
+		Label = SGLanguage.GetMessage("stool_stargate_shield_str_color"),
 		Red = "stargate_shield_r",
 		Green = "stargate_shield_g",
 		Blue = "stargate_shield_b",
@@ -202,18 +200,18 @@ function TOOL:ControlsPanel(Panel)
 		ShowRGB = 1,
 		Multiplier = 255,
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="stargate_shield_model",Category="",Models=self.Models});
-	Panel:CheckBox("Immunity","stargate_shield_immunity"):SetToolTip("When this is enabled, the owner of the shield can always go or shoot through\nno matter if he was inside the shield when it was turned on or not");
-	Panel:CheckBox("Draw Bubble","stargate_shield_bubble"):SetToolTip("Draw a bubble when hit?");
-	Panel:CheckBox("Show Effect when Passing Shield","stargate_shield_passing_draw"):SetToolTip("Draws the shield effect, when something passes it");
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="stargate_shield_model",Category="",Models=self.Models});
+	Panel:CheckBox(SGLanguage.GetMessage("stool_immunity"),"stargate_shield_immunity"):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_imm"));
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_shield_db"),"stargate_shield_bubble"):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_db_desc"));
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_shield_se"),"stargate_shield_passing_draw"):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_se_desc"));
 	if(StarGate.CFG:Get("shield","allow_containment",true)) then
-		Panel:CheckBox("Containment","stargate_shield_containment"):SetToolTip("Enable this to keep things inside a shield instead of keeping it away");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_shield_co"),"stargate_shield_containment"):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_co_desc"));
 	end
+	Panel:CheckBox(SGLanguage.GetMessage("stool_stargate_shield_an"), "stargate_shield_anti_noclip"):SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_an_desc"));
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_shield_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_shield_autolink"):SetToolTip("Autolink this to resouce using Entity?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"stargate_shield_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
-	Panel:CheckBox("Anti Noclip", "stargate_shield_anti_noclip"):SetToolTip("People can't noclip in the shield?");
 end
 
 --################# Numpad bindings

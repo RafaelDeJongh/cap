@@ -60,15 +60,13 @@ TOOL.Entity.Keys = {"shoot","explode","model","r","g","b","shaft","explosion","e
 TOOL.Entity.Limit = 2;
 
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = "Staffweapon Spawner";
-TOOL.Topic["desc"] = "Spawns a stationary staffweapon";
-TOOL.Topic[0] = "Left click, to spawn a staffweapon";
--- Adds additional "language" - To the end of these files, the string "_*classname*" will be added, using TOOL.Entity["class"].
--- E.g. TOOL.Language["Undone"] will add the language "Undone_prop_physics" when TOOL.Entity["class"] is "prop_physics"
-TOOL.Language["Undone"] = "Glider staffweapon removed";
-TOOL.Language["Cleanup"] = "Glider staffweapons";
-TOOL.Language["Cleaned"] = "Removed all glider staffweapons";
-TOOL.Language["SBoxLimit"] = "Hit the staffweapon limit";
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_staff_weapon_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_staff_weapon_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_staff_weapon_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_staff_weapon_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_staff_weapon_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_staff_weapon_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_staff_weapon_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -188,13 +186,13 @@ function TOOL:ControlsPanel(Panel)
 	});
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
-		Label="Shoot:",
+		Label=SGLanguage.GetMessage("stool_staff_weapon_shoot"),
 		Command="staff_weapon_shoot",
-		Label2="Explode:",
+		Label2=SGLanguage.GetMessage("stool_staff_weapon_explode"),
 		Command2="staff_weapon_explode",
 	});
 	Panel:AddControl("Color",{
-		Label = "Color",
+		Label = SGLanguage.GetMessage("stool_staff_weapon_color"),
 		Red = "staff_weapon_r",
 		Green = "staff_weapon_g",
 		Blue = "staff_weapon_b",
@@ -203,14 +201,14 @@ function TOOL:ControlsPanel(Panel)
 		ShowRGB = 1,
 		Multiplier = 255,
 	});
-	Panel:AddControl("PropSelect",{Label="Model",ConVar="staff_weapon_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="staff_weapon_model",Category="",Models=self.Models});
 	--Panel:CheckBox("Add Cannon's Velocity","staff_weapon_add_cannon_velocity"):SetToolTip("This will add the velocity of the cannon to the shot");
 	--Panel:CheckBox("Draw Shaft","staff_weapon_shaft");
-	Panel:CheckBox("Explosion","staff_weapon_explosion");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_staff_weapon_explosion"),"staff_weapon_explosion");
 	--Panel:CheckBox("Colorize Explosion","staff_weapon_explosion_colorize");
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"staff_weapon_autoweld");
 	if(StarGate.HasResourceDistribution) then
-		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"staff_weapon_autolink"):SetToolTip("Autolink this to resouce using Entities?");
+		Panel:CheckBox(SGLanguage.GetMessage("stool_autolink"),"staff_weapon_autolink"):SetToolTip(SGLanguage.GetMessage("stool_autolink_desc"));
 	end
 end
 

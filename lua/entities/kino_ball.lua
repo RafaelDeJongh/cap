@@ -281,7 +281,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (IsValid(ply)) then
 		local PropLimit = StarGate.CFG:Get("kino_dispenser","max_kino",4);
 		if(ply:GetCount("CAP_kino")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Kino limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_kino\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			self.Entity:Remove();
 			return
 		end

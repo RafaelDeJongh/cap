@@ -10,14 +10,14 @@ TOOL.List = "BearingModels";
 list.Set(TOOL.List,"models/Iziraider/gatebearing/bearing.mdl",{});
 TOOL.Entity.Class = "bearing";
 TOOL.Entity.Keys = {"model"};
-TOOL.Entity.Limit = StarGate.CFG:Get("bearing","limit",10);
-TOOL.Topic["name"] = "Bearing Spawner";
-TOOL.Topic["desc"] = "Creates a Bearing";
-TOOL.Topic[0] = "Left click, to spawn a Bearing";
-TOOL.Language["Undone"] = "Bearing removed";
-TOOL.Language["Cleanup"] = "Bearing";
-TOOL.Language["Cleaned"] = "Removed all Bearings";
-TOOL.Language["SBoxLimit"] = "Hit the Bearing limit";
+TOOL.Entity.Limit = 10;
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_bearing_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_bearing_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_bearing_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_bearing_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_bearing_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_bearing_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_bearing_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
@@ -29,12 +29,12 @@ function TOOL:LeftClick(t)
 	end
 	if(not self:CheckLimit()) then return false end;
 	if(not IsValid(t.Entity) or not t.Entity:GetClass():find("stargate_universe")) then
-	    p:SendLua("GAMEMODE:AddNotify(\"Target is not a Stargate Universe!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_bearing_err\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 	    return
 	end
 	for _,v in pairs(StarGate.GetConstrainedEnts(t.Entity,2) or {}) do
 		if(IsValid(v) and v:GetClass():find("bearing")) then
-		   p:SendLua("GAMEMODE:AddNotify(\"Bearing is exist on this Stargate!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		   p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_bearing_exs\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		   return
 		end
 	end
@@ -53,7 +53,7 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("Label", {Text = "\nDiscription:\n\nThe Gate bearing hangs from the ceiling of the gate room aboard the Destiny. The bearing lights up with each glyph dialed on the Stargate, serving a similar function to that of the chevrons on the Milky Way and Pegasus Stargate designs.",})
+	Panel:AddControl("Label", {Text = "\n"..SGLanguage.GetMessage("stool_desc").."\n\n"..SGLanguage.GetMessage("stool_bearing_fulldesc")})
 end
 
 TOOL:Register();

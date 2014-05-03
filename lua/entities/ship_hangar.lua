@@ -236,7 +236,7 @@ function ENT:ButtonPressed(id, ply)
 
 		local PropLimit = GetConVar("CAP_ships_max"):GetInt()
 		if(ply:GetCount("CAP_ships")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(\"Ships limit reached!\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ships\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 			return
 		end
 
