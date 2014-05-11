@@ -22,8 +22,8 @@ include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_iris");
 
-TOOL.ClientConVar["autolink"] = 1;
-TOOL.ClientConVar["autoweld"] = 1;
+--TOOL.ClientConVar["autolink"] = 1;
+--TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["toggle"] = 9;
 TOOL.ClientConVar["activate"] = 12;
 TOOL.ClientConVar["deactivate"] = 13;
@@ -77,7 +77,6 @@ function TOOL:LeftClick(t)
 	local model = self:GetClientInfo("model");
 	local e = self:SpawnSENT(p,t,model,toggle,activate,deactivate);
 	if (not IsValid(e)) then return end
-	local stargate = false;
 	if(IsValid(t.Entity) and t.Entity.IsStargate) then
 		for _,v in pairs(ents.FindInSphere(t.Entity:GetPos(),10)) do
 			if(v.IsIris and v ~= e) then
@@ -92,7 +91,6 @@ function TOOL:LeftClick(t)
 		end
 		e:SetPos(t.Entity:GetPos()+t.Entity:GetForward()*0.4); -- A little offset, or you can see the EH through iris/shield (ugly!)
 		e:SetAngles(t.Entity:GetAngles());
-		stargate = true;
 	end
 	e.GateLink = t.Entity;
 	if (t.Entity.GateSpawnerSpawned) then
@@ -106,7 +104,7 @@ function TOOL:LeftClick(t)
 	end
 	--]]
 	--######## Weld things?
-	local c = self:Weld(e,t.Entity,util.tobool(self:GetClientNumber("autoweld")) or stargate);
+	local c = self:Weld(e,t.Entity,true);
 	--######## Cleanup and undo register
 	self:AddUndo(p,e,c);
 	self:AddCleanup(p,c,e);

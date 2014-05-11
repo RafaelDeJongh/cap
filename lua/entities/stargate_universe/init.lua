@@ -813,7 +813,6 @@ end
 
 --#############################################################
 function ENT:BearingSetSkin(BearingLight)
-	print_r(self)
     if(IsValid(self.Entity))then
 	    local delay = 0;
 	    for k,v in pairs(StarGate.GetConstrainedEnts(self.Entity,2) or {}) do

@@ -71,11 +71,11 @@ end
 
 SWEP.DrawWeaponInfoBox  	= true					-- Draw Weapon Info HUD
 
-SWEP.Author 			= "The Art of War, Boba Fett"
+SWEP.Author 			= "The Art of War, Boba Fett, Gmod4phun"
 SWEP.Contact 			= "info@sg-carterpack.com"
 SWEP.Purpose 			= "Shoot them aliens up."
 
-SWEP.Instructions 		= "Left click to fire. Right click to aim through the Red Dot Sight. Use + Right Click to change firing mode"
+SWEP.Instructions 		= " Left click to fire.\n Right click to aim through the Red Dot Sight.\n Use + Right Click to change firing mode.\n Use + Left Click to attach/detach Kull Disruptor"
 
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 list.Add("NPCUsableWeapons", {class = "fnp90", title = SWEP.PrintName});
@@ -97,6 +97,7 @@ SWEP.Primary.Delay 		= 0.066					-- Rate of fire
 SWEP.Primary.DefaultClip 	= 300					-- Default ammo
 SWEP.Primary.Automatic 		= true				-- Weapon is automatic
 SWEP.Primary.Ammo 		= "pistol"				-- Weapon uses smg1 ammo
+SWEP.Primary.FirstDeploy = 1
 
 SWEP.Secondary.ClipSize 	= -1				-- No secondary attack
 SWEP.Secondary.DefaultClip 	= -1				-- - snip -
@@ -298,6 +299,7 @@ function SWEP:Initialize()
 	self.Weapon:SetNetworkedBool("Ironsights", false)
 
 	self.data[self.mode].Init(self)
+
 end
 
 if CLIENT then
@@ -349,9 +351,78 @@ function SWEP:Reload()
 
 	if ( self.Reloadaftershoot and self.Reloadaftershoot > CurTime() ) then return end
 
+	if (self.Weapon:Clip1() < 1 and self.Owner:IsNPC()) then
+		self.Weapon:DefaultReload( ACT_VM_RELOAD )
+		return
+	end
+
+	if ( self.Weapon:Clip1() < 1 and self.Owner:GetAmmoCount(self.Primary.Ammo)>0) then
 	self.Weapon:DefaultReload( ACT_VM_RELOAD )
 
-	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and IsValid(self.Owner) and self.Owner.GetAmmoCount and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
+	if (SERVER) then
+	timer.Simple(0.05, function()
+		if (IsValid(self)) then
+			self:EmitSound("npc/zombie/foot_slide2.wav", 100, 160)
+		end
+	end)
+
+	timer.Simple(0.4, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_cliprelease.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(0.5, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_clipout.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(2.1, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_clipin.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(3.25, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_boltpull.wav", 100, 100)
+		end
+	end)
+	end
+
+	elseif ( self.Weapon:Clip1() > 0 and self.Weapon:Clip1() < self.Primary.ClipSize ) then
+	self.Weapon:DefaultReload( ACT_VM_UNDEPLOY )
+
+	if (SERVER) then
+	timer.Simple(0.05, function()
+		if (IsValid(self)) then
+			self:EmitSound("npc/zombie/foot_slide2.wav", 100, 160)
+		end
+	end)
+
+	timer.Simple(0.4, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_cliprelease.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(0.5, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_clipout.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(2.1, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_clipin.wav", 100, 100)
+		end
+	end)
+	end
+
+	end
+
+	if ( self.Weapon:Clip1() < self.Primary.ClipSize ) and IsValid(self.Owner) and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
 		self:SetIronsights(false, self.Owner)
 
 		self:SetScope(false, self.Owner)
@@ -370,11 +441,68 @@ end
 Deploy
 ---------------------------------------------------------*/
 function SWEP:Deploy()
+	-- Dont mind the animation names, I had to re-name them in the .mdl of the gun so they match the Source Engine ACT_ enums :D
+
+	if (self.Primary.FirstDeploy == 1) then -- If first time deployed, we will play first time draw animation
+
+	self.Weapon:SendWeaponAnim( ACT_VM_IDLE_EMPTY ) -- Anims
+	self.Weapon:SetNextPrimaryFire(CurTime() + 3)
+	self.Weapon.Primary.FirstDeploy = 0
+
+	if (SERVER) then
+
+	timer.Simple(0.1, function()
+		if (IsValid(self)) then
+			self:EmitSound("npc/zombie/foot_slide2.wav", 100, 160)
+		end
+	end)
+
+	timer.Simple(0.9, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_clipin.wav", 100, 100)
+		end
+	end)
+
+	timer.Simple(2.1, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_boltpull.wav", 100, 100)
+		end
+	end)
+	end
+
+	elseif (self.Primary.FirstDeploy == 0 and self.Weapon:Clip1() > 0) then -- If deployed later, we will play normal draw animation
 
 	self.Weapon:SendWeaponAnim( ACT_VM_DRAW ) -- Anims
-
 	self.Weapon:SetNextPrimaryFire(CurTime() + 1)
 
+	if (SERVER) then
+	timer.Simple(0.1, function()
+		if (IsValid(self)) then
+			self:EmitSound("npc/zombie/foot_slide2.wav", 100, 160)
+		end
+	end)
+
+	timer.Simple(0.4, function()
+		if (IsValid(self)) then
+			self:EmitSound("weapons/p90/p90_boltpull.wav", 100, 100)
+		end
+	end)
+	end
+
+	end
+
+	if (self.Weapon:Clip1() == 0) then -- If there are 0 rounds in mag, we will play special animation without boltbull
+
+	self.Weapon:SendWeaponAnim( ACT_VM_IDLE_2 ) -- Anims
+	self.Weapon:SetNextPrimaryFire(CurTime() + 1)
+
+	timer.Simple(0.2, function()
+		if (IsValid(self)) then
+			self:EmitSound("npc/zombie/foot_slide2.wav", 100, 160)
+		end
+	end)
+
+	end
 	self:SetIronsights(false, self.Owner) -- Remove sight
 
 	self.Reloadaftershoot = CurTime() + 1 -- Reload delay after deploy...
@@ -386,6 +514,22 @@ end
 ---------------------------------------------------------*/
 function SWEP:PrimaryAttack()
 
+-- This makes you E + Left Click to attach Kull Disruptor - now its just skin, later maybe real function
+
+	if (self.Owner:IsPlayer()) then
+		if (self.Owner:KeyDown(IN_USE) and not self.Weapon:GetNWBool("HasKull",false)) then
+		self.Weapon.Owner:GetViewModel():SetSkin( 1 )
+		self.Weapon:SetNetworkedBool("HasKull",true);
+		self.Weapon:SetNextPrimaryFire(CurTime()+1)
+		self.Weapon:EmitSound("npc/combine_soldier/gear2.wav")
+		elseif ( self.Owner:KeyDown(IN_USE) and self.Weapon:GetNWBool("HasKull",false)) then
+		self.Weapon.Owner:GetViewModel():SetSkin( 0 )
+		self.Weapon:SetNetworkedBool("HasKull",false);
+		self.Weapon:SetNextPrimaryFire(CurTime()+1)
+		self.Weapon:EmitSound("npc/combine_soldier/gear2.wav")
+		end
+	end
+
 		/* if ( self.Owner:KeyDown(IN_USE) ) then
 			self.Weapon:SetNetworkedBool("Active", self.Weapon.LaserEx)
 			if ( !self.Weapon:GetNetworkedBool("Active") ) then
@@ -396,28 +540,36 @@ function SWEP:PrimaryAttack()
 		self.Weapon:EmitSound("weapons/smg1/switch_single.wav")
 		return end */
 
-	if ( self.Weapon:Clip1() == 0 ) then
-		self:Reload()
-	end
+	if (self.Owner:IsNPC() or !self.Owner:KeyDown(IN_USE)) then
 
-	if not self:CanPrimaryAttack() then return end
+		if ( self.Weapon:Clip1() == 0) then
+			if (self.weapon_reload) then
+				self.weapon_reload = nil;
+				self:Reload()
+			else
+				self.weapon_reload = true;
+			end
+		end
 
-	self.Reloadaftershoot = CurTime() + self.Primary.Delay
+		if not self:CanPrimaryAttack() then return end
 
-	self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
-	-- Set next secondary fire after firing delay
+		self.Reloadaftershoot = CurTime() + self.Primary.Delay
 
-	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	-- Set next primary fire after firing delay
+		self.Weapon:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+		-- Set next secondary fire after firing delay
 
-	self.Weapon:EmitSound(self.Primary.Sound)
+		self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+		-- Set next primary fire after firing delay
 
-	self:RecoilPower()
+		self.Weapon:EmitSound(self.Primary.Sound)
 
-	self:TakePrimaryAmmo(1)
+		self:RecoilPower()
 
-	if ((game.SinglePlayer() and SERVER) or SERVER) then
-	self.Weapon:SetNetworkedFloat("LastShootTime", CurTime())
+		self:TakePrimaryAmmo(1)
+
+		if ((game.SinglePlayer() and SERVER) or SERVER) then
+			self.Weapon:SetNetworkedFloat("LastShootTime", CurTime())
+		end
 	end
 end
 
@@ -474,6 +626,15 @@ function SWEP:CanPrimaryAttack()
 end
 
 SWEP.CrossHairScale = 1
+/*
+function SWEP:PreDrawViewModel(vm)
+	print_r(vm:GetSkin())
+	if (self:GetNWBool("HasKull",false)) then
+		vm:SetSkin(1)
+	else
+		vm:SetSkin(0)
+	end
+end*/
 
 function SWEP:DrawHUD()
 
@@ -705,7 +866,7 @@ end
 
 function SWEP:SetScope(b, player)
 
-if CLIENT then return end
+	if CLIENT then return end
 
 	local PlaySound = b ~= self.Weapon:GetNetworkedBool("Scope", not b)
 	self.CurScopeZoom = 1
@@ -714,12 +875,14 @@ if CLIENT then return end
 	if b then
 		if PlaySound then
 			self.Weapon:EmitSound(sndZoomIn)
+			self.Weapon:SendWeaponAnim(ACT_TURNLEFT45)
 
 			self:UnDrawModel()
 		end
 	else
 		if PlaySound then
 			self.Weapon:EmitSound(sndZoomOut)
+			self.Weapon:SendWeaponAnim(ACT_VM_DEPLOY_1)
 
 			self:ReDrawModel()
 		end
