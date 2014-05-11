@@ -578,6 +578,10 @@ function ENT:PreEntityCopy()
 		dupeInfo.BulkDoor = self.BulkDoor:EntIndex();
 	end
 
+	if (IsValid(self.OpenedDoor)) then
+		dupeInfo.OpenerDoor = self.OpenedDoor:EntIndex();
+	end
+
 	duplicator.StoreEntityModifier(self, "JumperDupeInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self)
 end
@@ -591,6 +595,10 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	if (dupeInfo.BulkDoor) then
 		self:SpawnBulkHeadDoor(CreatedEntities[dupeInfo.BulkDoor]);
+	end
+
+	if (dupeInfo.OpenerDoor and IsValid(CreatedEntities[dupeInfo.OpenerDoor])) then
+		timer.Simple(0.1,function() if IsValid(CreatedEntities[dupeInfo.OpenerDoor]) then CreatedEntities[dupeInfo.OpenerDoor]:Remove(); end end) -- fix
 	end
 
 	self:SpawnToggleButton()

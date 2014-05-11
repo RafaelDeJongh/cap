@@ -42,7 +42,7 @@ function TOOL:LeftClick(t)
 	local e = self:SpawnSENT(p,t,model);
 	if (not IsValid(e)) then return end
 	local ang = t.Entity:GetAngles(); ang.y = ang.y+180;
-	local vec = Vector(40,0,-90); if(model == models[2])then vec = Vector(40,0,0) end;
+	local vec = Vector(40,0,-90);
 	e:SetPos(t.Entity:LocalToWorld(vec))
 	e:SetAngles(ang);
     local c = self:Weld(e,t.Entity,util.tobool(self:GetClientNumber("autoweld")));

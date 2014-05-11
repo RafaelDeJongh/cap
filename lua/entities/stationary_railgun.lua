@@ -3,6 +3,8 @@
 	Copyright (C) 2010 Madman07
 ]]--
 
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
+
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Stationary Railgun"
@@ -41,10 +43,8 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE)
 	self.Entity:StartMotionController();
 
-	if (WireAddon) then
-		self.Inputs = WireLib.CreateInputs( self.Entity, {"Fire [NORMAL]", "Active [NORMAL]", "Reload [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]"});
-		self.Outputs = WireLib.CreateOutputs( self.Entity, {"Ammo"});
-	end
+	self:CreateWireInputs("Fire [NORMAL]", "Active [NORMAL]", "Reload [NORMAL]", "Vector [VECTOR]", "Entity [ENTITY]");
+	self:CreateWireOutputs("Ammo");
 
 	self.Driver = NULL;
 
@@ -482,10 +482,8 @@ function ENT:PreEntityCopy()
 	if IsValid(self.Cann) then
 		dupeInfo.CannID = self.Cann:EntIndex()
 	end
-	if WireAddon then
-		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Entity )
-	end
 	duplicator.StoreEntityModifier(self, "StatRailDupeInfo", dupeInfo)
+	StarGate.WireRD.PreEntityCopy(self)
 end
 duplicator.RegisterEntityModifier( "StatRailDupeInfo" , function() end)
 
@@ -512,10 +510,6 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Cann = CreatedEntities[ dupeInfo.CannID ]
 	end
 
-	if(Ent.EntityMods and Ent.EntityMods.StatRailDupeInfo.WireData) then
-		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.StatRailDupeInfo.WireData, function(id) return CreatedEntities[id] end)
-	end
-
 	self.Driver = NULL;
 	self.Pitch = 15;
 	self.Yaw = 0;
@@ -535,6 +529,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		ply:AddCount("CAP_statrail", self.Entity)
 	end
 
+	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

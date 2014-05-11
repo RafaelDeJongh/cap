@@ -109,7 +109,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Frame.DoorModel = dupeInfo.DoorModel;
 	end
 
-	if(Ent.EntityMods and Ent.EntityMods.DupeInfo.WireData) then
+	if(WireAddon and Ent.EntityMods and Ent.EntityMods.DupeInfo.WireData) then
 		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.DupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end
 

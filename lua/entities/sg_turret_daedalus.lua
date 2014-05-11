@@ -94,7 +94,7 @@ function ENT:Shoot(cann)
 		effectdata:SetScale( 2 )
 	util.Effect( "MuzzleEffect", effectdata )
 
-	local damage = GetConVar("CAP_shiprail_damage"):GetInt();
+	local damage = StarGate.CFG:Get("ship_railgun","damage",10);
 	bullet = {}
 	bullet.Src		= data.Pos;
 	bullet.Attacker = self.Parent;

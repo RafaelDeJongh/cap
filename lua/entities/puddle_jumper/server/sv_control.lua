@@ -20,7 +20,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		end
 		self.Pilot = nil;
 	end
-	
+
 	if(IsValid(self)) then
 		self:EmitSound(self.Sounds.Shutdown,100,100)
 		self:SetNetworkedEntity("jumper",NULL)
@@ -34,8 +34,8 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self.Accel.RIGHT = 0;
 		self.Accel.UP = 0;
 
-		self:SetNetworkedBool("JumperInflight",false);	
-		
+		self:SetNetworkedBool("JumperInflight",false);
+
 		self:SpawnToggleButton();
 		self:SpawnBulkHeadDoor();
 		self:SpawnBackDoor();
@@ -44,7 +44,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		end
 		self:SpawnOpenedDoor();
 		//self:SpawnSeats();
-		
+
 		self:ToggleRotorwash(false);
 
 		if(self.epodo) then
@@ -100,10 +100,10 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 
 		ply:SetNetworkedBool("isFlyingjumper",true)
 		ply:SetNetworkedEntity("jumper",self)
-		self:SetNetworkedBool("JumperInflight",true);		
-		
+		self:SetNetworkedBool("JumperInflight",true);
+
 		ply:SetEyeAngles(self:GetAngles());
-		
+
 		ply:Flashlight(false);
 	end
 	self.Entered=true

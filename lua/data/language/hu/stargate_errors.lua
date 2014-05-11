@@ -1,4 +1,6 @@
 // cap error notifications
+// You can get all this errors by typing "CAP_debugerror" in console.
+// Also you can get specified error by typing "CAP_debugerror 9" for example.
 sg_err_title = Carter Addon Pack - Hibák
 sg_err_html_t = Carter Addon Pack Hibák:
 sg_err_n = Hiba
@@ -42,5 +44,5 @@ sg_err_14 = [[A Wiremod lejárt, kérem frissítse hogy a CAP jól működjön.
 <br>Github Link: <u>https://github.com/wiremod/wire</u>
 <br>Steam Műhely Link: <a href='http://steamcommunity.com/sharedfiles/filedetails/?id=160250458'>http://steamcommunity.com/sharedfiles/filedetails/?id=160250458</a>
 <br>
-<br>Note: Ha az svn linket böngészőben nyissa meg a böngésző hibát jelez.Használjon valamilyen SVN programot a letöltésére(pl:Tortoise SVN).
+<br>Figyelem: Ha az svn linket böngészőben nyissa meg a böngésző hibát jelez.Használjon valamilyen SVN programot a letöltésére(pl:Tortoise SVN).
 ]]

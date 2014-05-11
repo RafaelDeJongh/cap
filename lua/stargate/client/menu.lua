@@ -83,6 +83,8 @@ spawnmenu.AddContentType( "cap_npc", function( container, obj )
 	if ( !obj.nicename ) then return end
 	if ( !obj.spawnname ) then return end
 
+	local gmod_npcweapon = GetConVar("gmod_npcweapon") or CreateConVar( "gmod_npcweapon", "", { FCVAR_ARCHIVE } );
+
 	if ( !obj.weapon ) then obj.weapon = gmod_npcweapon:GetString() end
 
 	local icon = vgui.Create( "ContentIcon", container )
@@ -275,7 +277,7 @@ local function StargateAddTab(Categorised, pnlContent, tree, node)
 					local adm_only = false;
 					local tbl = StarGate.CFG:Get(adminonly,ent.__ClassName,""):TrimExplode(",");
 					if (table.HasValue(tbl,"add_shield")) then adm_only = true; end
-					
+
 					local weapon = "";
 					if ( ent.Weapons ) then
 						weapon = ent.Weapons[1];

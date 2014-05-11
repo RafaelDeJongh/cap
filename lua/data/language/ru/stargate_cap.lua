@@ -376,6 +376,9 @@ hud_sts_connected = Подключено
 hud_sts_disconnected = Отключено
 hud_sts_depleted = Исчерпано
 
+// jumper hud
+jumper_hud_dial = Набор:
+
 // visual settings
 vis_fps_high = Влияние на FPS: Большое
 vis_fps_medium = Влияние на FPS: Среднее

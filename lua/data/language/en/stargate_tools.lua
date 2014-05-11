@@ -1,3 +1,7 @@
+// Attention! For see changes in-game you need fully restart gmod!
+// Reload languages or map will not update this messages!
+// This happens because gmod cache stool names/desc until close game.
+
 // Ramps
 stool_ramp_spawner = Ramp Spawner
 stool_ramp_create = Creates a Ramp

@@ -39,11 +39,11 @@ function ENT:Initialize()
 end
 
 function ENT:Think()
-   if(not StarGate.VisualsMisc("cl_stargate_dynlights")) then return end;
+   if(not StarGate.VisualsMisc("cl_stargate_un_dynlights")) then return end;
    if(self.BearingColor and (self.NextLight or 0) < CurTime()) then
 	    self.NextLight = CurTime()+0.001;
 		if(self.Entity:GetNWBool("bearing",false)) then
-			local dlight = DynamicLight(self:EntIndex()..i);
+			local dlight = DynamicLight(self:EntIndex());
 			if(dlight) then
 				dlight.Pos = self.Entity:LocalToWorld(self.LightPositions);
 				dlight.r = self.BearingColor.r;
@@ -52,7 +52,7 @@ function ENT:Think()
 				dlight.Brightness = 0.5;
 				dlight.Decay = 150;
 				dlight.Size = 250;
-				dlight.DieTime = CurTime()+1;
+				dlight.DieTime = CurTime()+0.5;
 			end
 		end
 	end
@@ -76,14 +76,19 @@ function ENT:Initialize()
 		phys:EnableMotion(false);
 		phys:SetMass(400);
 	end
+
+	self:CreateWireOutputs("Activated");
 end
 
 function ENT:Bearing(skin)
     if(skin)then
         self.Entity:Fire("skin",1);
+        self.Entity:SetNetworkedBool("bearing",true);
+        self:SetWire("Activated",true);
 	else
 	    self.Entity:Fire("skin",2);
 		self.Entity:SetNetworkedBool("bearing",false); -- Dynamic light of the bearing
+		self:SetWire("Activated",false);
     end
 end
 

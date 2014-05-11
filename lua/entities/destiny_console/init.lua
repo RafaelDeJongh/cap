@@ -59,21 +59,9 @@ function ENT:Initialize()
 	self.DHDRange = self.Range;
 	self:SetNetworkedInt("DHDRange",self.DHDRange);
 
-	local outputs = {
-		"1","2","3","4",
-		"5","6","7","8",
-		"A", "B"
-	}
-
-	local inputs = {
-		"Alarm [NORMAL]", "A [NORMAL]", "B [NORMAL]", "C [NORMAL]", "D [NORMAL]", "E [NORMAL]", "F [NORMAL]", "G [NORMAL]", "H [NORMAL]",
-		"Name A [STRING]","Name B [STRING]","Name C [STRING]","Name D [STRING]","Name E [STRING]","Name F [STRING]","Name G [STRING]","Name H [STRING]"
-	}
-
-	if (WireAddon) then
-		self.Outputs = WireLib.CreateOutputs( self.Entity, outputs);
-		self.Inputs = WireLib.CreateInputs( self.Entity, inputs);
-	end
+	self:CreateWireOutputs("1","2","3","4","5","6","7","8","A", "B");
+	self:CreateWireInputs("Alarm [NORMAL]", "A [NORMAL]", "B [NORMAL]", "C [NORMAL]", "D [NORMAL]", "E [NORMAL]", "F [NORMAL]", "G [NORMAL]", "H [NORMAL]",
+	"Name A [STRING]","Name B [STRING]","Name C [STRING]","Name D [STRING]","Name E [STRING]","Name F [STRING]","Name G [STRING]","Name H [STRING]");
 
 	self.Toggle = {
 		[1] = 0,
@@ -427,9 +415,6 @@ function ENT:PreEntityCopy()
 	if IsValid(self.Entity) then
 		dupeInfo.EntID = self.Entity:EntIndex()
 	end
-	if WireAddon then
-		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Entity )
-	end
 
 	if (IsValid(self.LockedGate)) then
 		dupeInfo.LockedGate = self.LockedGate:EntIndex();
@@ -445,6 +430,7 @@ function ENT:PreEntityCopy()
 	dupeInfo.ScreenTextH = self.ScreenTextH;
 
 	duplicator.StoreEntityModifier(self, "DestConDupeInfo", dupeInfo)
+	StarGate.WireRD.PreEntityCopy(self)
 end
 duplicator.RegisterEntityModifier( "DestConDupeInfo" , function() end)
 
@@ -465,10 +451,6 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	if dupeInfo.EntID then
 		self.Entity = CreatedEntities[ dupeInfo.EntID ]
-	end
-
-	if(Ent.EntityMods and Ent.EntityMods.DestConDupeInfo.WireData) then
-		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.DestConDupeInfo.WireData, function(id) return CreatedEntities[id] end)
 	end
 
 	if (dupeInfo.LockedGate and CreatedEntities[dupeInfo.LockedGate]) then
@@ -501,6 +483,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		ply:AddCount("CAP_destcon", self.Entity)
 	end
 
+	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

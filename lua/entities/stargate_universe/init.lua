@@ -813,21 +813,36 @@ end
 
 --#############################################################
 function ENT:BearingSetSkin(BearingLight)
+	print_r(self)
     if(IsValid(self.Entity))then
 	    local delay = 0;
 	    for k,v in pairs(StarGate.GetConstrainedEnts(self.Entity,2) or {}) do
-		    if(v:IsValid() and v:GetClass():find("bearing"))then
-			    timer.Create("Bearing"..k..self.Entity:EntIndex(),delay,1,
-				    function()
-					    if(IsValid(v)) then
-					        if(BearingLight)then
-				                v:Bearing(true);
-						    else
-						        v:Bearing(false);
+		    if(IsValid(v))then
+		    	if (v:GetClass()=="bearing") then
+				    timer.Create("Bearing"..k..self.Entity:EntIndex(),delay,1,
+					    function()
+						    if(IsValid(v)) then
+						        if(BearingLight)then
+					                v:Bearing(true);
+							    else
+							        v:Bearing(false);
+							    end
 						    end
 					    end
-				    end
-				);
+					);
+				elseif (v:GetClass()=="floorchevron" and v.BearingMode) then
+				    timer.Create("FloorChevronBM"..k..self.Entity:EntIndex(),delay,1,
+					    function()
+						    if(IsValid(v)) then
+						        if(BearingLight)then
+					                v:FloorChev(true);
+							    else
+							        v:FloorChev(false);
+							    end
+						    end
+					    end
+					);
+				end
 		    end
 	    end
     end
@@ -838,7 +853,7 @@ function ENT:FloorChevron(FloorChevLight)
     if(IsValid(self.Entity))then
 	    local delay = 0;
 	    for k,v in pairs(StarGate.GetConstrainedEnts(self.Entity,2) or {}) do
-		    if(v:IsValid() and v:GetClass():find("floorchevron"))then
+		    if(IsValid(v) and v:GetClass()=="floorchevron")then
 			    timer.Create("FloorChevron"..k..self.Entity:EntIndex(),delay,1,
 				    function()
 					    if(IsValid(v)) then

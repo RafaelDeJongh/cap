@@ -1,5 +1,9 @@
+// All lines/sentences what come after "//" is comments and shouldn't be translated!
+
+// Global language name, will be displayed in language settings
 global_lang_name = Magyar
 
+// Stargate and DHD names
 stargate_category = Kapuk és Gyűrűk
 stargate_address = Cím
 stargate_group = Csoport
@@ -25,7 +29,6 @@ stargate_galaxy_n = Nem
 stargate_reload = Csillagkapu Tárcsázási Mód Megváltozott:\nAz új tárcsázási módszer: %s.\nA Csillagkapu rendszer újratöltése.
 stargate_reloaded = A Csillagkapu rendszer újratöltve.
 stargate_reload_start = A Csillagkapu rendszer újratöltése.Kérem Várjon.
-
 // New tool menu on gates (when hold C)
 stargate_c_tool_01 = Forgás Engedélyzése
 stargate_c_tool_01d = Forgás Tiltása
@@ -130,9 +133,9 @@ stargate_vgui_blockedtip = A blokkolt kapuk pirosan vannak és nem lehet rákatt
 // Cap DirectX warning message, type CAP_dxlevel in console for get this message manually
 stargate_dxlevel_01 = Carter Addon Pack - Figyelmeztetés
 stargate_dxlevel_02 =[[ Figyelem: az ön gmod-ja DirectX 8.1(vagy kisebb) alatt fut.
-Ez problémát okoz a cap kompatibilitásával.
+Ez kompatibilitási problémát okoz a Carter Addon Pack-el.
 Problémák listája:]]
-stargate_dxlevel_03 =[[* Nincs a kapunak instabill örvénye amikor a kapu megnyílik.
+stargate_dxlevel_03 =[[* Nem lesz a kapunak instabill örvénye amikor a kapu megnyílik.
 * Fehér kockák amikor odahúzza az egeret pl:egy ZPM-hez.
 * Csillagkapu univerzumon pedig a szimbólumok állandóan világítnak.
 * És más egyéb problémák.]]

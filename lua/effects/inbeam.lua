@@ -26,7 +26,7 @@ function EFFECT:Init(data)
 end
 
 function EFFECT:Think()
-	if (not IsValid(self.EntityO)) then return end
+	if (not IsValid(self.EntityO) or not self.StartPos) then return end
 	self.Time = CurTime()
 	self.Rel = self.Time-self.Init
 
