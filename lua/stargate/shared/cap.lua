@@ -22,6 +22,7 @@ function StarGate.GetMultipleOwnerClientSide(ent) // Ugly, no validation, but wo
 end
 
 function StarGate.LOSVector(startpos, endpos, filter, radius)
+	if (not startpos or not endpos) then return false end
 	local tracedata = {
 		start = startpos,
 		endpos = endpos,

@@ -155,14 +155,14 @@ local function JumperCalcView(Player,Origin,Angles,FieldOfView)
     if (IsValid(jumper) and p:GetNetworkedBool("isFlyingjumper",false)) then
     	local self = jumper;
 		if(not View.FirstPerson)  then
-			local pos = self.Entity:GetPos() + View.Angle*self.Entity:GetUp() - View.Distance*p:GetAimVector()
-			local face = ((self.Entity:GetPos() + Vector(0,0,100))- pos):Angle()
+			local pos = self:GetPos() + View.Angle*self:GetUp() - View.Distance*p:GetAimVector()
+			local face = ((self:GetPos() + Vector(0,0,100))- pos):Angle()
 			view.origin = pos
 			view.angles = face
 			view.fov = nil
 		else
-			local pos = self.Entity:GetPos()+self.Entity:GetForward()*75+self.Entity:GetUp()*25
-			local angle = self.Entity:GetAngles()
+			local pos = self:GetPos()+self:GetForward()*75+self:GetUp()*25
+			local angle = self:GetAngles()
 			view.origin = pos
 			view.angles = angle
 			view.fov = FieldOfView + 20

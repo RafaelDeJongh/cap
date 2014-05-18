@@ -106,6 +106,7 @@ end
 
 function ENT:CloakEnt(b,nosound,alpha,s,owner,sound)
   local time = CurTime();
+  local sound
   owner = self.Entity:GetVar("Owner");
   s = 2;
   alpha = 0;

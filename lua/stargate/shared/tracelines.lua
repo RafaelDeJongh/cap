@@ -186,7 +186,7 @@ function StarGate.Trace:New(start,dir,ignore)
 					in_box = self:InBox(pos,v.Min,v.Max);
 				end
 
-				if (not self.Classes[class].Condition or self.Classes[class].Condition(e,{start,dir,ignore},trace,in_box)) then
+				if (self.Classes and self.Classes[class] and (not self.Classes[class].Condition or self.Classes[class].Condition(e,{start,dir,ignore},trace,in_box))) then
 					local e_pos = e:GetPos();
 					local norm = e:WorldToLocal(e_pos+norm_world); -- Get the normal (local coordinates!)
 					local hit;

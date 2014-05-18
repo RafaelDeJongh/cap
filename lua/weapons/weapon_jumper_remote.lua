@@ -40,7 +40,7 @@ function SWEP:PrimaryAttack()
 	self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 	timer.Simple(self.Delay, function()
 	for _,v in pairs(ents.FindByClass("puddle_jumper")) do
-		if(IsValid(v)) then
+		if(IsValid(v) and IsValid(self.Owner)) then
 			if(v.Owner==self.Owner) then
 				if(not(self.Owner:KeyDown(IN_USE))) then
 					if (IsValid(v.Shields) and v.Shields:Enabled()) then

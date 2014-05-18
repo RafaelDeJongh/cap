@@ -103,7 +103,7 @@ function ENT:PhysicsCollide( data, physobj )
 	self.HitDelay[e] = true;
 	self:Reflect(e, velo, normal, pos);
 
-	timer.Create("Delay"..e:EntIndex(),0.1,1, function() self.HitDelay[e] = false; end);
+	timer.Create("Delay"..e:EntIndex(),0.1,1, function() if IsValid(self) then self.HitDelay[e] = false; end end);
 
 	 self:DrawBubbleEffect(pos, normal, strength, false, true);
 end

@@ -23,21 +23,21 @@
 --################# Loads the menues #################
 --################ Check for visuals (used in effects) @aVoN
 function StarGate.VisualsShips(str)
-	if(util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsship")) and util.tobool(LocalPlayer():GetInfo(str))) then
+	if(LocalPlayer() and LocalPlayer().GetInfo and util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsship")) and util.tobool(LocalPlayer():GetInfo(str))) then
 		return true;
 	end
 	return false;
 end
 
 function StarGate.VisualsWeapons(str)
-	if(util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsweapon")) and util.tobool(LocalPlayer():GetInfo(str))) then
+	if(LocalPlayer() and LocalPlayer().GetInfo and util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsweapon")) and util.tobool(LocalPlayer():GetInfo(str))) then
 		return true;
 	end
 	return false;
 end
 
 function StarGate.VisualsMisc(str,ignore)
-	if((util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsmisc")) or ignore) and util.tobool(LocalPlayer():GetInfo(str))) then
+	if(LocalPlayer() and LocalPlayer().GetInfo and (util.tobool(LocalPlayer():GetInfo("cl_stargate_visualsmisc")) or ignore) and util.tobool(LocalPlayer():GetInfo(str))) then
 		return true;
 	end
 	return false;

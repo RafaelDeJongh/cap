@@ -105,7 +105,7 @@ function SWEP:Initialize()
 	-- Set holdtype, depending on NPCs, so it doesn't look too strange
 	timer.Simple(0.2,
 		function()
-			if(not (self and self.SetWeaponHoldType)) then return end;
+			if(not (IsValid(self) and self.SetWeaponHoldType)) then return end;
 			if(self.Owner and self.Owner:IsValid() and self.Owner:IsNPC()) then
 				local class = self.Owner:GetClass();
 				if(class ~= "npc_metropolice") then

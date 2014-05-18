@@ -49,7 +49,9 @@ function ENT:Use(ply)
 		self:EmitSound(self.Sounds.Button1,100,math.random(95,105));
 	end
 	if self.NextUse < CurTime() then
-		self.Parent:ButtonPressed(self.ID, ply);
+		if (IsValid(self.Parent)) then
+			self.Parent:ButtonPressed(self.ID, ply);
+		end
 		self.NextUse = CurTime() + 1;
 	end
 end

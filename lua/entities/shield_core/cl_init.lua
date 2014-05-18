@@ -443,7 +443,6 @@ function VGUI:Init()
 	MenuButtonClose.DoClick = function ( btn )
 		LocalPlayer():ConCommand("SC_Close"..e:EntIndex());
 		DermaPanel:Remove();
-		DermaPanelInfo:Remove();
     end
 
 	local MenuButtonCreate = vgui.Create("DButton");

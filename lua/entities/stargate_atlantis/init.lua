@@ -139,7 +139,7 @@ function ENT:GateWireInputs(groupsystem)
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Atlantis Type","Received [STRING]");
 end
 
 --################# Either allow the player to spawn this or not
@@ -306,6 +306,7 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		self.AtlType = util.tobool(v);
 		self.Entity:SetNWBool("AtlType",util.tobool(v));
 		self:AtlTypeThink();
+		self:SetWire("Atlantis Type",util.tobool(v));
 	end
 end
 

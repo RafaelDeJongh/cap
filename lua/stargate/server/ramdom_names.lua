@@ -57,7 +57,8 @@ local function RandomAll(max)
 end
 
 local function RandomGateName(ply,ent,count)
-    if (GetConVar("stargate_random_address"):GetBool()) then
+	local conv = GetConVar("stargate_random_address")
+    if (conv and conv:GetBool()) then
         if (IsValid(ent) and ent.IsStargate and ent:GetClass()!="stargate_orlin") then
         	local randadr = "";
         	if (GetConVar("stargate_group_system"):GetBool()) then

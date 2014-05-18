@@ -216,12 +216,14 @@ function ENT:Think()
 				end
 			end
 
+			local phys = v:GetPhysicsObject()
+
 			if string.find(class,"prop") ~= nil then
 				v:Fire("enablemotion","",0) --bye bye fort that took you 4 hours to make
-				constraint.RemoveAll(v)
+				if (IsValid(phys)) then
+					constraint.RemoveAll(v)
+				end
 			end
-
-			local phys = v:GetPhysicsObject()
 
 			-- Push stuff, dont push black hole
 			if (phys:IsValid() and not class == "black_hole_power") then

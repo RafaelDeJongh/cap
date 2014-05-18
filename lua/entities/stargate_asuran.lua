@@ -98,7 +98,7 @@ end
 
 function ENT:SpawnFunction(p,t)   --############ @  Llapp
 	if (!t.HitWorld) then return end;
-	e = ents.Create("stargate_asuran") ;
+	local e = ents.Create("stargate_asuran") ;
 	e:SetPos(t.HitPos + Vector(0,0,1000));
 	ang = p:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360;
 	e:SetAngles(ang);
@@ -110,7 +110,7 @@ function ENT:SpawnFunction(p,t)   --############ @  Llapp
 end
 
 function ENT:AddGate()  --############ @  Llapp
-    local pos = e:GetPos()+e:GetForward()*(51.5)
+    local pos = self:GetPos()+self:GetForward()*(51.5)
 	local l = ents.Create("stargate_atlantis");
 	l:DrawShadow(false);
 	l:SetParent(self.Entity);
@@ -384,8 +384,12 @@ function ENT:PhysicsUpdate( phys, deltatime )  --############ @ Madman07 and Lla
 	else
 	    AimVec = (TargetPos - pos):Angle() + ang;
 	end
-	self.Angles.Pitch = AimVec.Pitch
-	self.Angles.Yaw = AimVec.Yaw
+	if (self.Angles) then
+		self.Angles.Pitch = AimVec.Pitch
+		self.Angles.Yaw = AimVec.Yaw
+	else
+		self.Angles = Angle(90,0,0);
+	end
 	ShootAngle = AimVec
 	pit = -1 * math.NormalizeAngle(ShootAngle.Pitch);
     ya  = math.NormalizeAngle(ShootAngle.Yaw);

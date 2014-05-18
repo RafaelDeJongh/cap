@@ -255,7 +255,9 @@ function ENT:Exit()
 	self.Driver:DrawViewModel(true);
 	self.Driver:DrawWorldModel(true);
 	self.Driver = NULL;
-	self.Cann:SetOwner();
+	if (IsValid(self.Cann)) then
+		self.Cann:SetOwner();
+	end
 	self.Active = false;
 end
 

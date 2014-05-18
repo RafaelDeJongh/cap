@@ -71,7 +71,7 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
-	if (not self.AimVector) then return end
+	if (not self.AimVector or not self.StartPos) then return end
 	local ANGLE = self.AimVector:Angle()
 	local fw = self.AimVector
 	local up = ANGLE:Up()

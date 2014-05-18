@@ -151,7 +151,7 @@ function ENT:Think() --####### Now let me think... @RononDex
 			end
 		end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"SUCK")) then
+		if(self.Pilot:KeyDown(self.Vehicle,"SUCK") and IsValid(self.Harvester)) then
 			self.Harvester:TurnOn(true)
 		end
 
@@ -159,7 +159,7 @@ function ENT:Think() --####### Now let me think... @RononDex
 			self:OpenDHD(self.Pilot)
 		end
 
-		if(self.Pilot:KeyDown(self.Vehicle,"SPIT")) then
+		if(self.Pilot:KeyDown(self.Vehicle,"SPIT") and IsValid(self.Harvester)) then
 			self.Harvester:Spit()
 		end
 	end

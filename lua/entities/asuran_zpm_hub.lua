@@ -119,7 +119,7 @@ function ENT:Touch(ent)
 			ent:SetUseType(SIMPLE_USE);
 			ent.Use = function()
 				local constr = constraint.FindConstraint(self,"Weld");
-				if (constr and IsValid(constr.Entity[1].Entity)) then
+				if (constr and IsValid(constr.Entity[1].Entity) and constr.Entity[1].Entity.UseZPM) then
 					if (constr.Entity[1].Entity:GetWire("Disable Use")>0) then return end
 					constr.Entity[1].Entity:UseZPM();
 				end

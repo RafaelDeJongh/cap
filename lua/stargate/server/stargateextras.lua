@@ -213,8 +213,8 @@ function StarGate.CauseHeatDamage(gate)
 
       StarGate.HeatEntity(gate, heatDamage, heatRadius, overloaderOwner)
 
-      if(gate.excessPower > 3 * (gate.excessPowerLimit / 4)) then
-         for _, entity in pairs(ents.FindInSphere(StarGate.GetEntityCentre(gate), heatRadius)) do
+      if(gate.excessPower > 3 * (gate.excessPowerLimit / 4) and StarGate.GetEntityCentre(gate)) then
+         for k, entity in pairs(ents.FindInSphere(StarGate.GetEntityCentre(gate), heatRadius)) do
             if(entity ~= gate) then
                entity:Ignite(2, 25)
             end

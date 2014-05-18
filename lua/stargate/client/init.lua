@@ -81,7 +81,7 @@ function StarGate.Hook.GetInternetStatus(_,key)
 				if(version) then
 					StarGate.LATEST_VERSION = version;
 
-					if (installed and not StarGate.WorkShop and StarGate.LATEST_VERSION > StarGate.CURRENT_VERSION) then
+					if (installed and (not StarGate.WorkShop or StarGate.LATEST_VERSION-8 > StarGate.CURRENT_VERSION) and StarGate.LATEST_VERSION > StarGate.CURRENT_VERSION) then
 						LocalPlayer():ConCommand("CAP_Outdated");
 					end
 				end

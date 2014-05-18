@@ -287,7 +287,7 @@ function ENT:GateWireInputs(groupsystem)
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Ring Symbol [STRING]","Ring Rotation","Ring Chev7 Symbol [STRING]","Earth Point of Origin","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Ring Symbol [STRING]","Ring Rotation","Ring Chev7 Symbol [STRING]","Earth Point of Origin","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","SGC Type","Received [STRING]");
 end
 
 function ENT:WireOrigin()
@@ -819,9 +819,11 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		if (v >= 1) then
 			self.RingInbound = true;
 			self.Entity:SetNWBool("ActSGCT",true);
+			self:SetWire("SGC Type",true);
 		else
 			self.RingInbound = false;
 			self.Entity:SetNWBool("ActSGCT",false);
+			self:SetWire("SGC Type",false);
 		end
 	elseif(k == "Chevron Light") then
 		if (v >= 1)	then

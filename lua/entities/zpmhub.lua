@@ -108,7 +108,7 @@ end
 function ENT:Touch(ent)
 	local pos = self.Entity:GetPos();
 	local ang = self.Entity:GetAngles();
-	if (self.CanEject == true and ent.IsZPM and ent ~= self.ZPMs[1].Ent and ent ~= self.ZPMs[2].Ent and ent ~= self.ZPMs[3].Ent) then
+	if (self.CanEject == true and ent.IsZPM and self.ZPMs and ent ~= self.ZPMs[1].Ent and ent ~= self.ZPMs[2].Ent and ent ~= self.ZPMs[3].Ent) then
 		for i,v in ipairs(self.ZPMs) do
 			if (not v.IsValid and v.Eject == 0) then
 				v.Ent = ent;

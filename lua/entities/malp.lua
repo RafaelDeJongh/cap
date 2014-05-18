@@ -164,34 +164,34 @@ function ENT:Think()
 		end
 	end
 
-
-	
-	local dist = (self.Owner:GetPos() - self:GetPos()):Length();	
-	if(dist>5000) then
-		self.gate = self:FindGate(5000)
-		self.pgate = self:FindPlayerGate(5000)
-		if(IsValid(self.pgate)) then
-			if(self.pgate.IsOpen) then
-				self.pgate.EventHorizon.AutoClose = false;
-				self.pgate.DisAutoClose = true;
-				for k,v in pairs(self.gate) do
-					if(v.EventHorizon==self.pgate.EventHorizon.Target) then
-						if(IsValid(v.EventHorizon)) then
-							v.EventHorizon.AutoClose = false;
+	if(IsValid(self.Owner)) then
+		local dist = (self.Owner:GetPos() - self:GetPos()):Length();
+		if(dist>5000) then
+			self.gate = self:FindGate(5000)
+			self.pgate = self:FindPlayerGate(5000)
+			if(IsValid(self.pgate)) then
+				if(self.pgate.IsOpen) then
+					self.pgate.EventHorizon.AutoClose = false;
+					self.pgate.DisAutoClose = true;
+					for k,v in pairs(self.gate) do
+						if(v.EventHorizon==self.pgate.EventHorizon.Target) then
+							if(IsValid(v.EventHorizon)) then
+								v.EventHorizon.AutoClose = false;
+							end
+							self.pgate.DisAutoClose = true;
+							self.SignalLost = false;
+							UpdateRenderTarget(self.RTCamera);
 						end
-						self.pgate.DisAutoClose = true;
-						self.SignalLost = false;
-						UpdateRenderTarget(self.RTCamera);
 					end
+				else
+					self.SignalLost = true;
+					UpdateRenderTarget(NULL);
 				end
-			else
-				self.SignalLost = true;
-				UpdateRenderTarget(NULL);
 			end
+		else
+			self.SignalLost = false;
+			UpdateRenderTarget(self.RTCamera);
 		end
-	else
-		self.SignalLost = false;
-		UpdateRenderTarget(self.RTCamera);
 	end
 	/*
 	if(IsValid(self.gate)) then
@@ -487,6 +487,10 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (dupeInfo.RTCamera) then
 		self:SpawnRTCam(CreatedEntities[dupeInfo.RTCamera]);
 	end
+
+	if(not IsValid(ply) and game.SinglePlayer()) then
+		ply = Entity(1);
+ 	end
 
 	if (IsValid(ply) and ply:GetCount("malp")>0 or StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 
