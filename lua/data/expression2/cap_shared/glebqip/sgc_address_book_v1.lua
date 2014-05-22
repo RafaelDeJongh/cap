@@ -47,21 +47,10 @@ AddressG:clear()
 AddressN:clear()
 AddressB:clear()
 AddressList=SG:stargateAddressList()
-for(I=1,AddressList:count()){
-N = 2
-Blocked = 0
-Array = AddressList[I,string]:explode(" ")
-Address = Array[1,string]
-if (Address=="1") {
-Blocked = 1
-Address = Array[2,string]
-N = 3
-}
-Name = ""
-for (I=N,Array:count()) {
-if (I!=N) { Name = Name + " " }
-Name = Name + Array[I,string]
-}
+foreach(K,V:array=AddressList) {
+Address = V[1,string] # Get address
+Name = V[2,string] # Get name
+Blocked = V[3,number] # Get blocked
 #if (Blocked==1) {
 if(Address:length()==7){Name=Name+"(8:"+Address[7]+"#)"}
 if(Address:length()==9){Name=Name+"(9:"+Address[8]+Address[9]+")"}

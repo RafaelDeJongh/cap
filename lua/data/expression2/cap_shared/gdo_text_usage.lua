@@ -2,12 +2,12 @@
 # For addon Stargate with Group System
 # http://www.facepunch.com/threads/1163292
 @name GDO Text usage
-@inputs Code
-@outputs GDOStatus GDOText:string
+@inputs Received_Code
+@outputs GDO_Status GDO_Text:string
 @persist
 @trigger
 
-if (Code == 12345) {
+if (Received_Code == 12345) {
     GDOStatus = 1
     GDOText = "OK!!!"
 } else {

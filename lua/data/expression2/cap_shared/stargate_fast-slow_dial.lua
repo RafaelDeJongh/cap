@@ -1,48 +1,48 @@
 # Created by AlexALX (c) 2011
-# For addon Stargate with Group System
-# http://www.facepunch.com/threads/1163292
+# For addon Stargate Carter Addon Pack
+# http://sg-carterpack.com/
 @name stargate fast-slow dial
-@inputs Start Address:string RingSymbol:string Chevron Active Inbound
-@outputs Close RotateRing ChevronEncode Chevron7Lock RingSpeedMode
+@inputs Start Address:string Ring_Symbol:string Chevron Active Inbound
+@outputs Close Rotate_Ring Chevron_Encode Chevron_7_Lock Ring_Speed_Mode
 @persist Address:string Stop Dialling
-@trigger 
+@trigger
 if (!Address) {
     Address = "SPAWN0#"
 }
 interval(10)
-RingSpeedMode = 3
-ChevronEncode = 0
-Chevron7Lock = 0
+Ring_Speed_Mode = 3
+Chevron_Encode = 0
+Chevron_7_Lock = 0
 I = Chevron+1
 if (Start == 1) {
     Dialling = 1
     if (clk("delay")) {
-        ChevronEncode = 1
+        Chevron_Encode = 1
         timer("delay2", 2600)
     }
     if (clk("delay2")) {
         Stop = 0
     }
     if (clk("delay3")) {
-        Chevron7Lock = 1
+        Chevron_7_Lock = 1
     }
     if (Stop == 0) {
-        RotateRing = 1
+        Rotate_Ring = 1
     }
-    if (I < Address:length() & RingSymbol==Address[I] && Stop == 0) {
-        RotateRing = 0
+    if (I < Address:length() & Ring_Symbol==Address[I] && Stop == 0) {
+        Rotate_Ring = 0
         Stop = 1
         timer("delay", 50)
-    } elseif (I == Address:length() & RingSymbol==Address[I] && Stop == 0) {
-        RotateRing = 0
+    } elseif (I == Address:length() & Ring_Symbol==Address[I] && Stop == 0) {
+        Rotate_Ring = 0
         Stop = 1
         timer("delay3", 50)
-    } 
+    }
 } elseif (!Start) {
     if (Active & Dialling) {
         Close = 1
     }
-    RotateRing = 0
+    Rotate_Ring = 0
     Stop = 0
     Dialling = 0
     timer("close", 1000)

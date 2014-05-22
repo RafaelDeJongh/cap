@@ -1,6 +1,6 @@
 # Created by AlexALX (c) 2011
-# For addon Stargate with Group System
-# http://www.facepunch.com/threads/1163292
+# For addon Stargate Carter Addon Pack
+# http://sg-carterpack.com/
 @name "Screen with Text"
 @inputs Desc:string String:string
 @outputs OutString:string

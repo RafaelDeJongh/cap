@@ -160,7 +160,7 @@ function RingsDiallingCallback(ply,cmd,args)
 		else
 			ply.RingDialEnt:DoCallback(0, "")
 		end
-		ply.RingDialEnt:EmitSound(Sound("tech/ring_button1.mp3")); -- "Dial Button" Sound @aVoN
+		ply.RingDialEnt:EmitSound(Sound("button/ring_button1.mp3")); -- "Dial Button" Sound @aVoN
 		ply.RingDialEnt=nil
 	end
 end

@@ -329,7 +329,11 @@ GateActions["AddressList"] = {
 		if !IsValid(Ent) or !Ent.IsStargate then
 			return {}
 		elseif Refresh>0 then
-			Ent.LastGetAddresses = Ent:WireGetAddresses();
+			local tbl = Ent:WireGetAddresses();
+			Ent.LastGetAddresses = {};
+			for k,v in pairs(tbl) do
+				table.insert(Ent.LastGetAddresses,v[3].." "..v[1].." "..v[2]);
+			end
 			return Ent.LastGetAddresses;
 		elseif Ent.LastGetAddresses!=nil then
 			return Ent.LastGetAddresses;

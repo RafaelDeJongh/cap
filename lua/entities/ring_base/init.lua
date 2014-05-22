@@ -124,25 +124,24 @@ end
 
 function ENT:FindNearest(address)
 if address=="" or not address then
-	local dist=999999999999999 -- lolwut
+	local dist=-1
 	local nEnt=self.Entity
 	local rings=ents.FindByClass("ring_base_*")
-		for i=1,table.getn(rings) do
-			if (rings[i]~=self.Entity and rings[i].IsRings and (rings[i].Laser == false)) then
-				local nDist=(self.Entity:GetPos()-rings[i]:GetPos()):Length()
-					 if nDist<dist then
-						 dist=nDist
-						 nEnt=rings[i]
-					 end
-			end
+	for k,ent in pairs(rings) do
+		if (ent~=self.Entity and ent.IsRings and not ent.Busy and ent.Laser == false) then
+			local nDist=(self.Entity:GetPos()-ent:GetPos()):Length()
+			 if nDist<dist or dist<0 then
+				 dist=nDist
+				 nEnt=ent
+			 end
 		end
+	end
 	return nEnt
 else
 	local rings=ents.FindByClass("ring_base_*")
-	for _,ent in pairs(rings) do
-		if (ent.IsRings and (ent.Address==address) and (ent.Laser == false)) then
+	for k,ent in pairs(rings) do
+		if (ent.IsRings and ent.Address==address and not ent.Busy and ent.Laser == false) then
 			return ent
-
 		end
 	end
 	return false

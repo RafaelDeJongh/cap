@@ -1,3 +1,6 @@
+# Created by AlexALX (c) 2013
+# For addon Stargate Carter Addon Pack
+# http://sg-carterpack.com/
 @name Activate Universe Symbols
 @inputs Start
 @outputs Activate_Symbols:string Activate_Symbols_Sound

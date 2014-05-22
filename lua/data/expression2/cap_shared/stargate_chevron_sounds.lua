@@ -1,8 +1,8 @@
 # Created by AlexALX (c) 2011-2012
-# For addon Stargate with Group System
-# http://www.facepunch.com/threads/1163292
+# For addon Stargate Carter Addon Pack
+# http://sg-carterpack.com/
 @name Stargate chevron sounds
-@inputs Active Chevron ChevronLocked Open Inbound
+@inputs Active Chevron Chevron_Locked Open Inbound
 @outputs
 @persist Inc Fail Ch
 @trigger
@@ -27,22 +27,22 @@ if(Chevron==5 & !Inbound & Ch!=Chevron) {
 if(Chevron==6 & !Inbound & Ch!=Chevron) {
     soundPlay(0,2000,"stargate/walter/c6.mp3")
 }
-if(Chevron==7 & !Inbound & ChevronLocked & Ch!=Chevron) {
+if(Chevron==7 & !Inbound & Chevron_Locked & Ch!=Chevron) {
     soundPlay(0,2000,"stargate/walter/c7_locked.mp3")
-} elseif(Chevron==7 & !Inbound & !ChevronLocked & Ch!=Chevron) {
+} elseif(Chevron==7 & !Inbound & !Chevron_Locked & Ch!=Chevron) {
     #soundPlay(0,2000,"stargate/walter/c7_short.mp3")
     soundPlay(0,2000,"alexalx/stargate/riley/c7_encoded.mp3")
 }
-if(Chevron==8 & !Inbound & ChevronLocked & Ch!=Chevron) {
+if(Chevron==8 & !Inbound & Chevron_Locked & Ch!=Chevron) {
     soundPlay(0,2000,"stargate/walter/c8_locked.mp3")
-} elseif(Chevron==8 & !Inbound & !ChevronLocked & Ch!=Chevron) {
+} elseif(Chevron==8 & !Inbound & !Chevron_Locked & Ch!=Chevron) {
     #soundPlay(0,2000,"stargate/walter/c8.mp3") - not exists
     soundPlay(0,2000,"alexalx/stargate/riley/c8_encoded.mp3")
 }
-if(Chevron==9 & !Inbound & ChevronLocked) {
+if(Chevron==9 & !Inbound & Chevron_Locked) {
     #soundPlay(0,2000,"stargate/walter/c9_locked.mp3") - not exists
     soundPlay(0,2000,"alexalx/stargate/riley/bad/c9_lock.mp3")
-} elseif(Chevron==9 & !Inbound & !ChevronLocked & Ch!=Chevron) {
+} elseif(Chevron==9 & !Inbound & !Chevron_Locked & Ch!=Chevron) {
     #soundPlay(0,2000,"stargate/walter/c8.mp3") - not exists
     soundPlay(0,2000,"alexalx/stargate/riley/c9_encoded.mp3")
 }
@@ -70,12 +70,12 @@ if (Inbound & Chevron>0 & !Inc) {
     Inc = 0
 }
 
-if (Fail & !ChevronLocked & Chevron>=0) {
+if (Fail & !Chevron_Locked & Chevron>=0) {
     Fail = 0
 }
 
 # Fix for DHD remove chev
-if (Chevron>0 & Chevron<=9 & !ChevronLocked) {
+if (Chevron>0 & Chevron<=9 & !Chevron_Locked) {
     Ch = Chevron-1
 }
 

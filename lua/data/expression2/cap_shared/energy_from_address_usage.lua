@@ -1,5 +1,5 @@
 # Created by AlexALX (c) 2012
-# For addon Carter Addon Pack
+# For addon Stargate Carter Addon Pack
 # http://sg-carterpack.com/
 @name Energy from address usage
 @inputs Get Address:string SG:wirelink

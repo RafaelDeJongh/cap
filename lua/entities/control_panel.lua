@@ -191,17 +191,17 @@ function ENT:Initialize()
 		self.Sounds = self.SoundsAncient;
 		self.Buttons = {1,2,3,4,5,0};
 		self.SkinOff = 8;
-		self:CreateWireOutputs("1", "2", "3", "4", "5", "0", "Button Pressed");
+		self:CreateWireOutputs("1", "2", "3", "4", "5", "0", "Button Pressed","Panel Pressed");
 	elseif (self.Entity:GetModel()=="models/madman07/ring_panel/ancient_panel.mdl") then
 		self.Sounds = self.SoundsAncient;
 		self.Buttons = {1,2,3,4,5,6,7,8,9};
 		self.SkinOff = 10;
-		self:CreateWireOutputs("1", "2", "3", "4", "5", "6", "7", "8", "9", "Button Pressed");
+		self:CreateWireOutputs("1", "2", "3", "4", "5", "6", "7", "8", "9", "Button Pressed","Panel Pressed");
 	else
 		self.Sounds = self.SoundsGoauld;
 		self.Buttons = {1,2,3,4,5,6};
 		self.SkinOff = 7;
-		self:CreateWireOutputs("1", "2", "3", "4", "5", "6", "Button Pressed");
+		self:CreateWireOutputs("1", "2", "3", "4", "5", "6", "Button Pressed","Panel Pressed");
 	end
 	self:SetWire("Button Pressed",-1);
 end
@@ -210,7 +210,11 @@ function ENT:Use(ply)
 	if (IsValid(ply) and ply:IsPlayer()) then
 		if (not self.CantDial) then
 			local button = self:GetAimingButton(ply);
-			if (button) then self:PressButton(button, ply) end
+			if (button) then self:PressButton(button, ply);
+			else
+				self:SetWire("Panel Pressed",true);
+				timer.Simple(0.25,function() if IsValid(self) then self:SetWire("Panel Pressed",false); end end)
+			end
 		end
 	end
 end

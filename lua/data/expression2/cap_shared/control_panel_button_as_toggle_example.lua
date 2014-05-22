@@ -1,5 +1,5 @@
 # Created by AlexALX (c) 2012
-# For addon Carter Addon Pack
+# For addon Stargate Carter Addon Pack
 # http://sg-carterpack.com/
 @name Control Panel Button as Toggle Example
 @inputs Button

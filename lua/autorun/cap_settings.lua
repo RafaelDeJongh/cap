@@ -522,8 +522,8 @@ local function SG_Settings_OpenNet()
 		{SGLanguage.GetMessage("stargate_menu_33"), "stargate_atlantis_override", 1},
 		{SGLanguage.GetMessage("stargate_menu_34"), "stargate_gatespawner_enabled", 1},
 		{SGLanguage.GetMessage("stargate_menu_34b"), "stargate_gatespawner_protect", 1},
-		{SGLanguage.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
 		{SGLanguage.GetMessage("stargate_menu_38"), "stargate_model_clipping", 1},
+		{SGLanguage.GetMessage("stargate_menu_36"), "stargate_physics_clipping", 1},
 		{SGLanguage.GetMessage("stargate_menu_41"), "stargate_random_address", 1},
 	}
 
@@ -583,8 +583,8 @@ local function SG_Settings_OpenNet()
 	PropertySheet.animFade = Derma_Anim( "Fade", PropertySheet, PropertySheet.CrossFade )
 
 	PropertySheet.CloseButton = vgui.Create( "DImageButton", CapPanel)
-	PropertySheet.CloseButton:SetImage( "icon16/circlecross.png" )
-	PropertySheet.CloseButton:SetColor( Color( 10, 10, 10, 200 ) );
+	PropertySheet.CloseButton:SetImage( "icon16/cross.png" )
+	--PropertySheet.CloseButton:SetColor( Color( 10, 10, 10, 200 ) );
 	--PropertySheet.CloseButton:DockMargin( 0, 0, 0, 12 )
 	PropertySheet.CloseButton:SetSize( 16, 16 )
 	--PropertySheet.CloseButton:Dock( RIGHT )
@@ -807,10 +807,12 @@ local function SG_Settings_OpenNet()
 	laber:SizeToContents();
 
 	local i = 0;
+	local boxes = {}
 	for k,val in pairs(sgsettings) do
 		i = i + 1;
 
 		local box = vgui.Create( "DCheckBoxLabel" , GroupConvarFrame);
+		boxes[i] = box;
 		box:SetPos(15, 10+16*i);
 		box:SetText(val[1]);
 		box.Label:SetFont("OldDefaultSmall");
@@ -842,12 +844,18 @@ local function SG_Settings_OpenNet()
 			box:SetDisabled(true);
 			box:SetTextColor(Color(128,128,128));
 			box:SetValue(0);
+		elseif ((k==3 or k==6 or k==9 or k==11) and not boxes[k-1]:GetChecked()) then
+			box:SetDisabled(true);
 		end
 		box.OnChange = function(box, fValue)
-			if (val[4]==1) then fValue = not fValue; end
+			local fval = fValue
+			if (val[4]==1) then fval = not fval; end
 			local v = 0;
-			if fValue then v = 1; end
+			if fval then v = 1; end
 			SGSetConvar(val[2], v);
+			if (k==2 or k==5 or k==8 or k==10) then
+				boxes[k+1]:SetDisabled(not fValue);
+			end
 		end
 	end
 
@@ -887,10 +895,12 @@ local function SG_Settings_OpenNet()
 	laber:SizeToContents();
 
 	i = 0;
+	local boxes = {}
 	for k,val in pairs(dhdsettings) do
 		i = i + 1;
 
 		local box = vgui.Create( "DCheckBoxLabel" , GroupConvarFrame);
+		boxes[i] = box;
 		box:SetPos(215, 10+17*i);
 		box:SetText(val[1]);
 		box.Label:SetFont("OldDefaultSmall");
@@ -916,12 +926,18 @@ local function SG_Settings_OpenNet()
 			box:SetDisabled(true);
 			box:SetTextColor(Color(128,128,128));
 			box:SetValue(0);
+		elseif (k==2 and not boxes[k-1]:GetChecked()) then
+			box:SetDisabled(true);
 		end
 		box.OnChange = function(box, fValue)
-			if (val[4]==1) then fValue = not fValue; end
+			local fval = fValue
+			if (val[4]==1) then fval = not fval; end
 			local v = 0;
-			if fValue then v = 1; end
+			if fval then v = 1; end
 			SGSetConvar(val[2], v);
+			if (k==1) then
+				boxes[k+1]:SetDisabled(not fValue);
+			end
 		end
 	end
 

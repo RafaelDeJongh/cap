@@ -225,8 +225,10 @@ function ENT:WireGetAddresses()
 			    local address = v:GetGateAddress();
 				if(address ~= "") then
 					local name = v:GetGateName();
-					if(name == "") then name = "N/A" end;
-					table.insert(list, address.." "..name );
+					if(name == "") then name = "N/A" end
+					if(not table.HasValue(list, {address,name,0})) then
+						table.insert(list, {address,name,0});
+					end
 				end
 			end
 		end
@@ -255,9 +257,10 @@ function ENT:WireGetAddresses()
 							end
 							local name = v:GetGateName();
 							if(name == "") then name = "N/A" end;
-							if (v:GetBlocked()) then address = "1 "..address; end
-							if(not table.HasValue(list, address.." "..name)) then
-								table.insert(list, address.." "..name);
+							local blocked = 0;
+							if (v:GetBlocked()) then blocked = 1; end
+							if(not table.HasValue(list, {address,name,blocked})) then
+								table.insert(list, {address,name,blocked});
 							end
 						end
 					end
@@ -274,9 +277,10 @@ function ENT:WireGetAddresses()
 							if ((ent:GetGateGroup() == group or v:GetClass()=="stargate_universe" and ent:GetClass()=="stargate_universe") and (range<=c_range and ent:GetGateGroup():len()==3 or ent:GetGateGroup():len()==2 or c_range == 0 and ent:GetGateGroup():len()==3)) then
 								local name = v:GetGateName();
 								if(name == "") then name = "N/A" end;
-								if (v:GetBlocked()) then address = "1 "..address; end
-								if(not table.HasValue(list, address.." "..name)) then
-									table.insert(list, address.." "..name);
+								local blocked = 0;
+								if (v:GetBlocked()) then blocked = 1; end
+								if(not table.HasValue(list, {address,name,blocked})) then
+									table.insert(list, {address,name,blocked});
 								end
 							end
 						end
@@ -314,7 +318,9 @@ function ENT:WireGetAddresses()
 						if(name == "") then name = "N/A" end;
 						if (address:len()==6 or candialg==1) then
 							if (v:GetBlocked()) then address = "1 "..address; end
-							table.insert(list, address.." "..name);
+							if(not table.HasValue(list, {address,name,0})) then
+								table.insert(list, {address,name,0});
+							end
 						end
 					end
 				end

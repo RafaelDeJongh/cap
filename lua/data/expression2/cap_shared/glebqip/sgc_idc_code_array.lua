@@ -14,7 +14,8 @@
 if(dupefinished()){reset() gTable("SIca_"+entity():id()):clear()}
 interval(1000)
 
-#IDC[71629571282112,array]=array(1,"SG-1")
+# Add here custom codes! Read description above.
+IDC[71629571282112,array]=array(2,"SG-1")
 
 GT = gTable("SIca_"+entity():id())
 GT[1,string]="SIcav1"
