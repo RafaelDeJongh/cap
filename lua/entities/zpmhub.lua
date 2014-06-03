@@ -397,7 +397,7 @@ end
  	if (self:GetWire("Disable Use")>0) then return end
     local val = false;
 	for i=1,3 do
-        if((self.ZPMs[i].IsValid and self.ZPMs[i].Dist == 1)) then
+        if(self.ZPMs and (self.ZPMs[i].IsValid and self.ZPMs[i].Dist == 1)) then
 			val = true;
 			break;
 		end
@@ -405,7 +405,7 @@ end
 
 	if (val)then
 		timer.Simple(1,function()
-			if (IsValid(self.Entity)) then
+			if (IsValid(self.Entity) and self.ZPMs) then
 				for i=1,3 do
 					self.ZPMs[i].Dir = 0;
 				end
@@ -413,7 +413,7 @@ end
 		end);
 	else
 		timer.Simple(1,function()
-			if (IsValid(self.Entity)) then
+			if (IsValid(self.Entity) and self.ZPMs) then
 				for i=1,3 do
 					self.ZPMs[i].Dir = 1;
 				end

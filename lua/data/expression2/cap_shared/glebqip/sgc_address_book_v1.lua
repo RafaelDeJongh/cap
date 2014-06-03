@@ -47,7 +47,7 @@ AddressG:clear()
 AddressN:clear()
 AddressB:clear()
 AddressList=SG:stargateAddressList()
-foreach(K,V:array=AddressList) {
+foreach(I,V:array=AddressList) {
 Address = V[1,string] # Get address
 Name = V[2,string] # Get name
 Blocked = V[3,number] # Get blocked
