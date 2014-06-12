@@ -186,8 +186,10 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 		end
 		self.door=true
 		if not self.Inflight then
-			self.Door:SetSolid(SOLID_NONE)
-			if(self.HoverAlways) then
+			if (IsValid(self.Door)) then
+				self.Door:SetSolid(SOLID_NONE)
+			end
+			if(self.HoverAlways and IsValid(self.OpenedDoor)) then
 				self.OpenedDoor:SetSolid(SOLID_VPHYSICS);
 			end
 		end
@@ -199,10 +201,12 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 		end
 		self.door=false
 		if not self.Inflight then
-			if(self.HoverAlways) then
+			if(self.HoverAlways and IsValid(self.OpenedDoor)) then
 				self.OpenedDoor:SetSolid(SOLID_NONE);
 			end
-			self.Door:SetSolid(SOLID_VPHYSICS)
+			if (IsValid(self.Door)) then
+				self.Door:SetSolid(SOLID_VPHYSICS)
+			end
 		end
 	end
 	self:ResetSequence(self.doorseq)

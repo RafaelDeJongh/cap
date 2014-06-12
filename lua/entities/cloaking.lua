@@ -51,7 +51,7 @@ function ENT:Draw()
 		render.DrawSprite(self.Entity:GetPos(),size,size,Color(255,255,255,255));
 	end
 end
-
+/*
 -- HACKY HACKY HACKY HACKY HACKY @aVoN
 -- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
 if(util._Cloak_TraceLine) then return end;
@@ -64,7 +64,29 @@ function util.TraceLine(...)
 		end
 	end
 	return t;
-end
+end   
+
+-- New much better way without overriding color/alpha on players @ AlexALX
+hook.Add("PrePlayerDraw","StarGate.Cloak", function(p)
+		if (not IsValid(p)) then return end
+		local cloaked = p:GetNWBool("CloakCloaked",NULL);
+		if(cloaked == true) then
+			return true -- cloak
+		end
+	end
+);*/
+
+-- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
+hook.Add("HUDDrawTargetID","StarGate.Cloak", function()
+	local tr = util.GetPlayerTrace( LocalPlayer() )
+	local trace = util.TraceLine( tr )
+	if (!trace.Hit) then return end
+	if (!trace.HitNonWorld) then return end
+
+	if (trace.Entity:IsPlayer()) then
+		if(trace.Entity:GetNWBool("CloakCloaked",false)) then return false end;
+	end
+end);
 
 end
 

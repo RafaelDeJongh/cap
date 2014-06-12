@@ -84,7 +84,9 @@ function ENT:Use(ply,caller,ent)
 		kino:SetAngles(self.Entity:GetAngles());
 		kino:Spawn();
 		kino:Activate();
-		ply:AddCount("CAP_kino", kino)
+		if (IsValid(ply)) then
+			ply:AddCount("CAP_kino", kino)
+		end
 
 		--kino:EmitSound(self.Sounds.Tick,100,100);
 

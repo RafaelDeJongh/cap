@@ -235,7 +235,7 @@ hook.Add("PlayerFootstep","StarGate.SodanCloaking.PlayerFootStep",
 		end
 	end
 );
-
+       /*
 -- HACKY HACKY HACKY HACKY HACKY @aVoN
 -- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
 if(util._Sodan_TraceLine) then return end;
@@ -248,6 +248,18 @@ function util.TraceLine(...)
 		end
 	end
 	return t;
-end
+end    */
+
+-- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
+hook.Add("HUDDrawTargetID","StarGate.SodanCloak", function()
+	local tr = util.GetPlayerTrace( LocalPlayer() )
+	local trace = util.TraceLine( tr )
+	if (!trace.Hit) then return end
+	if (!trace.HitNonWorld) then return end
+
+	if (trace.Entity:IsPlayer()) then
+		if(not LocalPlayer():GetNetworkedBool("pCloaked",false) and trace.Entity:GetNWBool("pCloaked",false)) then return false end;
+	end
+end);
 
 end

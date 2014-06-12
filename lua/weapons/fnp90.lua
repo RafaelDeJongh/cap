@@ -221,7 +221,7 @@ local sndZoomOut = Sound("Weapon_AR2.Special2")
 
 function SWEP:Initialize()
 
-	if SERVER then self:SetWeaponHoldType("ar2") end	-- Hold type of the 3rd person animation
+	self:SetWeaponHoldType("smg")	-- Hold type of the 3rd person animation
 
 	if CLIENT then
 		/* local ply = LocalPlayer()

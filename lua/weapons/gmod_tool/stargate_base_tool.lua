@@ -19,6 +19,7 @@
 -- Failsafes - Sometimes, the StarGate lib is loader after the stools <=> will cause some problems
 if(StarGate==nil) then include("autorun/stargate.lua") end;
 if(SGLanguage==nil or SGLanguage.GetMessage==nil) then include("autorun/language_lib.lua") end;
+if (TOOL==nil) then return end -- wtf?
 TOOL.Tab="Stargate";
 TOOL.AddToMenu = false; -- Tell gmod not to add it. We will do it manually later!
 TOOL.Command=nil;

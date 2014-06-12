@@ -213,7 +213,7 @@ local font = {
 	additive = true,
 }
 surface.CreateFont("Glyphs", font);
-
+/*
 -- Damn, recoded this myself for fix stupid bugs with flashlight and cloak. I hope now all works fine (c) AlexALX
 hook.Add("Think","StarGate.ArthurCloaking.Think",
 	function()
@@ -275,7 +275,44 @@ hook.Add("Think","StarGate.ArthurCloaking.Think",
 			end
 		end
 	end
+);        */
+
+-- New much better way without overriding alpha on players @ AlexALX
+hook.Add("PrePlayerDraw","StarGate.ArthurCloak", function(p)
+		if (not IsValid(p)) then return end
+		local cloaked_self = LocalPlayer():GetNetworkedBool("ArthurCloaked",false);
+		local sodan_self = LocalPlayer():GetNetworkedBool("pCloaked",false);
+
+		local cloaked = p:GetNWBool("ArthurCloaked",NULL); -- If a player hasn't cloaked himself yet, we do not want to override color at all (It conflicted on my server
+		local sodan_cloaked = p:GetNWBool("pCloaked",NULL); -- sodan thing
+		if(cloaked ~= NULL or sodan_cloaked ~= NULL) then
+			if (cloaked==NULL) then cloaked = false end
+			if (sodan_cloaked==NULL) then sodan_cloaked = false end
+			local cloak = false;
+			if(cloaked_self and not sodan_self) then
+				if (sodan_cloaked) then cloak = true; end
+			elseif(sodan_self and not cloaked_self) then
+				if (cloaked) then cloak = true; end
+			elseif(not sodan_self and not cloaked_self) then
+				if (cloaked or sodan_cloaked) then cloak = true; end
+			end
+			if cloak then return true end -- cloak
+		end
+	end
 );
+
+-- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
+hook.Add("HUDDrawTargetID","StarGate.ArthurCloak", function()
+	local tr = util.GetPlayerTrace( LocalPlayer() )
+	local trace = util.TraceLine( tr )
+	if (!trace.Hit) then return end
+	if (!trace.HitNonWorld) then return end
+
+	if (trace.Entity:IsPlayer()) then
+		if(not LocalPlayer():GetNetworkedBool("ArthurCloaked",false) and trace.Entity:GetNWBool("ArthurCloaked",false)) then return false end;
+	end
+end);
+
 
 function ENT:Think()
 
@@ -341,7 +378,7 @@ function ENT:Draw()
 	end
 
 end
-
+       /*
 -- HACKY HACKY HACKY HACKY HACKY @aVoN
 -- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
 if(util._Arthur_TraceLine) then return end;
@@ -354,6 +391,6 @@ function util.TraceLine(...)
 		end
 	end
 	return t;
-end
+end     */
 
 end

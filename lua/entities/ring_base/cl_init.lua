@@ -20,7 +20,7 @@ hook.Add("HUDPaint","Ring.Hook.HUDPaint.ShowAddressAndNames",
 			local p = LocalPlayer();
 			if(IsValid(p)) then
 				local trace = LocalPlayer():GetEyeTrace();
-				if(trace.Hit and IsValid(trace.Entity)) then
+				if(trace and trace.Hit and IsValid(trace.Entity)) then
 					local e = trace.Entity;
 					if(e.IsRings) then
 						local address = e:GetRingAddress();

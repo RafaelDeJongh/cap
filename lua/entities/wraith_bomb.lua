@@ -238,6 +238,8 @@ function ENT:Stun( Ent )
 				local Ragdoll = ents.Create( "prop_ragdoll" )
 				local EntID = Ent:EntIndex()
 
+				if (not model) then return end
+
 				local State = Ent:GetNPCState()
 				Ent:SetNPCState( NPC_STATE_NONE )
 				Ent:SetNoDraw( true )
