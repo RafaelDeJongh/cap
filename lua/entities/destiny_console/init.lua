@@ -410,7 +410,7 @@ end
 function ENT:PreEntityCopy()
 	local dupeInfo = {}
 
-	if self.HaveCore then return end // dupe it by clicking on apple core u dumb
+	--if self.HaveCore then return end // dupe it by clicking on apple core u dumb
 
 	if IsValid(self.Entity) then
 		dupeInfo.EntID = self.Entity:EntIndex()
@@ -432,7 +432,7 @@ function ENT:PreEntityCopy()
 	duplicator.StoreEntityModifier(self, "DestConDupeInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self)
 end
-duplicator.RegisterEntityModifier( "DestConDupeInfo" , function() end)
+--duplicator.RegisterEntityModifier( "DestConDupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end

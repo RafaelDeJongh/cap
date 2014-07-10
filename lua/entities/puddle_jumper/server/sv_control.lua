@@ -36,13 +36,13 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 
 		self:SetNetworkedBool("JumperInflight",false);
 
-		self:SpawnToggleButton();
-		self:SpawnBulkHeadDoor();
-		self:SpawnBackDoor();
+		self:SpawnToggleButton(self.Owner);
+		self:SpawnBulkHeadDoor(nil,self.Owner);
+		self:SpawnBackDoor(nil,self.Owner);
 		if(self.door) then
 			self.Door:SetSolid(SOLID_NONE);
 		end
-		self:SpawnOpenedDoor();
+		self:SpawnOpenedDoor(self.Owner);
 		//self:SpawnSeats();
 
 		self:ToggleRotorwash(false);

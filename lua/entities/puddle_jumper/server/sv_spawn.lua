@@ -1,5 +1,5 @@
 --###### Spawn the shield @RononDex
-function ENT:SpawnShieldGen()
+function ENT:SpawnShieldGen(p)
 
 	if(IsValid(self)) then
 		local e = ents.Create("ship_shield_generator")
@@ -15,11 +15,12 @@ function ENT:SpawnShieldGen()
 		self.Shields=e
 		e.StrengthMultiplier={0.1,0.5,-5}
 		e:SetShieldColor(1,0.98,0.94)
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
 --###### Spawn the solid doors @RononDex
-function ENT:SpawnBackDoor(ent)
+function ENT:SpawnBackDoor(ent,p)
 
 	local e = ent or ents.Create("prop_physics")
 	e:SetModel(self.Gibs.Gib1)
@@ -32,10 +33,11 @@ function ENT:SpawnBackDoor(ent)
 	e.JumperPart = true;
 	if (not ent) then constraint.Weld(e,self,0,0,0,true) end
 	self.Door = e
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 end
 
-function ENT:SpawnBulkHeadDoor(ent)
+function ENT:SpawnBulkHeadDoor(ent,p)
 
 	local e = ent or ents.Create("prop_physics")
 	e:SetModel(self.Gibs.Gib3)
@@ -48,6 +50,7 @@ function ENT:SpawnBulkHeadDoor(ent)
 	e.JumperPart = true;
 	if (not ent) then constraint.Weld(e,self,0,0,0,true) end
 	self.BulkDoor = e
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 end
 
@@ -78,7 +81,7 @@ function ENT:Status(b,nosound)
 	return
 end
 
-function ENT:SpawnToggleButton()
+function ENT:SpawnToggleButton(p)
 
 	local e = {};
 	for i=1,4 do
@@ -117,11 +120,12 @@ function ENT:SpawnToggleButton()
 			e[i]:SetPos(self:GetPos() - self:GetForward()*32 + self:GetRight()*-29 + self:GetUp()*12)
 			e[i]:SetAngles(self:GetAngles()+Angle(90 ,0 ,0))
 		end
+		if CPPI and IsValid(p) and e[i].CPPISetOwner then e[i]:CPPISetOwner(p) end
 	end
 end
 
 
-function ENT:SpawnOpenedDoor()
+function ENT:SpawnOpenedDoor(p)
 	local d = ents.Create("prop_physics");
 	d:SetPos(self:GetPos()-self:GetForward()*145+self:GetUp()*140);
 	d:SetModel("models/Iziraider/jumper/gibs/backdoor.mdl");
@@ -134,12 +138,13 @@ function ENT:SpawnOpenedDoor()
 	d:SetSolid(SOLID_NONE);
 	d:SetColor(Color(255,255,255,0));
 	d:DrawShadow(false);
+	if CPPI and IsValid(p) and d.CPPISetOwner then d:CPPISetOwner(p) end
 
 	constraint.Weld(d,self,0,0,0,true)
 	self.OpenedDoor = d;
 end
 
-function ENT:SpawnSeats()
+function ENT:SpawnSeats(p)
 	local e ={}
 	self.Seats = {}
 	for i=1,9 do
@@ -180,6 +185,7 @@ function ENT:SpawnSeats()
 		e[i].Jumper = self;
 		e[i].CloakNoDraw = true;
 		self.Seats[i] = e[i];
+		if CPPI and IsValid(p) and e[i].CPPISetOwner then e[i]:CPPISetOwner(p) end
 	end
 
 end

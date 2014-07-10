@@ -352,7 +352,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 						end
 					end
 				elseif(IsAtlantisTransporter) then
-					e:CreateDoors(true,protect);
+					e:CreateDoors(nil,true,protect);
 					if (v.name ~= nil and v.name ~="") then
                 		e:SetAtlName(v.name,true);
                 	end

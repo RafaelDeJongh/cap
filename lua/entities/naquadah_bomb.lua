@@ -49,7 +49,7 @@ function ENT:Initialize()
 	--self.Sounds["ambient"] = CreateSound(self.Entity, self.SoundPaths["charge_ambient"])
 end
 
-function ENT:Setup(detonationCode, abortCode,  yield, chargeTime, hud, cart)
+function ENT:Setup(detonationCode, abortCode,  yield, chargeTime, hud, cart, p)
 
 	if(self.charging) then return false end;
 
@@ -76,6 +76,7 @@ function ENT:Setup(detonationCode, abortCode,  yield, chargeTime, hud, cart)
 			ent:Activate();
 			constraint.Weld(self.Entity,ent,0,0,0,true)
 			self.Cart = ent;
+			if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 		end
    end
 

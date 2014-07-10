@@ -61,6 +61,7 @@ end
 function TOOL:PreEntitySpawn(p,e,model,toggle, diff_text, doormodel)
 	e:SetModel(model);
 	e.DoorModel = doormodel;
+	e.Owner = p;
 end
 
 function TOOL:PostEntitySpawn(p,e,model,toggle, diff_text, doormodel)

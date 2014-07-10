@@ -285,7 +285,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<450 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<459 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -373,7 +373,7 @@ if (table.getn(oldfiles)>0) then
 	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
-if (VERSION<140419) then
+if (VERSION<140708) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)

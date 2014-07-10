@@ -55,10 +55,10 @@ function ENT:Initialize()
     -- self.TransporterEnable = false;
 
     -- self.Entity:SpawnAsgardBeams();
-	self.Entity:SpawnRailguns();
+	--self.Entity:SpawnRailguns();
     -- self.Entity:SpawnRings();
     -- self.Entity:SpawnTransporter();
-	self.Entity:SpawnRotor();
+	--self.Entity:SpawnRotor();
 	--self.Entity:SpawnLight();
 
 	-- if (self.HasRD) then
@@ -132,6 +132,9 @@ function ENT:SpawnFunction( ply, tr )
 	ent.Owner = ply;
 	-- ent.Owner:SetNetworkedEntity("DaedalusOutside",ent);
 
+	ent:SpawnRailguns(ply);
+	ent:SpawnRotor(ply);
+
 	-- ply:AddCount("ships_daedalus", ent)
 	ply:AddCount("CAP_ships", ent)
 	return ent
@@ -163,7 +166,7 @@ end
 
 -----------------------------------SPAWN ROTORWASH----------------------------------
 
-function ENT:SpawnRotor()
+function ENT:SpawnRotor(p)
 
 	local ent = NULL;
     local SpawnPos = {
@@ -185,6 +188,7 @@ function ENT:SpawnRotor()
 		ent:SetOwner(self.Entity);
 		ent:SetParent(self.Entity);
 		ent:SetKeyValue("Altitude", "1000");
+		if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	end
 
 end
@@ -225,7 +229,7 @@ end
 
 -----------------------------------SPAWN RAILGUNS----------------------------------
 
-function ENT:SpawnRailguns()
+function ENT:SpawnRailguns(p)
 	local att = {
 		"TLF",
 		"TLM",
@@ -253,6 +257,7 @@ function ENT:SpawnRailguns()
 		ent:Activate();
 		ent:SetOwner(self.Entity);
 		ent:SetParent(self.Entity);
+		if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 		local phys = ent:GetPhysicsObject();
 		if IsValid(phys) then phys:Wake(); end
 
@@ -867,6 +872,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		end
 		ply:AddCount("CAP_ships", Ent);
 	end
+	self:SpawnRailguns(ply);
+	self:SpawnRotor(ply);
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

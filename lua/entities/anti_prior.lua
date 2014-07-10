@@ -168,10 +168,7 @@ if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "anti_prior", StarGate.CAP_GmodDuplicator, "Data" )
 end
 
-end
-
--- shared hook
-
+-- shared hook not help for fix animation glitch it seems, so now again only server-side
 hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 	if (noclip) then
 		if (not IsValid(ply) or ply.HasGodMode and ply:HasGodMode()) then return end
@@ -184,3 +181,5 @@ hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 		end
 	end
 end )
+
+end

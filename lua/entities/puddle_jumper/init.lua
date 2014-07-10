@@ -74,10 +74,10 @@ function ENT:SpawnFunction(pl, tr)
 	e:Activate();
 	e:SetVar("Owner",pl);
 	-- Spawn the doors
-	e:SpawnBackDoor()
-	e:SpawnBulkHeadDoor()
-	e:SpawnToggleButton()
-	e:SpawnShieldGen()
+	e:SpawnBackDoor(nil,pl)
+	e:SpawnBulkHeadDoor(nil,pl)
+	e:SpawnToggleButton(pl)
+	e:SpawnShieldGen(pl)
 	//e:SpawnOpenedDoor();
 	e.Owner = pl;
 
@@ -90,10 +90,10 @@ end
 function ENT:HangarSpawn(pl)
 	self:SetVar("Owner",pl);
 	-- Spawn the doors
-	self:SpawnBackDoor()
-	self:SpawnBulkHeadDoor()
-	self:SpawnToggleButton()
-	self:SpawnShieldGen()
+	self:SpawnBackDoor(nil,pl)
+	self:SpawnBulkHeadDoor(nil,pl)
+	self:SpawnToggleButton(pl)
+	self:SpawnShieldGen(pl)
 	//e:SpawnOpenedDoor();
 end
 
@@ -601,8 +601,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		timer.Simple(0.1,function() if IsValid(CreatedEntities[dupeInfo.OpenerDoor]) then CreatedEntities[dupeInfo.OpenerDoor]:Remove(); end end) -- fix
 	end
 
-	self:SpawnToggleButton()
-	self:SpawnShieldGen()
+	self:SpawnToggleButton(ply)
+	self:SpawnShieldGen(ply)
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 

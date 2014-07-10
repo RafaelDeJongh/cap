@@ -58,7 +58,7 @@ function EFFECT:Init(data)
 		--The GetForward bit in here makes the end of the kawoosh come to a cone like point, giveing it a more rounded look instead of a flat end
 		local particle = emitter:Add(self.Smoke,origin + pos - i*forward*(radius-self.Data.Radius)/self.Data.Density);
 		if(particle) then
-			particle:SetDieTime(self.Data.Time+0.05);
+			particle:SetDieTime(self.Data.Time-0.05);
 			particle:SetStartAlpha(255);
 			particle:SetEndAlpha(0);
 

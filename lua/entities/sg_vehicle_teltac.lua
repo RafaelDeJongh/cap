@@ -77,10 +77,10 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:Spawn();
 	e:Activate();
 	e:SetVar("Owner",pl)
-	e:SpawnRings();
-	e:SpawnRingPanel();
-	e:SpawnDoor()
-	e:SpawnDoor2()
+	e:SpawnRings(pl);
+	e:SpawnRingPanel(pl);
+	e:SpawnDoor(pl)
+	e:SpawnDoor2(pl)
 	e:ToggleDoors("out")
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	pl:Give("weapon_ringcaller");
@@ -314,7 +314,7 @@ function ENT:ToggleDoors(d,set)
 end
 
 
-function ENT:SpawnDoor()
+function ENT:SpawnDoor(p)
 
 
 	local e = ents.Create("prop_physics");
@@ -328,6 +328,7 @@ function ENT:SpawnDoor()
 	constraint.Weld(self,e,0,0,0,true)
 	constraint.NoCollide(self,e,0,0)
 	e:SetParent(self);
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	self.Door = e;
 
 end
@@ -372,7 +373,7 @@ function ENT:Use(p)
 	end
 end
 
-function ENT:SpawnRings()
+function ENT:SpawnRings(p)
 	local e = ents.Create("ring_base_ancient");
 	e:SetModel(e.BaseModel);
 	e:SetPos(self:LocalToWorld(Vector(0,0,7)));
@@ -384,6 +385,7 @@ function ENT:SpawnRings()
 	e.DirOverride = true
 	e.Dir = -1;
 	self.OutRing = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 	local e = ents.Create("ring_base_ancient");
 	e:SetModel(e.BaseModel);
@@ -396,9 +398,10 @@ function ENT:SpawnRings()
 	e.DirOverride = true
 	e.Dir = 1;
 	self.InRing = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 end
 
-function ENT:SpawnRingPanel()
+function ENT:SpawnRingPanel(p)
 	local e = ents.Create("ring_panel_goauld");
 	e:SetPos(self:GetPos()+self:GetForward()*135+self:GetRight()*-50+self:GetUp()*100);
 	e:SetAngles(self:GetAngles()+Angle(0,180,0));
@@ -407,6 +410,7 @@ function ENT:SpawnRingPanel()
 	constraint.Weld(self,e,0,0,0,true)
 	e:SetParent(self);
 	self.RingPanel = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 end
 
 --############# Cloak @ aVoN
@@ -524,7 +528,7 @@ function ENT:TriggerInput(k,v)
 	end
 end
 
-function ENT:SpawnDoor2()
+function ENT:SpawnDoor2(p)
 
 	local e = ents.Create("prop_physics");
 	e:SetModel("models/James/teltac/inner_door.mdl");
@@ -535,6 +539,7 @@ function ENT:SpawnDoor2()
 	constraint.Weld(self,e,0,0,0,true)
 	e:SetParent(self);
 	self.Door2 = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 	local d = ents.Create("prop_physics");
 	d:SetModel("models/James/teltac/inner_door.mdl");
@@ -545,6 +550,7 @@ function ENT:SpawnDoor2()
 	constraint.Weld(self,d,0,0,0,true)
 	d:SetParent(self);
 	self.Door3 = d;
+	if CPPI and IsValid(p) and d.CPPISetOwner then d:CPPISetOwner(p) end
 end
 
 --####### Give us air @RononDex

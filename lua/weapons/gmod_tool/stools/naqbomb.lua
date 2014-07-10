@@ -56,7 +56,7 @@ function TOOL:LeftClick(t)
 	local e = self:SpawnSENT(p,t,model,detcode,abcode,time,yield, hud, cart, autoweld);
 	if (not IsValid(e)) then return end
 	if (cart) then e:SetPos(e:GetPos()+Vector(0,0,25)) end
-	e:Setup(detcode, abcode, yield, time, hud, cart)
+	e:Setup(detcode, abcode, yield, time, hud, cart, p)
 
 	if (weld and not cart) then local c = self:Weld(e,t.Entity,true);
 	else local c = self:Weld(e,t.Entity,false); end
@@ -74,7 +74,7 @@ function TOOL:PostEntitySpawn(p,e,model,detcode,abcode,time,yield, hud, cart, au
 	if IsValid(p) and not p:IsAdmin() then
 		yield = math.Clamp(yield, 10, 15)
 	end
-	e:Setup(detcode, abcode, yield, time, hud, cart)
+	e:Setup(detcode, abcode, yield, time, hud, cart, p)
 end
 
 function TOOL:ControlsPanel(Panel)

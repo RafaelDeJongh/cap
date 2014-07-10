@@ -295,6 +295,7 @@ net.Receive("MCD",function(len,ply)
 	e:SetParent(self.Entity);
 	e:Spawn();
 	e:SetAngles(self.Entity:GetAngles());
+	if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
 	self.Ent = e;
 	print_r(e)
 	self.Create = true;

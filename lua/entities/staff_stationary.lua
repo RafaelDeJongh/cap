@@ -82,13 +82,13 @@ function ENT:SpawnFunction( ply, tr )
 	local phys = ent:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false); phys:SetMass(50) end
 
-	ent.Turn, ent.Cann = ent:SpawnRest();
+	ent.Turn, ent.Cann = ent:SpawnRest(ply);
 
 	ply:AddCount("CAP_staffstat", ent)
 	return ent
 end
 
-function ENT:SpawnRest()
+function ENT:SpawnRest(p)
 
 	local pos = self.Entity:GetPos();
 	local ang = self.Entity:GetAngles(); ang.r = 0;
@@ -100,6 +100,7 @@ function ENT:SpawnRest()
 	ent1.Base = self.Entity;
 	ent1:Spawn();
 	ent1:Activate();
+	if CPPI and IsValid(p) and ent1.CPPISetOwner then ent1:CPPISetOwner(p) end
 
 	local ent2 = ents.Create("staff_stationary_part");
 	ent2:SetModel("models/Iziraider/staffweapon/weapon.mdl")
@@ -108,6 +109,7 @@ function ENT:SpawnRest()
 	ent2.Base = self.Entity;
 	ent2:Spawn();
 	ent2:Activate();
+	if CPPI and IsValid(p) and ent2.CPPISetOwner then ent2:CPPISetOwner(p) end
 
 	constraint.NoCollide( self.Entity, ent1, 0, 0 );
 	constraint.NoCollide( ent1, ent2, 0, 0 );

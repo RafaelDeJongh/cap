@@ -403,7 +403,7 @@ function ENT:Open()
 					    -- This will kill people
 					    local pos = self.Entity:GetPos();
 					    local normal = self.Entity:GetForward();
-					    local radius = self.Entity:BoundingRadius()*(1/2);
+					    local radius = self.Entity:BoundingRadius()*(1/3);
 						timer.Simple(2.0,function()	if (IsValid(self)) then
 							self:EHDissolve(pos-radius*normal,radius);
 							local fx = EffectData()

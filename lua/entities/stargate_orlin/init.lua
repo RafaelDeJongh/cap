@@ -95,6 +95,7 @@ function ENT:SpawnFunction(p,t)
 	e:Spawn();
 	e:Activate();
 	e:SetAngles(ang);
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	self.Ramp = e;
 	local phys = e:GetPhysicsObject();
 	if(phys and phys:IsValid())then
@@ -501,6 +502,26 @@ function ENT.Sequence:DialFail(instant_stop,play_sound)
 	action:Add({f=self.SetWire,v={self,"Chevron Locked",0},d=0}); -- Wire
 	action:Add({f=self.SetShutdown,v={self,false},d=0});
 	return action;
+end
+
+function ENT:PreEntityCopy()
+	local dupeInfo = {};
+
+	if (IsValid(self.Ramp)) then
+		dupeInfo.Ramp = self.Ramp:EntIndex();
+	end
+
+	duplicator.StoreEntityModifier(self, "SGOrlinDupeInfo", dupeInfo)
+	StarGate.WireRD.PreEntityCopy(self)
+end
+
+function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
+	local dupeInfo = Ent.EntityMods.SGOrlinDupeInfo
+
+	if (dupeInfo.Ramp) then
+		self.Ramp = CreatedEntities[dupeInfo.Ramp];
+	end
+	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

@@ -56,7 +56,7 @@ end
 
 -----------------------------------SPAWN----------------------------------
 
-function ENT:SpawnConsole()
+function ENT:SpawnConsole(p)
 	local data = self:GetAttachment(self:LookupAttachment("Console"))
 	if(not (data and data.Pos and data.Ang)) then return end
 
@@ -72,6 +72,7 @@ function ENT:SpawnConsole()
 	self.Console = ent;
 	self:SetNetworkedEntity("Console", self.Console);
 	ent:SetNWBool("Core", true);
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(ent,self,0,0,0,true)
 end
 
@@ -93,7 +94,7 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Activate();
 	ent.Owner = ply;
 
-	ent:SpawnConsole();
+	ent:SpawnConsole(ply);
 
 	local phys = ent:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false) end
@@ -184,6 +185,8 @@ function ENT:OnRemove()
 		self.Console:Remove();
 	end
 
+	if timer.Exists("Light"..self:EntIndex()) then timer.Destroy("Light"..self:EntIndex()); end
+
 	self:Remove();
 end
 
@@ -239,7 +242,7 @@ function ENT:PreEntityCopy()
 	/*
 	if WireAddon then
 		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Console )
-	end*/
+	end
 
 	dupeInfo.ScreenTextA = self.Console.ScreenTextA;
 	dupeInfo.ScreenTextB = self.Console.ScreenTextB;
@@ -249,7 +252,7 @@ function ENT:PreEntityCopy()
 	dupeInfo.ScreenTextF = self.Console.ScreenTextF;
 	dupeInfo.ScreenTextG = self.Console.ScreenTextG;
 	dupeInfo.ScreenTextH = self.Console.ScreenTextH;
-    /*
+
 	if self.HaveRD3 then
 		local RD = CAF.GetAddon("Resource Distribution")
 		RD.BuildDupeInfo(self.Entity)
@@ -295,7 +298,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if self.HaveRD3 then
 		local RD = CAF.GetAddon("Resource Distribution")
 		RD.ApplyDupeInfo(Ent, CreatedEntities)
-	end */
+	end
 
 	self.Console:SetNetworkedString("NameA",dupeInfo.ScreenTextA);
 	self.Console:SetNetworkedString("NameB",dupeInfo.ScreenTextB);
@@ -305,7 +308,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.Console:SetNetworkedString("NameF",dupeInfo.ScreenTextF);
 	self.Console:SetNetworkedString("NameG",dupeInfo.ScreenTextG);
 	self.Console:SetNetworkedString("NameH",dupeInfo.ScreenTextH);
-
+         */
 	if (IsValid(ply)) then
 		self.Owner = ply;
 		ply:AddCount("CAP_applecore", self.Entity)
@@ -416,10 +419,6 @@ function ENT:Think()
 
 		self.Light = nil;
 	end
-end
-
-function ENT:OnRemove()
-	if timer.Exists("Light"..self:EntIndex()) then timer.Destroy("Light"..self:EntIndex()); end
 end
 
 function ENT:Draw()

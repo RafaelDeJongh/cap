@@ -40,7 +40,6 @@ function ENT:Initialize()   --############ @  Llapp
 	self.Entity:PhysicsInit( SOLID_VPHYSICS ) ;
 	self.Entity:SetMoveType( MOVETYPE_VPHYSICS );
 	--self.Entity:SetSolid( SOLID_VPHYSICS ); -- bug with world collision in chair remote
-	self:AddGate();
 	--self:GateIris();  --bug with gate overloader
 	self.Phys = self.Entity:GetPhysicsObject();
 	if (self.Phys:IsValid()) then
@@ -106,10 +105,11 @@ function ENT:SpawnFunction(p,t)   --############ @  Llapp
 	self.Sat = e;
 	e:Spawn();
 	e:Activate();
+	e:AddGate(p);
 	return e;
 end
 
-function ENT:AddGate()  --############ @  Llapp
+function ENT:AddGate(p)  --############ @  Llapp
     local pos = self:GetPos()+self:GetForward()*(51.5)
 	local l = ents.Create("stargate_atlantis");
 	l:DrawShadow(false);
@@ -133,6 +133,7 @@ function ENT:AddGate()  --############ @  Llapp
 		physic:Wake()
 	end
     constraint.Weld(self.Gate,self,0,0,0,true);
+    if CPPI and IsValid(p) and l.CPPISetOwner then l:CPPISetOwner(p) end
 	return l;
 end
 
@@ -565,8 +566,37 @@ function ENT:ExitViewMode(ply)  --############ @  Llapp
 	self.APCply = NULL;
 end]]--
 
+function ENT:PreEntityCopy()
+	local dupeInfo = {}
+
+	if IsValid(self.Gate) then
+		dupeInfo.Gate = self.Gate:EntIndex()
+	end
+
+	duplicator.StoreEntityModifier(self, "AsuranSatDupeInfo", dupeInfo)
+	StarGate.WireRD.PreEntityCopy(self)
+end
+
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+
+	if not Ent.EntityMods then 	self.Entity:Remove(); return end
+
+	local dupeInfo = Ent.EntityMods.AsuranSatDupeInfo
+
+	if dupeInfo.Gate then
+		self.Gate = CreatedEntities[ dupeInfo.Gate ];
+		local physic = self.Gate:GetPhysicsObject()
+		if physic and physic:IsValid() then
+		    if(physic:GetMass())then
+			    physic:SetMass(0.000000001);
+			end
+			physic:EnableMotion(true)
+			physic:EnableGravity( false )
+			physic:Wake()
+		end
+	end
+
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

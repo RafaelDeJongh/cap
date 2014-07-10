@@ -94,7 +94,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	ent.Owner = ply;
 	ply:AddCount("CAP_dakara", ent)
-	ent:SpawnStuff()
+	ent:SpawnStuff(ply)
 	return ent
 end
 
@@ -197,7 +197,7 @@ if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "dakara_building", StarGate.CAP_GmodDuplicator, "Data" )
 end
 
-function ENT:SpawnStuff()
+function ENT:SpawnStuff(p)
 
 	local ang = self:GetAngles();
 
@@ -207,6 +207,7 @@ function ENT:SpawnStuff()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.Control = ent;
 
@@ -218,6 +219,7 @@ function ENT:SpawnStuff()
 	ent:Activate();
 	ent.Parent = self;
 	ent.Type = 1;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.MainDoor = ent;
 
@@ -229,6 +231,7 @@ function ENT:SpawnStuff()
 	ent:Activate();
 	ent.Parent = self;
 	ent.Type = 2;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.SecretDoor = ent;
 
@@ -241,6 +244,7 @@ function ENT:SpawnStuff()
 	ent.Type = 1;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.MainButton1 = ent;
 
@@ -251,6 +255,7 @@ function ENT:SpawnStuff()
 	ent.Type = 2;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.SecretButton2 = ent;
 
@@ -261,6 +266,7 @@ function ENT:SpawnStuff()
 	ent.Type = 2;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.SecretButton1 = ent;
 
@@ -271,6 +277,7 @@ function ENT:SpawnStuff()
 	ent.Type = 1;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	constraint.Weld(self,ent,0,0,0,true)
 	self.MainButton2 = ent;
 

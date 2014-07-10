@@ -467,7 +467,6 @@ function VGUI:Init()
 
 		LocalPlayer():ConCommand("SC_Apply"..e:EntIndex().." "..Power:GetValue().." "..Imm.." "..Draw.." "..Atl.." "..NumPad.NumPad1:GetValue());
 		DermaPanel:Remove();
-		DermaPanelInfo:Remove();
     end
 
 end

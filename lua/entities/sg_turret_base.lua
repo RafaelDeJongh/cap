@@ -68,7 +68,7 @@ end
 
 -----------------------------------SPAWN----------------------------------
 
-function ENT:SpawnRest()
+function ENT:SpawnRest(p)
 	local ang = self.Entity:GetAngles();
 
 	local pos1 = self.Stand:LocalToWorld(self.TurnPos);
@@ -80,6 +80,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Stand, 0, 0,  Vector(0,0,0), Vector(0,0,10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Stand)
 	self.Turn = ent;
@@ -92,6 +93,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local cannaxis = constraint.Axis(ent, self.Turn, 0, 0,  ent:GetRight(), ent:GetRight(), 0, 0, 1000, 1)
 	cannaxis:SetParent(self.Stand)
 	self.Cann = ent;

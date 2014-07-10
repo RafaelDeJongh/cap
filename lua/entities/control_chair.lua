@@ -114,6 +114,7 @@ function ENT:SpawnFunction(pl, tr)
 	e:SetAngles(ang);
 	e:Spawn()
 	e:Activate()
+	e:AddChair(pl)
 	self.Owner=pl
 	return e
 end
@@ -126,7 +127,7 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetUseType(SIMPLE_USE)
 	self.ActiveTime=0
-	self:AddChair()
+	--self:AddChair()
 	self:CreateWireInputs("X","Y","Z","Start X","Start Y","Start Z","Entity [ENTITY]","Vector [VECTOR]");
 	self:CreateWireOutputs("X","Y","Z","Vector [VECTOR]")
 
@@ -173,7 +174,7 @@ function ENT:OnRemove()
 
 end
 
-function ENT:AddChair()
+function ENT:AddChair(p)
 
 	local e = ents.Create("prop_physics")
 	e:SetModel(self.Models.Chair)
@@ -185,6 +186,7 @@ function ENT:AddChair()
 	--chair=e
 	self.Chair = e
 	self:SetNetworkedEntity("Chair",self.Chair)
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 end
 
@@ -501,6 +503,7 @@ end
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
+	self:AddChair(ply)
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

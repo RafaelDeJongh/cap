@@ -85,7 +85,7 @@ function SWEP:Reload()
 	self:SendWeaponAnim( ACT_VM_RELOAD )
 	timer.Simple(self.Delay, function()
 	for _,v in pairs(ents.FindByClass("puddle_jumper")) do
-		if(IsValid(v) and IsValid(v.Owner)) then
+		if(IsValid(v) and IsValid(v.Owner) and IsValid(self.Owner)) then
 			if(v.Owner==self.Owner) then
 				if(not(self.Owner:KeyDown(IN_USE))) then
 					v:DoKill()

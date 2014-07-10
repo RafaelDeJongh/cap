@@ -3,8 +3,6 @@
 	Copyright (C) 2011 Madman07
 ]]--
 
-if (1==1) then return end -- temporary disabled
-
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")

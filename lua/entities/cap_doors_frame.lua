@@ -58,6 +58,7 @@ function ENT:Initialize()
 		ent.Sound = false;
 		self.Door = ent;
 		ent.Frame = self;
+		if CPPI and IsValid(self.Owner) and ent.CPPISetOwner then ent:CPPISetOwner(self.Owner) end
 	end
 end
 
@@ -137,6 +138,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	local dupeInfo = Ent.EntityMods.DupeInfo
 
 	self.DoorModel = dupeInfo.DoorModel;
+	self.Owner = ply;
 
 	if dupeInfo.EntID then
 		self.Entity = CreatedEntities[ dupeInfo.EntID ]

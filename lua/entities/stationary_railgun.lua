@@ -95,14 +95,14 @@ function ENT:SpawnFunction( ply, tr )
 	local phys = ent.Stand:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false) end
 
-	ent.Turn, ent.Cann = ent:SpawnRest();
+	ent.Turn, ent.Cann = ent:SpawnRest(ply);
 	ent.Owner = ply;
 
 	ply:AddCount("CAP_statrail", ent)
 	return ent
 end
 
-function ENT:SpawnRest()
+function ENT:SpawnRest(p)
 
 	local pos = self.Entity:GetPos();
 	local ang = self.Entity:GetAngles();
@@ -114,6 +114,7 @@ function ENT:SpawnRest()
 	ent1:SetAngles(ang);
 	ent1:Spawn();
 	ent1:Activate();
+	if CPPI and IsValid(p) and ent1.CPPISetOwner then ent1:CPPISetOwner(p) end
 
 	local data = ent1:GetAttachment(ent1:LookupAttachment("Ball"))
 	if(not (data and data.Pos)) then self:OnRemove() return end
@@ -125,6 +126,7 @@ function ENT:SpawnRest()
 	ent2:SetAngles(ang+Angle(25,0,0));
 	ent2:Spawn();
 	ent2:Activate();
+	if CPPI and IsValid(p) and ent2.CPPISetOwner then ent2:CPPISetOwner(p) end
 
 	local ballpos = ent1:WorldToLocal(data.Pos);
 

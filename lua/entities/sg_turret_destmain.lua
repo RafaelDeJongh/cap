@@ -142,7 +142,7 @@ function ENT:SpawnFunction( ply, tr )
 
 	ply:AddCount("CAP_destmain", ent)
 	ent.Owner = ply
-	ent:SpawnRest();
+	ent:SpawnRest(ply);
 	ent.Duped = true;
 	return ent
 end
@@ -231,7 +231,7 @@ end
 
 -----------------------------------SPAWN----------------------------------
 
-function ENT:SpawnRest()
+function ENT:SpawnRest(p)
 	local ang = self.Entity:GetAngles();
 
 	local pos = self.Stand:LocalToWorld(self.TurnPos);
@@ -242,6 +242,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Stand, 0, 0,  Vector(0,0,0), Vector(0,0,10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Stand)
 	self.Turn = ent;
@@ -254,6 +255,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Turn, 0, 0,  ent:GetRight()*10, ent:GetRight()*(-10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Turn)
 	self.Cann1 = ent;
@@ -266,6 +268,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Turn, 0, 0,  ent:GetRight()*10, ent:GetRight()*(-10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Turn)
 	self.Cann2 = ent;
@@ -278,6 +281,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Turn, 0, 0,  ent:GetRight()*10, ent:GetRight()*(-10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Turn)
 	self.Cann3 = ent;
@@ -290,6 +294,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Turn, 0, 0,  ent:GetRight()*10, ent:GetRight()*(-10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Turn)
 	self.Cann4 = ent;
@@ -307,6 +312,7 @@ function ENT:SpawnRest()
 	ent:SetParent(self.Cann1);
 	ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 	ent.Parent = self;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	self.Lights[1] = ent;
 	ent.Glow = false;
 	ent:SetColor(Color(255,255,255,0));
@@ -322,6 +328,7 @@ function ENT:SpawnRest()
 	ent:SetParent(self.Cann2);
 	ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 	ent.Parent = self;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	self.Lights[2] = ent;
 	ent.Glow = false;
 	ent:SetColor(Color(255,255,255,0));
@@ -337,6 +344,7 @@ function ENT:SpawnRest()
 	ent:SetParent(self.Cann3);
 	ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 	ent.Parent = self;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	self.Lights[3] = ent;
 	ent.Glow = false;
 	ent:SetColor(Color(255,255,255,0));
@@ -352,6 +360,7 @@ function ENT:SpawnRest()
 	ent:SetParent(self.Cann4);
 	ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 	ent.Parent = self;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	self.Lights[4] = ent;
 	ent.Glow = false;
 	ent:SetColor(Color(255,255,255,0));

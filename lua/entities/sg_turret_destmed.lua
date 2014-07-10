@@ -112,7 +112,7 @@ function ENT:SpawnFunction( ply, tr )
 	if (IsValid(ply)) then
 		ply:AddCount("CAP_destmedium", ent)
 	end
-	ent:SpawnRest();
+	ent:SpawnRest(ply);
 	ent.Duped = true;
 	return ent
 end
@@ -192,7 +192,7 @@ end
 
 -----------------------------------SPAWN----------------------------------
 
-function ENT:SpawnRest()
+function ENT:SpawnRest(p)
 	local ang = self.Entity:GetAngles();
 
 	local pos = self.Stand:LocalToWorld(self.TurnPos);
@@ -203,6 +203,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local turnaxis = constraint.Axis(ent, self.Stand, 0, 0,  Vector(0,0,0), Vector(0,0,10), 0, 0, 1000, 1)
 	turnaxis:SetParent(self.Stand)
 	self.Turn = ent;
@@ -215,6 +216,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local cann1axis = constraint.Axis(ent, self.Turn, 0, 0,  Vector(-10,70,0), Vector(10,70,0), 0, 0, 1000, 1)
 	cann1axis:SetParent(self.Stand)
 	self.Cann1 = ent;
@@ -227,6 +229,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local cann2axis = constraint.Axis(ent, self.Turn, 0, 0,  Vector(-10,60,0), Vector(10,60,0), 0, 0, 1000, 1)
 	cann2axis:SetParent(self.Stand)
 	self.Cann2 = ent;
@@ -239,6 +242,7 @@ function ENT:SpawnRest()
 	ent.Parent = self;
 	ent:Spawn();
 	ent:Activate();
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 	local cann3axis = constraint.Axis(ent, self.Turn, 0, 0,  Vector(-10,70,0), Vector(10,70,0), 0, 0, 1000, 1)
 	cann3axis:SetParent(self.Stand)
 	self.Cann3 = ent;

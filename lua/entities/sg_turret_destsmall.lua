@@ -62,7 +62,7 @@ function ENT:SpawnFunction( ply, tr )
 	if (IsValid(ply)) then
 		ply:AddCount("CAP_destsmall", ent)
 	end
-	ent:SpawnRest();
+	ent:SpawnRest(ply);
 	ent.Duped = true;
 	return ent
 end

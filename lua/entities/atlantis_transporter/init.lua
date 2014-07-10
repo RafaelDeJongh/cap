@@ -25,7 +25,7 @@ function ENT:SpawnFunction(p,tr)
 	e:SetAngles(Angle(0,p:EyeAngles().Y-180,0));
 	e:Spawn();
 	e:Activate();
-	e:CreateDoors()
+	e:CreateDoors(p)
 	return e;
 end
 
@@ -111,7 +111,7 @@ function ENT:OnRemove()
 	net.Broadcast()
 end
 
-function ENT:CreateDoors(spawner,protect)
+function ENT:CreateDoors(ply,spawner,protect)
 
 	local d = ents.Create("atlantis_transporter_doors");
 	local e = self.Entity
@@ -119,14 +119,16 @@ function ENT:CreateDoors(spawner,protect)
 	d:SetAngles(e:GetAngles()+Angle(0,90,0));
 	d:Spawn();
 	d:Activate();
-	d:DrawShadow(false)
+	d:DrawShadow(false);
+	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
 	d.BaseTP = self;
 	local d2 = ents.Create("atlantis_transporter_doors");
 	d2:SetPos(e:GetPos()+e:GetForward()*(-0.5)+e:GetUp()*(-3)+e:GetRight()*(-1));
 	d2:SetAngles(e:GetAngles()+Angle(0,270,0));
 	d2:Spawn();
 	d2:Activate();
-	d2:DrawShadow(false)
+	d2:DrawShadow(false);
+	if CPPI and IsValid(ply) and d2.CPPISetOwner then d2:CPPISetOwner(ply) end
 	d2.BaseTP = self;
 	d2.Sound = false;
 	--constraint.NoCollide(e,d,0,0);
@@ -153,6 +155,7 @@ function ENT:CreateDoors(spawner,protect)
 	d:SetParent(self.Entity);
 	d:Spawn();
 	d:Activate();
+	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
 	if (spawner) then
 		d.GateSpawnerSpawned = true;
 		d:SetNetworkedBool("GateSpawnerSpawned",true);
@@ -175,6 +178,7 @@ function ENT:CreateDoors(spawner,protect)
 	d:SetParent(self.Entity);
 	d:Spawn();
 	d:Activate();
+	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
 	if (spawner) then
 		d.GateSpawnerSpawned = true;
 		d:SetNetworkedBool("GateSpawnerSpawned",true);

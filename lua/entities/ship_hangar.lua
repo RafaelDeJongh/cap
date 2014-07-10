@@ -35,8 +35,6 @@ function ENT:Initialize()
 		self:GetPhysicsObject():SetMass(500000);
 	end
 
-	self:SpawnButtons();
-
 	if (WireAddon) then
 		self:CreateWireInputs("Next Ship", "Prev Ship", "Spawn Ship", "Lock Doors", "Toggle Doors");
 		self:CreateWireOutputs("Doors Open");
@@ -85,7 +83,8 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Activate();
 	ent.Owner = ply;
 
-	ent:SpawnDoors();
+	ent:SpawnDoors(ply);
+	ent:SpawnButtons(ply);
 
 	local phys = ent:GetPhysicsObject()
 	if IsValid(phys) then phys:EnableMotion(false) end
@@ -93,7 +92,7 @@ function ENT:SpawnFunction( ply, tr )
 	return ent
 end
 
-function ENT:SpawnDoors()
+function ENT:SpawnDoors(p)
 	util.PrecacheModel("models/Iziraider/capbuild/hangardoor.mdl")
 
 	local ent = ents.Create("ship_hangar_door");
@@ -107,6 +106,7 @@ function ENT:SpawnDoors()
 	ent:GetPhysicsObject():Wake();
 	constraint.NoCollide( ent, self, 0, 0 );
 	self.Door1 = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	local ent2 = ents.Create("ship_hangar_door");
 	ent2:SetAngles(self.Entity:GetAngles()+Angle(0,180,0));
@@ -119,10 +119,11 @@ function ENT:SpawnDoors()
 	ent2:GetPhysicsObject():Wake();
 	constraint.NoCollide( ent2, self, 0, 0 );
 	self.Door2 = ent2;
+	if CPPI and IsValid(p) and ent2.CPPISetOwner then ent2:CPPISetOwner(p) end
 	constraint.NoCollide( ent, ent2, 0, 0 );
 end
 
-function ENT:SpawnButtons()
+function ENT:SpawnButtons(p)
 
 	entt = entt or {};
 
@@ -142,6 +143,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 1;
 	self.ButtonL = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("ship_hangar_button");
 	ent:SetAngles(ang+Angle(35,-90,0));
@@ -155,6 +157,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 2;
 	self.ButtonR = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("ship_hangar_button");
 	ent:SetAngles(ang+Angle(35,-90,0));
@@ -168,6 +171,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 3;
 	self.ButtonSP = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("ship_hangar_button");
 	ent:SetAngles(ang+Angle(35,-90,0));
@@ -181,6 +185,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 4;
 	self.ButtonLock = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("ship_hangar_button");
 	ent:SetAngles(ang+Angle(0,0,0));
@@ -192,6 +197,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 5;
 	self.ButtonT1 = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("ship_hangar_button");
 	ent:SetAngles(ang+Angle(0,180,0));
@@ -203,6 +209,7 @@ function ENT:SpawnButtons()
 	ent:SetParent(self);
 	ent.ID = 5;
 	self.ButtonT2 = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 
 	ent = ents.Create("prop_physics");
 	ent:SetAngles(ang+Angle(35,-90,0));
@@ -214,6 +221,7 @@ function ENT:SpawnButtons()
 	ent:SetMaterial("models/debug/debugwhite");
 	ent:SetColor(Color( 20, 50, 20, 255));
 	self.LED = ent;
+	if CPPI and IsValid(p) and ent.CPPISetOwner then ent:CPPISetOwner(p) end
 end
 
 function ENT:OnRemove()
@@ -252,6 +260,7 @@ function ENT:ButtonPressed(id, ply)
 		e.Owner = ply;
 		if (e.HangarSpawn) then e:HangarSpawn(ply) end
 		e:SetWire("Health",e:GetNetworkedInt("health"));
+		if CPPI and IsValid(ply) and e.CPPISetOwner then e:CPPISetOwner(ply) end
 		ply:AddCount("CAP_ships", e)
 	elseif (id == 4) then
 		self.LockedDoor = not self.LockedDoor;
@@ -335,6 +344,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	elseif (game.SinglePlayer()) then
 		self.Owner = player.GetByID(1)
 	end
+
+	self:SpawnButtons(self.Owner);
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then

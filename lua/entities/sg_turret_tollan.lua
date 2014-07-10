@@ -102,7 +102,7 @@ function ENT:SpawnFunction( ply, tr )
 	ent:Activate();
 
 	ply:AddCount("CAP_ioncannon", ent)
-	ent:SpawnRest();
+	ent:SpawnRest(ply);
 	ent.Duped = true;
 	return ent
 end

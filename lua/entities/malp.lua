@@ -25,10 +25,10 @@ function ENT:SpawnFunction(pl,tr)
 	e:SetVar("Owner",pl)
 	e.Owner = pl;
 
-	e:SpawnWheels() -- Spawn the wheels
-	e:SpawnCamera() -- Spawn the camera prop
-	e:SpawnCamStand() -- Spawn the camera stand
-	e:SpawnRTCam()
+	e:SpawnWheels(pl) -- Spawn the wheels
+	e:SpawnCamera(nil,pl) -- Spawn the camera prop
+	e:SpawnCamStand(nil,pl) -- Spawn the camera stand
+	e:SpawnRTCam(nil,pl)
 
 	pl:Give("weapon_malp_remote")
 	pl:SelectWeapon("weapon_malp_remote")
@@ -53,7 +53,7 @@ function ENT:Initialize()
 end
 
 --########## Spawn our wheel props @RononDex
-function ENT:SpawnWheels(pl)
+function ENT:SpawnWheels(p)
 	util.PrecacheModel("models/madjawa/malp/malpwheel.mdl");
 
 	local right = self:GetRight();
@@ -98,6 +98,7 @@ function ENT:SpawnWheels(pl)
 		constraint.Ballsocket(self, e, 0, 0, Vector(0, 20, 0), 0, 0, 1);
 		constraint.Ballsocket(self, e, 0, 0, Vector(0, -20, 0), 0, 0, 1);
 		self.MalpWheels[i] = e;
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
@@ -317,7 +318,7 @@ function ENT:PhysicOverdrive()
 	end
 end
 
-function ENT:SpawnCamera(ent)
+function ENT:SpawnCamera(ent,p)
 
 	if(IsValid(self)) then
 		local e = ent or ents.Create("prop_physics")
@@ -328,10 +329,11 @@ function ENT:SpawnCamera(ent)
 		e:Activate()
 		e:SetParent(self)
 		self.Camera=e
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
-function ENT:SpawnCamStand(ent)
+function ENT:SpawnCamStand(ent,p)
 
 	if(IsValid(self)) then
 		local e = ent or ents.Create("prop_physics")
@@ -342,6 +344,7 @@ function ENT:SpawnCamStand(ent)
 		e:Activate()
 		e:SetParent(self)
 		self.CamStand=e
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
@@ -387,7 +390,7 @@ function ENT:FindGate(dist)  --######### @ aVoN
 	return gate; -- Returns what we've found, a gate or no gate.
 end
 
-function ENT:SpawnRTCam(ent)
+function ENT:SpawnRTCam(ent,p)
 
 	if(IsValid(self)) then
 		local e = ent or ents.Create("gmod_cameraprop")
@@ -400,6 +403,7 @@ function ENT:SpawnRTCam(ent)
 		e:SetColor(Color(255,255,255,0))
 		UpdateRenderTarget(e)
 		self.RTCamera=e
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
@@ -477,15 +481,15 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	end
 
 	if (dupeInfo.Camera) then
-		self:SpawnCamera(CreatedEntities[dupeInfo.Camera]);
+		self:SpawnCamera(CreatedEntities[dupeInfo.Camera],ply);
 	end
 
 	if (dupeInfo.CamStand) then
-		self:SpawnCamStand(CreatedEntities[dupeInfo.CamStand]);
+		self:SpawnCamStand(CreatedEntities[dupeInfo.CamStand],ply);
 	end
 
 	if (dupeInfo.RTCamera) then
-		self:SpawnRTCam(CreatedEntities[dupeInfo.RTCamera]);
+		self:SpawnRTCam(CreatedEntities[dupeInfo.RTCamera],ply);
 	end
 
 	if(not IsValid(ply) and game.SinglePlayer()) then

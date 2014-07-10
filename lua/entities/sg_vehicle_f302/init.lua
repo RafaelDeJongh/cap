@@ -58,24 +58,24 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	e:SetAngles(Angle(0,p:GetAimVector():Angle().Yaw,0));
 	e:Spawn();
 	e:Activate();
-	e:CockpitSpawn() -- Spawn the cockpit
-	e:SpawnSeats(); -- Spawn the seats
-	e:SpawnRocketClamps(); -- Spawn the rocket clamps
-	e:SpawnMissile(); -- Spawn the missile props
-	e:Turrets(); -- Spawn turrets
-	e:SpawnWheels();
+	e:CockpitSpawn(p) -- Spawn the cockpit
+	e:SpawnSeats(p); -- Spawn the seats
+	e:SpawnRocketClamps(nil,p); -- Spawn the rocket clamps
+	e:SpawnMissile(p); -- Spawn the missile props
+	e:Turrets(p); -- Spawn turrets
+	e:SpawnWheels(nil,p);
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	p:AddCount("CAP_ships", e)
 	return e;
 end
 
-function ENT:HangarSpawn(pl)
-	self:CockpitSpawn() -- Spawn the cockpit
-	self:SpawnSeats(); -- Spawn the seats
-	self:SpawnRocketClamps(); -- Spawn the rocket clamps
-	self:SpawnMissile(); -- Spawn the missile props
-	self:Turrets(); -- Spawn turrets
-	self:SpawnWheels();
+function ENT:HangarSpawn(p)
+	self:CockpitSpawn(p) -- Spawn the cockpit
+	self:SpawnSeats(p); -- Spawn the seats
+	self:SpawnRocketClamps(nil,p); -- Spawn the rocket clamps
+	self:SpawnMissile(p); -- Spawn the missile props
+	self:Turrets(p); -- Spawn turrets
+	self:SpawnWheels(nil,p);
 end
 
 function ENT:Initialize() --######## What happens when it first spawns(Set Model, Physics etc.) @RononDex
@@ -642,7 +642,7 @@ function ENT:SpawnMissile() --############### Spawn Missile Props @RononDex
 end
 
 
-function ENT:Turrets() --####### Spawn the turret entities @RononDex
+function ENT:Turrets(p) --####### Spawn the turret entities @RononDex
 
 	local pos = self:GetPos()+self:GetUp()*-10+self:GetForward()*50
 
@@ -657,6 +657,7 @@ function ENT:Turrets() --####### Spawn the turret entities @RononDex
 		e.Turret = 1;
 		e.Parent=self
 		self.Turret = e
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 		local e2 = ents.Create("302turret")
 		e2:SetPos(self:GetAttachment(self:LookupAttachment("TurretR")).Pos)
@@ -668,10 +669,11 @@ function ENT:Turrets() --####### Spawn the turret entities @RononDex
 		e2.Turret = 2;
 		e2.Parent=self
 		self.Turret2 = e2
+		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
 end
 
-function ENT:CockpitSpawn()
+function ENT:CockpitSpawn(p)
 
 	if(IsValid(self.Cockpit and self.CockpitAnim)) then return end;
 
@@ -686,6 +688,7 @@ function ENT:CockpitSpawn()
 	e:SetColor(Color(255,255,255,0)); --Just in case...
 	self.Cockpit = e;
 	e.CanDoAnim = true;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 	e = ents.Create("prop_dynamic");
 	e:SetModel(self.GibTable.Cockpit);
@@ -697,10 +700,11 @@ function ENT:CockpitSpawn()
 	e:SetKeyValue("MinAnimTime","0")
 	e:SetKeyValue("MaxAnimTime","8")
 	self.CockpitAnim = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 end
 
-function ENT:SpawnRocketClamps(ent)
+function ENT:SpawnRocketClamps(ent,p)
 
 	local e = ent or ents.Create("prop_physics")
 	e:SetModel("models/Madman07/F302/rocket_clamp.mdl")
@@ -712,11 +716,12 @@ function ENT:SpawnRocketClamps(ent)
 	if (not ent) then
 		constraint.Weld(self,e,0,0,0,true)
 	end
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	self.RocketClamps=e
 
 end
 
-function ENT:SpawnSeats()
+function ENT:SpawnSeats(p)
 
 	local pilotseat = ents.Create("prop_physics");
 	pilotseat:SetModel(self.GibTable.Seat1);
@@ -726,6 +731,7 @@ function ENT:SpawnSeats()
 	pilotseat:Activate();
 	pilotseat:SetParent(self);
 	self.PilotSeat = pilotseat;
+	if CPPI and IsValid(p) and pilotseat.CPPISetOwner then pilotseat:CPPISetOwner(p) end
 
 	local passseat = ents.Create("prop_physics");
 	passseat:SetModel(self.GibTable.Seat2);
@@ -735,10 +741,11 @@ function ENT:SpawnSeats()
 	passseat:Activate();
 	passseat:SetParent(self);
 	self.PassangerSeat = passseat;
+	if CPPI and IsValid(p) and passseat.CPPISetOwner then passseat:CPPISetOwner(p) end
 
 end
 
-function ENT:SpawnWheels(ent)
+function ENT:SpawnWheels(ent,p)
 
 	local e = ent or ents.Create("prop_physics");
 	e:SetModel(self.GibTable.Wheels);
@@ -750,6 +757,7 @@ function ENT:SpawnWheels(ent)
 	e:SetOwner(self);
 	e:SetRenderMode(RENDERMODE_NONE)
 	e:DrawShadow(false)
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 
 	self.WheelPhys = e:GetPhysicsObject();
 
@@ -845,7 +853,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self:SpawnRocketClamps(self.RocketClamps); -- Spawn the rocket clamps
 	self:SpawnMissile(); -- Spawn the missile props
 	self:Turrets(); -- Spawn turrets
-	self:SpawnWheels(self.Wheels);
+	self:SpawnWheels(self.Wheels,ply);
 end
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then
