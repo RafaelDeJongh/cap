@@ -69,6 +69,7 @@ StarGate.Trace:Add("shield_core_buble",
 function ENT:Initialize()
 	self.Created = false;
 	self.RayModel = {};
+	self:SetCustomCollisionCheck(true);
 end
 
 function ENT:Think()
@@ -102,6 +103,6 @@ function ENT:SetCollisionScale()
 
 	self.Entity:PhysicsFromMesh(convex);
 
-	self.ShShp = model;
+	self.ShShap = model;
 	self.Size = size;
 end

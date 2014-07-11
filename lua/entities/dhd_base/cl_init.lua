@@ -148,6 +148,7 @@ function ENT:Draw()
 	end
 end
 
+/*
 -- ugly workaround
 local properties_HaloThink = properties.HaloThink;
 properties.HaloThink = function()
@@ -155,7 +156,23 @@ properties.HaloThink = function()
 	local ent = properties.GetHovered(LocalPlayer():EyePos(), LocalPlayer():GetAimVector())
 	if (!IsValid( ent ) or ent.IsDHD) then return end
 	properties_HaloThink();
-end
+end    */
+
+hook.Add("OnGamemodeLoaded","FixDHDHalos",function()
+	hook.Add( "PreDrawHalos", "PropertiesHover", function()
+		if ( vgui.GetHoveredPanel() != vgui.GetWorldPanel() && vgui.GetHoveredPanel() != g_ContextMenu ) then return end
+
+		local ent = properties.GetHovered( EyePos(), LocalPlayer():GetAimVector() )
+		if ( !IsValid( ent ) or ent.IsDHD) then return end
+
+		local c = Color( 255, 255, 255, 255 )
+		c.r = 200 + math.sin( RealTime() * 50 ) * 55
+		c.g = 200 + math.sin( RealTime() * 20 ) * 55
+		c.b = 200 + math.cos( RealTime() * 60 ) * 55
+
+		halo.Add( { ent }, c, 2, 2, 2, true, false )
+	end )
+end)
 
 -- fix for content menu not opens sometimes without halo effect somewhy.
 hook.Add( "GUIMousePressed", "StarGate.DHD.GUIMousePressed", function()

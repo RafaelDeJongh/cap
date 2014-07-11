@@ -373,7 +373,7 @@ if (table.getn(oldfiles)>0) then
 	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
-if (VERSION<140708) then
+if (VERSION<140711) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)

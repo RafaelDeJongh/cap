@@ -85,7 +85,7 @@ function ENT:SetCollisionScale(model, size)
 	elseif (model == "models/Madman07/shields/atlantis.mdl") then ShieldModel = AtlantisModel;  mod = 3; end
 
 	for _, vertex in pairs(ShieldModel) do
-		vec = Vector(vertex.y*size.y,vertex.x*size.x,vertex.z*size.z); -- hm, somewhy it should be y,x,z not x,y,z
+		vec = Vector(vertex.x*size.x,vertex.y*size.y,vertex.z*size.z); -- hm, somewhy it should be y,x,z not x,y,z @ now fixed?
 		vect = Vertex(vec, 1, 1, Vector( 0, 0, 1 ) )
 		table.insert(convex, vect);
 		table.insert(self.RayModel, vec);
@@ -126,7 +126,7 @@ end
 
 function ENT:IsEntityInShield()
 	for _,v in pairs(ents.GetAll()) do
-		if StarGate.IsInShieldCore(v, self.Entity) then
+		if StarGate.IsInsideShieldCore(v, self.Entity) then
 			table.insert(self.nocollide, v);
 			table.insert(self.nocollideID, v:EntIndex()); //tracelines
 		end

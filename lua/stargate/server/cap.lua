@@ -85,11 +85,11 @@ function StarGate.FindShield(ent)
 	return gate;
 end
 
-function StarGate.IsInShieldCore(ent, core)
+function StarGate.IsInsideShieldCore(ent, core)
 	if (core.ShShap == 1) then
 		return StarGate.IsInEllipsoid(ent:GetPos(), core, core.Size);
 	elseif (core.ShShap == 2) then
-		return StarGate.IsInCuboid(ent:GetPos(), core, core.Size);
+		return not StarGate.IsInCuboid(ent:GetPos(), core, core.Size); -- why NOT?? onclient it work correct, strange.
 	elseif (core.ShShap == 3) then
 		return StarGate.IsInAltantisoid(ent:GetPos(), core, core.Size);
 	end
@@ -114,7 +114,7 @@ function StarGate.IsInShield(ent)
 					return true;
 				end
 			else
-				if (not v.Depleted and v.Enabled and StarGate.IsInShieldCore(ent,v)) then
+				if (not v.Depleted and v.Enabled and StarGate.IsInsideShieldCore(ent,v)) then
 					return true;
 				end
 			end

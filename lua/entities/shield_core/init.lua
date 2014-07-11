@@ -79,6 +79,7 @@ function ENT:Initialize()
 		a:SetPos(self:LocalToWorld(self.Pos));
 		a:SetAngles(self:GetAngles()+self.Ang);
 		a.Parent = self;
+		if CPPI and IsValid(self.Owner) and a.CPPISetOwner then a:CPPISetOwner(self.Owner) end
 		a:SetNetworkedVector("Col",self.Entity:GetNetworkedVector("Col",Vector(100,100,100)));
 
 		a:Spawn();
@@ -204,6 +205,7 @@ function ENT:Use(ply)
 		self.Camera:SetAngles(ang);
 		self.Camera:Spawn();
 		self.Camera:Activate();
+		if CPPI and IsValid(self.Owner) and self.Camera.CPPISetOwner then self.Camera:CPPISetOwner(self.Owner) end
 
 		local phys = self.Camera:GetPhysicsObject()
 		if IsValid(phys) then phys:EnableMotion(false) end
