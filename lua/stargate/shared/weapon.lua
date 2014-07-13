@@ -17,7 +17,7 @@ if (SERVER) then
 	local function Drop(ply)
 		if (not StarGate.CFG:Get("cap_misc","allow_drop_weapons",true)) then return end
 		if(not ply:GetActiveWeapon():IsValid() or ply:IsTyping() or IsValid(ply.WireKeyboard) or ply:InVehicle())then return end
-		local allow = hook.Call("StarGate.Player.DrowWeapon",nil,ply,ply:GetActiveWeapon());
+		local allow = hook.Call("StarGate.Player.DropWeapon",nil,ply,ply:GetActiveWeapon());
 		if (allow==false) then return end
    		local tr = ply:GetEyeTraceNoCursor();
    		local class = ply:GetActiveWeapon():GetClass();
