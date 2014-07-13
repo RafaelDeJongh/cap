@@ -32,6 +32,7 @@ SWEP.DrawAmmo	= true;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/v_zat_tauri.mdl";
 SWEP.WorldModel = "models/w_zat.mdl";
+SWEP.HoldType = "pistol"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -50,13 +51,17 @@ list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 -- Add weapon for NPCs
 list.Add("NPCUsableWeapons", {class = "weapon_zat", title = SWEP.PrintName or ""});
 
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
 
 --################### Deploy @aVoN
 function SWEP:Deploy()
 	self.Weapon:SendWeaponAnim(ACT_VM_DRAW); -- Animation
 	if SERVER and IsValid(self.Owner) then
        self.Owner:EmitSound(self.Sounds.Deploy,90)
-    end
+    end	
+	return true
 end
 
 --################### Holster @aVoN
@@ -140,7 +145,7 @@ function SWEP:Initialize()
 	self.MaxSize = StarGate.CFG:Get("zat","max_size",110);
 	self.KillDistance = StarGate.CFG:Get("zat","kill_distance",100);
 	self.DissolveDistance = StarGate.CFG:Get("zat","dissolve_distance",60);
-	self:SetWeaponHoldType("pistol");
+	self:SetWeaponHoldType(self.HoldType);
 end
 
 --################### Initialize the shot @aVoN

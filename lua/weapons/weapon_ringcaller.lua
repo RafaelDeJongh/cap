@@ -50,6 +50,7 @@ SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/Iziraider/remote/v_remote.mdl";
 SWEP.WorldModel = "models/Iziraider/remote/w_remote.mdl";
+SWEP.HoldType = "slam"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -65,6 +66,10 @@ SWEP.Secondary.Ammo	= "none";
 
 -- spawnables.
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
+
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
 
 --################### Find near rings @aVoN
 function SWEP:FindRing()

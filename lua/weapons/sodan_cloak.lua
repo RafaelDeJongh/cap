@@ -32,6 +32,7 @@ SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/weapons/c_arms_animations.mdl";
 SWEP.WorldModel = "models/roltzy/w_sodan.mdl";
 SWEP.AnimPrefix = "melee";
+SWEP.HoldType = "normal"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -48,6 +49,10 @@ SWEP.Secondary.Ammo = "none";
 -- spawnables.
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
+function SWEP:Initialize()
+	self.Weapon:SetWeaponHoldType(self.HoldType)
+end
+
 if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
@@ -57,7 +62,7 @@ SWEP.Sounds = {Engage=Sound("tech/sodan_cloak_on.mp3"),Disengage=Sound("tech/sod
 
 --################### Set Holdtype @aVoN
 function SWEP:Initialize()
-	self:SetWeaponHoldType("melee");
+	self:SetWeaponHoldType(self.HoldType);
 end
 
 --################### Primary Attack @Catdaemon

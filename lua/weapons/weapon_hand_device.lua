@@ -32,6 +32,7 @@ SWEP.DrawAmmo	= true;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/weapons/v_models/v_hdevice.mdl";
 SWEP.WorldModel = "models/w_hdevice.mdl";
+SWEP.HoldType = "slam"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -54,6 +55,10 @@ function SWEP:SecondaryAttack() return false end;
 -- to cancel out default reload function
 function SWEP:Reload() return end;
 
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
+
 if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
@@ -68,6 +73,12 @@ SWEP.MaxAmmo = 100;
 SWEP.Delay = 5;
 SWEP.TimeOut = 0.25; -- Time in seconds, a target will be tracked when hit with the beam
 
+--################### Deploay the SWEP @ Gmod4phun
+function SWEP:Deploy()
+	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
+return true
+end
+
 --################### Init the SWEP @ jdm12989
 function SWEP:Initialize()
 	self:SetWeaponHoldType("melee");
@@ -78,11 +89,15 @@ function SWEP:PrimaryAttack(fast)
 	local ammo = self.Weapon:Clip1();
 	local delay = 0;
 	if(self.AttackMode == 1 and ammo >= 20 and not fast) then
+		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+		timer.Simple( 0.25, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
 		self.Owner:EmitSound(self.Sounds.Shot[1],90,math.random(96,102));
 		self:PushEffect();
 		delay = 0.3;
 		self.Weapon:SetNextPrimaryFire(CurTime()+0.8);
 	elseif(self.AttackMode == 2 and ammo >= 3) then
+		self.Weapon:SendWeaponAnim(ACT_VM_RECOIL1)
+		timer.Simple( 0.5, function() if (IsValid(self)) then self.Weapon:SendWeaponAnim( ACT_VM_IDLE ) end end)
 		self.Owner:SetNetworkedBool("shooting_hand",true);
 		local time = CurTime();
 		if((self.LastSound or 0)+0.9 < time) then

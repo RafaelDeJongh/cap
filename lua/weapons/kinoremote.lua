@@ -36,6 +36,7 @@ SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/Iziraider/kinoremote/v_kinoremote.mdl";
 SWEP.WorldModel = "models/Iziraider/kinoremote/w_kinoremote.mdl";
 SWEP.ViewModelFOV = 90
+SWEP.HoldType = "slam"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -59,6 +60,10 @@ function SWEP:SecondaryAttack() return false end
 -- to cancel out default reload function
 function SWEP:Reload() return end
 
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
+
 if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("extra")) then return end
@@ -77,7 +82,7 @@ SWEP.Delay = 5;
 
 --################### Init the SWEP
 function SWEP:Initialize()
-	self:SetWeaponHoldType("slam");
+	self:SetWeaponHoldType(self.HoldType);
 	self.Range = StarGate.CFG:Get("mobile_dhd","range",3000);
 
 	self.KinoActive = false;
@@ -379,8 +384,8 @@ local Pressed = false;
 --################### Positions the viewmodel correctly @aVoN
 function SWEP:GetViewModelPosition(p,a)
 	p = p - 10*a:Up() - 6*a:Forward() + 1*a:Right();
-	a:RotateAroundAxis(a:Right(),30);
-	a:RotateAroundAxis(a:Up(),5);
+	a:RotateAroundAxis(a:Right(),32);
+	a:RotateAroundAxis(a:Up(),4);
 	return p,a;
 end
 

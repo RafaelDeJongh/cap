@@ -14,6 +14,7 @@ SWEP.DrawAmmo	= false
 SWEP.DrawCrosshair = true
 SWEP.ViewModel = "models/Iziraider/remote/v_remote.mdl"
 SWEP.WorldModel = "models/Iziraider/remote/w_remote.mdl"
+SWEP.HoldType = "slam"
 
 -- Lol, without this we can't use this weapon in mp on gmod13...
 if SERVER then
@@ -37,6 +38,11 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo	= "none"
+
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType)
+end
+
 --[[
 function SWEP:Initialize()
 

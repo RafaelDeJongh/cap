@@ -14,6 +14,7 @@ SWEP.DrawCrosshair = true
 SWEP.ViewModel = "models/weapons/c_arms_animations.mdl"
 SWEP.WorldModel = "models/roltzy/w_sodan.mdl"
 SWEP.AnimPrefix = "melee"
+SWEP.HoldType = "normal"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -26,6 +27,10 @@ SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
+
+function SWEP:Initialize()
+	self.Weapon:SetWeaponHoldType(self.HoldType)
+end
 
 if CLIENT then
 	-- Inventory Icon
@@ -63,7 +68,7 @@ local Sounds = {
 }
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("melee")
+	self:SetWeaponHoldType(self.HoldType)
 	--self.Owner:SetNetworkedFloat("pShieldStrength", 0)
 end
 

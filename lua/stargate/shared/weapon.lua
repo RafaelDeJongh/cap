@@ -17,6 +17,8 @@ if (SERVER) then
 	local function Drop(ply)
 		if (not StarGate.CFG:Get("cap_misc","allow_drop_weapons",true)) then return end
 		if(not ply:GetActiveWeapon():IsValid() or ply:IsTyping() or IsValid(ply.WireKeyboard) or ply:InVehicle())then return end
+		local allow = hook.Call("StarGate.Player.DrowWeapon",nil,ply,ply:GetActiveWeapon());
+		if (allow==false) then return end
    		local tr = ply:GetEyeTraceNoCursor();
    		local class = ply:GetActiveWeapon():GetClass();
    		if (class=="sg_adrenaline") then -- don't know why, but it spawn ivnisible if use class
@@ -91,11 +93,13 @@ if (SERVER) then
 			ply:SetRunSpeed(1000)
 		    ply:SetJumpPower(500)
 			ply:SetArmor(200)
+			ply.CAP_Atanik = true
 		-- if we changed from weapon atanik_armband to another
 		elseif (weapon1:GetClass()=="atanik_armband") then
 		    ply:SetRunSpeed(500)
 			ply:SetJumpPower(200)
 			ply:SetArmor(0)
+			ply.CAP_Atanik = nil
 		end
 		-- PLEASE DO NOT EDIT! it works perfect in sp and mp! Don't touch code!
 	end)

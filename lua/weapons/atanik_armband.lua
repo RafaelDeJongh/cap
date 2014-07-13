@@ -24,7 +24,7 @@ SWEP.SlotPos = 5;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/Weapons/V_hands.mdl";
-SWEP.WorldModel = "models/Weapons/w_bugbait.mdl";
+SWEP.WorldModel = "models/weapons/w_bugbait.mdl";
 SWEP.ViewModelFOV = 90
 SWEP.AnimPrefix = "melee"
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
@@ -54,6 +54,7 @@ function SWEP:Initialize()
 	self:SetWeaponHoldType( "fist" )
 	self.Hit = Sound( "player/pl_fallpain1.wav" );
 	self.NextHit = 0;
+	if (not IsValid(self.OldOwner)) then self.OldOwner = self.Owner; end
 end
 
 function SWEP:PrimaryAttack()
@@ -105,11 +106,42 @@ function SWEP:DrawHUD()
 	draw.WordBox(8,ScrW()-315,ScrH()-50,"Melee mode: You are stronger and faster.","Default",Color(0,0,0,80),Color(255,220,0,220));
 end
 
+if SERVER then
+
+function SWEP:OnDrop()
+	self:SetNWBool("WorldNoDraw",false);
+	if (IsValid(self.OldOwner) and self.OldOwner.CAP_Atanik) then
+		self.OldOwner:SetRunSpeed(500)
+		self.OldOwner:SetJumpPower(200)
+		self.OldOwner:SetArmor(0)
+		self.OldOwner.CAP_Atanik = nil
+		self.OldOwner = NULL
+	end
+	return true;
+end
+
+function SWEP:Equip()
+	self:SetNWBool("WorldNoDraw",true);
+	return true;
+end
+
+function SWEP:OwnerChanged()
+	self.OldOwner = self.Owner;
+end
+
+end
+
 if CLIENT then
 
 -- Inventory Icon
 if(file.Exists("materials/VGUI/weapons/atanik_inventory.vmt","GAME")) then
    SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/atanik_inventory");
+end
+
+function SWEP:DrawWorldModel()
+	if (not self:GetNWBool("WorldNoDraw")) then
+		self:DrawModel();
+	end
 end
 
 function SWEP:GetViewModelPosition(p,a)

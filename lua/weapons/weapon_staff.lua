@@ -32,6 +32,7 @@ SWEP.DrawAmmo	= true;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/zup/staff/v_staff.mdl";
 SWEP.WorldModel = "models/zup/staff/w_staff.mdl";
+SWEP.HoldType = "shotgun"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -49,6 +50,10 @@ SWEP.Secondary.Ammo = "none";
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 -- Add weapon for NPCs
 list.Add("NPCUsableWeapons", {class = "weapon_staff", title = SWEP.PrintName or ""});
+
+function SWEP:Initialize()
+	self.Weapon:SetWeaponHoldType(self.HoldType)
+end
 
 --################### Deploy @aVoN
 function SWEP:Deploy()
@@ -114,7 +119,7 @@ function SWEP:Initialize()
 			end
 		end
 	);
-	self:SetWeaponHoldType("shotgun");
+	self:SetWeaponHoldType(self.HoldType);
 end
 
 --################### Holster @aVoN

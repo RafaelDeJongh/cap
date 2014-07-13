@@ -32,7 +32,8 @@ SWEP.SlotPos = 5;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
 SWEP.ViewModel = "models/weapons/c_arms_animations.mdl";
-SWEP.WorldModel = "models/Weapons/w_bugbait.mdl";
+SWEP.WorldModel = "models/weapons/w_bugbait.mdl";
+SWEP.HoldType = "normal"
 
 -- primary.
 SWEP.Primary.ClipSize = -1;
@@ -50,7 +51,7 @@ SWEP.Secondary.Ammo	= "none";
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType("pistol")
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 --################### Open Gate dialogue and overwrite default method @Madman07
@@ -85,4 +86,28 @@ end
 --################### Tell a player how to use this @aVoN
 function SWEP:DrawHUD()
 	draw.WordBox(8,ScrW()-315,ScrH()-50,"Primary: Open Stargate dial menu    Secondary: Heal friend","Default",Color(0,0,0,80),Color(255,220,0,220));
+end
+
+if SERVER then
+
+function SWEP:OnDrop()
+	self:SetNWBool("WorldNoDraw",false);
+	return true;
+end
+
+function SWEP:Equip()
+	self:SetNWBool("WorldNoDraw",true);
+	return true;
+end
+
+end
+
+if CLIENT then
+
+	function SWEP:DrawWorldModel()
+		if (not self:GetNWBool("WorldNoDraw")) then
+			self:DrawModel();
+		end
+	end
+
 end
