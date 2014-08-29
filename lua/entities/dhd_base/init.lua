@@ -303,9 +303,15 @@ function ENT:TriggerInput(k,v)
 		end
 	elseif (k == "Wire Disable DHD Sound") then
 		if (v>0) then
-			self.WireNoSound = true
+			self.WireNoSound = true;
 		else
 			self.WireNoSound = false;
+		end
+	elseif (k == "Disable Iris Toggle" and self:GetClass()=="dhd_city") then
+		if (v>0) then
+			self.WireNoIris = true;
+		else
+			self.WireNoIris = false;
 		end
 	end
 end

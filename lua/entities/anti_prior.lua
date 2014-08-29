@@ -1,13 +1,13 @@
 --[[############################################################################################################
-	Anti Priori Device
+	Anti Prior Device
 	Copyright (C) 2010 assassin21
 ############################################################################################################]]
 
 if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 ENT.Type = "anim"
 ENT.Base = "base_anim"
-ENT.PrintName = "Anti Priori Device"
-ENT.WireDebugName = "Anti Priori Device"
+ENT.PrintName = "Anti Prior Device"
+ENT.WireDebugName = "Anti Prior Device"
 ENT.Author = "assassin21, Boba Fett"
 ENT.Instructions= ""
 ENT.Contact = "zoellner21@gmail.com"
@@ -39,7 +39,7 @@ function ENT:Initialize()
 
 	self.Entity:SetModel("models/Madman07/anti_priest/anti_priest.mdl");
 
-	self.Entity:SetName("Anti Priori Weapon");
+	self.Entity:SetName("Anti Prior Device");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);

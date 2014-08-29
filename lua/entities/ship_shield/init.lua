@@ -81,6 +81,7 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_NONE);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
+	self.Entity:SetCollisionGroup(COLLISION_GROUP_WEAPON);
 	self.Entity:SetTrigger(true); -- The most important thing: Makes the shield trigger Touch() events, even when it's not solid
 	--self.Entity:SetNotSolid(true);
 

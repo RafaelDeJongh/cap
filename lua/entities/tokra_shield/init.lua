@@ -25,12 +25,13 @@ ENT.CAP_NotSave = true;
 -----------------------------------INIT----------------------------------
 
 function ENT:Initialize()
-	self.Entity:SetModel("models/hunter/blocks/cube025x025x025.mdl");
+	self.Entity:SetModel("models/Madman07/shields/box.mdl");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetColor(Color(0,0,0,0));
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA)
+	self.Entity:SetCustomCollisionCheck(true);
 
 	self.Initpos = self:GetPos()
 	self.Initang = self:GetAngles()

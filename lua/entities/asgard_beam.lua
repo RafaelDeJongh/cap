@@ -150,13 +150,16 @@ function ENT:Shoot()
 
 	if(energy > self.energy_drain or !self.HasRD) then
 
+		local FiringPos = self.Entity:GetPos() + self.Entity:GetUp()*70;
+		local ShootDir = (self.Target - FiringPos):GetNormal();
+		local trace = util.TraceLine({start = FiringPos, endpos = self.Target, ignoreworld = true});
+
+		if (IsValid(trace.Entity) and trace.Entity==self) then return end
+
 		self:ConsumeResource("energy",self.energy_drain);
 
 		self.Power = 0;
 		self.Entity:EmitSound(self.Sounds.Shoot,100,math.random(98,102));
-
-		local FiringPos = self.Entity:GetPos() + self.Entity:GetUp()*70;
-		local ShootDir = (self.Target - FiringPos):GetNormal();
 
 		local ent = ents.Create("energy_beam2");
 		ent.Owner = self.Entity;

@@ -140,6 +140,8 @@ function ENT:StartTouch(ent)
 	if IsValid(ent) then
 		if (ent:GetClass() == "black_hole_power") then return end
 
+		if(table.HasValue(self.Disallow,ent:GetClass())) then return end
+
 		local allow = hook.Call("StarGate.BlackHole.RemoveEnt",nil,ent,self);
 		if (allow==false) then return end
 
@@ -190,15 +192,16 @@ function ENT:PhysicsUpdate()
 	for entKey,entVal in pairs(inRange) do
 		if(not table.HasValue(self.Disallow,entVal:GetClass())) then
 
-			local allow = hook.Call("StarGate.BlackHole.PushEnt",nil,entVal,self);
-			if (allow==false) then continue end
-
 			local entLocation = entVal:GetPos()
 
 			local difference = myPosition - entLocation
 			local objRange = difference:Length()
 
 			if(objRange < self.Range) then
+
+				local allow = hook.Call("StarGate.BlackHole.PushEnt",nil,entVal,self);
+				if (allow==false) then continue end
+
 				local phys = entVal:GetPhysicsObject()
 				if(phys:IsValid()) then
 					difference:Normalize()

@@ -233,7 +233,7 @@ busy_time = 5
 [black_hole]
 amount = 500000
 resources = energy,oxygen,nitrogen,water,steam,heavy water,hydrogen,carbon dioxide,liquid nitrogen,hot liquid nitrogen,methane,propane,deuterium,tritium
-disallow = info_player_start,physgun_beam,predicted_viewmodel,black_hole_power,env_sprite,stargate_supergate,player_manager,bodyque,ai_network
+disallow = info_player_start,physgun_beam,predicted_viewmodel,black_hole_power,env_sprite,stargate_supergate,player_manager,bodyque,ai_network,shield_core_buble,shield,ship_shield
 
 #### Naquadah generator mk1
 [naq_gen_mk1]

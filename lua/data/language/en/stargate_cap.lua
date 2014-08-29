@@ -53,7 +53,7 @@ entity_dart = Wraith Dart
 // Main Entities
 entity_main_cat = Misc devices
 entity_obelisk = Ancient Obelisk
-entity_antiprior = Anti Priori Device
+entity_antiprior = Anti-Prior Device
 entity_apple_core = Apple Core
 entity_arthurs_mantle = Arthurs Mantle
 entity_asgart_trans = Asgard Transporter

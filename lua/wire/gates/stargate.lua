@@ -20,7 +20,7 @@ GateActions["GetAddress"] = {
 }
 
 GateActions["SetAddress"] = {
-	name = "Set atargate address",
+	name = "Set stargate address",
 	inputs = { "Ent", "Address", "Set" },
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
 	outputtypes = {},

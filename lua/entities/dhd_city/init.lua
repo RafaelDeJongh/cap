@@ -144,7 +144,7 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
-	self:CreateWireInputs("Press Button","Disable Menu","Slow Mode");
+	self:CreateWireInputs("Press Button","Disable Menu","Slow Mode","Disable Iris Toggle");
 	self.Range = StarGate.CFG:Get("dhd","range",1000);
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
@@ -162,6 +162,7 @@ function ENT:Initialize()
 	end
 	self:Fire("SetBodyGroup",1);
 	self.Light = false;
+	self.WireNoIris = false;
 	timer.Create("LightThink"..self:EntIndex(), 0.5, 0, function() if IsValid(self.Entity) then self:LightThink() end end);
 	timer.Create("EnergyThink"..self:EntIndex(), 3.0, 0, function() if IsValid(self.Entity) then self:EnergyThink() end end);
 	self:EnergyThink();
@@ -204,7 +205,7 @@ function ENT:Use(p)
 	end
 	if (IsValid(p) and p:IsPlayer()) then -- small override for IRIS, to let it press even, if gate are activated
 		local btn = self:GetCurrentButton(p);
-		if (btn and btn == "IRIS") then
+		if (btn and btn == "IRIS" and not self.WireNoIris) then
 			local iris = StarGate.FindIris(self:FindGate());
 			if IsValid(iris) then iris:Toggle(); end
 		end

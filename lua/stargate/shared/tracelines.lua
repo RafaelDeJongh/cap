@@ -207,6 +207,7 @@ function StarGate.Trace:New(start,dir,ignore)
 							//if in_box then dir2 = -1*dir end // fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
 							//if (e.ShShap == 2) then a = in_box end // small fix for box shape, i fucked triangles directions
 							hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir, e, true);
+							// this code not working, need something to do @ AlexALX
 						//end
 					else
 						if(norm.x ~= 0) then

@@ -111,7 +111,7 @@ function TOOL:LeftClick(trace)
 	local Ang = trace.HitNormal:Angle()
 	Ang.pitch = Ang.pitch+90
 	undo.Create('gravitycontroller')
-	if trace.Entity and trace.Entity:IsValid() and convtable["bSGAPowerNode"][2]==1 and trace.Entity.IsStargate then
+	if trace.Entity and trace.Entity:IsValid() and convtable["bSGAPowerNode"][2]==1 and trace.Entity.IsStargate and not trace.Entity.IsSupergate then
 		trace.Entity.GCTable=trace.Entity.GCTable or {}
 		for i=1,3 do
 			if !trace.Entity.GCTable[i] or !trace.Entity.GCTable[i]:IsValid() then

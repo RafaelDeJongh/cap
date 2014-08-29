@@ -655,6 +655,16 @@ e2function array entity:stargateAddressList()
 	return this:WireGetAddresses();
 end
 
+e2function void wirelink:stargateRandomAddress(number mode)
+	if not IsValid(this) or not this.IsStargate or not StarGate or not StarGate.RandomGateName then return end
+	StarGate.RandomGateName(nil,this,nil,true,mode);
+end
+
+e2function void entity:stargateRandomAddress(number mode)
+	if not IsValid(this) or not this.IsStargate or not StarGate or not StarGate.RandomGateName or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	StarGate.RandomGateName(nil,this,nil,true,mode);
+end
+
 __e2setcost( 1 )
 
 e2function number stargateSystemType()
