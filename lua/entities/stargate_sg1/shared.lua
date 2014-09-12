@@ -69,85 +69,35 @@ properties.Add( "Stargate.SGCType.Off",
 
 });
 
-properties.Add( "Stargate.PoO.On",
+properties.Add( "Stargate.PoO",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14"),
-	Order		=	-140,
-	MenuIcon	=	"icon16/plugin_disabled.png",
-
-	Filter		=	function( self, ent, ply )
-						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_tollan"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWInt("Point_of_Origin",0)!=0) then return false end
-						return true
-
-					end,
-
-	Action		=	function( self, ent )
-
-						self:MsgStart()
-							net.WriteEntity( ent )
-						self:MsgEnd()
-
-					end,
-
-	Receive		=	function( self, length, player )
-
-						local ent = net.ReadEntity()
-						if ( !self:Filter( ent, player ) ) then return false end
-
-						ent:TriggerInput("Set Point of Origin",1);
-					end
-
-});
-
-properties.Add( "Stargate.PoO.On2",
-{
-	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14b"),
-	Order		=	-140,
-	MenuIcon	=	"icon16/plugin.png",
-
-	Filter		=	function( self, ent, ply )
-						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_tollan"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWInt("Point_of_Origin",0)!=1) then return false end
-						return true
-
-					end,
-
-	Action		=	function( self, ent )
-
-						self:MsgStart()
-							net.WriteEntity( ent )
-						self:MsgEnd()
-
-					end,
-
-	Receive		=	function( self, length, player )
-
-						local ent = net.ReadEntity()
-						if ( !self:Filter( ent, player ) ) then return false end
-
-						ent:TriggerInput("Set Point of Origin",2);
-					end
-
-});
-
-properties.Add( "Stargate.PoO.Off",
-{
-	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14d"),
-	Order		=	-140,
+	Order		=	-170,
 	MenuIcon	=	"icon16/plugin_link.png",
 
 	Filter		=	function( self, ent, ply )
-                        local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_tollan"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWInt("Point_of_Origin",0)!=2) then return false end
+						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_tollan"}
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
 						return true
 
 					end,
 
-	Action		=	function( self, ent )
+	MenuOpen = function( self, option, ent, tr )
+		local submenu = option:AddSubMenu()
+		local poo = ent:GetNWInt("Point_of_Origin",0);
+		for i=0,2 do
+			local option = submenu:AddOption( SGLanguage.GetMessage("stargate_c_tool_14_"..i+1), function() self:SetPoo( ent, i ) end )
+			if ( poo == i ) then
+				option:SetChecked( true )
+			end
+		end
+	end,
+
+	SetPoo		=	function( self, ent, i )
 
 						self:MsgStart()
 							net.WriteEntity( ent )
+							net.WriteInt(i,8)
 						self:MsgEnd()
 
 					end,
@@ -157,7 +107,7 @@ properties.Add( "Stargate.PoO.Off",
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent:TriggerInput("Set Point of Origin",0);
+						ent:TriggerInput("Set Point of Origin",net.ReadInt(8));
 					end
 
 });

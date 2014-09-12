@@ -86,6 +86,10 @@ for k,v in pairs(file.Find("addons/carter_addon_pack_*.gma","GAME")) do
 	table.insert(oldfiles,v);
 	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
 end
+for k,v in pairs(file.Find("addons/stargate_carter_addon_pack_175394472.gma","GAME")) do
+	table.insert(oldfiles,v);
+	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
+end
 
 if (CLIENT) then
 
@@ -285,7 +289,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<459 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<465 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)

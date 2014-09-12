@@ -32,7 +32,8 @@ function ENT:Initialize()
 		end
 	end
 	if (WireAddon) then
-		self.Inputs = Wire_CreateInputs(self.Entity, {"ZPos", "Hovermode", "Add to Z", "Activate", "AirbrakeX" , "AirbrakeY" , "AirbrakeZ" , "GlobalBrake"})
+		self:CreateWireInputs("ZPos", "Hovermode", "Add to Z", "Activate", "AirbrakeX" , "AirbrakeY" , "AirbrakeZ" , "GlobalBrake","Disable Use")
+		self:CreateWireOutputs("Activated")
 	end
 	self.CanUse = true
 	self.IsGravcontroller = true
@@ -105,6 +106,7 @@ function ENT:ActivateIt(bool)
 		end
 		self:SetNetworkedBool("drawsprite", false)
 		self.Active = false
+		self:SetWire("Activated",false)
 		for _,e in pairs(self.ConstrainedEntities) do
 			if e.IsGravcontroller and e.Active and e != self.Entity then
 				return
@@ -116,6 +118,7 @@ function ENT:ActivateIt(bool)
 		self.SoundPlaying = true
 		self.Sound:ChangePitch(self.PitchStartup,0)
 		self.Active = true
+		self:SetWire("Activated",true)
 	end
 	self.ConstrainedEntities = constraint.GetAllConstrainedEntities(self.Entity)
 	if self.ConTable["bBrakeOnly"] and self.ConTable["bBrakeOnly"][2] == 0 or self.ConTable["bSGAPowerNode"] and self.ConTable["bSGAPowerNode"][2]==1 then
@@ -133,6 +136,7 @@ function ENT:ActivateIt(bool)
 end
 
 function ENT:Use(a, c)
+	if (self:GetWire("Disable Use")>0) then return end
 	if !a:KeyPressed(IN_USE) then return false end
 	if !(a == self.Owner) then return end
 	if self.Active and self.CanUse then

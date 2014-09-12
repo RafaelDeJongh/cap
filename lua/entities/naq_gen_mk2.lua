@@ -42,7 +42,7 @@ function ENT:Initialize()
 	self.Generate = StarGate.CFG:Get("naq_gen_mk2","generate",2000);
 	self.GenMulti = StarGate.CFG:Get("naq_gen_mk2","multiplier",25);
 	self.AllowNuke = StarGate.CFG:Get("naq_gen_mk2","nuke_explode",true);
-	self:CreateWireInputs("ON/OFF");
+	self:CreateWireInputs("ON/OFF","Disable Use");
 	self:CreateWireOutputs("Active","Naquadah","Naquadah %","Countdown","Energy")
 
 	self.health=100
@@ -167,6 +167,7 @@ function ENT:Output(perc,eng)
 end
 
 function ENT:Use(p) --####### Activate or deactivate @RononDex
+	if (self:GetWire("Disable Use")>0) then return end
 	if (self.depleted) then return end
 	if(not(self.Active)) then
 		self.Active=true

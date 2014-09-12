@@ -46,7 +46,7 @@ function ENT:Initialize()
 	self:AddResource("energy",StarGate.CFG:Get("naq_gen_mk1","energy",10000));
 	self.Generate = StarGate.CFG:Get("naq_gen_mk1","generate",130);
 	self.GenMulti = StarGate.CFG:Get("naq_gen_mk1","multiplier",20);
-	self:CreateWireInputs("ON/OFF");
+	self:CreateWireInputs("ON/OFF","Disable Use");
 	self:CreateWireOutputs("Active","Naquadah","Naquadah %","Energy");
 	self.health=100
 	self:Off()
@@ -198,6 +198,7 @@ function ENT:TriggerInput(k,v)
 end
 
 function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
 	if (self.depleted) then return end;
 	if(self.enabled) then
 		self:Off()

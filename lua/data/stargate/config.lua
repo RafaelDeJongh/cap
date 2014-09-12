@@ -196,7 +196,7 @@ allow_constrained = false
 # Can the harvester pickup frozen stuff?
 allow_frozen = false
 # These ENTs are never able to get suckup
-disallowed_entities = prop_door_rotating,stargate_atlantis,stargate_sg1,dhd_atlantis,dhd_sg1,prop_ragdoll,logic_case
+disallowed_entities = prop_door_rotating,physgun_beam,Beam_Drawer,predicted_viewmodel,player_manager,bodyque,ai_network,info_player_start,water_lod_control,scene_manager,network,soundent,gmod_ghost,beam_drawer2b,logic_casem,prop_ragdoll
 
 #### Cloaking Device
 [cloaking]

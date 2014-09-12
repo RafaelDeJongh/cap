@@ -36,7 +36,7 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetUseType(SIMPLE_USE);
-	self:CreateWireInputs("Detonate","Yield","Power","Timer");
+	self:CreateWireInputs("Detonate","Yield","Power","Timer","Disable Use");
 
 	self.Yield = self.Yield or 100;
 	self.Timer = self.Timer or 5;
@@ -68,7 +68,7 @@ end
 
 
 function ENT:Use(p)
-
+	if (self:GetWire("Disable Use")>0) then return end
 	if IsValid(self) then
 		self:Detonate();
 	end

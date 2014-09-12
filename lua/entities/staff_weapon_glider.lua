@@ -50,7 +50,7 @@ function ENT:Initialize()
 	self.TargetVector = Vector(0,0,0);
 	self.DirectionVectorAngleOffset = 0.5 -- Equals 60°
 	self:AddResource("energy",100);
-	self:CreateWireInputs("Fire","Distance","Explode","Dir_X","Dir_Y","Dir_Z","X","Y","Z");
+	self:CreateWireInputs("Fire","Distance","Explode","Dir_X","Dir_Y","Dir_Z","X","Y","Z","Disable Use");
 	self:CreateWireOutputs("Can Fire","Shots Remaining");
 	self.Color = self.Color or Color(math.random(230,255),200,120,255);
 	self.Phys = self.Entity:GetPhysicsObject();
@@ -191,6 +191,7 @@ end
 
 --#################  Shoot like hell! @aVoN
 function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
 	self:TriggerInput("Fire",1);
 	local id = "StarGate.StaffWeapon"..self.Entity:EntIndex();
 	local e = self.Entity;

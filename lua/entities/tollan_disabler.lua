@@ -56,7 +56,7 @@ function ENT:Initialize()
 	self.IsEnabled = false;
 
 	if (WireAddon) then
-		self:CreateWireInputs("Active");
+		self:CreateWireInputs("Activate");
 		self:CreateWireOutputs("Activated");
 	end
 
@@ -72,7 +72,7 @@ end
 -----------------------------------WIRE----------------------------------
 
 function ENT:TriggerInput(variable, value)
-	if (variable == "Active") then
+	if (variable == "Activate") then
 		self.IsEnabled = util.tobool(value)
 		if (self.IsEnabled) then
 			self:SetWire("Activated",1);

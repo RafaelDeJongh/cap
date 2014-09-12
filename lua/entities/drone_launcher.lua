@@ -55,7 +55,7 @@ function ENT:Initialize()
 	self.Track = false;
 	self.Launched = false;
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Launch","Lock","X","Y","Z","LockTime","Kill");
+	self:CreateWireInputs("Launch","Lock","X","Y","Z","LockTime","Kill","Disable Use");
 	self:CreateWireOutputs("Active","Drones In Air","Drones Remaining");
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
@@ -133,6 +133,7 @@ end
 
 --#################  Shoot like hell! @aVoN
 function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
 	self:TriggerInput("Launch",1);
 	local id = "StarGate.DroneLauncher"..self.Entity:EntIndex();
 	local e = self.Entity;

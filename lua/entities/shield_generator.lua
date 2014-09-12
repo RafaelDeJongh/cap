@@ -55,7 +55,7 @@ function ENT:Initialize()
 	self.Size = 80;
 	self.RestoreThresold = StarGate.CFG:Get("shield","restore_thresold",15); -- Which powerlevel has the shield to reach again until it works again?
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Activate","Strength");
+	self:CreateWireInputs("Activate","Strength","Disable Use");
 	self:CreateWireOutputs("Active","Strength");
 	self:SetWire("Strength",self.Strength);
 	self.Entity:SetUseType(SIMPLE_USE);
@@ -255,6 +255,7 @@ end
 
 --#################  Claok @aVoN
 function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
 	if(self:Enabled()) then
 		self:Status(false);
 	else

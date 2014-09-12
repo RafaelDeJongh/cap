@@ -58,8 +58,11 @@ function ENT:Initialize()
 		ent.Sound = false;
 		self.Door = ent;
 		ent.Frame = self;
+		self.DoorPhys = ent:GetPhysicsObject();
 		if CPPI and IsValid(self.Owner) and ent.CPPISetOwner then ent:CPPISetOwner(self.Owner) end
 	end
+
+	self.Phys = self.Entity:GetPhysicsObject();
 end
 
 function ENT:SoundType(t)
@@ -71,6 +74,22 @@ function ENT:SoundType(t)
 		self.Door.OpenSound = self.Sounds.AtlOpen;
 		self.Door.CloseSound = self.Sounds.AtlClose;
 	end
+end
+
+function ENT:Think()
+	-- fix for physics
+	if (IsValid(self.Phys) and IsValid(self.DoorPhys)) then
+        local mot,dmot = self.Phys:IsMotionEnabled(),self.DoorPhys:IsMotionEnabled();
+
+		if (not mot and dmot) then
+			self.DoorPhys:EnableMotion(false);
+		elseif (mot and not dmot) then
+			self.DoorPhys:EnableMotion(true);
+		end
+	end
+
+	self:NextThink(CurTime()+0.1);
+	return true;
 end
 
 function ENT:OnRemove()
@@ -147,9 +166,12 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if dupeInfo.EntIDDoor then
 		if (IsValid(self.Door)) then self.Door:Remove() end
 		self.Door = CreatedEntities[ dupeInfo.EntIDDoor ]
-		self.Door.Frame = self.Entity;
-		if (self.DoorModel == "models/madman07/doors/dest_door.mdl" || self.DoorModel == "models/madman07/doors/dest_frame.mdl") then self.Entity:SoundType(1);
-		else self.Entity:SoundType(2); end
+		if (IsValid(self.Door)) then
+			self.Door.Frame = self.Entity;
+			if (self.DoorModel == "models/madman07/doors/dest_door.mdl" || self.DoorModel == "models/madman07/doors/dest_frame.mdl") then self.Entity:SoundType(1);
+			else self.Entity:SoundType(2); end
+			self.DoorPhys = self.Door:GetPhysicsObject();
+		end
 	end
 
 	if(Ent.EntityMods and Ent.EntityMods.DupeInfo.WireData and WireLib) then

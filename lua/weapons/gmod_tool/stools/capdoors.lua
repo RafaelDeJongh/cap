@@ -17,6 +17,7 @@ TOOL.List = "DoorsModels";
 list.Set(TOOL.List,"models/Madman07/doors/dest_door.mdl",{});
 list.Set(TOOL.List,"models/Madman07/doors/atl_door1.mdl",{});
 list.Set(TOOL.List,"models/Madman07/doors/atl_door2.mdl",{});
+list.Set(TOOL.List,"models/Madman07/doors/atl_door3.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_frame";
 TOOL.Entity.Keys = {"model","toggle", "diff_text", "doormodel"}; -- These keys will get saved from the duplicator
@@ -38,6 +39,7 @@ function TOOL:LeftClick(t)
 	local diff_text = util.tobool(self:GetClientNumber("diff_text"));
 	local doormodel = model:lower();
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
+	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
 	else model = "models/madman07/doors/atl_frame.mdl"; end
 
 	if(not self:CheckLimit()) then return false end;

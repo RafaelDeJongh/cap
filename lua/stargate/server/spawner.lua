@@ -42,6 +42,9 @@ StarGate.GateSpawner.GravityController = {};
 StarGate.GateSpawner.AtlantisTransporter = {};
 StarGate.GateSpawner.Spawned = false;
 StarGate.GateSpawner.Block = false;
+StarGate.GateSpawner.Doors = {};
+StarGate.GateSpawner.DoorButtons = {};
+StarGate.GateSpawner.Console = {};
 
 -- ############### Load config @aVoN
 function StarGate.GateSpawner.LoadConfig()
@@ -70,6 +73,9 @@ function StarGate.GateSpawner.LoadConfig()
 		StarGate.GateSpawner.Brazier = ini.brazier or {};
 		StarGate.GateSpawner.GravityController = ini.gravitycontroller or {};
 		StarGate.GateSpawner.AtlantisTransporter = ini.atlantis_transporter or {};
+		StarGate.GateSpawner.Doors = ini.cap_doors or {};
+		StarGate.GateSpawner.DoorButtons = ini.cap_doors_contr or {};
+		StarGate.GateSpawner.Console = ini.cap_console or {};
 		return true;
 	end
 	return false;
@@ -115,6 +121,9 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local IsRingGoauld = v.classname:find("ring_base_goauld");
 		local IsGravityController = string.lower(v.classname):find("gravitycontroller");
 		local IsAtlantisTransporter = string.lower(v.classname):find("atlantis_transporter");
+		local IsDoors = string.lower(v.classname):find("cap_doors_frame");
+		local IsDoorsButton = string.lower(v.classname):find("cap_doors_contr");
+		local IsConsole = string.lower(v.classname):find("cap_console");
 
 		local IsSGULightUp = v.classname:find("bearing") or v.classname:find("floorchevron");
 
@@ -178,6 +187,14 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		if(IsGateBearing) then
 			e:SetModel("models/Iziraider/gatebearing/bearing.mdl");
 		end
+		if(IsDoors) then
+			if (v.doormodel) then
+				e.DoorModel = v.doormodel;
+			end
+			if (v.diffmat!=nil and v.diffmat!="" and util.tobool(v.diffmat)) then
+				e:SetMaterial("madman07/doors/atlwall_red");
+			end
+		end
 
 		if (k2) then
 			e.GateSpawnerID = k2;
@@ -229,41 +246,11 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 						e.ChevDestroyed = util.tobool(v.chevdestroyed);
 					end
 					-- damn, i should make it manualy...
-					if(v.chevdestroyed1 ~= nil and v.chevdestroyed1 ~= "" and v.chevdestroyed1) then
-						e.chev_destroyed[1] = util.tobool(v.chevdestroyed1);
-						e.Chevron[1]:Remove();
-					end
-					if(v.chevdestroyed2 ~= nil and v.chevdestroyed2 ~= "" and v.chevdestroyed2) then
-						e.chev_destroyed[2] = util.tobool(v.chevdestroyed2);
-						e.Chevron[2]:Remove();
-					end
-					if(v.chevdestroyed3 ~= nil and v.chevdestroyed3 ~= "" and v.chevdestroyed3) then
-						e.chev_destroyed[3] = util.tobool(v.chevdestroyed3);
-						e.Chevron[3]:Remove();
-					end
-					if(v.chevdestroyed4 ~= nil and v.chevdestroyed4 ~= "" and v.chevdestroyed4) then
-						e.chev_destroyed[4] = util.tobool(v.chevdestroyed4);
-						e.Chevron[4]:Remove();
-					end
-					if(v.chevdestroyed5 ~= nil and v.chevdestroyed5 ~= "" and v.chevdestroyed5) then
-						e.chev_destroyed[5] = util.tobool(v.chevdestroyed5);
-						e.Chevron[5]:Remove();
-					end
-					if(v.chevdestroyed6 ~= nil and v.chevdestroyed6 ~= "" and v.chevdestroyed6) then
-						e.chev_destroyed[6] = util.tobool(v.chevdestroyed6);
-						e.Chevron[6]:Remove();
-					end
-					if(v.chevdestroyed7 ~= nil and v.chevdestroyed7 ~= "" and v.chevdestroyed7) then
-						e.chev_destroyed[7] = util.tobool(v.chevdestroyed7);
-						e.Chevron[7]:Remove();
-					end
-					if(v.chevdestroyed8 ~= nil and v.chevdestroyed8 ~= "" and v.chevdestroyed8) then
-						e.chev_destroyed[8] = util.tobool(v.chevdestroyed8);
-						e.Chevron[8]:Remove();
-					end
-					if(v.chevdestroyed9 ~= nil and v.chevdestroyed9 ~= "" and v.chevdestroyed9) then
-						e.chev_destroyed[9] = util.tobool(v.chevdestroyed9);
-						e.Chevron[9]:Remove();
+					for c=1,9 do
+						if(v["chevdestroyed"..c] ~= nil and v["chevdestroyed"..c] ~= "" and v["chevdestroyed"..c]) then
+							e.chev_destroyed[c] = util.tobool(v["chevdestroyed"..c]);
+							e.Chevron[c]:Remove();
+						end
 					end
 					if (v.sgctype ~= nil and v.sgctype~="" and util.tobool(v.sgctype)==true) then
 						e.RingInbound = true;
@@ -369,6 +356,18 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
                 		e.NoAutoClose = true;
                 	end
 				end
+				if(IsDoors and IsValid(e.Door)) then
+					if (v.model and v.model == "models/madman07/doors/dest_frame.mdl") then
+					e:SoundType(1); else e:SoundType(2); end
+					if(v.angles) then
+						local p,y,r = unpack(v.angles:TrimExplode(" "));
+						e.Door:SetAngles(Angle(tonumber(p),tonumber(y),tonumber(r)));
+					end
+					e.Door.GateSpawnerSpawned = true;
+					e.Door:SetNetworkedBool("GateSpawnerSpawned",true);
+					e.Door.GateSpawnerProtected = protect;
+					e.Door:SetNetworkedBool("GateSpawnerProtected",protect);
+				end
 				if (v.__id and e:GetClass()=="prop_physics") then
 					duplicator.StoreEntityModifier(e, "GateSpawnerProp", {GateSpawner=true,ID=e.GateSpawnerID} )
 					for _,vv in pairs(ents.FindByClass("stargate_*")) do
@@ -419,6 +418,9 @@ function StarGate.GateSpawner.Reset()
 	StarGate.GateSpawner.GravityController = {};
 	StarGate.GateSpawner.AtlantisTransporter = {};
 	StarGate.GateSpawner.Spawned = false;
+	StarGate.GateSpawner.Doors = {};
+	StarGate.GateSpawner.DoorButtons = {};
+	StarGate.GateSpawner.Console = {};
 end
 
 -- ############### Initial spawn handling @aVoN
@@ -447,6 +449,8 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			ents.FindByClass("gravitycontroller"),
 			ents.FindByClass("atlantis_transporter"),
 			ents.FindByClass("prop_physics"),
+			ents.FindByClass("cap_doors*"),
+			ents.FindByClass("cap_console"),
 		};
 		for _,v in pairs(remove) do
 			for _,e in pairs(v) do
@@ -475,65 +479,30 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 			local i = 0; -- For delayed spawning
 
-			for _,v in pairs(StarGate.GateSpawner.Ramp) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.Gates) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.Iris) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.DHDs) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.MDHDs) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.DestinyTimer) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.DestinyConsole) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.KinoDispenser) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.RingBase) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.RingPanel) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.Brazier) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.SGULightUp) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.GravityController) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.AtlantisTransporter) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
-			end
-			for _,v in pairs(StarGate.GateSpawner.Props) do
-				table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
-				i = i + 1;
+			local tbl = {				StarGate.GateSpawner.Ramp,
+				StarGate.GateSpawner.Gates,
+				StarGate.GateSpawner.Iris,
+				StarGate.GateSpawner.DHDs,
+				StarGate.GateSpawner.MDHDs,
+				StarGate.GateSpawner.DestinyTimer,
+				StarGate.GateSpawner.DestinyConsole,
+				StarGate.GateSpawner.KinoDispenser,
+				StarGate.GateSpawner.RingBase,
+				StarGate.GateSpawner.RingPanel,
+				StarGate.GateSpawner.Brazier,
+				StarGate.GateSpawner.SGULightUp,
+				StarGate.GateSpawner.GravityController,
+				StarGate.GateSpawner.AtlantisTransporter,
+				StarGate.GateSpawner.Props,
+				StarGate.GateSpawner.Doors,
+				StarGate.GateSpawner.DoorButtons,
+				StarGate.GateSpawner.Console,			}
+
+			for k,t in pairs(tbl) do
+				for _,v in pairs(t) do
+					table.insert(StarGate.GateSpawner.Ents,{Entity=StarGate.GateSpawner.Spawn(v,protect,i),SpawnData=v});
+					i = i + 1;
+				end
 			end
 		end
 	end
@@ -763,6 +732,18 @@ function StarGate.GateSpawner.CreateFile(p)
               		f = f .. "autoclose=false\n";
               	end
 		end
+		for _,v in pairs(ents.FindByClass("cap_doors_*")) do
+			local class = v:GetClass();
+			if (class=="cap_doors_frame") then
+				f = f .. "[cap_doors]\nclassname=cap_doors_frame\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\ndoormodel="..tostring(v.DoorModel).."\n";
+				if (v:GetMaterial()=="madman07/doors/atlwall_red") then f = f .. "diffmat=true\n"; end
+			elseif (class=="cap_doors_contr" and not v.Atlantis) then
+				f = f .. "[cap_doors_contr]\nclassname=cap_doors_contr\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			end
+		end
+		for _,v in pairs(ents.FindByClass("cap_console")) do
+			f = f .. "[cap_console]\nclassname=cap_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+		end
 		f = f .. props
 
 		file.Write(game.GetMap():lower()..".txt",f);
@@ -835,6 +816,8 @@ function StarGate.GateSpawner.Restored()
 			ents.FindByClass("gravitycontroller"),
 			ents.FindByClass("atlantis_transporter"),
 			ents.FindByClass("prop_physics"),
+			ents.FindByClass("cap_doors*"),
+			ents.FindByClass("cap_console"),
 		};
 		local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 		for _,v in pairs(check) do

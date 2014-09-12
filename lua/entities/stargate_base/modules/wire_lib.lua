@@ -11,8 +11,8 @@ end
 function ENT:CheckWireSymbol(symbol)
 	local groupsystem = GetConVar("stargate_group_system"):GetBool();
 	local secret = false;
-	if (symbol=="*" and #self.WireDialledAddress==8 and string.Implode("",self.WireDialledAddress)=="E7?M2IX9"
-	or symbol=="?" and #self.WireDialledAddress==2 and string.Implode("",self.WireDialledAddress)=="E7") then secret = true end
+	if (self.ScrSymCnt and self.ScrSymCnt[2] and symbol=="*" and #self.WireDialledAddress==self.ScrSymCnt[2] and string.Implode("",self.WireDialledAddress)==self.ScrAddress:sub(1,self.ScrSymCnt[2])
+	or self.ScrSymCnt and self.ScrSymCnt[1] and symbol=="?" and #self.WireDialledAddress==self.ScrSymCnt[1] and string.Implode("",self.WireDialledAddress)==self.ScrAddress:sub(1,self.ScrSymCnt[1]) and self.Entity:GetNetworkedInt("Point_of_Origin")==1) then secret = true end
 	if (groupsystem) then
 		if ((symbol=="*" or symbol=="?") and not secret or symbol=="!") then return false; end
 	else
@@ -129,7 +129,7 @@ function ENT:WireActivateStargate(inbound)
 		else
 			if(inbound or (self.DialledAddress and (#self.DialledAddress >= 8 and #self.DialledAddress <= 10) and (inbound or not self:IsBlocked(nil,nil,true)))) then
 				local secret = false;
-				if(#self.DialledAddress == 10 and string.Implode("",self.DialledAddress)=="E7?M2IX9*DIAL") then secret = true; end
+				if(#self.DialledAddress == 10 and string.Implode("",self.DialledAddress)==self.ScrAddress.."DIAL") then secret = true; end
 				if(IsValid(e) and e.IsStargate and not (e.IsOpen or e.Dialling == true) or secret) then
 					action = self.Sequence:OpenGate();
 					--################# And open the other gate

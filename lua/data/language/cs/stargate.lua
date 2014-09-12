@@ -1,4 +1,4 @@
-﻿// All lines/sentences what come after "//" is comments and shouldn't be translated!
+// All lines/sentences what come after "//" is comments and shouldn't be translated!
 
 // Global language name, will be displayed in language settings
 global_lang_name = Český
@@ -56,9 +56,6 @@ stargate_c_tool_12b = Povolit všechny symboly u příchozí červí díry
 stargate_c_tool_12d = Zakázat symboly u příchozí červí díry
 stargate_c_tool_13 = Povolit typ SGC brány
 stargate_c_tool_13d = Zrušit typ SGC brány
-stargate_c_tool_14 = Nastavit výchozí bod Země
-stargate_c_tool_14b = Nastavit výchozí bod Abydosu
-stargate_c_tool_14d = Nastavit standradní výchozí bod
 stargate_c_tool_15 = Povolit klasický mód brány
 stargate_c_tool_15d = Zrušit klasický mód brány
 stargate_c_tool_16 = Povolit rozsvícení chevronů

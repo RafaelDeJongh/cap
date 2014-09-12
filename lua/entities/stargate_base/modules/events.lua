@@ -194,6 +194,10 @@ function ENT:Open()
 	if(IsValid(self.EventHorizon)) then self.EventHorizon:Remove() end; -- WORKAROUND for the EH-Stay bug: New EH's will definitely override the old!
 	self.EventHorizon = e;
 	self.OnButtLock = false;
+	local dialadr = self.DialledAddress;
+	if(#dialadr == 10 and string.Implode("",dialadr)==self.ScrAddress.."DIAL") then
+		self.EventHorizon.SecretDial = true;
+	end
 end
 
 --################# Emergency shutdown of the gate @aVoN
@@ -552,6 +556,7 @@ end
 --################# Sets the address of the gate which we want to dial @aVoN
 function ENT:SetAddress(a)
 	if(type(a) == "string") then
+		local a = string.upper(a:gsub("[^"..self.WireCharters.."]",""))
 		if (a:len() == 6) then
 			self.DialledAddress = {a:sub(1,1),a:sub(2,2),a:sub(3,3),a:sub(4,4),a:sub(5,5),a:sub(6,6),"#","DIAL"};
 		elseif (a:len() == 7 and a:sub(7,7) == "#") then

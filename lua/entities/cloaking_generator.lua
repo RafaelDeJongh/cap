@@ -50,7 +50,7 @@ function ENT:Initialize()
 	self.ConsumeAmmount = StarGate.CFG:Get("cloaking","energy",300); -- Energy needed for cloaking (per second)
 	self.MaxSize = StarGate.CFG:Get("cloaking","max_size",1024);
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Activate");
+	self:CreateWireInputs("Activate","Disable Use");
 	self:CreateWireOutputs("Active");
 	self.Entity:SetUseType(SIMPLE_USE);
 	local phys = self.Entity:GetPhysicsObject();
@@ -81,6 +81,7 @@ end
 
 --#################  Claok @aVoN
 function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
 	if(self:Enabled()) then
 		self:Status(false);
 	else

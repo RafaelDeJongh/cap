@@ -648,7 +648,7 @@ function ENT:FindGate(no_target,addr)
 					) then
 						table.insert(gates,v);
 					end
-				elseif(#dialadr == 10 and string.Implode("",a)=="E7?M2IX9*DIAL") then
+				elseif(#dialadr == 10 and string.Implode("",a)==self.ScrAddress.."DIAL") then
 					table.insert(gates,v);
 				end
 			end
@@ -770,7 +770,7 @@ function ENT:FindGateGalaxy(no_target,addr)
 					) then
 						table.insert(gates,v);
 					end
-				elseif(#dialadr == 10 and string.Implode("",a)=="E7?M2IX9*DIAL") then
+				elseif(#dialadr == 10 and string.Implode("",a)==self.ScrAddress.."DIAL") then
 					table.insert(gates,v);
 				end
 			end
@@ -1482,6 +1482,9 @@ function ENT:SetChevrons(chev,set,chevs)
 	local ch = self.WireChevrons;
 	self:SetWire("Chevrons",ch[1]..ch[2]..ch[3]..ch[4]..ch[5]..ch[6]..ch[7]..ch[8]..ch[9]);
 end
+
+ENT.ScrAddress = "H5C?W#3E*";
+ENT.ScrSymCnt = {3,8};
 
 --################# Set shutdown status by AlexALX
 function ENT:SetShutdown(b)

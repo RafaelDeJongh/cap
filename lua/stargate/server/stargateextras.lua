@@ -101,11 +101,12 @@ function StarGate.CoolGate(gate)
    -- Dissipate some of the excess power
    gate.excessPower = gate.excessPower - energyDissipated
 
-   if(StarGate.HasResourceDistribution) then
+   -- What is this? it seems like CONSUME energy with LS3, so i just disable this.
+   --if(StarGate.HasResourceDistribution) then
       -- Reduce the amount of energy the gate can store by the amount dissipated
       -- This will result in the gate returning to its original energy capacity once it has completely cooled
-      StarGate.WireRD.AddResource(gate, "energy", StarGate.GetStargateEnergyCapacity(gate) - energyDissipated)
-   end
+      --StarGate.WireRD.AddResource(gate, "energy", StarGate.GetStargateEnergyCapacity(gate) - energyDissipated)
+   --end
 
    return true
 end

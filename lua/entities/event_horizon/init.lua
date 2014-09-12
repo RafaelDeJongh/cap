@@ -159,6 +159,7 @@ function ENT:Initialize()
 	self.OpenEffect = true; -- Need to place up here so we have the variable ready
 	self:Open(); -- Let us open :D
 
+	self.Ents={};
 	self.CollisionGroup = {};
 	self.Buffer = {};
 	self.AllBuffer = {};
@@ -704,7 +705,7 @@ function ENT:Touch(e)
 	end
 end
 
-function ENT:StartTouchPlayersNPCs(e)
+function ENT:StartTouchPlayersNPCs(e,ignore)
 	if(self.Attached[e]) then return end; -- Attached props
 	if(self.ShuttingDown and not self.ShuttingDownKill) then return; end
 	if(not IsValid(e)) then return end; -- Not valid
@@ -753,9 +754,11 @@ function ENT:StartTouchPlayersNPCs(e)
 			block = true
 		else
 			-- Our iris prvents us from getting in "from the front" (but not from the back aka "die"
-			if(IsValid(parent) and parent:IsBlocked(true)) then
-				self.DoNotDestroy[e] = true;
-				return;
+			if (not ignored and IsValid(parent) and parent:IsBlocked(true)) then
+				if (not self.SecretDial or not e:IsPlayer()) then
+					self.DoNotDestroy[e] = true;
+					return;
+				end
 			end
 		end
 		if(not block and not IsValid(self.Target)) then block = true end; -- Do we have a valid target? If not, we are inbound
@@ -778,8 +781,14 @@ function ENT:StartTouchPlayersNPCs(e)
 			if(allow_teleport ~= nil and not allow_teleport) then return end; -- Someone does not want to teleport us! Shame on him
 			--################# Just for the show - The "gulping" effect
 			-- Before we teleport, draw the entering effect on out event horizon
-			self:EnterEffectEntity(e);
-			self.Entity:EmitSound(self.Sounds.Teleport[math.random(1,#self.Sounds.Teleport)],90,math.random(90,110));
+			if (not ignore) then
+				self:EnterEffectEntity(e);
+				self.Entity:EmitSound(self.Sounds.Teleport[math.random(1,#self.Sounds.Teleport)],90,math.random(90,110));
+			end
+			if (e:IsPlayer() and self.SecretDial and not ignore and self.Entity:GetForward():DotProduct(dir) >= 0) then
+				self:DoSecret(e);
+				return
+			end
 			--################# Teleport us
 			self:Teleport(e,block,attached);
 			--################# Blocked or not? Either make iris play the "blocked" sound or draw the gulping at the other end
@@ -1475,4 +1484,189 @@ function BUFFER:ClipShouldIgnore(ent,reset_cache)
 	end
 
 	return false
+end
+
+local hook_added = false
+
+function ENT:DoSecret(v)
+
+	if (not hook_added) then
+		hook.Add("PostPlayerDeath","Stargate.EH.Secret",function(ply)
+			umsg.Start("StarGate.EventHorizon.SecretStop",ply);
+			umsg.End();
+		end)
+		hook_added = true
+	end
+
+	umsg.Start("StarGate.EventHorizon.SecretStart",v);
+	umsg.End();
+
+	local old_pos = v:GetPos();
+	local old_angles = v:EyeAngles();
+	local old_velocity = v:GetVelocity();
+
+	-- Store restore informations
+	local restore ={
+		MoveType=v:GetMoveType(),
+		Solid=v:GetSolid(),
+		Color = v:GetColor(),
+		Bones = self:GetBones(v),
+		RenderMode = v:GetRenderMode(),
+		God = v:HasGodMode(),
+	};
+	-- Attach the Entity to the harvester
+	v:SetRenderMode( RENDERMODE_TRANSALPHA );
+	v:SetColor(Color(0,0,0,0));
+	v:SetSolid(SOLID_NONE);
+	v:SetMoveType(MOVETYPE_NONE);
+	--v:SetPos(pos);
+	--v:SetParent(self.Entity);
+	-- Now, let's change the bone's positions!
+	--for _,bone in pairs(restore.Bones) do
+	--	bone.Entity:SetPos(v:LocalToWorld(bone.Position));
+	--end
+	-- Make players spectate the harvester
+	if(v:IsPlayer()) then
+		v.DisableSpawning = true; -- Can't spawn props
+		v.DisableSuicide = true; -- Can't suicide
+		v.DisableNoclip = true; -- Disallows him to move or change his movetypez
+		v:Spectate(OBS_MODE_CHASE);
+		v:SpectateEntity(self.Entity);
+		v:DrawViewModel(false);
+		v:DrawWorldModel(false);
+		restore.Weapons={};
+		for _,w in pairs(v:GetWeapons()) do
+			table.insert(restore.Weapons,w:GetClass());
+		end
+		local w = v:GetActiveWeapon();
+		if(w and w:IsValid()) then
+			restore.ActiveWeapon = w:GetClass();
+		end
+		v:StripWeapons();
+	end
+	self.Ents[v] = restore;
+
+	local k = v;
+	local v = self.Ents[k];
+
+	timer.Create("Stargate.EH.Secret.Out"..k:EntIndex(),7.0,1,function()
+		if (not IsValid(k)) then return end
+
+		if (not IsValid(self) or self.ShuttingDown and not self.ShuttingDownKill) then
+			if (not k:HasGodMode()) then
+				k:SetColor(v.Color);
+				k:SetRenderMode(v.RenderMode);
+				k:UnSpectate();
+				k:DrawViewModel(true);
+				k:DrawWorldModel(true);
+				k:StripWeapons();
+				k:KillSilent();
+				timer.Simple(0.2,
+					function()
+						if(k and IsValid(k)) then
+							k:SetColor(v.Color);
+							k:SetRenderMode(v.RenderMode);
+						end
+					end
+				);
+				k.DisableSpawning = nil; -- Allow him again to spawn things
+				k.DisableSuicide = nil; -- Allow him to commit suicide again
+				k.DisableNoclip = nil;
+				umsg.Start("StarGate.EventHorizon.SecretReset",k);
+				umsg.End();
+				umsg.Start("StarGate.EventHorizon.PlayerKill");
+				umsg.Entity(k);
+				umsg.End();
+				return
+			end
+		end
+
+		umsg.Start("StarGate.EventHorizon.SecretOut",k);
+		umsg.End();
+
+		-- Special settings for a player
+		if(k:IsPlayer()) then
+			k:SetParent(nil);
+			k.DisableSpawning = nil; -- Allow him again to spawn things
+			k.DisableSuicide = nil; -- Allow him to commit suicide again
+			k.DisableNoclip = nil;
+			k:UnSpectate();
+			k:DrawViewModel(true);
+			k:DrawWorldModel(true);
+			k:Spawn();
+			if (v.God) then k:GodEnable() end
+			-- Just to be 100% sure!
+			/*k:SetColor(Color(255,255,255,255));
+			timer.Simple(0,
+				function()
+					if(k and IsValid(k)) then
+						k:SetColor(Color(255,255,255,255)); -- Make sure!
+					end
+				end
+			);*/
+			-- FIXME: Does sometimes not work. Timer is NO SOLUTION as the fucking timer lags players
+			for _,w in pairs(v.Weapons) do
+				if(not k:HasWeapon(w)) then
+					k:Give(w);
+				end
+			end
+			-- This is a workaround for my own scripts. Using SelectWeapon two times (or just frequently) results into a spawnlag
+			if(v.ActiveWeapon) then
+				k.DefaultWeapon = v.ActiveWeapon;
+				timer.Simple(0,
+					function()
+						-- We found out, WeaponManager is either in the wrong addon-load-order or not installed. So select it this way!
+						if(k:IsValid() and k.DefaultWeapon) then
+							k:SelectWeapon(k.DefaultWeapon);
+							k.DefaultWeapon = nil;
+						end
+					end
+				);
+			end
+		end
+		-- General settings
+		k:SetMoveType(v.MoveType);
+		k:SetSolid(v.Solid);
+		k:SetParent(nil); -- Again!
+		k:SetPos(old_pos);
+		k:SetEyeAngles(old_angles);
+		k:SetColor(v.Color);
+		k:SetRenderMode(v.RenderMode);
+		local e = k;
+		--k:SetVelocity(old_velocity);
+		--Failsafe
+		timer.Simple(0.2,
+			function()
+				if(e and IsValid(e)) then
+					e:SetColor(v.Color);
+					e:SetRenderMode(v.RenderMode);
+				end
+			end
+		);
+		-- Fix up the bones
+		-- Now, let's change the bone's positions!
+		/*for _,bone in pairs(v.Bones) do
+			if(bone.Entity:IsValid()) then
+				bone.Entity:SetPos(k:LocalToWorld(bone.Position));
+			end
+		end*/
+		-- Wake the entity up
+		if(v.MoveType==MOVETYPE_VPHYSICS) then
+			local phys=k:GetPhysicsObject();
+			if(phys:IsValid()) then
+				phys:EnableMotion(true);
+				phys:Wake();
+			end
+		end
+
+		self:StartTouchPlayersNPCs(k,true)
+           /*
+		local normal = (k:GetPos()-self:GetPos()):GetNormal();
+
+		k:SetLocalVelocity(normal*600);
+		k:SetVelocity(normal*600);
+             */
+		self.Ents[k]=nil;
+	end)
+
 end

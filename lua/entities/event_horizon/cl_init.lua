@@ -155,3 +155,121 @@ usermessage.Hook( "StarGate.EventHorizon.PlayerKill", function(um)
 	if(not(IsValid(e))) then return end;
 	GAMEMODE:AddDeathNotice("#event_horizon",-1,"event_horizon",e:Name(),e:Team());
 end)
+
+local mat_Overlay = {}
+local mats = {"effects/tp_eyefx/3tpeyefx_.vtf","effects/tp_eyefx/2tpeyefx_.vtf","effects/tp_eyefx/tpeyefx_.vtf"}
+
+usermessage.Hook( "StarGate.EventHorizon.SecretStart", function(um)
+	started = CurTime();
+	local e = LocalPlayer();
+	e:EmitSound( "stargate/travel.mp3" )
+	local rnd = math.random(1,3);
+	hook.Add("EntityEmitSound","Stargate.EH.Secret",function() return false end)
+	hook.Add("PlayerBindPress","Stargate.EH.Secret",function() return true end)
+	--timer.Create("Stargate.EH.Secret",0.1,1,function()
+	hook.Add("PreRender","Stargate.EH.Secret",function()
+		if ( mat_Overlay[rnd] == nil ) then
+			--mat_Overlay = Material( "effects/tp_eyefx/tpeye3" )
+			mat_Overlay[rnd] = StarGate.MaterialFromVMT(
+				"SGTeleportSecret"..rnd,
+				[["UnLitGeneric"
+				{
+					"$basetexture"		]]..mats[rnd]..[[
+					"$nocull" 1
+					"$additive"0
+					"$vertexalpha" 1
+					"$vertexcolor" 1
+					"Proxies"
+					{
+						"AnimatedTexture"
+						{
+							"animatedtexturevar" "$basetexture"
+							"animatedtextureframenumvar" "$frame"
+							"animatedtextureframerate" 23
+						}
+					}
+				}]]
+			);
+		end
+
+		if ( mat_Overlay[rnd] == nil ) then return end
+
+		render.UpdateScreenEffectTexture()
+
+		render.SetMaterial( mat_Overlay[rnd] )
+		render.DrawScreenQuad()
+		return true;
+	end)
+	--end)
+end)
+
+usermessage.Hook( "StarGate.EventHorizon.SecretReset", function(um)
+	local e = LocalPlayer();
+	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
+	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
+	hook.Remove("RenderScreenspaceEffects","Stargate.EH.Secret");
+	e.SGSecretEffect = false;
+	started = CurTime();
+end)
+
+usermessage.Hook( "StarGate.EventHorizon.SecretOut", function(um)
+	local e = LocalPlayer();
+	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
+	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
+	started = CurTime();
+
+	local rnd = math.random(1,10);
+
+	if (e.SGSecretEffect) then
+		hook.Remove("RenderScreenspaceEffects","Stargate.EH.Secret");
+		e.SGSecretEffect = false;
+	else
+		e.SGSecretEffect = true;
+
+		hook.Add( "RenderScreenspaceEffects", "Stargate.EH.Secret", function()
+			if (rnd==1) then
+				DrawSharpen(5,5.2)
+			elseif (rnd==2) then
+				DrawSharpen(5,5.2)
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+			elseif (rnd==3) then
+				DrawSharpen(5,5.2)
+				DrawTexturize(0.05, Material("none_mat_lol") ) -- haha black purple world :D
+			elseif (rnd==4) then
+				DrawSharpen(5,5.2)
+				DrawMaterialOverlay("effects/strider_pinch_dudv",0.1)
+			elseif (rnd==5) then
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+				DrawSobel(0.11)
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+			elseif (rnd==6) then
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+				DrawMaterialOverlay("effects/water_warp01",0.15)
+			elseif (rnd==7) then
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+				DrawTexturize(1, Material("pp/texturize/pattern1.png") )
+			elseif (rnd==8) then
+				DrawTexturize(1, Material("pp/texturize/rainbow.png") )
+				DrawMaterialOverlay("models/props_lab/tank_glass001",-0.1)
+			elseif (rnd==9) then
+				DrawTexturize(1, Material("pp/texturize/pattern1.png") )
+				DrawMaterialOverlay("models/props_lab/tank_glass001",0.1)
+			elseif (rnd==10) then
+				DrawTexturize(1, Material("pp/texturize/lines.png") )
+				DrawSharpen(2,5.2)
+			end
+			return true
+		end)
+	end
+end)
+
+usermessage.Hook( "StarGate.EventHorizon.SecretStop", function(um)
+	local e = LocalPlayer();
+	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
+	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
+	hook.Remove("RenderScreenspaceEffects","Stargate.EH.Secret");
+	e.SGSecretEffect = false;
+end)

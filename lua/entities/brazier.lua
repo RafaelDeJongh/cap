@@ -5,6 +5,7 @@
 
 ENT.Type = "anim"
 ENT.Base = "base_anim"
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
 ENT.PrintName = "Braziers"
 ENT.Author = "Madman07, Boba Fett"
 ENT.Category = "Stargate Carter Addon Pack"
@@ -24,13 +25,35 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 
+	self:CreateWireInputs("Disable Fire")
+	self:CreateWireOutputs("Fire ON")
+
 	self.Act = "5";
 	if string.find(self.Entity:GetModel(), "ori") then self.Pos = Vector(0,0,self.Entity:OBBMaxs().z-25);
 	else self.Pos = Vector(0,0,self.Entity:OBBMaxs().z); end
 
-	self.Entity:MakeFire()
+	self.Entity:MakeFire();
 	self.Entity:Light();
+	self:SetWire("Fire ON",true);
 
+end
+
+function ENT:TriggerInput(k,v)
+	if (k=="Disable Fire") then
+		if (v>0) then
+		    if IsValid(self.FireEnt) then
+			    self.FireEnt:Remove()
+			end
+			if IsValid(self.LampEnt) then
+			    self.LampEnt:Remove()
+			end
+			self:SetWire("Fire ON",false);
+		else
+			self.Entity:MakeFire();
+			self.Entity:Light();
+			self:SetWire("Fire ON",true);
+		end
+	end
 end
 
 function ENT:MakeFire()
