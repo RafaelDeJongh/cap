@@ -10,14 +10,14 @@ TOOL.Name=SGLanguage.GetMessage("stool_door");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["toggle"] = 3;
 TOOL.ClientConVar["diff_text"] = 0;
-TOOL.ClientConVar["model"] = "models/Madman07/doors/dest_door.mdl";
+TOOL.ClientConVar["model"] = "models/madman07/doors/dest_door.mdl";
 TOOL.ClientConVar["doormodel"] = "";
 
 TOOL.List = "DoorsModels";
-list.Set(TOOL.List,"models/Madman07/doors/dest_door.mdl",{});
-list.Set(TOOL.List,"models/Madman07/doors/atl_door1.mdl",{});
-list.Set(TOOL.List,"models/Madman07/doors/atl_door2.mdl",{});
-list.Set(TOOL.List,"models/Madman07/doors/atl_door3.mdl",{});
+list.Set(TOOL.List,"models/madman07/doors/dest_door.mdl",{});
+list.Set(TOOL.List,"models/madman07/doors/atl_door1.mdl",{});
+list.Set(TOOL.List,"models/madman07/doors/atl_door2.mdl",{});
+list.Set(TOOL.List,"models/madman07/doors/atl_door3.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_frame";
 TOOL.Entity.Keys = {"model","toggle", "diff_text", "doormodel"}; -- These keys will get saved from the duplicator
@@ -34,10 +34,10 @@ function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;
 	if(CLIENT) then return true end;
 	local p = self:GetOwner();
-	local model = self:GetClientInfo("model");
+	local model = self:GetClientInfo("model"):lower();
 	local toggle = self:GetClientNumber("toggle");
 	local diff_text = util.tobool(self:GetClientNumber("diff_text"));
-	local doormodel = model:lower();
+	local doormodel = model;
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
 	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
 	else model = "models/madman07/doors/atl_frame.mdl"; end
@@ -73,14 +73,14 @@ function TOOL:PostEntitySpawn(p,e,model,toggle, diff_text, doormodel)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="cap_doors_model",Category="",Models=self.Models});
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="capdoors_model",Category="",Models=self.Models});
 	Panel:AddControl("Numpad",{
 		ButtonSize=22,
 		Label=SGLanguage.GetMessage("stool_toggle"),
-		Command="cap_doors_toggle",
+		Command="capdoors_toggle",
 	});
-	Panel:CheckBox(SGLanguage.GetMessage("stool_cap_doors_redt"),"cap_doors_diff_text");
-	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cap_doors_autoweld");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_cap_doors_redt"),"capdoors_diff_text");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"capdoors_autoweld");
 end
 
 if SERVER then

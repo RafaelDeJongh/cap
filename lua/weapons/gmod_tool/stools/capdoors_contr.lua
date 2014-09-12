@@ -9,10 +9,10 @@ TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_door_c");
 TOOL.ClientConVar["autoweld"] = 1;
 
-TOOL.ClientConVar["model"] = "models/Iziraider/destinybutton/destinybutton.mdl";
+TOOL.ClientConVar["model"] = "models/iziraider/destinybutton/destinybutton.mdl";
 TOOL.List = "ControllerModels";
-list.Set(TOOL.List,"models/Iziraider/destinybutton/destinybutton.mdl",{});
-list.Set(TOOL.List,"models/Boba_Fett/props/buttons/atlantis_button.mdl",{});
+list.Set(TOOL.List,"models/iziraider/destinybutton/destinybutton.mdl",{});
+list.Set(TOOL.List,"models/boba_fett/props/buttons/atlantis_button.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_contr";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
@@ -44,8 +44,8 @@ function TOOL:PreEntitySpawn(p,e,model)
 end
 
 function TOOL:ControlsPanel(Panel)
-	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="cap_door_contr_model",Category="",Models=self.Models});
-	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"cap_door_contr_autoweld");
+	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="capdoors_contr_model",Category="",Models=self.Models});
+	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"capdoors_contr_autoweld");
 end
 
 TOOL:Register();
