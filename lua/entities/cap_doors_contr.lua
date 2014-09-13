@@ -106,26 +106,12 @@ end
 
 -----------------------------------DUPLICATOR----------------------------------
 
-function ENT:PreEntityCopy()
-	local dupeInfo = {}
-
-	if IsValid(self.Entity) then
-		dupeInfo.EntID = self.Entity:EntIndex()
-	end
-
-	duplicator.StoreEntityModifier(self, "DoorContrDupeInfo", dupeInfo)
-end
-duplicator.RegisterEntityModifier( "DoorContrDupeInfo" , function() end)
-
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
-
-	local dupeInfo = Ent.EntityMods.DoorContrDupeInfo
-
-	if dupeInfo.EntID then
-		self.Entity = CreatedEntities[ dupeInfo.EntID ]
-	end
-
 	self.Owner = ply;
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "cap_doors_contr", StarGate.CAP_GmodDuplicator, "Data" )
 end
 
 end

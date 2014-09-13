@@ -1659,14 +1659,16 @@ function ENT:DoSecret(v)
 			end
 		end
 
-		self:StartTouchPlayersNPCs(k,true)
-           /*
-		local normal = (k:GetPos()-self:GetPos()):GetNormal();
+		if (IsValid(self)) then
+			self:StartTouchPlayersNPCs(k,true)
+	           /*
+			local normal = (k:GetPos()-self:GetPos()):GetNormal();
 
-		k:SetLocalVelocity(normal*600);
-		k:SetVelocity(normal*600);
-             */
-		self.Ents[k]=nil;
+			k:SetLocalVelocity(normal*600);
+			k:SetVelocity(normal*600);
+	             */
+			self.Ents[k]=nil;
+		end
 	end)
 
 end

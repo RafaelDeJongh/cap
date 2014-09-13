@@ -142,4 +142,8 @@ function ENT:Toggle()
 	end
 end
 
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "atlantis_transporter_doors", StarGate.CAP_GmodDuplicator, "Data" )
+end
+
 end

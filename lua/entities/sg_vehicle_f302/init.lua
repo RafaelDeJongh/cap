@@ -215,6 +215,9 @@ function ENT:OnRemove()
 	if (IsValid(self.CockpitAnim)) then
 		self.CockpitAnim:Remove();
 	end
+	if (IsValid(self.RocketClamps)) then
+		self.RocketClamps:Remove();
+	end
 	if (IsValid(self.WheelsAnim)) then
 		self.WheelsAnim:Remove();
 	end
@@ -710,7 +713,7 @@ function ENT:SpawnRocketClamps(ent,p)
 	e:SetModel("models/Madman07/F302/rocket_clamp.mdl")
 	e:SetPos(self:GetPos())
 	e:SetAngles(self:GetAngles())
-	e:SetParent(self)
+	--e:SetParent(self)
 	e:Spawn()
 	e:Activate()
 	if (not ent) then
@@ -850,7 +853,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 
 	self:CockpitSpawn() -- Spawn the cockpit
 	self:SpawnSeats(); -- Spawn the seats
-	self:SpawnRocketClamps(self.RocketClamps); -- Spawn the rocket clamps
+	self:SpawnRocketClamps(self.RocketClamps,ply); -- Spawn the rocket clamps
 	self:SpawnMissile(); -- Spawn the missile props
 	self:Turrets(); -- Spawn turrets
 	self:SpawnWheels(self.Wheels,ply);

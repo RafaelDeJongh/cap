@@ -92,7 +92,6 @@ function ENT:PreEntityCopy()
 
 	duplicator.StoreEntityModifier(self, "DupeInfo", dupeInfo)
 end
-duplicator.RegisterEntityModifier( "DupeInfo" , function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 

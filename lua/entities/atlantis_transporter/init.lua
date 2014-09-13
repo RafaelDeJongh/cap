@@ -105,6 +105,8 @@ function ENT:OnRemove()
 		if (IsValid(self.Doors[1])) then self.Doors[1]:Remove() end
 		if (IsValid(self.Doors[2])) then self.Doors[2]:Remove() end
 	end
+	if (IsValid(self.Button1)) then self.Button1:Remove() end
+	if (IsValid(self.Button2)) then self.Button2:Remove() end
 	net.Start("UpdateAtlTP")
 	net.WriteInt(self:EntIndex(),16)
 	net.WriteInt(0,4)
@@ -152,7 +154,7 @@ function ENT:CreateDoors(ply,spawner,protect)
 	d:SetModel("models/Boba_Fett/props/buttons/atlantis_button.mdl");
 	d:SetPos(e:GetPos()+e:GetRight()*(-37)+e:GetUp()*45+e:GetForward()*(3));
 	d:SetAngles(e:GetAngles()+Angle(90,0,0));
-	d:SetParent(self.Entity);
+	--d:SetParent(self.Entity);
 	d:Spawn();
 	d:Activate();
 	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
@@ -166,8 +168,10 @@ function ENT:CreateDoors(ply,spawner,protect)
 	d.AtlTP = self;
 	d.AtlDoor = self.Doors;
 	constraint.NoCollide(e,d,0,0);
+	constraint.NoCollide(self.Doors[1],d,0,0);
+	constraint.NoCollide(self.Doors[2],d,0,0);
 	--constraint.NoCollide(d,game.GetWorld(),0,0);
-	--constraint.Weld(d,e,0,0,0,true)
+	constraint.Weld(d,e,0,0,0,true)
 	self.Button1=d
 
 	local d = ents.Create("cap_doors_contr");
@@ -175,7 +179,7 @@ function ENT:CreateDoors(ply,spawner,protect)
 	d:SetModel("models/Boba_Fett/props/buttons/atlantis_button.mdl");
 	d:SetPos(e:GetPos()+e:GetRight()*(37)+e:GetUp()*55+e:GetForward()*(-4));
 	d:SetAngles(e:GetAngles()+Angle(90,0,180));
-	d:SetParent(self.Entity);
+	--d:SetParent(self.Entity);
 	d:Spawn();
 	d:Activate();
 	if CPPI and IsValid(ply) and d.CPPISetOwner then d:CPPISetOwner(ply) end
@@ -189,8 +193,10 @@ function ENT:CreateDoors(ply,spawner,protect)
 	d.AtlTP = self;
 	d.AtlDoor = self.Doors;
 	constraint.NoCollide(e,d,0,0);
+	constraint.NoCollide(self.Doors[1],d,0,0);
+	constraint.NoCollide(self.Doors[2],d,0,0);
 	--constraint.NoCollide(d,game.GetWorld(),0,0);
-	--constraint.Weld(d,e,0,0,0,true)
+	constraint.Weld(d,e,0,0,0,true)
 	self.Button2=d
 end
 
@@ -603,7 +609,7 @@ end
 function ENT:PreEntityCopy()
 	local dupeInfo = {};
 
-	if (IsValid(self.Doors[1]) and IsValid(self.Doors[2])) then
+	if (self.Doors and IsValid(self.Doors[1]) and IsValid(self.Doors[2])) then
 		dupeInfo.Doors = {self.Doors[1]:EntIndex(),self.Doors[2]:EntIndex()};
 	end
 
@@ -631,6 +637,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Doors[1].BaseTP = self;
 		self.Doors[2]:DrawShadow(false);
 		self.Doors[2].BaseTP = self;
+		self.Doors[2].Sound = false;
 		self.DoorPhys = {self.Doors[1]:GetPhysicsObject(),self.Doors[2]:GetPhysicsObject()};
 		if(IsValid(self.DoorPhys[1]))then
 			--self.DoorPhys:EnableMotion(true);
@@ -647,7 +654,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Button1.Atlantis = true;
 		self.Button1.AtlTP = self;
 		self.Button1.AtlDoor = self.Doors;
-		self.Button1:SetParent(self);
+		--self.Button1:SetParent(self);
 	end
 
 	if (dupeInfo.Button2) then
@@ -655,7 +662,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		self.Button2.Atlantis = true;
 		self.Button2.AtlTP = self;
 		self.Button2.AtlDoor = self.Doors;
-		self.Button2:SetParent(self);
+		--self.Button2:SetParent(self);
 	end
 
 	self.TName = dupeInfo.Name or "";
