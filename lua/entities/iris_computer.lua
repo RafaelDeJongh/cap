@@ -166,6 +166,7 @@ function ENT:Think()
 				end
 			else
 				self:SetWire("Gate Active", 0)
+				self:SetWire("Incoming Wormhole", 0)
 			end
 
 			if iris.IsActivated then
@@ -185,6 +186,26 @@ function ENT:Think()
 	else
 		self.LockedGate = self.Entity;
 		self.LockedIris = self.Entity;
+		self:SetWire("Received Code", 0);
+		self:SetWire("Iris Active", 0);
+		self:SetWire("Code Description", "");
+		self:SetWire("Code Status", 0);
+		if (IsValid(gate)) then
+			if gate.IsOpen or gate.NewActive then
+				self:SetWire("Gate Active", 1)
+				if not gate.Outbound then
+					self:SetWire("Incoming Wormhole", 1)
+				else
+					self:SetWire("Incoming Wormhole", 0)
+				end
+			else
+				self:SetWire("Gate Active", 0)
+				self:SetWire("Incoming Wormhole", 0)
+			end
+		else
+			self:SetWire("Gate Active", 0)
+			self:SetWire("Incoming Wormhole", 0)
+		end
 	end
 
 	self.Entity:NextThink(CurTime()+0.5)
@@ -298,6 +319,7 @@ function ENT:RecieveIrisCode(code)
 		gate = self.LockedGate
 		iris = self.LockedIris
 	end
+	if (not IsValid(gate) or not IsValid(iris)) then return -2 end
 	local ret = 0
 	self.wireCode = code
 	self:SetWire("Received Code", self.wireCode)

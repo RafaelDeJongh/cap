@@ -15,6 +15,7 @@ properties.Add( "Stargate.Atl.RingLight.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_atlantis" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActRingL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -46,6 +47,7 @@ properties.Add( "Stargate.Atl.RingLight.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_atlantis" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActRingL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -76,6 +78,7 @@ properties.Add( "Stargate.Atl.AtlType.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_atlantis" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("AtlType",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -107,6 +110,7 @@ properties.Add( "Stargate.Atl.AtlType.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_atlantis" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("AtlType",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,

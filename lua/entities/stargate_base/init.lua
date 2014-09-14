@@ -332,7 +332,7 @@ end
 
 --################# When it get's hurt, make it flicker etc
 function ENT:OnTakeDamage(dmg)
-	if (dmg:GetAttacker():GetClass() == "point_hurt" || dmg:GetAttacker():GetClass() == "kawoosh_hurt" || self:GetClass()=="stargate_orlin") then return end
+	if (not IsValid(dmg:GetAttacker()) || dmg:GetAttacker():GetClass() == "point_hurt" || dmg:GetAttacker():GetClass() == "kawoosh_hurt" || self:GetClass()=="stargate_orlin") then return end
 	local damage = dmg:GetDamage();
 
 	if(dmg:GetDamageType() == DMG_BLAST and (not self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect"):GetInt()) or self.GateSpawnerSpawned and not util.tobool(GetConVar("stargate_protect_spawner"):GetInt())))then

@@ -15,6 +15,7 @@ ENT.Category		= "Stargate Carter Addon Pack"
 
 ENT.Spawnable	= false
 ENT.AdminSpawnable = false
+ENT.CapJammingDevice = true
 
 if SERVER then
 
@@ -35,7 +36,6 @@ function ENT:Initialize()
 	self.Immunity = false;
 	self.IsEnabled = false;
 
-	self.IsJamming = true;
 	self.Allow = {};
 
 	if (WireAddon) then

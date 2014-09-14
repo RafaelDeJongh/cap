@@ -19,6 +19,19 @@
 if (StarGate==nil or StarGate.MaterialCopy==nil) then return end
 EFFECT.Material = StarGate.MaterialCopy("CloakingMuzzle","models/shadertest/predator");
 
+local Friends = {};
+
+net.Receive("Stargate.Cloak.Friends",function(len)
+	local tbl = {}
+	for k,v in pairs(Friends) do
+		if (IsValid(k)) then tbl[k] = v end
+	end
+	Friends = tbl;
+	local ent = net.ReadEntity();
+	if (not IsValid(ent)) then return end
+	Friends[ent] = net.ReadTable();
+end)
+
 --################### Init @aVoN
 function EFFECT:Init(data)
 	local e = data:GetEntity();
@@ -132,9 +145,11 @@ function EFFECT:Render(draw_anyway)
 	local alpha = self.Color.a*multiply;
 	--################### To show this only to the Owner, we need to do this...
 	local immune = self.Parent:GetNWEntity("cloak_player",false);
-	if(immune == LocalPlayer()) then
-		min_alpha = 130;
-		if(self.Engage) then self.PermaDraw = true end;
+	if (immune!=false) then
+		if(immune == LocalPlayer() or CPPI and Friends[immune] and table.HasValue(Friends[immune],LocalPlayer())) then
+			min_alpha = 130;
+			if(self.Engage) then self.PermaDraw = true end;
+		end
 	end
 	alpha = math.Clamp(alpha,min_alpha,self.Color.a); -- Avoids some ugly sideeffects if your uncloaking from "Visible for owner" mode
 	if(self.NoShader) then

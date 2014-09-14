@@ -86,6 +86,8 @@ local function SendCode(EntTable)
 			end
 		elseif answer == -1 then
 			EntTable:SetNWString("gdo_textdisplay", "BUSY");
+		elseif answer == -2 then
+			EntTable:SetNWString("gdo_textdisplay", "ERROR");
 		else
 			if (answ and answ!="") then
 				EntTable:SetNetworkedString("gdo_textdisplay", answ);

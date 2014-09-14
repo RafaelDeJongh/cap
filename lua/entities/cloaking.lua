@@ -64,7 +64,7 @@ function util.TraceLine(...)
 		end
 	end
 	return t;
-end   
+end
 
 -- New much better way without overriding color/alpha on players @ AlexALX
 hook.Add("PrePlayerDraw","StarGate.Cloak", function(p)
@@ -105,6 +105,8 @@ ENT.CDSIgnore = true; -- CDS Immunity
 function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invulnarability!
 
 --################# SENT CODE ###############
+
+util.AddNetworkString("Stargate.Cloak.Friends");
 
 --################# Init @aVoN
 function ENT:Initialize()
@@ -170,6 +172,20 @@ function ENT:Initialize()
 			end
 		end
 	end
+
+	if CPPI then
+		local owner = self.Parent:GetVar("Owner");
+		if(owner and owner:IsValid() and owner:IsPlayer() and owner.CPPIGetFriends) then
+			local tbl = owner:CPPIGetFriends();
+			if (type(tbl)=="table") then
+				net.Start("Stargate.Cloak.Friends");
+				net.WriteEntity(owner);
+				net.WriteTable(owner:CPPIGetFriends());
+				net.Broadcast();
+			end
+		end
+	end
+
 	-- The most important thing: Makes the cloak trigger Touch() events, even when it's not solid. Only call it here after we ran the shit above!
 	self.Entity:SetTrigger(true);
 	local phys = self.Entity:GetPhysicsObject()

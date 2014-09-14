@@ -70,6 +70,17 @@ function ENT:Initialize()
 	-- Imunity to the owner?
 	if(self.Parent.ImmuneOwner) then
 		self.nocollide[self.Parent.Owner] = true;
+		if CPPI then
+			local owner = self.Parent.Owner;
+			if(owner and owner:IsValid() and owner:IsPlayer() and owner.CPPIGetFriends) then
+				local tbl = owner:CPPIGetFriends();
+				if (type(tbl)=="table") then
+					for k,v in pairs(tbl) do
+						self.nocollide[v] = true;
+					end
+				end
+			end
+		end
 	end
 	self.Entity:SetNWInt("size",self.Size);
 	if(self.Parent.DrawBubble) then
@@ -104,6 +115,7 @@ function ENT:Initialize()
 		self.nocollide[v] = true;
 		v.CDSIgnore = true; -- Make it immuned to damage by CDS!
 	end
+
 	self.Passed = {};
 	self:AddAthmosphere(); -- Add athmosphere to the shield (if turned on in on a planet or in an athmosphere)
 	-- When we checked new things for "Collision or no Collision", we put them in here to be sure not to check again (speedup!)

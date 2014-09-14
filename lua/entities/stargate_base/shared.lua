@@ -58,6 +58,7 @@ properties.Add( "Stargate.AutoClose.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent.IsStargateOrlin || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisAutoClose",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -90,6 +91,7 @@ properties.Add( "Stargate.AutoClose.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent.IsStargateOrlin || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisAutoClose",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -121,6 +123,7 @@ properties.Add( "Stargate.DisableMenu.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate and !ent.IsDHD || ent.IsStargateOrlin || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisMenu",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -153,6 +156,7 @@ properties.Add( "Stargate.DisableMenu.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate and !ent.IsDHD || ent.IsStargateOrlin || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisMenu",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -184,6 +188,7 @@ properties.Add( "Stargate.ChevronLight.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent.IsStargateOrlin || ent.IsSupergate || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActChevronsL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -219,6 +224,7 @@ properties.Add( "Stargate.ChevronLight.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent.IsStargateOrlin || ent.IsSupergate || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActChevronsL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -254,6 +260,7 @@ properties.Add( "Stargate.RingRotate.On",
 	Filter		=	function( self, ent, ply )
 						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActRotRingL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -285,6 +292,7 @@ properties.Add( "Stargate.RingRotate.Off",
 	Filter		=	function( self, ent, ply )
                         local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActRotRingL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -316,6 +324,7 @@ properties.Add( "Stargate.InfinityEH.On",
 	Filter		=	function( self, ent, ply )
 						local vg = {"stargate_infinity"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -347,6 +356,7 @@ properties.Add( "Stargate.InfinityEH.Off",
 	Filter		=	function( self, ent, ply )
                         local vg = {"stargate_infinity"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,

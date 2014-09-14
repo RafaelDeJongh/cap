@@ -101,6 +101,29 @@ function StarGate.Hook.PlayerCanPickupWeapon(p,w)
 end
 hook.Add("PlayerCanPickupWeapon","StarGate.Hook.PlayerCanPickupWeapon",StarGate.Hook.PlayerCanPickupWeapon);
 
+if (CPPI) then
+	hook.Add("StarGate.Player.CanModifyGate","Stargate.CPPI.CanModifyGate",function(ply,ent)
+		if not ent:CPPICanTool(ply,"stargatemodify") then return false end
+	end)
+
+	local function CapIsFriend(ply,owner)
+		if (IsValid(owner) and owner.CPPIGetFriends) then
+			local tbl = owner:CPPIGetFriends();
+			if (type(tbl)=="table") then
+				if (table.HasValue(tbl,ply)) then return true end
+			end
+		end
+		return false
+	end
+
+	hook.Add("StarGate.AntiPrior.Noclip","Stargate.CPPI.AntiPrior",function(ply,ent)
+		if (CapIsFriend(ply,ent.Owner)) then return false end
+	end)
+	hook.Add("StarGate.TollanDisabler.CanBlockWeapon","Stargate.CPPI.TollanDisabler",function(ply,weapon,ent)
+		if (CapIsFriend(ply,ent.Owner)) then return false end
+	end)
+end
+
 end
 
 -- disable usage C tool menu for gatespawner ents

@@ -56,7 +56,7 @@ function TOOL:LeftClick(t)
 	if(not self:CheckLimit()) then return false end;
 	local e = self:SpawnSENT(p,t,model,toggle, size, immunity);
 	if (not IsValid(e)) then return end
-	e:Setup(size, util.tobool(immunity));
+	e:Setup(size, util.tobool(immunity), p);
 	local c = self:Weld(e,t.Entity,util.tobool(self:GetClientNumber("autoweld")));
 	self:AddUndo(p,e,c);
 	self:AddCleanup(p,c,e);

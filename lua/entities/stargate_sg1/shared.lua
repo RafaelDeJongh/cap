@@ -16,6 +16,7 @@ properties.Add( "Stargate.SGCType.On",
 	Filter		=	function( self, ent, ply )
 						local vg = {"stargate_movie","stargate_sg1","stargate_infinity"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActSGCT",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -47,6 +48,7 @@ properties.Add( "Stargate.SGCType.Off",
 	Filter		=	function( self, ent, ply )
                         local vg = {"stargate_movie","stargate_sg1","stargate_infinity"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActSGCT",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -78,6 +80,7 @@ properties.Add( "Stargate.PoO",
 	Filter		=	function( self, ent, ply )
 						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_tollan"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,

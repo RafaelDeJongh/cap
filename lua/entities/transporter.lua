@@ -223,7 +223,7 @@ function ENT:Teleport(from,to,ply,gps_ent)
 	local radius = 1024; -- max range of jamming, we will adjust it later
 	local jaiming_online = false;
 	for _,v in pairs(ents.FindInSphere(from,  radius)) do
-		if IsValid(v) then
+		if IsValid(v) and v.CapJammingDevice then
 			if v.IsEnabled then
 				local dist = from:Distance(v:GetPos());
 				if (dist < v.Size) then  -- ow jaiming, we cant do anything
@@ -234,7 +234,7 @@ function ENT:Teleport(from,to,ply,gps_ent)
 		end
 	end
 	for _,v in pairs(ents.FindInSphere(to,  radius)) do
-		if IsValid(v) then
+		if IsValid(v) and v.CapJammingDevice then
 			if v.IsEnabled then
 				local dist = to:Distance(v:GetPos());
 				if (dist < v.Size) then -- ow jaiming, we cant do anything

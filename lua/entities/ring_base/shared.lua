@@ -22,6 +22,7 @@ properties.Add( "Stargate.Ring.Unusable.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsRings || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("Busy",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "ringmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -54,6 +55,7 @@ properties.Add( "Stargate.Unusable.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsRings || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("Busy",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "ringmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -85,6 +87,7 @@ properties.Add( "Stargate.Ring.DialClosest",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsRings || ent:GetNWBool("Busy",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "ringmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -115,6 +118,7 @@ properties.Add( "Stargate.Ring.DialMenu",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsRings || ent:GetNWBool("Busy",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "ringmodify", ent ) ) then return false end
 						return true
 
 					end,

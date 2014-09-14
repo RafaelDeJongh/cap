@@ -171,6 +171,7 @@ properties.Add( "Stargate.DHD.SG1.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || !ent.IsDHDSg1 || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisRingRotate",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -203,6 +204,7 @@ properties.Add( "Stargate.DHD.SG1.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || !ent.IsDHDSg1 || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisRingRotate",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -234,6 +236,7 @@ properties.Add( "Stargate.DHD.Atl.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || !ent.IsDHDAtl || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisRingRotate",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -266,6 +269,7 @@ properties.Add( "Stargate.DHD.Atl.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || !ent.IsDHDAtl || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisRingRotate",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -297,6 +301,7 @@ properties.Add( "Stargate.DHD.Glyphs.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("DisGlyphs",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -328,6 +333,7 @@ properties.Add( "Stargate.DHD.Glyphs.Off",
 	Filter		=	function( self, ent, ply )
 
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("DisGlyphs",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
 						return true
 
 					end,

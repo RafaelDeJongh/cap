@@ -15,6 +15,7 @@ properties.Add( "Stargate.MChevL.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_movie" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActMChevL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -45,6 +46,7 @@ properties.Add( "Stargate.MChevL.Off",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_movie" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActMChevL",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -75,6 +77,7 @@ properties.Add( "Stargate.MCl.On",
 
 	Filter		=	function( self, ent, ply )
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_movie" || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActMCl",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
@@ -106,6 +109,7 @@ properties.Add( "Stargate.MCl.Off",
 	Filter		=	function( self, ent, ply )
                         local vg = {"stargate_movie","stargate_sg1","stargate_infinity"}
 						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetClass()!="stargate_movie" || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActMCl",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,

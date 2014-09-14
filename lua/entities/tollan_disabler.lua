@@ -39,6 +39,7 @@ ENT.Tools = {
 		"weapon_crowbar",
 		"weapon_physcannon",
 		"tool_npc_eof",
+		"nox_hands",
 	}
 
 -----------------------------------INIT----------------------------------
@@ -64,9 +65,10 @@ end
 
 -----------------------------------SETUP----------------------------------
 
-function ENT:Setup(size, immunity)
+function ENT:Setup(size, immunity, owner)
 	self.Size = size;
 	self.Immunity = immunity;
+	self.Owner = owner;
 end
 
 -----------------------------------WIRE----------------------------------
@@ -97,7 +99,15 @@ function ENT:Think()
 				if (not IsValid(v:GetActiveWeapon())) then return end
 				local active = v:GetActiveWeapon():GetClass();
 
-				if not table.HasValue(self.Tools, active) then v:SelectWeapon("weapon_physgun"); end
+				if not table.HasValue(self.Tools, active) then
+					local allow = hook.Call("StarGate.TollanDisabler.CanBlockWeapon",nil,v,active,self);
+					if (allow==false) then continue end
+					local weps = v:GetWeapons() or {};
+					if (not table.HasValue(weps,"weapon_physgun")) then
+						v:Give("weapon_physgun");
+					end
+					v:SelectWeapon("weapon_physgun");
+				end
 
 			end
 		end
