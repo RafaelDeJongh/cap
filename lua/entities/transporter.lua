@@ -632,6 +632,7 @@ net.Receive("CAP.AsgardTransporter",function(len)
 	withEnts:SizeToContents()
 	withEnts:SetTooltip(SGLanguage.GetMessage("asgardtp_ents_desc"))
 	withEnts.OnChange = function(self,val)
+		if (not IsValid(ent)) then return end
 		ent.SaveTable.withEnts = val;
 		updateAction();
 	end
@@ -643,6 +644,7 @@ net.Receive("CAP.AsgardTransporter",function(len)
 	sendButton:SetPos(215, 360)
 	sendButton:SetSize(130, 25)
 	sendButton.DoClick = function ( btn )
+		if (not IsValid(ent)) then return end
 		local target = targetList:GetSelectedLine();
 		local dest = destList:GetSelectedLine();
 		if (target and dest) then
@@ -672,6 +674,7 @@ net.Receive("CAP.AsgardTransporter",function(len)
 	retrieveButton:SetPos(35, 360)
 	retrieveButton:SetSize(130, 25)
 	retrieveButton.DoClick = function ( btn )
+		if (not IsValid(ent)) then return end
 		local target = targetList:GetSelectedLine();
 		local dest = destList:GetSelectedLine();
 		if (target and dest) then

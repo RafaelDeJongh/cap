@@ -100,7 +100,7 @@ function TOOL:LeftClick(t)
 		return true;
 	end
 	if(not self:CheckLimit()) then return false end;
-	local e = self:SpawnSENT(p,t,toggle,model,size,immunity,phase_shift);
+	local e = self:SpawnSENT(p,t,toggle,model,size,immunity,phase_shift,attached);
 	if(util.tobool(self:GetClientNumber("autolink"))) then
 		self:AutoLink(e,t.Entity); -- Link to that energy system, if valid
 	end

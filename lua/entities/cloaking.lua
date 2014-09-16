@@ -133,17 +133,19 @@ function ENT:Initialize()
 	self.Entity:SetCollisionBounds(-1*offset,offset);
 	-- To be compatible to Catdaemons shield and/or my staffweapon, I will use the same Table name and method like he does
 	self.nocollide = {};
-	for _,v in pairs(ents.FindInSphere(self.Entity:GetPos(),self.Size)) do
-		local class = v:GetClass():lower();
-		if(IsValid(v) and not v:IsWeapon() and not self.Disallowed[class]) then
-			-- Should fix some fuck with adv dupe (but not all!)
-			local movetype = v:GetMoveType();
-			if(class ~= "prop_physics" or movetype == MOVETYPE_VPHYSICS and v:GetSolid() == SOLID_VPHYSICS) then
-				if(not (movetype == MOVETYPE_NONE)) then -- Fix for wraith harvestere'd things
-					self.nocollide[v] = true;
-					-- Add deriving entities (e.g. Stargate Chevrons)
-					for _,vv in pairs(v:GetDerived()) do
-						self.nocollide[vv] = true;
+	if (self.Size>1) then
+		for _,v in pairs(ents.FindInSphere(self.Entity:GetPos(),self.Size)) do
+			local class = v:GetClass():lower();
+			if(IsValid(v) and not v:IsWeapon() and not self.Disallowed[class]) then
+				-- Should fix some fuck with adv dupe (but not all!)
+				local movetype = v:GetMoveType();
+				if(class ~= "prop_physics" and (not v:CreatedByMap() or movetype == MOVETYPE_VPHYSICS) or movetype == MOVETYPE_VPHYSICS and v:GetSolid() == SOLID_VPHYSICS) then
+					if(not (movetype == MOVETYPE_NONE)) then -- Fix for wraith harvestere'd things
+						self.nocollide[v] = true;
+						-- Add deriving entities (e.g. Stargate Chevrons)
+						for _,vv in pairs(v:GetDerived()) do
+							self.nocollide[vv] = true;
+						end
 					end
 				end
 			end
