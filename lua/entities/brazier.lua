@@ -57,6 +57,7 @@ function ENT:TriggerInput(k,v)
 end
 
 function ENT:MakeFire()
+	if (IsValid(self.FireEnt)) then return end
     local fire = ents.Create("env_fire");
 
 	fire:SetKeyValue("health","5");
@@ -74,6 +75,7 @@ function ENT:MakeFire()
 end
 
 function ENT:Light()
+	if (IsValid(self.LampEnt)) then return end
 	local lamp = ents.Create( "gmod_light" )
 	if (not IsValid(lamp)) then self:Remove(); return end
 

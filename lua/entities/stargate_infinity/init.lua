@@ -183,7 +183,7 @@ function ENT:Initialize()
 	self.DiallingSymbol = "";
 	self.RingSymbol = "";
 	self.RingSpeed = 0;
-	self.RingDir = 0;
+	self.RingDir = -1;
 	self:AddRing();
 	self:AddChevron();
 	self.IsConcept = false;
@@ -326,7 +326,7 @@ function ENT:ActivateRingSound(pitch)
 end
 
 --################# Makes it rotate or stop @aVoN
-function ENT:ActivateRing(b,loop,fast)
+function ENT:ActivateRing(b,loop,fast,dir)
 	if(not IsValid(self.Ring)) then return end;
 	if(b) then
 		if (not fast) then
@@ -356,9 +356,11 @@ function ENT:ActivateRing(b,loop,fast)
 				pitch = 95;
 			end
 		end
-	    if (self.RingDir==1) then self.RingDir = -1; else self.RingDir = 1 end
 		self:ActivateRingSound(pitch);
-		self.Ring:Fire("Reverse","",0); -- Reverse direction first
+		if (not dir or self.RingDir!=dir) then
+			if (self.RingDir==1) then self.RingDir = -1; else self.RingDir = 1 end
+			self.Ring:Fire("Reverse","",0); -- Reverse direction first
+		end
 		self.Ring:Fire("start","",0);
 		self.Entity:SetWire("Ring Rotation",self.RingDir);
 		if (loop or loop==nil) then
@@ -607,7 +609,9 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 	elseif(k == "Rotate Ring" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v >= 1) then
 			if (IsValid(self.Ring) and not self.Ring.WireMoving and (self:CheckEnergy(true,true) or self.WireManualDial)) then
-				self:ActivateRing(true,true);
+				local dir
+				if (v==2) then dir = 1; elseif (v>=3) then dir = -1; end
+				self:ActivateRing(true,true,false,dir);
 				self.Entity:SetNWBool("ActRotRingL",true);
 			end
 		else

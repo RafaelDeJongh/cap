@@ -151,6 +151,7 @@ function ENT:Initialize()
 	self.WireSpin = false;
 	self.WireSpinSpeed = false;
 	self.ActSymSound = false;
+	self.WireSpinDir = false;
 end
 
 --#################  Called when stargate_group_system changed
@@ -685,10 +686,14 @@ function ENT:TriggerInput(k,v,mobile,mdhd,ignore)
 		if (v >= 1) then
 			if (not self.WireSpin and (self:CheckEnergy(true,true) or self.WireManualDial)) then
 				self.WireSpin = true;
-				if (self.WireSpinDir) then
-					self.WireSpinDir = false;
-				else
-					self.WireSpinDir = true;
+				local dir
+				if (v==2) then dir = true; elseif (v>=3) then dir = false; end
+				if (dir==nil or dir!=self.WireSpinDir) then
+					if (self.WireSpinDir) then
+						self.WireSpinDir = false;
+					else
+						self.WireSpinDir = true;
+					end
 				end
 				self:SetSpeed(true,self.WireSpinDir);
 				self.WireBlock = true;
