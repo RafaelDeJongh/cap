@@ -27,8 +27,9 @@ function file.Open(path,mode,param)
 		dir = param
 	end
 	if (dir:upper()=="DATA" and not file.Exists(path,dir) and (mode=="r" or mode=="rb")) then
-		-- special workaround for workshop and e2
-		if (path and path:lower():find("^expression2/cap_shared/(.*).lua$")) then
+		-- special workaround for workshop and e2/starfall
+		if path and (path:lower():find("^expression2/cap_shared/(.*).lua$")
+		or path:lower():find("^starfall/cap_shared/(.*).lua$")) then
 			return file_Open("lua/data/"..path,mode,"GAME");
 		end
 	end
@@ -40,7 +41,8 @@ function file.Find(path,dir,order)
 	if (dir:upper()=="DATA") then
 		local files,folders = file_Find(path,dir,order);
 		-- ugly workaround for workshop...
-		if (path and path:lower():find("^expression2/cap_shared/(.*)$")) then
+		if path and (path:lower():find("^expression2/cap_shared/(.*)$")
+		or path:lower():find("^starfall/cap_shared/(.*)$")) then
 			local fi,fo = file_Find("lua/data/"..path,"GAME");
             if (fi) then
 	 			for k,d in pairs(fi) do

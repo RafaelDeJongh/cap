@@ -191,7 +191,7 @@ end
 
 --################# Init @Catdaemon,aVoN
 function ENT:Allowed(e)
-	if(not (self.Ents[e] or self.Disallowed[e:GetClass()] or e.IsStargate or e.IsDHD or e.IsRings or e:IsPlayer() and e:HasGodMode() or e~=game.GetWorld() or e:GetModel():find("*"))) then -- "*" in modelname is always a brush/map entity
+	if(not (self.Ents[e] or self.Disallowed[e:GetClass()] or e.IsStargate or e.IsDHD or e.IsRings or e:IsPlayer() and e:HasGodMode() or e==game.GetWorld() or e:GetModel():find("*"))) then -- "*" in modelname is always a brush/map entity
 		local allow = hook.Call("StarGate.Harvester.Ent",nil,e,self);
 		if (allow==false) then return false end
 		return true;

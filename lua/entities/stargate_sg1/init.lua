@@ -95,29 +95,9 @@ ENT.SymbolsLockGroup = {
 	D = 351,
 }
 
-ENT.SymbolsLockConceptGroup = {
-	["#"] = 0,		[0] = 9,
-	J = 18,			K = 27,
-	N = 36,  		T = 45,
-	R = 54,			[3] = 63,
-	M = 72,			B = 81,
-	Z = 90,			X = 99,
-	["*"] = 108, -- not exists on dhd
-	H = 117,  		[6] = 126,
-	[9] = 135,		I = 144,
-	G = 153,		P = 162,
-	L = 171,		["?"] = 180,
-	["@"] = 189,	Q = 198,
-	F = 207,  		S = 216,
-	[1] = 225,		E = 234,
-	[4] = 243,		A = 252,
-	U = 261,  		[8] = 270,
-	[5] = 279,		O = 288,
-	C = 297,    	W = 306,
-	[7] = 315,		[2] = 324,
-	Y = 333,    	V = 342,
-	D = 351,
-}
+ENT.SymbolsLockConceptGroup = ENT.SymbolsLockGroup or {};
+ENT.SymbolsLockConceptGroup["?"] = 180;
+ENT.SymbolsLockConceptGroup["#"] = 0;
 
 ENT.SymbolsLockGalaxy = {
 	["?"] = 0,		["!"] = 9,
@@ -143,29 +123,9 @@ ENT.SymbolsLockGalaxy = {
 	D = 351,
 }
 
-ENT.SymbolsLockConceptGalaxy = {
-	["#"] = 0,		["!"] = 9,
-	J = 18,			K = 27,
-	N = 36,  		T = 45,
-	R = 54,			[3] = 63,
-	M = 72,			B = 81,
-	Z = 90,			X = 99,
-	["*"] = 108, -- not exists on dhd
-	H = 117,  		[6] = 126,
-	[9] = 135,		I = 144,
-	G = 153,		P = 162,
-	L = 171,		["?"] = 180,
-	["@"] = 189,	Q = 198,
-	F = 207,  		S = 216,
-	[1] = 225,		E = 234,
-	[4] = 243,		A = 252,
-	U = 261,  		[8] = 270,
-	[5] = 279,		O = 288,
-	C = 297,    	W = 306,
-	[7] = 315,		[2] = 324,
-	Y = 333,    	V = 342,
-	D = 351,
-}
+ENT.SymbolsLockConceptGalaxy = ENT.SymbolsLockGalaxy or {};
+ENT.SymbolsLockConceptGalaxy["?"] = 180;
+ENT.SymbolsLockConceptGalaxy["#"] = 0;
 
 --################# SENT CODE ###############
 

@@ -61,6 +61,9 @@ function StarGate.Init()
 		if (file.IsDir("expression2","DATA") and not file.IsDir("expression2/cap_shared","DATA")) then
 			file.CreateDir("expression2/cap_shared");
 		end
+		if (file.IsDir("starfall","DATA") and not file.IsDir("starfall/cap_shared","DATA")) then
+			file.CreateDir("starfall/cap_shared");
+		end
 	else
 		StarGate.HasWire = false;
 	end

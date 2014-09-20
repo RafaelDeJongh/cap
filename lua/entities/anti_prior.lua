@@ -49,9 +49,11 @@ function ENT:Initialize()
 	self.IsOn = false;
 	self.Radius = 800; --math.random(600, 800); sorry disable this, because added hook, lazy to make it with radius...
 	if WireAddon then
-		self:CreateWireInputs("Activate");
+		self:CreateWireInputs("Activate","Immunity Mode");
 		self:CreateWireOutputs("Activated");
 	end
+
+	self.Immunity = 0;
 
 end
 
@@ -98,6 +100,9 @@ function ENT:TriggerInput(variable, value)
 		else
 			self:SetWire("Activated",0);
 		end
+	elseif(variable=="Immunity Mode") then
+		self.Immunity = math.Clamp(value,-1,1);
+		self:SetNWInt("Immunity",self.Immunity);
 	end
 end
 
@@ -108,7 +113,7 @@ function ENT:Think()
 		local e = ents.FindInSphere(self:GetPos(), self.Radius);
 			for _,v in pairs(e) do
 				if v:IsPlayer() and v:GetMoveType() == MOVETYPE_NOCLIP then
-					if v != self.Owner and not v:HasGodMode() then
+					if (self.Immunity<0 or v != self.Owner) and not v:HasGodMode() then
 						local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,v,self);
 						if (allow==false) then continue end
 						v:SetMoveType(MOVETYPE_WALK)
@@ -173,7 +178,7 @@ hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 	if (noclip) then
 		if (not IsValid(ply) or ply.HasGodMode and ply:HasGodMode()) then return end
 		for k,v in pairs(ents.FindInSphere(ply:GetPos(),800)) do
-			if (v:GetClass()=="anti_prior" and v.IsOn and ply!=v.Owner and not ply:HasGodMode()) then
+			if (v:GetClass()=="anti_prior" and v.IsOn and (v.Immunity<0 or ply!=v.Owner) and not ply:HasGodMode()) then
 				local allow = hook.Call("StarGate.AntiPrior.Noclip",nil,ply,v);
 				if (allow==false) then continue end
 				return false;
@@ -183,3 +188,46 @@ hook.Add("PlayerNoClip", "AntiPrior.DisableNoclip", function(ply,noclip)
 end )
 
 end
+
+properties.Add( "AntiPrior.Immunity",
+{
+	MenuLabel	=	SGLanguage.GetMessage("antiprior_c_t"),
+	Order		=	-170,
+	MenuIcon	=	"icon16/plugin_link.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || ent:GetClass()!="anti_prior") then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "antipriormodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	MenuOpen = function( self, option, ent, tr )
+		local submenu = option:AddSubMenu()
+		local val = ent:GetNWInt("Immunity",0);
+		local option = submenu:AddOption( SGLanguage.GetMessage("antiprior_c_1"), function() self:SetImmunity( ent, 0 ) end )
+		if ( val == 0 ) then option:SetChecked( true ) end
+		local option = submenu:AddOption( SGLanguage.GetMessage("antiprior_c_2"), function() self:SetImmunity( ent, 1 ) end )
+		if ( val == 1 ) then option:SetChecked( true ) end
+		local option = submenu:AddOption( SGLanguage.GetMessage("antiprior_c_3"), function() self:SetImmunity( ent, -1 ) end )
+		if ( val == -1 ) then option:SetChecked( true ) end
+	end,
+
+	SetImmunity		=	function( self, ent, i )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+							net.WriteInt(i,8)
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("Immunity Mode",net.ReadInt(8));
+					end
+
+});

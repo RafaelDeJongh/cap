@@ -364,6 +364,12 @@ asgardtp_error = Invalid target or destination! (refresh list?)
 asgardtp_jamming = Can't teleport by this coordinates - jamming device online.
 asgardtp_succ = Successful teleportation.
 
+// anti-prior
+antiprior_c_t = Immunity Mode
+antiprior_c_1 = Owner and friends
+antiprior_c_2 = Only for owner
+antiprior_c_3 = No one
+
 // huds
 hud_status = Status
 hud_energy = Energy

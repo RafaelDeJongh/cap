@@ -117,7 +117,7 @@ if (CPPI) then
 	end
 
 	hook.Add("StarGate.AntiPrior.Noclip","Stargate.CPPI.AntiPrior",function(ply,ent)
-		if (CapIsFriend(ply,ent.Owner)) then return false end
+		if (ent.Immunity==0 and CapIsFriend(ply,ent.Owner)) then return false end
 	end)
 	hook.Add("StarGate.TollanDisabler.CanBlockWeapon","Stargate.CPPI.TollanDisabler",function(ply,weapon,ent)
 		if (CapIsFriend(ply,ent.Owner)) then return false end
