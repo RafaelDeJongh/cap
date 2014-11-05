@@ -274,6 +274,7 @@ stool_stargate_iris_cleaned = Removed all Iris/Shield
 stool_stargate_iris_limit = Hit the Iris/Shield limit
 stool_stargate_iris_err = Target is not a Stargate!
 stool_stargate_iris_err2 = Iris can't be spawned on supergate or orlin stargate!
+stool_stargate_iris_err3 = Iris can't be spawned on gatespawner gate!
 
 // Shield
 stool_stargate_shield_spawner = Shield Spawner

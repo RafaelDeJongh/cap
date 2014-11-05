@@ -105,6 +105,8 @@ properties.Add( "Stargate.PoO",
 
 					end,
 
+	Action 		= 	function() end,
+
 	Receive		=	function( self, length, player )
 
 						local ent = net.ReadEntity()

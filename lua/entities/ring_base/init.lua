@@ -76,8 +76,21 @@ function ENT:OnRemove()
 	end
 end
 
+function ENT:CAP_CanModify(ply)
+	if (not IsValid(ply)) then return false end
+	local allowed = true;
+	if(hook.Call("StarGate.Player.CanModify.Ring",GAMEMODE,ply,self.Entity) == false) then
+		allowed = false;
+	elseif(self.GateSpawnerProtected) then
+		allowed = hook.Call("StarGate.Player.CanModifyProtected.Ring",GAMEMODE,ply,self.Entity);
+		if(allowed == nil) then allowed = (ply:IsAdmin() or game.SinglePlayer()) end;
+	end
+	return allowed;
+end
+
 function ENT:Use(ply)
 	--if self.Address then return end -- Allow address changing!
+	if (not self:CAP_CanModify(ply)) then return end
 	umsg.Start("RingTransporterShowNameWindowCap",ply)
 	umsg.Entity(self.Entity);
 	umsg.End()
@@ -86,6 +99,7 @@ end
 
 function RingsNamingCallback(ply,cmd,args)
 	if ply.RingNameEnt and ply.RingNameEnt~=NULL then
+		if (not ply.RingNameEnt:CAP_CanModify(ply)) then return end
 		if args[1] then
 			local adr = args[1]:gsub("[^0-9]","");
 			-- No multiple rings please!

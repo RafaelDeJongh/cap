@@ -380,7 +380,7 @@ GateActions["SetRingAddress"] = {
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
 	outputtypes = {},
 	output = function(gate, Ent, Address, Set)
-		if !IsValid(Ent) or !Ent.IsRings then return "" elseif Set>0 then return Ent:SetRingAddress(Address) end
+		if !IsValid(Ent) or !Ent.IsRings or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetRingAddress(Address) end
 	end
 }
 
@@ -425,7 +425,7 @@ GateActions["SetAtlantisTPName"] = {
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
 	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
-		if !IsValid(Ent) or !Ent.IsAtlTP then return "" elseif Set>0 then return Ent:SetAtlName(Name,true) end
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlName(Name,true) end
 	end
 }
 
@@ -449,7 +449,7 @@ GateActions["SetAtlantisTPPrivate"] = {
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
 	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
-		if !IsValid(Ent) or !Ent.IsAtlTP then return "" elseif Set>0 then return Ent:SetAtlPrivate(Private) end
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlPrivate(Private) end
 	end
 }
 

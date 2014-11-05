@@ -84,6 +84,13 @@ wormholejump = 3000
 # disable auto close if gate is underwater
 water_noclose = true
 
+#### Stargate iris config
+[stargate_iris]
+# Allow spawn on gatespawner gates by players
+gatespawner=true
+# Allow spawn on gatespawner gates by server (gatespawner itself)
+sv_gatespawner=true
+
 #### DHD config
 [dhd]
 # How long is the range you can use it?

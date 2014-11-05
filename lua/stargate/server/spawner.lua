@@ -125,6 +125,8 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local IsDoorsButton = string.lower(v.classname):find("cap_doors_contr");
 		local IsConsole = string.lower(v.classname):find("cap_console");
 
+		if (IsIris and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","sv_gatespawner",true)) then e:Remove(); return end
+
 		local IsSGULightUp = v.classname:find("bearing") or v.classname:find("floorchevron");
 
 		e.CDSIgnore = true; -- Fixes Combat Damage System destroying Ramps - http://mantis.39051.vs.webtropia.com/view.php?id=45

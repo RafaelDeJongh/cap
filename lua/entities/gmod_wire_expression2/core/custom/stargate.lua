@@ -5,24 +5,6 @@
 if (E2Lib==nil) then return end
 E2Lib.RegisterExtension("stargate", true)
 
-local function SG_CanModify(self,p)
-	if (hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,p,self) == false) then return false; end
-	if (self.GateSpawnerProtected) then
-		local allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,p,self);
-		if(allowed == nil) then allowed = (p:IsAdmin() or game.SinglePlayer()) end
-		if(not allowed) then return false; end
-	end
-	return true;
-end
-
-local function CanModify(self,p)
-	if (self.GateSpawnerProtected) then
-		local allowed = (p:IsAdmin() or game.SinglePlayer())
-		if(not allowed) then return false; end
-	end
-	return true;
-end
-
 __e2setcost( 1 )
 
 e2function string entity:stargateAddress()
@@ -38,12 +20,12 @@ end
 __e2setcost( 5 )
 
 e2function void entity:stargateSetAddress(string address)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetGateAddress(address)
 end
 
 e2function void wirelink:stargateSetAddress(string address)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetGateAddress(address)
 end
 
@@ -62,12 +44,12 @@ end
 __e2setcost( 5 )
 
 e2function void entity:stargateSetGroup(string group)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetGateGroup(group)
 end
 
 e2function void wirelink:stargateSetGroup(string group)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetGateGroup(group)
 end
 
@@ -84,12 +66,12 @@ e2function string wirelink:stargateName()
 end
 
 e2function void entity:stargateSetName(string name)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetGateName(name)
 end
 
 e2function void wirelink:stargateSetName(string name)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetGateName(name)
 end
 
@@ -114,12 +96,12 @@ e2function number wirelink:stargatePrivate()
 end
 
 e2function void entity:stargateSetPrivate(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetPrivate(bool)
 end
 
 e2function void wirelink:stargateSetPrivate(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetPrivate(bool)
 end
 
@@ -144,12 +126,12 @@ e2function number wirelink:stargateLocal()
 end
 
 e2function void entity:stargateSetLocal(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetLocale(bool)
 end
 
 e2function void wirelink:stargateSetLocal(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetLocale(bool)
 end
 
@@ -174,12 +156,12 @@ e2function number wirelink:stargateBlocked()
 end
 
 e2function void entity:stargateSetBlocked(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetBlocked(bool)
 end
 
 e2function void wirelink:stargateSetBlocked(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetBlocked(bool)
 end
 
@@ -204,12 +186,12 @@ e2function number wirelink:stargateGalaxy()
 end
 
 e2function void entity:stargateSetGalaxy(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetGalaxy(bool)
 end
 
 e2function void wirelink:stargateSetGalaxy(number bool)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) then return end
 	this:SetGalaxy(bool)
 end
 
@@ -674,12 +656,12 @@ e2function array entity:stargateAddressList()
 end
 
 e2function void wirelink:stargateRandomAddress(number mode)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not StarGate or not StarGate.RandomGateName then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not StarGate or not StarGate.RandomGateName then return end
 	StarGate.RandomGateName(nil,this,nil,true,mode);
 end
 
 e2function void entity:stargateRandomAddress(number mode)
-	if not IsValid(this) or not this.IsStargate or not SG_CanModify(this,self.player) or not StarGate or not StarGate.RandomGateName or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsStargate or not this:CAP_CanModify(self.player) or not StarGate or not StarGate.RandomGateName or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	StarGate.RandomGateName(nil,this,nil,true,mode);
 end
 
@@ -693,6 +675,43 @@ e2function number stargateSystemType()
 		return 0
 	end
 end
+
+__e2setcost( 50 )
+
+e2function number stargateIsInJamming(vector from)
+	local radius = 1024; -- max range of jamming, we will adjust it later
+	local jaiming_online = 0;
+	for _,v in pairs(ents.FindInSphere(from,  radius)) do
+		if IsValid(v) and v.CapJammingDevice then
+			if v.IsEnabled then
+				local dist = from:Distance(v:GetPos());
+				if (dist < v.Size) then  -- ow jaiming, we cant do anything
+					jaiming_online = 1
+				end
+			end
+		end
+	end
+	return jaiming_online;
+end
+
+e2function number stargateIsInJamming(vector from, entity player)
+	if (not IsValid(player) or not player:IsPlayer()) then return -1 end
+	local radius = 1024; -- max range of jamming, we will adjust it later
+	local jaiming_online = 0;
+	for _,v in pairs(ents.FindInSphere(from,  radius)) do
+		if IsValid(v) and v.CapJammingDevice then
+			if v.IsEnabled then
+				local dist = from:Distance(v:GetPos());
+				if (dist < v.Size) then  -- ow jaiming, we cant do anything
+					if not (v.Immunity and v.Owner == player) then jaiming_online = 1 end
+				end
+			end
+		end
+	end
+	return jaiming_online;
+end
+
+__e2setcost( 1 )
 
 e2function string wirelink:stargateTransmit(string value)
 	if not IsValid(this) or not this.IsStargate then return end
@@ -715,12 +734,12 @@ e2function string wirelink:stargateRingAddress()
 end
 
 e2function void entity:stargateRingSetAddress(string address)
-	if not IsValid(this) or not this.IsRings or not CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsRings or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetRingAddress(address);
 end
 
 e2function void wirelink:stargateRingSetAddress(string address)
-	if not IsValid(this) or not this.IsRings or not CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsRings or not this:CAP_CanModify(self.player) then return end
 	this:SetRingAddress(address);
 end
 
@@ -776,7 +795,7 @@ e2function string wirelink:stargateAtlantisTPGetName()
 end
 
 e2function void wirelink:stargateAtlantisTPSetName(string name)
-	if not IsValid(this) or not this.IsAtlTP or not CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
 	this:SetAtlName(name,true);
 end
 
@@ -791,7 +810,7 @@ e2function number wirelink:stargateAtlantisTPGetPrivate()
 end
 
 e2function void wirelink:stargateAtlantisTPSetPrivate(number bool)
-	if not IsValid(this) or not this.IsAtlTP or not CanModify(this,self.player) then return end
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
 	this:SetAtlPrivate(bool);
 end
 
@@ -818,7 +837,7 @@ e2function string entity:stargateAtlantisTPGetName()
 end
 
 e2function void entity:stargateAtlantisTPSetName(string name)
-	if not IsValid(this) or not this.IsAtlTP or not CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetAtlName(name,true);
 end
 
@@ -833,7 +852,7 @@ e2function number entity:stargateAtlantisTPGetPrivate()
 end
 
 e2function void entity:stargateAtlantisTPSetPrivate(number bool)
-	if not IsValid(this) or not this.IsAtlTP or not CanModify(this,self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetAtlPrivate(bool);
 end
 

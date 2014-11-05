@@ -225,6 +225,13 @@ sg_sets[stargate][wormholejump][desc] = Сколько необходимо на
 sg_sets[stargate][water_noclose] = Не закрывать врата в воде
 sg_sets[stargate][water_noclose][desc] = Выключить автоматическое закрытие врат если врата под водой
 
+// Stargate iris
+sg_sets[stargate_iris] = Диафрагма звёздных врат
+sg_sets[stargate_iris][gatespawner] = Спавн на вратах сервера
+sg_sets[stargate_iris][gatespawner][desc] = Разрешить создавать диафрагму на вратах сервера игроками
+sg_sets[stargate_iris][sv_gatespawner] = Спавн сервером (gatespawner'ом)
+sg_sets[stargate_iris][sv_gatespawner][desc] = Разрешить создавать диафрагму сервером (самим gatespawner'ом)
+
 // DHD
 sg_sets[dhd] = Наборное устройство (DHD)
 sg_sets[dhd][range] = Диапазон поиска врат

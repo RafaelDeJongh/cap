@@ -306,11 +306,24 @@ function ENT:Use(ply)
 		return
 	end
 	if (self.DisEditMenu) then return end
+	if (not self:CAP_CanModify(ply)) then return end
 	umsg.Start("AtlantisTransporterEditWindow", ply)
 	umsg.Entity(self)
 	umsg.String(self.TName)
 	umsg.Bool(self.TPrivate)
 	umsg.End()
+end
+
+function ENT:CAP_CanModify(ply)
+	if (not IsValid(ply)) then return false end
+	local allowed = true;
+	if(hook.Call("StarGate.Player.CanModify.AtlantisTransporter",GAMEMODE,ply,self.Entity) == false) then
+		allowed = false;
+	elseif(self.GateSpawnerProtected) then
+		allowed = hook.Call("StarGate.Player.CanModifyProtected.AtlantisTransporter",GAMEMODE,ply,self.Entity);
+		if(allowed == nil) then allowed = (ply:IsAdmin() or game.SinglePlayer()) end;
+	end
+	return allowed;
 end
 
 net.Receive("atlantis_transport",function(len,ply)
@@ -320,6 +333,7 @@ net.Receive("atlantis_transport",function(len,ply)
 		self.Destination = net.ReadString();
 		self:Teleport();
 	else
+		if (not self:CAP_CanModify(ply)) then return end
 		self:SetAtlName(net.ReadString(),false,ply);
 		self:SetAtlPrivate(net.ReadBit());
 	end

@@ -102,8 +102,16 @@ end
 hook.Add("PlayerCanPickupWeapon","StarGate.Hook.PlayerCanPickupWeapon",StarGate.Hook.PlayerCanPickupWeapon);
 
 if (CPPI) then
-	hook.Add("StarGate.Player.CanModifyGate","Stargate.CPPI.CanModifyGate",function(ply,ent)
+	hook.Add("StarGate.Player.CanModifyGate","StarGate.CPPI.CanModify.Gate",function(ply,ent)
 		if not ent:CPPICanTool(ply,"stargatemodify") then return false end
+	end)
+
+	hook.Add("StarGate.Player.CanModify.Ring","StarGate.CPPI.CanModify.Ring",function(ply,ent)
+		if not ent:CPPICanTool(ply,"ringmodify") then return false end
+	end)
+
+	hook.Add("StarGate.Player.CanModify.AtlantisTransporter","StarGate.CPPI.CanModify.AtlantisTransporter",function(ply,ent)
+		if not ent:CPPICanTool(ply,"atlantistransportermodify") then return false end
 	end)
 
 	local function CapIsFriend(ply,owner)
@@ -116,10 +124,10 @@ if (CPPI) then
 		return false
 	end
 
-	hook.Add("StarGate.AntiPrior.Noclip","Stargate.CPPI.AntiPrior",function(ply,ent)
+	hook.Add("StarGate.AntiPrior.Noclip","StarGate.CPPI.AntiPrior",function(ply,ent)
 		if (ent.Immunity==0 and CapIsFriend(ply,ent.Owner)) then return false end
 	end)
-	hook.Add("StarGate.TollanDisabler.CanBlockWeapon","Stargate.CPPI.TollanDisabler",function(ply,weapon,ent)
+	hook.Add("StarGate.TollanDisabler.CanBlockWeapon","StarGate.CPPI.TollanDisabler",function(ply,weapon,ent)
 		if (CapIsFriend(ply,ent.Owner)) then return false end
 	end)
 end

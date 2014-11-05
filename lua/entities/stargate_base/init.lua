@@ -515,6 +515,18 @@ function ENT:Use(p)
 	end
 end
 
+function ENT:CAP_CanModify(ply)
+	if (not IsValid(ply)) then return false end
+	local allowed = true;
+	if(hook.Call("StarGate.Player.CanModifyGate",GAMEMODE,ply,self.Entity) == false) then
+		allowed = false;
+	elseif(self.GateSpawnerProtected) then
+		allowed = hook.Call("StarGate.Player.CanModifyProtectedGate",GAMEMODE,ply,self.Entity);
+		if(allowed == nil) then allowed = (ply:IsAdmin() or game.SinglePlayer()) end;
+	end
+	return allowed;
+end
+
 --##################################
 --#### Wire Inputs
 --##################################

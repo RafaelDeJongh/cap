@@ -70,6 +70,10 @@ function TOOL:LeftClick(t)
 	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err2\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 	    return
 	end
+	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","gatespawner",true)) then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
 	--######## Spawn SENT
 	local toggle = self:GetClientNumber("toggle");
 	local activate = self:GetClientNumber("activate");

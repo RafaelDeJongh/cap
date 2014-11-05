@@ -40,6 +40,10 @@ function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
 		return true;
 	end
+	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","gatespawner",true)) then
+	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+		return
+	end
 	if(not self:CheckLimit()) then return false end;
 	local e = self:SpawnSENT(p,t,toggle,activate,deactivate);
 	if (not IsValid(e)) then return end

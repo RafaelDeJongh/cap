@@ -270,6 +270,7 @@ stool_stargate_iris_cleaned = Удалены все диафрагмы/щиты
 stool_stargate_iris_limit = Достигнут лимит диафрагм/щитов
 stool_stargate_iris_err = Выбранная цель не является звёздными вратами!
 stool_stargate_iris_err2 = Диафрагма не может быть создана на супервратах или вратах орлина!
+stool_stargate_iris_err3 = Диафрагма не может быть создана на вратах сервера!
 
 // Shield
 stool_stargate_shield_spawner = Создатель щита

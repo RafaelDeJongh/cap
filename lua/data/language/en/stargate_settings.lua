@@ -225,6 +225,13 @@ sg_sets[stargate][wormholejump][desc] = How many damage should be taken before d
 sg_sets[stargate][water_noclose] = Water no autoclose
 sg_sets[stargate][water_noclose][desc] = Disable auto close if gate is underwater
 
+// Stargate iris
+sg_sets[stargate_iris] = Stargate iris
+sg_sets[stargate_iris][gatespawner] = Spawn on gatespawner
+sg_sets[stargate_iris][gatespawner][desc] = Allow spawn on gatespawner gates by players
+sg_sets[stargate_iris][sv_gatespawner] = Spawn by server (gatespawner)
+sg_sets[stargate_iris][sv_gatespawner][desc] = Allow spawn on gatespawner gates by server (gatespawner itself)
+
 // DHD
 sg_sets[dhd] = DHD (Dial Home Device)
 sg_sets[dhd][range] = Range
