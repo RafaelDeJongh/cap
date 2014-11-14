@@ -161,8 +161,16 @@ function ENT:Initialize()
 			for _,vv in pairs(v:GetDerived()) do
 				self.nocollide[vv] = true;
 			end
+			if (v.IsUniverseGate) then
+				self.nocollide[v.Gate] = true;
+				self.nocollide[v.Chevron] = true;
+				for k,s in pairs(v.Symbols or {}) do
+					self.nocollide[s] = true;
+				end
+			end
 		end
 	end
+
 	-- After we got all entities for cloaking, cloak them now!
 	for k,_ in pairs(self.nocollide) do
 		if(IsValid(k) and k ~= self.Entity) then
@@ -217,6 +225,13 @@ function ENT:StartTouch(e)
 		for _,v in pairs(e:GetDerived()) do
 			self:Cloak(v,true);
 		end
+		if (e.IsUniverseGate) then
+			self:Cloak(e.Gate,true);
+			self:Cloak(e.Chevron,true);
+			for k,s in pairs(e.Symbols or {}) do
+				self:Cloak(s,true);
+			end
+		end
 	end
 end
 
@@ -231,6 +246,13 @@ function ENT:EndTouch(e)
 	-- Cloak deriving entities of this too! (E.g. the parented chevrons on stargates)
 	for _,v in pairs(e:GetDerived()) do
 		self:Cloak(v,false);
+	end
+	if (e.IsUniverseGate) then
+		self:Cloak(e.Gate,false);
+		self:Cloak(e.Chevron,false);
+		for k,s in pairs(e.Symbols or {}) do
+			self:Cloak(s,false);
+		end
 	end
 	-- Show cloaking fade on all props
 	local cloak = self.Entity;

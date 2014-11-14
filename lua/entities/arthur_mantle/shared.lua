@@ -18,3 +18,6 @@ list.Set("CAP.Entity", ENT.PrintName, ENT);
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.AutomaticFrameAdvance = true
+
+ENT.TFont = "Anquietas"
+ENT.GFont = "Stargate Address Glyphs Concept"

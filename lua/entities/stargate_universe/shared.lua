@@ -7,6 +7,8 @@ ENT.Category = "Stargate Carter Addon Pack: Gates and Rings"
 list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.WireDebugName = "Stargate Universe"
 
+ENT.IsUniverseGate = true;
+
 properties.Add( "Stargate.Uni.SymLight.On",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_10"),

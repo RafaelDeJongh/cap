@@ -11,14 +11,17 @@ ENT.Category = SGLanguage.GetMessage("entity_main_cat");
 ENT.PrintName = SGLanguage.GetMessage("entity_arthurs_mantle");
 end
 
+ENT.AFont = "Anquietas"
+ENT.SFont = "Stargate Address Glyphs Concept"
+
 local font = {
-	font = "Anquietas",
-	size = ScreenScale(35),
+	font = ENT.AFont,
+	size = 35,
 	weight = 400,
 	antialias = true,
 	additive = true,
 }
-surface.CreateFont("Ancients", font);
+surface.CreateFont("AncientsC", font);
 
 local font = {
 	font = "Roboto",
@@ -30,26 +33,7 @@ local font = {
 surface.CreateFont("MantleErr", font);
 
 local font = {
-	font = "Anquietas",
-	size = 35,
-	weight = 400,
-	antialias = true,
-	additive = true,
-}
-surface.CreateFont("AncientsC", font);
-
-local font = {
-	font = "Stargate Address Glyphs Concept",
-	size = ScreenScale(35),
-	weight = 400,
-	antialias = true,
-	additive = true,
-}
-surface.CreateFont("Glyphs", font);
-
-
-local font = {
-	font = "Stargate Address Glyphs Concept",
+	font = ENT.SFont,
 	size = 35,
 	weight = 400,
 	antialias = true,
@@ -121,6 +105,15 @@ hook.Add("Think","StarGate.ArthurCloaking.Think",
 	end
 );        */
 
+local font = {
+	font = ENT.SFont,
+	size = ScreenScale(35),
+	weight = 400,
+	antialias = true,
+	additive = true,
+}
+surface.CreateFont("Glyphs", font);
+
 -- New much better way without overriding alpha on players @ AlexALX
 hook.Add("PrePlayerDraw","StarGate.ArthurCloak", function(p)
 		if (not IsValid(p)) then return end
@@ -144,6 +137,15 @@ hook.Add("PrePlayerDraw","StarGate.ArthurCloak", function(p)
 		end
 	end
 );
+
+local font = {
+	font = ENT.AFont,
+	size = ScreenScale(35),
+	weight = 400,
+	antialias = true,
+	additive = true,
+}
+surface.CreateFont("Ancients", font);
 
 -- Stops making players "recognizeable" if they are cloaked (E.g. by looking at them - Before you e.g. saw "Catdaemon - Health 100" if you lookaed at a cloaked player. Now, you dont see anything if he is cloaked
 hook.Add("HUDDrawTargetID","StarGate.ArthurCloak", function()
@@ -173,7 +175,7 @@ function ENT:Think()
 end
 
 local validfont
-local function checkfont()
+local function checkfont(self)
 	if (validfont!=nil) then return validfont end
 	surface.SetFont( "AncientsC" )
 	local w = surface.GetTextSize("SoMe TeXt HerE 12-12 %$");
@@ -182,13 +184,15 @@ local function checkfont()
 	if (w==321 and w2==727) then
 		validfont = true
 	end
+	if (self.AFont!=self.TFont) then validfont = false end
+	if (self.SFont!=self.GFont) then validfont = false end
 	if (validfont==nil) then validfont = false end
 	return validfont;
 end
 
 local checkdata = false
 if (file.Exists("entities/arthur_mantle/cl_data.lua","LUA")) then
-	local str = util.Decompress(file.Read("entities/arthur_mantle/cl_data.lua","LUA") or "");
+	local str = util.Decompress(file.Read("entities/arthur_mantle/cl_data.lua","LUA") or "") or "";
 	local str_exp = string.Explode("||\n\n||",str);
 	local tbl = {}
 	for k=1,table.Count(str_exp) do
@@ -233,7 +237,7 @@ function ENT:Draw()
 				cam.Start3D2D(pos, ang, 0.05 );
 					draw.DrawText("DATA ERROR", "MantleErr", 0, 600, Col, TEXT_ALIGN_CENTER );
 				cam.End3D2D();
-			elseif (not checkfont()) then
+			elseif (not checkfont(self)) then
 				cam.Start3D2D(pos, ang, 0.05 );
 					draw.DrawText("FONT ERROR", "MantleErr", 0, 600, Col, TEXT_ALIGN_CENTER );
 				cam.End3D2D();
