@@ -96,8 +96,8 @@ ENT.SymbolsLockGroup = {
 }
 
 ENT.SymbolsLockConceptGroup = ENT.SymbolsLockGroup or {};
-ENT.SymbolsLockConceptGroup["?"] = 180;
-ENT.SymbolsLockConceptGroup["#"] = 0;
+ENT.SymbolsLockConceptGroup["?"] = 0;
+ENT.SymbolsLockConceptGroup["#"] = 180;
 
 ENT.SymbolsLockGalaxy = {
 	["?"] = 0,		["!"] = 9,
@@ -124,8 +124,8 @@ ENT.SymbolsLockGalaxy = {
 }
 
 ENT.SymbolsLockConceptGalaxy = ENT.SymbolsLockGalaxy or {};
-ENT.SymbolsLockConceptGalaxy["?"] = 180;
-ENT.SymbolsLockConceptGalaxy["#"] = 0;
+ENT.SymbolsLockConceptGalaxy["?"] = 0;
+ENT.SymbolsLockConceptGalaxy["#"] = 180;
 
 --################# SENT CODE ###############
 
