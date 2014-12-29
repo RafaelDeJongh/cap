@@ -397,12 +397,13 @@ function ENT:OnTakeDamage(dmg)
 	// WormholeJump call is in gate_nuke
 end
 
-function ENT:SubFlicker(target,jump)
+function ENT:SubFlicker(target,jump,super)
 	if (not IsValid(self.Entity)) then return end
 	local delay = 0.5;
 	if (jump) then
 		if (self.EventHorizon.Unstable) then return end
 		delay = 4.0;
+		if (super) then	delay = 6.0; end
 	end
 	if (self.Jumping and not jump) then return end
 	if(self.Entity:GetClass() == "stargate_universe")then

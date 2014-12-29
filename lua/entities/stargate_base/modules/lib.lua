@@ -330,19 +330,101 @@ function ENT:Viru(vir)
 	if(vir)then self.Virus = true end;
 end
 
+function ENT:CheckWormJump(target,range,c_range,old_target,groupsystem)
+	local result = true;
+	local chevs = #self.DialledAddress;
+	if (groupsystem) then
+		/*if (chevs==10) then
+			if (target.IsSupergate or target:GetLocale()) then
+				result = false;
+			end
+			result = false;
+		else*/if(chevs==9) then
+			if (self.IsUniverseGate) then
+				if (not target.IsUniverseGate or target.IsSupergate or c_range!=0 and range>=c_range) then
+					result = false;
+				end
+			else
+				if (target.IsUniverseGate or target.IsSupergate or target:GetGateGroup()!=old_target:GetGateGroup()) then
+					result = false;
+				end
+			end
+		else
+			if (self.IsUniverseGate) then
+				if (not target.IsUniverseGate and not target.IsSupergate or c_range!=0 and range>=c_range) then
+					result = false;
+				end
+			else
+				if (not target.IsSupergate and self:GetGateGroup()!=target:GetGateGroup()) then
+					result = false;
+				end
+			end
+		end
+	else
+		if(chevs==9) then
+			if (self.IsUniverseGate) then
+				if (not target.IsUniverseGate or target:GetGalaxy()!=old_target:GetGalaxy()) then
+					result = false;
+				end
+			else
+				if (target.IsUniverseGate or target:GetGalaxy()!=old_target:GetGalaxy()) then
+					result = false;
+				end
+			end
+		else
+			if (self.IsUniverseGate) then
+				if (not target.IsUniverseGate and not target.IsSupergate or target:GetGalaxy()!=old_target:GetGalaxy()) then
+					result = false;
+				end
+			else
+				if (target.IsUniverseGate or not target.IsSupergate and target:GetGalaxy()!=old_target:GetGalaxy()) then
+					result = false;
+				end
+			end
+		end
+	end
+	return result;
+end
+
+function ENT:WormHoleShutdown(old)
+	self:SubFlicker(false,true);
+	self.Jumping = true;
+	if (IsValid(old)) then
+		old:Close();
+		old.EventHorizon:Shutdown(true);
+	end
+	timer.Simple(2,function()
+		if (IsValid(self)) then
+			self.Jumping = false;
+			self:AbortDialling();
+		end
+	end);
+	self.Jumped = true;
+	self.Target = self;
+end
+
 --################# Jump wormhole to nearest gate
 function ENT:WormHoleJump()
-	if (self.IsOpen and self.Outbound and IsValid(self.EventHorizon) and not self.Jumped and self.Entity:GetClass() != "stargate_orlin" and not self.IsSupergate and (not IsValid(self.Target) or not self.Target.jammed)) then
+	if (self.IsOpen and self.Outbound and IsValid(self.EventHorizon) and self.Entity:GetClass() != "stargate_orlin" and not self.IsSupergate and (not IsValid(self.Target) or not self.Target.jammed)) then
 		local old = self.Target;
+
+		if (self.Jumped) then
+			self:WormHoleShutdown(old);
+			return
+		end
 
 		if not IsValid(old) then return end
 
+		local groupsystem = GetConVar("stargate_group_system"):GetBool();
+
 		local gate;
-		local dist = 10000;
+		local dist = 32000;
 		local pos = old:GetPos();
 		for _,v in pairs(ents.FindByClass("stargate_*")) do
 			if ((v.IsGroupStargate or v:GetClass() == "stargate_supergate") and v~=self.Entity and v~=old and not v.IsOpen and not v.IsDialling and v:GetClass() != "stargate_orlin") then
 				local sg_dist = (pos - v:GetPos()):Length();
+				local range = GetConVar("stargate_sgu_find_range"):GetInt();
+				if (not self:CheckWormJump(v,sg_dist,range,old,groupsystem)) then continue end
 				if(dist >= sg_dist) then
 					dist = sg_dist;
 					gate = v;
@@ -350,9 +432,12 @@ function ENT:WormHoleJump()
 			end
 		end
 
-		if not IsValid(gate) then return end
+		if (not IsValid(gate) or #self.DialledAddress==10) then
+    		self:WormHoleShutdown(old);
+			return
+		end
 
-		old:Close(ignore);
+		old:Close();
 		old.EventHorizon:Shutdown(true);
 		gate.Target = self;
 		self.Target = gate;
@@ -371,7 +456,7 @@ function ENT:WormHoleJump()
 		action = action + gate.Sequence:OpenGate();
 		gate:RunActions(action);
 
-		self:SubFlicker(false,true);
+		self:SubFlicker(false,true,gate.IsSupergate);
 
 		-- little delay or it will give us nil
 		timer.Simple(0.3,function()

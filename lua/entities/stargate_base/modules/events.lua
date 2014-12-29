@@ -252,6 +252,8 @@ function ENT:DeactivateStargate(ignore)
 		self:Close(ignore);
 		self.OnButtLock = false;
 		self.DialledAddress = {};
+		self.Jumped = nil;
+		self.Jumping = nil;
 		table.Empty(self.DialledAddress);
 		self.Target = nil;
 	end
