@@ -287,7 +287,11 @@ function ENT:Teleport(from,to,ply,gps_ent)
 			v:SetRenderMode( RENDERMODE_TRANSALPHA );
 			v:SetColor(Color(color.r,color.g,color.b,0));
 			local fx = EffectData();
-			fx:SetEntity(v);
+			if (v.IsUniverseGate and IsValid(v.Gate)) then
+				fx:SetEntity(v.Gate);
+			else
+				fx:SetEntity(v);
+			end
 			fx:SetOrigin(start);
 			fx:SetScale(1); -- "Suck in" - a.k.a. "beam me up". Suck it!
 			util.Effect("teleport_effect",fx,true,true);

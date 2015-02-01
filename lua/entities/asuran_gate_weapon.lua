@@ -622,6 +622,7 @@ function ENT:StopFiring()
 	if(self.remoteGate && self.remoteGate:IsValid()) then
 		StarGate.UnJamGate(self.remoteGate)
 		self.remoteGate:DeactivateStargate(true)
+		self.remoteGate.asuranweapon = nil
 	end
 
 	self.remoteGate = nil

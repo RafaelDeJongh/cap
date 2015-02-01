@@ -87,8 +87,11 @@ function PANEL:Paint()
 				end
 				if(v:GetDialledAddress()!="") then
 					surface.SetTextPos(sX+60,sY-posy-(pos/75));
-					surface.DrawText(SGLanguage.GetMessage("jumper_hud_dial").." "..v:GetDialledAddress());
-					print_r(v.Outputs)
+					if (v:GetDialledAddress():find("?")) then
+						surface.DrawText(SGLanguage.GetMessage("jumper_hud_dial").." "..string.rep("*",v:GetDialledAddress():len()));
+					else
+						surface.DrawText(SGLanguage.GetMessage("jumper_hud_dial").." "..v:GetDialledAddress());
+					end
 				end
 			else
 				local gpos = v:GetPos();

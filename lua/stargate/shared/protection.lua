@@ -90,12 +90,16 @@ function StarGate.Hook.PlayerCanPickupWeapon(p,w)
 	if (StarGate.CFG:Get("swep_groups_only",w:GetClass(),false)) then
 		local tbl = StarGate.CFG:Get("swep_groups_only",w:GetClass(),""):TrimExplode(",");
 		local disallow = true;
+		local exclude = false;
+		if (table.HasValue(tbl,"exclude_mod")) then exclude = true; disallow = false; end
 		for k,v in pairs(tbl) do
-			if (v=="add_shield") then continue end
+			if (v=="add_shield" or v=="exclude_mod") then continue end
 			if (p:IsUserGroup(v)) then
-				disallow = false; break;
+				disallow = exclude;
+				break;
 			end
 		end
+		if (table.Count(tbl)==0) then disallow = false end
 		if (disallow) then return false; end
 	end
 end
