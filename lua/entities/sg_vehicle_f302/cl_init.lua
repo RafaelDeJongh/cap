@@ -289,6 +289,7 @@ local function F302Hud()
 	local p = LocalPlayer();
 	local f302 = p:GetNWEntity("F302");
 	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL);
+	if (not IsValid(self)) then return end
 	local health = math.Round(((self:GetNWInt("health"))/5));
 	if(self.HideHUD) then return end;
 
