@@ -132,7 +132,7 @@ function ENT:Initialize()
     end);
 
 	concommand.Add("SC_Angle"..self:EntIndex(),function(ply,cmd,args)
-		self.Entity:SetNetworkedVector("Ang", Angle(tonumber(args[1]),tonumber(args[2]),tonumber(args[3])));
+		self.Entity:SetNetworkedAngle("Ang", Angle(tonumber(args[1]),tonumber(args[2]),tonumber(args[3])));
 		self.Ang = Angle(tonumber(args[1]),tonumber(args[2]),tonumber(args[3]));
     end);
 

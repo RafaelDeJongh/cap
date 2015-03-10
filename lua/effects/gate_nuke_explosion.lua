@@ -75,7 +75,7 @@ function EFFECT:Init(data)
 		part:SetRoll(math.Rand(480,540))
 		part:SetRollDelta(math.Rand(-1,1))
 		part:SetColor(math.random(100,200), math.random(50,150), 255)
-		part:VelocityDecay(true)
+		--part:VelocityDecay(true)
 	end
 
 	for i=1, 10 do
@@ -95,7 +95,7 @@ function EFFECT:Init(data)
 			part:SetRoll(math.Rand(20,80))
 			part:SetRollDelta(math.random(-1,1))
 			part:SetColor(math.random(100,200), math.random(50,150), 255)
-			part:VelocityDecay(true)
+			--part:VelocityDecay(true)
 		end
 	end
 end

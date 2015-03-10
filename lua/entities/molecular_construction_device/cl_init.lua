@@ -101,7 +101,7 @@ function ENT:MolecularParticle()
 		    pt:SetStartSize(3);
 		    pt:SetEndSize(0.4);
 		    pt:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
-		    pt:VelocityDecay(false);
+		    --pt:VelocityDecay(false);
 		    --self.Emitter:Finish();
 
 			local size = math.random(0.5,0.7);
@@ -113,7 +113,7 @@ function ENT:MolecularParticle()
 		    pt2:SetStartSize(size);
 		    pt2:SetEndSize(size);
 		    pt2:SetColor(Color(math.random(0,255),math.random(0,255),math.random(0,255)));
-		    pt2:VelocityDecay(false);
+		    --pt2:VelocityDecay(false);
 			--self.Emitter2:Finish();
 
 			local dynlight2 = DynamicLight(0);

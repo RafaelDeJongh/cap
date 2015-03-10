@@ -37,7 +37,7 @@ function ENT:Draw()
 			local percent = 0;
 			if IsValid(self) then percent = self:GetNWInt("HUD_Percent", 0); end
             percent = string.format("%G",percent);
-            draw.SimpleText(percent.."%", "center", ScrW()/2+9, ScrH()/2-62, color,0)
+            draw.SimpleText(percent.."%", "center", ScrW()/2+9, ScrH()/2-62, Color(209,238,238,255),0)
 		end);
 	end
 end
@@ -211,7 +211,7 @@ function VGUI:Init()
     Angle_x:SetText( "Pitch:" )
     Angle_x:SetMin( -180 )
     Angle_x:SetMax( 180 )
-	Angle_x:SetValue( e:GetNWVector("Ang", Vector(100,100,100)).x );
+	Angle_x:SetValue( e:GetNWAngle("Ang", Angle(100,100,100)).x );
     Angle_x:SetDecimals( 0 )
 	Angle_x.OnValueChanged = function(Angle_x, fValue)
 		LocalPlayer():ConCommand("SC_Angle"..e:EntIndex().." "..VGUI.Angle_x:GetValue().." "..VGUI.Angle_y:GetValue().." "..VGUI.Angle_z:GetValue());
@@ -223,7 +223,7 @@ function VGUI:Init()
     Angle_y:SetText( "Yaw:" )
     Angle_y:SetMin( -180 )
     Angle_y:SetMax( 180 )
-	Angle_y:SetValue( e:GetNWVector("Ang", Vector(100,100,100)).y );
+	Angle_y:SetValue( e:GetNWAngle("Ang", Angle(100,100,100)).y );
     Angle_y:SetDecimals( 0 )
 	Angle_y.OnValueChanged = function(Angle_y, fValue)
 		LocalPlayer():ConCommand("SC_Angle"..e:EntIndex().." "..VGUI.Angle_x:GetValue().." "..VGUI.Angle_y:GetValue().." "..VGUI.Angle_z:GetValue());
@@ -235,7 +235,7 @@ function VGUI:Init()
     Angle_z:SetText( "Roll:" )
     Angle_z:SetMin( -180 )
     Angle_z:SetMax( 180 )
-	Angle_z:SetValue( e:GetNWVector("Ang", Vector(100,100,100)).z );
+	Angle_z:SetValue( e:GetNWAngle("Ang", Angle(100,100,100)).z );
     Angle_z:SetDecimals( 0 )
 	Angle_z.OnValueChanged = function(Angle_z, fValue)
 		LocalPlayer():ConCommand("SC_Angle"..e:EntIndex().." "..VGUI.Angle_x:GetValue().." "..VGUI.Angle_y:GetValue().." "..VGUI.Angle_z:GetValue());

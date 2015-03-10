@@ -43,7 +43,7 @@ function EFFECT:Init(data)
 		pt:SetStartSize(4*scale);
 		pt:SetEndSize(1*scale);
 		pt:SetColor(self.Color.r,self.Color.g,self.Color.b);
-		pt:VelocityDecay(false);
+		--pt:VelocityDecay(false);
 	end
 	for i =1,12 do
 		local pt = em:Add("sprites/gmdm_pickups/light",pos+VectorRand()*math.random(4,6)*scale);
@@ -54,7 +54,7 @@ function EFFECT:Init(data)
 		pt:SetStartSize(24*scale);
 		pt:SetEndSize(24*scale);
 		pt:SetColor(self.Color.r,self.Color.g,self.Color.b);
-		pt:VelocityDecay(false);
+		--pt:VelocityDecay(false);
 	end
 	-- ######################## Decal on the wall
 	if(StarGate.VisualsWeapons("cl_staff_scorch")) then

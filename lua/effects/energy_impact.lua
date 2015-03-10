@@ -46,7 +46,7 @@ function EFFECT:Init(data)
 		pt:SetStartSize(4);
 		pt:SetEndSize(1);
 		pt:SetColor(self.Color.r,self.Color.g,self.Color.b);
-		pt:VelocityDecay(false);
+		--pt:VelocityDecay(false);
 	end
 	for i =1,12 do
 		local pt = em:Add("sprites/gmdm_pickups/light",pos+VectorRand()*math.random(4,6));
@@ -57,7 +57,7 @@ function EFFECT:Init(data)
 		pt:SetStartSize(20+size*5);
 		pt:SetEndSize(20+size*5);
 		pt:SetColor(self.Color.r,self.Color.g,self.Color.b);
-		pt:VelocityDecay(false);
+		--pt:VelocityDecay(false);
 	end
 	-- ######################## Decal on the wall
 	-- display red glow only if its ronon gun @ AlexALX
