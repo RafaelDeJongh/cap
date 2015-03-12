@@ -1347,7 +1347,7 @@ local function SG_Settings_OpenNet()
 				elseif(typ=="number") then
 					row:Setup("CapNumber");
 				else
-					row:Setup("Generic");
+					row:Setup("Generic",{}); -- ??? whats wrong? why needed second parameter now?
 				end
 				if (SGLanguage.ValidMessage("sg_sets["..name.."]["..k.."][desc]")) then
 					row:SetToolTip(SGLanguage.GetMessage("sg_sets["..name.."]["..k.."][desc]"));
