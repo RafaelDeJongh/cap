@@ -24,7 +24,8 @@ AddCSLuaFile();
 
 --include("entities/event_horizon/modules/teleport.lua"); -- FIXME: Move all teleportation code of the eventhorizon to /stargate/server/teleport.lua. Then create a teleportation class
 
-local snd = Sound("tech/asgard_teleport.mp3");
+if (math.random(1,2)==1) then local snd = Sound("tech/asgard_teleport.mp3");
+else local snd = Sound("tech/asgard_beamup.mp3"); end
 
 --################### Init @PiX06,aVoN
 function ENT:Initialize()
