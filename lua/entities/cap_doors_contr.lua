@@ -28,6 +28,8 @@ AddCSLuaFile()
 ENT.Sounds={
 	PressDest=Sound("door/dest_door_button.wav"),
 	PressAtl=Sound("door/atlantis_door_chime.wav"),
+	PressGoa=Sound("button/ring_button1.mp3"),
+	PressOri=Sound("button/ancient_button1.wav"),
 }
 
 -----------------------------------INIT----------------------------------
@@ -45,7 +47,9 @@ function ENT:Initialize()
 	self.Atlantis = false;
 
 	if (self.Entity:GetModel() == "models/iziraider/destinybutton/destinybutton.mdl") then self.Entity.TypeS = 1;
-	else self.Entity.TypeS = 2; end
+	elseif (self.Entity:GetModel() == "models/boba_fett/props/buttons/atlantis_button.mdl") then self.Entity.TypeS = 2;
+	elseif (self.Entity:GetModel() == "models/madman07/ring_panel/goauld_panel.mdl") then self.Entity.TypeS = 3;
+	else self.Entity.TypeS = 4; end
 end
 
 function ENT:TriggerInput(variable, value)
@@ -72,6 +76,8 @@ function ENT:BressButton()
 	end);
 
 	if (self.TypeS == 1) then self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
+	elseif (self.TypeS == 3) then self.Entity:EmitSound(self.Sounds.PressGoa,100,math.random(90,110));
+	elseif (self.TypeS == 4) then self.Entity:EmitSound(self.Sounds.PressOri,100,math.random(90,110));
 	else self.Entity:EmitSound(self.Sounds.PressAtl,100,math.random(90,110)); end
 
 	if (self.Atlantis and IsValid(self.AtlTP) and self.AtlTP.Busy) then return end

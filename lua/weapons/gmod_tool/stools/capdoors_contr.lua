@@ -13,6 +13,8 @@ TOOL.ClientConVar["model"] = "models/iziraider/destinybutton/destinybutton.mdl";
 TOOL.List = "ControllerModels";
 list.Set(TOOL.List,"models/iziraider/destinybutton/destinybutton.mdl",{});
 list.Set(TOOL.List,"models/boba_fett/props/buttons/atlantis_button.mdl",{});
+list.Set(TOOL.List,"models/madman07/ring_panel/goauld_panel.mdl",{});
+list.Set(TOOL.List,"models/ZsDaniel/ori-ringpanel/panel.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_contr";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
