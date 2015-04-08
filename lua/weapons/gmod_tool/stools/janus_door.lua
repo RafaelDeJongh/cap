@@ -36,7 +36,7 @@ if (CLIENT) then
 
 	function TOOL:BuildCPanel()
 		self:AddControl("Header",   {Text = "#Tool_janus_door_name", Description = "#Tool_janus_door_desc"});
-		self:AddControl("CheckBox", {Label = "Reversed (Starts invisible, becomes solid)", Command = "janus_door_reversed"});
+		self:AddControl("CheckBox", {Label = "Reversed (Starts no solid, becomes solid)", Command = "janus_door_reversed"});
 		self:AddControl("CheckBox", {Label = "Toggle Active", Command = "janus_door_toggle"});
 		self:AddControl("Numpad",   {Label = "Button", ButtonSize = "22", Command = "janus_door_key"});
 	end
