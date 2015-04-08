@@ -49,7 +49,8 @@ function ENT:Initialize()
 	if (self.Entity:GetModel() == "models/iziraider/destinybutton/destinybutton.mdl") then self.Entity.TypeS = 1;
 	elseif (self.Entity:GetModel() == "models/boba_fett/props/buttons/atlantis_button.mdl") then self.Entity.TypeS = 2;
 	elseif (self.Entity:GetModel() == "models/madman07/ring_panel/goauld_panel.mdl") then self.Entity.TypeS = 3;
-	else self.Entity.TypeS = 4; end
+	elseif (self.Entity:GetModel() == "models/madman07/ring_panel/ancient/panel.mdl") then self.Entity.TypeS = 4;
+	else self.Entity.TypeS = 5; end
 end
 
 function ENT:TriggerInput(variable, value)
@@ -77,7 +78,7 @@ function ENT:BressButton()
 
 	if (self.TypeS == 1) then self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
 	elseif (self.TypeS == 3) then self.Entity:EmitSound(self.Sounds.PressGoa,100,math.random(90,110));
-	elseif (self.TypeS == 4) then self.Entity:EmitSound(self.Sounds.PressOri,100,math.random(90,110));
+	elseif (self.TypeS == 4 or self.TypeS == 5) then self.Entity:EmitSound(self.Sounds.PressOri,100,math.random(90,110));
 	else self.Entity:EmitSound(self.Sounds.PressAtl,100,math.random(90,110)); end
 
 	if (self.Atlantis and IsValid(self.AtlTP) and self.AtlTP.Busy) then return end

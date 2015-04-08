@@ -266,9 +266,16 @@ end
 function ENT:Draw()
 	self.Entity:DrawModel();
 	hook.Remove("HUDPaint",tostring(self.Entity).."MK2");
+	local ent = self.Entity
 	if(not StarGate.VisualsMisc("cl_draw_huds",true)) then return end;
     if(LocalPlayer():GetEyeTrace().Entity == self.Entity && EyePos():Distance( self.Entity:GetPos() ) < 1024)then
 		hook.Add("HUDPaint",tostring(self.Entity).."MK2",function()
+		
+			if(not IsValid(ent))then
+				hook.Remove("HUDPaint",tostring(ent).."MK2")
+				return
+			end
+		
 		    local w = 0;
             local h = 260;
 		    surface.SetTexture(self.Zpm_hud);
@@ -284,7 +291,7 @@ function ENT:Draw()
 		    	draw.DrawText(SGLanguage.GetMessage("hud_naquadah"), "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +115 - h, Color(209,238,238,255),0);
 		    	draw.DrawText(SGLanguage.GetMessage("hud_capacity"), "center2", ScrW() / 2 + 40 + w, ScrH() / 2 +165 - h, Color(209,238,238,255),0);
 		    end
-
+			
 			if(IsValid(self.Entity))then
 	            add = self.Entity:GetNetworkedString("add");
 	            perc = self.Entity:GetNWString("perc");

@@ -140,7 +140,7 @@ function ENT:Initialize(ply)
 	self:SetUseType(SIMPLE_USE);
 	self:SetRenderMode(RENDERMODE_TRANSALPHA);
 	self:CreateWireInputs("X","Y","Z","Target [VECTOR]","Cloak","Shield","Toggle Light", "AutoDestruct");
-	self:CreateWireOutputs("Shield Strength","Shield Enabled","Health","Driver");
+	self:CreateWireOutputs("Shield Strength","Shield Enabled","Health","Driver [ENTITY]");
 
 	self.Hover = true;
 	self:SpawnSeats()
@@ -182,7 +182,6 @@ function ENT:OnRemove()   --######### @ RononDex
 	if((self.Inflight)and(IsValid(self.Pilot))) then
 		if(not(self.Done)) then
 			self:ExitJumper(self.Pilot)
-			self:setWire("Driver",nil)
 		end
 	end
 
@@ -411,7 +410,6 @@ function ENT:Use(ply)   --######### What happens when you press E?@ RononDex
 	if ((pos.x > -20 and pos.x < 100)and(pos.y > -90 and pos.y < 90)and(pos.z > -2 and pos.z < 80)) then
 		if(not(self.Inflight)) then
 			self:EnterJumper(ply)
-			self:setWire("Driver",self.Pilot)
 		end
 	end
 end

@@ -25,6 +25,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self:EmitSound(self.Sounds.Shutdown,100,100)
 		self:SetNetworkedEntity("jumper",NULL)
 		self.HoverPos = self:GetPos();
+		self:SetWire("Driver",NULL)
 
 		self:RemoveDrones() -- Remove the drone props... SO MANY BUGS BECAUSE OF THESE THINGS!
 		self.Roll=0
@@ -66,6 +67,7 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		self.Inflight = true
 		self.Pilot = true
 		self.Pilot=ply
+		self:SetWire("Driver",self.Pilot)
 		self.Roll=0
 		if(self.BulkHead) then
 			self:ToggleBulkHead()
