@@ -26,7 +26,8 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS);
 	self:SetUseType(SIMPLE_USE);
 
-	self.Pressed = false
+	self.Pressed = false;
+	self:CreateWireInputs("Pressed");
 	self:CreateWireOutputs("Active");
 end
 
@@ -45,20 +46,28 @@ function ENT:Think()
 	return true
 end
 
+function ENT:TriggerInput(variable, value)
+	if (variable == "Pressed") then
+		if(value<=0)then
+			self:PressConsole();
+		end
+	end
+end
+
 function ENT:Use()
 	self:PressConsole();
 end
 
 function ENT:PressConsole()
 	if(not self.Pressed) then
-		self.Pressed = true
-		self:SetSkin(1)
-		self.Light=true
+		self.Pressed = true;
+		self:SetSkin(1);
+		self.Light=true;
 		self:SetWire("Active",1);
 	else
-		self.Pressed = false
-		self:SetSkin(0)
-		self.Light=true
+		self.Pressed = false;
+		self:SetSkin(0);
+		self.Light=true;
 		self:SetWire("Active",0);
 	end
 end
