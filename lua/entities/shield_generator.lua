@@ -108,7 +108,7 @@ function ENT:Status(b,nosound)
 					self.Shield = e;
 					self:ShowOutput(true);
 					if(not nosound) then
-						if(self.Active==1) then
+						if(SndDisable==1) then
 							self:EmitSound(self.Sounds.Engage,90,math.random(90,110));
 						end
 					end
@@ -266,6 +266,35 @@ function ENT:TriggerInput(k,v)
 			self.SndDisable=1
 		end
 	end
+end
+
+--#################  Claok @aVoN
+function ENT:Use(p)
+	if (self:GetWire("Disable Use")>0) then return end
+	if(self:Enabled()) then
+		self:Status(false);
+	else
+		self:Status(true);
+	end
+end
+
+local function cap_shield_nuke(ent)
+	if (not IsValid(ent)) then return end
+	if (StarGate.IsInShield(ent)) then return false end
+end
+
+hook.Add("StarGate.GateNuke.DamageEnt","CAP.Shield.Nuke",cap_shield_nuke);
+hook.Add("StarGate.GateNuke.KillPlayer","CAP.Shield.Nuke",cap_shield_nuke);
+hook.Add("StarGate.SatBlast.DamageEnt","CAP.Shield.Nuke",cap_shield_nuke);
+
+end
+
+if CLIENT then
+
+ENT.RenderGroup = RENDERGROUP_OPAQUE; -- This FUCKING THING avoids the clipping bug I have had for ages since stargate BETA 1.0. DAMN!
+
+end
+
 end
 
 --#################  Claok @aVoN
