@@ -60,7 +60,7 @@ function ENT:Initialize()
 	self:SetWire("Strength",self.Strength);
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Phys = self.Entity:GetPhysicsObject();
-	self.Active=1 --variable for Disabling sound @KvasirSG
+	self.SndDisable=1 --variable for Disabling sound @KvasirSG
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(10);
@@ -124,12 +124,14 @@ function ENT:Status(b,nosound)
 			self.Shield = nil;
 			self:ShowOutput(false);
 			if(not nosound and not self.Depleted) then
-				self:EmitSound(self.Sounds.Disengage,90,math.random(90,110));
+				if(self.SndDisable==1) then
+					self:EmitSound(self.Sounds.Disengage,90,math.random(90,110));
+				end
 			end
 		end
 		return;
 	end
-	if(self.Active==1) then
+	if(self.SndDisable==1) then
 		-- Fail animation
 		self:EmitSound(self.Sounds.Fail[1],90,math.random(90,110));
 		self:EmitSound(self.Sounds.Fail[2],90,math.random(90,110));
@@ -145,7 +147,7 @@ function ENT:Think()
 		if(self.Strength >= math.Clamp(self.RestoreThresold/self.StrengthMultiplier[2],3,40)) then
 			self.Depleted = nil;
 			if(enabled) then
-				if(self.Active==1) then
+				if(self.SndDisable==1) then
 					self:EmitSound(self.Sounds.Engage,90,math.random(90,110));
 				end
 				-- Add new entities to the shield, which "entered the shield" while it was offline!
@@ -259,9 +261,9 @@ function ENT:TriggerInput(k,v)
 		self:SetMultiplier(math.Clamp(v,-5,5));
 	elseif(k=="Disable Sound") then
 		if(v>0) then
-			self.Active=0
+			self.SndDisable=0
 		else
-			self.Active=1
+			self.SndDisable=1
 		end
 	end
 end
