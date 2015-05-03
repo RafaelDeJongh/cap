@@ -339,10 +339,22 @@ atlantis_hit = 50
 [ashen_defence]
 req_energy = true
 
+# TelTak
+[teltak]
+allow_beam_weapon = true
+jump_distance = 15000
+
+# ATL Light
+[atlantis_light]
+max_brightness = 5
+max_size = 500
+
 # Cap misc
 [cap_misc]
 allow_drop_weapons = true
 ship_shield = true
+
+
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu

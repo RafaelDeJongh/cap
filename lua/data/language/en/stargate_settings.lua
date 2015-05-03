@@ -431,6 +431,13 @@ sg_sets[tac][max_shoots] = Maximum shoots
 sg_sets[tac][max_shoots][desc] = Maximum shoots in kill mode before destroy, 0 - unlimited.
 sg_sets[tac][range] = Target find range
 
+//Teltak
+sg_sets[teltak] = Tel'tak
+sg_sets[teltak][jump_distance] = Jump Distance
+sg_sets[teltak][jump_distance][desc] = The Maximum Jump Distance
+sg_sets[teltak][allow_beam_weapon] = Ring Beam Weapon
+sg_sets[teltak][allow_beam_weapon][desc] = Allow Ring Beam Weapon
+
 // Kino dispenser
 sg_sets[kino_dispenser] = Kino Dispenser
 sg_sets[kino_dispenser][max_kino] = Maximum kinos

@@ -21,7 +21,7 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.Type = "vehicle"
 ENT.Base = "sg_vehicle_base"
 
-ENT.PrintName = "TelTac"
+ENT.PrintName = "TelTak"
 ENT.Author	= "RononDex, Madman07, James, Boba Fett"
 ENT.Contact	= ""
 ENT.Purpose	= ""
@@ -30,6 +30,7 @@ list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.AutomaticFrameAdvance = true
 
 ENT.IsSGVehicleCustomView = true
+ENT.EntHealth = 20000;
 
 if SERVER then
 
@@ -80,8 +81,7 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:SpawnRings(pl);
 	e:SpawnRingPanel(pl);
 	e:SpawnDoor(pl)
-	e:SpawnDoor2(pl)
-	e:ToggleDoors("out")
+	//e:ToggleDoors("out")
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	pl:Give("weapon_ringcaller");
 	pl:AddCount("CAP_ships", e)
@@ -93,8 +93,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 
 	self.BaseClass.Initialize(self)
 
-	self.Vehicle = "Teltac";
-	self.EntHealth = 20000;
+	self.Vehicle = "Teltak";
 	self.BlastMaxVel = 10000000;
 	self.Blasts = {};
 	self.BlastCount = 0;
@@ -148,6 +147,15 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	end
 
 	self.Open = false;
+	
+	self.HyperspaceDist = 0;
+	self.MaxCharge = StarGate.CFG:Get("teltak","jump_distance",15000); //Max Jump Distance
+	self.CanJump = true;
+	self.CanFire = true;
+	self.CooledDown = true; //Beam Cooldown
+	self.TeltakHealth = self:GetNetworkedInt("health");	
+	self.WeaponAllowed = StarGate.CFG:Get("teltak","allow_beam_weapon",true);
+	self:SpawnButtons();
 
 end
 
@@ -180,18 +188,33 @@ function ENT:OnTakeDamage(dmg) --########## Gliders aren't invincible are they? 
 	self:SetWire("Health",health-dmg:GetDamage());
 
 	if(health-dmg:GetDamage()<=1500) then
+		self.CanFire = false;
+	end
+	
+	if(health-dmg:GetDamage()<=1000) then
 		self.CanCloak = false;
 	end
 
+	if(health-dmg:GetDamage()<=500) then
+		self.CanJump = false;
+	end
+	
 	if((health-dmg:GetDamage())<=0) then
 		self:Bang(); -- Go boom
 	end
+	
+	self.TeltakHealth = health;
 end
 
 function ENT:OnRemove()
 	if IsValid(self.RingPanel) then self.RingPanel:Remove(); end
 	if IsValid(self.InRing) then self.InRing:Remove(); end
-	if IsValid(self.OutRing) then self.OutRing:Remove(); end
+	if IsValid(self.OutRing) then 
+		if(self.OutRing.Laser) then
+			self.OutRing:StopLaser();
+		end
+		self.OutRing:Remove();
+	end
 	if(IsValid(self.Door)) then self.Door:Remove(); end
 	if(IsValid(self.Door2)) then self.Door2:Remove(); end
 	if(IsValid(self.Door3)) then self.Door3:Remove(); end
@@ -230,32 +253,126 @@ function ENT:Think()
 				self:ToggleCloak()
 			elseif(self.Pilot:KeyDown(self.Vehicle,"DOOR")) then
 				self:ToggleDoors("out")
-			elseif(self.Pilot:KeyDown(self.Vehicle,"HYPERSPACE")) then
-				if(self.Accel.FWD == self.MaxSpeed) then
-					if(not self.Pressed) then
-						self.Pressed = true;
-						timer.Simple(1, function()
-							if(IsValid(self)) then
-								self:HyperSpace();
-								self.Pressed = false;
-							end
-						end);
+			end
+			
+			if(self.CanJump) then
+				if(self.Pilot:KeyDown(self.Vehicle,"HYPERSPACE") and not self.OutRing.Laser) then
+					if(self.HyperspaceDist < self.MaxCharge) then
+						self.HyperspaceDist = self.HyperspaceDist + (250 + math.Round(self.TeltakHealth/self.EntHealth*100));
 					end
+					self.Charging = true;
+				else
+					self.Charging = false;
+					if(self.HyperspaceDist < (self.MaxCharge/4)) then
+						self.HyperspaceDist = 0;
+					end					
+				end
+			end
+			
+			self.Pilot:SetNetworkedBool("Charging",self.Charging);
+			
+			if(not self.Charging and self.HyperspaceDist > (self.MaxCharge/4)) then
+				self:HyperSpace();
+				self.HyperspaceDist = 0;
+				
+			end
+			self.Pilot:SetNWInt("Charge",self.HyperspaceDist);
+			
+			if(not self.LandingMode and self.OutRing.Laser) then
+				self.OutRing:StopLaser();
+			end
+			
+			if(self.WeaponAllowed) then
+				if(self.Pilot:KeyDown(self.Vehicle,"FIRE")) then
+					if(not self.Cloaked and self.CanFire and self.CooledDown and self.LandingMode) then
+						if(not self.OutRing.Laser) then
+							self.OutRing:StartLaser();
+							self.OutRing.Busy = true;
+							timer.Simple(30, function()
+								if(IsValid(self)) then
+									self.CooledDown = false;
+									if(IsValid(self.OutRing)) then
+										self.OutRing.Busy = false;
+										self.OutRing:StopLaser();
+									end
+									self.BeamTimer = "BeamCooldown"..self.Pilot:SteamID()
+									timer.Create(self.BeamTimer,60,1, function()
+										self.CooledDown = true;
+									end);
+								end
+							end);
+						end
+					end
+				end
+				
+				if(not self.CooledDown) then
+					self.Pilot:SetNWInt("BeamCooldown", timer.TimeLeft(self.BeamTimer));
 				end
 			end
 		end
+		
 	end
+						
 end
 
 function ENT:Enter(p)
 	self.BaseClass.Enter(self,p);
-	self:ToggleDoors("out",true);
+	self.Pilot:SetNWInt("MaxCharge",self.MaxCharge);
 end
 
 function ENT:Exit(kill)
 	self.ExitPos = self:GetPos()+Vector(0,0,120);
 	self.CanUse = false;
+	self.Pilot:SetNWInt("BeamCooldown", 0);
+	self.HyperspaceDist = 0;
+	self.Charging = false;
+	//self:IntertialDampning(false);
 	self.BaseClass.Exit(self,kill);
+end
+
+ENT.Buttons = {};
+function ENT:SpawnButtons()
+	local e = {};
+	for i=1,5 do
+		e[i] = ents.Create("teltak_button");
+		e[i]:Spawn();
+		e[i]:Activate();
+		//constraint.Weld(e[i],self,0,0,0,true);
+		e[i]:SetParent(self);
+		e[i]:SetRenderMode(RENDERMODE_TRANSALPHA);
+		e[i].Parent = self;
+		constraint.Weld(e[i],self,0,0,0,true);
+		e[i].TelTakPart = true;
+		self.Buttons[i] = e[i]
+		if(i==1) then
+			e[i].RearDoor = false;
+			e[i].Bulkhead = true;
+			e[i]:SetPos(self:GetPos()+Vector(178, 35, 105))
+			e[i]:SetAngles(self:GetAngles()+Angle(0,90,84))			
+		elseif(i==2) then
+			e[i].RearDoor = false;
+			e[i].Bulkhead = true;
+			e[i]:SetPos(self:GetPos()+Vector(136, -35, 105))
+			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
+			
+		elseif(i==3) then
+			e[i].RearDoor = true;
+			e[i].Bulkhead = false;
+			e[i]:SetPos(self:GetPos()+ Vector(-142, 30, 105))
+			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
+		elseif(i==4) then
+			e[i].RearDoor = true;
+			e[i].Bulkhead = false;
+			e[i]:SetPos(self:GetPos()+ Vector(-200, -30, 105))
+			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
+		elseif(i==5) then
+			e[i].RearDoor = false;
+			e[i].Bulkhead = false;
+			e[i]:SetPos(self:GetPos()+ Vector(285, -149, 103));
+			e[i]:SetAngles(self:GetAngles()+Angle(90,0,90))
+		end
+		if CPPI and IsValid(p) and e[i].CPPISetOwner then e[i]:CPPISetOwner(p) end
+	end
 end
 
 function ENT:ToggleDoors(d,set)
@@ -267,7 +384,7 @@ function ENT:ToggleDoors(d,set)
 			self.Open = false;
 			self.Door:SetSolid(SOLID_VPHYSICS);
 			self.Door:EmitSound(self.Sounds.Open,80,98);
-		elseif(not set) then
+		elseif(not self.Open) then
 			self:SetPlaybackRate(0.4)
 			self:ResetSequence("hide");
 			self.Open = true;
@@ -311,6 +428,7 @@ function ENT:ToggleDoors(d,set)
 			self.Door3:EmitSound(self.Sounds.OpenC,80,100);
 		end
 	end
+	self.RunningAnim = true;
 end
 
 
@@ -319,7 +437,7 @@ function ENT:SpawnDoor(p)
 
 	local e = ents.Create("prop_physics");
 	e:SetModel("models/props_c17/door01_left.mdl");
-	e:SetPos(self:GetPos()+self:GetRight()*160+self:GetForward()*270+self:GetUp()*103);
+	e:SetPos(self:GetPos()+self:GetRight()*170+self:GetForward()*270+self:GetUp()*103);
 	e:SetAngles(self:GetAngles()+Angle(0,90,0));
 	e:Spawn();
 	e:Activate();
@@ -330,8 +448,55 @@ function ENT:SpawnDoor(p)
 	e:SetParent(self);
 	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	self.Door = e;
+	
+	e = ents.Create("prop_physics");
+	e:SetModel("models/James/teltac/inner_door.mdl");
+	e:SetPos(self:GetPos()+self:GetForward()*300);
+	e:SetAngles(self:GetAngles());
+	e:Spawn();
+	e:Activate();
+	constraint.Weld(self,e,0,0,0,true)
+	e:SetParent(self);
+	self.Door2 = e;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
+
+	local d = ents.Create("prop_physics");
+	d:SetModel("models/James/teltac/inner_door.mdl");
+	d:SetPos(self:GetPos()+self:GetForward()*-40);
+	d:SetAngles(self:GetAngles());
+	d:Spawn();
+	d:Activate();
+	constraint.Weld(self,d,0,0,0,true)
+	d:SetParent(self);
+	self.Door3 = d;
+	if CPPI and IsValid(p) and d.CPPISetOwner then d:CPPISetOwner(p) end
 
 end
+
+/*
+function ENT:IntertialDampning(b)
+	if(b) then
+		self.Cargo = ents.FindInSphere(self:GetPos(),800)
+		for k,v in pairs(self.Cargo) do
+			print(v:GetClass())
+			v.TeltakCurrentParent = v:GetParent();
+			if(v.TeltakCurrentParent != nil) then
+				v:SetParent(self);
+			end
+		end
+	else
+		for k,v in pairs(self.Cargo) do
+			print(v.TeltakCurrentParent);
+			if(v.TeltakCurrentParent:IsValid()) then
+				v:SetParent(v.TeltakCurrentParent);
+			else
+				v:SetParent(nil);
+			end
+		end
+		table.Empty(self.Cargo);
+	end
+end
+*/
 
 function ENT:Use(p)
 
@@ -345,30 +510,18 @@ function ENT:Use(p)
 	local de_pos = self:WorldToLocal(p:GetPos()) - DOORE_POS;
 
 	if(not(self.Inflight)) then
-		if(	(pos.x > -100 and pos.x < 100) and --Allow player if he is 30 units away from COCKPIT_POS in left/right direction
+		if(	(pos.x > -80 and pos.x < 100) and --Allow player if he is 30 units away from COCKPIT_POS in left/right direction
 			(pos.y > -100 and pos.y < 100) and --Allow, if 30 units away from COCKPIT_POS in froward/backward dir
 			(pos.z > -30 and pos.z < 70) -- Allow, if in range of -2 or + 30 in z-direction
 		) then
 			self.CanUse = true;
+
+			//self:IntertialDampning(true);
+			
 			self:Enter(p);
 			if(self.Open) then
 				self:ToggleDoors("out");
 			end
-		elseif(	(d_pos.x > -50 and d_pos.x < 50) and
-			(d_pos.y > -125 and d_pos.y < 125) and
-			(d_pos.z > -30 and d_pos.z < 70)
-		) then
-			self.CanUse = false;
-			self:ToggleDoors("inc")
-		elseif(	(de_pos.x > -50 and de_pos.x < 50) and
-			(de_pos.y > -185 and de_pos.y < 155) and
-			(de_pos.z > -30 and de_pos.z < 70)
-		) then
-			self.CanUse = false;
-			self:ToggleDoors("ine")
-		else
-			self.CanUse = false;
-			self:ToggleDoors("out");
 		end
 	end
 end
@@ -389,7 +542,7 @@ function ENT:SpawnRings(p)
 
 	local e = ents.Create("ring_base_ancient");
 	e:SetModel(e.BaseModel);
-	e:SetPos(self:LocalToWorld(Vector(0,-5,45)));
+	e:SetPos(self:LocalToWorld(Vector(0,-5,44)));
 	e:Spawn();
 	e:Activate();
 	e:SetAngles(self:GetAngles());
@@ -403,7 +556,7 @@ end
 
 function ENT:SpawnRingPanel(p)
 	local e = ents.Create("ring_panel_goauld");
-	e:SetPos(self:GetPos()+self:GetForward()*135+self:GetRight()*-50+self:GetUp()*100);
+	e:SetPos(self:GetPos()+self:GetForward()*137+self:GetRight()*-50+self:GetUp()*100);
 	e:SetAngles(self:GetAngles()+Angle(0,180,0));
 	e:Spawn();
 	e:Activate();
@@ -494,7 +647,7 @@ function ENT:HyperSpace()
 	util.Effect( "jump_out", ed, true, true );
 
 	if(not(self.DestSet)) then
-		self:SetPos(self:GetPos()+self:GetForward()*7500)
+		self:SetPos(self:GetPos()+self:GetForward()*self.HyperspaceDist)
 	else
 		if(self.HyperVector) then
 			self:SetPos(self.HyperspaceVector);
@@ -528,30 +681,6 @@ function ENT:TriggerInput(k,v)
 	end
 end
 
-function ENT:SpawnDoor2(p)
-
-	local e = ents.Create("prop_physics");
-	e:SetModel("models/James/teltac/inner_door.mdl");
-	e:SetPos(self:GetPos()+self:GetForward()*300);
-	e:SetAngles(self:GetAngles());
-	e:Spawn();
-	e:Activate();
-	constraint.Weld(self,e,0,0,0,true)
-	e:SetParent(self);
-	self.Door2 = e;
-	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
-
-	local d = ents.Create("prop_physics");
-	d:SetModel("models/James/teltac/inner_door.mdl");
-	d:SetPos(self:GetPos()+self:GetForward()*-40);
-	d:SetAngles(self:GetAngles());
-	d:Spawn();
-	d:Activate();
-	constraint.Weld(self,d,0,0,0,true)
-	d:SetParent(self);
-	self.Door3 = d;
-	if CPPI and IsValid(p) and d.CPPISetOwner then d:CPPISetOwner(p) end
-end
 
 --####### Give us air @RononDex
 function ENT:LSSupport()
@@ -601,8 +730,6 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if dupeInfo.Door2 then self.Door2 = CreatedEntities[dupeInfo.Door2]; end
 	if dupeInfo.Door3 then self.Door3 = CreatedEntities[dupeInfo.Door3]; end
 
-	self:ToggleDoors("out")
-
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 
 	if (IsValid(ply)) then
@@ -638,7 +765,7 @@ ENT.Sounds = {
 if (StarGate==nil or StarGate.KeyBoard==nil or StarGate.KeyBoard.New==nil) then return end
 
 --########## Keybinder stuff
-local KBD = StarGate.KeyBoard:New("Teltac")
+local KBD = StarGate.KeyBoard:New("Teltak")
 --Navigation
 KBD:SetDefaultKey("FWD",StarGate.KeyBoard.BINDS["+forward"] or "W"); -- Forward
 KBD:SetDefaultKey("LEFT",StarGate.KeyBoard.BINDS["+moveleft"] or "A"); -- Forward
@@ -670,19 +797,21 @@ KBD:SetDefaultKey("FPV","1");
 
 KBD:SetDefaultKey("EXIT",StarGate.KeyBoard.BINDS["+use"] or "E");
 
-
+local MaxCharge;
 function ENT:Initialize()
 	self.Dist=-1160
 	self.UDist=450
 	self.KBD = self.KBD or KBD:CreateInstance(self)
 	self.BaseClass.Initialize(self)
-	self.Vehicle = "Teltac";
+	self.Vehicle = "Teltak";
 	self.NextPress = CurTime();
 	self.FPV = 0;
+	//MaxCharge = LocalPlayer():GetNWInt("MaxCharge") or 15000;
+	MaxCharge = StarGate.CFG:Get("teltak","jump_distance",15000);
 end
 
 
-function SGTeltacCalcView(Player,Origin, Angles, FieldOfView)
+function SGTeltakCalcView(Player,Origin, Angles, FieldOfView)
 	local view = {};
 
 	local p = LocalPlayer();
@@ -708,7 +837,7 @@ function SGTeltacCalcView(Player,Origin, Angles, FieldOfView)
 		return view;
 	end
 end
-hook.Add("CalcView", "SGTeltacCalcView", SGTeltacCalcView)
+hook.Add("CalcView", "SGTeltakCalcView", SGTeltakCalcView)
 
 --######## Mainly Keyboard stuff @RononDex
 function ENT:Think()
@@ -748,5 +877,56 @@ function ENT:Think()
 		end
 	end
 end
+
+--########### All HUD Related stuff is below @ RononDex
+local hudpos = {
+	hyperx = (ScrW()/2),
+	hypery = (ScrH()/10*9),
+	coolx = (ScrW()/4*3),
+	cooly = (ScrH()/10*9),
+	healthx = (ScrW()/4),
+	healthy = (ScrH()/10*9),
+}
+local ChargeWidth = 100;
+local HealthWidth = 100;
+local CooldownWidth = 100;
+function PrintHUD()
+
+	local p = LocalPlayer()
+	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local Charging = p:GetNWBool("Charging");
+	local Teltak = p:GetNetworkedEntity("Teltak")
+	
+	local Charge = p:GetNWInt("Charge");
+	local Cooldown = math.Round(p:GetNWInt("BeamCooldown"));
+
+	if(IsValid(self)) then
+		if((IsValid(Teltak))and(Teltak==self)) then
+		
+			if(Charging) then
+				local charge = math.Round(Charge/MaxCharge*100);
+				local TextColour;
+				if(Charge >= (MaxCharge/4)) then
+					TextColour = Color(0,255,0,255);
+				else
+					TextColour = Color(255,255,255,255);
+				end
+				
+				local HUDBox = draw.WordBox(8,hudpos.hyperx-ChargeWidth/2,hudpos.hypery, "Hyperdrive Charge: "..charge.."%","ScoreboardText",Color(50,50,75,100), TextColour);
+				ChargeWidth = HUDBox;
+			end
+			
+			if(Cooldown > 0) then
+				local CooldownBox = draw.WordBox(8,hudpos.coolx-CooldownWidth/2,hudpos.cooly, "Beam Cooldown: "..Cooldown.." seconds","ScoreboardText",Color(50,50,75,100), Color(255,255,255,255));
+				CooldownWidth = CooldownBox;
+			end
+			
+			local Health = math.Round(Teltak:GetNWInt("health")/Teltak.EntHealth*100);
+			local HealthBox = draw.WordBox(8,hudpos.healthx-HealthWidth/2,hudpos.healthy, "Health: ".. Health .."%","ScoreboardText",Color(50,50,75,100), Color(255,255,255,255));
+			HealthWidth = HealthBox;
+		end
+	end
+end
+hook.Add("HUDPaint","TeltakHUD",PrintHUD)
 
 end

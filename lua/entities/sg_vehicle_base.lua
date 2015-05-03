@@ -65,6 +65,7 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE);
 	self:StartMotionController();
 	self.HoverPos = self:GetPos();
+	self.NextLand = CurTime();
 
 end
 
@@ -137,6 +138,7 @@ function ENT:Enter(p) --####### Get in @RononDex
 		p:SetViewEntity(self)
 		self:GetPhysicsObject():Wake();
 		self:GetPhysicsObject():EnableMotion(true); --UnFreeze us
+		self:StartMotionController()
 		if(self.ShouldRotorwash) then
 			self:Rotorwash(true);
 		end
@@ -281,12 +283,20 @@ function ENT:PhysicsSimulate( phys, deltatime )--############## Flight code@ Ron
 		if (ang.Roll!=ang.Roll) then ang.Roll = oldRoll; end -- fix for nan values what cause despawing/crash.
 
 		if(self.Pilot:KeyDown(self.Vehicle,"LAND")) then
-			self.LandingMode = true;
-			self:SetAngles(Angle(0,self:GetAngles().Yaw,self.Roll));
-		else
-			self.LandingMode = false;
+			if(self.NextLand < CurTime()) then
+				if(not self.LandingMode) then
+					self.LandingMode = true;
+				else
+					self.LandingMode = false;
+				end
+				self.NextLand = CurTime()+1;
+			end
 		end
 
+		if(self.LandingMode) then
+			FlightPhys.angle = Angle(0,self:GetAngles().Yaw,self.Roll);
+		end
+		
 		--##### Calculate our new angles and position based on speed
 		if(not(self.LandingMode)) then
 			FlightPhys.angle = ang; --+ Vector(90 0, 0)
@@ -345,7 +355,7 @@ function ENT:Anims(e,anim,playback_rate,delay,nosound,sound)
 		if(not(nosound)) then --Set false to allow sound
 			e:EmitSound(Sound(sound),100,100); --create sound as a string in the arguements
 		end
-		--e:SetPlaybackRate(0.00001);
+		e:SetPlaybackRate(playback_rate);
 		e:SetSequence(e.Anim); -- play the sequence
 		--e:Fire("setanimation",anim,"0")
 		timer.Simple(delay,function() --How long until we can do the anim again?

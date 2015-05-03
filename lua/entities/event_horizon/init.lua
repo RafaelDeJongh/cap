@@ -65,7 +65,6 @@ ENT.NoTouchTeleport = {
 	"grenade_spit",
 	"prop_ragdoll",
 	"horizon_missile",
-	"sg_vehicle_dart",
 }
 
 -- These entities are immune against autoclose and should also never avoid an autoclose event if to near to a gate
