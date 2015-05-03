@@ -6,6 +6,8 @@ ENT.PrintName = "Atlantis Light"
 ENT.Author = "RononDex"
 ENT.Category = "Stargate Carter Addon Pack"
 
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
+
 if SERVER then
 
 AddCSLuaFile()
@@ -22,9 +24,7 @@ function ENT:Initialize()
 	
 	self:SetNWBool("On",false);
 	
-	print(self.Brightness)
-	print(self.Lightsize)
-	print(self.LightColour)
+	self:CreateWireInputs("On");
 	
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
@@ -61,13 +61,20 @@ function ENT:Use()
 		self.NextUse = CurTime() + 1;
 	end
 	self:SetNWBool("On",self.On);
-	print(self.On);
-	print(self.LightColour);
-	print(self.LightSize);
-	print(self.Brightness);
 end
 
+function ENT:TriggerInput(k,v)
 
+	if(k=="On") then
+		if(v >= 1) then
+			self.On = true;
+		else
+			self.On = false;
+		end
+		self:SetNWBool("On",self.On);
+	end
+
+end
 
 end
 
