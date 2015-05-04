@@ -392,6 +392,7 @@ function StarGate.JumperSettings(Panel)
 				{SGLanguage.GetMessage("key_act_light"),"LIGHT"},
 				{SGLanguage.GetMessage("key_act_shield"),"SHIELD"},
 				{SGLanguage.GetMessage("key_act_standby"),"HOVER"},
+				{"AutoPilot","AUTOPILOT"},
 				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
 			},
 		},
@@ -561,6 +562,7 @@ function StarGate.TeltakSettings(Panel)
 			Name = SGLanguage.GetMessage("key_act_title"),
 			Keys = {
 				{SGLanguage.GetMessage("key_act_destruct"),"BOOM"},
+				{"Ring Beam Weapon","FIRE"},
 				{SGLanguage.GetMessage("key_act_cloak"),"CLOAK"},
 				{SGLanguage.GetMessage("key_act_door"),"DOOR"},
 				{SGLanguage.GetMessage("key_act_land"),"LAND"},

@@ -8,6 +8,7 @@ function ENT:SpawnShieldGen(p)
 		e:SetParent(self)
 		e:Spawn()
 		e:Activate()
+		e:AddFlags(FL_DONTTOUCH);
 		e:SetSolid(SOLID_NONE)
 		e:SetColor(Color(255,255,255,0))
 		e:SetRenderMode( RENDERMODE_TRANSALPHA );
@@ -28,6 +29,7 @@ function ENT:SpawnBackDoor(ent,p)
 	e:SetAngles(self:GetAngles())
 	e:Spawn()
 	e:Activate()
+	e:AddFlags(FL_DONTTOUCH);
 	e:SetColor(Color(255,255,255,0))
 	e:SetRenderMode(RENDERMODE_TRANSALPHA);
 	e.JumperPart = true;
@@ -45,6 +47,7 @@ function ENT:SpawnBulkHeadDoor(ent,p)
 	e:SetAngles(self:GetAngles())
 	e:Spawn()
 	e:Activate()
+	e:AddFlags(FL_DONTTOUCH);
 	e:SetRenderMode(RENDERMODE_TRANSALPHA);
 	e:SetColor(Color(255,255,255,0))
 	e.JumperPart = true;
@@ -89,6 +92,7 @@ function ENT:SpawnToggleButton(p)
 		e[i]:Spawn();
 		e[i]:Activate();
 		e[i]:SetParent(self);
+		e[i]:AddFlags(FL_DONTTOUCH);
 		if(not self.Cloaked) then
 			e[i]:SetColor(Color(64,65,48,127.5));
 		else
@@ -134,6 +138,7 @@ function ENT:SpawnOpenedDoor(p)
 	d.JumperPart = true;
 	d:Spawn();
 	d:Activate();
+	d:AddFlags(FL_DONTTOUCH);
 	d:SetRenderMode(RENDERMODE_TRANSALPHA)
 	d:SetSolid(SOLID_NONE);
 	d:SetColor(Color(255,255,255,0));
@@ -181,6 +186,7 @@ function ENT:SpawnSeats(p)
 		e[i]:Spawn();
 		e[i]:Activate();
 		e[i]:SetParent(self);
+		e[i]:AddFlags(FL_DONTTOUCH);
 		e[i].IsJumperSeat = true;
 		e[i].Jumper = self;
 		e[i].CloakNoDraw = true;

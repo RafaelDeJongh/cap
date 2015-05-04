@@ -58,6 +58,72 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 
 end
 
+function ENT:AutoPilot(b)
+	
+	if(b) then
+		if self.Autopilot then return end;
+		local gate = self:FindGate(5000);
+		if(IsValid(gate)) then
+			if((self:GetPos()-gate:GetPos()):DotProduct(gate:GetForward()) > 0) then
+			
+				local Dist = self:WorldToLocal(gate:GetPos()).x;
+				if(Dist < 600) then Dist = 600 end;
+				self.AutoAlignPos = gate:GetPos()+gate:GetForward()*Dist;
+				
+				/*
+				local gateYaw = gate:GetAngles().y;
+				print(gateYaw)
+				if(gateYaw >= 0) then
+					self.AutoAlignAng = Angle(0,-180,0);
+				else
+					self.AutoAlignAng = Angle(0,180,0);
+				end
+				*/
+				
+				self.AutoAlignAng = Angle(0,0,0)
+				
+
+				
+				local gateRoll = gate:GetAngles().r;
+				self.AutoAlignAng = gate:GetAngles() + Angle(180,0,-180-gateRoll*2);
+				
+				self.Autopilot = true;
+				self.AutoGate = gate;
+				self.Pilot:ChatPrint("AutoPilot Engaged");
+				
+				if(self.epodo) then
+					self:TogglePods();
+				end
+				
+				if(self.Cloaked) then
+					self:ToggleCloak();
+				end
+				
+				if(self.Shielded) then
+					self:ToggleShield();
+				end
+				
+				if(self.door) then
+					self:ToggleDoor();
+				end
+			else
+				self.Pilot:ChatPrint("Please Move to the front of the Stargate");
+			end
+		else
+			self.Pilot:ChatPrint("You are not in range of a Stargate");
+		end
+	else
+		self.AutoAlignPos = nil;
+		self.AutoAlignAng = nil;
+		self.Autopilot = false;
+		self.AutoGate = NULL;
+		self.FinalAlignment = false;
+		self.Pilot:ChatPrint("AutoPilot Disengaged");
+	end
+
+end
+
+
 function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 
 	if(self.AllowActivation) then

@@ -297,6 +297,15 @@ stool_stargate_shield_co_desc = Enable this to keep things inside a shield inste
 stool_stargate_shield_an = Anti Noclip
 stool_stargate_shield_an_desc = People can't noclip in the shield?
 
+//Atlantis Light
+stool_atlantis_light_colour = Light Colour
+stool_atlantis_light_spawner = Atlantis Light Spawner
+stool_atlantis_light_create = Spawns an Atlantis Light
+stool_atlantis_light_desc = Left click to spawn the light
+stool_atlantis_light_undone = Atlantis Light removed
+stool_atlantis_light_cleanup = Atlantis Lights
+stool_atlantis_light_cleaned = Removed all Atlantis Lights
+
 // Supergate DHD
 stool_supergate_dhd_spawner = Supergate DHD Spawner
 stool_supergate_dhd_create = Creates a Supergate DHD

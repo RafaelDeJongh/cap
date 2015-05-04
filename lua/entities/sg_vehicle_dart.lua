@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-ENT.Type = "vehicle"
+ENT.Type = "anim"
 ENT.Base = "sg_vehicle_base"
 
 ENT.PrintName = "Wraith Dart"
@@ -49,9 +49,11 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 
 	local e = ents.Create("sg_vehicle_dart")
 	e:SetPos(tr.HitPos+Vector(0,0,90))
-	e:SetAngles(Angle(0,p:GetAimVector():Angle().Yaw,0))
+	e:SetAngles(Angle(0,p:GetAimVector():Angle().Yaw,0))	
 	e:Spawn()
+	e:SetModelScale(0.65,0) //Resize the Dart so It can go through the gate
 	e:Activate()
+	
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	p:AddCount("CAP_ships", e)
 	return e
@@ -95,8 +97,12 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.CanRoll=true
 	self.ShootingCann = 1
 	self:CreateWireOutputs("Health");
+	self.ShouldRotorwash = true;
 
 	local phys = self:GetPhysicsObject()
+	phys:Wake()
+	phys:EnableMotion(true)
+	print(phys:IsValid())
 	if(phys:IsValid()) then
 		phys:Wake()
 		phys:SetMass(10000) --@Madman07 well i set model mass for 1500
@@ -167,6 +173,7 @@ function ENT:Think() --####### Now let me think... @RononDex
 	self.Entity:NextThink(CurTime()+0.25);
 	return true
 end
+
 
 function ENT:SpawnHarvester()
 
@@ -319,8 +326,8 @@ ENT.Sounds={
 function ENT:Initialize( )
 	self.BaseClass.Initialize(self)
 	LocalPlayer().Missiles=0
-	self.Dist=-850
-	self.UDist=250
+	self.Dist=-650
+	self.UDist=190
 	self.KBD = self.KBD or KBD:CreateInstance(self)
 	self.Vehicle="Dart"
 end
