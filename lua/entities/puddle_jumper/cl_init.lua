@@ -59,6 +59,7 @@ KBD:SetDefaultKey("WEPPODS","Q") -- Weapon Pods
 KBD:SetDefaultKey("LIGHT","F") -- Flashlight
 KBD:SetDefaultKey("SHIELD","G") -- Shields
 KBD:SetDefaultKey("HOVER","T") -- Hover
+KBD:SetDefaultKey("AUTOPILOT","3") -- AutoPilot
 
 --View
 KBD:SetDefaultKey("VIEW","1") -- Toggle FirstPerson View

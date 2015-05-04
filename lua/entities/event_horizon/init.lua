@@ -871,6 +871,10 @@ function ENT:EndTouch(e)
 		if(e:GetClass()=="puddle_jumper") then
 			if(not IsValid(self.Target)) then
 				e.Exiting = false;
+				e.Exited = true;
+				timer.Simple(1,function()
+					e.Exited = false;
+				end);
 			end
 		end
 	end

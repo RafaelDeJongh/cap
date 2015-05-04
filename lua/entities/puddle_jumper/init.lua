@@ -123,7 +123,7 @@ function ENT:Initialize(ply)
 	self.Vehicle = "PuddleJumper";
 
 	self.EHAngles = Angle(0,0,0);
-
+	self.AutoAccel = 0;
 	self.Buttons = {}
 
 	self.door = false;
@@ -152,7 +152,8 @@ function ENT:Initialize(ply)
 	self.DroneCount = 0;
 	self.MaxDrones = 6;
 	self.On = 1;
-
+	
+	
 	self.Accel={
 		FWD=0,
 		RIGHT=0,
@@ -285,6 +286,10 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 	--########## Mostly key presses
 	if(IsValid(self.Pilot) and self.Inflight) then
 
+		if(self.Exited and self.Autopilot) then
+			self:AutoPilot(false);
+		end
+	
 		if(not(self.DronePropsMade)) then
 			if(self.WepPods) then
 				if(self.FinalDrone) then
@@ -313,77 +318,91 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		else
 			self.Track = false
 		end
-
-		if(self.Pilot:KeyDown(self.Vehicle,"FIRE")) then
-			self:FireDrone()
-		end
-
-		if(self.epodo) then
-			if(self.CanWepPods) then
-				if(self.CanOpenWepPods) then
-					if(self.Pilot:KeyDown(self.Vehicle,"WEPPODS")) then
-						self:RemoveDrones()
-						self:ToggleWeaponPods()
-					end
+		
+		if(self.Pilot:KeyDown(self.Vehicle,"AUTOPILOT")) then
+			if(self.NextUse < CurTime()) then
+				if(not self.Autopilot) then
+					self:AutoPilot(true);
+				else
+					self:AutoPilot(false);
 				end
-			end
-		end
-
-		if(self.Cloaked) then
-			if(self.Pilot:KeyDown(self.Vehicle,"FIRE")) then
-				self:ToggleCloak()
+				self.NextUse = CurTime() + 1;
 			end
 		end
 
 		if(self.Pilot:KeyDown(self.Vehicle,"LIGHT")) then
 				self:ToggleLight()
 		end
-
-		if(IsValid(self)) then
-			if(self.Pilot:KeyDown(self.Vehicle,"BOOM")) then
-				self:DoKill()
-			end
+		
+		if(self.Pilot:KeyDown(self.Vehicle,"DHD")) then
+			self:OpenDHD(self.Pilot) -- Open DHD for pilot
 		end
-
-		if (IsValid(self.Pilot)) then
-			if((self.Pilot:KeyDown(self.Vehicle,"SPD"))and(self.CanOpenPods)) then
-				self:TogglePods()
+		
+		if(!self.Autopilot) then
+			if(self.Pilot:KeyDown(self.Vehicle,"FIRE")) then
+				if(not self.Cloaked) then
+					self:FireDrone()
+				else
+					self:ToggleCloak()
+				end
 			end
 
-			if(self.Pilot:KeyDown(self.Vehicle,"DHD")) then
-				self:OpenDHD(self.Pilot) -- Open DHD for pilot
-			end
-
-			if(self.Pilot:KeyDown(self.Vehicle,"CLOAK")) then
-				self:ToggleCloak()
-			end
-
-			if(self.Pilot:KeyDown(self.Vehicle,"SHIELD")) then
-				self:ToggleShield()
-			end
-
-			if(self.Pilot:KeyDown(self.Vehicle,"HOVER")) then
-				if(self.NextUse < CurTime()) then
-					if(not self.HoverAlways) then
-						self.HoverAlways = true;
-						self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: ON");
-					else
-						self.HoverAlways = false;
-						self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: OFF");
+			if(self.epodo) then
+				if(self.CanWepPods) then
+					if(self.CanOpenWepPods) then
+						if(self.Pilot:KeyDown(self.Vehicle,"WEPPODS")) then
+							self:RemoveDrones()
+							self:ToggleWeaponPods()
+						end
 					end
-					self.NextUse = CurTime() + 1;
 				end
 			end
 
-			if(not(self.epodo)) then
-				if(self.Pilot:KeyDown(self.Vehicle,"DOOR")) then
-					self:ToggleDoor()
+
+			if(IsValid(self)) then
+				if(self.Pilot:KeyDown(self.Vehicle,"BOOM")) then
+					self:DoKill()
 				end
 			end
 
-			if(self.AllowActivation) then
-				if(self.Pilot:KeyDown(self.Vehicle,"EXIT")) then
-					self:ExitJumper()
+			if (IsValid(self.Pilot)) then
+				if((self.Pilot:KeyDown(self.Vehicle,"SPD"))and(self.CanOpenPods)) then
+					self:TogglePods()
+				end
+
+
+
+				if(self.Pilot:KeyDown(self.Vehicle,"CLOAK")) then
+					self:ToggleCloak()
+				end
+
+				if(self.Pilot:KeyDown(self.Vehicle,"SHIELD")) then
+					self:ToggleShield()
+				end
+
+				if(self.Pilot:KeyDown(self.Vehicle,"HOVER")) then
+					if(self.NextUse < CurTime()) then
+						if(not self.HoverAlways) then
+							self.HoverAlways = true;
+							self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: ON");
+						else
+							self.HoverAlways = false;
+							self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: OFF");
+						end
+						self.NextUse = CurTime() + 1;
+					end
+				end
+
+				if(not(self.epodo)) then
+					if(self.Pilot:KeyDown(self.Vehicle,"DOOR")) then
+						self:ToggleDoor()
+					end
+				end
+
+				if(self.AllowActivation) then
+					if(self.Pilot:KeyDown(self.Vehicle,"EXIT")) then
+						self:ExitJumper()
+					end
 				end
 			end
 		end

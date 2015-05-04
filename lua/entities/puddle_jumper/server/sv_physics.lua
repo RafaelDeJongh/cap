@@ -169,12 +169,63 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 			ang.Roll = (ang.Roll + self.Roll - ExtraRoll*mul) % 360;
 			if (ang.Roll!=ang.Roll) then ang.Roll = oldRoll; end -- fix for nan values what cause despawing/crash.
 
-			--########### Calculate our angles and position based on speed
-			FlightPhys.pos = pos+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);
-			FlightPhys.angle = ang; --+ Vector(90 0, 0)
-			FlightPhys.deltatime		= deltatime;
+			if(not self.Autopilot) then
+			
+				FlightPhys.pos = pos+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);
+				FlightPhys.angle = ang; --+ Vector(90 0, 0)
+				
+			else
+			
+				FlightPhys.angle = self.AutoAlignAng;
+				
+				local Aligned = pos:WithinAABox(self.AutoAlignPos+Vector(-100,-50,-100),self.AutoAlignPos+Vector(100,50,100));
+				local modifier;
+				if(self.AutoGate:GetAngles().y > 0) then
+					modifierY = 180;
+				else
+					modifierY = -180;
+				end
+				
+				//local angVec = Vector(self:GetAngles().p+180,self:GetAngles().y+modifierY,self:GetAngles().r-180)
+				//local alignVec = Vector(self.AutoAlignAng.p,self.AutoAlignAng.y,self.AutoAlignAng.r);				
+				//local anglesAligned = angVec:WithinAABox(alignVec+Vector(-1,-1,-1),alignVec+Vector(1,1,1));
+				
+				local currentAng = self:GetAngles();
 
-			self.Pilot:SetPos(pos);
+				local alignAng = self.AutoAlignAng;
+				local anglesAligned;
+				local newAng = Angle((currentAng.p+180*-1)*-1,currentAng.y+modifierY,currentAng.r+180*-1);
+				//if((currentAng.p > self.AutoAlignAng.p-1 and currentAng.p < self.AutoAlignAng.p+1) and (currentAng.y > self.AutoAlignAng.y-1 and currentAng.y < self.AutoAlignAng.y+1) and (currentAng.r > self.AutoAlignAng.r-1 and currentAng.r < self.AutoAlignAng.r+1)) then
+				if((newAng.p > self.AutoAlignAng.p-1 and newAng.p < self.AutoAlignAng.p+1) and (newAng.y > self.AutoAlignAng.y-1 and newAng.y < self.AutoAlignAng.y+1)) then
+					anglesAligned = true;
+				else
+					anglesAligned = false;
+				end
+
+				if(not self.FinalAlignment) then
+					if(!Aligned or not anglesAligned) then
+						FlightPhys.pos = self.AutoAlignPos;
+					end
+					if(Aligned and anglesAligned) then
+						self.FinalAlignment = true;		
+					end
+				end
+
+				if(self.FinalAlignment) then
+					if(IsValid(self.AutoGate.EventHorizon)) then
+						if(self.AutoGate.EventHorizon.ValidOpen) then
+							self.AutoAccel = math.Approach(self.AutoAccel,500,6.75);
+							FlightPhys.pos = pos+(FWD*self.AutoAccel);
+						end
+					end
+				end
+			end
+	
+			
+	
+			FlightPhys.deltatime = deltatime;
+
+			self.Pilot:SetPos(self:GetPos());
 
 			phys:ComputeShadowControl(FlightPhys);
 
