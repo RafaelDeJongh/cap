@@ -105,6 +105,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 		Use = CurTime(),
 		Wheels = CurTime(),
 		Change = CurTime(),
+		Cockpit = CurTime(),
 	}
 
 	--######## Weapon Vars
@@ -117,6 +118,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.MissilesFired=0;
 	self:CreateWireInputs("X","Y","Z");
 	self.Target = Vector(0,0,0);
+	self.NextFire = CurTime();
 
 	--######### Flight Vars
 	self.Accel = {};
@@ -235,8 +237,7 @@ function ENT:Use(p)
 		if((pos.x>-100 and pos.x<100)and(pos.y>-120 and pos.y<120)and(pos.z>-100 and pos.z<100)) then
 			if(not(self.CockpitOpen)) then
 				if (IsValid(self.CockpitAnim)) then
-					self.CockpitAnim:Fire("setanimation","open","0")
-					timer.Simple(1, function() if (IsValid(self)) then self.CockpitOpen = true; end end)
+					self:ToggleCockpit()
 				end
 			else
 				self.CanUse = true;
@@ -244,20 +245,27 @@ function ENT:Use(p)
 			end
 		else
 			self.CanUse = false;
-			if (IsValid(self.CockpitAnim)) then
-				if(not(self.CockpitOpen)) then
-					self.CockpitAnim:Fire("setanimation","open","0")
-					timer.Simple(1, function() self.CockpitOpen = true; end)
-					self.Cockpit.CollisionGroup = self.Cockpit:GetCollisionGroup();
-					self.Cockpit:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE);
-				else
-					self.CockpitAnim:Fire("setanimation","close","0")
-					timer.Simple(1, function() self.CockpitOpen = false; end)
-					if (self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
-				end
-			end
+			self:ToggleCockpit()
 		end
 		self.NextUse.Use = CurTime() + 1;
+	end
+end
+
+function ENT:ToggleCockpit()
+	if(self.NextUse.Cockpit < CurTime()) then
+		if (IsValid(self.CockpitAnim)) then
+			if(not(self.CockpitOpen)) then
+				self.CockpitAnim:Fire("setanimation","open","0")
+				timer.Simple(1, function() if(IsValid(self)) then self.CockpitOpen = true; end end)
+				self.Cockpit.CollisionGroup = self.Cockpit:GetCollisionGroup();
+				self.Cockpit:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE);
+			else
+				self.CockpitAnim:Fire("setanimation","close","0")
+				timer.Simple(1, function() if(IsValid(self)) then self.CockpitOpen = false; end end)
+				if (self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
+			end
+		end
+		self.NextUse.Cockpit = CurTime() + 1;
 	end
 end
 
@@ -267,7 +275,7 @@ function ENT:Enter(p)
 	self.BaseClass.Enter(self,p);
 	self.CanUse = false;
 	if(self.CockpitOpen and IsValid(self.CockpitAnim)) then
-		self.CockpitAnim:Fire("setanimation","close","0")
+		self:ToggleCockpit();
 	end
 	self.CockpitOpen = false;
 
@@ -276,9 +284,9 @@ end
 function ENT:Exit(kill)
 
 	self.BaseClass.Exit(self,kill);
-	if (IsValid(self.CockpitAnim)) then self.CockpitAnim:Fire("setanimation","open","0") end
-	timer.Simple(1, function() self.CockpitOpen = true; end)
-	if (IsValid(self.Cockpit) and self.Cockpit.CollisionGroup) then self.Cockpit:SetCollisionGroup(self.Cockpit.CollisionGroup); end
+	if(not self.CockpitOpen) then
+		self:ToggleCockpit();
+	end
 
 end
 
@@ -353,7 +361,10 @@ function ENT:Think() --####### Now let me think... @RononDex
 
 	if(self.Inflight) then
 		if(IsValid(self.Pilot) and self.Pilot:KeyDown(self.Vehicle,"FIRE") and self.Missile) then
-			self:FireMissiles()
+			if(self.NextFire < CurTime()) then
+				self:FireMissiles()
+				self.NextFire = CurTime()+0.5;
+			end
 		end
 	end
 
@@ -402,6 +413,16 @@ function ENT:Think() --####### Now let me think... @RononDex
 		if(not(self.PoppedFlares) and IsValid(self.Pilot)) then
 			if(self.Pilot:KeyDown(self.Vehicle,"FLARES")) then
 				self:Flares();
+			end
+		end
+		
+		if(self.Accel.FWD > 200) then
+			if(self.CockpitOpen) then
+				self:ToggleCockpit();
+			end
+		else
+			if(self.Pilot:KeyDown(self.Vehicle,"COCKPIT")) then
+				self:ToggleCockpit();
 			end
 		end
 	end
@@ -600,6 +621,7 @@ function ENT:SpawnMissile() --############### Spawn Missile Props @RononDex
 	if (not IsValid(self.RocketClamps)) then return end
 	local pos = self:GetPos()+self:GetUp()*-40
 
+	
 	local m1 = ents.Create("prop_physics")
 	m1:SetModel(self.GibTable.Rocket)
 	m1:SetPos(self.RocketClamps:GetAttachment(self.RocketClamps:LookupAttachment("Rocket4")).Pos)
@@ -607,6 +629,7 @@ function ENT:SpawnMissile() --############### Spawn Missile Props @RononDex
 	m1:Activate()
 	m1:SetParent(self)
 	m1:SetAngles(self:GetAngles())
+	
 	self.M1 = m1
 	self.M1:SetSolid(SOLID_NONE)
 
@@ -713,7 +736,8 @@ function ENT:SpawnRocketClamps(ent,p)
 	e:SetModel("models/Madman07/F302/rocket_clamp.mdl")
 	e:SetPos(self:GetPos())
 	e:SetAngles(self:GetAngles())
-	--e:SetParent(self)
+	e:SetParent(self)
+	e:SetMoveType(MOVETYPE_VPHYSICS);
 	e:Spawn()
 	e:Activate()
 	if (not ent) then
@@ -743,8 +767,23 @@ function ENT:SpawnSeats(p)
 	passseat:Spawn();
 	passseat:Activate();
 	passseat:SetParent(self);
-	self.PassangerSeat = passseat;
+	self.PassengerSeat = passseat;
 	if CPPI and IsValid(p) and passseat.CPPISetOwner then passseat:CPPISetOwner(p) end
+	
+	local e = ents.Create("prop_vehicle_prisoner_pod");
+	e:SetModel("models/nova/airboat_seat.mdl");
+	e:SetRenderMode(RENDERMODE_TRANSALPHA);
+	e:SetColor(Color(255,255,255,0));
+	e:SetPos(self:GetPos()+self:GetForward()*95+self:GetUp()*10);
+	e:SetAngles(self:GetAngles()+Angle(0,-90,0));
+	e:Spawn();
+	e:Activate();
+	e:SetParent(self);
+	e:SetCameraDistance(850);
+	e.IsF302Seat = true;
+	e.F302 = self;
+	if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
+	
 
 end
 
@@ -858,6 +897,30 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self:Turrets(); -- Spawn turrets
 	self:SpawnWheels(self.Wheels,ply);
 end
+
+hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
+	if(IsValid(p) and IsValid(v)) then
+		if(v.IsF302Seat) then
+			local F302 = v.F302;
+			p:SetNetworkedBool("302Passenger",false);
+			p:SetNWEntity("302Passenger",NULL);
+			p:SetNetworkedEntity("302Seat",NULL);
+			p:SetPos(F302:GetPos()+F302:GetForward()*100+F302:GetRight()*100+F302:GetUp()*25);
+		end
+	end
+end);
+
+hook.Add("PlayerEnteredVehicle","JumperSeatEnter", function(p,v)
+	if(IsValid(v)) then
+		if(IsValid(p) and p:IsPlayer()) then
+			if(v.IsF302Seat) then
+				p:SetNetworkedEntity("302Seat",v);
+				p:SetNetworkedEntity("302Passenger",v:GetParent());
+				p:SetNetworkedBool("302Passenger",true);
+			end
+		end
+	end
+end);
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "sg_vehicle_f302", StarGate.CAP_GmodDuplicator, "Data" )

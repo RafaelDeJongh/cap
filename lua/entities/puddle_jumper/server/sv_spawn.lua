@@ -130,6 +130,7 @@ end
 
 
 function ENT:SpawnOpenedDoor(p)
+
 	local d = ents.Create("prop_physics");
 	d:SetPos(self:GetPos()-self:GetForward()*145+self:GetUp()*140);
 	d:SetModel("models/Iziraider/jumper/gibs/backdoor.mdl");
@@ -179,6 +180,7 @@ function ENT:SpawnSeats(p)
 			e[i]:SetAngles(self:GetAngles()+Angle(0,-90,0));
 			e[i]:SetPos(self:GetPos()+self:GetRight()*30+self:GetUp()*-25+self:GetForward()*50);
 			e[i].FrontSeat = true;
+			self.FrontSeat = e[i];
 		end
 		e[i]:SetModel("models/nova/airboat_seat.mdl");
 		e[i]:SetRenderMode(RENDERMODE_TRANSALPHA);

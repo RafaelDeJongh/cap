@@ -190,6 +190,7 @@ function StarGate.F302Settings(Panel)
 				{SGLanguage.GetMessage("key_act_wheels"),"WHEELS"},
 				{SGLanguage.GetMessage("key_act_flares"),"FLARES"},
 				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
+				{"Toggle Cockpit","COCKPIT"},
 			},
 		},
 		{

@@ -70,19 +70,7 @@ function ENT:AutoPilot(b)
 				if(Dist < 600) then Dist = 600 end;
 				self.AutoAlignPos = gate:GetPos()+gate:GetForward()*Dist;
 				
-				/*
-				local gateYaw = gate:GetAngles().y;
-				print(gateYaw)
-				if(gateYaw >= 0) then
-					self.AutoAlignAng = Angle(0,-180,0);
-				else
-					self.AutoAlignAng = Angle(0,180,0);
-				end
-				*/
-				
-				self.AutoAlignAng = Angle(0,0,0)
-				
-
+				//self.AutoAlignAng = Angle(0,0,0)
 				
 				local gateRoll = gate:GetAngles().r;
 				self.AutoAlignAng = gate:GetAngles() + Angle(180,0,-180-gateRoll*2);
@@ -173,6 +161,7 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		ply:SetEyeAngles(self:GetAngles());
 
 		ply:Flashlight(false);
+		
 	end
 	self.Entered=true
 	timer.Simple( 0.75, function()

@@ -1,9 +1,20 @@
+ENT.NextUse = {
+	Shields = CurTime(),
+	WepPods = CurTime(),
+	BulkHead = CurTime(),
+	Light = CurTime(),
+	Door = CurTime(),
+	EnginePods = CurTime(),
+	Autopilot = CurTime(),
+	Hover = CurTime(),
+}
+
 --########## Toggle the shield @RononDex
 function ENT:ToggleShield()
 
 	if(IsValid(self)) then
 		if(self.CanShield) then
-			if(self.CanToggleShield) then
+			if(self.NextUse.Shields < CurTime()) then
 				if (IsValid(self.Shields)) then
 					if(not(self.Shielded)) then
 						if(not(self.Shields:Enabled())) then
@@ -20,12 +31,7 @@ function ENT:ToggleShield()
 
 					end
 				end
-				self.CanToggleShield=false
-				timer.Simple(0.75, function()
-					if (IsValid(self)) then
-						self.CanToggleShield=true
-					end
-				end)
+				self.NextUse.Shields = CurTime() + 1;
 			end
 		end
 	end
@@ -35,16 +41,12 @@ end
 function ENT:ToggleWeaponPods()
 
 	if(self.epodo) then
-		if(self.CanOpenWepPods) then
+		if(self.NextUse.WepPods < CurTime()) then
 			if(self.CanWepPods) then
 				if(not(self.WepPods)) then
 					self.WepPodSeq = self:LookupSequence("wepo")
 					self.WepPods=true
-					self.CanOpenWepPods=false
 					self:RemoveDrones() -- Remove any invalid models
-					timer.Simple(1.5, function()
-						self.CanOpenWepPods=true
-					end)
 					timer.Simple(0.5, function()
 						if(self.WepPods) then
 							if(not(self.DronePropsMade)) then
@@ -57,21 +59,14 @@ function ENT:ToggleWeaponPods()
 				else
 					self.WepPodSeq = self:LookupSequence("wepc")
 					self.WepPods=false
-					self.CanOpenWepPods=false
-					timer.Simple(1.5, function()
-						self.CanOpenWepPods=true
-					end)
 					self:RemoveDrones()
 				end
+				self.NextUse.WepPods = CurTime() + 1;
 			end
 		end
 	end
-	self.RunningAnimation=true
 	self:ResetSequence(self.WepPodSeq)
 	self:SetPlaybackRate(1)
-	timer.Simple( 1, function()
-		self.RunningAnimation = false
-	end)
 end
 
 --########## Toggle the bulk head doors @RononDex
@@ -80,35 +75,34 @@ function ENT:ToggleBulkHead()
 	if(self.epodo) then
 		self:TogglePods()
 	end
-
-	if(not(self.BulkHead)) then
-		if(self.door) then
-			self.BulkDoorSeq = self:LookupSequence("dobulko")
+	
+	if(self.NextUse.BulkHead < CurTime()) then
+		if(not(self.BulkHead)) then
+			if(self.door) then
+				self.BulkDoorSeq = self:LookupSequence("dobulko")
+			else
+				self.BulkDoorSeq = self:LookupSequence("dcbulko")
+			end
+			self.BulkHead=true
+			if not self.Inflight then
+				self.BulkDoor:SetSolid(SOLID_NONE)
+			end
 		else
-			self.BulkDoorSeq = self:LookupSequence("dcbulko")
+			if(self.door) then
+				self.BulkDoorSeq = self:LookupSequence("dobulkc")
+			else
+				self.BulkDoorSeq = self:LookupSequence("dcbulkc")
+			end
+			self.BulkHead=false
+			if not self.Inflight then
+				self.BulkDoor:SetSolid(SOLID_VPHYSICS);
+			end
 		end
-		self.BulkHead=true
-		if not self.Inflight then
-			self.BulkDoor:SetSolid(SOLID_NONE)
-		end
-	else
-		if(self.door) then
-			self.BulkDoorSeq = self:LookupSequence("dobulkc")
-		else
-			self.BulkDoorSeq = self:LookupSequence("dcbulkc")
-		end
-		self.BulkHead=false
-		if not self.Inflight then
-			self.BulkDoor:SetSolid(SOLID_VPHYSICS);
-		end
+		self:EmitSound(self.Sounds.BulkDoor,100,100)
+		self:ResetSequence(self.BulkDoorSeq)
+		self:SetPlaybackRate(0.80)
+		self.NextUse.BulkHead = CurTime() + 1.25;
 	end
-	self:EmitSound(self.Sounds.BulkDoor,100,100)
-	self.RunningAnimation=true
-	self:ResetSequence(self.BulkDoorSeq)
-	self:SetPlaybackRate(0.80)
-	timer.Simple( 2, function()
-		self.RunningAnimation = false
-	end)
 end
 
 --######### Toggle the rotorwash effect @RononDex
@@ -139,9 +133,8 @@ function ENT:ToggleLight()
 		self:GetPos()+self:GetForward()*150+self:GetRight()*65+self:GetUp()*-25,
 	};
 
-	if ((self.lastswitch2*4)+2<(CurTime()*4)) then
+	if (self.NextUse.Light < CurTime()) then
 		for i=1,2 do
-
 			if not self.FlashOn then
 				e = ents.Create( "env_projectedtexture" )
 				e:SetParent( self.Entity )
@@ -163,11 +156,12 @@ function ENT:ToggleLight()
 					SafeRemoveEntity(self.Flashlight[i])
 					if i == 2 then
 						self.FlashOn = false;
-						return
+						//return;
 					end
 				end
 			end
 		end
+		self.NextUse.Light = CurTime() + 1;
 	end
 end
 
@@ -177,45 +171,44 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 	if(self.epodo) then
 		self:TogglePods()
 	end
-
-	if(not(self.door)) then
-		if(self.BulkHead) then
-			self.doorseq = self:LookupSequence("bodooro")
+	
+	if(self.NextUse.Door < CurTime()) then
+		if(not(self.door)) then
+			if(self.BulkHead) then
+				self.doorseq = self:LookupSequence("bodooro")
+			else
+				self.doorseq = self:LookupSequence("bcdooro")
+			end
+			self.door=true
+			if not self.Inflight then
+				if (IsValid(self.Door)) then
+					self.Door:SetSolid(SOLID_NONE)
+				end
+				if(self.HoverAlways and IsValid(self.OpenedDoor)) then
+					self.OpenedDoor:SetSolid(SOLID_VPHYSICS);
+				end
+			end
 		else
-			self.doorseq = self:LookupSequence("bcdooro")
-		end
-		self.door=true
-		if not self.Inflight then
-			if (IsValid(self.Door)) then
-				self.Door:SetSolid(SOLID_NONE)
+			if(self.BulkHead) then
+				self.doorseq = self:LookupSequence("bodoorc")
+			else
+				self.doorseq = self:LookupSequence("bcdoorc")
 			end
-			if(self.HoverAlways and IsValid(self.OpenedDoor)) then
-				self.OpenedDoor:SetSolid(SOLID_VPHYSICS);
-			end
-		end
-	else
-		if(self.BulkHead) then
-			self.doorseq = self:LookupSequence("bodoorc")
-		else
-			self.doorseq = self:LookupSequence("bcdoorc")
-		end
-		self.door=false
-		if not self.Inflight then
-			if(self.HoverAlways and IsValid(self.OpenedDoor)) then
-				self.OpenedDoor:SetSolid(SOLID_NONE);
-			end
-			if (IsValid(self.Door)) then
-				self.Door:SetSolid(SOLID_VPHYSICS)
+			self.door=false
+			if not self.Inflight then
+				if(self.HoverAlways and IsValid(self.OpenedDoor)) then
+					self.OpenedDoor:SetSolid(SOLID_NONE);
+				end
+				if (IsValid(self.Door)) then
+					self.Door:SetSolid(SOLID_VPHYSICS)
+				end
 			end
 		end
+		self.NextUse.Door = CurTime() + 1.25;
 	end
 	self:ResetSequence(self.doorseq)
 	self:SetPlaybackRate(0.675)
 	self:EmitSound(self.Sounds.Door,100,100)
-	self.RunningAnimation=true
-	timer.Simple( 3, function()
-		self.RunningAnimation = false
-	end)
 end
 
 function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
@@ -228,17 +221,16 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				else
 					self:EmitSound(self.Sounds.Uncloak,80,math.random(90,110))
 					local fx = EffectData();
-					local pos = self:GetPos();
-					fx:SetOrigin(pos);
-					fx:SetStart(pos);
-					fx:SetEntity(self);
-					fx:SetScale(-2);
+						local pos = self:GetPos();
+						fx:SetOrigin(pos);
+						fx:SetStart(pos);
+						fx:SetEntity(self);
+						fx:SetScale(-2);
 					util.Effect("cloaking",fx,true,true);
 				end
+				
 				if(self.Inflight)then
 					self:ToggleRotorwash(true)
-				//else
-				//	self:SpawnToggleButton()
 				end
 				if(self.WepPods) then
 					if(not(self.DronePropsMade)) then
@@ -248,11 +240,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 
 				self.CanDoCloak=false
 				self.CanShield=true
-				for i=1,4 do
-					if(IsValid(self.Buttons[i])) then
-						self.Buttons[i]:SetColor(Color(64,65,48,127.5));
-					end
-				end
+
 				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(false); end
 				timer.Simple( 1.75, function()
 					self.CanDoCloak=true;
@@ -272,11 +260,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 					fx:SetScale(2);
 					util.Effect("cloaking",fx,true,true);
 				end
-				for i=1,4 do
-					if(IsValid(self.Buttons[i])) then
-						self.Buttons[i]:SetColor(Color(255,255,255,0));
-					end
-				end
+
 				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(true); end
 				self.Cloaked = true
 				if(self.WepPods) then
@@ -287,13 +271,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				if(self.Inflight) then
 					self:ToggleRotorwash(false)
 				end
-				/*
-				for _,v in pairs(self.Buttons or {}) do
-					if IsValid(v) then
-						v:Remove();
-					end
-				end
-				*/
+
 				self.CanShield=false
 				self:SetNetworkedBool("Cloaked",true)
 				self.CanDoCloak=false
@@ -314,13 +292,12 @@ function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
 	end
 
 	if(self.CanOpenPods) then
-		if(self.CanDoPods) then
+		if(self.NextUse.EnginePods < CurTime()) then
 			if(not(self.epodo)) then
 				self.sequence = self:LookupSequence("epodo") -- Open the drive pods
 				self.epodo = true
 				self:EmitSound(self.Sounds.EnginePodOpen,100,100)
 				self.CanDoPods=false
-				timer.Simple( 1.75, function() self.CanDoPods=true end)
 			else
 				self.CanDoPods=false
 				self.sequence = self:LookupSequence("epodc")
@@ -331,16 +308,12 @@ function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
 				end
 				self:RemoveDrones()
 				timer.Simple( 1, function()
-					self.CanDoPods=true
 					self.epodo = false
 				end)
 			end
-			self.RunningAnimation = true
 			self:ResetSequence(self.sequence)
 			self:SetPlaybackRate(0.9)
-			timer.Simple( 3, function()
-				self.RunningAnimation = false
-			end)
+			self.NextUse.EnginePods = CurTime() + 2;
 		end
 	end
 end

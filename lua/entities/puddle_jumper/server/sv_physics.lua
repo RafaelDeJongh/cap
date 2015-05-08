@@ -67,26 +67,12 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 	if(self.Inflight) then
 		if(self.Entered) then
 			if(self.door) then
-				if((self:GetPos().Z)>self.StartPos.Z+200) then
-					self.Entered = false;
-					self:ToggleDoor();
-				elseif((self:GetPos().Y)>self.StartPos.Y+100) then
-					self.Entered = false;
-					self:ToggleDoor();
-				elseif((self:GetPos().X)>self.StartPos.X+100) then
-					self.Entered = false;
-					self:ToggleDoor();
-				elseif((self:GetPos().Z)<self.StartPos.Z-200) then
-					self.Entered = false;
-					self:ToggleDoor();
-				elseif((self:GetPos().Y)<self.StartPos.Y-100) then
-					self.Entered = false;
-					self:ToggleDoor();
-				elseif((self:GetPos().X)<self.StartPos.X-100) then
+				local NearStart = self:GetPos():WithinAABox(self.StartPos-Vector(100,100,200),self.StartPos+Vector(100,100,200));
+				if(not NearStart) then
 					self.Entered = false;
 					self:ToggleDoor();
 				end
-			end
+			end	
 		end
 	end
 
@@ -186,16 +172,12 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 					modifierY = -180;
 				end
 				
-				//local angVec = Vector(self:GetAngles().p+180,self:GetAngles().y+modifierY,self:GetAngles().r-180)
-				//local alignVec = Vector(self.AutoAlignAng.p,self.AutoAlignAng.y,self.AutoAlignAng.r);				
-				//local anglesAligned = angVec:WithinAABox(alignVec+Vector(-1,-1,-1),alignVec+Vector(1,1,1));
-				
+							
 				local currentAng = self:GetAngles();
-
 				local alignAng = self.AutoAlignAng;
 				local anglesAligned;
 				local newAng = Angle((currentAng.p+180*-1)*-1,currentAng.y+modifierY,currentAng.r+180*-1);
-				//if((currentAng.p > self.AutoAlignAng.p-1 and currentAng.p < self.AutoAlignAng.p+1) and (currentAng.y > self.AutoAlignAng.y-1 and currentAng.y < self.AutoAlignAng.y+1) and (currentAng.r > self.AutoAlignAng.r-1 and currentAng.r < self.AutoAlignAng.r+1)) then
+				
 				if((newAng.p > self.AutoAlignAng.p-1 and newAng.p < self.AutoAlignAng.p+1) and (newAng.y > self.AutoAlignAng.y-1 and newAng.y < self.AutoAlignAng.y+1)) then
 					anglesAligned = true;
 				else
@@ -224,9 +206,7 @@ function ENT:PhysicsSimulate(phys,deltatime)--############## Flight code@ RononD
 			
 	
 			FlightPhys.deltatime = deltatime;
-
 			self.Pilot:SetPos(self:GetPos());
-
 			phys:ComputeShadowControl(FlightPhys);
 
 
