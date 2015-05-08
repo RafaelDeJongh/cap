@@ -6,10 +6,12 @@ ENT.DronePropFired = {
 	D5 = false,
 	D6 = false,
 };
+
+ENT.NextUse.DroneFire = CurTime();
 function ENT:FireDrone()
 
-	if ((self.lastswitch*4)+2<(CurTime()*4) and self.Cloak == nil) then
-		self.lastswitch=CurTime()
+	if ((self.NextUse.DroneFire < CurTime()) and self.Cloak == nil) then
+		self.NextUse.DroneFire = CurTime() + 0.5;
 		if(self.WepPods) then
 			if(((self.On)==1 )and(self.DronePropsMade)) then
 				if(IsValid(self.DroneProp4)) then
@@ -17,6 +19,7 @@ function ENT:FireDrone()
 					self:LoadDrones(self.DroneProp4:GetPos())
 					self.DroneProp4:Remove()
 					self.DronePropFired[4]=true
+					print("FIRE")
 				end
 			elseif((self.On==2)) then
 				if(IsValid(self.DroneProp3)) then
@@ -64,7 +67,7 @@ function ENT:LoadDrones(offset) --######### @ LightDemon,RononDex
 
 	if(not(self.Cloaked))then -- Cant fire when cloaked
 		if(self.epodo)then -- Only when pods are open
-			if(self.CanShoot)then -- only if were not damaged critically
+			if(self.CanShoot)then -- only if we're not damaged critically
 				if self.DroneCount < self.MaxDrones then
 					local pos = self:GetPos()+self:GetForward()*-50+self:GetUp()*-55
 					local vel = self:GetVelocity()
@@ -114,105 +117,49 @@ function ENT:RemoveDrones()
 	end
 	self.DronePropsMade=false
 end
---######## The drones you see in the pods @RononDex
+
+function ENT:CreateDrone(pos,n)
+
+	local e = ents.Create("prop_physics");
+	e:SetModel("models/Zup/Drone/drone.mdl")
+	e:SetPos(pos)
+	e:SetAngles(self:GetAngles())
+	e:SetParent(self)
+	e:SetOwner(self)
+	e:Spawn()
+	e:Activate()
+	constraint.Weld(e,self,0,0,0,true)
+	self.DronePropFired[n] = false;
+	
+	return e;
+end
+
 function ENT:SpawnDroneProps()
 
-	local pos = self:GetPos()+self:GetForward()*-50+self:GetUp()*-55
-
-	if(self.DroneCount<6) then
-		if(not(self.DronePropFired[1])) then
-			local e = ents.Create("prop_physics")
-			e:SetModel("models/Zup/Drone/drone.mdl")
-			e:SetPos(pos+self:GetRight()*-97.5+self:GetUp()*21.25+self:GetForward()*50)
-			e:SetAngles(self:GetAngles())
-			e:SetParent(self)
-			e:SetOwner(self)
-			e:Spawn()
-			e:Activate()
-			constraint.Weld(e,self,0,0,0,true)
-			self.DroneProp1=e
-			self.DronePropFired[1]=false
+	local pos = self:GetPos()+self:GetUp()*-55
+	local dronePos;
+	for i=1,6 do
+		if(not(self.DronePropFired[i])) then
+			if(i==1) then
+				dronePos = pos+self:GetRight()*-97.5+self:GetUp()*21.25;
+				self.DroneProp1 = self:CreateDrone(dronePos,i);
+			elseif(i==2) then
+				dronePos = pos+self:GetRight()*97.5+self:GetUp()*21.25;
+				self.DroneProp2 = self:CreateDrone(dronePos,i);
+			elseif(i==3) then
+				dronePos = pos+self:GetRight()*105+self:GetUp()*35.25;
+				self.DroneProp3 = self:CreateDrone(dronePos,i);
+			elseif(i==4) then
+				dronePos = pos+self:GetRight()*-105+self:GetUp()*35.25;
+				self.DroneProp4 = self:CreateDrone(dronePos,i);
+			elseif(i==5) then
+				dronePos = pos+self:GetRight()*95.5+self:GetUp()*9.25;
+				self.DroneProp5 = self:CreateDrone(dronePos,i);
+			elseif(i==6) then
+				dronePos = pos+self:GetRight()*-95.5+self:GetUp()*9.25;
+				self.DroneProp6 = self:CreateDrone(dronePos,i);
+			end
 		end
 	end
-
-	if(self.DroneCount<5) then
-		if(not(self.DronePropFired[2])) then
-			local e2 = ents.Create("prop_physics")
-			e2:SetModel("models/Zup/Drone/drone.mdl")
-			e2:SetPos(pos+self:GetRight()*97.5+self:GetUp()*21.25+self:GetForward()*50)
-			e2:SetAngles(self:GetAngles())
-			e2:SetParent(self)
-			e2:SetOwner(self)
-			e2:Spawn()
-			e2:Activate()
-			constraint.Weld(e2,self,0,0,0,true)
-			self.DroneProp2=e2
-			self.DronePropFired[2]=false
-		end
-	end
-
-	if(self.DroneCount<4) then
-		if(not(self.DronePropFired[3])) then
-			local e3 = ents.Create("prop_physics")
-			e3:SetModel("models/Zup/Drone/drone.mdl")
-			e3:SetPos(pos+self:GetRight()*105+self:GetUp()*35.25+self:GetForward()*50)
-			e3:SetAngles(self:GetAngles())
-			e3:SetParent(self)
-			e3:SetOwner(self)
-			e3:Spawn()
-			e3:Activate()
-			constraint.Weld(e3,self,0,0,0,true)
-			self.DroneProp3=e3
-			self.DronePropFired[3]=false
-		end
-	end
-
-	if(self.DroneCount<3) then
-		if(not(self.DronePropFired[4])) then
-			local e4 = ents.Create("prop_physics")
-			e4:SetModel("models/Zup/Drone/drone.mdl")
-			e4:SetPos(pos+self:GetRight()*-105+self:GetUp()*35.25+self:GetForward()*50)
-			e4:SetAngles(self:GetAngles())
-			e4:SetParent(self)
-			e4:SetOwner(self)
-			e4:Spawn()
-			e4:Activate()
-			constraint.Weld(e4,self,0,0,0,true)
-			self.DroneProp4=e4
-			self.DronePropFired[4]=false
-		end
-	end
-
-	if(self.DroneCount<2) then
-		if(not(self.DronePropFired[5])) then
-			local e5 = ents.Create("prop_physics")
-			e5:SetModel("models/Zup/Drone/drone.mdl")
-			e5:SetPos(pos+self:GetRight()*95.5+self:GetUp()*9.25+self:GetForward()*50)
-			e5:SetAngles(self:GetAngles())
-			e5:SetParent(self)
-			e5:SetOwner(self)
-			e5:Spawn()
-			e5:Activate()
-			constraint.Weld(e5,self,0,0,0,true)
-			self.DroneProp5=e5
-			self.DronePropFired[5]=false
-		end
-	end
-
-	if(self.DroneCount<1) then
-		if(not(self.DronePropFired[6])) then
-			local e6 = ents.Create("prop_physics")
-			e6:SetModel("models/Zup/Drone/drone.mdl")
-			e6:SetPos(pos+self:GetRight()*-95.5+self:GetUp()*9.25+self:GetForward()*50)
-			e6:SetAngles(self:GetAngles())
-			e6:SetParent(self)
-			e6:SetOwner(self)
-			e6:Spawn()
-			e6:Activate()
-			constraint.Weld(e6,self,0,0,0,true)
-			self.DroneProp6=e6
-			self.DronePropFired[6]=false
-		end
-	end
-	self.DronePropsMade=true
+	self.DronePropsMade = true;
 end

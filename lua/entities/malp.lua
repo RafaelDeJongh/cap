@@ -97,6 +97,7 @@ function ENT:SpawnWheels(p)
 		--constraint.Axis(self, e, 0, 0, pos[i], pos[i], 0, 0, 50, 1, norm[i])
 		constraint.Ballsocket(self, e, 0, 0, Vector(0, 20, 0), 0, 0, 1);
 		constraint.Ballsocket(self, e, 0, 0, Vector(0, -20, 0), 0, 0, 1);
+		e:AddFlags(FL_DONTTOUCH);
 		self.MalpWheels[i] = e;
 		if CPPI and IsValid(p) and e.CPPISetOwner then e:CPPISetOwner(p) end
 	end
@@ -668,7 +669,7 @@ local function RenderMALPHud()
 
 			if(habitable == 1) then habitable = "Yes"; else habitable = "No"; end
 
-			-- too far: don't show the informations
+			-- too far: don't show the information
 			if(dist > MAXDIST) then
 				if(p.SignalLost) then -- Too far away and no active gate connecting the signals
 					habitable = "-";

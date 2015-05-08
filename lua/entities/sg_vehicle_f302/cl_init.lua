@@ -27,6 +27,7 @@ KBD:SetDefaultKey("FLARES","ALT");
 KBD:SetDefaultKey("EJECT","2");
 KBD:SetDefaultKey("BRAKE",StarGate.KeyBoard.BINDS["+jump"] or "SPACE");
 KBD:SetDefaultKey("BOOST","B");
+KBD:SetDefaultKey("COCKPIT","3");
 --View
 KBD:SetDefaultKey("Z+","UPARROW");
 KBD:SetDefaultKey("Z-","DOWNARROW");
@@ -76,6 +77,8 @@ function SGF302CalcView(Player, Origin, Angles, FieldOfView)
 
 	local p = LocalPlayer()
 	local self = p:GetNetworkedEntity("ScriptedVehicle", NULL)
+	local pass302 = p:GetNetworkedEntity("302Seat",NULL);
+	local Passenger = p:GetNetworkedBool("302Passenger",false);
 
 	if(IsValid(self) and self:GetClass()=="sg_vehicle_f302") then
 		if(not self.FPV) then
@@ -84,12 +87,23 @@ function SGF302CalcView(Player, Origin, Angles, FieldOfView)
 			view.origin = pos
 			view.angles = face
 		else
-			local pos = self.Entity:GetPos()+self.Entity:GetForward()*120+self.Entity:GetUp()*40
+			local pos = self.Entity:GetPos()+self.Entity:GetForward()*130+self.Entity:GetUp()*40
 			local angle = self.Entity:GetAngles()
 			view.origin = pos
 			view.angles = angle
 		end
 		return view;
+	elseif(Passenger) then
+		if(IsValid(pass302)) then
+			if(pass302:GetThirdPersonMode()) then
+				local pos = pass302:GetPos()+pass302:GetUp()*250+LocalPlayer():GetAimVector():GetNormal()*-850
+				local face = ( ( pass302:GetPos() + Vector( 0, 0, 100 ) ) - pos ):Angle()
+				view.origin = pos
+				view.angles = face
+				view.fov = nil
+				return view;
+			end
+		end
 	end
 end
 hook.Add("CalcView", "SGF302CalcView", SGF302CalcView)
@@ -279,11 +293,12 @@ local HUD = surface.GetTextureID("VGUI/HUD/F302_HUD/F302_HUD");
 local MISSILE_COLOUR = GREEN;
 local TURRET_COLOUR  = GREEN;
 local ENGINE_COLOUR = BLUE;
-local num = 0;
-local mnum = 3.5;
-local enum = 3.2;
-local hnum = 3.1;
+
 local w,h = ScrW(),ScrH();
+local num = 0;
+local mnum = h/4*3.5;
+local enum = h/4*3.2;
+local hnum = h/4*3;
 local function F302Hud()
 
 	local p = LocalPlayer();
@@ -330,7 +345,7 @@ local function F302Hud()
 		num = math.Approach(num,0,10)
 		mnum = math.Approach(mnum,h/4*3.5,10)
 		enum = math.Approach(enum,h/4*3.2,10)
-		hnum = math.Approach(hnum,h/4*3.1,10)
+		hnum = math.Approach(hnum,h/4*3,10)
 	end
 
 

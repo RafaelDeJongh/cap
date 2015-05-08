@@ -104,19 +104,14 @@ function ENT:Initialize(ply)
 	self.Roll = 0;
 	self.Engine = true; -- Is the engine not damaged?
 	self.AllowActivation = true; -- Can we get in?
-	self.lastswitch = CurTime(); -- For the drones
-	self.lastswitch2 = CurTime(); -- For the light
-	self.CanDoPods = true;
 	self.CanDoCloak = true;
 	self.CanCloak = true;
 	self.Cloaked = false; -- Even though bools are false by default, i need to set it here for the SWep
 	self.CanOpenPods = true;
 	self.CanShoot = true;
 	self.CanWepPods = true;
-	self.CanOpenWepPods = true;
 	self.CanShield = true;
 	self.CanHaveLS = true;
-	self.CanToggleShield = true;
 	self.PWeapons = {};
 	self.EntHealth = 500;
 	self.IsJumper = true;
@@ -129,7 +124,6 @@ function ENT:Initialize(ply)
 	self.door = false;
 	self.BulkHead = false;
 
-	self.NextUse = CurTime();
 
 	--############## Standard Crap
 	self:SetModel("models/Iziraider/jumper/jumper.mdl"); -- Hooray Izi's model
@@ -264,10 +258,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		end
 	end
 
-	if(self.RunningAnimation) then
-		self:NextThink(CurTime()) -- Makes our animations smooth. But make sure we only run this while running anims otherwise it may crash/lag server.
-		return true -- Return true to override normal NextThink
-	end
+
 
 	--######## This fixes a bug since the first Jumper V2.5 i made, when people couldn't hover
 	if(not(self.Hover)) then
@@ -279,7 +270,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 
 	if(IsValid(self.FrontPassenger)) then
 		if(self.FrontPassenger:KeyDown(IN_RELOAD)) then
-			self:OpenDHD(self.FrontPassenger) -- Open DHD for pilot
+			self:OpenDHD(self.FrontPassenger);
 		end
 	end
 
@@ -320,18 +311,18 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		end
 		
 		if(self.Pilot:KeyDown(self.Vehicle,"AUTOPILOT")) then
-			if(self.NextUse < CurTime()) then
+			if(self.NextUse.Autopilot < CurTime()) then
 				if(not self.Autopilot) then
 					self:AutoPilot(true);
 				else
 					self:AutoPilot(false);
 				end
-				self.NextUse = CurTime() + 1;
+				self.NextUse.Autopilot = CurTime() + 1;
 			end
 		end
 
 		if(self.Pilot:KeyDown(self.Vehicle,"LIGHT")) then
-				self:ToggleLight()
+			self:ToggleLight()
 		end
 		
 		if(self.Pilot:KeyDown(self.Vehicle,"DHD")) then
@@ -349,11 +340,9 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 
 			if(self.epodo) then
 				if(self.CanWepPods) then
-					if(self.CanOpenWepPods) then
-						if(self.Pilot:KeyDown(self.Vehicle,"WEPPODS")) then
-							self:RemoveDrones()
-							self:ToggleWeaponPods()
-						end
+					if(self.Pilot:KeyDown(self.Vehicle,"WEPPODS")) then
+						self:RemoveDrones()
+						self:ToggleWeaponPods()
 					end
 				end
 			end
@@ -366,7 +355,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			end
 
 			if (IsValid(self.Pilot)) then
-				if((self.Pilot:KeyDown(self.Vehicle,"SPD"))and(self.CanOpenPods)) then
+				if(self.Pilot:KeyDown(self.Vehicle,"SPD")) then
 					self:TogglePods()
 				end
 
@@ -381,7 +370,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 				end
 
 				if(self.Pilot:KeyDown(self.Vehicle,"HOVER")) then
-					if(self.NextUse < CurTime()) then
+					if(self.NextUse.Hover < CurTime()) then
 						if(not self.HoverAlways) then
 							self.HoverAlways = true;
 							self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: ON");
@@ -389,7 +378,7 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 							self.HoverAlways = false;
 							self.Pilot:PrintMessage(HUD_PRINTTALK,"Engine Standby: OFF");
 						end
-						self.NextUse = CurTime() + 1;
+						self.NextUse.Hover = CurTime() + 1;
 					end
 				end
 
@@ -420,12 +409,16 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 		self:SetWire("Shield Strength",0);
 	end
 	self:SetWire("Health",self.EntHealth)
+	
+	if(self.Inflight or self.NextUse.Door > CurTime() or self.NextUse.BulkHead > CurTime()) then
+		self:NextThink(CurTime())
+		return true
+	end
 end
 
 function ENT:Use(ply)   --######### What happens when you press E?@ RononDex
 
 	local pos = self:WorldToLocal(ply:GetPos()) - COCKPIT_POS
-
 	if ((pos.x > -20 and pos.x < 100)and(pos.y > -90 and pos.y < 90)and(pos.z > -2 and pos.z < 80)) then
 		if(not(self.Inflight)) then
 			self:EnterJumper(ply)
@@ -532,7 +525,7 @@ function ENT:LSSupport()
 	end
 end
 
---####### Avoids the annoying bug that i've had since the start. When a player suicides the jumper now blows up @Ronondex
+--####### Avoids the annoying bug that i've had since the start. When a player suicides the jumper now blows up @RononDex
 hook.Add( "PlayerDeath","JumperPlayerDeath", function(p)
 	local Jumper = p:GetNetworkedEntity("jumper");
 	if(IsValid(Jumper) and Jumper.Inflight) then
