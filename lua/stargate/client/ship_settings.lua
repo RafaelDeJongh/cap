@@ -190,7 +190,7 @@ function StarGate.F302Settings(Panel)
 				{SGLanguage.GetMessage("key_act_wheels"),"WHEELS"},
 				{SGLanguage.GetMessage("key_act_flares"),"FLARES"},
 				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
-				{"Toggle Cockpit","COCKPIT"},
+				{SGLanguage.GetMessage("key_act_cockpit"),"COCKPIT"},
 			},
 		},
 		{
@@ -393,7 +393,7 @@ function StarGate.JumperSettings(Panel)
 				{SGLanguage.GetMessage("key_act_light"),"LIGHT"},
 				{SGLanguage.GetMessage("key_act_shield"),"SHIELD"},
 				{SGLanguage.GetMessage("key_act_standby"),"HOVER"},
-				{"AutoPilot","AUTOPILOT"},
+				{SGLanguage.GetMessage("key_act_auto"),"AUTOPILOT"},
 				{SGLanguage.GetMessage("key_act_exit"),"EXIT"},
 			},
 		},
