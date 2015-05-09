@@ -477,6 +477,8 @@ key_act_standby = Engine Standby
 key_act_land = Landing Mode
 key_act_hyper = Hyperspace
 key_act_target = Change Target Mode
+key_act_cockpit = Toggle Cockpit
+key_act_auto = Toggle AutoPilot
 key_view_title = View
 key_view_hud = Hide HUD
 key_view_lsd = Hide LSD
@@ -493,6 +495,7 @@ key_cam_down = Camera Down
 key_cam_reset = Reset camera
 key_rocket_title = Missiles control
 key_rocket = Missile
+
 
 // Limits reached
 entity_limit_ag3 = AG-3 Satellites limit reached!

@@ -24,7 +24,7 @@ function ENT:Initialize()
 	
 	self:SetNWBool("On",false);
 	
-	self:CreateWireInputs("On");
+	self:CreateWireInputs("On","R","G","B");
 	
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
@@ -50,6 +50,15 @@ function ENT:SetLightColour(r,g,b)
 	self:SetNWInt("Light_B",b);
 end
 
+function ENT:GetLightColour()
+
+	local r = self.LightColour.r;
+	local g = self.LightColour.g;
+	local b = self.LightColour.b;
+	return r,g,b;
+
+end
+
 function ENT:Use()
 
 	if self.NextUse < CurTime() then
@@ -64,7 +73,9 @@ function ENT:Use()
 end
 
 function ENT:TriggerInput(k,v)
-
+	
+	local r,g,b = self:GetLightColour();
+	
 	if(k=="On") then
 		if(v >= 1) then
 			self.On = true;
@@ -72,6 +83,12 @@ function ENT:TriggerInput(k,v)
 			self.On = false;
 		end
 		self:SetNWBool("On",self.On);
+	elseif(k=="R") then
+		self:SetLightColour(v,g,b);
+	elseif(k=="G") then
+		self:SetLightColour(r,v,b);
+	elseif(k=="B") then
+		self:SetLightColour(r,g,v);		
 	end
 
 end
