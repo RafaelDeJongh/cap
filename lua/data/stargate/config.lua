@@ -349,6 +349,11 @@ jump_distance = 15000
 max_brightness = 5
 max_size = 500
 
+# Wraith Grenade
+[wraith_grenade]
+blast_range = 200
+detect_range = 200
+
 # Cap misc
 [cap_misc]
 allow_drop_weapons = true
