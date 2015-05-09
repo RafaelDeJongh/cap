@@ -24,7 +24,7 @@ function ENT:Initialize()
 	
 	self:SetNWBool("On",false);
 	
-	self:CreateWireInputs("On","R","G","B");
+	self:CreateWireInputs("On","RGB [VECTOR]","R","G","B");
 	
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
@@ -88,7 +88,9 @@ function ENT:TriggerInput(k,v)
 	elseif(k=="G") then
 		self:SetLightColour(r,v,b);
 	elseif(k=="B") then
-		self:SetLightColour(r,g,v);		
+		self:SetLightColour(r,g,v);
+	elseif(k=="RGB") then
+		self:SetLightColour(v.x,v.y,v.z);
 	end
 
 end
