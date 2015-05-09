@@ -438,6 +438,13 @@ sg_sets[teltak][jump_distance][desc] = The Maximum Jump Distance
 sg_sets[teltak][allow_beam_weapon] = Ring Beam Weapon
 sg_sets[teltak][allow_beam_weapon][desc] = Allow Ring Beam Weapon
 
+// Wraith Grenade
+sg_sets[wraith_grenade] = Wraith Grenade
+sg_sets[wraith_grenade][blast_range] = Blast Range
+sg_sets[wraith_grenade][blast_range][desc] = How far the Blast can kill people?
+sg_sets[wraith_grenade][detect_range] = Detect Range
+sg_sets[wraith_grenade][detect_range][desc] = How far will the grenade detect people when in Mine mode?
+
 // Kino dispenser
 sg_sets[kino_dispenser] = Kino Dispenser
 sg_sets[kino_dispenser][max_kino] = Maximum kinos
