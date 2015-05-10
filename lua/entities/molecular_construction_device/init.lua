@@ -41,7 +41,7 @@ function ENT:Initialize()
 
 	if(self.HasWire) then
 		self:CreateWireInputs("Alternative Skin")
-		self:CreateWireOutputs("Active","Percent Completed", "Conscruction Complete")
+		self:CreateWireOutputs("Active","Percent Completed", "Construction Complete")
 	end
 end
 
