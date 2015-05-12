@@ -295,9 +295,15 @@ function ENT:Think()
 										self.OutRing.Busy = false;
 										self.OutRing:StopLaser();
 									end
-									self.BeamTimer = "BeamCooldown"..self.Pilot:SteamID()
+									if(IsValid(self.Pilot)) then
+										self.BeamTimer = "BeamCooldown"..self.Pilot:SteamID()
+									else
+										self.BeamTimer = "BeamCooldown"..self:EntIndex();
+									end
 									timer.Create(self.BeamTimer,60,1, function()
-										self.CooledDown = true;
+										if(IsValid(self)) then 
+											self.CooledDown = true;
+										end
 									end);
 								end
 							end);
@@ -326,6 +332,7 @@ function ENT:Exit(kill)
 	self.Pilot:SetNWInt("BeamCooldown", 0);
 	self.HyperspaceDist = 0;
 	self.Charging = false;
+	self.PreviousPilot = self.Pilot:SteamID();
 	//self:IntertialDampning(false);
 	self.BaseClass.Exit(self,kill);
 end
