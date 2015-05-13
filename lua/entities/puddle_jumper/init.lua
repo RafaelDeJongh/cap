@@ -230,6 +230,17 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			umsg.Bool(self.Inflight)
 		umsg.End()
 	end
+	
+	if(self.Cloaked) then
+		umsg.Start("JumperCloakData",self.Owner)
+			umsg.Entity(self);
+			umsg.Bool(self.CloakPods);
+			umsg.Bool(self.door);
+			umsg.Bool(self.BulkHead);
+			umsg.Bool(self.WepPods);
+			umsg.Bool(self.AnimCloaked);
+		umsg.End()
+	end
 	--####### Keep giving us air, coolant etc.
 	if(self.HasRD) then
 		if(self.CanHaveLS) then
@@ -257,7 +268,6 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			end
 		end
 	end
-
 
 
 	--######## This fixes a bug since the first Jumper V2.5 i made, when people couldn't hover
@@ -396,6 +406,8 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 			end
 		end
 	end
+	
+	
 	if (IsValid(self.Shields)) then
 		if(self.Shields.Depleted) then
 			self:SetWire("Shield Enabled",-1);

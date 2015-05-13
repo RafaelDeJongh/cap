@@ -61,12 +61,14 @@ function ENT:ToggleWeaponPods()
 					self.WepPods=false
 					self:RemoveDrones()
 				end
-				self.NextUse.WepPods = CurTime() + 1;
+				self.NextUse.WepPods = CurTime() + self:SequenceDuration(self.WepPodSeq);
+				self:ResetSequence(self.WepPodSeq)
+				self:SetPlaybackRate(1)
 			end
+			
 		end
 	end
-	self:ResetSequence(self.WepPodSeq)
-	self:SetPlaybackRate(1)
+	
 end
 
 --########## Toggle the bulk head doors @RononDex
@@ -101,7 +103,7 @@ function ENT:ToggleBulkHead()
 		self:EmitSound(self.Sounds.BulkDoor,100,100)
 		self:ResetSequence(self.BulkDoorSeq)
 		self:SetPlaybackRate(0.80)
-		self.NextUse.BulkHead = CurTime() + 1.25;
+		self.NextUse.BulkHead = CurTime() + self:SequenceDuration(self.BulkDoorSeq);
 	end
 end
 
@@ -204,7 +206,7 @@ function ENT:ToggleDoor() --############# Toggle Door @ RononDex
 				end
 			end
 		end
-		self.NextUse.Door = CurTime() + 1.25;
+		self.NextUse.Door = CurTime() + self:SequenceDuration(self.doorseq);
 	end
 	self:ResetSequence(self.doorseq)
 	self:SetPlaybackRate(0.675)
@@ -237,7 +239,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 						self:SpawnDroneProps()
 					end
 				end
-
+				self.AnimCloaked = false;
 				self.CanDoCloak=false
 				self.CanShield=true
 
@@ -271,7 +273,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				if(self.Inflight) then
 					self:ToggleRotorwash(false)
 				end
-
+				self.AnimCloaked = true;
 				self.CanShield=false
 				self:SetNetworkedBool("Cloaked",true)
 				self.CanDoCloak=false
@@ -279,6 +281,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 			end
 		end
 	end
+
 end
 
 function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
@@ -298,6 +301,7 @@ function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
 				self.epodo = true
 				self:EmitSound(self.Sounds.EnginePodOpen,100,100)
 				self.CanDoPods=false
+				self.CloakPods = true;
 			else
 				self.CanDoPods=false
 				self.sequence = self:LookupSequence("epodc")
@@ -307,13 +311,14 @@ function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
 					self:ToggleWeaponPods()
 				end
 				self:RemoveDrones()
+				self.CloakPods = false;
 				timer.Simple( 1, function()
 					self.epodo = false
 				end)
 			end
 			self:ResetSequence(self.sequence)
 			self:SetPlaybackRate(0.9)
-			self.NextUse.EnginePods = CurTime() + 2;
+			self.NextUse.EnginePods = CurTime() + self:SequenceDuration(self.sequence);
 		end
 	end
 end
