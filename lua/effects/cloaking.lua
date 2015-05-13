@@ -34,7 +34,7 @@ end)
 
 --################### Init @aVoN
 function EFFECT:Init(data)
-	local e = data:GetEntity();
+	local e = data:GetEntity();	
 	if(e == LocalPlayer()) then return end; -- Do not draw this on me. Looks ugly
 	if(not IsValid(e)) then return end;
 	local mdl = e:GetModel();
@@ -100,14 +100,145 @@ function EFFECT:Init(data)
 	if(self.Engage and self.LifeTime > 1) then start_alpha = 255 end; -- Only 255 alpha, when it's not a short flicker (less than 1 sec) or when it engages the field (aka starts cloaking)
 	self.Entity:SetColor(Color(self.Color.r,self.Color.g,self.Color.b,start_alpha));
 	self.Parent = e;
+	self.Entity.NextUse = {TogglePods = CurTime(), ToggleDoor = CurTime(), ToggleBulk = CurTime(), ToggleWeps = CurTime(),}; // Jumper Settings
 	e.CurrentCloak = self.Entity;
+	
 	self.Draw = true;
+end
+
+--################### The Functions below are to do with the Jumper, I.E it's animations @ Liam0102(RononDex)
+function EFFECT:ToggleJumperWeps(instant)
+
+	local e = self.Entity;
+	local cd = self.Parent.CloakData;
+	
+	if(e.NextUse.ToggleWeps < CurTime()) then
+		if(cd.WepPods) then
+			e.WepSeq = e:LookupSequence("wepo");
+		else
+			e.WepSeq = e:LookupSequence("wepc");
+		end
+		e:ResetSequence(e.WepSeq);
+		e:SetPlaybackRate(1);
+		e.NextUse.ToggleWeps = CurTime()+1;
+	end
+
+end
+
+function EFFECT:ToggleJumperDoor(instant)
+
+	local e = self.Entity;
+	local cd = self.Parent.CloakData;
+	
+	if(e.NextUse.ToggleDoor < CurTime()) then
+		if(cd.Door) then
+			if(cd.BulkHead) then
+				e.DoorSeq = e:LookupSequence("bodoorc")
+			else
+				e.DoorSeq = e:LookupSequence("bcdoorc")
+			end
+		else
+			if(cd.BulkHead) then
+				e.DoorSeq = e:LookupSequence("bodooro")
+			else
+				e.DoorSeq = e:LookupSequence("bcdooro")
+			end
+		end
+		e:ResetSequence(e.DoorSeq);
+		e:SetPlaybackRate(0.675);
+		e.NextUse.ToggleWeps = CurTime()+1;
+	end
+end
+
+function EFFECT:ToggleJumperBulkHead(instant)
+
+	local e = self.Entity;
+	local cd = self.Parent.CloakData;
+	
+	if(e.NextUse.ToggleBulk < CurTime()) then
+		if(cd.BulkHead) then
+			if(cd.Door) then
+				e.BulkSeq = e:LookupSequence("dobulkc")
+			else
+				e.BulkSeq = e:LookupSequence("dcbulkc")
+			end
+		else
+			if(cd.Door) then
+				e.BulkSeq = e:LookupSequence("dobulko")
+			else
+				e.BulkSeq = e:LookupSequence("dcbulko")
+			end
+		end
+		e:ResetSequence(e.BulkSeq);
+		e:SetPlaybackRate(0.8);
+		e.NextUse.ToggleWeps = CurTime()+1;
+	end
+
+end
+
+function EFFECT:ToggleJumperPods(instant)
+
+	local e = self.Entity;
+	local cd = self.Parent.CloakData;
+	
+	if(e.NextUse.TogglePods < CurTime()) then
+		if(cd.Pods) then
+			e.PodSeq = e:LookupSequence("epodo");
+		else
+			e.PodSeq = e:LookupSequence("epodc");
+		end
+		e:ResetSequence(e.PodSeq);
+		e:SetPlaybackRate(0.9);
+		e.NextUse.TogglePods = CurTime()+1;
+	end
+
+end
+
+function EFFECT:CheckJumper()
+
+	if(self.Parent:GetClass()=="puddle_jumper") then
+		if(self.Parent.CloakData.Cloaked) then
+			if(IsValid(self.Entity)) then
+				if(!self.StartAnim) then
+					local cd = self.Parent.CloakData;
+					local e = self.Entity;
+					if(cd.Pods) then
+						e:ResetSequence(e:LookupSequence("epodc"));
+					elseif(cd.WepPods) then
+						e:ResetSequence(e:LookupSequence("wepc"));
+					elseif(cd.Door) then
+						if(cd.BulkHead) then
+							e:ResetSequence(e:LookupSequence("bodoorc"));
+						else
+							e:ResetSequence(e:LookupSequence("bcdoorc"));
+						end
+					elseif(cd.BulkHead) then
+						if(!cd.Door) then
+							e:ResetSequence(e:LookupSequence("dcbulkc"));
+						end
+						
+					//elseif(cd.BulkHead) then
+					//	if(cd.Door) then
+					//		e:ResetSequence(e:LookupSequence("dobulkc"));
+					//	else
+					//		e:ResetSequence(e:LookupSequence("dcbulkc"));
+					//	end
+					end
+					self.StartAnim = true;
+				end
+			end
+		end
+	end
+
 end
 
 --################### Think @aVoN
 function EFFECT:Think()
 	self.Draw = (self.Created or 0) + (self.LifeTime or 0) > CurTime();
 	if(not IsValid(self.Parent)) then return false end; -- We aren't valid - Stop us!
+	
+	self:CheckJumper();
+	
 	local draw = self.Draw or self.PermaDraw; -- Should we draw?
 	if(draw and not self.HasBeenDrawn) then -- We shall draw but we haven't been drawn yet. Force a draw (mostly for "VisibleForOwner")
 		self:Render(true);
@@ -156,8 +287,9 @@ function EFFECT:Render(draw_anyway)
 		self.Parent:SetColor(Color(self.Color.r,self.Color.g,self.Color.b,alpha));
 	else
 		-- Permanently setting of the color
-		self.Entity:SetColor(Color(self.Color.r,self.Color.g,self.Color.b,alpha));
 		self.Entity:DrawModel();
+		self.Entity.AutomaticFrameAdvance = true;
+		self.Entity:SetColor(Color(self.Color.r,self.Color.g,self.Color.b,alpha));
 		if(not self.Draw) then return end;
 		--################### Refract is always limited to time. But not the "always-drawing" above for the owner
 		if(not self.UseShader or not self.Material) then return end;

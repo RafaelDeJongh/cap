@@ -22,6 +22,8 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self.NextUse = CurTime();
 	self:SetUseType(SIMPLE_USE)
+	self:SetNWEntity("Jumper",self.Parent);
+	self:SetNWBool("BulkHead",self.Bulkhead)
 
 end
 
@@ -33,8 +35,17 @@ function ENT:Use()
 		elseif self.Bulkhead and not self.RearDoor then
 			self.Parent:ToggleBulkHead();
 		end
+		self:SetNWBool("Use",true);
 		self.NextUse = CurTime() + 1;
 	end
+end
+
+function ENT:Think()
+	
+	if(self.NextUse < CurTime()) then
+		self:SetNWInt("Use",false);
+	end	
+
 end
 
 end
@@ -42,5 +53,23 @@ end
 if CLIENT then
 
 function ENT:Draw() self:DrawModel() end
+
+function ENT:Think()
+	
+	local On = self:GetNWBool("Use");
+	local e = self:GetParent();
+	local b = self:GetNWBool("BulkHead");
+	local c = e.CurrentCloak;
+	if(On) then
+		if(IsValid(c)) then
+			if(b) then
+				c:ToggleJumperBulkHead(false);
+			else
+				c:ToggleJumperDoor(false);
+			end
+		end
+	end
+
+end
 
 end
