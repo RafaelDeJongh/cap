@@ -27,39 +27,44 @@ function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE);
 
 	self.Pressed = false;
-	self:CreateWireInputs("Pressed");
+	self:CreateWireInputs("Disable Auto-mode","Pressed","Disable Use");
 	self:CreateWireOutputs("Active");
+	self.Auto = true;
 end
 
 function ENT:Think()
-	//local ply = StarGate.FindPlayer(self:GetPos(), 400);
+	if (not self.Auto) then return end
+	local ply = StarGate.FindPlayer(self:GetPos(), 400);
 
-	/*if (ply and not self.Light) then
+	if (ply and not self.Light) then
 		self.Light = true;
 		self:SetSkin(1);
 	elseif (not ply and self.Light) then
 		self.Light = false;
 		self:SetSkin(0);
-	end*/
+	end
 
-	//self:NextThink(CurTime()+0.5);
+	self:NextThink(CurTime()+0.5);
 	return true
 end
 
 function ENT:TriggerInput(variable, value)
 	if (variable == "Pressed") then
-		if(value<=0)then
-			self:PressConsole();
-		end
+		self:PressConsole(util.tobool(value));
+	elseif (variable == "Disable Auto-mode") then
+		if (value>0) then self.Auto = false;
+		else self.Auto = true; end
 	end
 end
 
 function ENT:Use()
-	self:PressConsole();
+	if (self:GetWire("Disable Use")>0) then return end
+	self:PressConsole(not self.Pressed);
 end
 
-function ENT:PressConsole()
-	if(not self.Pressed) then
+function ENT:PressConsole(pressed)
+	if (self.Auto) then return end
+	if(pressed) then
 		self.Pressed = true;
 		self:SetSkin(1);
 		self.Light=true;

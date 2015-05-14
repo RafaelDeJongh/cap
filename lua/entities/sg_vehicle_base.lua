@@ -452,7 +452,7 @@ function ENT:Think()
 	local IsFlying = p:GetNWBool("Flying"..self.Vehicle,false);
 
 	--######### Handle engine sound
-	if(IsFlying) then
+	if(IsFlying and IsDriver) then
 		-- Normal behaviour for Pilot or people who stand outside
 		self:StartClientsideSound("Engine");
 		--#########  Now add Pitch etc

@@ -24,7 +24,7 @@ AddCSLuaFile();
 
 --include("entities/event_horizon/modules/teleport.lua"); -- FIXME: Move all teleportation code of the eventhorizon to /stargate/server/teleport.lua. Then create a teleportation class
 
-local snd = Sound("tech/asgard_teleport.mp3");
+local snd = {Sound("tech/asgard_teleport.mp3"),Sound("tech/asgard_beamup.mp3")};
 
 --################### Init @PiX06,aVoN
 function ENT:Initialize()
@@ -273,9 +273,10 @@ function ENT:Teleport(from,to,ply,gps_ent)
 			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"asgardtp_succ\"), NOTIFY_GENERIC, 4); surface.PlaySound( \"buttons/button9.wav\" )");
 		end
 
+		local rnds = snd[math.random(1,2)];
 		-- This here is the actual teleport
-		sound.Play(snd,from,100,100);
-		sound.Play(snd,to,100,100);
+		sound.Play(rnds,from,100,100);
+		sound.Play(rnds,to,100,100);
 		local diff = to - from;
 		for _,v in pairs(entities) do
 			local start = v:GetPos();

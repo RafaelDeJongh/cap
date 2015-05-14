@@ -60,7 +60,7 @@ function ENT:Initialize()
 	self:SetWire("Strength",self.Strength);
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Phys = self.Entity:GetPhysicsObject();
-	self.SndDisable=1 --variable for Disabling sound @KvasirSG
+	self.SndDisable=0 --variable for Disabling sound @KvasirSG
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(10);
@@ -108,7 +108,7 @@ function ENT:Status(b,nosound)
 					self.Shield = e;
 					self:ShowOutput(true);
 					if(not nosound) then
-						if(SndDisable==1) then
+						if(self.SndDisable==1) then
 							self:EmitSound(self.Sounds.Engage,90,math.random(90,110));
 						end
 					end
@@ -261,9 +261,9 @@ function ENT:TriggerInput(k,v)
 		self:SetMultiplier(math.Clamp(v,-5,5));
 	elseif(k=="Disable Sound") then
 		if(v>0) then
-			self.SndDisable=0
-		else
 			self.SndDisable=1
+		else
+			self.SndDisable=0
 		end
 	end
 end

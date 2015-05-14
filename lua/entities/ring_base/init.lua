@@ -71,7 +71,7 @@ function ENT:OnRemove()
 	if self.Laser then
 		self.Laser = false;
 		if (IsValid(self.LaserBeam)) then
-			self.LaserBeam:RemoveLaser();
+			self.LaserBeam:Remove();
 		end
 	end
 end

@@ -293,6 +293,15 @@ stool_stargate_shield_co_desc = Включите это, если хотите �
 stool_stargate_shield_an = Анти Noclip
 stool_stargate_shield_an_desc = Игроки не смогут проходить щит в режиме полёта (noclip)
 
+//Atlantis Light
+stool_atlantis_light_colour = Цвет света
+stool_atlantis_light_spawner = Создатель Атлантис лампы
+stool_atlantis_light_create = Создаёт Атлантис лампу
+stool_atlantis_light_desc = Левый клик для создания Атлантис лампы
+stool_atlantis_light_undone = Атлантис лампа удалена
+stool_atlantis_light_cleanup = Атлантис лампы
+stool_atlantis_light_cleaned = Удалены все Атлантис лампы
+
 // Supergate DHD
 stool_supergate_dhd_spawner = Создатель DHD для суперврат
 stool_supergate_dhd_create = Создаёт DHD для суперврат

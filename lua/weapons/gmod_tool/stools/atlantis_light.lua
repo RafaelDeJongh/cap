@@ -23,8 +23,8 @@ TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_light");
 
 TOOL.ClientConVar["autoweld"] = 1;
-TOOL.ClientConVar["brightness"] = 10;
-TOOL.ClientConVar["size"] = 400;
+TOOL.ClientConVar["brightness"] = StarGate.CFG:Get("atlantis_light","max_brightness",5);
+TOOL.ClientConVar["size"] = StarGate.CFG:Get("atlantis_light","max_size",400);
 TOOL.ClientConVar["r"] = 255;
 TOOL.ClientConVar["g"] = 255;
 TOOL.ClientConVar["b"] = 255;
@@ -38,7 +38,7 @@ list.Set(TOOL.List,"models/Madman07/wall_decoration/decoration3.mdl",{});
 
 -- Information about the SENT to spawn
 TOOL.Entity.Class = "atlantis_light";
-TOOL.Entity.Keys = {"brightness","model","r","g","b"}; -- These keys will get saved from the duplicator
+TOOL.Entity.Keys = {"brightness","model","r","g","b","size"}; -- These keys will get saved from the duplicator
 TOOL.Entity.Limit = 10; -- A person generally can spawn 1 shield
 
 -- Add the topic texts, you see in the upper left corner
@@ -49,8 +49,6 @@ TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_atlantis_light_undone");
 TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_atlantis_light_cleanup");
 TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_atlantis_light_cleaned");
 TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_atlantis_light_limit");
-TOOL.MaximumBrightness = StarGate.CFG:Get("atlantis_light","max_brightness",5);
-TOOL.MaximumSize = StarGate.CFG:Get("atlantis_light","max_size",1000);
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -72,7 +70,7 @@ function TOOL:LeftClick(t)
 		t.Entity:SetBrightness(brightness);
 		t.Entity:SetLightSize(size);
 		-- THIS FUNCTIONS SAVES THE MODIFIED KEYS TO THE SENT, SO THEY ARE AVAILABLE WHEN COPIED WITH DUPLICATOR!
-		t.Entity:UpdateKeys(_,_,brightness,model,r,g,b);
+		t.Entity:UpdateKeys(_,_,brightness,model,r,g,b,size);
 		return true;
 	end
 
@@ -91,7 +89,6 @@ end
 --################# The PreEntitySpawn function is called before a SENT got spawned. Either by the duplicator or with the stool.@aVoN
 function TOOL:PreEntitySpawn(p,e,brightness,model,r,g,b,size)
 	e:SetModel(model);
-	print(model);
 end
 
 --################# The PostEntitySpawn function is called after a SENT got spawned. Either by the duplicator or with the stool.@aVoN
@@ -106,8 +103,8 @@ end
 --################# Controlpanel @aVoN
 function TOOL:ControlsPanel(Panel)
 	
-	Panel:NumSlider(SGLanguage.GetMessage("stool_brightness"),"atlantis_light_brightness",1,self.MaximumBrightness,0);
-	Panel:NumSlider(SGLanguage.GetMessage("stool_size"),"atlantis_light_size",10,self.MaximumSize,0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_brightness"),"atlantis_light_brightness",1,StarGate.CFG:Get("atlantis_light","max_brightness",5),0);
+	Panel:NumSlider(SGLanguage.GetMessage("stool_size"),"atlantis_light_size",10,StarGate.CFG:Get("atlantis_light","max_size",1000),0);
 
 	Panel:AddControl("Color",{
 		Label = SGLanguage.GetMessage("stool_atlantis_light_colour"),

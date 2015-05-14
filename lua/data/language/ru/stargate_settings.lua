@@ -430,6 +430,25 @@ sg_sets[tac][max_shoots] = Максимально выстрелов
 sg_sets[tac][max_shoots][desc] = Максимальное количество выстрелов в режиме убийства прежде, чем взорваться, 0 - неограниченно.
 sg_sets[tac][range] = Радиус поиска целей
 
+//Teltak
+sg_sets[teltak] = Tel'tak
+sg_sets[teltak][jump_distance] = Дистанция прыжка
+sg_sets[teltak][jump_distance][desc] = Максимальная дистанция гипер-прыжка
+sg_sets[teltak][allow_beam_weapon] = Луч колец
+sg_sets[teltak][allow_beam_weapon][desc] = Разрешить активацию луча у колец
+
+// Atlantis Light
+sg_sets[atlantis_light] = Лампа Атлантиды
+sg_sets[atlantis_light][max_brightness] = Макс яркость
+sg_sets[atlantis_light][max_size] = Макс размер
+
+// Wraith Grenade
+sg_sets[wraith_grenade] = Граната Рейфов
+sg_sets[wraith_grenade][blast_range] = Радиус поражения
+sg_sets[wraith_grenade][blast_range][desc] = Насколько далеко взрыв будет убивать людей?
+sg_sets[wraith_grenade][detect_range] = Радиус определения
+sg_sets[wraith_grenade][detect_range][desc] = Насколько далеко граната будет определят игрока в режиме мины?
+
 // Kino dispenser
 sg_sets[kino_dispenser] = Кино Диспенсер
 sg_sets[kino_dispenser][max_kino] = Максимум кино
