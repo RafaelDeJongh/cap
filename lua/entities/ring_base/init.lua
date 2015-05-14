@@ -362,11 +362,12 @@ end
 
 function ENT:DoRings()
 	self.Busy=true
-	self.Entity:EmitSound("tech/ring_transporter2.wav", 100, 100)
+	if (math.random(1,2)==1) then self.Entity:EmitSound("tech/ring_transporter.mp3", 100, 100)
+    	else self.Entity:EmitSound("tech/ring_transporter2.wav", 75, 100) end
 	self:Anim(false);
 
 	local dir = 1;
-	-- Addtion by aVoN: Use "FindRange" everytime we are facing down and the angle is below 45° (pi/4)
+	-- Addtion by aVoN: Use "FindRange" everytime we are facing down and the angle is below 45Â° (pi/4)
 	if(self.Entity:GetUp():DotProduct(Vector(0,0,-1)) > 1/math.sqrt(2)) then
 		--self.SetRange = 1024;
 		dir = -1;
