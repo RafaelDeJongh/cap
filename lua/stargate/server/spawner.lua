@@ -45,6 +45,7 @@ StarGate.GateSpawner.Block = false;
 StarGate.GateSpawner.Doors = {};
 StarGate.GateSpawner.DoorButtons = {};
 StarGate.GateSpawner.Console = {};
+StarGate.GateSpawner.Jammer = {};
 
 -- ############### Load config @aVoN
 function StarGate.GateSpawner.LoadConfig()
@@ -76,6 +77,7 @@ function StarGate.GateSpawner.LoadConfig()
 		StarGate.GateSpawner.Doors = ini.cap_doors or {};
 		StarGate.GateSpawner.DoorButtons = ini.cap_doors_contr or {};
 		StarGate.GateSpawner.Console = ini.cap_console or {};
+		StarGate.GateSpawner.JammingDevice = ini.jamming_device or {};
 		return true;
 	end
 	return false;
@@ -124,6 +126,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local IsDoors = string.lower(v.classname):find("cap_doors_frame");
 		local IsDoorsButton = string.lower(v.classname):find("cap_doors_contr");
 		local IsConsole = string.lower(v.classname):find("cap_console");
+		local IsJammingDevice = string.lower(v.classname):find("jamming_device");
 
 		if (IsIris and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","sv_gatespawner",true)) then e:Remove(); return end
 
@@ -134,6 +137,13 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		-- Set model (if not a gate and valid key exists)
 		if(not IsGate and v.model) then
 			e:SetModel(v.model);
+		end
+
+		if(IsJammingDevice)then
+			e:SetSize(tonumber(v.size))
+			if(tobool(v.enabled))then
+				e:Enable()
+			end
 		end
 
 		-- Enable gravity controllers
@@ -423,6 +433,7 @@ function StarGate.GateSpawner.Reset()
 	StarGate.GateSpawner.Doors = {};
 	StarGate.GateSpawner.DoorButtons = {};
 	StarGate.GateSpawner.Console = {};
+	StarGate.GateSpawner.JammingDevice = {};
 end
 
 -- ############### Initial spawn handling @aVoN
@@ -453,6 +464,7 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			ents.FindByClass("prop_physics"),
 			ents.FindByClass("cap_doors*"),
 			ents.FindByClass("cap_console"),
+			ents.FindByClass("jamming_device"),
 		};
 		for _,v in pairs(remove) do
 			for _,e in pairs(v) do
@@ -481,7 +493,8 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 			local i = 0; -- For delayed spawning
 
-			local tbl = {				StarGate.GateSpawner.Ramp,
+			local tbl = {
+				StarGate.GateSpawner.Ramp,
 				StarGate.GateSpawner.Gates,
 				StarGate.GateSpawner.Iris,
 				StarGate.GateSpawner.DHDs,
@@ -498,7 +511,9 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 				StarGate.GateSpawner.Props,
 				StarGate.GateSpawner.Doors,
 				StarGate.GateSpawner.DoorButtons,
-				StarGate.GateSpawner.Console,			}
+				StarGate.GateSpawner.Console,
+				StarGate.GateSpawner.JammingDevice,
+			}
 
 			for k,t in pairs(tbl) do
 				for _,v in pairs(t) do
@@ -746,6 +761,9 @@ function StarGate.GateSpawner.CreateFile(p)
 		for _,v in pairs(ents.FindByClass("cap_console")) do
 			f = f .. "[cap_console]\nclassname=cap_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
 		end
+		for _,v in pairs(ents.FindByClass("jamming_device")) do
+			f = f .. "[jamming_device]\nclassname=jamming_device\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nsize="..tostring(v.Size).."\nenabled="..tostring(v.IsEnabled).."\n";
+		end
 		f = f .. props
 
 		file.Write(game.GetMap():lower()..".txt",f);
@@ -820,6 +838,7 @@ function StarGate.GateSpawner.Restored()
 			ents.FindByClass("prop_physics"),
 			ents.FindByClass("cap_doors*"),
 			ents.FindByClass("cap_console"),
+			ents.FindByClass("jamming_device"),
 		};
 		local protect = GetConVar("stargate_gatespawner_protect"):GetBool();
 		for _,v in pairs(check) do

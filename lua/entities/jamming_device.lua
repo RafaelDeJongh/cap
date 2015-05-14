@@ -110,4 +110,12 @@ function ENT:Use(ply)
 	end
 end
 
+function ENT:Enable()
+	self.IsEnabled = true
+end
+
+function ENT:SetSize(size)
+	self.Size = size
+end
+
 end

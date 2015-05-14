@@ -35,11 +35,17 @@ end
 list.Set( "ButtonModels", "models/Iziraider/destinybutton/destinybutton.mdl", {} )
 list.Set( "ButtonModels", "models/Boba_Fett/props/buttons/atlantis_button.mdl", {} )
 list.Set( "ButtonModels", "models/Iziraider/artifacts/asgard_stone.mdl", {} )
+list.Set( "ButtonModels", "models/Madman07/ring_panel/goauld_panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-12)} )
+list.Set( "ButtonModels", "models/Zsdaniel/ori-ringpanel/panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-5)} )
+list.Set( "ButtonModels", "models/Madman07/ring_panel/ancient/panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-10)} )
 
 -- Add wire buttons
 list.Set( "Wire_button_Models", "models/Iziraider/destinybutton/destinybutton.mdl", {} )
 list.Set( "Wire_button_Models", "models/Boba_Fett/props/buttons/atlantis_button.mdl", {} )
 list.Set( "Wire_button_Models", "models/Iziraider/artifacts/asgard_stone.mdl", {} )
+list.Set( "Wire_button_Models", "models/Madman07/ring_panel/goauld_panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-12)} )
+list.Set( "Wire_button_Models", "models/Zsdaniel/ori-ringpanel/panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-5)} )
+list.Set( "Wire_button_Models", "models/Madman07/ring_panel/ancient/panel.mdl", {Angle=Angle(270,0,0),Position=Vector(0,0,-10)} )
 
 -- Player models and NPCs
 if (StarGate.CheckModule("npc")) then
