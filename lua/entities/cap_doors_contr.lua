@@ -29,7 +29,9 @@ ENT.Sounds={
 	PressDest=Sound("door/dest_door_button.wav"),
 	PressAtl=Sound("door/atlantis_door_chime.wav"),
 	PressGoa=Sound("button/ring_button1.mp3"),
+	PressGoa2=Sound("button/ring_button2.mp3"),
 	PressOri=Sound("button/ancient_button1.wav"),
+	PressOri2=Sound("button/ancient_button2.wav"),
 }
 
 -----------------------------------INIT----------------------------------
@@ -77,8 +79,20 @@ function ENT:BressButton()
 	end);
 
 	if (self.TypeS == 1) then self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
-	elseif (self.TypeS == 3) then self.Entity:EmitSound(self.Sounds.PressGoa,100,math.random(90,110));
-	elseif (self.TypeS == 4 or self.TypeS == 5) then self.Entity:EmitSound(self.Sounds.PressOri,100,math.random(90,110));
+	elseif (self.TypeS == 3) then
+		local SoundToPlay = math.random(0,1)
+		if(SoundToPlay==1) then
+			self.Entity:EmitSound(self.Sounds.PressGoa,100,math.random(90,110));
+		else
+			self.Entity:EmitSound(self.Sounds.PressGoa2,100,math.random(90,110));
+		end
+	elseif(self.TypeS == 4 or self.TypeS == 5) then
+		local SoundToPlay = math.random(0,1)
+		if(SoundToPlay==1) then
+			self.Entity:EmitSound(self.Sounds.PressOri,100,math.random(90,110));
+		else
+			self.Entity:EmitSound(self.Sounds.PressOri2,100,math.random(90,110));
+		end
 	else self.Entity:EmitSound(self.Sounds.PressAtl,100,math.random(90,110)); end
 
 	if (self.Atlantis and IsValid(self.AtlTP) and self.AtlTP.Busy) then return end
