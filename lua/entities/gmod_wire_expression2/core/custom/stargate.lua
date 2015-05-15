@@ -195,7 +195,7 @@ e2function void wirelink:stargateSetGalaxy(number bool)
 	this:SetGalaxy(bool)
 end
 
-/* I think this function is like exploit - we can openiris from target gate for example... So i disable it.
+//I think this function is like exploit - we can openiris from target gate for example... So i disable it.
 e2function entity entity:stargateTarget()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return nil end
 	if (IsValid(this.Target) and (not this.Target:GetPrivate() or isOwner(self.Target,this) or self.player:IsAdmin())) then
@@ -212,7 +212,7 @@ e2function entity wirelink:stargateTarget()
 	else
 		return nil
 	end
-end */
+end
 
 e2function number entity:stargateOpen()
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
