@@ -41,7 +41,7 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self:SetUseType(SIMPLE_USE);
 
-	self:CreateWireInputs("Teleport","Destination [STRING]","Toggle Doors","Lock Doors","Lock Console","Should be closed","Disable auto-open","Disable auto-close","Disable Dial Menu","Disable Edit Menu");
+	self:CreateWireInputs("Teleport","Destination [STRING]","Group [STRING]","Toggle Doors","Lock Doors","Lock Console","Should be closed","Disable auto-open","Disable auto-close","Disable Dial Menu","Disable Edit Menu");
 	self:CreateWireOutputs("Active","Doors Opened");
 
 	self.TName = "";
@@ -62,6 +62,8 @@ function ENT:Initialize()
 	self.Ents={}
 	self.EntsTP={}
 
+	self.Group = "ATL";
+	
 	self.Disallowed = {};
 	for _,v in pairs(StarGate.CFG:Get("atlantis_transporter","classnames",""):TrimExplode(",")) do
 		self.Disallowed[v:lower()] = true;
@@ -221,6 +223,32 @@ function ENT:SetAtlName(name,wire,ply)
 	net.Broadcast()
 end
 
+function ENT:SetAtlGrp(grp)
+	if(not IsValid(self)) then return end;
+	grp = grp or "";
+	grp = grp:Trim();
+	
+	self.Group = grp;
+	net.Start("UpdateAtlTp");
+	net.WriteInt(self:EntIndex(),16);
+	net.WriteInt(4,4);
+	net.WriteString(grp);
+	net.Broadcast();
+end
+
+function ENT:SetAtlLocal(loc)
+
+	if not IsValid(self) then return end
+	loc = util.tobool(loc);
+	self.Local = loc;
+	net.Start("UpdateAtlTP")
+	net.WriteInt(self:EntIndex(),16)
+	net.WriteInt(5,4)
+	net.WriteBit(loc)
+	net.Broadcast()
+	
+end
+
 function ENT:SetAtlPrivate(private)
 	if not IsValid(self.Entity) then return end
 	private = util.tobool(private);
@@ -240,6 +268,8 @@ function ENT:OnReloaded()
 			net.WriteInt(3,4)
 			net.WriteString(self.TName)
 			net.WriteBit(self.TPrivate)
+			net.WriteString(self.Group)
+			net.WriteBit(self.Local)
 			net.Broadcast()
 		end
 	end)
@@ -252,6 +282,8 @@ function ENT:TriggerInput(k,v)
 		end
 	elseif k == "Destination" then
 		self.Destination = v;
+	elseif(k == "Group") then
+		self:SetAtlGrp(v);
 	elseif k == "Toggle Doors" and v>0 then
 		self:ToggleDoors();
 	elseif k == "Disable Dial Menu" then
@@ -308,9 +340,11 @@ function ENT:Use(ply)
 	if (self.DisEditMenu) then return end
 	if (not self:CAP_CanModify(ply)) then return end
 	umsg.Start("AtlantisTransporterEditWindow", ply)
-	umsg.Entity(self)
-	umsg.String(self.TName)
-	umsg.Bool(self.TPrivate)
+		umsg.Entity(self)
+		umsg.String(self.TName)
+		umsg.Bool(self.TPrivate)
+		umsg.String(self.Group)
+		umsg.Bool(self.Local)
 	umsg.End()
 end
 
@@ -336,6 +370,8 @@ net.Receive("atlantis_transport",function(len,ply)
 		if (not self:CAP_CanModify(ply)) then return end
 		self:SetAtlName(net.ReadString(),false,ply);
 		self:SetAtlPrivate(net.ReadBit());
+		self:SetAtlGrp(net.ReadString(),false,ply);
+		self:SetAtlLocal(net.ReadBit());
 	end
 end)
 

@@ -47,6 +47,14 @@ net.Receive( "UpdateAtlTP" , function(len)
 		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
 		AtlTP_GetAll[ent].name = net.ReadString();
 		AtlTP_GetAll[ent].private = util.tobool(net.ReadBit());
+		AtlTP_GetAll[ent].grp = net.ReadString();
+		AtlTP_GetAll[ent].loc = util.tobool(net.ReadBit());	
+	elseif(type==4) then
+		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
+		AtlTP_GetAll[ent].grp = net.ReadString();
+	elseif(type==5) then
+		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
+		AtlTP_GetAll[ent].loc = util.tobool(net.ReadBit());
 	end
 end );
 
@@ -71,7 +79,9 @@ function PANEL:Init()
   	self.TextEntry:SetAllowNonAsciiCharacters(true)
 
   	self.ListView = vgui.Create( "DListView", self )
-  	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_05")):SetFixedWidth(380);
+  	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_05")):SetFixedWidth(285); //380
+	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_group")):SetFixedWidth(50);
+	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_local") .. "?"):SetFixedWidth(45);
   	self.ListView:SortByColumn(0,false);
   	self.ListView:SetSize(380,170);
   	self.ListView.OnRowSelected = function(ListView,Row)
@@ -130,10 +140,19 @@ function PANEL:Init()
  	self.L1:SetSize( 400, 30 )
 end
 
+local group;
 function PANEL:UpdateList()
 	for k,v in pairs(AtlTP_GetAll) do
 		if (self.Entity:EntIndex()!=k and v.name and v.name!="" and not v.private) then
-			self.ListView:AddLine(v.name);
+			local this = AtlTP_GetAll[self.Entity:EntIndex()];
+			if(v.loc) then
+				if(v.grp == this.grp and this.loc) then
+					self.ListView:AddLine(v.name,v.grp,"Yes");
+
+				end
+			else
+				self.ListView:AddLine(v.name,v.grp,"No");
+			end
 		end
 	end
 end
@@ -165,7 +184,7 @@ usermessage.Hook("AtlantisTransporterShowWindow", RingTransporterShowWindow)
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetSize(400,90)
+	self:SetSize(400,110)
 	self:MakePopup();
 	self:SetSizable(false)
 	self:SetDraggable(false)
@@ -177,23 +196,51 @@ function PANEL:Init()
  	self.TextEntry = vgui.Create( "DTextEntry", self )
  	self.TextEntry:SetText("")
  	self.TextEntry:SetAllowNonAsciiCharacters(true)
-
+	
  	self.L1 = vgui.Create( "DLabel", self )
  	self.L1:SetText(SGLanguage.GetMessage("atl_tp_01"))
  	self.L1:SetFont("OldDefaultSmall")
-
+	
+	
+	self.NameLabel = vgui.Create( "DLabel", self );
+	self.NameLabel:SetText(SGLanguage.GetMessage("atl_tp_name"))
+	self.NameLabel:SetFont("OldDefaultSmall")
+	self.NameLabel:SetSize( 400, 50 )
+	self.NameLabel:SetPos(11,25)
+	
+	self.GroupLabel = vgui.Create( "DLabel", self );
+	self.GroupLabel:SetText(SGLanguage.GetMessage("atl_tp_group"))
+	self.GroupLabel:SetFont("OldDefaultSmall")
+	self.GroupLabel:SetSize( 400, 50 )
+	self.GroupLabel:SetPos(256,25)
+	
 	self.PrivateImage = vgui.Create("DImage",self)
-	self.PrivateImage:SetPos(10,67);
+	self.PrivateImage:SetPos(10,87);
 	self.PrivateImage:SetSize(16,16);
 	self.PrivateImage:SetImage("icon16/shield.png");
 
 	self.PrivateCheckbox = vgui.Create("DCheckBoxLabel",self)
-	self.PrivateCheckbox:SetPos(35,67);
+	self.PrivateCheckbox:SetPos(35,87);
 	self.PrivateCheckbox:SetText(SGLanguage.GetMessage("atl_tp_06"));
 	self.PrivateCheckbox:SetWide(110);
 	local tip = SGLanguage.GetMessage("atl_tp_07");
 	self.PrivateCheckbox:SetTooltip(tip);
 	self.PrivateCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
+	
+	self.LocalCheckbox = vgui.Create("DCheckBoxLabel",self)
+	self.LocalCheckbox:SetPos(100,87);
+	self.LocalCheckbox:SetText(SGLanguage.GetMessage("atl_tp_local")); //MAKE Language COMPATIBLE
+	self.LocalCheckbox:SetWide(110);
+	//local tip = SGLanguage.GetMessage("atl_tp_07");
+	local tip = "Sets whether to use a Local Group or not";
+	self.LocalCheckbox:SetTooltip(tip);
+	self.LocalCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
+	
+	self.GroupEntry = vgui.Create("DTextEntry",self);
+	self.GroupEntry:SetText("ATL");
+	self.GroupEntry:SetSize(50,self.GroupEntry:GetTall());
+	self.GroupEntry:SetPos(255,60);
+	self.GroupEntry:SetAllowNonAsciiCharacters(false)
 
  	self.Button = vgui.Create( "Button", self)
  	self.Button.DoClick = function(self)
@@ -203,17 +250,20 @@ function PANEL:Init()
 		net.WriteBit(false);
 		net.WriteString(panel2.TextEntry:GetValue());
 		net.WriteBit(panel2.PrivateCheckbox:GetChecked());
+		net.WriteString(panel2.GroupEntry:GetValue());
+		group = panel2.GroupEntry:GetValue();
+		net.WriteBit(panel2.LocalCheckbox:GetChecked());
 		net.SendToServer();
 		panel2:Remove();
  	end
 	self.Button:SetText(SGLanguage.GetMessage("atl_tp_03"))
 
-	self.Button:SetPos(310,39)
+	self.Button:SetPos(310,59)
 	self.Button:SetSize(80,22)
- 	self.TextEntry:SetSize( 290, self.TextEntry:GetTall() )
- 	self.TextEntry:SetPos( 10, 40 )
+ 	self.TextEntry:SetSize( 240, self.TextEntry:GetTall() )
+ 	self.TextEntry:SetPos( 10, 60 )
  	self.L1:SetPos( 30, 3 )
- 	self.L1:SetSize( 400, 30 )
+ 	self.L1:SetSize( 400, 50 )
 end
 
 function PANEL:Paint(w,h)
@@ -225,9 +275,13 @@ function PANEL:SetEntity(ent)
 	self.Entity = ent;
 end
 
-function PANEL:SetVal(val,priv)
+function PANEL:SetVal(val,priv,grp,loc)
 	self.TextEntry:SetText(val);
 	self.PrivateCheckbox:SetChecked(priv);
+	self.GroupEntry:SetText(grp);
+	self.LocalCheckbox:SetChecked(loc);
+	group = grp;
+
 end
 
 vgui.Register( "AtlantisDestinationEditCap", PANEL, "DFrame" )
@@ -241,6 +295,6 @@ local function RingTransporterEditWindow(um)
 	Window:SetPos( (ScrW()/2 - 250) / 2, ScrH()/2 - 75 )
 	Window:SetVisible( true )
 	Window:SetEntity(ent)
-	Window:SetVal(um:ReadString(),um:ReadBool())
+	Window:SetVal(um:ReadString(),um:ReadBool(),um:ReadString(),um:ReadBool())
 end
 usermessage.Hook("AtlantisTransporterEditWindow", RingTransporterEditWindow)
