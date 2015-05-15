@@ -412,19 +412,18 @@ function ENT:Think() --####### Now let me think... @RononDex
 		if(self.Pilot:KeyDown(self.Vehicle,"EJECT")) then
 			self:EjectorSeat();
 		end
-
+		
 		if(not(self.PoppedFlares) and IsValid(self.Pilot)) then
 			if(self.Pilot:KeyDown(self.Vehicle,"FLARES")) then
 				self:Flares();
 			end
 		end
-		
 		if(self.Accel.FWD > 200) then
 			if(self.CockpitOpen) then
 				self:ToggleCockpit();
 			end
 		else
-			if(self.Pilot:KeyDown(self.Vehicle,"COCKPIT")) then
+			if(IsValid(self.Pilot) and self.Pilot:KeyDown(self.Vehicle,"COCKPIT")) then
 				self:ToggleCockpit();
 			end
 		end
@@ -908,6 +907,7 @@ hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
 			p:SetNetworkedBool("302Passenger",false);
 			p:SetNWEntity("302Passenger",NULL);
 			p:SetNetworkedEntity("302Seat",NULL);
+			if (not IsValid(F302)) then return end
 			p:SetPos(F302:GetPos()+F302:GetForward()*100+F302:GetRight()*100+F302:GetUp()*25);
 		end
 	end

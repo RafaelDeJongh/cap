@@ -81,6 +81,7 @@ function ENT:SpawnFunction(pl, tr) --######## Pretty useless unless we can spawn
 	e:SpawnRings(pl);
 	e:SpawnRingPanel(pl);
 	e:SpawnDoor(pl)
+	e:SpawnButtons(pl);
 	//e:ToggleDoors("out")
 	e:SetWire("Health",e:GetNetworkedInt("health"));
 	pl:Give("weapon_ringcaller");
@@ -156,7 +157,6 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.CooledDown = true; //Beam Cooldown
 	self.TeltakHealth = self:GetNetworkedInt("health");	
 	self.WeaponAllowed = StarGate.CFG:Get("teltak","allow_beam_weapon",true);
-	self:SpawnButtons();
 
 end
 
@@ -296,9 +296,15 @@ function ENT:Think()
 										self.OutRing.Busy = false;
 										self.OutRing:StopLaser();
 									end
-									self.BeamTimer = "BeamCooldown"..self.Pilot:SteamID()
+									if(IsValid(self.Pilot)) then
+										self.BeamTimer = "BeamCooldown"..self.Pilot:SteamID()
+									else
+										self.BeamTimer = "BeamCooldown"..self:EntIndex();
+									end
 									timer.Create(self.BeamTimer,60,1, function()
-										self.CooledDown = true;
+										if(IsValid(self)) then 
+											self.CooledDown = true;
+										end
 									end);
 								end
 							end);
@@ -331,12 +337,13 @@ function ENT:Exit(kill)
 	self:SetWire("Driver",NULL);
 	self.HyperspaceDist = 0;
 	self.Charging = false;
+	self.PreviousPilot = self.Pilot:SteamID();
 	//self:IntertialDampning(false);
 	self.BaseClass.Exit(self,kill);
 end
 
 ENT.Buttons = {};
-function ENT:SpawnButtons()
+function ENT:SpawnButtons(p)
 	local e = {};
 	for i=1,5 do
 		e[i] = ents.Create("teltak_button");
@@ -346,34 +353,32 @@ function ENT:SpawnButtons()
 		e[i]:SetParent(self);
 		e[i]:SetRenderMode(RENDERMODE_TRANSALPHA);
 		e[i].Parent = self;
-		constraint.Weld(e[i],self,0,0,0,true);
 		e[i].TelTakPart = true;
 		self.Buttons[i] = e[i]
 		if(i==1) then
 			e[i].RearDoor = false;
 			e[i].Bulkhead = true;
-			e[i]:SetPos(self:GetPos()+Vector(178, 35, 105))
+			e[i]:SetPos(self:GetPos()-self:GetForward()*-178+self:GetRight()*-35+self:GetUp()*105)
 			e[i]:SetAngles(self:GetAngles()+Angle(0,90,84))			
 		elseif(i==2) then
 			e[i].RearDoor = false;
 			e[i].Bulkhead = true;
-			e[i]:SetPos(self:GetPos()+Vector(136, -35, 105))
+			e[i]:SetPos(self:GetPos()-self:GetForward()*-136+self:GetRight()*35+self:GetUp()*105)
 			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
-			
 		elseif(i==3) then
 			e[i].RearDoor = true;
 			e[i].Bulkhead = false;
-			e[i]:SetPos(self:GetPos()+ Vector(-142, 30, 105))
+			e[i]:SetPos(self:GetPos()-self:GetForward()*142+self:GetRight()*-30+self:GetUp()*105)
 			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
 		elseif(i==4) then
 			e[i].RearDoor = true;
 			e[i].Bulkhead = false;
-			e[i]:SetPos(self:GetPos()+ Vector(-200, -30, 105))
+			e[i]:SetPos(self:GetPos()-self:GetForward()*200+self:GetRight()*30+self:GetUp()*105)
 			e[i]:SetAngles(self:GetAngles()+Angle(0,90,90))
 		elseif(i==5) then
 			e[i].RearDoor = false;
 			e[i].Bulkhead = false;
-			e[i]:SetPos(self:GetPos()+ Vector(285, -149, 103));
+			e[i]:SetPos(self:GetPos()-self:GetForward()*-285+self:GetRight()*149+self:GetUp()*105);
 			e[i]:SetAngles(self:GetAngles()+Angle(90,0,90))
 		end
 		if CPPI and IsValid(p) and e[i].CPPISetOwner then e[i]:CPPISetOwner(p) end
@@ -735,6 +740,8 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	if dupeInfo.Door2 then self.Door2 = CreatedEntities[dupeInfo.Door2]; end
 	if dupeInfo.Door3 then self.Door3 = CreatedEntities[dupeInfo.Door3]; end
 
+	self:SpawnButtons(ply)
+	
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 
 	if (IsValid(ply)) then
