@@ -77,8 +77,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self:SpawnChairs()
 	self:SpawnShieldGen()
 	self:CreateWireInputs("Shield")
-	self:CreateWireOutputs("Health","Shield Strength","Shield Enabled","Driver [ENTITY]")
-	self:SetWire("Driver",NULL);
+	self:CreateWireOutputs("Health","Shield Strength","Shield Enabled")
 	self.IsShuttle=true
 	self.Vehicle = "Shuttle"
 
@@ -112,18 +111,6 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 		phys:Wake()
 		phys:SetMass(10000)
 	end
-end
-
-function ENT:Enter(p)
-	self.BaseClass.Enter(self,p);
-	if IsValid(self.Pilot) and self.Pilot:IsPlayer() then
-		self:SetWire("Driver",self.Pilot)
-	end
-end
-
-function ENT:Exit(kill)
-	self.BaseClass.Exit(self,kill);
-	self:SetWire("Driver",NULL);
 end
 
 function ENT:OnRemove()	self.BaseClass.OnRemove(self) end

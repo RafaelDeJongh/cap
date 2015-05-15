@@ -96,8 +96,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.GoesUp=true
 	self.CanRoll=true
 	self.ShootingCann = 1
-	self:CreateWireOutputs("Health","Driver [ENTITY]");
-	self:SetWire("Driver",NULL);
+	self:CreateWireOutputs("Health");
 	self.ShouldRotorwash = true;
 
 	local phys = self:GetPhysicsObject()
@@ -117,18 +116,6 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 		self:SetNetworkedInt("health", health);
 		self:SetWire("Health",health);
 	end);
-end
-
-function ENT:Enter(p)
-	self.BaseClass.Enter(self,p);
-	if IsValid(self.Pilot) and self.Pilot:IsPlayer() then
-		self:SetWire("Driver",self.Pilot);
-	end
-end
-
-function ENT:Exit(kill)
-	self.BaseClass.Exit(self,kill);
-	self:SetWire("Driver",NULL);
 end
 
 function ENT:OnTakeDamage(dmg) --########## Darts aren't invincible are they? @RononDex

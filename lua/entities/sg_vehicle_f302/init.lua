@@ -65,7 +65,6 @@ function ENT:SpawnFunction(p, tr) --######## Pretty useless unless we can spawn 
 	e:Turrets(p); -- Spawn turrets
 	e:SpawnWheels(nil,p);
 	e:SetWire("Health",e:GetNetworkedInt("health"));
-	e:SetWire("Driver",NULL);
 	p:AddCount("CAP_ships", e)
 	return e;
 end
@@ -139,7 +138,7 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	self.GoesRight = false;
 	self.GoesUp = false;
 	self.CanRoll = true;
-	self:CreateWireOutputs("Health","Driver [ENTITY]");
+	self:CreateWireOutputs("Health");
 
 	self.ShouldRotorwash = true;
 
@@ -279,9 +278,7 @@ function ENT:Enter(p)
 		self:ToggleCockpit();
 	end
 	self.CockpitOpen = false;
-	if(IsValid(self.Pilot) and self.Pilot:IsPlayer()) then
-		self:SetWire("Driver",self.Pilot)
-	end
+
 end
 
 function ENT:Exit(kill)
@@ -290,7 +287,7 @@ function ENT:Exit(kill)
 	if(not self.CockpitOpen) then
 		self:ToggleCockpit();
 	end
-	self:SetWire("Driver",NULL)
+
 end
 
 function ENT:Think() --####### Now let me think... @RononDex
