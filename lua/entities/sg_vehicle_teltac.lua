@@ -138,7 +138,8 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 
 	self.HoverPos = self:GetPos();
 	self.HoverAlways = true;	 -- let me hover always :)
-	self:CreateWireOutputs("Health");
+	self:CreateWireOutputs("Health","Driver [ENTITY]");
+	self:SetWire("Driver",NULL);
 
 	local phys = self:GetPhysicsObject()
 	if(phys:IsValid()) then
@@ -318,12 +319,16 @@ end
 function ENT:Enter(p)
 	self.BaseClass.Enter(self,p);
 	self.Pilot:SetNWInt("MaxCharge",self.MaxCharge);
+	if IsValid(self.Pilot) and self.Pilot:IsPlayer() then
+		self:SetWire("Driver",self.Pilot);
+	end
 end
 
 function ENT:Exit(kill)
 	self.ExitPos = self:GetPos()+Vector(0,0,120);
 	self.CanUse = false;
 	self.Pilot:SetNWInt("BeamCooldown", 0);
+	self:SetWire("Driver",NULL);
 	self.HyperspaceDist = 0;
 	self.Charging = false;
 	//self:IntertialDampning(false);
