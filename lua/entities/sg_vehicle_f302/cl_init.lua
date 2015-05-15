@@ -28,6 +28,7 @@ KBD:SetDefaultKey("EJECT","2");
 KBD:SetDefaultKey("BRAKE",StarGate.KeyBoard.BINDS["+jump"] or "SPACE");
 KBD:SetDefaultKey("BOOST","B");
 KBD:SetDefaultKey("COCKPIT","3");
+KBD:SetDefaultKey("WINCH","4");
 --View
 KBD:SetDefaultKey("Z+","UPARROW");
 KBD:SetDefaultKey("Z-","DOWNARROW");
@@ -338,9 +339,9 @@ local function F302Hud()
 
 	if(self.FPV) then
 		num = math.Approach(num,h/4*-2.8,10)
-		mnum = math.Approach(mnum,h/4*0.75,10)
+		mnum = math.Approach(mnum,h/4*0.70,10)
 		enum = math.Approach(enum,h/4*0.4,10)
-		hnum = math.Approach(hnum,h/4*0.3,10)
+		hnum = math.Approach(hnum,h/4*0.2,10)
 	else
 		num = math.Approach(num,0,10)
 		mnum = math.Approach(mnum,h/4*3.5,10)
@@ -358,8 +359,8 @@ local function F302Hud()
 			draw.DrawText("Missiles","MainF302Font",w/4*1.5,mnum,MISSILE_COLOUR,1);
 			draw.DrawText("Turrets","MainF302Font",w/4*2.5,mnum,TURRET_COLOUR,1);
 			draw.DrawText("Engine","MainF302Font",w/4*2,enum,ENGINE_COLOUR,1);
-			draw.DrawText("Hull:\n"..tostring(health).."%","F302Font",w/4*0.55,hnum,WHITE,1);
-			draw.DrawText(p.Missiles.."/"..(4-p.Missiles),"F302Font",w/4*3.45,enum,WHITE,1);
+			draw.DrawText("Hull:\n"..tostring(health).."%","F302Font",w/4*0.45,hnum,WHITE,1);
+			draw.DrawText(p.Missiles.."/"..(4-p.Missiles),"F302Font",w/4*3.55,enum,WHITE,1);
 		end
 	end
 end

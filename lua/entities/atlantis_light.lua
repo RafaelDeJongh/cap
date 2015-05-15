@@ -24,22 +24,25 @@ function ENT:Initialize()
 	
 	self:SetNWBool("On",false);
 	
-	self:CreateWireInputs("On","R","G","B");
+	self:CreateWireInputs("On","Disable Use","Brightness","Size","RGB [VECTOR]","R","G","B");
 	
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(100);
 	end
+	
+	self.MaxB = StarGate.CFG:Get("atlantis_light","max_brightness",5);
+	self.MaxS = StarGate.CFG:Get("atlantis_light","max_size",400);
 
 end
 
 function ENT:SetBrightness(b)
-	self.Brightness = b;
+	self.Brightness = math.Clamp(b,0,self.MaxB);
 	self:SetNWInt("Light_Brightness",b);
 end
 
 function ENT:SetLightSize(size)
-	self.LightSize = size;
+	self.LightSize = math.Clamp(size,0,self.MaxS);
 	self:SetNWInt("Light_Size",size);
 end
 
@@ -60,7 +63,7 @@ function ENT:GetLightColour()
 end
 
 function ENT:Use()
-
+	if (self:GetWire("Disable Use")>0) then return end
 	if self.NextUse < CurTime() then
 		if(self.On) then
 			self.On = false;
@@ -83,12 +86,18 @@ function ENT:TriggerInput(k,v)
 			self.On = false;
 		end
 		self:SetNWBool("On",self.On);
+	elseif(k=="Brightness") then
+		self:SetBrightness(v);
+	elseif(k=="Size") then
+		self:SetLightSize(v);
 	elseif(k=="R") then
 		self:SetLightColour(v,g,b);
 	elseif(k=="G") then
 		self:SetLightColour(r,v,b);
 	elseif(k=="B") then
-		self:SetLightColour(r,g,v);		
+		self:SetLightColour(r,g,v);
+	elseif(k=="RGB") then
+		self:SetLightColour(v.x,v.y,v.z);
 	end
 
 end

@@ -99,6 +99,7 @@ weapon_zat = Zat'nik'tel
 weapon_wraith = Wraith Hands
 weapon_wraith_blaster = Wraith Blaster
 weapon_tac = Tac
+weapon_wraith_grenade = Wraith Grenade
 
 // Player Misc Weapons
 weapon_misc_cat = Misc Weapons
@@ -251,8 +252,11 @@ atl_tp_03 = Save
 atl_tp_04 = Teleport
 atl_tp_05 = Destination
 atl_tp_06 = Private
-atl_tp_07 = Private transporters not shows in dial menu, but they can still be called!
+atl_tp_07 = Private transporters do not show in the dial menu, but they can still be called!
 atl_tp_error = This name already in use!
+atl_tp_local = Local
+atl_tp_group = Group
+atl_tp_name = Name
 
 // Misc
 kawoosh_hurt = Unstable Vortex

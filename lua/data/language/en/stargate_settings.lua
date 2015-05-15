@@ -431,12 +431,17 @@ sg_sets[tac][max_shoots] = Maximum shoots
 sg_sets[tac][max_shoots][desc] = Maximum shoots in kill mode before destroy, 0 - unlimited.
 sg_sets[tac][range] = Target find range
 
-//Teltak
+// Teltak
 sg_sets[teltak] = Tel'tak
 sg_sets[teltak][jump_distance] = Jump Distance
 sg_sets[teltak][jump_distance][desc] = The Maximum Jump Distance
 sg_sets[teltak][allow_beam_weapon] = Ring Beam Weapon
 sg_sets[teltak][allow_beam_weapon][desc] = Allow Ring Beam Weapon
+
+// Atlantis Light
+sg_sets[atlantis_light] = Atlantis Light
+sg_sets[atlantis_light][max_brightness] = Max brightness
+sg_sets[atlantis_light][max_size] = Max size
 
 // Wraith Grenade
 sg_sets[wraith_grenade] = Wraith Grenade

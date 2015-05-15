@@ -105,6 +105,7 @@ function ENT:Initialize()
 
 	self.NextUse = CurTime();
 	self.JData = {};
+	self.CloakData = {};
 
 end
 
@@ -191,6 +192,27 @@ function ENT:OnRemove()
 	self.LSD:Remove();
 end
 
+local CloakData = {};
+local function GetCloakData(um)
+	
+	CloakData.Entity = um:ReadEntity();
+	CloakData.Pods = um:ReadBool();
+	CloakData.Door = um:ReadBool();
+	CloakData.BulkHead = um:ReadBool();
+	CloakData.WepPods = um:ReadBool();
+	CloakData.Cloaked = um:ReadBool();
+
+end
+usermessage.Hook("JumperCloakData",GetCloakData);
+
+function ENT:UpdateCloakData()
+	if (CloakData.Entity!=self) then return end
+	self.CloakData.Pods = CloakData.Pods;
+	self.CloakData.Door = CloakData.Door;
+	self.CloakData.BulkHead = CloakData.BulkHead;
+	self.CloakData.WepPods = CloakData.WepPods;
+	self.CloakData.Cloaked = CloakData.Cloaked;
+end
 
 local function SetData(um) --############# Recieve Data from the Server @RononDex
 	JData.Entity = um:ReadEntity();
@@ -205,6 +227,8 @@ local function SetData(um) --############# Recieve Data from the Server @RononDe
 	JData.Inflight = um:ReadBool();
 end
 usermessage.Hook("jumperData", SetData)
+
+
 
 local invisible = Color(255,255,255,1);
 local visible = Color(255,255,255,255);
@@ -267,6 +291,37 @@ function ENT:Think() --#########################  Overly complex think function 
 	local Passenger = p:GetNetworkedBool("JumperPassenger",false);
 	local passJumper = p:GetNetworkedEntity("JumperPassenger");
 	local jumperSeat  = p:GetNetworkedEntity("JumperSeat");
+	self.Cloaked = self:GetNetworkedBool("Cloaked",false);
+	
+	if(CloakData.Cloaked and IsValid(self.CurrentCloak)) then
+		self:UpdateCloakData();
+		local fx = self.CurrentCloak;
+		if(Inflight) then
+			if(IsDriver) then
+				if(p:KeyDown(self.Vehicle,"SPD")) then
+					if(CloakData.WepPods and CloakData.Pods) then
+						fx:ToggleJumperWeps(false);
+					end
+					if(CloakData.Door) then
+						fx:ToggleJumperDoor(false);
+					end
+					fx:ToggleJumperPods(false);
+				end
+				
+				if(!CloakData.Pods) then
+					if(p:KeyDown(self.Vehicle,"DOOR")) then
+						fx:ToggleJumperDoor(false);
+					end
+				else
+					if(p:KeyDown(self.Vehicle,"WEPPODS")) then
+						fx:ToggleJumperWeps(false);
+					end
+				end			
+
+			end
+		end
+	end
+	
 
 	if(IsDriver and IsInJumper) then
 		if self.HUD and IsValid(self.HUD) then
@@ -286,7 +341,6 @@ function ENT:Think() --#########################  Overly complex think function 
 	if(game.SinglePlayer()) then
 		local min = self:GetPos()+self:GetForward()*100+self:GetUp()*50+self:GetRight()*50;
 		local max = self:GetPos()-self:GetForward()*190-self:GetUp()*50-self:GetRight()*50;
-		local Cloaked = self:GetNetworkedBool("Cloaked",false);
 		if(IsValid(self) and not Inflight) then
 			for k,v in pairs(ents.FindInBox(min,max)) do
 				local renderm = v:GetRenderMode();
@@ -294,7 +348,7 @@ function ENT:Think() --#########################  Overly complex think function 
 					local wep = v:GetActiveWeapon();
 					if(IsValid(wep)) then local wepren = wep:GetRenderMode() end;
 					if(self:InJumper(v)) then
-						if(Cloaked) then
+						if(self.Cloaked) then
 							v:SetRenderMode( RENDERMODE_TRANSALPHA )
 							v:SetColor(invisible);
 							if(IsValid(v:GetActiveWeapon())) then
