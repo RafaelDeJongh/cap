@@ -55,9 +55,10 @@ function ENT:Initialize()
 	self.Size = 80;
 	self.RestoreThresold = StarGate.CFG:Get("shield","restore_thresold",15); -- Which powerlevel has the shield to reach again until it works again?
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound");
-	self:CreateWireOutputs("Active","Strength");
+	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound","Allowed Players [ARRAY]");
+	self:CreateWireOutputs("Active","Strength","Players Allowed [ARRAY]");
 	self:SetWire("Strength",self.Strength);
+	self.AllowedPlayers = {};
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Phys = self.Entity:GetPhysicsObject();
 	self.SndDisable=0 --variable for Disabling sound @KvasirSG
@@ -86,6 +87,16 @@ function ENT:Enabled()
 	return (self.Shield and self.Shield:IsValid());
 end
 
+function ENT:SetNoCollideWithAllowedPlayers()
+	if(self.AllowedPlayers ~= {}) then
+		for _,ply in pairs(self.AllowedPlayers) do
+			if IsValid(ply) and ply:IsPlayer() then
+				self.Shield.nocollide[ply] = true;
+			end
+		end
+	end
+end
+
 --################# Activates or deactivates the shield @aVoN
 function ENT:Status(b,nosound)
 	if(b) then
@@ -106,6 +117,8 @@ function ENT:Status(b,nosound)
 				e:SetNWBool("containment",self.Containment); -- For the clientside traceline class
 				if(e and e:IsValid() and not e.Disable) then -- When our new shield mentioned, that there is already a shield
 					self.Shield = e;
+					self:SetNoCollideWithAllowedPlayers();
+					self:SetWire("Players Allowed",self.AllowedPlayers);
 					self:ShowOutput(true);
 					if(not nosound) then
 						if(self.SndDisable==1) then
@@ -264,6 +277,11 @@ function ENT:TriggerInput(k,v)
 			self.SndDisable=1
 		else
 			self.SndDisable=0
+		end
+	elseif(k=="Allowed Players") then
+		if (v~={}) then
+			self.AllowedPlayers = v;
+			if (self:Enabled()) then self:SetNoCollideWithAllowedPlayers(); end
 		end
 	end
 end
