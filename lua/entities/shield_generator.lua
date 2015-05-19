@@ -55,13 +55,14 @@ function ENT:Initialize()
 	self.Size = 80;
 	self.RestoreThresold = StarGate.CFG:Get("shield","restore_thresold",15); -- Which powerlevel has the shield to reach again until it works again?
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound","Allowed Players [ARRAY]");
+	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound","Allowed Players [ARRAY]","Frequency");
 	self:CreateWireOutputs("Active","Strength","Players Allowed [ARRAY]");
 	self:SetWire("Strength",self.Strength);
 	self.AllowedPlayers = {};
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.Phys = self.Entity:GetPhysicsObject();
 	self.SndDisable=0 --variable for Disabling sound @KvasirSG
+	self.Frequency=0;
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(10);
@@ -97,6 +98,21 @@ function ENT:SetNoCollideWithAllowedPlayers()
 	end
 end
 
+function ENT:RemoveNoCollideWithAllowedPlayers()
+	for _,ply in pairs(self.AllowedPlayers) do
+		self.Shield.nocollide[ply] = false;
+	end
+end
+
+function ENT:GetFrequency()
+	return self.Frequency;
+end
+
+function ENT:SetFrequency(value)
+	if value < 0 then value = 0 end;
+	if value > 200 then value = 200 end;
+	self.Frequency = value;
+end
 --################# Activates or deactivates the shield @aVoN
 function ENT:Status(b,nosound)
 	if(b) then
@@ -279,10 +295,15 @@ function ENT:TriggerInput(k,v)
 			self.SndDisable=0
 		end
 	elseif(k=="Allowed Players") then
+		if (self:Enabled() and self.AllowedPlayers ~= {}) then
+			self:RemoveNoCollideWithAllowedPlayers();
+		end
 		if (v~={}) then
 			self.AllowedPlayers = v;
 			if (self:Enabled()) then self:SetNoCollideWithAllowedPlayers(); end
 		end
+	elseif(k=="Frequency") then
+		self:SetFrequency(v);
 	end
 end
 
