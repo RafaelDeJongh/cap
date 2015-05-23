@@ -7,7 +7,7 @@ ENT.Author = "Matspyder"
 ENT.Contact	= "mat.spyder@gmail.com"
 ENT.Instructions= "Press E to use and set a frequency with the Wire Advanced"
 ENT.Category = "Stargate Carter Addon Pack: Others"
-//ENT.WireDebugName = "Shield Identifier"
+ENT.WireDebugName = "Shield Identifier"
 
 list.Set("CAP.Entity", ENT.PrintName, ENT);
 
@@ -26,12 +26,15 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	self.IsEnabled = false;
-	self.Frequency = 0;
+	self.Frequency = 1;
+	self.MaxFrequency = 1500;
 
 	if (WireAddon) then
 		self:CreateWireInputs("Activate","Frequency");
-		self:CreateWireOutputs("Activated","Frequency");
+		self:CreateWireOutputs("Activated","ActiveFrequency");
 	end
+
+	self:ShowOutput(true);
 
 end
 
@@ -81,13 +84,23 @@ end
 function ENT:SetFrequency(number)
 	local value = number;
 	if number < 0 then value = 0; end
-	if number > 200 then value = 200; end
+	if number > self.MaxFrequency then value = self.MaxFrenquency; end
 	self.Frequency = value;
-	self:SetWire("Frequency",value);
+	self:SetWire("ActiveFrequency",value);
 end
 
 function ENT:GetFrequency()
 	return self.Frequency;
+end
+
+function ENT:Toggle()
+	if self:Enabled() then
+		self.IsEnabled = false;
+		self:SetWire("Activated",0);
+	else
+		self.IsEnabled = true;
+		self:SetWire("Activated",1)
+	end
 end
 
 -----------------------------------THINK----------------------------------
@@ -116,19 +129,30 @@ end
 util.AddNetworkString("shieldid_sendinfo")
 
 function ENT:Use(ply)
-	if(self.IsEnabled) then
+	/*if(self.IsEnabled) then
 		self.IsEnabled = false;
 		self:SetWire("Activated",0);
 	else
 		self.IsEnabled = true;
 		self:SetWire("Activated",1);
-	end
-	/*net.Start("shieldid_sendinfo")
+	end*/
+	net.Start("shieldid_sendinfo")
 	net.WriteEntity(self)
-	net.WriteInt(self:GetFrequency(),8)
+	net.WriteInt(self.Frequency,32)
 	net.WriteBool(self.IsEnabled)
-	net.Send(ply)*/
+	net.Send(ply)
 end
+
+local function ReceiveNewInfos()
+	local ent = net.ReadEntity()
+	if (not IsValid(ent)) then return end
+	if (util.tobool(net.ReadBit())) then
+		ent:Toggle();
+	else
+		ent:SetFrequency(net.ReadInt(32));
+	end
+end
+net.Receive("shieldid_sendinfo", ReceiveNewInfos)
 
 end
 
@@ -136,7 +160,7 @@ if CLIENT then
 	local function shieldid_menuhook(len)
 		local ent = net.ReadEntity();
 		if (not IsValid(ent)) then return end
-		local frequency = net.ReadInt(8);
+		local SIfrequency = net.ReadInt(32);
 		local active = net.ReadBit();
 
 		local DermaPanel = vgui.Create( "DFrame" )
@@ -159,23 +183,29 @@ if CLIENT then
 	    image:SetImage("gui/cap_logo");
 
 	    local title = vgui.Create( "DLabel", DermaPanel );
-	 	title:SetText(SGLanguage.GetMessage("shieldid_title"));
+	 	-- title:SetText(SGLanguage.GetMessage("shieldid_title"));
+	 	title:SetText("Shield Identifier");
 	  	title:SetPos( 25, 0 );
 	 	title:SetSize( 400, 25 );
-
-	 	local frequencylabel = vgui.Create("DLabel" , DermaPanel )
-		frequencylabel:SetPos(140,20)
-		frequencylabel:SetText(SGLanguage.GetMessage("shieldid_freq"))
 
 		local frequency = vgui.Create( "DNumSlider" , DermaPanel )
 	    frequency:SetPos( 10, 35 )
 	    frequency:SetSize( 320, 50 )
-		frequency:SetText( SGLanguage.GetMessage("shieldid_frequency") )
+	    frequency:SetText("Frequency")
+		-- frequency:SetText( SGLanguage.GetMessage("shieldid_frequency") )
 	    frequency:SetMin(1)
-	    frequency:SetMax(200)
-		frequency:SetValue(frequency);
+	    frequency:SetMax(1500)
+		frequency:SetValue(SIfrequency);
 	    frequency:SetDecimals(0)
 		//frequency:SetToolTip(SGLanguage.GetMessage("iriscomp_time_desc"))
+
+		local function saveFrequency()
+			net.Start("shieldid_sendinfo")
+			net.WriteEntity(ent)
+			net.WriteBit(false)
+			net.WriteInt(math.Round(frequency:GetValue()),32)
+			net.SendToServer()
+		end
 
 		local saveClose = vgui.Create("DButton" , DermaPanel )
 	    saveClose:SetParent( DermaPanel )
@@ -183,20 +213,17 @@ if CLIENT then
 	    saveClose:SetPos(230,100)
 	    saveClose:SetSize(80,25)
 		saveClose.DoClick = function ( btn3 )
-			saveCodes()
+			saveFrequency();
 	    end
 
 	    local ToggleActive = vgui.Create("DButton" , DermaPanel )
 		ToggleActive:SetParent( DermaPanel )
-		if active then
-			ToggleActive:SetText("Desactivate")
-		else
-			ToggleActive:SetText("Activate")
-		end
+		-- ToggleActive:SetText(SGLanguage.GetMessage("shieldid_toggle"))
+		ToggleActive:SetText("Toggle")
 	    ToggleActive:SetPos(110, 100)
 	    ToggleActive:SetSize(100, 25)
 		ToggleActive.DoClick = function ( btn5 )
-			net.Start("shielid_sendinfo")
+			net.Start("shieldid_sendinfo")
 			net.WriteEntity(ent)
 			net.WriteBit(true)
 			net.SendToServer()
