@@ -412,7 +412,7 @@ function ENT:Reflect(e,do_not_draw_hit)
 end
 
 --################# Draws an hiteffect, drains energy and makes the baseprop "wobbly" @aVoN
-function ENT:HitShield(e,pos,phys,class,normal)
+function ENT:HitShield(e,pos,phys,class,normal,fireFrequency)
 	-- Zapping
 	local fx = EffectData();
 	fx:SetStart(e:GetPos());
@@ -432,7 +432,8 @@ function ENT:HitShield(e,pos,phys,class,normal)
 		self:HitEffect(e,pos,strength);
 		-- Drain energy
 		if(not (e:IsNPC() or e:IsPlayer() or class=="rpg_missile")) then
-			self.Parent:Hit(strength,normal,pos);
+			if not fireFrequency then fireFrequency = 0; end
+			self.Parent:Hit(strength,normal,pos,fireFrequency);
 		end
 	end
 end
@@ -515,13 +516,14 @@ function ENT:Think()
 end
 
 --################# The hit function (for external usage) @aVoN
-function ENT:Hit(e,pos,dmg,normal)
+function ENT:Hit(e,pos,dmg,normal,fireFrequency)
 	if(not self.Parent.Depleted) then
 		if(self.Parent.Strength > 0) then
 			normal = normal or Vector(0,0,0);
 			self:HitEffect(e,pos,dmg);
 			if(dmg and dmg ~= 0) then
-				self.Parent:Hit(dmg,normal,pos);
+				if (not fireFrequency) then fireFrequency = 0; end
+				self.Parent:Hit(dmg,normal,pos,fireFrequency);
 			end
 			return true;
 		else

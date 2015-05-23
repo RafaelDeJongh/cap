@@ -55,7 +55,7 @@ function ENT:Initialize()
 	self.Size = 80;
 	self.RestoreThresold = StarGate.CFG:Get("shield","restore_thresold",15); -- Which powerlevel has the shield to reach again until it works again?
 	self:AddResource("energy",1);
-	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound","Allowed Players [ARRAY]","Frequency");
+	self:CreateWireInputs("Activate","Strength","Disable Use","Disable Sound","Allowed Players [ARRAY]","Frequency","Fire Frequency");
 	self:CreateWireOutputs("Active","Strength","Players Allowed [ARRAY]");
 	self:SetWire("Strength",self.Strength);
 	self.AllowedPlayers = {};
@@ -63,6 +63,7 @@ function ENT:Initialize()
 	self.Phys = self.Entity:GetPhysicsObject();
 	self.SndDisable=0 --variable for Disabling sound @KvasirSG
 	self.Frequency=0;
+	self.FireFrequency = 0;
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
 		self.Phys:SetMass(10);
@@ -92,7 +93,11 @@ function ENT:SetNoCollideWithAllowedPlayers()
 	if(self.AllowedPlayers ~= {}) then
 		for _,ply in pairs(self.AllowedPlayers) do
 			if IsValid(ply) and ply:IsPlayer() then
-				self.Shield.nocollide[ply] = true;
+				if not self.Shield:IsContainment() then
+					self.Shield.nocollide[ply] = true;
+				else
+					self.Shield.nocollide[ply] = false;
+				end
 			end
 		end
 	end
@@ -110,8 +115,18 @@ end
 
 function ENT:SetFrequency(value)
 	if value < 0 then value = 0 end;
-	if value > 200 then value = 200 end;
+	if value > 1500 then value = 1500 end;
 	self.Frequency = value;
+end
+
+function ENT:SetFireFrequency(value)
+	if value < 0 then value = 0 end;
+	if value > 1000 then value = 1000 end;
+	self.FireFrequency = value;
+end
+
+function ENT:GetFireFrequency()
+	return self.FireFrequency;
 end
 --################# Activates or deactivates the shield @aVoN
 function ENT:Status(b,nosound)
@@ -236,11 +251,26 @@ function ENT:SetMultiplier(n)
 end
 
 --################# Shield got hit - Take strength @aVoN
-function ENT:Hit(strength,normal,pos)
+function ENT:Hit(strength,normal,pos,fireFrequency)
 	-- Calculate strenght-taking multiplier: Are we a shield, which is not moving? If so, we are many times stronger than a shield of a ship which is moving.
 	local divisor = 1;
 	if(self.Entity:GetVelocity():Length() < 5) then
 		divisor = StarGate.CFG:Get("shield","stationary_shield_multiplier",10);
+	end
+
+	if(not fireFrequency)then
+		fireFrequency = 0;
+	end
+
+	if (fireFrequency ~= 0) then
+		if (self:GetFireFrequency() ~= 0) then
+			local GetFrequency = self:GetFireFrequency() - fireFrequency;
+			if GetFrequency < 50 and GetFrequency > -50 then
+				divisor = 20;
+			else
+				divisor = 0.5;
+			end
+		end
 	end
 	-- Take strength
 	self.Strength = math.Clamp(self.Strength-2*math.Clamp(strength,1,20)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),0,100);
@@ -304,6 +334,8 @@ function ENT:TriggerInput(k,v)
 		end
 	elseif(k=="Frequency") then
 		self:SetFrequency(v);
+	elseif(k=="Fire Frequency") then
+		self:SetFireFrequency(v);
 	end
 end
 
