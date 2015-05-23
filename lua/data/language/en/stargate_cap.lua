@@ -323,6 +323,11 @@ iriscomp_cancel = Cancel
 iriscomp_toggle = Toggle Iris
 iriscomp_ok = Save
 
+//Shield Identifier
+shieldid_title = Shield Identifier
+shieldid_frequency = Frequency
+shieldid_toggle = Toggle
+
 // destiny timer
 destimer_title = Destiny Timer
 destimer_time = Set Time:
