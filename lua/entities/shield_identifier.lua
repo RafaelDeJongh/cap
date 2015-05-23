@@ -33,9 +33,7 @@ function ENT:Initialize()
 		self:CreateWireInputs("Activate","Frequency");
 		self:CreateWireOutputs("Activated","ActiveFrequency");
 	end
-
 	self:ShowOutput(true);
-
 end
 
 function ENT:SpawnFunction( ply, tr )
@@ -106,7 +104,7 @@ end
 -----------------------------------THINK----------------------------------
 
 function ENT:Think()
-	self.Entity:ShowOutput(self.IsEnabled);
+	self.Entity:ShowOutput(true);
 	self.Entity:NextThink(CurTime()+0.25);
 	return true
 end
