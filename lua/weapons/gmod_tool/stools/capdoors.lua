@@ -10,11 +10,12 @@ TOOL.Name=SGLanguage.GetMessage("stool_door");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["toggle"] = 3;
 TOOL.ClientConVar["diff_text"] = 0;
-TOOL.ClientConVar["model"] = "models/madman07/doors/dest_door.mdl";
+TOOL.ClientConVar["model"] = "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl";
 TOOL.ClientConVar["doormodel"] = "";
 
 TOOL.List = "DoorsModels";
 list.Set(TOOL.List,"models/madman07/doors/dest_door.mdl",{});
+list.Set(TOOL.List,"models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl",{});
 list.Set(TOOL.List,"models/madman07/doors/atl_door1.mdl",{});
 list.Set(TOOL.List,"models/madman07/doors/atl_door2.mdl",{});
 list.Set(TOOL.List,"models/madman07/doors/atl_door3.mdl",{});
@@ -39,6 +40,7 @@ function TOOL:LeftClick(t)
 	local diff_text = util.tobool(self:GetClientNumber("diff_text"));
 	local doormodel = model;
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
+	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl") then model = "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl";
 	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
 	else model = "models/madman07/doors/atl_frame.mdl"; end
 
@@ -55,6 +57,7 @@ function TOOL:LeftClick(t)
 		if diff_text then e:SetMaterial("madman07/doors/atlwall_red"); end
 	end
 	if (model == "models/madman07/doors/dest_frame.mdl") then e:SoundType(1);
+	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl") then e:SoundType(9000);
 	else e:SoundType(2); end
 
 	return true;
