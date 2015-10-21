@@ -28,6 +28,8 @@ ENT.Sounds={
 	Lock=Sound("door/dest_door_lock.wav"),
 	AtlOpen=Sound("door/atlantis_door_open.wav"),
 	AtlClose=Sound("door/atlantis_door_close.wav"),
+	DestBridgeOpen=Sound("cryptalchemy_sounds/destiny/bridge_door/bridge_door_open.wav"),
+	DestBridgeClose=Sound("cryptalchemy_sounds/destiny/bridge_door/bridge_door_close.wav"),
 }
 
 -----------------------------------INIT----------------------------------
@@ -70,6 +72,9 @@ function ENT:SoundType(t)
 	if (t == 1) then
 		self.Door.OpenSound = self.Sounds.DestOpen;
 		self.Door.CloseSound = self.Sounds.DestClose;
+	elseif (t == 9000) then
+		self.Door.OpenSound = self.Sounds.DestBridgeOpen;
+		self.Door.CloseSound = self.Sounds.DestBridgeClose;
 	else
 		self.Door.OpenSound = self.Sounds.AtlOpen;
 		self.Door.CloseSound = self.Sounds.AtlClose;
