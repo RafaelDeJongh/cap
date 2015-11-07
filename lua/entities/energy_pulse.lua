@@ -73,6 +73,8 @@ function ENT:Initialize()
 
 	self.CoreNotCollide = self.Owner.CoreNotCollide;
 	self.CoreEntity = self.Owner.CoreEntity;
+
+	self.FireFrequency = 325;
 end
 
 --################# Prevent PVS bug/drop of all networkes vars (Let's hope, it works) @aVoN
@@ -221,7 +223,7 @@ function ENT:Blast(effect,pos,ent,norm,smoke,dmg,rad,old_vel)
 	util.ScreenShake(pos,2,2.5,1,700);
 
 	if (ent:GetClass() == "shield") then -- aVoN shield!
-		ent:HitShield(ent,pos,self:GetPhysicsObject(),self:GetClass(),norm);
+		ent:HitShield(ent,pos,self:GetPhysicsObject(),self:GetClass(),norm,self.FireFrequency);
 	end
 
 	--local dmg;

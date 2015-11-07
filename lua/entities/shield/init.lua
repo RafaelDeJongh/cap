@@ -161,6 +161,28 @@ function ENT:GetTraceSize()
 	return self.TraceSize;
 end
 
+function ENT:GetFrequency()
+	return self.Parent.Frequency;
+end
+
+function ENT:FindAShieldIdentifier(ent)
+	for _, e in pairs(constraint.GetAllConstrainedEntities(ent)) do
+		if e:GetClass() == "shield_identifier" then
+			if e:Enabled() then
+				self.ShieldIdentifier = e;
+				return true;
+			end
+		end
+	end
+	return false;
+end
+
+function ENT:GetFrequencyOfShieldIdentifier()
+	if IsValid(self.ShieldIdentifier) then
+		return self.ShieldIdentifier:GetFrequency();
+	end
+end
+
 --################# Prevent PVS bug/drop of all networkes vars (Let's hope, it works) @aVoN
 function ENT:UpdateTransmitState() return TRANSMIT_ALWAYS end;
 
@@ -183,6 +205,12 @@ end
 function ENT:StartTouch(e)
 	if(not IsValid(self.Parent)) then return end;
 	if(not IsValid(e)) then return end;
+	if not self.nocollide[e] and self:FindAShieldIdentifier(e) and (self.Parent:GetFrequency() ~= 0) and (self:GetFrequencyOfShieldIdentifier() == self.Parent:GetFrequency()) then
+		self.RemoveAfterPass = constraint.GetAllConstrainedEntities(e);
+		for _,entity in pairs(constraint.GetAllConstrainedEntities(e)) do
+			self.nocollide[e] = true;
+		end
+	end
 	-- This starts the effect on players who own the shield, but won't reflect them
 	if(self.Parent.Containment and self.AllowContainment) then
 		self.nocollide[e] = true;
@@ -209,6 +237,11 @@ function ENT:EndTouch(e)
 	if(not IsValid(self.Parent)) then return end;
 	if(self.Parent.Depleted) then return end; -- Prevents the "Draw on Passing" effect, if a shield is getting depleted (Stops client crashing)
 	self.HasHitShield[e] = nil;
+	if self.RemoveAfterPass then
+		for _,ent in pairs(self.RemoveAfterPass) do
+			self.nocollide[e] = false;
+		end
+	end
 	-- Fixes a few bugs: E.g. if you delete a prop it will call this function before it is invalid => It will draw the "DrawOnPassing" effect but the prop is deleted.
 	timer.Simple(0,
 		function()
@@ -379,7 +412,7 @@ function ENT:Reflect(e,do_not_draw_hit)
 end
 
 --################# Draws an hiteffect, drains energy and makes the baseprop "wobbly" @aVoN
-function ENT:HitShield(e,pos,phys,class,normal)
+function ENT:HitShield(e,pos,phys,class,normal,fireFrequency)
 	-- Zapping
 	local fx = EffectData();
 	fx:SetStart(e:GetPos());
@@ -399,7 +432,8 @@ function ENT:HitShield(e,pos,phys,class,normal)
 		self:HitEffect(e,pos,strength);
 		-- Drain energy
 		if(not (e:IsNPC() or e:IsPlayer() or class=="rpg_missile")) then
-			self.Parent:Hit(strength,normal,pos);
+			if not fireFrequency then fireFrequency = 0; end
+			self.Parent:Hit(strength,normal,pos,fireFrequency);
 		end
 	end
 end
@@ -482,13 +516,14 @@ function ENT:Think()
 end
 
 --################# The hit function (for external usage) @aVoN
-function ENT:Hit(e,pos,dmg,normal)
+function ENT:Hit(e,pos,dmg,normal,fireFrequency)
 	if(not self.Parent.Depleted) then
 		if(self.Parent.Strength > 0) then
 			normal = normal or Vector(0,0,0);
 			self:HitEffect(e,pos,dmg);
 			if(dmg and dmg ~= 0) then
-				self.Parent:Hit(dmg,normal,pos);
+				if (not fireFrequency) then fireFrequency = 0; end
+				self.Parent:Hit(dmg,normal,pos,fireFrequency);
 			end
 			return true;
 		else

@@ -26,6 +26,8 @@ function ENT:Initialize()
 	self.EndEntity = self.Entity:SpawnTarget()
 	self.StartEntity = self.Entity:SpawnBeam()
 	self.EndPos = Vector(1,1,1);
+
+	self.FireFrequency = 575;
 end
 
 function ENT:SpawnTarget()
@@ -122,7 +124,7 @@ function ENT:UpdateEndPos()
 		local ent = self.StargateTrace.Entity;
 
 		if (IsValid(ent) and (ent:GetClass() == "shield" or ent:GetClass() == "shield_core_buble")) then
-			ent:Hit(self.Entity,self.StargateTrace.HitPos, 3, self.StargateTrace.HitNormal);
+			ent:Hit(self.Entity,self.StargateTrace.HitPos, 3, self.StargateTrace.HitNormal, self.FireFrequency);
 		end
 
 		self.EndPos = self.StargateTrace.HitPos;

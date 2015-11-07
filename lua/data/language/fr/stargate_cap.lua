@@ -98,6 +98,8 @@ weapon_staff = Lance Jaffa
 weapon_zat = Zat'nik'tel
 weapon_wraith = Main Wraith
 weapon_wraith_blaster = Blaster Wraith
+weapon_tac = Tac
+weapon_wraith_grenade = Grenade Wraith
 
 // Player Misc Weapons
 weapon_misc_cat = Autres armes
@@ -114,6 +116,8 @@ weapon_misc_sodan = Camouflage Sodan
 weapon_misc_gdo = GDO
 weapon_misc_nox = Main Nox
 weapon_misc_nox_desc = Clic gauche: Ouvre le menu des portes de étoiles\nClic droit: Soigne un allié proche.
+weapon_misc_adrenaline = Dose D'Adrenaline
+weapon_misc_atl_medkit = Kit de soin d'Atlantis
 
 // Stools Cats
 stool_cat = Portes des étoiles
@@ -150,6 +154,7 @@ stool_cloak = Camouflage
 stool_mdhd = DHD mobile
 stool_iris = Iris
 stool_shield = Bouclier
+stool_light = Lampes D'atlantis
 stool_sdhd = DHD Superporte
 stool_tshield = Émetteur bouclier Tok'ra
 stool_tshieldc = Contrôleur bouclier Tok'ra
@@ -163,6 +168,7 @@ stool_atlantis_hub = Hub E2PZ Atlante
 stool_naq_gen = gén. à Naquadah MK1/MK2
 stool_sgc_hub = Hub E2PZ SGC
 stool_zpm_mk3 = E2PZ MK III
+stool_naq_bottle = Flacon de Naquadah
 
 // Stool Names - Weapons
 stool_drones = Drones
@@ -177,6 +183,7 @@ stool_nanim_ramps = Rampes non animées
 stool_ring_ramps = Plateforme d'anneaux
 
 // Stool Names - Keybinders
+stool_key_deadalus = Paramètres du Dédale
 stool_key_dart = Paramètres Dart
 stool_key_glider = Paramètres Enf. d'aiguilles
 stool_key_dglider = Paramètres Pl. de la mort
@@ -189,6 +196,19 @@ stool_key_teltak = Paramètres Tel'tak
 // Stool Global
 stool_autoweld = Soudage automatique
 stool_autolink = Lien automatique
+stool_autolink_desc = Relier automatiquement l'entité au ressource nodes ?
+stool_disabled_ship = Ce vaisseau est désactivé sur ce serveur!
+stool_disabled_tool = Cet Outils est désactivé sur ce serveur!
+stool_disabled_ent = Cette entité est désactivée sur ce serveur!
+stool_model = Model:
+stool_size = Taille:
+stool_brightness = Luminosité:
+stool_toggle = Toggle:
+stool_desc = Description:
+stool_activate = Activer:
+stool_deactivate = Desactiver:
+stool_immunity = Immunité
+stool_help = Aide
 
 // Naquadah bomb menu
 entity_naq_bomb = Bombe au Naquadah
@@ -203,6 +223,8 @@ naq_stool_menu_h_d = Afficher ou cacher le HUD sur la bombe.
 naq_stool_menu_c = Chariot
 naq_stool_menu_c_d = Apparait avec un chariot. (Seulement pour le modèle Tau'ri)
 naq_stool_menu_a_d = Souder automatiquement la bombe. Si apparut avec un chariot la bombe ne sera attaché qu'au chariot.
+naq_stool_menu_code = Entrez le code de détonation de la bombe
+naq_stool_menu_abort = Entrez le code d'annulation de la bombe
 
 // Dakara
 ancient_control_panel = Panneau de contrôle Ancien
@@ -232,6 +254,9 @@ atl_tp_05 = Destination
 atl_tp_06 = Privée
 atl_tp_07 = Téléporteur privée, invisible dans le menu, mais peut-être contacter!
 atl_tp_error = Ce nom est déjà utiliser!
+atl_tp_local = Locale
+atl_tp_group = Groupe
+atl_tp_name = Nom
 
 // Misc
 kawoosh_hurt = Vortex instable
@@ -262,7 +287,83 @@ cap_prop_cat3 = Cat construction (route)
 cap_menu_author = Auteur
 cap_admin_ent = Cette entité est réserver au Admin!
 cap_admin_swep = Cette arme est réserver au Admin!
-cap_admin_tool = Ce tool est réserver au Admin!
+cap_admin_tool = Cet outil est réserver au Admin!
 cap_disabled_ent = Cette entité est désactiver sur ce serveur!
 cap_disabled_swep = Cette arme est désactiver sur ce serveur!
-cap_disabled_tool = Ce tool est désactiver sur ce serveur!
+cap_disabled_tool = Cet outil est désactiver sur ce serveur!
+cap_disabled_npc = Ce PNJ est désactiver sur ce serveur!
+iris_gatespawner = Vous ne pouvez pas outrepasser l'iris du GateSpawner! Faîtes apparaitre un Ordinateur à iris pour le controller.
+iris_protection = L'iris à bien été ajoutée au GateSpawner, Faîtes apparaitre un ordinateur à iris pour la controlée.
+
+// gatespawner
+sg_gtsp_title = Générateur de Gatespawner
+sg_stsp_text =[[<h2>Gatespawner Créer avec succès!</h2>
+Fichier: <u>garrysmod\data\%s.txt</u>
+<br>Renommez ce fichier pour <u>%s.lua</u> Et déplacez le dans:
+<br><u>garrysmod\lua\data\%s\</u> pour le faire fonctionner.
+<br>N'oubliez pas de recharger le GateSpawner ou redémarer le serveur pour qu'il soit pris en compte!
+<br>
+<br><b>Note:</b> Vous avez changer l'éxtention du fichier de ".txt" à ".lua".
+<br>Si vous n'êtes pas familier à ce processus, utilisez <b>Google</b>.
+]]
+
+// iris computer
+iriscomp_title = Menu de l'ordinateur à Iris
+iriscomp_code = Code de l'Iris
+iriscomp_desc = Description
+iriscomp_time = Temps de Fermeture
+iriscomp_time_desc = The time in seconds the iris will stay open after a correct code is sent. Set to 0 to stay open forever.
+iriscomp_close = Fermeture Automatique?
+iriscomp_close_desc = Si coché, the iris will close as soon as an incoming connection is established.
+iriscomp_open = Désactivé l'ouverture automatique?
+iriscomp_open_desc = Si coché, L'iris ne s'ouvrira pas tant que le wire ne lui aura pas dit.
+iriscomp_cancel = Annulez
+iriscomp_toggle = Activer/Desactiver l'Iris
+iriscomp_ok = Sauvegarder
+
+// destiny timer
+destimer_title = Timeur de Destiné
+destimer_time = Définir le temps:
+destimer_autostart = Démarage Automatique
+destimer_autostart_desc = Automatic starting counter after stargate opens.
+destimer_autostop = Remise à zéro automatique
+destimer_autostop_desc = Automatic reseting counter after stargate closes. Uncheck this if you want manualy start/stop counter.
+destimer_autoclose = Fermeture Automatique
+destimer_autoclose_desc = Automatic closes stargate when time is ended.
+destimer_countup = Compter à l'envers
+destimer_countup_desc = If checked, then counter will count up.
+destimer_font = Police de caractère normale
+destimer_font_desc = If checked, then will be used normal font.
+destimer_save = Sauvegarder
+destimer_start = Démarer le Compteur
+destimer_stop = Arreter le Compteur
+destimer_reset = Remetre à zéro le compteur
+destimer_close = Fermer la Porte des Étoiles
+destimer_error = On ne peut pas démarer le timeur quand la porte des étoiles est fermée avec l'option de remise à zéro automatique!
+
+// asgard transporter
+asgardtp_title = Téléporteur Asgard
+asgardtp_target = Cible
+asgardtp_target_desc = Choose target what you want to teleport
+asgardtp_dest = Destination
+asgardtp_dest_desc = Choose where you want to teleport target
+asgardtp_ents = Teleport with ents and props
+asgardtp_ents_desc = Teleport with entities and props near target
+asgardtp_action = Action:
+asgardtp_noact = Pas d'action choisie!
+asgardtp_none = Pas d'action.
+asgardtp_act = Teleporter %s\na %s
+asgardtp_act2 = Teleporter un joueur/PNJ\nde %s\na %s
+asgardtp_acte = Avec les entités et les props
+asgardtp_send = Envoyer
+asgardtp_retrieve = Retrouver
+asgardtp_refresh = Rafraichir la liste
+asgardtp_type1 = Joueur
+asgardtp_type2 = PNJS
+asgardtp_type3 = Wire GPS
+asgardtp_busy = Le téléporteur Asgard est cassé!
+asgardtp_energy = Pas assez d'énergie!
+asgardtp_wrong = Mauvaises Coordonées! (peut-être pas dans la map?)
+asgardtp_error = Cible ou destination invalide! (rafraichir la liste?)
+asgardtp_jamming = Impossible de téléporter à ces Coordonées - Brouilleur en ligne.
+asgardtp_succ = Téléportation éfféctuée.
