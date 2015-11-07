@@ -1026,6 +1026,7 @@ function ENT.Sequence:DialFail(instant_stop,play_sound,fail)
 	action:Add({f=self.SetWire,v={self,"Dialing Address",""},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialed Symbol",""},d=0}); -- Wire
+	action:Add({f=self.SetWire,v={self,"Received",""},d=0}); -- Wire
 	action:Add({f=self.SetStatus,v={self,false,false},d=0.8}); -- Make the Wire-Value of "-7" = dial-fail stay longer so people's script work along with the sound
 	action:Add({f=self.SetWire,v={self,"Chevron",0},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Chevron Locked",0},d=0}); -- Wire
@@ -1058,6 +1059,7 @@ function ENT:Close(ignore,fast)
 	action:Add({f=self.SetWire,v={self,"Dialing Address",""},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 	action:Add({f=self.SetWire,v={self,"Dialed Symbol",""},d=0}); -- Wire
+	action:Add({f=self.SetWire,v={self,"Received",""},d=0}); -- Wire
 	-- Add additional shutdown sequences
 	if(self.Shutdown) then
 		action:Add({f=self.Shutdown,v={self},d=0});

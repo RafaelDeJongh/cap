@@ -189,7 +189,7 @@ if (CLIENT) then
 	local function CAP_DebugError(ply,cmd,args)
 		local tbl = {};
 		local err = 0;
-		if (args[1]) then err = math.Clamp(tonumber(args[1]),0,13); end
+		if (args[1]) then err = math.Clamp(tonumber(args[1]),0,14); end
 		if (err>0) then
 			if (err<10) then err = "0"..err end
 			if (err==13) then
@@ -201,7 +201,7 @@ if (CLIENT) then
 			end
 			CAP_ShowError(tbl);
 		else
-			for i=1,13 do
+			for i=1,14 do
 				local err = i;
 				if (err<10) then err = "0"..err end
 				if (err==13) then

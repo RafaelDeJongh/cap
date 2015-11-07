@@ -9,7 +9,9 @@ ENT.Instructions= "Press E to use and set a frequency with the Wire Advanced"
 ENT.Category = "Stargate Carter Addon Pack: Others"
 ENT.WireDebugName = "Shield Identifier"
 
-list.Set("CAP.Entity", ENT.PrintName, ENT);
+--list.Set("CAP.Entity", ENT.PrintName, ENT);
+ENT.Spawnable = false
+ENT.AdminSpawnable = false
 
 if SERVER then
 
@@ -19,7 +21,7 @@ AddCSLuaFile()
 -----------------------------------INIT----------------------------------
 
 function ENT:Initialize()
-	self.Entity:SetModel("models/props_lab/reciever01b.mdl")
+	--self.Entity:SetModel("models/props_lab/reciever01b.mdl")
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);

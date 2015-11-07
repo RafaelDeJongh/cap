@@ -411,7 +411,7 @@ GateActions["GetAtlantisTPName"] = {
 	inputtypes = { "WIRELINK" },
 	outputtypes = { "STRING" },
 	timed = true,
-	output = function(gate, Ent, Name, Set)
+	output = function(gate, Ent)
 		if !IsValid(Ent) or !Ent.IsAtlTP then return "" else return Ent.TName end
 	end,
 	label = function(Out)
@@ -425,7 +425,31 @@ GateActions["SetAtlantisTPName"] = {
 	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
 	outputtypes = {},
 	output = function(gate, Ent, Name, Set)
-		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlName(Name,true) end
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlName(Name) end
+	end
+}
+
+GateActions["GetAtlantisTPGroup"] = {
+	name = "Get atlantis transporter group",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "STRING" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsAtlTP then return "" else return Ent.TGroup end
+	end,
+	label = function(Out)
+		return string.format ("Group = %q", Out)
+	end
+}
+
+GateActions["SetAtlantisTPGroup"] = {
+	name = "Set atlantis transporter group",
+	inputs = { "Ent", "Group", "Set" },
+	inputtypes = { "WIRELINK", "STRING", "NORMAL" },
+	outputtypes = {},
+	output = function(gate, Ent, Group, Set)
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlGrp(Group) end
 	end
 }
 
@@ -448,8 +472,32 @@ GateActions["SetAtlantisTPPrivate"] = {
 	inputs = { "Ent", "Private", "Set" },
 	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
 	outputtypes = {},
-	output = function(gate, Ent, Name, Set)
+	output = function(gate, Ent, Private, Set)
 		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlPrivate(Private) end
+	end
+}
+
+GateActions["GetAtlantisTPLocal"] = {
+	name = "Get atlantis transporter local status",
+	inputs = { "Ent" },
+	inputtypes = { "WIRELINK" },
+	outputtypes = { "NORMAL" },
+	timed = true,
+	output = function(gate, Ent)
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent.TLocal then return 0 else return 1 end
+	end,
+	label = function(Out)
+		return string.format ("Local = %q", Out)
+	end
+}
+
+GateActions["SetAtlantisTPLocal"] = {
+	name = "Set atlantis transporter local status",
+	inputs = { "Ent", "Local", "Set" },
+	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
+	outputtypes = {},
+	output = function(gate, Ent, Local, Set)
+		if !IsValid(Ent) or !Ent.IsAtlTP or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetAtlLocal(Local) end
 	end
 }
 
@@ -462,7 +510,11 @@ GateActions["GetAtlantisTPList"] = {
 		if !IsValid(Ent) or !Ent.IsAtlTP then
 			return {}
 		elseif Refresh>0 then
-			Ent.LastGetAddresses = Ent:WireGetAddresses();
+			local tbl = Ent:WireGetAddresses();
+			Ent.LastGetAddresses = {};
+			for k,v in pairs(tbl) do
+				table.insert(Ent.LastGetAddresses,v[1].." ||| "..v[2]);
+			end
 			return Ent.LastGetAddresses;
 		elseif Ent.LastGetAddresses!=nil then
 			return Ent.LastGetAddresses;

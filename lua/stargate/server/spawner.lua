@@ -345,8 +345,14 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					if (v.name ~= nil and v.name ~="") then
                 		e:SetAtlName(v.name,true);
                 	end
+					if (v.group ~= nil and v.group ~="") then
+                		e:SetAtlGrp(v.group,true);
+                	end
 					if (v.private ~= nil and v.private ~="" and util.tobool(v.private)==true) then
                 		e:SetAtlPrivate(v.private);
+                	end
+					if (v.locale ~= nil and v.locale ~="" and util.tobool(v.locale)==true) then
+                		e:SetAtlLocal(v.locale);
                 	end
 					if (v.onlyclosed ~= nil and v.onlyclosed ~="" and util.tobool(v.onlyclosed)==true) then
                 		e.OnlyClosed = true;
@@ -723,7 +729,7 @@ function StarGate.GateSpawner.CreateFile(p)
 			end
 		end
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-			f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."private="..tostring(v.TPrivate).."\n";
+			f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."group="..v.TGroup.."\n".."private="..tostring(v.TPrivate).."\n".."locale="..tostring(v.TLocal).."\n";
 			if (v.OnlyClosed) then
               		f = f .. "onlyclosed=true\n";
               	end

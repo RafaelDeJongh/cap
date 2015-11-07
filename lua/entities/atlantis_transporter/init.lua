@@ -61,8 +61,9 @@ function ENT:Initialize()
 	self.Busy = false;
 	self.Ents={}
 	self.EntsTP={}
-
-	self.Group = "ATL";
+	
+	self.TLocal = false;
+	self.TGroup = "ATL";
 	
 	self.Disallowed = {};
 	for _,v in pairs(StarGate.CFG:Get("atlantis_transporter","classnames",""):TrimExplode(",")) do
@@ -202,15 +203,46 @@ function ENT:CreateDoors(ply,spawner,protect)
 	self.Button2=d
 end
 
-function ENT:SetAtlName(name,wire,ply)
+function ENT:SetAtlNameGrp(name,grp,ply,wire)
+	if not IsValid(self.Entity) then return end
+	name = name or "";
+	name = name:Trim();
+	
+	grp = grp or "";
+	grp = grp:Trim();
+	
+	if (name!="" and grp!="") then
+		-- No multiple rings please!
+		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
+			if(v.TName == name and v.TGroup == grp and v.Entity != self.Entity) then
+				if (not wire) then ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"atl_tp_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); end
+				return;
+			end
+		end
+	else return end
+	self.TName=name;
+	net.Start("UpdateAtlTP")
+	net.WriteInt(self:EntIndex(),16)
+	net.WriteInt(1,4)
+	net.WriteString(name)
+	net.Broadcast()
+	
+	self.TGroup = grp;
+	net.Start("UpdateAtlTp");
+	net.WriteInt(self:EntIndex(),16);
+	net.WriteInt(4,4);
+	net.WriteString(grp);
+	net.Broadcast();
+end
+
+function ENT:SetAtlName(name)
 	if not IsValid(self.Entity) then return end
 	name = name or "";
 	name = name:Trim();
 	if (name!="") then
 		-- No multiple rings please!
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-			if(v.TName == name and v.Entity != self.Entity) then
-				if (not wire) then ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"atl_tp_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); end
+			if(v.TName == name and v.TGroup == self.TGroup and v.Entity != self.Entity) then
 				return;
 			end
 		end
@@ -227,8 +259,16 @@ function ENT:SetAtlGrp(grp)
 	if(not IsValid(self)) then return end;
 	grp = grp or "";
 	grp = grp:Trim();
+	if (grp!="") then
+		-- No multiple rings please!
+		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
+			if(v.TName == self.TName and v.TGroup == grp and v.Entity != self.Entity) then
+				return;
+			end
+		end
+	end
 	
-	self.Group = grp;
+	self.TGroup = grp;
 	net.Start("UpdateAtlTp");
 	net.WriteInt(self:EntIndex(),16);
 	net.WriteInt(4,4);
@@ -240,7 +280,7 @@ function ENT:SetAtlLocal(loc)
 
 	if not IsValid(self) then return end
 	loc = util.tobool(loc);
-	self.Local = loc;
+	self.TLocal = loc;
 	net.Start("UpdateAtlTP")
 	net.WriteInt(self:EntIndex(),16)
 	net.WriteInt(5,4)
@@ -268,8 +308,8 @@ function ENT:OnReloaded()
 			net.WriteInt(3,4)
 			net.WriteString(self.TName)
 			net.WriteBit(self.TPrivate)
-			net.WriteString(self.Group)
-			net.WriteBit(self.Local)
+			net.WriteString(self.TGroup)
+			net.WriteBit(self.TLocal)
 			net.Broadcast()
 		end
 	end)
@@ -282,8 +322,6 @@ function ENT:TriggerInput(k,v)
 		end
 	elseif k == "Destination" then
 		self.Destination = v;
-	elseif(k == "Group") then
-		self:SetAtlGrp(v);
 	elseif k == "Toggle Doors" and v>0 then
 		self:ToggleDoors();
 	elseif k == "Disable Dial Menu" then
@@ -343,8 +381,8 @@ function ENT:Use(ply)
 		umsg.Entity(self)
 		umsg.String(self.TName)
 		umsg.Bool(self.TPrivate)
-		umsg.String(self.Group)
-		umsg.Bool(self.Local)
+		umsg.String(self.TGroup)
+		umsg.Bool(self.TLocal)
 	umsg.End()
 end
 
@@ -368,9 +406,8 @@ net.Receive("atlantis_transport",function(len,ply)
 		self:Teleport();
 	else
 		if (not self:CAP_CanModify(ply)) then return end
-		self:SetAtlName(net.ReadString(),false,ply);
+		self:SetAtlNameGrp(net.ReadString(),net.ReadString(),ply);
 		self:SetAtlPrivate(net.ReadBit());
-		self:SetAtlGrp(net.ReadString(),false,ply);
 		self:SetAtlLocal(net.ReadBit());
 	end
 end)
@@ -673,6 +710,8 @@ function ENT:PreEntityCopy()
 
 	dupeInfo.Name = self.TName;
 	dupeInfo.Private = self.TPrivate;
+	dupeInfo.Local = self.TLocal;
+	dupeInfo.Group = self.TGroup;
 
 	duplicator.StoreEntityModifier(self, "AtlantisTPDupeInfo", dupeInfo)
 	StarGate.WireRD.PreEntityCopy(self)
@@ -715,10 +754,13 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		--self.Button2:SetParent(self);
 	end
 
-	self.TName = dupeInfo.Name or "";
-	self:SetNetworkedString("TName",self.TName);
+	self:SetAtlNameGrp(dupeInfo.Name or "", dupeInfo.Group or self.TGroup, nil, true);
+	--self.TName = dupeInfo.Name or "";
+	--self:SetNetworkedString("TName",self.TName);
+	--self.TGroup = dupeInfo.Group or self.TGroup;
 
 	self.TPrivate = dupeInfo.Private or false;
+	self.TLocal = dupeInfo.Local or false;
 
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
 	self:OnReloaded();
@@ -734,7 +776,7 @@ function ENT:WireGetAddresses()
 	local entt = ents.FindByClass("atlantis_transporter")
 	for _,e in pairs(entt) do
 		if IsValid(e) and e!=self and e.TName!="" and not e.TPrivate then
-			table.insert(list,e.TName);
+			table.insert(list,{e.TName,e.TGroup});
 		end
 	end
 	return list;

@@ -796,7 +796,17 @@ end
 
 e2function void wirelink:stargateAtlantisTPSetName(string name)
 	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
-	this:SetAtlName(name,true);
+	this:SetAtlName(name);
+end
+
+e2function string wirelink:stargateAtlantisTPGetGroup()
+	if not IsValid(this) or not this.IsAtlTP then return "" end
+	return this.TGroup or "";
+end
+
+e2function void wirelink:stargateAtlantisTPSetGroup(string group)
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
+	this:SetAtlGrp(group);
 end
 
 e2function number wirelink:stargateAtlantisTPGetPrivate()
@@ -813,6 +823,22 @@ e2function void wirelink:stargateAtlantisTPSetPrivate(number bool)
 	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
 	this:SetAtlPrivate(bool);
 end
+
+e2function number wirelink:stargateAtlantisTPGetLocal()
+	if not IsValid(this) or not this.IsAtlTP then return -1 end
+	local ret = this.TLocal;
+	if (ret) then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function void wirelink:stargateAtlantisTPSetLocal(number bool)
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) then return end
+	this:SetAtlLocal(bool);
+end
+
 
 __e2setcost( 5 )
 
@@ -838,7 +864,17 @@ end
 
 e2function void entity:stargateAtlantisTPSetName(string name)
 	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
-	this:SetAtlName(name,true);
+	this:SetAtlName(name);
+end
+
+e2function string entity:stargateAtlantisTPGetGroup()
+	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return "" end
+	return this.TGroup or "";
+end
+
+e2function void entity:stargateAtlantisTPSetGroup(string group)
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	this:SetAtlName(group);
 end
 
 e2function number entity:stargateAtlantisTPGetPrivate()
@@ -854,6 +890,21 @@ end
 e2function void entity:stargateAtlantisTPSetPrivate(number bool)
 	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
 	this:SetAtlPrivate(bool);
+end
+
+e2function number entity:stargateAtlantisTPGetLocal()
+	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	local ret = this.TLocal;
+	if (ret) then
+		return 1
+	else
+		return 0
+	end
+end
+
+e2function void entity:stargateAtlantisTPSetLocal(number bool)
+	if not IsValid(this) or not this.IsAtlTP or not this:CAP_CanModify(self.player) or not(isOwner(self,this) or self.player:IsAdmin()) then return end
+	this:SetAtlLocal(bool);
 end
 
 __e2setcost( 5 )

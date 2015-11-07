@@ -246,13 +246,14 @@ dakara_menu_11 = Close
 dakara_menu_12 = Launch
 
 // Atlantis transporter
-atl_tp_01 = Set Name of this transporter:
+atl_tp_01 = Atlantis Transporter Settings
 atl_tp_02 = Destination transporter name:
 atl_tp_03 = Save
 atl_tp_04 = Teleport
 atl_tp_05 = Destination
 atl_tp_06 = Private
 atl_tp_07 = Private transporters do not show in the dial menu, but they can still be called!
+alt_tp_08 = Sets whether to use a Local Group or not
 atl_tp_error = This name already in use!
 atl_tp_local = Local
 atl_tp_group = Group

@@ -57,7 +57,7 @@ function TOOL:LeftClick(t)
 		if diff_text then e:SetMaterial("madman07/doors/atlwall_red"); end
 	end
 	if (model == "models/madman07/doors/dest_frame.mdl") then e:SoundType(1);
-	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl") then e:SoundType(9000);
+	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl") then e:SoundType(3);
 	else e:SoundType(2); end
 
 	return true;

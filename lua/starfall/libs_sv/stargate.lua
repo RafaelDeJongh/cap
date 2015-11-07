@@ -422,7 +422,24 @@ function ents_methods:stargateAtlantisTPSetName(name)
 	local this = unwrap( self )
 	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
 	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlName(name,true);
+	this:SetAtlName(name);
+end
+
+function ents_methods:stargateAtlantisTPGetGroup()
+	SF.CheckType( self, ents_metatable )
+	local this = unwrap( self )
+	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return this.TGroup or "";
+end
+
+function ents_methods:stargateAtlantisTPSetGroup(group)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( group, "string" )
+	local this = unwrap( self )
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	this:SetAtlGrp(group);
 end
 
 function ents_methods:stargateAtlantisTPGetPrivate()
@@ -440,6 +457,23 @@ function ents_methods:stargateAtlantisTPSetPrivate(bool)
 	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
 	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
 	this:SetAtlPrivate(bool);
+end
+
+function ents_methods:stargateAtlantisTPGetLocal()
+	SF.CheckType( self, ents_metatable )
+	local this = unwrap( self )
+	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return this.TLocal;
+end
+
+function ents_methods:stargateAtlantisTPSetLocal(bool)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( bool, "boolean" )
+	local this = unwrap( self )
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	this:SetAtlLocal(bool);
 end
 
 function ents_methods:stargateAtlantisTPTeleport(name)
@@ -842,7 +876,25 @@ function wirelink_methods:stargateAtlantisTPSetName(name)
 	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
 	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
 	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlName(name,true);
+	this:SetAtlName(name);
+end
+
+function wirelink_methods:stargateAtlantisTPGetGroup()
+	SF.CheckType( self, wirelink_metatable )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return this.TGroup or "";
+end
+
+function wirelink_methods:stargateAtlantisTPSetGroup(group)
+	SF.CheckType( self, wirelink_metatable )
+	SF.CheckType( group, "string" )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	this:SetAtlGrp(group);
 end
 
 function wirelink_methods:stargateAtlantisTPGetPrivate()
@@ -861,6 +913,24 @@ function wirelink_methods:stargateAtlantisTPSetPrivate(bool)
 	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
 	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
 	this:SetAtlPrivate(bool);
+end
+
+function wirelink_methods:stargateAtlantisTPGetLocal()
+	SF.CheckType( self, wirelink_metatable )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return this.TLocal;
+end
+
+function wirelink_methods:stargateAtlantisTPSetLocal(bool)
+	SF.CheckType( self, wirelink_metatable )
+	SF.CheckType( bool, "boolean" )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
+	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	this:SetAtlLocal(bool);
 end
 
 function wirelink_methods:stargateAtlantisTPTeleport(name)

@@ -72,7 +72,7 @@ function ENT:SoundType(t)
 	if (t == 1) then
 		self.Door.OpenSound = self.Sounds.DestOpen;
 		self.Door.CloseSound = self.Sounds.DestClose;
-	elseif (t == 9000) then
+	elseif (t == 3) then
 		self.Door.OpenSound = self.Sounds.DestBridgeOpen;
 		self.Door.CloseSound = self.Sounds.DestBridgeClose;
 	else
@@ -174,6 +174,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		if (IsValid(self.Door)) then
 			self.Door.Frame = self.Entity;
 			if (self.DoorModel == "models/madman07/doors/dest_door.mdl" || self.DoorModel == "models/madman07/doors/dest_frame.mdl") then self.Entity:SoundType(1);
+			elseif (self.DoorModel == "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl") then self.Entity:SoundType(3);
 			else self.Entity:SoundType(2); end
 			self.DoorPhys = self.Door:GetPhysicsObject();
 		end

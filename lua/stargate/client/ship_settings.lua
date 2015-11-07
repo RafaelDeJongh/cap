@@ -544,7 +544,7 @@ function StarGate.TeltakSettings(Panel)
 		VGUI:SetTopic("Help:  Teltak Config");
 		Panel:AddPanel(VGUI);
 	end */
-	local LAYOUT = "Teltac";
+	local LAYOUT = "Teltak";
 	-- Use soo much tables at the bottom to keep the sorting-order in exact this order.
 	local KEYS = {
 		{
