@@ -304,6 +304,7 @@ function ENT:AddRing()
 	e:Activate();
 	self.Ring = e;
 	self.Ring.Entity = e;
+	self:SetNWEntity("EntRing",e)
 	--Spawn the "real" ring (model)
 	local e = ents.Create("prop_dynamic_override");
 	e:SetModel(self.Models.Ring);

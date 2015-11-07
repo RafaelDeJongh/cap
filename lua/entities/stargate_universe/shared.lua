@@ -9,6 +9,12 @@ ENT.WireDebugName = "Stargate Universe"
 
 ENT.IsUniverseGate = true;
 
+function ENT:GetRingAng()
+	if not IsValid(self.EntRing) then self.EntRing=self:GetNWEntity("EntRing") if not IsValid(self.EntRing) then return end end   -- Use this trick beacause NWVars hooks not works yet...
+	local angle = tonumber(math.NormalizeAngle(self.EntRing:GetLocalAngles().r));
+	return (angle<0) and angle+360 or angle
+end
+
 properties.Add( "Stargate.Uni.SymLight.On",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_10"),

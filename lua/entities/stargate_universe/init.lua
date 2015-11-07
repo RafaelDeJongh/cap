@@ -255,6 +255,7 @@ function ENT:AddModels()
 	self.Gate = e2;
 	self.Gate.Entity = e2;
 	self.Gate.Moving = false;
+	self:SetNWEntity("EntRing",e2)
 	self.AngGate = self.Gate:GetAngles();
 	local e3 = ents.Create("prop_dynamic_override");
 	e3:SetModel(self.Models.Chevrons);
