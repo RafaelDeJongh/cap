@@ -75,6 +75,8 @@ function ENT:SoundType(t)
 	elseif (t == 3) then
 		self.Door.OpenSound = self.Sounds.DestBridgeOpen;
 		self.Door.CloseSound = self.Sounds.DestBridgeClose;
+		self.Door.Delay = 6.5;
+		--self.Door.Shake = true;
 	else
 		self.Door.OpenSound = self.Sounds.AtlOpen;
 		self.Door.CloseSound = self.Sounds.AtlClose;

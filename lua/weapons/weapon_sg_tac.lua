@@ -1,12 +1,9 @@
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapons")) then return end
-
-if (1==1) then return end -- temporary disabled
-
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 	SWEP.PrintName = SGLanguage.GetMessage("weapon_tac");
 	SWEP.Category = SGLanguage.GetMessage("weapon_cat");
 end
-SWEP.Author = "Ronon Dex, Boba Fett";
+SWEP.Author = "Ronon Dex, Boba Fett, AlexALX";
 SWEP.Contact = "";
 SWEP.Purpose = "";
 SWEP.Instructions = "Throw with Left Click, Change Mode with Right Click";
@@ -15,11 +12,11 @@ SWEP.Slot = 4;
 SWEP.SlotPos = 3;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
-SWEP.ViewModel 		= "models/boba_fett/tac/tac.mdl";
-SWEP.WorldModel 	= "models/boba_fett/tac/w_tac.mdl";
+SWEP.ViewModel = "models/boba_fett/tac/tac.mdl";
+SWEP.WorldModel = "models/boba_fett/tac/w_tac.mdl";
 SWEP.ViewModelFOV = 60;
 
-SWEP.Primary.ClipSize = 5;
+SWEP.Primary.ClipSize = 1;
 SWEP.Primary.DefaultClip = 3;
 SWEP.Primary.Automatic = false;
 SWEP.Primary.Ammo	= "none";
@@ -30,10 +27,24 @@ SWEP.Secondary.DefaultClip = -1;
 SWEP.Secondary.Automatic = false;
 SWEP.Secondary.Ammo	= "none";
 
+SWEP.HoldType = "grenade";
+
 -- spawnables.
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);
 
+function SWEP:Initialize()
+	self:SetWeaponHoldType(self.HoldType);
+end
+
+function SWEP:Deploy()
+	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
+end
+
+SWEP.Sounds = {SwingSound = Sound( "weapons/slam/throw.wav" )}
+
 if SERVER then
+
+AddCSLuaFile();
 
 SWEP.CanThrow = true;
 SWEP.WepMode = 1;
@@ -43,49 +54,131 @@ SWEP.Kill = true;
 SWEP.Stun = false;
 SWEP.Smoke = false;
 
+SWEP.Ammo = 3;
+
+end
+
+if SERVER then
+local GRENADE_RADIUS	= 4.0;
+
+-- Thanks to swep-bases code
+function SWEP:CheckThrowPosition( pPlayer, vecEye, vecSrc )
+	local tr;
+
+	tr = {}
+	tr.start = vecEye
+	tr.endpos = vecSrc
+	tr.mins = -Vector(GRENADE_RADIUS+2,GRENADE_RADIUS+2,GRENADE_RADIUS+2)
+	tr.maxs = Vector(GRENADE_RADIUS+2,GRENADE_RADIUS+2,GRENADE_RADIUS+2)
+	tr.mask = MASK_PLAYERSOLID
+	tr.filter = pPlayer
+	tr.collision = pPlayer:GetCollisionGroup()
+	local trace = util.TraceHull( tr );
+
+	if ( trace.Hit ) then
+		vecSrc = tr.endpos;
+	end
+
+	return vecSrc
+end
+
+function SWEP:ThrowGrenade()
+	if (not IsValid(self) or not IsValid(self.Owner)) then return end
+	local pPlayer = self.Owner;
+
+	local	vecEye = pPlayer:EyePos();
+	local	vForward, vRight;
+
+	vForward = pPlayer:GetForward();
+	vRight = pPlayer:GetRight();
+	local vecSrc = vecEye + vForward * 18.0 + vRight * 8.0;
+	vecSrc = self:CheckThrowPosition( pPlayer, vecEye, vecSrc );
+//	vForward.x = vForward.x + 0.1;
+//	vForward.y = vForward.y + 0.1;
+
+	local vecThrow;
+	vecThrow = pPlayer:GetVelocity();
+	vecThrow = vecThrow + vForward * 1200;
+	local pGrenade = ents.Create( "tac_bomb" );
+	--pGrenade:SetOwner( pPlayer );
+	--pGrenade:SetModel("models/boba_fett/tac/w_tac.mdl");
+	pGrenade:SetPos( vecSrc );
+	pGrenade:SetAngles( Angle() );
+	pGrenade:Spawn()
+	pGrenade:Activate();
+	pGrenade:GetPhysicsObject():SetVelocity( vecThrow );
+	pGrenade:GetPhysicsObject():AddAngleVelocity( Vector(600,math.random(-1200,1200),0) );
+
+	if ( pGrenade ) then
+	
+		pGrenade.IsThrownTac = true;
+		self.CanThrow = false;
+		self:SetNWBool("CanThrow",false);
+		self.ThrownTac = true;
+		self.Tac = pGrenade;
+		pGrenade.Owner = self.Owner;
+
+		if(self.Kill) then
+			pGrenade.Kill = true;
+		elseif(self.Stun) then
+			pGrenade.Stun = true;
+		elseif(self.Smoke) then
+			pGrenade.Smoke = true;
+		end
+	
+		if ( pPlayer && !pPlayer:Alive() ) then
+			vecThrow = pPlayer:GetVelocity();
+
+			local pPhysicsObject = pGrenade:GetPhysicsObject();
+			if ( pPhysicsObject ) then
+				vecThrow = pPhysicsObject:SetVelocity();
+			end
+		end
+
+		pGrenade.m_flDamage = self.Primary.Damage;
+		pGrenade.m_DmgRadius = GRENADE_DAMAGE_RADIUS;
+	end
+end
+
+function SWEP:Think()
+	if (self.Throw and self.Throw<CurTime()) then
+		self:ThrowGrenade();
+		self.Throw = false;
+		--self.Owner:RemoveAmmo( 1, self.Primary.Ammo );
+		self.Ammo = self.Ammo - 1;
+		self.Owner:EmitSound( self.Sounds.SwingSound, 75, math.random(80, 120) );
+		--if (self.Ammo<=0) then
+			--self.Owner:StripWeapon(self:GetClass());
+			--self:Remove();
+		--end
+	end
+end
+end
 
 function SWEP:PrimaryAttack()
+	if (not IsValid(self)) then return end
+	if(self:GetNWBool("CanThrow",true)) then
+		self.Weapon:SendWeaponAnim( ACT_VM_PULLPIN );
+		timer.Simple(1.0,function()
+			if (IsValid(self.Weapon)) then
+				self.Weapon:SendWeaponAnim( ACT_VM_THROW );
+				timer.Simple(1,function()
+					if (IsValid(self.Weapon)) then
+						self.Weapon:SendWeaponAnim( ACT_VM_IDLE );
+					end
+				end);
+			end
+		end)
+	end
 
-	if(IsValid(self)) then
+	if (SERVER) then
+		timer.Simple(0.5, function() 
+			if (IsValid(self) and IsValid(self.Owner)) then 
+				self.Owner:SetAnimation( PLAYER_ATTACK1 ); 
+			end 
+		end); 
 		if(self.CanThrow) then
-			self:SendWeaponAnim(ACT_VM_PULLPIN)
-
-			timer.Simple(1,function()
-				if(IsValid(self)) then // Since we're doing this inside a timer we need to make sure we are still valid
-					self:SendWeaponAnim(ACT_VM_THROW);
-
-					local tr = util.TraceLine(util.GetPlayerTrace(self.Owner));
-
-					local e = ents.Create("tac_bomb");
-					e:SetPos(tr.StartPos+Vector(10,10,10));
-					e:SetModel("models/boba_fett/tac/w_tac.mdl");
-					e:Spawn();
-					e:Activate();
-
-					local p = e:GetPhysicsObject()
-					if (IsValid(p)) then
-						p:Wake()
-						p:AddAngleVelocity(Vector(100,50,200))
-						p:SetVelocity(self.Owner:GetAimVector()*Vector(250,250,0));
-					end
-					e.IsThrownTac = true;
-					self.CanThrow = false;
-					self.ThrownTac = true;
-					self.Tac = e;
-					e.Owner = self.Owner;
-
-					if(self.Kill) then
-						e.Kill = true;
-					elseif(self.Stun) then
-						e.Stun = true;
-					elseif(self.Smoke) then
-						e.Smoke = true;
-					end
-
-					timer.Simple(1,function()
-						self:SendWeaponAnim(ACT_VM_IDLE) end);
-				end
-			end);
+			self.Throw = CurTime()+1;
 		else
 			if(self.ThrownTac) then
 				if(not self.Tac.Smoke) then
@@ -95,9 +188,9 @@ function SWEP:PrimaryAttack()
 				end
 			end
 		end
-		self:SetNextPrimaryFire(CurTime()+1);
-
 	end
+	
+	self:SetNextPrimaryFire(CurTime()+2);
 end
 
 /*
@@ -116,6 +209,7 @@ function SWEP:SecondaryAttack()
 end
 */
 
+if (SERVER) then
 SWEP.NextUse = CurTime()
 function SWEP:SecondaryAttack()
 	local p = self.Owner;
@@ -138,7 +232,7 @@ function SWEP:SecondaryAttack()
 			self.WepMode = 1;
 		end
 		self:SetNWInt("Mode",self.WepMode);
-		self.NextUse = CurTime() + 1;
+		self.NextUse = CurTime() + 0.1;
 	end
 end
 

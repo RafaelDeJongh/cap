@@ -1,31 +1,45 @@
 ENT.Type 		= "anim";
 ENT.Base 		= "base_anim";
 ENT.PrintName	= "Tac";
-ENT.Author		= "Ronon Dex, Boba Fett";
+ENT.Author		= "Ronon Dex, Boba Fett, AlexALX";
 ENT.Contact		= "";
 ENT.Spawnable        = false
 ENT.AdminSpawnable   = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-if (1==1) then return end -- temporary disabled
+--if (1==1) then return end -- temporary disabled
 
 if SERVER then
 	AddCSLuaFile();
 	function ENT:Initialize()
+		self:SetModel("models/boba_fett/tac/w_tac.mdl");
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
 		self:SetSolid(SOLID_VPHYSICS)
-		self:SetModel("models/boba_fett/tac/w_tac.mdl");
 		self:SetRenderMode(RENDERMODE_NORMAL);
 
 		self.MaxShoots = StarGate.CFG:Get("tac","max_shoots",50);
 		self.MaxTargets = StarGate.CFG:Get("tac","max_targets",5);
 		self.ThinkInterval = StarGate.CFG:Get("tac","shoot_interval",0.5);
 		self.Range = StarGate.CFG:Get("tac","range",800);
+		self.BlastRange = StarGate.CFG:Get("tac","blast_range",200);
+		self.BlastDamage = StarGate.CFG:Get("tac","blast_damage",200);
 
 		self.Shoots = 0;
 	end
 
+	function ENT:Use(ply)
+		if(IsValid(self.Owner) and ply == self.Owner) then
+			if (!ply:HasWeapon("weapon_sg_tac")) then
+				ply:Give("weapon_sg_tac");
+				ply:GetWeapon("weapon_sg_tac").Ammo = 1;
+			else
+				ply:GetWeapon("weapon_sg_tac").Ammo = ply:GetWeapon("weapon_sg_tac").Ammo+1;
+			end			
+			self:ResetSwep();
+			self:Remove();
+		end
+	end
 
 	function ENT:Think()
 
@@ -93,7 +107,7 @@ if SERVER then
 			for i=1,6 do
 				local sfx = EffectData()
 					sfx:SetOrigin(self:GetPos())
-				util.Effect("tac_smoke",sfx);
+				util.Effect("tac_smoke",sfx, true, true);
 			end
 			self:ResetSwep();
 			self:Remove()
@@ -295,8 +309,9 @@ if SERVER then
 	end
 
 	function ENT:Destroy()
+		if (self.Destroyed) then return end
 		local e = self;
-
+		/*
 		for k,v in pairs(ents.FindInSphere(e:GetPos(),200)) do
 			if(IsValid(v)) then
 				if(not (v==self)) then
@@ -314,12 +329,16 @@ if SERVER then
 					end
 				end
 			end
-		end
+		end*/
+		
+		self.Destroyed = true; -- FIX FOR CRASH!
+		util.BlastDamage( self.Owner, self, self:GetPos(), self.BlastRange, self.BlastDamage)
+		
 		local fx = EffectData();
-			fx:SetOrigin(e:GetPos());
+			fx:SetOrigin(self:GetPos());
 			fx:SetMagnitude(50);
 		util.Effect("Explosion", fx, true, true);
-		e:Remove();
+		self:Remove();
 
 		self:ResetSwep();
 	end
@@ -329,6 +348,10 @@ if SERVER then
 		if(IsValid(tac)) then
 			tac.ThrownTac = false;
 			tac.CanThrow = true;
+			tac:SetNWBool("CanThrow",true);
+			if (tac.Ammo<=0) then
+				tac:Remove();
+			end
 		end
 	end
 end

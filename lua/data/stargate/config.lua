@@ -306,6 +306,10 @@ max_targets = 5
 max_shoots = 50
 # Target find range
 range = 800
+# Explosion range
+blast_range = 200
+# Explosion damage
+blast_damage = 200
 
 # kino dispenser
 [kino_dispenser]
@@ -353,13 +357,12 @@ max_size = 500
 [wraith_grenade]
 blast_range = 200
 detect_range = 200
+blast_damage = 300
 
 # Cap misc
 [cap_misc]
 allow_drop_weapons = true
 ship_shield = true
-
-
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu

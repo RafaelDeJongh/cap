@@ -17,6 +17,7 @@ if SERVER then
 		
 		self.DetectRange = StarGate.CFG:Get("wraith_grenade","detect_range",200);
 		self.BlastRange = StarGate.CFG:Get("wraith_grenade","blast_range",200);
+		self.BlastDamage = StarGate.CFG:Get("wraith_grenade","blast_damage",300);
 		
 		self:SetRenderMode(RENDERMODE_NORMAL);
 
@@ -25,11 +26,13 @@ if SERVER then
 	
 	function ENT:Think()
 		if(not self.Mine) then
-			timer.Simple(5, function()
+			local delay = math.Rand(3,6);
+			timer.Simple(delay, function()
 				if(IsValid(self)) then
 					self:Explode();
 				end
 			end)
+			self.Entity:NextThink(CurTime()+delay+0.1);
 		else
 			if(self.CanExplode < CurTime()) then
 				for k,v in pairs(ents.FindInSphere(self:GetPos(),self.DetectRange)) do
@@ -40,18 +43,25 @@ if SERVER then
 					end
 				end
 			end
+			self.Entity:NextThink(CurTime()+0.2);
 		end
+		return true;
 	end
 	
-	function ENT:Use()
-		if(self.Mine) then
-			self.Owner:GiveAmmo(1,"grenade");
+	function ENT:Use(ply)
+		if(self.Mine and IsValid(self.Owner) and ply == self.Owner) then
+			if (!ply:HasWeapon("wraith_grenade")) then
+				ply:Give("wraith_grenade");
+				ply:GetWeapon("wraith_grenade").Ammo = 1;
+			else
+				ply:GetWeapon("wraith_grenade").Ammo = ply:GetWeapon("wraith_grenade").Ammo+1;
+			end			
 			self:Remove();
 		end
 	end
 	
 	function ENT:Explode()
-
+		/* For what this shit code?...
 		for k,v in pairs(ents.FindInSphere(self:GetPos(),self.BlastRange)) do
 			if(IsValid(v)) then
 				if(not (v==self)) then
@@ -67,7 +77,10 @@ if SERVER then
 					end
 				end
 			end
-		end
+		end*/
+		-- Much better solution!
+		util.BlastDamage( self.Owner, self, self:GetPos(), self.BlastRange, self.BlastDamage) 
+		
 		local fx = EffectData();
 			fx:SetOrigin(self:GetPos());
 			fx:SetMagnitude(50);
