@@ -25,7 +25,8 @@ function ENT:SpawnFunction(p,tr)
 	e:SetAngles(Angle(0,p:EyeAngles().Y-180,0));
 	e:Spawn();
 	e:Activate();
-	e:CreateDoors(p)
+	e:CreateDoors(p);
+	e:OnReloaded();
 	return e;
 end
 
@@ -211,21 +212,22 @@ function ENT:SetAtlNameGrp(name,grp,ply,wire)
 	grp = grp or "";
 	grp = grp:Trim();
 	
-	if (name!="" and grp!="") then
+	if (name!="") then
 		-- No multiple rings please!
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-			if(v.TName == name and v.TGroup == grp and v.Entity != self.Entity) then
+			if(v.TName == name and v.Entity != self.Entity) then
 				if (not wire) then ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"atl_tp_error\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )"); end
 				return;
 			end
 		end
-	else return end
-	self.TName=name;
-	net.Start("UpdateAtlTP")
-	net.WriteInt(self:EntIndex(),16)
-	net.WriteInt(1,4)
-	net.WriteString(name)
-	net.Broadcast()
+
+		self.TName=name;
+		net.Start("UpdateAtlTP")
+		net.WriteInt(self:EntIndex(),16)
+		net.WriteInt(1,4)
+		net.WriteString(name)
+		net.Broadcast()
+	end
 	
 	self.TGroup = grp;
 	net.Start("UpdateAtlTp");
@@ -242,7 +244,7 @@ function ENT:SetAtlName(name)
 	if (name!="") then
 		-- No multiple rings please!
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-			if(v.TName == name and v.TGroup == self.TGroup and v.Entity != self.Entity) then
+			if(v.TName == name and v.Entity != self.Entity) then
 				return;
 			end
 		end
@@ -262,7 +264,7 @@ function ENT:SetAtlGrp(grp)
 	if (grp!="") then
 		-- No multiple rings please!
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
-			if(v.TName == self.TName and v.TGroup == grp and v.Entity != self.Entity) then
+			if(v.TName == self.TName and v.Entity != self.Entity) then
 				return;
 			end
 		end
@@ -475,22 +477,22 @@ function ENT:FindTransporter(name)
 	if name=="" or not name then
 		local dist=999999999999999 -- lolwut
 		local nEnt
-		local rings=ents.FindByClass("atlantis_transporter")
-			for i=1,table.getn(rings) do
-				if (rings[i]~=self.Entity and not rings[i].TPrivate) then
-					local nDist=(self.Entity:GetPos()-rings[i]:GetPos()):Length()
-						 if nDist<dist then
-							 dist=nDist
-							 nEnt=rings[i]
-						 end
+		local entt=ents.FindByClass("atlantis_transporter")
+		for _,e in pairs(entt) do
+			if e~=self.Entity and not e.TPrivate and (e.TGroup == self.TGroup or !self.TLocal and !e.TLocal) then
+				local nDist=(self.Entity:GetPos()-e:GetPos()):Length()
+				if nDist<dist then
+				dist=nDist
+				nEnt=e
 				end
 			end
+		end
 		return nEnt
 	else
 		local entt = ents.FindByClass("atlantis_transporter")
 		for _,e in pairs(entt) do
 			if IsValid(e) and e!=self and e.TName!="" then
-				if e.TName == name then
+				if e.TName == name and (e.TGroup == self.TGroup or !self.TLocal and !e.TLocal) then
 					return e;
 				end
 			end
@@ -775,7 +777,7 @@ function ENT:WireGetAddresses()
 	local list = {}
 	local entt = ents.FindByClass("atlantis_transporter")
 	for _,e in pairs(entt) do
-		if IsValid(e) and e!=self and e.TName!="" and not e.TPrivate then
+		if IsValid(e) and e!=self and e.TName!="" and not e.TPrivate and (e.TGroup == self.TGroup or !self.TLocal and !e.TLocal) then
 			table.insert(list,{e.TName,e.TGroup});
 		end
 	end

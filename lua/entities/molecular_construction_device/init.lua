@@ -38,6 +38,8 @@ function ENT:Initialize()
 	self.AdvanceTimer = 0;
 	self.AtlSkin = false;
 	self:SetUseType(SIMPLE_USE)
+	
+	self.Speed = StarGate.CFG:Get("mcd","speed",100)/100;
 
 	if(self.HasWire) then
 		self:CreateWireInputs("Alternative Skin")
@@ -92,7 +94,7 @@ function ENT:SpawnFunction(p,t)
 end
 
 function ENT:Use(ply)
-    if(not self.Create)then
+    if(not self.Create and self.Forw)then
 		umsg.Start("MolecularConstructionDevice",ply)
 	    umsg.Entity(self.Entity);
 	    umsg.End()
@@ -111,6 +113,7 @@ function ENT:Think()
     	end
 	    if(self.InitCreate)then
 		    self.InitCreate = false;
+			self.Forw = false;
 		    if (self.AtlSkin) then
 	        	self.Entity:SetMaterial("MarkJaw/mcd/mcd_on_atl.vmt");
 		    else
@@ -142,11 +145,11 @@ function ENT:Think()
 			else
 			    self.Progress = tonumber(self.Progress[1])
 			end
-			self.Entity:SetNWInt("Progress",self.Progress+0.02); -- 0.02
+			self.Entity:SetNWInt("Progress",math.Clamp(self.Progress+(0.02*self.Speed),0,255)); -- 0.02
 			local color = self.Ent:GetColor();
 			local r,g,b,a = color.r,color.g,color.b,color.a;
 			self.Ent:SetRenderMode( RENDERMODE_TRANSALPHA );
-	        if(self.Progress < 255)then
+	        if(self.Progress < 254)then
 			    if(self.EntProgress == self.Progress)then
 				    if(self.Progress <= 175)then
                         self.Ent:SetColor(Color(r,g,b,a + 1));
@@ -161,14 +164,39 @@ function ENT:Think()
 			end
 			if(self.Progress >= 240.8)then
 		        self.Ent:SetParent(nil);
-				local distance = (self.Entity:GetPos() + self.Ent:GetPos()):Length()
-				if(distance >= 32)then
-			        self.Ent:SetPos(self.Ent:GetPos() - Vector(0,0,0.04))
+				local distance = (self.Entity:GetPos() - self.Ent:GetPos()):Length()
+				if(distance >= self.Ent._MCDSTOP)then
+			        self.Ent:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*self.Ent._MCDUP)
+					self.Ent._MCDUP = self.Ent._MCDUP - 0.04;
+				elseif (self.Progress==255) then
+					self.EntProgress = 255;
+					self.Entity:SetNWInt("EntProgress",self.EntProgress);
 				end
 			    self.Ent:SetParent(self.Entity);
 		    end
             if(self.Entity:GetNWInt("EntProgress") == 255)then
 	            self.Ent:SetParent(nil);
+				if (self.Ent._MCDTampered) then
+					local e = ents.Create("tampered_zpm");
+					e:SetPos(self.Ent:GetPos());
+					e:Spawn();
+					e:SetAngles(self.Ent:GetAngles());
+					e:SetParent(self.Entity);
+					if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
+					self.Ent:Remove();
+					self.Ent = e;
+				end	
+				if (self.Ent:GetClass()=="prop_physics") then
+					local e = ents.Create("prop_ragdoll");
+					e:SetPos(self.Ent:GetPos());
+					e:SetModel(self.Ent:GetModel());
+					e:Spawn();
+					e:SetAngles(self.Ent:GetAngles());
+					e:SetParent(self.Entity);
+					if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
+					self.Ent:Remove();
+					self.Ent = e;
+				end
 				local effectdata = EffectData()
 				effectdata:SetOrigin(self.Ent:GetPos())
 			    util.Effect( "mcd_spawn", effectdata )
@@ -181,6 +209,7 @@ function ENT:Think()
 					end
 				end);
 		        self.Ent:SetSolid(SOLID_VPHYSICS);
+				self.Ent:SetParent(NULL);
 		        local phys = self.Ent:GetPhysicsObject();
 	            if(phys:IsValid())then
 		            phys:EnableMotion(true);
@@ -205,15 +234,17 @@ function ENT:Think()
 			end
 		end
 		--##############################################################################
-		y = y or 0;
-		if(type(y)=="number" and y <= 360)then
-		    y = y + 0.5;
-		else
-		    y = 0;
+		if (self.Create) then
+			self.y = self.y or 0;
+			if(type(self.y)=="number" and self.y <= 360)then
+				self.y = self.y + 0.5;
+			else
+				self.y = 0;
+			end
+			--local ang = Angle(self.Entity:GetAngles().Pitch, self.Entity:GetAngles().Yaw + self.y, self.Entity:GetAngles().Roll)
+			self.Ent:SetLocalAngles(Angle(0,self.y,0));
+			self:ProgressIdle();
 		end
-		local ang = Angle(self.Entity:GetAngles().Pitch, self.Entity:GetAngles().Yaw + y, self.Entity:GetAngles().Roll)
-        self.Ent:SetAngles(ang);
-		self:ProgressIdle();
         --##############################################################################
 	elseif(not self.Create and self.Undone)then
 	    timer.Simple(6,function()
@@ -225,6 +256,7 @@ function ENT:Think()
 		        end
 				self.Entity:SetNWInt("Advance",0);
 				self.Entity:SetNWBool("IdleSound",false);
+				self.Forw = true;
 				if(self.HasWire) then
 					self:SetWire("Conscruction Complete", 0)
 					self:SetWire("Percent Completed", 0)
@@ -234,13 +266,19 @@ function ENT:Think()
 		end);
 		local sequence = self.Entity:LookupSequence("idle");
         self.Entity:ResetSequence(sequence);
-	    undo.Create(self.Object)
-        undo.AddEntity(self.Ent)
-        undo.SetPlayer(self.Player)
-        undo.Finish()
-        self.Ent.Create = false;
+		if (IsValid(self.Ent)) then
+			local class = self.Ent:GetClass();
+			if (class=="naquadah_generator") then class = "naq_gen_mks"; end
+			undo.Create(class)
+			undo.AddEntity(self.Ent)
+			undo.SetPlayer(self.Player)
+			undo.Finish()
+			self.Ent.Create = false;
+			self.Ent._MCDUP = nil;
+			self.Ent._MCDTampered = nil;
+		end
 		self.Undone = false;
-		self.Forw = true;
+		--self.Forw = true;
 		self.AdvanceTimer = 0;
 		if(self.HasWire) then
 			self:SetWire("Conscruction Complete", 1)
@@ -268,25 +306,39 @@ net.Receive("MCD",function(len,ply)
 	local self = net.ReadEntity()
 	if (not IsValid(self) or self.Player!=ply or self.Create) then return end
 
-    local entities = {"tollan_disabler","cloaking_generator","shield_generator","jamming_device","tampered_zpm","zpm_mk3"}
+    local entities = {"tollan_disabler","cloaking_generator","shield_generator","jamming_device","zpm_mk3","arthur_mantle","telchak","naquadah_generator","replicator"}
+	local ents_stop = {
+		["arthur_mantle"] = 34.2,
+		["naquadah_generator"] = 33,
+		["tollan_disabler"] = 35.2,
+		["zpm_mk3"] = 40.5,
+		["telchak"] = 34.2,
+		["replicator"] = 40,
+	}
     local class = net.ReadString()
+	if (not table.HasValue(entities,class)) then return end
+	if (class=="replicator") then class = "prop_physics" end
+    local e = ents.Create(class);
     if (class=="zpm_mk3" and StarGate.CFG:Get("mcd","allow_tzmp",false)) then
     	local rnd = StarGate.CFG:Get("mcd","tzmp_chance",2);
     	if (rnd<1) then rnd = 1 end
     	local rand = math.random(1,rnd);
     	if (rand==1) then
- 			class = "tampered_zpm";
+ 			e._MCDTampered = true;
  		end
     end
-    local e = ents.Create(class);
     self.Undone = true;
-    self.Object = class;
+    --self.Object = class;
+	e._MCDSTOP = ents_stop[class] or 34;
 	e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*57);
+	e._MCDUP = 57;
 	if(class == entities[1] or class == entities[2] or class == entities[3])then
 		e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*58.2);
+		e._MCDUP = 58.2;
 		e.Owner = self.Player;
-	elseif(class == entities[5] or class == entities[6] or class == entities[7])then
+	elseif(class == entities[5])then
 		e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*62.9);
+		e._MCDUP = 62.9;
 	end
 	local model = net.ReadString()
     if(model != "")then
@@ -297,7 +349,6 @@ net.Receive("MCD",function(len,ply)
 	e:SetAngles(self.Entity:GetAngles());
 	if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
 	self.Ent = e;
-	print_r(e)
 	self.Create = true;
 	self.Start = true;
 	self.Ent.Create = true;

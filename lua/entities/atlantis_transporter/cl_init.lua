@@ -47,14 +47,14 @@ net.Receive( "UpdateAtlTP" , function(len)
 		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
 		AtlTP_GetAll[ent].name = net.ReadString();
 		AtlTP_GetAll[ent].private = util.tobool(net.ReadBit());
-		AtlTP_GetAll[ent].grp = net.ReadString();
-		AtlTP_GetAll[ent].loc = util.tobool(net.ReadBit());	
+		AtlTP_GetAll[ent].group = net.ReadString();
+		AtlTP_GetAll[ent].locale = util.tobool(net.ReadBit());	
 	elseif(type==4) then
 		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
-		AtlTP_GetAll[ent].grp = net.ReadString();
+		AtlTP_GetAll[ent].group = net.ReadString();
 	elseif(type==5) then
 		AtlTP_GetAll[ent] = AtlTP_GetAll[ent] or {};
-		AtlTP_GetAll[ent].loc = util.tobool(net.ReadBit());
+		AtlTP_GetAll[ent].locale = util.tobool(net.ReadBit());
 	end
 end );
 
@@ -79,9 +79,9 @@ function PANEL:Init()
   	self.TextEntry:SetAllowNonAsciiCharacters(true)
 
   	self.ListView = vgui.Create( "DListView", self )
-  	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_05")):SetFixedWidth(285); //380
-	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_group")):SetFixedWidth(50);
-	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_local") .. "?"):SetFixedWidth(45);
+  	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_05")):SetFixedWidth(270); //380
+	self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_group")):SetFixedWidth(110);
+	--self.ListView:AddColumn(SGLanguage.GetMessage("atl_tp_local")):SetFixedWidth(45);
   	self.ListView:SortByColumn(0,false);
   	self.ListView:SetSize(380,170);
   	self.ListView.OnRowSelected = function(ListView,Row)
@@ -143,15 +143,10 @@ end
 local group;
 function PANEL:UpdateList()
 	for k,v in pairs(AtlTP_GetAll) do
-		if (self.Entity:EntIndex()!=k and v.name and v.name!="" and not v.private) then
-			local this = AtlTP_GetAll[self.Entity:EntIndex()];
-			if(v.loc) then
-				if(v.grp == this.grp and this.loc) then
-					self.ListView:AddLine(v.name,v.grp,"Yes");
-
-				end
-			else
-				self.ListView:AddLine(v.name,v.grp,"No");
+		if (self.Entity:EntIndex()!=k and v.name and v.name!="" and v.group and v.group!="" and not v.private) then
+			local ent = AtlTP_GetAll[self.Entity:EntIndex()];
+			if(ent and (v.group == ent.group or !ent.locale and !v.locale)) then
+				self.ListView:AddLine(v.name,v.group);
 			end
 		end
 	end

@@ -290,9 +290,12 @@ coolingPerCycle = 300
 
 #### molecular_construction_device
 [mcd]
+# allow tampered zpm
 allow_tzmp = true
-tzmp_chance = 2
 # if chance = 2, then this means 50%, 3 will mean 33%, etc. 1 = always
+tzmp_chance = 2
+# creating speed in percent 
+speed = 100
 
 #### Tacluchnatagamuntoron (Tac)
 [tac]

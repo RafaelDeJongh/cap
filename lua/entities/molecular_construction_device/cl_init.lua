@@ -141,11 +141,11 @@ function VGUI:Init()
 	DermaPanel.Paint = function()
         surface.SetDrawColor( 80, 80, 80, 185 )
         surface.DrawRect( 0, 0, DermaPanel:GetWide(), DermaPanel:GetTall() )
-    end
+    end/*
 	local image = vgui.Create("TGAImage" , DermaPanel);
     image:SetSize(10, 10);
     image:SetPos(10, 10);
-    image:LoadTGAImage("materials/gui/cap_logo.tga", "MOD");
+    image:LoadTGAImage("materials/gui/cap_logo.tga", "MOD");*/
 
     local NumSliderThingy1 = vgui.Create( "DNumSlider" , DermaPanel )
     NumSliderThingy1:SetPos( 25,270 )
@@ -238,17 +238,21 @@ function VGUI:Init()
 		surface.SetTextColor( 255, 255, 255, 255 )
         surface.DrawRect( 0, 0, ComboBox:GetWide(), ComboBox:GetTall() )
     end
+	
+	local shield_model = "models/micropro/shield_gen.mdl";
+	
     ComboBox:AddColumn("Select Device")
     ComboBox.Columns[1].DoClick = function() end
-	ComboBox:AddLine( "Cloaking Generator" )
-	ComboBox:AddLine( "Shield Generator" )
-	ComboBox:AddLine( "Jamming Device" )
-	ComboBox:AddLine( "Telchak" )
-	ComboBox:AddLine( "ZPM MK3" )
-	ComboBox:AddLine( "Tollan Disabler" )
-	--ComboBox:AddLine( "Anti Preori Device" )
-	ComboBox:AddLine( "Naquadah Gen MK1" )
-	ComboBox:AddLine( "Arthurs Mantle" )
+	ComboBox:AddLine("Cloaking Generator", "cloaking_generator", shield_model)
+	ComboBox:AddLine("Shield Generator", "shield_generator", shield_model)
+	ComboBox:AddLine("Jamming Device", "jamming_device", shield_model)
+	ComboBox:AddLine("Telchak", "telchak")
+	ComboBox:AddLine("ZPM MK3", "zpm_mk3")
+	ComboBox:AddLine("Tollan Disabler", "tollan_disabler", "models/Iziraider/disabler/disabler.mdl")
+	--ComboBox:AddLine("Anti Preori Device", "anti_prior")
+	ComboBox:AddLine("Naquadah Gen MK1", "naquadah_generator")
+	ComboBox:AddLine("Arthurs Mantle", "arthur_mantle")
+	ComboBox:AddLine("Replicator", "replicator", "models/pg_props/pg_stargate/pg_replicator.mdl")
 	ComboBox:SetToolTip("Select your Entity.")
 	ComboBox:SortByColumn(1,false)
 
@@ -259,50 +263,34 @@ function VGUI:Init()
     MenuButtonCreate:SetSize( 135, 25 )
 	MenuButtonCreate.DoClick = function ( btn )
 	    if(ComboBox:GetSelected()[1] and ComboBox:GetSelected())then
-	        local value = ComboBox:GetSelected()[1]:GetValue(1);
-		    local models = {"models/micropro/shield_gen.mdl",
-			                "models/Iziraider/disabler/disabler.mdl",
-							"",}
-			local entsi = {"Cloaking Generator:cloaking_generator:"..models[1],
-                		   "Shield Generator:shield_generator:"..models[1],
-						   "Jamming Device:jamming_device:"..models[1],
-						   "Telchak:telchak:"..models[3],
-						   "ZPM MK3:zpm_mk3:"..models[3],
-						   "Tollan Disabler:tollan_disabler:"..models[2],
-						   --"Anti Preori Device:anti_prior:"..models[3],
-						   "Naquadah Gen MK1:naquadah_generator:"..models[3],
-						   "Arthurs Mantle:arthur_mantle:"..models[3],}
-			for _,j in pairs(entsi) do
-			    entsr = string.Explode(":",j)
-    		    if(value == entsr[1])then
-	    		    if(CheckBoxThing1:GetChecked())then immunity = 1 end
-	    		    if(CheckBoxThing2:GetChecked())then phaseshifting = 1 end
-	    		    if(CheckBoxThing3:GetChecked())then drawbubble = 1 end
-	    		    if(CheckBoxThing4:GetChecked())then passing = 1 end
-	    		    if(CheckBoxThing5:GetChecked())then containment = 1 end
-					local col = color:GetColor()
-					local this_ent = string.Explode(" ",tostring(e))
+	        local class = ComboBox:GetSelected()[1]:GetValue(2);
+			local model = ComboBox:GetSelected()[1]:GetValue(3) or "";
+			if(CheckBoxThing1:GetChecked())then immunity = 1 end
+			if(CheckBoxThing2:GetChecked())then phaseshifting = 1 end
+			if(CheckBoxThing3:GetChecked())then drawbubble = 1 end
+			if(CheckBoxThing4:GetChecked())then passing = 1 end
+			if(CheckBoxThing5:GetChecked())then containment = 1 end
+			local col = color:GetColor()
+			local this_ent = string.Explode(" ",tostring(e))
 
-					net.Start("MCD")
-					net.WriteEntity(self.Entity)
-					net.WriteString(entsr[2])
-					net.WriteString(entsr[3])
-					net.WriteInt(NumSliderThingy1:GetValue(),16)
-					net.WriteBit(util.tobool(immunity))
-					net.WriteBit(util.tobool(phaseshifting))
-					net.WriteInt(NumSliderThingy2:GetValue(),16)
-					net.WriteBit(util.tobool(drawbubble))
-					net.WriteBit(util.tobool(passing))
-					net.WriteBit(util.tobool(containment))
-					net.WriteInt(NumPad.NumPad1:GetValue(),16)
-					net.WriteInt(col.r,8)
-					net.WriteInt(col.g,8)
-					net.WriteInt(col.b,8)
-					net.SendToServer();
+			net.Start("MCD")
+			net.WriteEntity(self.Entity)
+			net.WriteString(class)
+			net.WriteString(model)
+			net.WriteInt(NumSliderThingy1:GetValue(),16)
+			net.WriteBit(util.tobool(immunity))
+			net.WriteBit(util.tobool(phaseshifting))
+			net.WriteInt(NumSliderThingy2:GetValue(),16)
+			net.WriteBit(util.tobool(drawbubble))
+			net.WriteBit(util.tobool(passing))
+			net.WriteBit(util.tobool(containment))
+			net.WriteInt(NumPad.NumPad1:GetValue(),16)
+			net.WriteInt(col.r,8)
+			net.WriteInt(col.g,8)
+			net.WriteInt(col.b,8)
+			net.SendToServer();
 
-	                DermaPanel:Remove()
-			    end
-	        end
+			DermaPanel:Remove()
 	    end
     end
 end
