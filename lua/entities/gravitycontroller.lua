@@ -322,7 +322,6 @@ numpad.Register("FireGravitycontroller", FireGravitycontroller)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 	self.Owner = ply;
-	if (StarGate.NotSpawnable(Ent:GetClass(),ply,"tool")) then self.Entity:Remove(); return end
 	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
 end
 

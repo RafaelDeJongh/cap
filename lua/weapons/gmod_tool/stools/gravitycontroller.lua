@@ -5,6 +5,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_gravc");
 TOOL.Category="Tech";
 TOOL.Tab = "Stargate";
 TOOL.Entity.Class = "gravitycontroller";
+TOOL.Entity.Limit = 15;
 TOOL.CustomSpawnCode = true;
 
 TOOL.AddToMenu = false; -- Tell gmod not to add it. We will do it manually later!
@@ -106,6 +107,7 @@ function TOOL:LeftClick(trace)
 		return true
 	end
 	if(!SERVER) then return false end
+	if(not self:CheckLimit()) then return false end;
 	local ply = self:GetOwner()
 	local Pos = trace.HitPos
 	local Ang = trace.HitNormal:Angle()
@@ -165,9 +167,11 @@ function TOOL:LeftClick(trace)
 end
 
 if SERVER then
-    CreateConVar('sbox_maxgravitycontroller', 15)
+    --CreateConVar('sbox_maxgravitycontroller', 15)
 	function MakeGravitycontroller(ply, Ang, Pos, tbl, Data)
-
+		if (game.SinglePlayer()) then
+			ply = player.GetByID(1);
+		end
 		if (IsValid(ply)) then
 			if (StarGate_Group and StarGate_Group.Error == true) then StarGate_Group.ShowError(ply); return
 			elseif (StarGate_Group==nil or StarGate_Group.Error==nil) then
@@ -177,6 +181,15 @@ if SERVER then
 				return;
 			end
 			if (StarGate.NotSpawnable("gravitycontroller",ply,"tool")) then return end
+
+			local PropLimit = GetConVar("sbox_maxgravitycontroller"):GetInt()
+			if(IsValid(ply)) then
+				if ply:GetCount("gravitycontroller")+1 > PropLimit then
+					ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_gravitycontroller_limit\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+					return;
+				end
+			end
+			
 		end
 
 		local ent=ents.Create('gravitycontroller')
@@ -189,9 +202,6 @@ if SERVER then
 			ent.ConTable = Data.ConTable
 			tbl = Data.ConTable;
 		end
-		if (game.SinglePlayer()) then
-			ply = player.GetByID(1);
-		end
 
 		if (Data and Data.GateSpawnerSpawned and Data.GateSpawnerID) then
 			ent.GateSpawnerSpawned = true;
@@ -200,7 +210,11 @@ if SERVER then
 		end
 
 		ent:Spawn()
-		ent:SetVar('Owner',ply)
+		if (IsValid(ply)) then
+			ent:SetVar('Owner',ply)
+			ply:AddCount('gravitycontroller', ent)
+		end
+
 		numpad.OnDown(ply, tbl["iActivateKey"][2], 'FireGravitycontroller', ent)
 		if tbl["bSGAPowerNode"][2]!=1 then
 			if tbl["fWeight"][2] > 1 then
@@ -223,9 +237,6 @@ if SERVER then
 			tbl=tbl,
 		}
 		table.Merge(ent:GetTable(), ttable)
-		if (IsValid(ply)) then
-			ply:AddCount('gravcontroller', ent)
-		end
 		return ent
 	end
 	duplicator.RegisterEntityClass("gravitycontroller", MakeGravitycontroller, "Ang", "Pos", "tbl", "Data")

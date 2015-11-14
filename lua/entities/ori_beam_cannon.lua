@@ -192,6 +192,7 @@ function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
 		local PropLimit = GetConVar("CAP_ori_beam_max"):GetInt()
 		if(ply:GetCount("CAP_ori_beam")+1 > PropLimit) then
 			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_ori_beam\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			self.Entity:Remove();
 			return
 		end
 	end

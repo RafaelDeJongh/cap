@@ -4,6 +4,7 @@ stargate_menu_t3 = Misc Convars
 stargate_menu_t4 = Config Editor
 stargate_menu_t5 = Admin Tools
 stargate_menu_hint = Convar: %s
+stargate_menu_sp = Note: this settings work only in multiplayer.
 stargate_menu_01 = Stargate Menu
 stargate_menu_02 = DHD
 stargate_menu_03 = Wire

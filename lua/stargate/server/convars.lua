@@ -1,10 +1,10 @@
 --################################ DON'T EDIT THIS FILE YOU CAN MAKE CHANGES IN THE GAME!!!!!!!!!!!!!
 
--- This should be recoded later. @AlexALX
--- Right now default values also should be changed at two sides inside autorun/cap_settings.lua file!
--- Or settings may glitch/not work due to new convar saving system!
+-- Finally all default convar values in one file! @AlexALX
 
+-- Arrays for save default values, used in cap settings menu.
 StarGate.CAP_Convars = {};
+StarGate.CAP_SGConvars = {};
 
 local limits = {
 	{"Destiny Small Turret", "destsmall", 4},
@@ -46,30 +46,44 @@ end
 
 -- From stargate group system by AlexALX
 
+local sgconvars = {
+	{"stargate_candial_groups_dhd",1},
+	{"stargate_candial_groups_menu",1},
+	{"stargate_candial_groups_wire",1},
+	{"stargate_sgu_find_range",16000},
+	{"stargate_energy_dial",1},
+	{"stargate_energy_dial_spawner",0},
+	{"stargate_dhd_protect",0},
+	{"stargate_dhd_protect_spawner",0},
+	{"stargate_dhd_destroyed_energy",1},
+	{"stargate_dhd_close_incoming",1},
+	{"stargate_show_inbound_address",2},
+	{"stargate_protect",0},
+	{"stargate_protect_spawner",1},
+	{"stargate_block_address",2},
+	{"stargate_dhd_letters",1},
+	{"stargate_energy_target",1},
+	{"stargate_vgui_glyphs",2},
+	{"stargate_dhd_menu",1},
+	{"stargate_atlantis_override",1},
+	{"stargate_dhd_ring",1},
+	{"stargate_different_dial_menu",0},
+	{"stargate_gatespawner_enabled",1},
+	{"stargate_random_address",1},
+	{"stargate_gatespawner_protect",1},
+	{"stargate_physics_clipping",1},
+	{"stargate_model_clipping",1},
+	{"stargate_group_system",1},
+}
+
 -- Convars
-CreateConVar( "stargate_candial_groups_dhd", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_candial_groups_menu", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_candial_groups_wire", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_sgu_find_range", "16000", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_energy_dial", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_energy_dial_spawner", "0", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_protect", "0", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_protect_spawner", "0", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_destroyed_energy", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_close_incoming", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_show_inbound_address", "2", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_protect", "0", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_protect_spawner", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_block_address", "2", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_letters", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_energy_target", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_vgui_glyphs", "2", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_menu", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_atlantis_override", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_dhd_ring", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_different_dial_menu", "0", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_gatespawner_enabled", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_random_address", "1", {FCVAR_ARCHIVE} )
+for _,val in pairs(sgconvars) do
+	local flags = {FCVAR_ARCHIVE};
+	if (val[1]=="stargate_group_system") then flags = {FCVAR_NOTIFY, FCVAR_GAMEDLL, FCVAR_ARCHIVE}; end
+	CreateConVar(val[1], tostring(val[2]), flags);
+	StarGate.CAP_SGConvars[val[1]] = val[2];
+end
+
 local count = cvars.GetConVarCallbacks("stargate_gatespawner_enabled") or {}; -- add callback only once
 if (table.Count(count)==0) then
 	cvars.AddChangeCallback("stargate_gatespawner_enabled", function(CVar, PreviousValue, NewValue)
@@ -78,7 +92,7 @@ if (table.Count(count)==0) then
 		timer.Create("stargate_gatespawner_reload",0.5,1,function() StarGate.GateSpawner.InitialSpawn(true) end);
 	end);
 end
-CreateConVar( "stargate_gatespawner_protect", "1", {FCVAR_ARCHIVE} )
+
 local count = cvars.GetConVarCallbacks("stargate_gatespawner_protect") or {}; -- add callback only once
 if (table.Count(count)==0) then
 	cvars.AddChangeCallback("stargate_gatespawner_protect", function(CVar, PreviousValue, NewValue)
@@ -94,10 +108,7 @@ if (table.Count(count)==0) then
 		end
 	end);
 end
-CreateConVar( "stargate_physics_clipping", "1", {FCVAR_ARCHIVE} )
-CreateConVar( "stargate_model_clipping", "1", {FCVAR_ARCHIVE} )
 
-CreateConVar( "stargate_group_system", "1", { FCVAR_NOTIFY, FCVAR_GAMEDLL, FCVAR_ARCHIVE } )
 local count = cvars.GetConVarCallbacks("stargate_group_system") or {}; -- add callback only once
 if (table.Count(count)==0) then
 	cvars.AddChangeCallback("stargate_group_system", function(CVar, PreviousValue, NewValue)
