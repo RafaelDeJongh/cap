@@ -89,7 +89,7 @@ stargate_vgui_blockedtip = Blokeeritud aadress näitab punases ja ei saa ühenda
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Cap Uuenduste meeldetuletaja
-stargate_updater_02 = Su CAPi pakk ei ole uundatud!\nSu revisjon: %d Uueim Revisionjon: %d
+stargate_updater_02 = Su CAPi pakk ei ole uundatud!\nSu revisjon: %s Uueim Revisionjon: %s
 stargate_updater_03 = Palun uuenda Carter Pack, et saada uued uuendused ja parandused!
 stargate_updater_04 = sulge
 
@@ -99,7 +99,7 @@ stargate_credits_02 = Siin sa saad teatada vigadest. Kui sa ei saa trükkida HTM
 stargate_credits_03 = Ei saa kindlaks määrata kõige uuemat uuendust. Ole kindel, et sa oled ühendatud Internetiga või võta ühendust CAP Team.
 stargate_credits_04 = Ei suutnud kindlaks teha praegust CAP Uuendust. Ole kindel, et sa Exportisid teist korda/uuendasid CAP-i õigesti ja fail cap_ver.lua on CAP-is/cap/lua.
 stargate_credits_05 = Sinu Carter's Pack Addon on graafikus.
-stargate_credits_06 = Sinu revisjon: %d. Uueim revisjon: %d.
+stargate_credits_06 = Sinu revisjon: %s. Uueim revisjon: %s.
 stargate_credits_07 = Palun uuenda Carter Pack-ki, et saada paremad funktsioonid ja parandused!
 stargate_credits_08 = Näib, et sa ei ole ühendatud internetiga.Seetõttu autoreid ei saa näidata.Kui sa oled kindel, et sa oled ühendatud ja oled saanud sõnumi juhuslikult, sa saad manuaalselt lubada internetiabi allpool.
 stargate_credits_09 = Manuaalne Ülekirjutamine

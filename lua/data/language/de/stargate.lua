@@ -132,7 +132,7 @@ Es kann mit der ConVar mat_dxlevel verändert werden.]]
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Cap Update Erinnerung
-stargate_updater_02 = Dein Build von CAP ist nicht aktuell!\nDeine Revision: %d Neuste Revision: %d
+stargate_updater_02 = Dein Build von CAP ist nicht aktuell!\nDeine Revision: %s Neuste Revision: %s
 stargate_updater_03 = Bitte aktualisiere Carter Pack für\n neue Features und Fehlerbehebungen!
 stargate_updater_04 = Schließen
 
@@ -142,7 +142,7 @@ stargate_credits_02 = Hier kannst du Bugs reporten. Falls du nicht in HTML-Formu
 stargate_credits_03 = Konnte neustes BUILD nicht ermitteln. Stellen Sie sicher, dass sie mit dem Internet verbunden sind oder kontaktieren sie CAP Team.
 stargate_credits_04 = Konnte jetziges BUILD nicht ermitteln. Stellen Sie sicher, dass Sie richtig aktualisiert haben und die Datei cap_ver.lua in addons/cap/lua ist.
 stargate_credits_05 = Dein Carter's Pack Addon ist auf dem neusten Stand
-stargate_credits_06 = Dein Stand: %d. Neuster Stand: %d.
+stargate_credits_06 = Dein Stand: %s. Neuster Stand: %s.
 stargate_credits_07 = Bitte aktualisiere Carter Pack fьr\n neue Features und Fehlerbehebungen!
 stargate_credits_08 = Es sieht so aus, als wдren Sie nicht mit dem Internet verbunden. Deshalb kцnnen Credits nicht angezeigt werden. Wenn Sie sicher sind, dass Sie verbunden sind und die Meldung ausversehen erschien, so kцnnen sie die Online-Hilfe selbst aktivieren.
 stargate_credits_09 = Automatisches Ьberschreiben

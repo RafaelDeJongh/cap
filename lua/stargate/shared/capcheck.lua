@@ -29,7 +29,7 @@ if (GetAddonListJson!=nil) then
 	end
 end
 
-local cap_ver = StarGate.CapVer;
+local cap_ver = tonumber(StarGate.CapVer);
 local cap_res = 0;
 local cap_res_req = 0;
 
@@ -289,7 +289,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<465 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<483 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)

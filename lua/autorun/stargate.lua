@@ -68,19 +68,39 @@ for _,v in pairs(engine.GetAddons()) do
 	end
 end
 
-local function CheckVersion()
-	if (file.Exists("lua/cap_ver.lua","GAME")) then
-		StarGate.CapVer = tonumber(file.Read("lua/cap_ver.lua","GAME"));
-	elseif(file.Exists("addons/cap/ver.txt","GAME")) then -- for old clients compatibility in mp
-		StarGate.CapVer = tonumber(file.Read("addons/cap/ver.txt","GAME"));
-	elseif (StarGate.Workshop and CLIENT) then
-		StarGate.CapVer = 413; -- just for old workshop clients compatibility in mp, can be removed later
+function StarGate.ParseVersion(vert)
+	-- support two numbers in version with safe-parse numbers
+	local ver = "0";
+	local i = 0;
+	for v in string.gmatch( vert, "[0-9]+" ) do
+		if (i==0) then 
+			ver = v;
+		elseif (i==1) then 
+			ver = ver.."."..v; 
+			break; -- only two numbers support
+		end
+		i = i + 1;
 	end
+	
+	return ver;
+end
+
+local function CheckVersion()
+	local vert = "";
+	if (file.Exists("lua/cap_ver.lua","GAME")) then
+		vert = file.Read("lua/cap_ver.lua","GAME");
+	elseif(file.Exists("addons/cap/ver.txt","GAME")) then -- for old clients compatibility in mp
+		vert = file.Read("addons/cap/ver.txt","GAME");
+	elseif (StarGate.Workshop and CLIENT) then
+		vert = "413"; -- just for old workshop clients compatibility in mp, can be removed later
+	end
+	
+	StarGate.CapVer = StarGate.ParseVersion(vert);
 
 	if (SERVER) then
 		local capver = CreateConVar("stargate_cap_version",StarGate.CapVer,{FCVAR_GAMEDLL,FCVAR_NOTIFY});
-		if (capver:GetInt()!=StarGate.CapVer) then
-			RunConsoleCommand("stargate_cap_version", tostring(StarGate.CapVer))
+		if (capver:GetString()!=StarGate.CapVer) then
+			RunConsoleCommand("stargate_cap_version", StarGate.CapVer)
 		end
 	end
 end

@@ -682,3 +682,541 @@ function StarGate.HasLatestVersion(Panel)
 		Panel:Help(SGLanguage.GetMessage("stool_update_03"));
 	end
 end
+
+--[[
+	Pack Version (packversion.lua)
+	Copyright (C) 2011 Madman07
+]]--
+
+function StarGate.Update_Check(Panel)
+	local LAYOUT = SGLanguage.GetMessage("stargate_credits_01");
+	local GREEN = Color(0,255,0,255);
+	local ORANGE = Color(255,128,0,255);
+
+	if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		-- VGUI:SetHelp("credits");
+		VGUI:SetTopic(SGLanguage.GetMessage("stargate_credits_01"));
+		VGUI:SetText(SGLanguage.GetMessage("stargate_credits_01"));
+		VGUI:SetImage("icon16/star.png");
+		VGUI:SetURL(StarGate.HTTP.CREDITS);
+		Panel:AddPanel(VGUI);
+
+		Panel:Help(SGLanguage.GetMessage("stargate_credits_02", StarGate.HTTP.BUGS));
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetTopic(SGLanguage.GetMessage("stargate_credits_13"));
+		VGUI:SetText(SGLanguage.GetMessage("stargate_credits_13"));
+		VGUI:SetImage("icon16/exclamation.png");
+		VGUI:SetURL(StarGate.HTTP.BUGS);
+		Panel:AddPanel(VGUI);
+
+		local VGUImg = vgui.Create("DImage",Panel)
+		VGUImg:SetSize(210,210);
+		VGUImg:SetImage("gui/update_checker/cap");
+		Panel:AddPanel(VGUImg);
+
+		if (StarGate.LATEST_VERSION == 0) then
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_03")):SetTextColor(ORANGE);
+		elseif (StarGate.CURRENT_VERSION == 0) then
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
+		elseif (StarGate.LATEST_VERSION == 0 and StarGate.CURRENT_VERSION == 0) then
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_01")):SetTextColor(ORANGE);
+			Panel:Help(SGLanguage.GetMessage("stargate_credits_04")):SetTextColor(ORANGE);
+		else
+			local last_ver = StarGate.LATEST_VERSION;
+			if (StarGate.WorkShop) then last_ver = tostring(math.floor(tonumber(last_ver))); end -- display "CAP Outdated" only if main version higher that subversion for workshop clients
+			-- yes i know tonumber then tostring is ugly way
+			-- Workshop users should NEVER receive "beta" updates from github, so no need to write "CAP Outdated" in this case
+			if (not StarGate.CompareVersion(last_ver,StarGate.CURRENT_VERSION)) then
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_05").." "..StarGate.CURRENT_VERSION.." :)"):SetTextColor(GREEN);
+				VGUImg:SetImage("gui/update_checker/cap_is")
+			else
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_06", StarGate.CURRENT_VERSION, StarGate.LATEST_VERSION)):SetTextColor(ORANGE);
+				Panel:Help(SGLanguage.GetMessage("stargate_credits_07"));
+				VGUImg:SetImage("gui/update_checker/cap_not")
+			end
+		end
+
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetText("www.sg-carterpack.com");
+		VGUI:SetImage("icon16/star.png");
+		VGUI:SetURL(StarGate.HTTP.SITE);
+		Panel:AddPanel(VGUI);
+
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetText("www.facepunch.com/threads/1162629");
+		VGUI:SetImage("icon16/star.png");
+		VGUI:SetURL(StarGate.HTTP.FACEPUNCH);
+		Panel:AddPanel(VGUI);
+
+	else
+		local VGUImg = vgui.Create("DImage",Panel)
+		VGUImg:SetSize(210,210);
+		VGUImg:SetImage("gui/update_checker/cap");
+		Panel:AddPanel(VGUImg);
+
+		Panel:Help(SGLanguage.GetMessage("stargate_credits_08"));
+		Panel:CheckBox(SGLanguage.GetMessage("stargate_credits_09"),"cl_has_internet"):SetToolTip(SGLanguage.GetMessage("stargate_credits_10"));
+	end
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_14"));
+	local VGUI = vgui.Create("SHelpButton",Panel);
+	VGUI:SetText(SGLanguage.GetMessage("stargate_credits_15"));
+	VGUI:SetImage("icon16/money_add.png");
+	VGUI:SetURL(StarGate.HTTP.DONATE,true);
+	Panel:AddPanel(VGUI);
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_11"));
+	Panel:Help("");
+	Panel:Help(SGLanguage.GetMessage("stargate_credits_12"));
+	Panel:Help("Creative Commons Attribution-NonCommercial-NoDerivs");
+	Panel:Help("3.0 Unported License.");
+end
+
+function CAP_Outdated()
+	local addons = GetAddonList(true);
+	if (StarGate.HasInternet and StarGate.InstalledOnClient()) then
+		local UpdateFrame = vgui.Create("DFrame");
+		UpdateFrame:SetPos(ScrW()-540, 100);
+		UpdateFrame:SetSize(440,130);
+		UpdateFrame:SetTitle(SGLanguage.GetMessage("stargate_updater_01"));
+		UpdateFrame:SetVisible(true);
+		UpdateFrame:SetDraggable(true);
+		UpdateFrame:ShowCloseButton(true);
+		UpdateFrame:SetBackgroundBlur(false);
+		UpdateFrame:MakePopup();
+		UpdateFrame.Paint = function()
+
+			// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
+			local matBlurScreen = Material( "pp/blurscreen" )
+
+			// Background
+			surface.SetMaterial( matBlurScreen )
+			surface.SetDrawColor( 255, 255, 255, 255 )
+
+			matBlurScreen:SetFloat( "$blur", 5 )
+			render.UpdateScreenEffectTexture()
+
+			surface.DrawTexturedRect( -ScrW()/10, -ScrH()/10, ScrW(), ScrH() )
+
+			surface.SetDrawColor( 100, 100, 100, 150 )
+			surface.DrawRect( 0, 0, ScrW(), ScrH() )
+
+			// Border
+			surface.SetDrawColor( 50, 50, 50, 255 )
+			surface.DrawOutlinedRect( 0, 0, UpdateFrame:GetWide(), UpdateFrame:GetTall() )
+
+			draw.DrawText(SGLanguage.GetMessage("stargate_updater_02",StarGate.CURRENT_VERSION,StarGate.LATEST_VERSION).."\n"..SGLanguage.GetMessage("stargate_updater_03"), "ScoreboardText", 220, 30, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
+		end;
+
+		local close = vgui.Create("DButton", UpdateFrame);
+		close:SetText(SGLanguage.GetMessage("stargate_updater_04"));
+		close:SetPos(340, 95);
+		close:SetSize(80, 25);
+		close.DoClick = function (btn)
+			UpdateFrame:Close();
+		end
+
+
+	end
+end
+concommand.Add("CAP_Outdated",CAP_Outdated)
+
+--########################
+-- cl_visualssettings.lua
+--########################
+
+function StarGate.MiscVisualSettings(Panel)
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
+
+	Panel:ClearControls();
+	-- The HELP Button
+	/*if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetHelp("config/visual");
+		VGUI:SetTopic("Help:  Visual Settings");
+		Panel:AddPanel(VGUI);
+	end */
+	-- Configuration
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsmisc");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
+	Panel:Help("");
+	-- Stargates
+	table.insert(disable,Panel:Help(SGLanguage.GetMessage("stool_cat")));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	if (file.Exists("materials/zup/stargate/effect_03.vmt","GAME")) then
+		table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_ripple"),"cl_stargate_ripple"));
+		table.GetLastValue(disable):SetToolTip(medium);
+    end
+    table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_eff"),"cl_stargate_kenter"));
+    table.GetLastValue(disable):SetToolTip(low);
+	Panel:CheckBox(SGLanguage.GetMessage("vis_kawoosh_mat"), "cl_kawoosh_material"):SetToolTip(SGLanguage.GetMessage("vis_kawoosh_mat_desc"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_stargate_eff"), "cl_stargate_effects"):SetToolTip(SGLanguage.GetMessage("vis_stargate_eff_desc",medium));
+	-- Stargate Universe
+	Panel:Help(SGLanguage.GetMessage("stargate_universe"));	
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_stargate_un_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- SuperGate
+	Panel:Help(SGLanguage.GetMessage("stargate_supergate"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_supergate_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- Shield
+	Panel:Help(SGLanguage.GetMessage("stool_shield"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_shield_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_shield_bubble"),"cl_shield_bubble"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_refl"),"cl_shield_hitradius"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_shield_hiteffect"));
+	table.GetLastValue(disable):SetToolTip(low);
+	-- Atl Shield
+	Panel:Help(SGLanguage.GetMessage("vis_atl_shield"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl"), "cl_shieldcore_refract"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_refl_desc",low));
+	-- Harvester
+	Panel:Help(SGLanguage.GetMessage("stool_harvester"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_harvester_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- Cloaking
+	Panel:Help(SGLanguage.GetMessage("stool_cloak"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_pass"),"cl_cloaking_hitshader"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_cloak_eff"),"cl_cloaking_shader"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Apple Core
+	Panel:Help(SGLanguage.GetMessage("entity_apple_core"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_applecore_light"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"), "cl_applecore_smoke"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Huds
+	Panel:Help(SGLanguage.GetMessage("vis_hud_title"));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_hud_energy"), "cl_draw_huds"):SetToolTip(SGLanguage.GetMessage("vis_hud_energy_desc",low));
+	Panel:CheckBox(SGLanguage.GetMessage("vis_dhd_glyphs"), "cl_dhd_letters"):SetToolTip(SGLanguage.GetMessage("vis_dhd_glyphs_desc",low));
+end
+
+function StarGate.ShipVisualSettings(Panel)
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
+
+	Panel:ClearControls();
+	-- The HELP Button
+	/*if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetHelp("config/visual");
+		VGUI:SetTopic("Help:  Visual Settings");
+		Panel:AddPanel(VGUI);
+	end */
+	-- Configuration
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsship");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
+	Panel:Help("");
+	-- Jumper
+	Panel:Help(SGLanguage.GetMessage("entity_jumper"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_jumper_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_jumper_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_jumper_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- F302
+	Panel:Help(SGLanguage.GetMessage("entity_f302"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_F302_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_F302_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Shuttle
+	Panel:Help(SGLanguage.GetMessage("entity_dest_shuttle"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_shuttle_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sprites"), "cl_shuttle_sprites"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Wraith Dart
+	Panel:Help(SGLanguage.GetMessage("entity_dart"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_heatwave"), "cl_dart_heatwave"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Control Chair
+	Panel:Help(SGLanguage.GetMessage("entity_control_chair"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_chair_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+end
+
+function StarGate.WeaponVisualSettings(Panel)
+	local high = SGLanguage.GetMessage("vis_fps_high");
+	local medium = SGLanguage.GetMessage("vis_fps_medium");
+	local low = SGLanguage.GetMessage("vis_fps_low");
+
+	Panel:ClearControls();
+	-- The HELP Button
+	/*if(StarGate.HasInternet) then
+		local VGUI = vgui.Create("SHelpButton",Panel);
+		VGUI:SetHelp("config/visual");
+		VGUI:SetTopic("Help:  Visual Settings");
+		Panel:AddPanel(VGUI);
+	end */
+	-- Configuration
+	local disable = {}
+	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsweapon");
+	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
+	conf.OnChange = function(self,val)
+		for k,v in pairs(disable) do
+			if (val) then
+				v:SetDisabled(false);
+			else
+				v:SetDisabled(true);
+			end
+		end
+	end
+	Panel:Help("");
+	-- Staff Weapon and Dexgun
+	Panel:Help(SGLanguage.GetMessage("vis_weap_title"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_dyn_light"),"cl_staff_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_fly_dyn_light"),"cl_staff_dynlights_flight"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_smoke"),"cl_staff_smoke"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_wall"),"cl_staff_scorch"));
+	table.GetLastValue(disable):SetToolTip(low);
+	-- Zat'nik'tel
+	Panel:Help(SGLanguage.GetMessage("weapon_zat"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"),"cl_zat_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_hit_eff"),"cl_zat_hiteffect"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_diss_eff"),"cl_zat_dissolveeffect"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	-- Drones
+	Panel:Help(SGLanguage.GetMessage("stool_drones"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_glow"),"cl_drone_glow"));
+	table.GetLastValue(disable):SetToolTip(low);
+	-- Naquadah Bomb
+	Panel:Help(SGLanguage.GetMessage("stool_naq_bomb"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sunbeams"), "cl_gate_nuke_sunbeams"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_sunbeams_desc",high));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_gate_nuke_rings"));
+	table.GetLastValue(disable):SetToolTip(high);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_shield_part"), "cl_gate_nuke_shieldrings"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_shield_part_desc",high));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_plasma"), "cl_gate_nuke_plasma"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",low));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_plasma_light"), "cl_gate_nuke_dynlights"));
+	table.GetLastValue(disable):SetToolTip(SGLanguage.GetMessage("vis_plasma_desc",medium));
+	-- Stargate Overloader
+	Panel:Help(SGLanguage.GetMessage("entity_overloader"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl_rings"), "cl_overloader_refract"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_part_rings"), "cl_overloader_particle"));
+	table.GetLastValue(disable):SetToolTip(medium);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_overloader_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- Asuran Gun
+	Panel:Help(SGLanguage.GetMessage("entity_asuran_weapon"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_sm_laser"), "cl_asuran_laser"));
+	table.GetLastValue(disable):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_dyn_light"), "cl_asuran_dynlights"));
+	table.GetLastValue(disable):SetToolTip(high);
+	-- Dakara Super Weapon
+	Panel:Help(SGLanguage.GetMessage("entity_dakara"));
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_charge_up"), "cl_dakara_rings"));
+	table.GetLastValue(disable):SetToolTip(low);
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl_sphere"), "cl_dakara_refract"));
+	table.GetLastValue(disable):SetToolTip(medium);
+end
+
+/*
+function CAP_NotLegal()
+	if StarGate.HasInternet then
+		local LegalFrame = vgui.Create("DFrame");
+		LegalFrame:SetPos(100, 100);
+		LegalFrame:SetSize(400,150);
+		LegalFrame:SetTitle("Cap Legality Checker");
+		LegalFrame:SetVisible(true);
+		LegalFrame:SetDraggable(false);
+		LegalFrame:ShowCloseButton(false);
+		LegalFrame:SetBackgroundBlur(false);
+		LegalFrame:MakePopup();
+		LegalFrame.Paint = function()
+
+			// Thanks Overv, http://www.facepunch.com/threads/1041686-What-are-you-working-on-V4-John-Lua-Edition
+			local matBlurScreen = Material( "pp/blurscreen" )
+
+			// Background
+			surface.SetMaterial( matBlurScreen )
+			surface.SetDrawColor( 255, 255, 255, 255 )
+
+			matBlurScreen:SetFloat( "$blur", 5 )
+			render.UpdateScreenEffectTexture()
+
+			surface.DrawTexturedRect( -ScrW()/10, -ScrH()/10, ScrW(), ScrH() )
+
+			surface.SetDrawColor( 100, 100, 100, 150 )
+			surface.DrawRect( 0, 0, ScrW(), ScrH() )
+
+			// Border
+			surface.SetDrawColor( 50, 50, 50, 255 )
+			surface.DrawOutlinedRect( 0, 0, LegalFrame:GetWide(), LegalFrame:GetTall() )
+
+			draw.DrawText("An error occured. If your Steam profile is private, please\nturn it to Public mode in order to use Carter Addon Pack.\nIf your copy of Garry's Mod is illegal, your Steam ID will be\nreported. Please buy a legal copy of Garry's Mod.", "ScoreboardText", 200, 30, Color(255, 255, 255, 255),TEXT_ALIGN_CENTER);
+		end;
+
+		LegalFrame.Count = RealTime()+15;
+
+		local close = vgui.Create("DButton", LegalFrame);
+		close:SetText("15");
+		close:SetPos(300, 115);
+		close:SetSize(80, 25);
+		close.DoClick = function (btn)
+			local rel = LegalFrame.Count - RealTime();
+			if (rel < 0) then LegalFrame:Close(); end
+		end
+
+		function LegalFrame:Think()
+			local rel = LegalFrame.Count - RealTime();
+			if (rel > 0) then close:SetText(Format("Wait %i sec.", rel));
+			else close:SetText("Close"); end
+		end
+
+	end
+end
+concommand.Add("CAP_NotLegal",CAP_NotLegal)*/
+
+--##############
+-- settings.lua
+--##############
+
+/*
+	Created by AlexALX (c) 2012
+	Small settings tab
+	For some functions what come from my addon
+*/
+
+function StarGate_Settings(Panel)
+	local LAYOUT = "Convars/Limits/Language";
+	local GREEN = Color(0,255,0,255);
+	local ORANGE = Color(255,128,0,255);
+	local RED = Color(255,0,0,255);
+	local DGREEN = Color(0,182,0,255);
+
+	if (LocalPlayer():IsAdmin()) then
+		local convarsmenu = vgui.Create("DButton", Panel);
+	    convarsmenu:SetText(SGLanguage.GetMessage("stargate_settings_01"));
+	    convarsmenu:SetSize(150, 25);
+	    convarsmenu:SetImage("icon16/wrench.png");
+		convarsmenu.DoClick = function ( btn )
+			RunConsoleCommand("stargate_settings");
+		end
+		Panel:AddPanel(convarsmenu);
+	end
+	Panel:Help("");
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_06")):SetTextColor(DGREEN);
+	local clientlang = vgui.Create("DMultiChoice",Panel);
+	clientlang:SetSize(50,20);
+	local lg = SGLanguage.GetLanguageName(SGLanguage.GetClientLanguage());
+	if (lg!="Error") then
+		clientlang:SetText(lg);
+	else
+		clientlang:SetText(SGLanguage.GetClientLanguage());
+	end
+	clientlang.TextEntry:SetTooltip(SGLanguage.GetMessage("stargate_settings_07"));
+	clientlang.TextEntry.OnTextChanged = function(TextEntry)
+		local pos = TextEntry:GetCaretPos();
+		local text = TextEntry:GetValue();
+		local len = text:len();
+		local letters = text:lower():gsub("[^a-z-]",""); -- Lower, remove invalid chars and split!
+		TextEntry:SetText(letters);
+		TextEntry:SetCaretPos(math.Clamp(pos - (len-letters:len()),0,text:len())); -- Reset the caretpos!
+		timer.Remove("SG.lang_check");
+		timer.Create("SG.lang_check",0.4,1,function()
+			local lg = SGLanguage.GetLanguageName(letters);
+			if (IsValid(TextEntry) and lg!="Error") then
+				TextEntry:SetText(lg);
+				TextEntry:SetCaretPos(lg:len()); -- Reset the caretpos!
+			end
+			if (letters!="") then SGLanguage.SetClientLanguage(letters); end
+		end)
+	end
+	clientlang.OnSelect = function(panel,index,value)
+		if (value!="") then
+			local lg = SGLanguage.GetLanguageFromName(value);
+			SGLanguage.SetClientLanguage(lg);
+		end
+	end
+	-- add exists languages
+	local _,langs = file.Find("lua/data/language/*","GAME");
+	local en_count,en_msgs = SGLanguage.CountMessagesInLanguage("en",true);
+	local lng_arr = {}
+	for i,lang in pairs(langs) do
+		local count,msgs = SGLanguage.CountMessagesInLanguage(lang,true);
+		if (lang!="en"/* and (not msgs["global_lang_similar"] or msgs["global_lang_similar"]=="false")*/) then
+			for k,v in pairs(msgs) do
+				if (not en_msgs[k]/* or v==en_msgs[k]*/) then count = count-1; end -- stop cheating!
+			end
+		end
+		count = math.Round(count*100/en_count);
+		lng_arr[lang] = {SGLanguage.GetLanguageName(lang),count};
+		clientlang:AddChoice(SGLanguage.GetLanguageName(lang));
+	end
+	Panel:AddPanel(clientlang);
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_07"));
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_03")):SetTextColor(DGREEN);
+	local VGUI = vgui.Create("DPanel");
+	VGUI:SetBackgroundColor(Color(120,120,120));
+	local i = 5;
+	for k,v in SortedPairs(lng_arr) do
+		local count = v[2];
+		local col = HSVToColor((count/100)*120,1,0.9);
+		local p = vgui.Create("DLabel",VGUI);
+		p:SetPos(10,i);
+		p:SetText(v[1].." ("..k..") - "..count.."%");
+		p:SetSize(150,15);
+		p:SetAutoStretchVertical(true);
+		p:SetTextColor(col);
+		p:SetTall(10);
+		p:DockMargin(0,0,0,0);
+		i = i+15;
+	end
+	VGUI:SetSize(150,i+5);
+	Panel:AddPanel(VGUI);
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_04"));
+	Panel:Help("");
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_05"));
+	local VGUI = vgui.Create("DButton");
+	VGUI:SetText(SGLanguage.GetMessage("stargate_settings_02"));
+	VGUI:SetImage("icon16/group.png");
+	VGUI:SetSize(150, 25);
+	VGUI.DoClick = function()
+		local help = vgui.Create("SHTMLHelp");
+		help:SetURL("http://sg-carterpack.com/wiki/doc/how-to-translate-cap/");
+		help:SetText(SGLanguage.GetMessage("stargate_settings_02t"));
+		help:SetVisible(true);
+	end
+	Panel:AddPanel(VGUI);
+	Panel:Help("");
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_08"));
+	Panel:Help(SGLanguage.GetMessage("stargate_settings_09"));
+
+end

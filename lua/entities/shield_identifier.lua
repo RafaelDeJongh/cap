@@ -28,7 +28,7 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 
 	self.IsEnabled = false;
-	self.Frequency = 1;
+	self.Frequency = 0;
 	self.MaxFrequency = 1500;
 
 	if (WireAddon) then
@@ -67,11 +67,7 @@ end
 function ENT:TriggerInput(variable, value)
 	if (variable == "Activate") then
 		self.IsEnabled = util.tobool(value)
-		if (self.IsEnabled) then
-			self:SetWire("Activated",1);
-		else
-			self:SetWire("Activated",0);
-		end
+		self:SetWire("Activated",self.IsEnabled);
 	elseif (variable == "Frequency") then
 		self:SetFrequency(value);
 	end
@@ -138,7 +134,7 @@ function ENT:Use(ply)
 	end*/
 	net.Start("shieldid_sendinfo")
 	net.WriteEntity(self)
-	net.WriteInt(self.Frequency,32)
+	net.WriteUInt(self.Frequency,12)
 	net.WriteBool(self.IsEnabled)
 	net.Send(ply)
 end
@@ -149,7 +145,7 @@ local function ReceiveNewInfos()
 	if (util.tobool(net.ReadBit())) then
 		ent:Toggle();
 	else
-		ent:SetFrequency(net.ReadInt(32));
+		ent:SetFrequency(net.ReadUInt(12));
 	end
 end
 net.Receive("shieldid_sendinfo", ReceiveNewInfos)
@@ -160,16 +156,17 @@ if CLIENT then
 	local function shieldid_menuhook(len)
 		local ent = net.ReadEntity();
 		if (not IsValid(ent)) then return end
-		local SIfrequency = net.ReadInt(32);
-		local active = net.ReadBit();
+		local SIfrequency = net.ReadUInt(12);
+		local active = util.tobool(net.ReadBit());
 
 		local DermaPanel = vgui.Create( "DFrame" )
-	   	DermaPanel:SetPos(ScrW()/2-175, ScrH()/2-100)
-	   	DermaPanel:SetSize(330, 130)
+	   	--DermaPanel:SetPos(ScrW()/2-175, ScrH()/2-100)
+	   	DermaPanel:SetSize(330, 90)
+		DermaPanel:Center()
 
 	   	DermaPanel:SetTitle("")
 	   	DermaPanel:SetVisible( true )
-	   	DermaPanel:SetDraggable( true )
+	   	DermaPanel:SetDraggable( false )
 	   	DermaPanel:ShowCloseButton( true )
 	   	DermaPanel:MakePopup()
 		DermaPanel.Paint = function(self,w,h)
@@ -183,59 +180,58 @@ if CLIENT then
 	    image:SetImage("gui/cap_logo");
 
 	    local title = vgui.Create( "DLabel", DermaPanel );
-	 	-- title:SetText(SGLanguage.GetMessage("shieldid_title"));
-	 	title:SetText("Shield Identifier");
+	 	title:SetText(SGLanguage.GetMessage("shieldid_title"));
 	  	title:SetPos( 25, 0 );
 	 	title:SetSize( 400, 25 );
 
 		local frequency = vgui.Create( "DNumSlider" , DermaPanel )
-	    frequency:SetPos( 10, 35 )
+	    frequency:SetPos( 10, 15 )
 	    frequency:SetSize( 320, 50 )
-	    frequency:SetText("Frequency")
-		-- frequency:SetText( SGLanguage.GetMessage("shieldid_frequency") )
-	    frequency:SetMin(1)
+		frequency:SetText( SGLanguage.GetMessage("shieldid_frequency") )
+	    frequency:SetMin(0)
 	    frequency:SetMax(1500)
+		frequency:SetDecimals(0)
 		frequency:SetValue(SIfrequency);
-	    frequency:SetDecimals(0)
 		//frequency:SetToolTip(SGLanguage.GetMessage("iriscomp_time_desc"))
 
 		local function saveFrequency()
 			net.Start("shieldid_sendinfo")
 			net.WriteEntity(ent)
 			net.WriteBit(false)
-			net.WriteInt(math.Round(frequency:GetValue()),32)
+			net.WriteUInt(math.Round(frequency:GetValue()),12)
 			net.SendToServer()
 		end
 
 		local saveClose = vgui.Create("DButton" , DermaPanel )
 	    saveClose:SetParent( DermaPanel )
-	    saveClose:SetText(SGLanguage.GetMessage("iriscomp_ok"))
-	    saveClose:SetPos(230,100)
-	    saveClose:SetSize(80,25)
+	    saveClose:SetText(SGLanguage.GetMessage("shieldid_save"))
+	    saveClose:SetPos(180,60)
+	    saveClose:SetSize(120,25)
 		saveClose.DoClick = function ( btn3 )
 			saveFrequency();
 	    end
 
 	    local ToggleActive = vgui.Create("DButton" , DermaPanel )
 		ToggleActive:SetParent( DermaPanel )
-		-- ToggleActive:SetText(SGLanguage.GetMessage("shieldid_toggle"))
-		ToggleActive:SetText("Toggle")
-	    ToggleActive:SetPos(110, 100)
-	    ToggleActive:SetSize(100, 25)
+		ToggleActive:SetText(SGLanguage.GetMessage("shieldid_toggle"))
+	    ToggleActive:SetPos(30, 60)
+		if (active) then
+			ToggleActive:SetImage("icon16/lightbulb.png")		
+		else
+			ToggleActive:SetImage("icon16/lightbulb_off.png")
+		end
+	    ToggleActive:SetSize(120, 25)
 		ToggleActive.DoClick = function ( btn5 )
 			net.Start("shieldid_sendinfo")
 			net.WriteEntity(ent)
 			net.WriteBit(true)
 			net.SendToServer()
-	    end
-
-	    local cancelButton = vgui.Create("DButton" , DermaPanel )
-	    cancelButton:SetParent( DermaPanel )
-	    cancelButton:SetText(SGLanguage.GetMessage("iriscomp_cancel"))
-	    cancelButton:SetPos(10, 100)
-	    cancelButton:SetSize(80, 25)
-		cancelButton.DoClick = function ( btn4 )
-			DermaPanel:Close()
+			active = !(active)
+			if (active) then
+				ToggleActive:SetImage("icon16/lightbulb.png")		
+			else
+				ToggleActive:SetImage("icon16/lightbulb_off.png")
+			end
 	    end
 	end
 

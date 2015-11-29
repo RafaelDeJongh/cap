@@ -297,6 +297,16 @@ stool_stargate_shield_co_desc = Enable this to keep things inside a shield inste
 stool_stargate_shield_an = Anti Noclip
 stool_stargate_shield_an_desc = People can't noclip in the shield?
 
+// Shield identifier
+stool_stargate_shield_ident_spawner = Shield Identifier Spawner
+stool_stargate_shield_ident_create = Creates a Shield Identifier
+stool_stargate_shield_ident_desc = Left click, to spawn a Shield Identifier
+stool_stargate_shield_ident_undone = Shield Identifier removed
+stool_stargate_shield_ident_cleanup = Shield Identifiers
+stool_stargate_shield_ident_cleaned = Removed all Shield Identifiers
+stool_stargate_shield_ident_limit = Hit the Shield Identifier limit
+stool_stargate_shield_ident_text = PLACEHOLDER, description will be later.
+
 //Atlantis Light
 stool_atlantis_light_colour = Light Colour
 stool_atlantis_light_spawner = Atlantis Light Spawner

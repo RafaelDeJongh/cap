@@ -29,15 +29,15 @@ list.Set(TOOL.List,"models/props_junk/popcan01a.mdl",{});
 TOOL.Entity.Class = "shield_identifier";
 TOOL.Entity.Keys = {"model"}; -- These keys will get saved from the duplicator
 TOOL.Entity.Limit = 5; -- A person generally can spawn 1 shield
-/*
+
 -- Add the topic texts, you see in the upper left corner
-TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_shield_spawner");
-TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_shield_create");
-TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_shield_desc");
-TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_shield_undone");
-TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_shield_cleanup");
-TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_shield_cleaned");
-TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_shield_limit");*/
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_stargate_shield_ident_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_stargate_shield_ident_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_stargate_shield_ident_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_stargate_shield_ident_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_stargate_shield_ident_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_stargate_shield_ident_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_stargate_shield_ident_limit");
 --################# Code
 
 --################# LeftClick Toolaction @aVoN
@@ -67,6 +67,7 @@ end
 
 --################# Controlpanel @aVoN
 function TOOL:ControlsPanel(Panel)
+	Panel:AddControl("Label",{Text=SGLanguage.GetMessage("stool_stargate_shield_ident_text")});
 	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="stargate_shield_identifier_model",Category="",Models=self.Models});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"stargate_shield_autoweld");
 end

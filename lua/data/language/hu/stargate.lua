@@ -141,7 +141,7 @@ Ez megváltoztatható mat_dxlevel convar-ral .]]
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Cap Frissítési Emlékeztető
-stargate_updater_02 = Az ön verziója lejárt!\nAz ön verziója: %d Jelenlegi Verzió: %d
+stargate_updater_02 = Az ön verziója lejárt!\nAz ön verziója: %s Jelenlegi Verzió: %s
 stargate_updater_03 = Kérem Frissítse,Hogy új funciók és kevesebb hibája legyen.
 stargate_updater_04 = Bezárás
 
@@ -164,7 +164,7 @@ stargate_credits_02 = Itt elküldheti a hibákat. Ha nem tudja beírni HTML-Form
 stargate_credits_03 = Nem lehet meghatározni az új verziót. Kösse vissza az internetet vagy lépjen kapcsolatba CAP Team.
 stargate_credits_04 = Nem lehet meghatározni a jelenlegi verziót. Nézze meg hogy rendesen töltötte e le vagy frissítette a capot és hogy létezik e a cap_ver.lua az addons/cap/lua mappában.
 stargate_credits_05 = A Carter's Pack Addon jelenlegi verziója
-stargate_credits_06 = A CAP jelenleg verziója: %d.Utolsó Verzió: %d.
+stargate_credits_06 = A CAP jelenleg verziója: %s.Utolsó Verzió: %s.
 stargate_credits_07 = Kérem Frissítse a CAP-ját,hogy új funciói legyenek és kevesebb hiba.!
 stargate_credits_08 = Nincs csatlakozva az internethez. Úgyhogy,A készítők nem lesznek megjelenítve. Hogyha Biztos Benne, hogy csatlakozva van és látja ezt az üzenetet,akkor manuálisan engedélyezhetje online a támogatást lejjebb.
 stargate_credits_09 = Manuális Felülbírálás

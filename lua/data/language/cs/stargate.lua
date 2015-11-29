@@ -142,7 +142,7 @@ Můžete to změnit prěs konzoli s convarem mat_dxlevel.]]
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = CAP Připomínkovač Aktualizací
-stargate_updater_02 = Tvoje verze CAP je zastaralá!\nVlastníš verzi: %d Nejnovější verze je: %d
+stargate_updater_02 = Tvoje verze CAP je zastaralá!\nVlastníš verzi: %s Nejnovější verze je: %s
 stargate_updater_03 = Aktualizuj CAP, pro nové funkce a méně chyb.
 stargate_updater_04 = Zavřít
 
@@ -165,7 +165,7 @@ stargate_credits_02 = Tady můžeš nahlasovat chyby. Pokud nemůžeš psát v H
 stargate_credits_03 = Nelze určit nejnovější verzi. Ujisti se, že jsi připojen k internetu. Pokud máte problémy, kontaktujte "CAP Team"
 stargate_credits_04 = Nelze určit aktualní verzi. Stáhněte znovu "cap_ver.lua", je v "addons/cap/lua/".
 stargate_credits_05 = Tvůj Carter Addon Pack je aktualní, a to na verzi
-stargate_credits_06 = Tvá verze: %d. Nejnovější verze: %d.
+stargate_credits_06 = Tvá verze: %s. Nejnovější verze: %s.
 stargate_credits_07 = Prosím aktualizuj Carter Addon Pack pro nové funkce a méně chyb.
 stargate_credits_08 = Vypadá to, že nejsi připojený k internetu, takže podpora nebude ukázána. Pokud si jseš jistý, že jsi připojený a dostal jsi tuto zprávu omylem, můžeš zapnout online pomoc níže.
 stargate_credits_09 = Manuální objetí nastavení

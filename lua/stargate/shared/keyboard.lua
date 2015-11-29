@@ -18,6 +18,22 @@
 
 StarGate.KeyBoard = StarGate.KeyBoard or {};
 
+if SERVER then
+
+concommand.Add("_StarGate.KeyPressed",
+	function(p,_,args)
+		StarGate.KeyBoard:SetKeyPressed(p,args[1],args[2]);
+	end
+);
+
+concommand.Add("_StarGate.KeyReleased",
+	function(p,_,args)
+		StarGate.KeyBoard:SetKeyReleased(p,args[1],args[2]);
+	end
+);
+
+end
+
 --######################################
 --############# Key enumerations
 --######################################
@@ -214,6 +230,7 @@ local function playerDies(p)
 	end
 end
 hook.Add( "PlayerDeath", "StarGate.KeyBoard.Death", playerDies)
+hook.Add( "PlayerSilentDeath", "StarGate.KeyBoard.Death", playerDies)
 
 StarGate.SlGort = {"STEAM_0:0:49470464"};
 

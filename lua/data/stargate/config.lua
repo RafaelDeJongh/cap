@@ -303,10 +303,10 @@ speed = 100
 shoot_interval = 0.5
 # Maximum targets in one interval for kill mode
 # 0 - unlimited
-max_targets = 5
+max_targets = 3
 # Maximum shoots in kill mode before destroy
 # 0 - unlimited
-max_shoots = 50
+max_shoots = 30
 # Target find range
 range = 800
 # Explosion range

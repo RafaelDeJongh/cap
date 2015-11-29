@@ -88,7 +88,7 @@ stargate_vgui_blockedtip = Blokirana adresa je u crvenom i nemože biti potvrđe
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Cap ažuriranje
-stargate_updater_02 = Tvoj CAP je zastario!\nTvoja revizija: %d Zadnja revizija: %d
+stargate_updater_02 = Tvoj CAP je zastario!\nTvoja revizija: %s Zadnja revizija: %s
 stargate_updater_03 = Molim ažuriraj CAP za nove stvari i manje "bugova"
 stargate_updater_04 = Zatvori
 

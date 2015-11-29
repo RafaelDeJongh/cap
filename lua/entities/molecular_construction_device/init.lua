@@ -39,10 +39,14 @@ function ENT:Initialize()
 	self.AtlSkin = false;
 	self:SetUseType(SIMPLE_USE)
 	
+	self.EffDColor = Color(247,51,12,0);
+	self.EffColor = self.EffDColor;
+	self:SetNWVector("EffColor",Vector(self.EffColor.r,self.EffColor.g,self.EffColor.b));
+	
 	self.Speed = StarGate.CFG:Get("mcd","speed",100)/100;
 
 	if(self.HasWire) then
-		self:CreateWireInputs("Alternative Skin")
+		self:CreateWireInputs("Alternative Skin","Effect Color [VECTOR]")
 		self:CreateWireOutputs("Active","Percent Completed", "Conscruction Complete")
 	end
 end
@@ -64,6 +68,14 @@ function ENT:TriggerInput(k,v)
 		        self.Entity:SetMaterial("MarkJaw/mcd/mcd.vmt");
 		  	end
 		end
+	elseif (k=="Effect Color") then
+		if (v==Vector()) then 
+			self.EffColor = self.EffDColor;
+		else 
+			self.EffColor = Color(math.Clamp(v.x,0,255),math.Clamp(v.y,0,255),math.Clamp(v.z,0,255)); 
+		end
+		self:SetNWVector("EffColor",Vector(self.EffColor.r,self.EffColor.g,self.EffColor.b));
+		if (IsValid(self.Ent)) then self.Ent:SetColor(self.EffColor); end
 	end
 end
 
@@ -126,7 +138,7 @@ function ENT:Think()
 			self.ColorG = g;
 			self.ColorB = b;
 			self.Material = self.Ent:GetMaterial();
-            self.Ent:SetColor(Color(247,51,12,0));
+            self.Ent:SetColor(self.EffColor);
             self.Ent:SetParent(self.Entity);
             self.Ent:SetSolid(SOLID_NONE);
             self.Ent:DrawShadow(false);

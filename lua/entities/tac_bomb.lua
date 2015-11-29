@@ -309,7 +309,7 @@ if SERVER then
 	end
 
 	function ENT:Destroy()
-		if (self.Destroyed) then return end
+		if (self.Destroyed or not IsValid(self)) then return end
 		local e = self;
 		/*
 		for k,v in pairs(ents.FindInSphere(e:GetPos(),200)) do

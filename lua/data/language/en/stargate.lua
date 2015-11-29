@@ -146,7 +146,7 @@ This can be changed with convar mat_dxlevel.]]
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Cap Update Reminder
-stargate_updater_02 = Your build of CAP is out of date!\nYour Revision: %d Latest Revision: %d
+stargate_updater_02 = Your build of CAP is out of date!\nYour Revision: %s Latest Revision: %s
 stargate_updater_03 = Please update Carter Pack to get new features and bugfixing!
 stargate_updater_04 = Close
 
@@ -169,7 +169,7 @@ stargate_credits_02 = Here, you can report bugs. If you can't type in the HTML-F
 stargate_credits_03 = Couldn't determine latest BUILD. Make sure, you are connected to the Internet or contact with CAP Team.
 stargate_credits_04 = Couldn't determine current BUILD. Make sure, you reexported/updated pack propely and file cap_ver.lua is in addons/cap/lua.
 stargate_credits_05 = Your Carter's Pack Addon is up to date on revision
-stargate_credits_06 = Your Revision: %d. Latest Revision: %d.
+stargate_credits_06 = Your Revision: %s. Latest Revision: %s.
 stargate_credits_07 = Please update Carter Pack to get new features and bugfixing!
 stargate_credits_08 = It seems like, you are not connected to the Internet. Therefore, the Credits can't be shown. If you are sure, you are connected and have receive this message accidently, you can manually enable the online help below.
 stargate_credits_09 = Manual Override

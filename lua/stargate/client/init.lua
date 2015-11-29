@@ -42,6 +42,22 @@ StarGate.CURRENT_VERSION = 0;
 --						Internet communication
 --#########################################
 
+-- compare two digit versions @AlexALX
+function StarGate.CompareVersion(ver, verc, add)
+	local v1t = string.Explode(".",ver)
+	local v2t = string.Explode(".",verc)
+	if (add!=nil) then v2t[1] = v2t[1]-add; end
+	if v2t[2]==nil then
+		return tonumber(ver)>tonumber(v2t[1]);
+	elseif v1t[2]==nil then
+		return tonumber(v1t[1])>tonumber(verc);
+	end
+	if tonumber(v2t[1])<tonumber(v1t[1]) or tonumber(v2t[1])==tonumber(v1t[1]) and tonumber(v1t[2])>tonumber(v2t[2]) then
+		return true;
+	end
+	return false;
+end
+
 -- Do we have internet?
 local InternetCheck = CreateClientConVar("cl_has_internet",0,true,false); -- Some percentage crashes by this online help check. Now we check this if they crash once during this check, this check will be disabled permanently for them
 StarGate.HasInternet = false;
@@ -77,11 +93,11 @@ function StarGate.Hook.GetInternetStatus(_,key)
 		StarGate.HasInternet = true;
 		http.Fetch(StarGate.HTTP.VER,
 			function(html,size)
-				local version = tonumber(html);
+				local version = StarGate.ParseVersion(html);
 				if(version) then
 					StarGate.LATEST_VERSION = version;
 
-					if (installed and (not StarGate.WorkShop or StarGate.LATEST_VERSION-8 > StarGate.CURRENT_VERSION) and StarGate.LATEST_VERSION > StarGate.CURRENT_VERSION) then
+					if (installed and (not StarGate.WorkShop or StarGate.CompareVersion(StarGate.LATEST_VERSION,StarGate.CURRENT_VERSION,-8)) and StarGate.CompareVersion(StarGate.LATEST_VERSION,StarGate.CURRENT_VERSION)) then
 						LocalPlayer():ConCommand("CAP_Outdated");
 					end
 				end
@@ -93,12 +109,12 @@ function StarGate.Hook.GetInternetStatus(_,key)
 		-- Do we have the latest version of SG installed?
 		http.Fetch(StarGate.HTTP.VER,
 			function(html,size)
-				local version = tonumber(html);
+				local version = StarGate.ParseVersion(html);
 				if(version) then
 					StarGate.HasInternet = true;
 					StarGate.LATEST_VERSION = version;
 
-					if (installed and not StarGate.WorkShop and StarGate.LATEST_VERSION > StarGate.CURRENT_VERSION) then
+					if (installed and not StarGate.WorkShop and StarGate.CompareVersion(StarGate.LATEST_VERSION,StarGate.CURRENT_VERSION)) then
 						LocalPlayer():ConCommand("CAP_Outdated");
 					end
 				end
@@ -304,3 +320,67 @@ net.Receive( "CAP_GATESPAWNER", function( length )
 
 	StarGate.ShowCapMotd(SGLanguage.GetMessage("sg_gtsp_title"),SGLanguage.GetMessage("sg_stsp_text",map,map,path))
 end)
+
+--################
+-- cl_convars.lua
+--################
+
+--################################ DON'T EDIT THIS FILE YOU CAN MAKE CHANGES IN THE GAME!!!!!!!!!!!!!
+
+-- Defines
+CreateClientConVar("cl_stargate_visualsship",1,true,false); -- Global - Turns on or off all visuals which may suck FPS. Turning this to off will turn of all. If it's on, the one below will be used
+CreateClientConVar("cl_stargate_visualsmisc",1,true,false); -- Global - Turns on or off all visuals which may suck FPS. Turning this to off will turn of all. If it's on, the one below will be used
+CreateClientConVar("cl_stargate_visualsweapon",1,true,false); -- Global - Turns on or off all visuals which may suck FPS. Turning this to off will turn of all. If it's on, the one below will be used
+
+CreateClientConVar("cl_stargate_dynlights",0,true,false);
+CreateClientConVar("cl_stargate_un_dynlights",0,true,false);
+CreateClientConVar("cl_stargate_ripple",0,true,false);
+CreateClientConVar("cl_stargate_kenter",1,true,false);
+CreateClientConVar("cl_stargate_effects",1,true,false);
+CreateClientConVar("cl_kawoosh_material",1,true,false);
+
+CreateClientConVar("cl_draw_huds",1,true,false);
+CreateClientConVar("cl_dhd_letters",1,true,false);
+
+CreateClientConVar("cl_shield_hitradius",1,true,false);
+CreateClientConVar("cl_shield_hiteffect",1,true,false);
+CreateClientConVar("cl_shield_dynlights",0,true,false);
+CreateClientConVar("cl_shield_bubble",1,true,false);
+CreateClientConVar("cl_harvester_dynlights",1,true,false);
+CreateClientConVar("cl_cloaking_shader",1,true,false);
+CreateClientConVar("cl_cloaking_hitshader",1,true,false);
+CreateClientConVar("cl_supergate_dynlights",0,true,false);
+CreateClientConVar("cl_applecore_light",1,true,false);
+CreateClientConVar("cl_applecore_smoke",1,true,false);
+CreateClientConVar("cl_shieldcore_refract",1,true,false);
+
+CreateClientConVar("cl_jumper_dynlights",1,true,false);
+CreateClientConVar("cl_jumper_heatwave",1,true,false);
+CreateClientConVar("cl_jumper_sprites",1,true,false);
+CreateClientConVar("cl_f302_heatwave",1,true,false);
+CreateClientConVar("cl_f302_sprites",1,true,false);
+CreateClientConVar("cl_shuttle_heatwave",1,true,false);
+CreateClientConVar("cl_shuttle_sprites",1,true,false);
+CreateClientConVar("cl_dart_heatwave",1,true,false);
+CreateClientConVar("cl_chair_dynlights",1,true,false);
+
+CreateClientConVar("cl_zat_dynlights",1,true,false);
+CreateClientConVar("cl_zat_hiteffect",1,true,false);
+CreateClientConVar("cl_zat_dissolveeffect",1,true,false);
+CreateClientConVar("cl_staff_dynlights",0,true,false);
+CreateClientConVar("cl_staff_dynlights_flight",0,true,false);
+CreateClientConVar("cl_staff_scorch",1,true,false);
+CreateClientConVar("cl_staff_smoke",1,true,false);
+CreateClientConVar("cl_drone_glow",1,true,false);
+CreateClientConVar("cl_gate_nuke_sunbeams",1,true,false);
+CreateClientConVar("cl_gate_nuke_rings",1,true,false);
+CreateClientConVar("cl_gate_nuke_shieldrings",1,true,false);
+CreateClientConVar("cl_gate_nuke_dynlights",0,true,false);
+CreateClientConVar("cl_gate_nuke_plasma",1,true,false);
+CreateClientConVar("cl_overloader_refract",1,true,false);
+CreateClientConVar("cl_overloader_particle",1,true,false);
+CreateClientConVar("cl_overloader_dynlights",0,true,false);
+CreateClientConVar("cl_asuran_laser",1,true,false);
+CreateClientConVar("cl_asuran_dynlights",0,true,false);
+CreateClientConVar("cl_dakara_rings",1,true,false);
+CreateClientConVar("cl_dakara_refract",1,true,false);

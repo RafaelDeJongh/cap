@@ -132,7 +132,7 @@ Ceci peut-etre changer avec la variable mat_dxlevel]]
 
 // Cap update reminter (for github users), type CAP_Outdated in console for get this message manually
 stargate_updater_01 = Rappel de MàJ du CAP
-stargate_updater_02 = Votre Version du CAP est dépassée!\nVotre Version: %d Dernière version: %d
+stargate_updater_02 = Votre Version du CAP est dépassée!\nVotre Version: %s Dernière version: %s
 stargate_updater_03 = Veuillez mettre à jour le CAP pour obtenir\nles nouvelles fonctionnalités et corrections de bugs!
 stargate_updater_04 = Fermer
 
@@ -142,7 +142,7 @@ stargate_credits_02 = Ici, Vous pouvez rapporter tout bugs. si vous ne pouvez ta
 stargate_credits_03 = Impossible de déterminer la dernière version. Verifiez que vous êtes connectés à internet ou contactez CAP Team.
 stargate_credits_04 = Impossible de déterminer votre version. Verifiez que vous avez correctement mis à jour le CAP et que cap_ver.lua est dans addon/cap/lua.
 stargate_credits_05 = Votre CAP est à jour.
-stargate_credits_06 = Votre version: %d. Dernière version: %d.
+stargate_credits_06 = Votre version: %s. Dernière version: %s.
 stargate_credits_07 = SVP, mettez votre CAP à jour pour profiter des nouveautés!
 stargate_credits_08 = Il semble que vous ne soyez pas connecté à internet. Il est donc impossible d'afficher les crédits. Si vous êtes sûr d'être connecté et que vous avez reçu ce message accidentellement, Vous pouvez activer manuellement l'aide en ligne ci-dessous.
 stargate_credits_09 = Activation manuelle
