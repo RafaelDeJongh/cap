@@ -679,10 +679,10 @@ end
 
 concommand.Add( "cap_spawnnpc", function( ply, cmd, args ) CAP_Spawn_NPC( ply, args[1], args[2] ) end )
 
-function StarGate.NotSpawnable(class,player,mode)
+function StarGate.NotSpawnable(class,player,mode,nomsg)
 	if (not mode) then mode = "ent" end
 	if ( StarGate.CFG:Get("cap_disabled_"..mode,class,false) ) then
-		if (IsValid(player)) then
+		if (not nomsg and IsValid(player)) then
 			player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_disabled_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		end
 		return true
@@ -702,7 +702,9 @@ function StarGate.NotSpawnable(class,player,mode)
 		end
 		if (table.Count(tbl)==0) then disallow = false end
 		if (disallow) then
-			player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_group_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			if (not nomsg) then
+				player:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"cap_group_"..mode.."\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+			end
 			return true;
 		end
 	end

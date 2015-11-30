@@ -12,6 +12,27 @@ ENT.Sounds = {
 	Idle=Sound("tech/mcd_idle.wav"),
 }
 
+local ent_check = {
+	["fnp90"] = "swep",
+	["weapon_zat"] = "swep",
+	["weapon_asura"] = "swep",
+	["sg_medkit"] = "swep",
+	["arthur_mantle"] = "ent",
+	["telchak"] = "ent",
+}
+
+local ent_check_class = {
+	["cloaking_generator"] = "stargate_cloaking",
+	["shield_generator"] = "stargate_shield",
+	["jamming_device"] = "jamming",
+	["naquadah_generator"] = "naq_gen_mks",
+}
+
+local MCDEntities = {
+	"tollan_disabler","cloaking_generator","shield_generator","jamming_device","zpm_mk3","arthur_mantle","telchak","naquadah_generator","replicator",
+	"fnp90","weapon_zat","weapon_asura","sg_medkit","naquadah_bottle"
+}
+
 function ENT:Initialize()
 	self.Entity:SetModel("models/MarkJaw/mcd/mcd.mdl");
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
@@ -44,6 +65,7 @@ function ENT:Initialize()
 	self:SetNWVector("EffColor",Vector(self.EffColor.r,self.EffColor.g,self.EffColor.b));
 	
 	self.Speed = StarGate.CFG:Get("mcd","speed",100)/100;
+	self.CheckRights = StarGate.CFG:Get("mcd","check_rights",true);
 
 	if(self.HasWire) then
 		self:CreateWireInputs("Alternative Skin","Effect Color [VECTOR]")
@@ -107,9 +129,19 @@ end
 
 function ENT:Use(ply)
     if(not self.Create and self.Forw)then
-		umsg.Start("MolecularConstructionDevice",ply)
-	    umsg.Entity(self.Entity);
-	    umsg.End()
+		net.Start("MCD")
+	    net.WriteEntity(self.Entity);
+		local classes = {}
+		for k,v in pairs(MCDEntities) do
+			if (v=="replicator") then continue end
+			local pl = ply
+			if (not self.CheckRights) then pl = nil end
+			if (not StarGate.NotSpawnable(ent_check_class[v] or v,pl,ent_check[v] or "tool",true)) then
+				classes[v] = true;
+			end
+		end
+		net.WriteTable(classes)
+	    net.Send(ply)
 		self.Player = ply;
 	end
 end
@@ -188,6 +220,7 @@ function ENT:Think()
 		    end
             if(self.Entity:GetNWInt("EntProgress") == 255)then
 	            self.Ent:SetParent(nil);
+				self.Entity:SetNWBool("IdleSound",false);
 				if (self.Ent._MCDTampered) then
 					local e = ents.Create("tampered_zpm");
 					e:SetPos(self.Ent:GetPos());
@@ -198,8 +231,8 @@ function ENT:Think()
 					self.Ent:Remove();
 					self.Ent = e;
 				end	
-				if (self.Ent:GetClass()=="prop_physics") then
-					local e = ents.Create("prop_ragdoll");
+				if (self.MCD_RealClass!=nil) then
+					local e = ents.Create(self.MCD_RealClass);
 					e:SetPos(self.Ent:GetPos());
 					e:SetModel(self.Ent:GetModel());
 					e:Spawn();
@@ -268,6 +301,7 @@ function ENT:Think()
 		        end
 				self.Entity:SetNWInt("Advance",0);
 				self.Entity:SetNWBool("IdleSound",false);
+				self.Ent = nil;
 				self.Forw = true;
 				if(self.HasWire) then
 					self:SetWire("Conscruction Complete", 0)
@@ -318,18 +352,27 @@ net.Receive("MCD",function(len,ply)
 	local self = net.ReadEntity()
 	if (not IsValid(self) or self.Player!=ply or self.Create) then return end
 
-    local entities = {"tollan_disabler","cloaking_generator","shield_generator","jamming_device","zpm_mk3","arthur_mantle","telchak","naquadah_generator","replicator"}
+    local entities = MCDEntities
+	
 	local ents_stop = {
 		["arthur_mantle"] = 34.2,
 		["naquadah_generator"] = 33,
 		["tollan_disabler"] = 35.2,
 		["zpm_mk3"] = 40.5,
 		["telchak"] = 34.2,
-		["replicator"] = 40,
+		["weapon_zat"] = 36,
+		["weapon_asura"] = 38,
+		["sg_medkit"] = 35.2,
 	}
     local class = net.ReadString()
+	local orig_class = class;
 	if (not table.HasValue(entities,class)) then return end
-	if (class=="replicator") then class = "prop_physics" end
+	local pl = ply;
+	if (not self.CheckRights) then pl = nil end
+	if (class!="replicator" and StarGate.NotSpawnable(ent_check_class[class] or class,pl,ent_check[class] or "tool")) then return end	
+	local realclass = nil
+	if (class=="replicator") then realclass = "prop_ragdoll"; class = "prop_physics"; end
+	if (class=="fnp90" or class=="weapon_zat" or class=="weapon_asura" or class=="sg_medkit" or class=="weapon_gdo") then realclass = class; class = "prop_physics"; end
     local e = ents.Create(class);
     if (class=="zpm_mk3" and StarGate.CFG:Get("mcd","allow_tzmp",false)) then
     	local rnd = StarGate.CFG:Get("mcd","tzmp_chance",2);
@@ -339,9 +382,10 @@ net.Receive("MCD",function(len,ply)
  			e._MCDTampered = true;
  		end
     end
+	self.MCD_RealClass = realclass
     self.Undone = true;
     --self.Object = class;
-	e._MCDSTOP = ents_stop[class] or 34;
+	e._MCDSTOP = ents_stop[orig_class] or 34;
 	e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*57);
 	e._MCDUP = 57;
 	if(class == entities[1] or class == entities[2] or class == entities[3])then
@@ -360,6 +404,8 @@ net.Receive("MCD",function(len,ply)
 	e:Spawn();
 	e:SetAngles(self.Entity:GetAngles());
 	if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
+	local effcol = net.ReadVector();
+	self:TriggerInput("Effect Color",effcol);
 	self.Ent = e;
 	self.Create = true;
 	self.Start = true;
@@ -375,11 +421,11 @@ net.Receive("MCD",function(len,ply)
         local drawbubble = net.ReadBit();
         local passing = net.ReadBit();
         local containment = net.ReadBit();
+		local antiNC = net.ReadBit();
         local key = net.ReadInt(16);
         local r,g,b = net.ReadInt(8),net.ReadInt(8),net.ReadInt(8);
         if(class == entities[1] or class == entities[4])then
-		    e.Size = size;
-   	        e.Immunity = util.tobool(immunity);
+		    e:Setup(tonumber(size),util.tobool(immunity),self.Owner);
 	        if(class == entities[1])then
 		        togglename = "ToggleDisabler";
 		    elseif(class == entities[4])then
@@ -397,19 +443,20 @@ net.Receive("MCD",function(len,ply)
 	        if(class == entities[2])then
 		        togglename = "ToggleCloaking";
 				e:SetVar("Owner",self.Player);
-   	    		e.Size = size;
+   	    		e:SetSize(tonumber(size));
    	    		e.ImmuneOwner = util.tobool(immunity);
    	    		e.PhaseShifting = util.tobool(phaseshifting);
 		    elseif(class == entities[3])then
 		        togglename = "ToggleShield";
 				e:SetVar("Owner",self.Player);
-	            e.Size = tonumber(size);
+	            e:SetSize(tonumber(size));
    	            e.ImmuneOwner = util.tobool(immunity);
    	            e:SetMultiplier(strengh);
 	            e:SetShieldColor(r/255,g/255,b/255);
    	            e.DrawBubble = util.tobool(drawbubble);
    	            e.PassingDraw = util.tobool(passing);
   		        e.Containment = util.tobool(containment);
+				e.AntiNoclip = util.tobool(antiNC)
 		    end
 			numpad.Register(togglename,function(ply,e)
 				if(not IsValid(e) or e.Create) then return end;

@@ -66,7 +66,7 @@ end
 -----------------------------------SETUP----------------------------------
 
 function ENT:Setup(size, immunity, owner)
-	self.Size = size;
+	self.Size = math.Clamp(size,1,1024);
 	self.Immunity = immunity;
 	self.Owner = owner;
 end

@@ -48,7 +48,7 @@ end
 -----------------------------------SETUP----------------------------------
 
 function ENT:Setup(size, immunity)
-	self.Size = size;
+	self.Size = math.Clamp(size,1,1024);
 	self.Immunity = immunity;
 end
 

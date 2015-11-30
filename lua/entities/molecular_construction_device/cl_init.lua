@@ -133,8 +133,9 @@ end
 local VGUI = {}
 function VGUI:Init()
 	local DermaPanel = vgui.Create( "DFrame" )
-   	DermaPanel:SetPos( ScrW()/2 - 163.5,ScrH()/2 - 227.5 )
-   	DermaPanel:SetSize( 327, 455 )
+   	--DermaPanel:SetPos( ScrW()/2 - 163.5,ScrH()/2 - 227.5 )
+   	DermaPanel:SetSize( 500, 455 )
+	DermaPanel:Center()
 	DermaPanel:SetTitle( SGLanguage.GetMessage("mcd_title") )
    	DermaPanel:SetVisible( true )
    	DermaPanel:SetDraggable( false )
@@ -143,96 +144,209 @@ function VGUI:Init()
 	DermaPanel.Paint = function()
         surface.SetDrawColor( 80, 80, 80, 185 )
         surface.DrawRect( 0, 0, DermaPanel:GetWide(), DermaPanel:GetTall() )
-    end/*
-	local image = vgui.Create("TGAImage" , DermaPanel);
-    image:SetSize(10, 10);
-    image:SetPos(10, 10);
-    image:LoadTGAImage("materials/gui/cap_logo.tga", "MOD");*/
+    end
+	/*
+  	local title = vgui.Create( "DLabel", DermaPanel );
+ 	title:SetText(SGLanguage.GetMessage("mcd_title"));
+  	title:SetPos( 25, 0 );
+ 	title:SetSize( 400, 25 );
+	
+ 	local image = vgui.Create("DImage" , DermaPanel);
+    image:SetSize(16, 16);
+    image:SetPos(5, 5);
+    image:SetImage("gui/cap_logo");*/
+	
+	local DermaSettings = vgui.Create( "DPanel", DermaPanel )
+	DermaSettings:SetPos(230,30);
+	DermaSettings:SetSize( 255, 410 )
+	DermaSettings.Paint = function(self)
+		local alpha = 100;
+		local col = Color( 170, 170, 170, alpha);
+		local col2 = Color( 100, 100, 100, alpha);
+		local bor = 6;
+		local diff = 2;
 
-    local NumSliderThingy1 = vgui.Create( "DNumSlider" , DermaPanel )
-    NumSliderThingy1:SetPos( 25,270 )
-    NumSliderThingy1:SetSize( 280, 50 )
+		draw.RoundedBox( bor, 0, 0, self:GetWide(), self:GetTall(), col);
+		draw.RoundedBox( bor, diff, diff, self:GetWide()-2*diff, self:GetTall()-2*diff, col2);
+	end
+	
+	function DermaSettings:UpdateSettings(class)
+		self.Label:SetVisible(true)
+		self.NumPad:SetVisible(false)
+		self.Color:SetVisible(false)
+		self.SizeNum:SetVisible(false)
+		self.Imm:SetVisible(false)
+		self.Phase:SetVisible(false)
+		self.Strengh:SetVisible(false)
+		self.Buble:SetVisible(false)
+		self.Effect:SetVisible(false)
+		self.Cont:SetVisible(false)
+		self.AntiNC:SetVisible(false)
+		
+		if (class=="jamming_device" or class=="shield_generator" or class=="cloaking_generator" or class=="tollan_disabler") then
+			self.NumPad:SetVisible(true)
+			self.SizeNum:SetVisible(true)
+			self.Imm:SetVisible(true)
+			self.Label:SetVisible(false)
+		end
+		
+		if (class=="shield_generator") then
+			self.Color:SetVisible(true)
+			self.Strengh:SetVisible(true)
+			self.Buble:SetVisible(true)
+			self.Effect:SetVisible(true)
+			self.Cont:SetVisible(true)
+			self.AntiNC:SetVisible(true)
+			self.Imm:SetText(SGLanguage.GetMessage("stool_immunity"));
+			self.Imm:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_imm"));
+			self.Imm:SizeToContents();
+		end
+		
+		if (class=="cloaking_generator") then
+			self.Phase:SetVisible(true)
+			self.Imm:SetText(SGLanguage.GetMessage("stool_stargate_cloaking_ow"));
+			self.Imm:SetToolTip(SGLanguage.GetMessage("stool_stargate_cloaking_ow_desc"));
+			self.Imm:SizeToContents();
+		end
+		
+		if (class=="jamming_device") then
+			self.Imm:SetText(SGLanguage.GetMessage("stool_immunity"));
+			self.Imm:SetToolTip(SGLanguage.GetMessage("stool_jamming_imm_desc"));
+			self.Imm:SizeToContents();
+		end
+		
+		if (class=="tollan_disabler") then
+			self.Imm:SetText(SGLanguage.GetMessage("stool_immunity"));
+			self.Imm:SetToolTip(SGLanguage.GetMessage("stool_tollan_disabler_imm"));
+			self.Imm:SizeToContents();
+		end
+	end
+	
+	local DPanel = vgui.Create( "DPanel", DermaSettings )
+    DPanel:SetPos( 0, 5 )
+	DPanel:SetSize(DermaSettings:GetWide()-10,20)	
+	DPanel:CenterHorizontal()
+	
+	local Label = vgui.Create( "DLabel" , DPanel);
+	Label:SetFont("OldDefaultSmall");
+	Label:SetPos(15, 0);
+	Label:SetText(SGLanguage.GetMessage("mcd_settings"));
+	Label:SizeToContents();
+	Label:SetColor(Color(0,0,0));
+	Label:Center();
+	
+	local Label = vgui.Create( "DLabel", DermaSettings )
+    Label:SetPos( 0, 30 )
+	Label:SetText(SGLanguage.GetMessage("mcd_nosettings"));
+	Label:SizeToContents()	
+	Label:Center()
+	DermaSettings.Label = Label;
+	
+	local NumPad = vgui.Create( "CtrlNumPad", DermaSettings )
+    NumPad:SetPos( 0, 30 )
+	NumPad:SetSize( 220, 100 )
+	NumPad:SetLabel1(SGLanguage.GetMessage("mcd_toggle"))
+	NumPad:SetToolTip(SGLanguage.GetMessage("mcd_toggle_desc"))
+	NumPad:CenterHorizontal();
+	NumPad:SetVisible(false);
+	DermaSettings.NumPad = NumPad;
+	
+    local NumSliderThingy1 = vgui.Create( "DNumSlider" , DermaSettings )
+    NumSliderThingy1:SetPos( 15, 90 )
+    NumSliderThingy1:SetSize( 235, 50 )
     NumSliderThingy1:SetText( SGLanguage.GetMessage("mcd_size") )
     NumSliderThingy1:SetMin( 0 )
     NumSliderThingy1:SetMax( 1024 )
 	NumSliderThingy1:SetValue( 100 );
     NumSliderThingy1:SetDecimals( 2 )
-	NumSliderThingy1:SetToolTip(SGLanguage.GetMessage("mcd_close_desc"))
+	NumSliderThingy1:SetToolTip(SGLanguage.GetMessage("mcd_size_desc"))
+	--NumSliderThingy1:CenterHorizontal();
+	NumSliderThingy1:SetVisible(false);
+	DermaSettings.SizeNum = NumSliderThingy1;
 
-	local NumSliderThingy2 = vgui.Create( "DNumSlider" , DermaPanel )
-    NumSliderThingy2:SetPos( 25,300 )
-    NumSliderThingy2:SetSize( 280, 50 )
+	local CheckBoxThing1 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing1:SetPos( 15, 130 )
+    CheckBoxThing1:SetValue( 1 )
+	CheckBoxThing1:SetVisible(false);
+	DermaSettings.Imm = CheckBoxThing1;
+	local immunity = 0
+	
+	local CheckBoxThing2 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing2:SetPos( 15,150 )
+    CheckBoxThing2:SetText( SGLanguage.GetMessage("stool_stargate_cloaking_nc") )
+    CheckBoxThing2:SetValue( 0 )
+    CheckBoxThing2:SizeToContents()
+	CheckBoxThing2:SetToolTip(SGLanguage.GetMessage("stool_stargate_cloaking_nc_desc"))
+	CheckBoxThing2:SetVisible(false);
+	DermaSettings.Phase = CheckBoxThing2;
+	local phaseshifting = 0
+	
+	local NumSliderThingy2 = vgui.Create( "DNumSlider" , DermaSettings )
+    NumSliderThingy2:SetPos( 15,150 )
+    NumSliderThingy2:SetSize( 235, 20 )
     NumSliderThingy2:SetText( SGLanguage.GetMessage("mcd_strengh") )
     NumSliderThingy2:SetMin( -5 )
     NumSliderThingy2:SetMax( 5 )
 	NumSliderThingy2:SetValue( 0 );
     NumSliderThingy2:SetDecimals( 2 )
-	NumSliderThingy2:SetToolTip(SGLanguage.GetMessage("mcd_strengh_desc") )
+	NumSliderThingy2:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_str_desc") )
+	NumSliderThingy2:SetVisible(false);
+	DermaSettings.Strengh = NumSliderThingy2;
 
-	local CheckBoxThing1 = vgui.Create( "DCheckBoxLabel", DermaPanel )
-    CheckBoxThing1:SetPos( 25,350 )
-    CheckBoxThing1:SetText( SGLanguage.GetMessage("mcd_imm") )
-    CheckBoxThing1:SetValue( 1 )
-    CheckBoxThing1:SizeToContents()
-	CheckBoxThing1:SetToolTip(SGLanguage.GetMessage("mcd_imm_desc") )
-	local immunity = 0
-
-	local CheckBoxThing2 = vgui.Create( "DCheckBoxLabel", DermaPanel )
-    CheckBoxThing2:SetPos( 110,350 )
-    CheckBoxThing2:SetText( SGLanguage.GetMessage("mcd_phase") )
-    CheckBoxThing2:SetValue( 0 )
-    CheckBoxThing2:SizeToContents()
-	CheckBoxThing2:SetToolTip(SGLanguage.GetMessage("mcd_phase_desc"))
-	local phaseshifting = 0
-
-	local CheckBoxThing3 = vgui.Create( "DCheckBoxLabel", DermaPanel )
-    CheckBoxThing3:SetPos( 220,350 )
-    CheckBoxThing3:SetText( SGLanguage.GetMessage("mcd_buble") )
+	local CheckBoxThing3 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing3:SetPos( 15,175 )
+    CheckBoxThing3:SetText( SGLanguage.GetMessage("stool_stargate_shield_db") )
     CheckBoxThing3:SetValue( 1 )
     CheckBoxThing3:SizeToContents()
-	CheckBoxThing3:SetToolTip(SGLanguage.GetMessage("mcd_buble_desc"))
+	CheckBoxThing3:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_db_desc"))
+	CheckBoxThing3:SetVisible(false);
+	DermaSettings.Buble = CheckBoxThing3;
 	local drawbubble = 0
 
-	local CheckBoxThing4 = vgui.Create( "DCheckBoxLabel", DermaPanel )
-    CheckBoxThing4:SetPos( 25,380 )
-    CheckBoxThing4:SetText( SGLanguage.GetMessage("mcd_effect") )
-    CheckBoxThing4:SetValue( 0 )
+	local CheckBoxThing4 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing4:SetPos( 15,195 )
+    CheckBoxThing4:SetText( SGLanguage.GetMessage("stool_stargate_shield_se") )
+    CheckBoxThing4:SetValue( 1 )
     CheckBoxThing4:SizeToContents()
-	CheckBoxThing4:SetToolTip(SGLanguage.GetMessage("mcd_effect_desc"))
+	CheckBoxThing4:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_se_desc"))
+	CheckBoxThing4:SetVisible(false);
+	DermaSettings.Effect = CheckBoxThing4;
 	local passing = 0
 
-	local CheckBoxThing5 = vgui.Create( "DCheckBoxLabel", DermaPanel )
-    CheckBoxThing5:SetPos( 220,380 )
-    CheckBoxThing5:SetText( SGLanguage.GetMessage("mcd_cont") )
+	local CheckBoxThing5 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing5:SetPos( 15,215 )
+    CheckBoxThing5:SetText( SGLanguage.GetMessage("stool_stargate_shield_co") )
     CheckBoxThing5:SetValue( 0 )
     CheckBoxThing5:SizeToContents()
-	CheckBoxThing5:SetToolTip(SGLanguage.GetMessage("mcd_cont_desc"))
+	CheckBoxThing5:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_co_desc"))
+	CheckBoxThing5:SetVisible(false);
+	DermaSettings.Cont = CheckBoxThing5;
 	local containment = 0
-
-	local MenuButtonClose = vgui.Create("DButton")
-    MenuButtonClose:SetParent( DermaPanel )
-    MenuButtonClose:SetText(SGLanguage.GetMessage("mcd_close"))
-    MenuButtonClose:SetPos(25, 410)
-    MenuButtonClose:SetSize( 135, 25 )
-	MenuButtonClose.DoClick = function ( btn )
-		DermaPanel:Remove()
-    end
-
-	local NumPad = vgui.Create( "CtrlNumPad", DermaPanel )
-    NumPad:SetPos( 150, 30 )
-	NumPad:SetSize( 200, 100 )
-	NumPad:SetLabel1(SGLanguage.GetMessage("mcd_toggle"))
-	NumPad:SetToolTip(SGLanguage.GetMessage("mcd_toggle_desc"))
-
-	local color = vgui.Create( "DColorMixer", DermaPanel);
-    color:SetSize( 132, 175);
-    color:SetPos( 190, 110 );
+	
+	local CheckBoxThing6 = vgui.Create( "DCheckBoxLabel", DermaSettings )
+    CheckBoxThing6:SetPos( 15,235 )
+    CheckBoxThing6:SetText( SGLanguage.GetMessage("stool_stargate_shield_an") )
+    CheckBoxThing6:SetValue( 1 )
+    CheckBoxThing6:SizeToContents()
+	CheckBoxThing6:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_an_desc"))
+	CheckBoxThing6:SetVisible(false);
+	DermaSettings.AntiNC = CheckBoxThing6;
+	local antiNC = 0
+	
+	local color = vgui.Create( "DColorMixer", DermaSettings );
+    color:SetSize( 225, 140);
+    color:SetPos( 15, 260 );
     color:SetColor(Color(170,189,255,255))
     color:SetToolTip(SGLanguage.GetMessage("mcd_color"))
-
+	--color:SetPalette(false);
+	color:SetAlphaBar(false);
+	--color:CenterHorizontal();
+	color:SetVisible(false);
+	DermaSettings.Color = color;
+	
 	local ComboBox = vgui.Create( "DListView", DermaPanel )
-	ComboBox:SetPos( 25, 30 )
-	ComboBox:SetSize( 145, 200 )
+	ComboBox:SetPos( 15, 30 )
+	ComboBox:SetSize( 200, 230 )
 	ComboBox:SetMultiSelect( false )
 	ComboBox.Paint = function()
         surface.SetDrawColor( 155, 155, 155, 125 )
@@ -245,24 +359,104 @@ function VGUI:Init()
 	
     ComboBox:AddColumn(SGLanguage.GetMessage("mcd_device"))
     ComboBox.Columns[1].DoClick = function() end
-	ComboBox:AddLine(SGLanguage.GetMessage("stool_cloak"), "cloaking_generator", shield_model)
-	ComboBox:AddLine(SGLanguage.GetMessage("stool_shield"), "shield_generator", shield_model)
-	ComboBox:AddLine(SGLanguage.GetMessage("stool_jamming"), "jamming_device", shield_model)
-	ComboBox:AddLine(SGLanguage.GetMessage("entity_telchak"), "telchak")
-	ComboBox:AddLine(SGLanguage.GetMessage("stool_zpm_mk3"), "zpm_mk3")
-	ComboBox:AddLine(SGLanguage.GetMessage("stool_tolland"), "tollan_disabler", "models/Iziraider/disabler/disabler.mdl")
-	--ComboBox:AddLine("Anti Preori Device", "anti_prior")
-	ComboBox:AddLine(SGLanguage.GetMessage("naq_gen_mk1"), "naquadah_generator")
-	ComboBox:AddLine(SGLanguage.GetMessage("entity_arthurs_mantle"), "arthur_mantle")
-	ComboBox:AddLine(SGLanguage.GetMessage("mcd_replicator"), "replicator", "models/pg_props/pg_stargate/pg_replicator.mdl")
+	ComboBox.Setup = function(self,classes)
+		if (classes["cloaking_generator"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_cloak"), "cloaking_generator", shield_model)
+		end
+		if (classes["shield_generator"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_shield"), "shield_generator", shield_model)
+		end
+		if (classes["jamming_device"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_jamming"), "jamming_device", shield_model)
+		end
+		if (classes["telchak"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("entity_telchak"), "telchak")
+		end
+		if (classes["zpm_mk3"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_zpm_mk3"), "zpm_mk3")
+		end
+		if (classes["tollan_disabler"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_tolland"), "tollan_disabler", "models/Iziraider/disabler/disabler.mdl")
+		end
+		--ComboBox:AddLine("Anti Preori Device", "anti_prior")
+		if (classes["naquadah_generator"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("naq_gen_mk1"), "naquadah_generator")
+		end
+		if (classes["arthur_mantle"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("entity_arthurs_mantle"), "arthur_mantle")
+		end
+		ComboBox:AddLine(SGLanguage.GetMessage("mcd_replicator"), "replicator", "models/pg_props/pg_stargate/pg_replicator.mdl")
+		if (classes["fnp90"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_p90"), "fnp90", "models/boba_fett/p90/w_smg_p90.mdl")
+		end
+		if (classes["weapon_asura"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_asuran"), "weapon_asura", "models/micropro/Asuragun/w_asugun/w_asugun.mdl")
+		end
+		if (classes["weapon_zat"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_zat"), "weapon_zat", "models/w_zat.mdl")
+		end
+		if (classes["sg_medkit"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_misc_atl_medkit"), "sg_medkit", "models/pg_props/pg_weapons/pg_healthkit_w.mdl")
+		end
+		if (classes["naquadah_bottle"]) then
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_naq_bottle"), "naquadah_bottle")
+		end
+		ComboBox:SortByColumn(1,false)
+	end
 	ComboBox:SetToolTip(SGLanguage.GetMessage("mcd_device_desc"))
-	ComboBox:SortByColumn(1,false)
+	ComboBox.OnRowSelected = function(self, index, row)
+		DermaSettings:UpdateSettings(row:GetValue(2))
+	end
+	self.ComboBox = ComboBox;
+	
+	local DPanel = vgui.Create( "DPanel", DermaPanel )
+    DPanel:SetPos( 15, 270 )
+	DPanel:SetSize(200,100)	
+	DPanel.Paint = function(self)
+		local alpha = 100;
+		local col = Color( 170, 170, 170, alpha);
+		local col2 = Color( 100, 100, 100, alpha);
+		local bor = 6;
+		local diff = 2;
 
+		draw.RoundedBox( bor, 0, 0, self:GetWide(), self:GetTall(), col);
+		draw.RoundedBox( bor, diff, diff, self:GetWide()-2*diff, self:GetTall()-2*diff, col2);
+	end
+	--DPanel:CenterHorizontal()
+	
+	local Label = vgui.Create( "DLabel" , DPanel);
+	Label:SetFont("OldDefaultSmall");
+	Label:SetPos(0, 5);
+	Label:SetText(SGLanguage.GetMessage("mcd_effcolor"));
+	Label:SizeToContents();
+	--Label:Center();
+	Label:CenterHorizontal();
+	
+	local ecolor = vgui.Create( "DColorMixer", DPanel );
+    ecolor:SetSize( 190, 68);
+    ecolor:SetPos( 0, 25 );
+    ecolor:SetColor(Color(170,189,255,255))
+    ecolor:SetToolTip(SGLanguage.GetMessage("mcd_effcolor_desc"))
+	ecolor:SetPalette(false);
+	ecolor:SetAlphaBar(false);
+	ecolor:CenterHorizontal();
+	ecolor:SetColor(Color(247,51,12,0));
+	self.EffColor = ecolor;
+
+	local MenuButtonClose = vgui.Create("DButton")
+    MenuButtonClose:SetParent( DermaPanel )
+    MenuButtonClose:SetText(SGLanguage.GetMessage("mcd_close"))
+    MenuButtonClose:SetPos(15, 415)
+    MenuButtonClose:SetSize( 200, 25 )
+	MenuButtonClose.DoClick = function ( btn )
+		DermaPanel:Remove()
+    end
+	
 	local MenuButtonCreate = vgui.Create("DButton")
     MenuButtonCreate:SetParent( DermaPanel )
     MenuButtonCreate:SetText(SGLanguage.GetMessage("mcd_create"))
-    MenuButtonCreate:SetPos(170, 410)
-    MenuButtonCreate:SetSize( 135, 25 )
+    MenuButtonCreate:SetPos(15, 380)
+    MenuButtonCreate:SetSize( 200, 25 )
 	MenuButtonCreate.DoClick = function ( btn )
 	    if(ComboBox:GetSelected()[1] and ComboBox:GetSelected())then
 	        local class = ComboBox:GetSelected()[1]:GetValue(2);
@@ -272,13 +466,15 @@ function VGUI:Init()
 			if(CheckBoxThing3:GetChecked())then drawbubble = 1 end
 			if(CheckBoxThing4:GetChecked())then passing = 1 end
 			if(CheckBoxThing5:GetChecked())then containment = 1 end
+			if(CheckBoxThing6:GetChecked())then antiNC = 1 end
 			local col = color:GetColor()
+			local ecol = ecolor:GetColor()
 			local this_ent = string.Explode(" ",tostring(e))
-
 			net.Start("MCD")
 			net.WriteEntity(self.Entity)
 			net.WriteString(class)
 			net.WriteString(model)
+			net.WriteVector(Vector(ecol.r,ecol.g,ecol.b))
 			net.WriteInt(NumSliderThingy1:GetValue(),16)
 			net.WriteBit(util.tobool(immunity))
 			net.WriteBit(util.tobool(phaseshifting))
@@ -286,6 +482,7 @@ function VGUI:Init()
 			net.WriteBit(util.tobool(drawbubble))
 			net.WriteBit(util.tobool(passing))
 			net.WriteBit(util.tobool(containment))
+			net.WriteBit(util.tobool(antiNC))
 			net.WriteInt(NumPad.NumPad1:GetValue(),16)
 			net.WriteInt(col.r,8)
 			net.WriteInt(col.g,8)
@@ -297,18 +494,22 @@ function VGUI:Init()
     end
 end
 
-function VGUI:SetEntity(e)
+function VGUI:SetEntity(e,classes)
 	self.Entity = e;
+	if (not IsValid(e)) then return end
+	local col = e:GetNWVector("EffColor");
+	self.EffColor:SetColor(Color(col.x,col.y,col.z));
+	self.ComboBox:Setup(classes);
 end
 
 vgui.Register( "MCDEntry", VGUI )
 
-function MolecularConstructionDevice(um)
-	local e = um:ReadEntity();
+net.Receive("MCD",function(len)
+	local e = net.ReadEntity();
 	if(not IsValid(e)) then return end;
+	
 	local Window = vgui.Create( "MCDEntry" )
 	Window:SetMouseInputEnabled( true )
 	Window:SetVisible( true )
-	Window:SetEntity(e)
-end
-usermessage.Hook("MolecularConstructionDevice", MolecularConstructionDevice)
+	Window:SetEntity(e,net.ReadTable())
+end)

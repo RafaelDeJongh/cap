@@ -378,7 +378,7 @@ asgardtp_jamming = Can't teleport by this coordinates - jamming device online.
 asgardtp_succ = Successful teleportation.
 
 // MCD
-mcd_title = Molecular Construction Device Creationmenu
+mcd_title = Molecular Construction Device - Creation menu
 mcd_device = Select Device
 mcd_device_desc = Select your Entity.
 mcd_replicator = Replicator
@@ -388,20 +388,13 @@ mcd_color = Set the Color for Shield.
 mcd_size = Size
 mcd_size_desc = Set the Size for Shield, Tollana Disabler, Cloaking Generator or Jamming Device.
 mcd_strengh = Faster - Stronger
-mcd_strengh_desc = Set the Strengh for the Shield.
-mcd_imm = Immunity
-mcd_imm_desc = Set Immunity for Shield, Tollana Disabler, Cloaking Generator or Jamming Device.
-mcd_phase = Phase Shifting
-mcd_phase_desc = Set Phase Shifting for Cloaking Generator.
-mcd_buble = Draw Bubble
-mcd_buble_desc = Set Draw Bubble for Shield.
-mcd_effect = Passing Effect
-mcd_effect_desc = Set Passing Effect for Shield
-mcd_cont = Containment
-mcd_cont_desc = Set Containment for Shield.
 mcd_close = Close
 mcd_create = Create
 mcd_progress = Progress
+mcd_effcolor = Effect color
+mcd_effcolor_desc = Set creation effect color.
+mcd_settings = Additional settings
+mcd_nosettings = No additional settings available.
 
 // anti-prior
 antiprior_c_t = Immunity Mode

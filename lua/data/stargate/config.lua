@@ -296,6 +296,8 @@ allow_tzmp = true
 tzmp_chance = 2
 # creating speed in percent 
 speed = 100
+# check for player group access
+check_rights = true
 
 #### Tacluchnatagamuntoron (Tac)
 [tac]
