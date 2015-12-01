@@ -1,6 +1,6 @@
 /*
 	molecular construction device for GarrysMod10
-	Copyright (C) 2010  Llapp
+	Copyright (C) 2010  Llapp, AlexALX
 */
 
 include("shared.lua");
@@ -257,7 +257,7 @@ function VGUI:Init()
     NumSliderThingy1:SetText( SGLanguage.GetMessage("mcd_size") )
     NumSliderThingy1:SetMin( 0 )
     NumSliderThingy1:SetMax( 1024 )
-	NumSliderThingy1:SetValue( 100 );
+	NumSliderThingy1:SetValue( 800 );
     NumSliderThingy1:SetDecimals( 2 )
 	NumSliderThingy1:SetToolTip(SGLanguage.GetMessage("mcd_size_desc"))
 	--NumSliderThingy1:CenterHorizontal();
@@ -336,7 +336,7 @@ function VGUI:Init()
 	local color = vgui.Create( "DColorMixer", DermaSettings );
     color:SetSize( 225, 140);
     color:SetPos( 15, 260 );
-    color:SetColor(Color(170,189,255,255))
+    color:SetColor(Color(0,0,255,255))
     color:SetToolTip(SGLanguage.GetMessage("mcd_color"))
 	--color:SetPalette(false);
 	color:SetAlphaBar(false);
@@ -355,51 +355,49 @@ function VGUI:Init()
         surface.DrawRect( 0, 0, ComboBox:GetWide(), ComboBox:GetTall() )
     end
 	
-	local shield_model = "models/micropro/shield_gen.mdl";
-	
     ComboBox:AddColumn(SGLanguage.GetMessage("mcd_device"))
     ComboBox.Columns[1].DoClick = function() end
 	ComboBox.Setup = function(self,classes)
 		if (classes["cloaking_generator"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_cloak"), "cloaking_generator", shield_model)
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_cloak"), "cloaking_generator"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","cloaking_generator"));
 		end
 		if (classes["shield_generator"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_shield"), "shield_generator", shield_model)
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_shield"), "shield_generator"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","shield_generator"));
 		end
 		if (classes["jamming_device"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_jamming"), "jamming_device", shield_model)
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_jamming"), "jamming_device"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","jamming_device"));
 		end
 		if (classes["telchak"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("entity_telchak"), "telchak")
+			ComboBox:AddLine(SGLanguage.GetMessage("entity_telchak"), "telchak"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","telchak"));
 		end
 		if (classes["zpm_mk3"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_zpm_mk3"), "zpm_mk3")
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_zpm_mk3"), "zpm_mk3"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","zpm_mk3"));
 		end
 		if (classes["tollan_disabler"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_tolland"), "tollan_disabler", "models/Iziraider/disabler/disabler.mdl")
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_tolland"), "tollan_disabler"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","tollan_disabler"));
 		end
 		--ComboBox:AddLine("Anti Preori Device", "anti_prior")
 		if (classes["naquadah_generator"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("naq_gen_mk1"), "naquadah_generator")
+			ComboBox:AddLine(SGLanguage.GetMessage("naq_gen_mk1"), "naquadah_generator"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","naquadah_generator"));
 		end
 		if (classes["arthur_mantle"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("entity_arthurs_mantle"), "arthur_mantle")
+			ComboBox:AddLine(SGLanguage.GetMessage("entity_arthurs_mantle"), "arthur_mantle"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","arthur_mantle"));
 		end
-		ComboBox:AddLine(SGLanguage.GetMessage("mcd_replicator"), "replicator", "models/pg_props/pg_stargate/pg_replicator.mdl")
+		ComboBox:AddLine(SGLanguage.GetMessage("mcd_replicator"), "replicator"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","replicator"));
 		if (classes["fnp90"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("weapon_p90"), "fnp90", "models/boba_fett/p90/w_smg_p90.mdl")
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_p90"), "fnp90"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","fnp90"));
 		end
 		if (classes["weapon_asura"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("weapon_asuran"), "weapon_asura", "models/micropro/Asuragun/w_asugun/w_asugun.mdl")
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_asuran"), "weapon_asura"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","weapon_asura"));
 		end
 		if (classes["weapon_zat"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("weapon_zat"), "weapon_zat", "models/w_zat.mdl")
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_zat"), "weapon_zat"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","weapon_zat"));
 		end
 		if (classes["sg_medkit"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("weapon_misc_atl_medkit"), "sg_medkit", "models/pg_props/pg_weapons/pg_healthkit_w.mdl")
+			ComboBox:AddLine(SGLanguage.GetMessage("weapon_misc_atl_medkit"), "sg_medkit"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","sg_medkit"));
 		end
 		if (classes["naquadah_bottle"]) then
-			ComboBox:AddLine(SGLanguage.GetMessage("stool_naq_bottle"), "naquadah_bottle")
+			ComboBox:AddLine(SGLanguage.GetMessage("stool_naq_bottle"), "naquadah_bottle"):SetToolTip(SGLanguage.GetMessage("mcd_device_desc").."\n"..SGLanguage.GetMessage("mcd_classname","naquadah_bottle"));
 		end
 		ComboBox:SortByColumn(1,false)
 	end
@@ -460,7 +458,6 @@ function VGUI:Init()
 	MenuButtonCreate.DoClick = function ( btn )
 	    if(ComboBox:GetSelected()[1] and ComboBox:GetSelected())then
 	        local class = ComboBox:GetSelected()[1]:GetValue(2);
-			local model = ComboBox:GetSelected()[1]:GetValue(3) or "";
 			if(CheckBoxThing1:GetChecked())then immunity = 1 end
 			if(CheckBoxThing2:GetChecked())then phaseshifting = 1 end
 			if(CheckBoxThing3:GetChecked())then drawbubble = 1 end
@@ -473,20 +470,21 @@ function VGUI:Init()
 			net.Start("MCD")
 			net.WriteEntity(self.Entity)
 			net.WriteString(class)
-			net.WriteString(model)
 			net.WriteVector(Vector(ecol.r,ecol.g,ecol.b))
-			net.WriteInt(NumSliderThingy1:GetValue(),16)
-			net.WriteBit(util.tobool(immunity))
-			net.WriteBit(util.tobool(phaseshifting))
-			net.WriteInt(NumSliderThingy2:GetValue(),16)
-			net.WriteBit(util.tobool(drawbubble))
-			net.WriteBit(util.tobool(passing))
-			net.WriteBit(util.tobool(containment))
-			net.WriteBit(util.tobool(antiNC))
-			net.WriteInt(NumPad.NumPad1:GetValue(),16)
-			net.WriteInt(col.r,8)
-			net.WriteInt(col.g,8)
-			net.WriteInt(col.b,8)
+			if(class == "tollan_disabler" or class == "cloaking_generator" or class == "shield_generator" or class == "jamming_device")then
+				net.WriteInt(NumSliderThingy1:GetValue(),16)
+				net.WriteBit(util.tobool(immunity))
+				net.WriteBit(util.tobool(phaseshifting))
+				net.WriteInt(NumSliderThingy2:GetValue(),16)
+				net.WriteBit(util.tobool(drawbubble))
+				net.WriteBit(util.tobool(passing))
+				net.WriteBit(util.tobool(containment))
+				net.WriteBit(util.tobool(antiNC))
+				net.WriteInt(NumPad.NumPad1:GetValue(),16)
+				net.WriteInt(col.r,8)
+				net.WriteInt(col.g,8)
+				net.WriteInt(col.b,8)
+			end
 			net.SendToServer();
 
 			DermaPanel:Remove()

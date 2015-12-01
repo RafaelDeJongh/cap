@@ -665,6 +665,16 @@ e2function void entity:stargateRandomAddress(number mode)
 	StarGate.RandomGateName(nil,this,nil,true,mode);
 end
 
+e2function number entity:stargateTransferEnergy(number value)
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	return this:TransferEnergy(value);
+end
+
+e2function number wirelink:stargateTransferEnergy(number value)
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	return this:TransferEnergy(value);
+end
+
 __e2setcost( 1 )
 
 e2function number stargateSystemType()

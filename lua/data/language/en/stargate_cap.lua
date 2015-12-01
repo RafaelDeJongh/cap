@@ -383,10 +383,10 @@ mcd_device = Select Device
 mcd_device_desc = Select your Entity.
 mcd_replicator = Replicator
 mcd_toggle = Set the Toogle
-mcd_toggle_desc = Set the Toggle for Shield, Tollana Disabler, Cloaking Generator or Jamming Device.
+mcd_toggle_desc = Set the Toggle for this device.
 mcd_color = Set the Color for Shield.
 mcd_size = Size
-mcd_size_desc = Set the Size for Shield, Tollana Disabler, Cloaking Generator or Jamming Device.
+mcd_size_desc = Set the Size for this device.
 mcd_strengh = Faster - Stronger
 mcd_close = Close
 mcd_create = Create
@@ -395,6 +395,7 @@ mcd_effcolor = Effect color
 mcd_effcolor_desc = Set creation effect color.
 mcd_settings = Additional settings
 mcd_nosettings = No additional settings available.
+mcd_classname = Classname: %s
 
 // anti-prior
 antiprior_c_t = Immunity Mode

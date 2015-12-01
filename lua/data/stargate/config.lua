@@ -83,6 +83,12 @@ world_blocked = false
 wormholejump = 3000
 # disable auto close if gate is underwater
 water_noclose = true
+# enable energy transfer feature
+energy_transfer = true
+# max energy transfer per inverval, 0 - unlimited
+max_energy_transfer = 80000
+# energy transfer cycle inteval in seconds, 0 - unlimited
+en_trans_interval = 0.1
 
 #### Stargate iris config
 [stargate_iris]

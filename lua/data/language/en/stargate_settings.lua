@@ -225,6 +225,12 @@ sg_sets[stargate][wormholejump] = Damage for wormhole jump
 sg_sets[stargate][wormholejump][desc] = How many damage should be taken before do wormhole jump? Set to 0 for disable this feature. (cap energy shoots have around 70-100 damage)
 sg_sets[stargate][water_noclose] = Water no autoclose
 sg_sets[stargate][water_noclose][desc] = Disable auto close if gate is underwater
+sg_sets[stargate][energy_transfer] = Allow energy transfer
+sg_sets[stargate][energy_transfer][desc] = Enable energy transfer between two connected gates via wiremod/e2 function stargateEnergyTransfer
+sg_sets[stargate][max_energy_transfer] = Max energy transfer
+sg_sets[stargate][max_energy_transfer][desc] = Maximum energy transfer per inverval, 0 - unlimited
+sg_sets[stargate][en_trans_interval] = Energy transfer interval
+sg_sets[stargate][en_trans_interval][desc] = Energy transfer cycle inteval in seconds, 0 - unlimited
 
 // Stargate iris
 sg_sets[stargate_iris] = Stargate iris
@@ -421,6 +427,10 @@ sg_sets[mcd][allow_tzmp] = Allow Tampered ZPM
 sg_sets[mcd][allow_tzmp][desc] = Allow Tampered ZPM spawning (random with chance setting).
 sg_sets[mcd][tzmp_chance] = Spawn chance
 sg_sets[mcd][tzmp_chance][desc] = if chance = 2, then this means 50%%, 3 will mean 33%%, etc. 1 = always.
+sg_sets[mcd][speed] = Speed
+sg_sets[mcd][speed][desc] = Creating speed in percent
+sg_sets[mcd][check_rights] = Check Rights
+sg_sets[mcd][check_rights][desc] = Check for player group access rights for spawning devices.
 
 // TAC
 sg_sets[tac] = TAC (Tacluchnatagamuntoron)
@@ -431,6 +441,8 @@ sg_sets[tac][max_targets][desc] = Maximum targets in one interval for kill mode,
 sg_sets[tac][max_shoots] = Maximum shoots
 sg_sets[tac][max_shoots][desc] = Maximum shoots in kill mode before destroy, 0 - unlimited.
 sg_sets[tac][range] = Target find range
+sg_sets[tac][blast_range] = Explosion range
+sg_sets[tac][blast_damage] = Explosion damage
 
 // Teltak
 sg_sets[teltak] = Tel'tak
@@ -450,6 +462,7 @@ sg_sets[wraith_grenade][blast_range] = Blast Range
 sg_sets[wraith_grenade][blast_range][desc] = How far the Blast can kill people?
 sg_sets[wraith_grenade][detect_range] = Detect Range
 sg_sets[wraith_grenade][detect_range][desc] = How far will the grenade detect people when in Mine mode?
+sg_sets[wraith_grenade][blast_damage] = Blast damage
 
 // Kino dispenser
 sg_sets[kino_dispenser] = Kino Dispenser

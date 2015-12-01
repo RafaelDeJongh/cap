@@ -69,6 +69,9 @@ function ENT:Initialize()
 	self.DialBlocked = StarGate.CFG:Get("stargate","dial_blocked",false);
 	self.DialBlockedWorld = StarGate.CFG:Get("stargate","world_blocked",false);
 	self.WormHoleJumpNDMG = StarGate.CFG:Get("stargate","wormholejump",3000);
+	self.EnergyTransInterval = StarGate.CFG:Get("stargate","en_trans_interval",0.1);
+	self.MaxEnergyTransfer = StarGate.CFG:Get("stargate","max_energy_transfer",80000);
+	self.EnergyTransfer = StarGate.CFG:Get("stargate","energy_transfer",true);
 	self.WormHoleJumpDMG = 0;
 	self:SetNetworkedInt("DHDRange",self.DHDRange);
 	--################# General defines and inits
@@ -732,6 +735,38 @@ function ENT:CheckRamp()
 			break;
 		end
 	end
+end
+
+-- simple energy transfer function @AlexALX
+function ENT:TransferEnergy(value)
+	value = tonumber(value);
+	if not self.HasRD or not value or not self.EnergyTransfer then return -1; end
+	if self.NextTransfer and self.NextTransfer>CurTime() then return 0; end
+	if self.IsOpen and IsValid(self.Target) and self.Target.IsOpen then
+		local origin = self;
+		local target = self.Target;
+		if (value<0) then
+			value = value * -1;
+			origin = self.Target;
+			target = self;
+		end
+		if self.MaxEnergyTransfer>0 and value>self.MaxEnergyTransfer then value = self.MaxEnergyTransfer end
+		if (StarGate.WireRD.Connected(target) and origin:GetResource("energy")>0) then
+			local energy = origin:GetResource("energy");
+			local capacity = target:GetNetworkCapacity("energy");
+			local tenergy = target:GetResource("energy");
+			if (value>capacity) then value = capacity end
+			if (energy<value) then value = energy end
+			if (tenergy+value>capacity) then value = capacity-tenergy end
+			if (value>0) then
+				origin:ConsumeResource("energy",value);
+				target:SupplyResource("energy",value);
+				self.NextTransfer = CurTime()+self.EnergyTransInterval;
+				return value;
+			end
+		end
+	end
+	return 0;
 end
 
 function ENT:FakeDelay() return true end;

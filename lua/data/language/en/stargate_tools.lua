@@ -305,7 +305,7 @@ stool_stargate_shield_ident_undone = Shield Identifier removed
 stool_stargate_shield_ident_cleanup = Shield Identifiers
 stool_stargate_shield_ident_cleaned = Removed all Shield Identifiers
 stool_stargate_shield_ident_limit = Hit the Shield Identifier limit
-stool_stargate_shield_ident_text = PLACEHOLDER, description will be later.
+stool_stargate_shield_ident_text = If device active and his frequency is the same of the shield, then this allow entities to pass trought the shield.\nAlso when we shoot on the shield and it has a Fire frequency, and the shield equal to the fire frequency of the weapon, then the shield take very small damages, but if the fire frequency of the shield and the fire frequency of the weapon wasn't the same, the damages take ~= 45%% of the shield strengh.
 
 //Atlantis Light
 stool_atlantis_light_colour = Light Colour

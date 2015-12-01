@@ -707,6 +707,23 @@ if IsValid(@value 1) and @value 1.IsStargate and @value 1:CAP_CanModify(Context.
 end
 ]])
 Component:AddFunctionHelper( "stargateRandomAddress", "wl:n", "Sets random stargate address." )
+-------------------------------------------------------------------------
+
+Component:AddPreparedFunction( "stargateTransferEnergy", "e:", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsStargate and EXPADV.PPCheck(Context,@value 1) then 
+	@@result = @value 1:TransferEnergy(@value 2)
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateTransferEnergy", "e:", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred energy if successful." )
+
+Component:AddPreparedFunction( "stargateTransferEnergy", "wl:", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsStargate then 
+	@@result = @value 1:TransferEnergy(@value 2)
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateTransferEnergy", "wl:", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred energy if successful." )
 --[[
 Component:AddVMFunction( "stargateRandomAddress", "e:n", "", function( Context, Trace, Entity, Bool )
 	if IsValid(Entity) and @value 1.IsStargate and Entity:CAP_CanModify(Context.player) and StarGate and StarGate.RandomGateName and EXPADV.PPCheck(Context,Entity) then 
@@ -912,6 +929,40 @@ end
 Component:AddFunctionHelper( "stargateAtlantisTPSetName", "wl:s", "Sets atlantis teleport name." )
 -------------------------------------------------------------------------
 
+Component:AddPreparedFunction( "stargateAtlantisTPGetGroup", "e:", "s",
+[[@define result = ""
+if IsValid(@value 1) and @value 1.IsAtlTP and EXPADV.PPCheck(Context,@value 1) then 
+	@result = @value 1.TGroup or "" 
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateAtlantisTPGetGroup", "e:", "Returns atlantis teleport group." )
+
+Component:AddPreparedFunction( "stargateAtlantisTPGetGroup", "wl:", "s",
+[[@define result = ""
+if IsValid(@value 1) and @value 1.IsAtlTP then 
+	@result = @value 1.TGroup or "" 
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateAtlantisTPGetGroup", "wl:", "Returns atlantis teleport group." )
+-------------------------------------------------------------------------
+
+Component:AddPreparedFunction( "stargateAtlantisTPSetGroup", "e:s", "",
+[[
+if IsValid(@value 1) and @value 1.IsAtlTP and @value 1:CAP_CanModify(Context.player) and EXPADV.PPCheck(Context,@value 1) then 
+	@value 1:SetAtlGrp(@value 2,true)
+end
+]])
+Component:AddFunctionHelper( "stargateAtlantisTPSetGroup", "e:s", "Sets atlantis teleport group." )
+
+Component:AddPreparedFunction( "stargateAtlantisTPSetGroup", "wl:s", "",
+[[
+if IsValid(@value 1) and @value 1.IsAtlTP and @value 1:CAP_CanModify(Context.player) then 
+	@value 1:SetAtlGrp(@value 2,true)
+end
+]])
+Component:AddFunctionHelper( "stargateAtlantisTPSetGroup", "wl:s", "Sets atlantis teleport group." )
+-------------------------------------------------------------------------
+
 Component:AddPreparedFunction( "stargateAtlantisTPGetPrivate", "e:", "n",
 [[@define result = -1
 if IsValid(@value 1) and @value 1.IsAtlTP and EXPADV.PPCheck(Context,@value 1) then 
@@ -944,6 +995,40 @@ if IsValid(@value 1) and @value 1.IsAtlTP and @value 1:CAP_CanModify(Context.pla
 end
 ]])
 Component:AddFunctionHelper( "stargateAtlantisTPSetPrivate", "wl:n", "Sets atlantis teleport private state." )
+-------------------------------------------------------------------------
+
+Component:AddPreparedFunction( "stargateAtlantisTPGetLocal", "e:", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsAtlTP and EXPADV.PPCheck(Context,@value 1) then 
+	@result = @value 1.TLocal and 1 or 0
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateAtlantisTPGetLocal", "e:", "Returns atlantis teleport local state." )
+
+Component:AddPreparedFunction( "stargateAtlantisTPGetLocal", "wl:", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsAtlTP then 
+	@result = @value 1.TLocal and 1 or 0
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateAtlantisTPGetLocal", "wl:", "Returns atlantis teleport local state." )
+-------------------------------------------------------------------------
+
+Component:AddPreparedFunction( "stargateAtlantisTPSetLocal", "e:n", "",
+[[
+if IsValid(@value 1) and @value 1.IsAtlTP and @value 1:CAP_CanModify(Context.player) and EXPADV.PPCheck(Context,@value 1) then 
+	@value 1:SetAtlLocal(@value 2)
+end
+]])
+Component:AddFunctionHelper( "stargateAtlantisTPSetLocal", "e:n", "Sets atlantis teleport local state." )
+
+Component:AddPreparedFunction( "stargateAtlantisTPSetLocal", "wl:n", "",
+[[
+if IsValid(@value 1) and @value 1.IsAtlTP and @value 1:CAP_CanModify(Context.player) then 
+	@value 1:SetAtlLocal(@value 2)
+end
+]])
+Component:AddFunctionHelper( "stargateAtlantisTPSetLocal", "wl:n", "Sets atlantis teleport local state." )
 -------------------------------------------------------------------------
 
 Component:AddPreparedFunction( "stargateAtlantisTPTeleport", "e:s", "",

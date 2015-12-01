@@ -1,6 +1,6 @@
 /*
 	molecular construction device for GarrysMod10
-	Copyright (C) 2010  Llapp
+	Copyright (C) 2010  Llapp, AlexALX
 */
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
@@ -12,25 +12,67 @@ ENT.Sounds = {
 	Idle=Sound("tech/mcd_idle.wav"),
 }
 
-local ent_check = {
-	["fnp90"] = "swep",
-	["weapon_zat"] = "swep",
-	["weapon_asura"] = "swep",
-	["sg_medkit"] = "swep",
-	["arthur_mantle"] = "ent",
-	["telchak"] = "ent",
-}
-
-local ent_check_class = {
-	["cloaking_generator"] = "stargate_cloaking",
-	["shield_generator"] = "stargate_shield",
-	["jamming_device"] = "jamming",
-	["naquadah_generator"] = "naq_gen_mks",
-}
-
+local shield_model = "models/micropro/shield_gen.mdl";
+-- local server-size table with all needed information 
 local MCDEntities = {
-	"tollan_disabler","cloaking_generator","shield_generator","jamming_device","zpm_mk3","arthur_mantle","telchak","naquadah_generator","replicator",
-	"fnp90","weapon_zat","weapon_asura","sg_medkit","naquadah_bottle"
+	["tollan_disabler"] = {
+		["model"] = "models/iziraider/disabler/disabler.mdl",
+		["stop"] = 35.2,
+		["pos"] = 58.2,
+	},
+	["cloaking_generator"] = {
+		["model"] = shield_model,
+		["check"] = "stargate_cloaking",
+		["pos"] = 58.2,
+	},
+	["shield_generator"] = {
+		["model"] = shield_model,
+		["check"] = "stargate_shield",
+		["pos"] = 58.2,
+	},
+	["jamming_device"] = {
+		["model"] = shield_model,
+		["check"] = "jamming",
+	},
+	["zpm_mk3"] = {
+		["stop"] = 40.5,
+		["pos"] = 62.9,
+	},
+	["arthur_mantle"] = {
+		["type"] = "ent",
+		["stop"] = 34.2,
+	},
+	["telchak"] = {
+		["type"] = "ent",
+		["stop"] = 34.2,
+	},
+	["naquadah_generator"] = {
+		["check"] = "naq_gen_mks",
+		["stop"] = 33,
+	},
+	["replicator"] = {
+		["model"] = "models/pg_props/pg_stargate/pg_replicator.mdl",
+	},
+	["fnp90"] = {
+		["model"] = "models/boba_fett/p90/w_smg_p90.mdl",
+		["type"] = "swep",
+	},
+	["weapon_zat"] = {
+		["model"] = "models/w_zat.mdl",
+		["type"] = "swep",
+		["stop"] = 36,
+	},
+	["weapon_asura"] = {
+		["model"] = "models/micropro/asuragun/w_asugun/w_asugun.mdl",
+		["type"] = "swep",
+		["stop"] = 38,
+	},
+	["sg_medkit"] = {
+		["model"] = "models/pg_props/pg_weapons/pg_healthkit_w.mdl",
+		["type"] = "swep",
+		["stop"] = 35.2,
+	},
+	["naquadah_bottle"] = {},
 }
 
 function ENT:Initialize()
@@ -68,8 +110,8 @@ function ENT:Initialize()
 	self.CheckRights = StarGate.CFG:Get("mcd","check_rights",true);
 
 	if(self.HasWire) then
-		self:CreateWireInputs("Alternative Skin","Effect Color [VECTOR]")
-		self:CreateWireOutputs("Active","Percent Completed", "Conscruction Complete")
+		self:CreateWireInputs("Alternative Skin","Effect Color [VECTOR]","Class Name [STRING]","Create")
+		self:CreateWireOutputs("Active","Creation Class [STRING]","Percent Completed", "Conscruction Complete")
 	end
 end
 
@@ -98,6 +140,13 @@ function ENT:TriggerInput(k,v)
 		end
 		self:SetNWVector("EffColor",Vector(self.EffColor.r,self.EffColor.g,self.EffColor.b));
 		if (IsValid(self.Ent)) then self.Ent:SetColor(self.EffColor); end
+	elseif (k=="Class Name") then
+		if (v!="") then self.CreateClass = v;
+		else self.CreateClass = nil; end
+	elseif (k=="Create" and v>0) then
+		if (self.CreateClass and IsValid(self.Owner)) then
+			self:StartCreate(self.CreateClass,self.Owner);
+		end
 	end
 end
 
@@ -121,6 +170,7 @@ function ENT:SpawnFunction(p,t)
 	e:SetVar("Owner",p)
 	e:Spawn();
 	e:Activate();
+	e.Owner = p;
 	if (IsValid(p)) then
 		p:AddCount("CAP_mcd", e)
 	end
@@ -133,11 +183,11 @@ function ENT:Use(ply)
 	    net.WriteEntity(self.Entity);
 		local classes = {}
 		for k,v in pairs(MCDEntities) do
-			if (v=="replicator") then continue end
+			if (k=="replicator") then continue end
 			local pl = ply
 			if (not self.CheckRights) then pl = nil end
-			if (not StarGate.NotSpawnable(ent_check_class[v] or v,pl,ent_check[v] or "tool",true)) then
-				classes[v] = true;
+			if (not StarGate.NotSpawnable(v.check or k,pl,v.type or "tool",true)) then
+				classes[k] = true;
 			end
 		end
 		net.WriteTable(classes)
@@ -307,6 +357,7 @@ function ENT:Think()
 					self:SetWire("Conscruction Complete", 0)
 					self:SetWire("Percent Completed", 0)
 					self:SetWire("Active", 0)
+					self:SetWire("Creation Class","")
 				end
 			end
 		end);
@@ -348,32 +399,19 @@ end
 
 util.AddNetworkString("MCD")
 
-net.Receive("MCD",function(len,ply)
-	local self = net.ReadEntity()
-	if (not IsValid(self) or self.Player!=ply or self.Create) then return end
-
-    local entities = MCDEntities
-	
-	local ents_stop = {
-		["arthur_mantle"] = 34.2,
-		["naquadah_generator"] = 33,
-		["tollan_disabler"] = 35.2,
-		["zpm_mk3"] = 40.5,
-		["telchak"] = 34.2,
-		["weapon_zat"] = 36,
-		["weapon_asura"] = 38,
-		["sg_medkit"] = 35.2,
-	}
-    local class = net.ReadString()
+function ENT:StartCreate(class,owner,data)
+	if (self.Create or not class or not MCDEntities[class]) then return end
+	local info = MCDEntities[class];
 	local orig_class = class;
-	if (not table.HasValue(entities,class)) then return end
-	local pl = ply;
+	local pl = owner;
 	if (not self.CheckRights) then pl = nil end
-	if (class!="replicator" and StarGate.NotSpawnable(ent_check_class[class] or class,pl,ent_check[class] or "tool")) then return end	
+	if (class!="replicator" and StarGate.NotSpawnable(info.check or class,pl,info.type or "tool")) then return end	
 	local realclass = nil
 	if (class=="replicator") then realclass = "prop_ragdoll"; class = "prop_physics"; end
 	if (class=="fnp90" or class=="weapon_zat" or class=="weapon_asura" or class=="sg_medkit" or class=="weapon_gdo") then realclass = class; class = "prop_physics"; end
     local e = ents.Create(class);
+	if (not IsValid(e)) then return end
+	self:SetWire("Creation Class",orig_class);
     if (class=="zpm_mk3" and StarGate.CFG:Get("mcd","allow_tzmp",false)) then
     	local rnd = StarGate.CFG:Get("mcd","tzmp_chance",2);
     	if (rnd<1) then rnd = 1 end
@@ -385,53 +423,48 @@ net.Receive("MCD",function(len,ply)
 	self.MCD_RealClass = realclass
     self.Undone = true;
     --self.Object = class;
-	e._MCDSTOP = ents_stop[orig_class] or 34;
-	e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*57);
-	e._MCDUP = 57;
-	if(class == entities[1] or class == entities[2] or class == entities[3])then
-		e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*58.2);
-		e._MCDUP = 58.2;
-		e.Owner = self.Player;
-	elseif(class == entities[5])then
-		e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*62.9);
-		e._MCDUP = 62.9;
-	end
-	local model = net.ReadString()
-    if(model != "")then
-   	    e:SetModel(model);
+	e._MCDSTOP = info.stop or 34;
+	e._MCDUP = info.pos or 57;
+	e:SetPos(self.Entity:GetPos() + self.Entity:GetUp()*e._MCDUP);
+	e.Owner = owner;
+    if(info.model)then
+   	    e:SetModel(info.model);
     end
 	e:SetParent(self.Entity);
 	e:Spawn();
 	e:SetAngles(self.Entity:GetAngles());
-	if CPPI and IsValid(self.Owner) and e.CPPISetOwner then e:CPPISetOwner(self.Owner) end
-	local effcol = net.ReadVector();
-	self:TriggerInput("Effect Color",effcol);
+	if CPPI and IsValid(owner) and e.CPPISetOwner then e:CPPISetOwner(owner) end
 	self.Ent = e;
 	self.Create = true;
 	self.Start = true;
 	self.Ent.Create = true;
 	self.Entity:SetNWEntity("CreatingEntity",self.Ent);
 	self.Entity:SetNWBool("StartEffects",true);
-    if(class == entities[1] or class == entities[2] or class == entities[3] or class == entities[4])then
+    if(class == "tollan_disabler" or class == "cloaking_generator" or class == "shield_generator" or class == "jamming_device")then
         local togglename;
-        local size = net.ReadInt(16);
-        local immunity = net.ReadBit();
-        local phaseshifting = net.ReadBit();
-        local strengh = net.ReadInt(16);
-        local drawbubble = net.ReadBit();
-        local passing = net.ReadBit();
-        local containment = net.ReadBit();
-		local antiNC = net.ReadBit();
-        local key = net.ReadInt(16);
-        local r,g,b = net.ReadInt(8),net.ReadInt(8),net.ReadInt(8);
-        if(class == entities[1] or class == entities[4])then
-		    e:Setup(tonumber(size),util.tobool(immunity),self.Owner);
-	        if(class == entities[1])then
+		data = data or {};
+        local size = data.size or 800;
+        local immunity = data.immunity;
+		if (immunity==nil) then immunity = true end -- if use data.immunity or true it will always return true so...
+        local phaseshifting = data.phaseshifting or false;
+        local strengh = data.strengh or 0;
+        local drawbubble = data.drawbubble;
+		if (drawbubble==nil) then drawbubble = true end 
+        local passing = data.passing;
+		if (passing==nil) then passing = true end 
+        local containment = data.containment or false;
+		local antiNC = data.antiNC;
+		if (antiNC==nil) then antiNC = true end 
+        local key = data.key;
+        local color = data.color or Vector(0,0,255);
+        if(class == "tollan_disabler" or class == "jamming_device")then
+		    e:Setup(size,immunity,owner);
+	        if(class == "tollan_disabler")then
 		        togglename = "ToggleDisabler";
-		    elseif(class == entities[4])then
+		    else
 		        togglename = "ToggleJamming";
 		    end
-			numpad.Register(togglename,function(ply,e)
+			numpad.Register(togglename,function(owner,e)
 				if(not IsValid(e) or e.Create) then return end;
 				if(e.IsEnabled) then
 					e.IsEnabled = false;
@@ -439,26 +472,26 @@ net.Receive("MCD",function(len,ply)
 					e.IsEnabled = true;
 				end
 			end);
-	    elseif(class == entities[2] or class == entities[3])then
-	        if(class == entities[2])then
+	    elseif(class == "cloaking_generator" or class == "shield_generator")then
+	        if(class == "cloaking_generator")then
 		        togglename = "ToggleCloaking";
-				e:SetVar("Owner",self.Player);
-   	    		e:SetSize(tonumber(size));
-   	    		e.ImmuneOwner = util.tobool(immunity);
-   	    		e.PhaseShifting = util.tobool(phaseshifting);
-		    elseif(class == entities[3])then
+				e:SetVar("Owner",owner);
+   	    		e:SetSize(size);
+   	    		e.ImmuneOwner = immunity;
+   	    		e.PhaseShifting = phaseshifting;
+		    else
 		        togglename = "ToggleShield";
-				e:SetVar("Owner",self.Player);
-	            e:SetSize(tonumber(size));
-   	            e.ImmuneOwner = util.tobool(immunity);
+				e:SetVar("Owner",owner);
+	            e:SetSize(size);
+   	            e.ImmuneOwner = immunity;
    	            e:SetMultiplier(strengh);
-	            e:SetShieldColor(r/255,g/255,b/255);
-   	            e.DrawBubble = util.tobool(drawbubble);
-   	            e.PassingDraw = util.tobool(passing);
-  		        e.Containment = util.tobool(containment);
-				e.AntiNoclip = util.tobool(antiNC)
+	            e:SetShieldColor(color.x/255,color.y/255,color.z/255);
+   	            e.DrawBubble = drawbubble;
+   	            e.PassingDraw = passing;
+  		        e.Containment = containment;
+				e.AntiNoclip = antiNC;
 		    end
-			numpad.Register(togglename,function(ply,e)
+			numpad.Register(togglename,function(owner,e)
 				if(not IsValid(e) or e.Create) then return end;
 				if(e:Enabled()) then
 					e:Status(false);
@@ -467,9 +500,30 @@ net.Receive("MCD",function(len,ply)
 				end
 			end);
 	    end
-	    numpad.OnDown(self.Player,key,togglename,e);
+	    if key then numpad.OnDown(owner,key,togglename,e); end
     end
 
+end
+
+net.Receive("MCD",function(len,ply)
+	local self = net.ReadEntity()
+	if (not IsValid(self) or self.Player!=ply) then return end
+	local class = net.ReadString();
+	self:TriggerInput("Effect Color",net.ReadVector());
+	local data = {};
+    if(class == "tollan_disabler" or class == "cloaking_generator" or class == "shield_generator" or class == "jamming_device")then
+        data.size = net.ReadInt(16);
+        data.immunity = util.tobool(net.ReadBit());
+        data.phaseshifting = util.tobool(net.ReadBit());
+        data.strengh = net.ReadInt(16);
+        data.drawbubble = util.tobool(net.ReadBit());
+        data.passing = util.tobool(net.ReadBit());
+        data.containment = util.tobool(net.ReadBit());
+		data.antiNC = util.tobool(net.ReadBit());
+        data.key = net.ReadInt(16);
+        data.color = Vector(net.ReadInt(8),net.ReadInt(8),net.ReadInt(8));
+	end
+	self:StartCreate(class,ply,data);
 end);
 
 function ENT:PostEntityPaste(player, Ent,CreatedEntities)
@@ -482,6 +536,7 @@ function ENT:PostEntityPaste(player, Ent,CreatedEntities)
 	end
 	if (IsValid(player)) then
 		player:AddCount("CAP_mcd", self.Entity)
+		self.Owner = player;
 	end
 	StarGate.WireRD.PostEntityPaste(self,player,Ent,CreatedEntities)
 end

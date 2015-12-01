@@ -327,6 +327,15 @@ function ents_methods:stargateRandomAddress(mode)
 	StarGate.RandomGateName(nil,this,nil,true,mode);
 end
 
+function ents_methods:stargateTransferEnergy(value)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( mode, "number" )
+	local this = unwrap( self )
+	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
+	if not this.IsStargate then return false, "entity is not stargate" end
+	return this:TransferEnergy(value);
+end
+
 --SF.Stargate = {}
 
 local sg_library, _ = SF.Libraries.Register( "stargate" )
@@ -807,6 +816,15 @@ function wirelink_methods:stargateRandomAddress(mode)
 	if not this.IsStargate then return false, "entity is not stargate" end
 	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
 	StarGate.RandomGateName(nil,this,nil,true,mode);
+end
+
+function wirelink_methods:stargateTransferEnergy(value)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( mode, "number" )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
+	if not this.IsStargate then return false, "entity is not stargate" end
+	return this:TransferEnergy(value);
 end
 
 function wirelink_methods:stargateRingAddress()

@@ -252,8 +252,6 @@ GateActions["OverloadTime"] = {
 	end
 }
 
-
-
 GateActions["IsAsuranBeam"] = {
 	name = "Get stargate asuran gate weapon status",
 	inputs = { "Ent" },
@@ -381,6 +379,19 @@ GateActions["SetRingAddress"] = {
 	outputtypes = {},
 	output = function(gate, Ent, Address, Set)
 		if !IsValid(Ent) or !Ent.IsRings or !Ent:CAP_CanModify(gate.Founder) then return "" elseif Set>0 then return Ent:SetRingAddress(Address) end
+	end
+}
+
+GateActions["TransferEnergy"] = {
+	name = "Transfer energy between stargates",
+	inputs = { "Ent", "Value", "Transfer" },
+	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
+	outputtypes = { "NORMAL" },
+	output = function(gate, Ent, Value, Set)
+		if !IsValid(Ent) or !Ent.IsStargate then return 0 elseif Set>0 then return Ent:TransferEnergy(Value) end
+	end,
+	label = function(Out)
+		return string.format ("Transferred = %s", Out)
 	end
 }
 
