@@ -709,21 +709,38 @@ end
 Component:AddFunctionHelper( "stargateRandomAddress", "wl:n", "Sets random stargate address." )
 -------------------------------------------------------------------------
 
-Component:AddPreparedFunction( "stargateTransferEnergy", "e:", "n",
+Component:AddPreparedFunction( "stargateTransferEnergy", "e:n", "n",
 [[@define result = -1
 if IsValid(@value 1) and @value 1.IsStargate and EXPADV.PPCheck(Context,@value 1) then 
-	@@result = @value 1:TransferEnergy(@value 2)
+	@@result = @value 1:TransferResource("energy", @value 2)
 end
 ]], "@result" )
-Component:AddFunctionHelper( "stargateTransferEnergy", "e:", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred energy if successful." )
+Component:AddFunctionHelper( "stargateTransferEnergy", "e:n", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred amount of energy if successful." )
 
-Component:AddPreparedFunction( "stargateTransferEnergy", "wl:", "n",
+Component:AddPreparedFunction( "stargateTransferEnergy", "wl:n", "n",
 [[@define result = -1
 if IsValid(@value 1) and @value 1.IsStargate then 
-	@@result = @value 1:TransferEnergy(@value 2)
+	@@result = @value 1:TransferResource("energy", @value 2)
 end
 ]], "@result" )
-Component:AddFunctionHelper( "stargateTransferEnergy", "wl:", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred energy if successful." )
+Component:AddFunctionHelper( "stargateTransferEnergy", "wl:n", "Transfer energy between two connected stargates. Use negative value to retrieve energy. Returns transferred amount of energy if successful." )
+-------------------------------------------------------------------------
+
+Component:AddPreparedFunction( "stargateTransferResource", "e:s,n", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsStargate and EXPADV.PPCheck(Context,@value 1) then 
+	@@result = @value 1:TransferResource(@value 2, @value 3)
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateTransferResource", "e:s,n", "Transfer resource between two connected stargates. Use negative value to retrieve resource. Returns transferred amount of resource if successful." )
+
+Component:AddPreparedFunction( "stargateTransferResource", "wl:s,n", "n",
+[[@define result = -1
+if IsValid(@value 1) and @value 1.IsStargate then 
+	@@result = @value 1:TransferResource(@value 2, @value 3)
+end
+]], "@result" )
+Component:AddFunctionHelper( "stargateTransferResource", "wl:s,n", "Transfer resource between two connected stargates. Use negative value to retrieve resource. Returns transferred amount of resource if successful." )
 --[[
 Component:AddVMFunction( "stargateRandomAddress", "e:n", "", function( Context, Trace, Entity, Bool )
 	if IsValid(Entity) and @value 1.IsStargate and Entity:CAP_CanModify(Context.player) and StarGate and StarGate.RandomGateName and EXPADV.PPCheck(Context,Entity) then 

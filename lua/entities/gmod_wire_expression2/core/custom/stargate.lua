@@ -667,12 +667,22 @@ end
 
 e2function number entity:stargateTransferEnergy(number value)
 	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
-	return this:TransferEnergy(value);
+	return this:TransferResource("energy",value);
 end
 
 e2function number wirelink:stargateTransferEnergy(number value)
 	if not IsValid(this) or not this.IsStargate then return -1 end
-	return this:TransferEnergy(value);
+	return this:TransferResource("energy",value);
+end
+
+e2function number entity:stargateTransferResource(string resname, number value)
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return -1 end
+	return this:TransferResource(resname,value);
+end
+
+e2function number wirelink:stargateTransferResource(string resname, number value)
+	if not IsValid(this) or not this.IsStargate then return -1 end
+	return this:TransferResource(resname,value);
 end
 
 __e2setcost( 1 )

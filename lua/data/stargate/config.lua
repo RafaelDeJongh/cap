@@ -89,6 +89,14 @@ energy_transfer = true
 max_energy_transfer = 80000
 # energy transfer cycle inteval in seconds, 0 - unlimited
 en_trans_interval = 0.1
+# allow resource transfer (oxygen, water etc)
+resource_transfer = true
+# max resource transfer per inverval, 0 - unlimited
+max_res_transfer = 5000
+# resource transfer cycle inteval in seconds, 0 - unlimited
+res_trans_interval = 0.1
+# allowed resources to transfer, separate by comma, keep empty to allow any resources, example usage: water,oxygen,heavy water
+res_classes = 
 
 #### Stargate iris config
 [stargate_iris]

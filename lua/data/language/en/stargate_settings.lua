@@ -226,11 +226,19 @@ sg_sets[stargate][wormholejump][desc] = How many damage should be taken before d
 sg_sets[stargate][water_noclose] = Water no autoclose
 sg_sets[stargate][water_noclose][desc] = Disable auto close if gate is underwater
 sg_sets[stargate][energy_transfer] = Allow energy transfer
-sg_sets[stargate][energy_transfer][desc] = Enable energy transfer between two connected gates via wiremod/e2 function stargateEnergyTransfer
+sg_sets[stargate][energy_transfer][desc] = Enable energy transfer between two connected gates via wiremod/e2 function stargateTransferEnergy
 sg_sets[stargate][max_energy_transfer] = Max energy transfer
 sg_sets[stargate][max_energy_transfer][desc] = Maximum energy transfer per inverval, 0 - unlimited
 sg_sets[stargate][en_trans_interval] = Energy transfer interval
 sg_sets[stargate][en_trans_interval][desc] = Energy transfer cycle inteval in seconds, 0 - unlimited
+sg_sets[stargate][resource_transfer] = Allow resource transfer
+sg_sets[stargate][resource_transfer][desc] = Enable resource transfer between two connected gates via wiremod/e2 function stargateTransferResource
+sg_sets[stargate][max_res_transfer] = Max resource transfer
+sg_sets[stargate][max_res_transfer][desc] = Maximum resource transfer per inverval, 0 - unlimited
+sg_sets[stargate][res_trans_interval] = Resource transfer interval
+sg_sets[stargate][res_trans_interval][desc] = Resource transfer cycle inteval in seconds, 0 - unlimited
+sg_sets[stargate][res_classes] = Allowed resource classes
+sg_sets[stargate][res_classes][desc] = Allowed resource classes to transfer, separate by comma, keep empty to allow any resources\nexample usage: water,oxygen,heavy water
 
 // Stargate iris
 sg_sets[stargate_iris] = Stargate iris

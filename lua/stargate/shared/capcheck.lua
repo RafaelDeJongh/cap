@@ -386,7 +386,7 @@ if (VERSION<140711) then
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_06");
 	MsgN("-------");
 	MsgN("Error #06\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-end if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire.lua","LUA")) then
+end if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA")) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
@@ -395,7 +395,7 @@ end if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire.lua","L
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_07");
 	MsgN("-------");
 	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-elseif (file.Exists("weapons/gmod_tool/stools/wire.lua","LUA") and not table.HasValue(ws_addonlist,"Wiremod") and not table.HasValue(js_addonlist,"Wiremod")) then
+elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not table.HasValue(ws_addonlist,"Wiremod") and not table.HasValue(js_addonlist,"Wiremod")) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)
@@ -403,7 +403,7 @@ elseif (file.Exists("weapons/gmod_tool/stools/wire.lua","LUA") and not table.Has
 	table.insert(StarGate_Group.ErrorMSG, {"Your Wiremod is outdated, please update it.\\nYou're using an older repository of the Wiremod SVN.\\nWe suggest you to switch to the newer github or Steam Workshop version of Wiremod.","14"});
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_14");
 	MsgN("-------");
-	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+	MsgN("Error #14\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then
 	if (status != "Error") then
 		status = "Error";

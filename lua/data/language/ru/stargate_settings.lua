@@ -226,11 +226,19 @@ sg_sets[stargate][wormholejump][desc] = Сколько необходимо на
 sg_sets[stargate][water_noclose] = Не закрывать врата в воде
 sg_sets[stargate][water_noclose][desc] = Выключить автоматическое закрытие врат если врата под водой
 sg_sets[stargate][energy_transfer] = Разрешить передачу энергии
-sg_sets[stargate][energy_transfer][desc] = Включить перетаду энергии между двумя вратами с помощью wiremod/e2 функции stargateEnergyTransfer
+sg_sets[stargate][energy_transfer][desc] = Включить передачу энергии между двумя вратами с помощью wiremod/e2 функции stargateTransferEnergy
 sg_sets[stargate][max_energy_transfer] = Макс передача энергии
 sg_sets[stargate][max_energy_transfer][desc] = Максимальное количество энергии которое можно передать за один интервал, 0 - без ограничений
 sg_sets[stargate][en_trans_interval] = Интервал передачи энергии
 sg_sets[stargate][en_trans_interval][desc] = Интервал между передачами энергии в секундах, 0 - без ограничений
+sg_sets[stargate][resource_transfer] = Разрешить передачу ресурсов
+sg_sets[stargate][resource_transfer][desc] = Включить передачу ресурсов между двумя вратами с wiremod/e2 функции stargateTransferResource
+sg_sets[stargate][max_res_transfer] = Макс передача ресурсов
+sg_sets[stargate][max_res_transfer][desc] = Максимальное количество ресурсов которые можно передать за один интервал, 0 - без ограничений
+sg_sets[stargate][res_trans_interval] = Интервал передачи ресурсов
+sg_sets[stargate][res_trans_interval][desc] = Интервал между передачами ресурсов в секундах, 0 - без ограничений
+sg_sets[stargate][res_classes] = Разрешённые ресурсы
+sg_sets[stargate][res_classes][desc] = Разрешённые ресурсы для передачи, разделяйте запятой, оставте пустым чтобы разрешить любой ресурс\nПример: water,oxygen,heavy water
 
 // Stargate iris
 sg_sets[stargate_iris] = Диафрагма звёздных врат

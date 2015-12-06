@@ -72,6 +72,15 @@ function ENT:Initialize()
 	self.EnergyTransInterval = StarGate.CFG:Get("stargate","en_trans_interval",0.1);
 	self.MaxEnergyTransfer = StarGate.CFG:Get("stargate","max_energy_transfer",80000);
 	self.EnergyTransfer = StarGate.CFG:Get("stargate","energy_transfer",true);
+	self.ResTransInterval = StarGate.CFG:Get("stargate","res_trans_interval",0.1);
+	self.MaxResTransfer = StarGate.CFG:Get("stargate","max_res_transfer",5000);
+	self.ResTransfer = StarGate.CFG:Get("stargate","resource_transfer",true);
+	
+	self.ResTransferClasses = {};
+	for _,v in pairs(StarGate.CFG:Get("stargate","res_classes",""):TrimExplode(",")) do
+		self.ResTransferClasses[v:lower()] = true;
+	end
+	
 	self.WormHoleJumpDMG = 0;
 	self:SetNetworkedInt("DHDRange",self.DHDRange);
 	--################# General defines and inits
@@ -738,10 +747,22 @@ function ENT:CheckRamp()
 end
 
 -- simple energy transfer function @AlexALX
-function ENT:TransferEnergy(value)
+function ENT:TransferResource(resname,value)
+	if not resname then return -1; end
+	resname = resname:lower();
 	value = tonumber(value);
-	if not self.HasRD or not value or not self.EnergyTransfer then return -1; end
-	if self.NextTransfer and self.NextTransfer>CurTime() then return 0; end
+	local is_energy = (resname=="energy")
+	local Transfer = self.EnergyTransfer
+	local NextTransfer = self.NextTransfer
+	local MaxTransfer = self.MaxEnergyTransfer
+	if not is_energy then
+		Transfer = self.ResTransfer
+		NextTransfer = self.NextResTransfer
+		MaxTransfer = self.MaxResTransfer
+	end
+	if not self.HasRD or not value or not Transfer then return -1; end
+	if not is_energy and table.Count(self.ResTransferClasses)>0 and not self.ResTransferClasses[resname] then return -1 end
+	if NextTransfer and NextTransfer>CurTime() then return 0; end
 	if self.IsOpen and IsValid(self.Target) and self.Target.IsOpen then
 		local origin = self;
 		local target = self.Target;
@@ -750,18 +771,22 @@ function ENT:TransferEnergy(value)
 			origin = self.Target;
 			target = self;
 		end
-		if self.MaxEnergyTransfer>0 and value>self.MaxEnergyTransfer then value = self.MaxEnergyTransfer end
-		if (StarGate.WireRD.Connected(target) and origin:GetResource("energy")>0) then
-			local energy = origin:GetResource("energy");
-			local capacity = target:GetNetworkCapacity("energy");
-			local tenergy = target:GetResource("energy");
+		if MaxTransfer>0 and value>MaxTransfer then value = MaxTransfer end
+		if (StarGate.WireRD.Connected(target) and origin:GetResource(resname)>0) then
+			local energy = origin:GetResource(resname);
+			local capacity = target:GetNetworkCapacity(resname);
+			local tenergy = target:GetResource(resname);
 			if (value>capacity) then value = capacity end
 			if (energy<value) then value = energy end
 			if (tenergy+value>capacity) then value = capacity-tenergy end
 			if (value>0) then
-				origin:ConsumeResource("energy",value);
-				target:SupplyResource("energy",value);
-				self.NextTransfer = CurTime()+self.EnergyTransInterval;
+				origin:ConsumeResource(resname,value);
+				target:SupplyResource(resname,value);
+				if is_energy then
+					self.NextTransfer = CurTime()+self.EnergyTransInterval;
+				else
+					self.NextResTransfer = CurTime()+self.ResTransInterval;				
+				end
 				return value;
 			end
 		end

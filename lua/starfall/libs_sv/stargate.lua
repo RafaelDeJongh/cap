@@ -329,11 +329,21 @@ end
 
 function ents_methods:stargateTransferEnergy(value)
 	SF.CheckType( self, ents_metatable )
-	SF.CheckType( mode, "number" )
+	SF.CheckType( value, "number" )
 	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
+	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
 	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferEnergy(value);
+	return this:TransferResource("energy",value);
+end
+
+function ents_methods:stargateTransferResource(resname, value)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( resname, "string" )
+	SF.CheckType( value, "number" )
+	local this = unwrap( self )
+	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	if not this.IsStargate then return false, "entity is not stargate" end
+	return this:TransferResource(resname,value);
 end
 
 --SF.Stargate = {}
@@ -820,11 +830,21 @@ end
 
 function wirelink_methods:stargateTransferEnergy(value)
 	SF.CheckType( self, ents_metatable )
-	SF.CheckType( mode, "number" )
+	SF.CheckType( value, "number" )
 	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
 	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferEnergy(value);
+	return this:TransferResource("energy",value);
+end
+
+function wirelink_methods:stargateTransferResource(resname, value)
+	SF.CheckType( self, ents_metatable )
+	SF.CheckType( resname, "string" )
+	SF.CheckType( value, "number" )
+	local this = unwrap( self )
+	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	if not this.IsStargate then return false, "entity is not stargate" end
+	return this:TransferResource(resname,value);
 end
 
 function wirelink_methods:stargateRingAddress()
