@@ -8,7 +8,7 @@ SWEP.Contact = ""
 SWEP.Purpose = "Blow Stuff Up."
 SWEP.Instructions = ""
 SWEP.Base = "weapon_base";
-SWEP.Slot = 1;
+SWEP.Slot = 4;
 SWEP.SlotPos = 3;
 SWEP.DrawAmmo	= false;
 SWEP.DrawCrosshair = true;
@@ -19,12 +19,12 @@ SWEP.ViewModelFOV = 65;
 if SERVER then
 	AddCSLuaFile();
 end
-
+/*
 if CLIENT then
-	if(file.Exists("materials/VGUI/weapons/wraith_hands.vmt","GAME")) then
-		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/wraith_hands.vmt")
+	if(file.Exists("materials/VGUI/weapons/wraith_grenade.vmt","GAME")) then
+		SWEP.WepSelectIcon = surface.GetTextureID("VGUI/weapons/wraith_grenade.vmt")
 	end
-end
+end*/
 
 SWEP.HoldType = "grenade";
 

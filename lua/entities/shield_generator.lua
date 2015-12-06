@@ -258,19 +258,15 @@ function ENT:Hit(strength,normal,pos,fireFrequency)
 		divisor = StarGate.CFG:Get("shield","stationary_shield_multiplier",10);
 	end
 
-	if(not fireFrequency)then
-		fireFrequency = 0;
-	end
-
-	if (fireFrequency ~= 0) then
-		if (self:GetFireFrequency() ~= 0) then
-			local GetFrequency = self:GetFireFrequency() - fireFrequency;
+	if (fireFrequency) then
+		--if (self:GetFireFrequency() ~= 0) then
+			local GetFrequency = self:GetFireFrequency() - fireFrequency or 0;
 			if GetFrequency < 50 and GetFrequency > -50 then
-				divisor = 20;
+				divisor = 5;
 			else
-				divisor = 0.5;
+				divisor = 0.25;
 			end
-		end
+		--end
 	end
 	-- Take strength
 	self.Strength = math.Clamp(self.Strength-2*math.Clamp(strength,1,20)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),0,100);

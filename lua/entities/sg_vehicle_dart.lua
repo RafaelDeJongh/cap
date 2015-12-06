@@ -102,7 +102,6 @@ function ENT:Initialize() --######## What happens when it first spawns(Set Model
 	local phys = self:GetPhysicsObject()
 	phys:Wake()
 	phys:EnableMotion(true)
-	print(phys:IsValid())
 	if(phys:IsValid()) then
 		phys:Wake()
 		phys:SetMass(10000) --@Madman07 well i set model mass for 1500

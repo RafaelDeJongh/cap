@@ -31,12 +31,14 @@ Stargate Address Glyphs Atl - for atlantis gates.
 for enable fonts on egp in singleplayer or your server
 you need MANUALY edit file
 wire\lua\entities\gmod_wire_egp\lib\egplib\materials.lua
-and add after EGP.ValidFonts[9] = "Marlett" this:
+and add after EGP.ValidFonts[10] = "Roboto" this:
 
-EGP.ValidFonts[10] = "Stargate Address Glyphs SG1"
-EGP.ValidFonts[11] = "Stargate Address Glyphs Concept"
-EGP.ValidFonts[12] = "Stargate Address Glyphs U"
-EGP.ValidFonts[13] = "Stargate Address Glyphs Atl"
+EGP.ValidFonts[11] = "Stargate Address Glyphs SG1"
+EGP.ValidFonts[12] = "Stargate Address Glyphs Concept"
+EGP.ValidFonts[13] = "Stargate Address Glyphs U"
+EGP.ValidFonts[14] = "Stargate Address Glyphs Atl"
+EGP.ValidFonts[15] = "Anquietas"
+EGP.ValidFonts[16] = "Quiver"
 
 if you are using workshop version, then you should download
 this file from github separatery and place in

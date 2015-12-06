@@ -77,8 +77,11 @@ function ENT:Initialize()
 	self.ResTransfer = StarGate.CFG:Get("stargate","resource_transfer",true);
 	
 	self.ResTransferClasses = {};
-	for _,v in pairs(StarGate.CFG:Get("stargate","res_classes",""):TrimExplode(",")) do
-		self.ResTransferClasses[v:lower()] = true;
+	local classes = StarGate.CFG:Get("stargate","res_classes","");
+	if (classes!="") then
+		for _,v in pairs(classes:TrimExplode(",")) do
+			self.ResTransferClasses[v:lower()] = true;
+		end
 	end
 	
 	self.WormHoleJumpDMG = 0;

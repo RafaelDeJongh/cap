@@ -19,7 +19,6 @@ function ENT:FireDrone()
 					self:LoadDrones(self.DroneProp4:GetPos())
 					self.DroneProp4:Remove()
 					self.DronePropFired[4]=true
-					print("FIRE")
 				end
 			elseif((self.On==2)) then
 				if(IsValid(self.DroneProp3)) then

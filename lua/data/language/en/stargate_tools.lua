@@ -305,7 +305,18 @@ stool_stargate_shield_ident_undone = Shield Identifier removed
 stool_stargate_shield_ident_cleanup = Shield Identifiers
 stool_stargate_shield_ident_cleaned = Removed all Shield Identifiers
 stool_stargate_shield_ident_limit = Hit the Shield Identifier limit
-stool_stargate_shield_ident_text = If device active and his frequency is the same of the shield, then this allow entities to pass trought the shield.\nAlso when we shoot on the shield and it has a Fire frequency, and the shield equal to the fire frequency of the weapon, then the shield take very small damages, but if the fire frequency of the shield and the fire frequency of the weapon wasn't the same, the damages take ~= 45%% of the shield strengh.
+stool_stargate_shield_ident_text =[[If device active and his frequency is the same of the shield, then this allow constrained entities to device (for example welded) pass through the shield.
+
+Also when we shoot and the shield fire frequency equal to the fire frequency of the weapon, then:
+Shield take 25%% of damage, but if the fire frequency wasn't the same, the shield take in 5 times more damage.
+There possible difference in fire frequency of 50 more or less.
+
+By default shield has both frequencies equal to 0.
+Weapon frequencies:
+850 - ag3, asgard/ori beam weapons
+575 - asuran gate weapon, ring beam
+325 - all other cap energy weapons (player weapons, destiny turrets etc)
+]]
 
 //Atlantis Light
 stool_atlantis_light_colour = Light Colour

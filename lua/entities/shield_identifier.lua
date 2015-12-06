@@ -192,7 +192,7 @@ if CLIENT then
 	    frequency:SetMax(1500)
 		frequency:SetDecimals(0)
 		frequency:SetValue(SIfrequency);
-		//frequency:SetToolTip(SGLanguage.GetMessage("iriscomp_time_desc"))
+		frequency:SetToolTip(SGLanguage.GetMessage("stool_stargate_shield_ident_text"))
 
 		local function saveFrequency()
 			net.Start("shieldid_sendinfo")

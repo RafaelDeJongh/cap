@@ -205,7 +205,7 @@ end
 function ENT:StartTouch(e)
 	if(not IsValid(self.Parent)) then return end;
 	if(not IsValid(e)) then return end;
-	if not self.nocollide[e] and self:FindAShieldIdentifier(e) and (self.Parent:GetFrequency() ~= 0) and (self:GetFrequencyOfShieldIdentifier() == self.Parent:GetFrequency()) then
+	if not self.nocollide[e] and self:FindAShieldIdentifier(e)/* and (self.Parent:GetFrequency() ~= 0)*/ and (self:GetFrequencyOfShieldIdentifier() == self.Parent:GetFrequency()) then
 		self.RemoveAfterPass = constraint.GetAllConstrainedEntities(e);
 		for _,entity in pairs(constraint.GetAllConstrainedEntities(e)) do
 			self.nocollide[e] = true;
@@ -407,7 +407,7 @@ function ENT:Reflect(e,do_not_draw_hit)
 		e:SetOwner(self.Entity);
 	end
 	if(not do_not_draw_hit) then
-		self:HitShield(e,e_pos,phys,class,normal);
+		self:HitShield(e,e_pos,phys,class,normal,e.FireFrequency or 0);
 	end
 end
 
@@ -432,8 +432,7 @@ function ENT:HitShield(e,pos,phys,class,normal,fireFrequency)
 		self:HitEffect(e,pos,strength);
 		-- Drain energy
 		if(not (e:IsNPC() or e:IsPlayer() or class=="rpg_missile")) then
-			if not fireFrequency then fireFrequency = 0; end
-			self.Parent:Hit(strength,normal,pos,fireFrequency);
+			self.Parent:Hit(strength,normal,pos,fireFrequency or 0);
 		end
 	end
 end
@@ -522,8 +521,7 @@ function ENT:Hit(e,pos,dmg,normal,fireFrequency)
 			normal = normal or Vector(0,0,0);
 			self:HitEffect(e,pos,dmg);
 			if(dmg and dmg ~= 0) then
-				if (not fireFrequency) then fireFrequency = 0; end
-				self.Parent:Hit(dmg,normal,pos,fireFrequency);
+				self.Parent:Hit(dmg,normal,pos,fireFrequency or 0);
 			end
 			return true;
 		else
