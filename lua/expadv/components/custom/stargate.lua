@@ -740,7 +740,7 @@ if IsValid(@value 1) and @value 1.IsStargate then
 	@@result = @value 1:TransferResource(@value 2, @value 3)
 end
 ]], "@result" )
-Component:AddFunctionHelper( "stargateTransferResource", "wl:s,n", "Transfer resource between two connected stargates. Use negative value to retrieve resource. Returns transferred amount of resource if successful." )
+Component:AddFunctionHelper( "stargateTransferResource", "wl:s,n", "Transfer resource between two connected stargates. Use negative value to retrieve resource. Can transfer only to dialled gate (not from). Returns transferred amount of resource if successful." )
 --[[
 Component:AddVMFunction( "stargateRandomAddress", "e:n", "", function( Context, Trace, Entity, Bool )
 	if IsValid(Entity) and @value 1.IsStargate and Entity:CAP_CanModify(Context.player) and StarGate and StarGate.RandomGateName and EXPADV.PPCheck(Context,Entity) then 

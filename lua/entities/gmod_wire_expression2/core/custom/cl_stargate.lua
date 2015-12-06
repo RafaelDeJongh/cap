@@ -9,4 +9,4 @@ E2Helper.Descriptions["stargateOverload"] = "Return 1 if stargate has overload b
 E2Helper.Descriptions["stargateAsuranBeam"] = "Return 1 if stargate has asuran gate weapon active.";
 E2Helper.Descriptions["stargateRandomAddress"] = "Generate new random address and/or name.\nModes:\n0 - Generate new address and name.\n1 - Generate only new address.\n2 - Generate only new name.";
 E2Helper.Descriptions["stargateTransferEnergy"] = "Transfer energy between two connected stargates.\nUse negative value to retrieve energy.\nReturns transferred amount of energy if successful.";
-E2Helper.Descriptions["stargateTransferResource"] = "Transfer resource between two connected stargates.\nUse negative value to retrieve resource.\nReturns transferred amount of resource if successful.";
+E2Helper.Descriptions["stargateTransferResource"] = "Transfer resource between two connected stargates.\nUse negative value to retrieve resource.\nCan transfer only to dialled gate (not from).\nReturns transferred amount of resource if successful.";

@@ -21,3 +21,4 @@ if (Type==0) {
 # At same time we can transfer only ONE resource and energy.
 # By default you can transfer only once at 0.1 second (cycle)
 # And max - 80000 energy or 5000 of any resource
+# We also can retrieve energy from target gate using negative value

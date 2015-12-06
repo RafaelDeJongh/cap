@@ -776,6 +776,8 @@ function ENT:TransferResource(resname,value)
 		end
 		if MaxTransfer>0 and value>MaxTransfer then value = MaxTransfer end
 		if (StarGate.WireRD.Connected(target) and origin:GetResource(resname)>0) then
+			-- we can only transport energy at both ends due to stargate rules, also if there is iris then block tranfser
+			if not is_energy and not origin.Outbound or origin:IsBlocked(true) or target:IsBlocked(true) then return 0 end
 			local energy = origin:GetResource(resname);
 			local capacity = target:GetNetworkCapacity(resname);
 			local tenergy = target:GetResource(resname);
