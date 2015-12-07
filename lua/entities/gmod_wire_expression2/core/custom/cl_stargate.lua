@@ -1,4 +1,24 @@
 if (E2Helper==nil) then return end
+
+if EGP and EGP.ValidFonts then
+	local insertid
+	for k,v in pairs(EGP.ValidFonts) do
+		if v:StartWith("WireEGP_") then
+			insertid = k;
+			break;
+		end
+	end
+	-- insert to table with correct order client-side
+	if insertid then
+		table.insert(EGP.ValidFonts,insertid,"Stargate Address Glyphs SG1");
+		table.insert(EGP.ValidFonts,insertid+1,"Stargate Address Glyphs Concept");
+		table.insert(EGP.ValidFonts,insertid+2,"Stargate Address Glyphs U");
+		table.insert(EGP.ValidFonts,insertid+3,"Stargate Address Glyphs Atl");
+		table.insert(EGP.ValidFonts,insertid+4,"Anquietas");
+		table.insert(EGP.ValidFonts,insertid+5,"Quiver");
+	end
+end
+
 E2Helper.Descriptions["stargateDial"] = "Dial gate.\nSyntax: address, mode.\nModes: 0 - slow, 1 - fast, 2 - nox.";
 E2Helper.Descriptions["stargateClose"] = "Close stargate or abort dialling.";
 E2Helper.Descriptions["stargateDHDPressButton"] = "Press button on DHD (not stargate!).";

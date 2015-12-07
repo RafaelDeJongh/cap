@@ -16,6 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+--[[
 --################# This is a helper function. If you use my TraceClass, you can use this to determine a correct position and direction vector from the other gate @aVoN
 function ENT:GetTeleportedVector(pos,dir)
 	if(IsValid(self.Target)) then
@@ -31,6 +32,24 @@ function ENT:GetTeleportedVector(pos,dir)
 	else
 		return pos,dir;
 	end
+end
+]]
+
+-- fix provided by Divran
+function ENT:GetTeleportedVector(Pos,Dir)
+	local Target = self.Target
+	if (!Target) then return Pos, Dir end
+	
+	Pos = self:WorldToLocal(Pos)
+	Pos.y = Pos.y * -1
+	Pos = Target:LocalToWorld(Pos)
+	
+	Dir = self:WorldToLocal(self:GetPos()+Dir)
+	Dir.x = Dir.x * -1
+	Dir.y = Dir.y * -1
+	Dir = Target:GetPos() - Target:LocalToWorld(Dir)
+	
+	return Pos, Dir * -1
 end
 
 --################# This not only retrieves the teleported vector, it will also add the gulping sound and will add animations @aVoN

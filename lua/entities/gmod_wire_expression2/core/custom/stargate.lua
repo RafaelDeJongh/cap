@@ -5,6 +5,15 @@
 if (E2Lib==nil) then return end
 E2Lib.RegisterExtension("stargate", true)
 
+if EGP and EGP.ValidFonts then
+	table.insert(EGP.ValidFonts,"Stargate Address Glyphs SG1");
+	table.insert(EGP.ValidFonts,"Stargate Address Glyphs Concept");
+	table.insert(EGP.ValidFonts,"Stargate Address Glyphs U");
+	table.insert(EGP.ValidFonts,"Stargate Address Glyphs Atl");
+	table.insert(EGP.ValidFonts,"Anquietas");
+	table.insert(EGP.ValidFonts,"Quiver");
+end
+
 __e2setcost( 1 )
 
 e2function string entity:stargateAddress()
