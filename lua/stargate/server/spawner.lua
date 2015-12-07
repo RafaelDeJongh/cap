@@ -39,6 +39,7 @@ StarGate.GateSpawner.DestinyConsole = {};
 StarGate.GateSpawner.Ramp = {};
 StarGate.GateSpawner.Brazier = {};
 StarGate.GateSpawner.GravityController = {};
+StarGate.GateSpawner.AtlantisLight = {}
 StarGate.GateSpawner.AtlantisTransporter = {};
 StarGate.GateSpawner.Spawned = false;
 StarGate.GateSpawner.Block = false;
@@ -72,6 +73,7 @@ function StarGate.GateSpawner.LoadConfig()
 		StarGate.GateSpawner.Ramp = ini.ramp or {};
 		StarGate.GateSpawner.Brazier = ini.brazier or {};
 		StarGate.GateSpawner.GravityController = ini.gravitycontroller or {};
+		StarGate.GateSpawner.AtlantisLight = ini.atlantis_light or {};
 		StarGate.GateSpawner.AtlantisTransporter = ini.atlantis_transporter or {};
 		StarGate.GateSpawner.Doors = ini.cap_doors or {};
 		StarGate.GateSpawner.DoorButtons = ini.cap_doors_contr or {};
@@ -120,6 +122,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local IsRingOri = v.classname:find("ring_base_ori");
 		local IsRingGoauld = v.classname:find("ring_base_goauld");
 		local IsGravityController = string.lower(v.classname):find("gravitycontroller");
+		local IsAtlantisLight = string.lower(v.classname):find("atlantis_light");
 		local IsAtlantisTransporter = string.lower(v.classname):find("atlantis_transporter");
 		local IsDoors = string.lower(v.classname):find("cap_doors_frame");
 		local IsDoorsButton = string.lower(v.classname):find("cap_doors_contr");
@@ -363,6 +366,20 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					if (v.autoclose ~= nil and v.autoclose ~="" and util.tobool(v.autoclose)==false) then
                 		e.NoAutoClose = true;
                 	end
+				elseif(IsAtlantisLight) then
+					if (v.brightness ~= nil and v.brightness ~="") then
+                		e:SetBrightness(tonumber(v.brightness));
+                	end
+					if (v.size ~= nil and v.size ~="") then
+                		e:SetLightSize(tonumber(v.size));
+                	end
+					if (v.size ~= nil and v.size ~="") then
+                		e:SetLightSize(tonumber(v.size));
+                	end
+					if(v.color) then
+						local r,g,b = unpack(v.color:TrimExplode(" "));
+						e:SetLightColour(tonumber(r),tonumber(g),tonumber(b));
+					end
 				end
 				if(IsDoors and IsValid(e.Door)) then
 					if (v.model and v.model == "models/madman07/doors/dest_frame.mdl") then
@@ -424,6 +441,7 @@ function StarGate.GateSpawner.Reset()
 	StarGate.GateSpawner.Ramp = {};
 	StarGate.GateSpawner.Brazier = {};
 	StarGate.GateSpawner.GravityController = {};
+	StarGate.GateSpawner.AtlantisLight = {};
 	StarGate.GateSpawner.AtlantisTransporter = {};
 	StarGate.GateSpawner.Spawned = false;
 	StarGate.GateSpawner.Doors = {};
@@ -455,6 +473,7 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 			ents.FindByClass("sgu_ramp"),
 			ents.FindByClass("goauld_ramp"),
 			ents.FindByClass("gravitycontroller"),
+			ents.FindByClass("atlantis_light"),
 			ents.FindByClass("atlantis_transporter"),
 			ents.FindByClass("prop_physics"),
 			ents.FindByClass("cap_doors*"),
@@ -500,6 +519,7 @@ function StarGate.GateSpawner.InitialSpawn(reload)
 				StarGate.GateSpawner.Brazier,
 				StarGate.GateSpawner.SGULightUp,
 				StarGate.GateSpawner.GravityController,
+				StarGate.GateSpawner.AtlantisLight,
 				StarGate.GateSpawner.AtlantisTransporter,
 				StarGate.GateSpawner.Props,
 				StarGate.GateSpawner.Doors,
@@ -728,6 +748,9 @@ function StarGate.GateSpawner.CreateFile(p)
 				f = f .. "[gravitycontroller]\nclassname=gravitycontroller\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nsound="..tostring(v.ConTable["sSound"][2]).."\n";
 			end
 		end
+		for _,v in pairs(ents.FindByClass("atlantis_light")) do
+			f = f .. "[atlantis_light]\nclassname=atlantis_light\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nbrightness="..v.Brightness.."\n".."size="..v.LightSize.."\n".."color="..v.LightColour.r.." "..v.LightColour.g.." "..v.LightColour.b.."\n";
+		end
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
 			f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."group="..v.TGroup.."\n".."private="..tostring(v.TPrivate).."\n".."locale="..tostring(v.TLocal).."\n";
 			if (v.OnlyClosed) then
@@ -822,6 +845,7 @@ function StarGate.GateSpawner.Restored()
 			ents.FindByClass("sgu_ramp"),
 			ents.FindByClass("goauld_ramp"),
 			ents.FindByClass("gravitycontroller"),
+			ents.FindByClass("atlantis_light"),
 			ents.FindByClass("atlantis_transporter"),
 			ents.FindByClass("prop_physics"),
 			ents.FindByClass("cap_doors*"),

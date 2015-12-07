@@ -25,6 +25,7 @@ function ENT:Initialize()
 	self:SetNWBool("On",false);
 	
 	self:CreateWireInputs("On","Disable Use","Brightness","Size","RGB [VECTOR]","R","G","B");
+	self:CreateWireOutputs("Active");
 	
 	if(self.Phys:IsValid()) then
 		self.Phys:Wake();
@@ -73,6 +74,7 @@ function ENT:Use()
 		self.NextUse = CurTime() + 1;
 	end
 	self:SetNWBool("On",self.On);
+	self:SetWire("Active",self.On);
 end
 
 function ENT:TriggerInput(k,v)
@@ -86,6 +88,7 @@ function ENT:TriggerInput(k,v)
 			self.On = false;
 		end
 		self:SetNWBool("On",self.On);
+		self:SetWire("Active",self.On);
 	elseif(k=="Brightness") then
 		self:SetBrightness(v);
 	elseif(k=="Size") then
