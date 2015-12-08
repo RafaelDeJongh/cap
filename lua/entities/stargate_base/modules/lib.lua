@@ -484,11 +484,14 @@ end
 
 --################# Find's all DHD's which may call this gate @aVoN
 function ENT:FindDHD()
-	if (IsValid(self.LockedDHD)) then return {self.LockedDHD} end
+	if (IsValid(self.LockedDHD)) then
+		if self.LockedDHD.Disabled then return {} end
+		return {self.LockedDHD}
+	end
 	local pos = self.Entity:GetPos();
 	local dhd = {};
 	for _,v in pairs(ents.FindByClass("dhd_*")) do
-		if (v.IsGroupDHD and self.DHDRange and (not IsValid(v.LockedGate) or v.LockedGate==self.Entity)) then
+		if (v.IsGroupDHD and not v.Disabled and self.DHDRange and (not IsValid(v.LockedGate) or v.LockedGate==self.Entity)) then
 			local e_pos = v:GetPos();
 			local dist = (e_pos - pos):Length(); -- Distance from DHD to this stargate
 			if(dist <= self.DHDRange) then
@@ -511,7 +514,10 @@ end
 
 --################# Find's special DHD's which may power this gate @Mad
 function ENT:FindPowerDHD()
-	if (IsValid(self.LockedDHD) and (not self.LockedDHD.Destroyed or util.tobool(GetConVar("stargate_dhd_destroyed_energy"):GetInt()))) then return {self.LockedDHD} end
+	if (IsValid(self.LockedDHD) and (not self.LockedDHD.Destroyed or util.tobool(GetConVar("stargate_dhd_destroyed_energy"):GetInt()))) then 
+		if self.LockedDHD.Disabled then return {} end
+		return {self.LockedDHD} 
+	end
 	if (IsValid(self.LockedMDHD)) then return {self.LockedMDHD} end
 	if (IsValid(self.LockedDestC)) then return {self.LockedDestC} end
 	local pos = self.Entity:GetPos();

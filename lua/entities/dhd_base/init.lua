@@ -118,7 +118,6 @@ ENT.ChevronNumber = {
 	G = 17,
 	H = 18,
 	I = 19,
-
 	J = 20,
 	K = 21,
 	L = 22,
@@ -146,7 +145,7 @@ ENT.ChevronNumber = {
 function ENT:Initialize()
 	self.DialledAddress = {}; -- The address, the DHD shall dial
 	self.busy = false;
-	util.PrecacheModel(self.Model);
+	--util.PrecacheModel(self.Model);
 	util.PrecacheSound(self.PlorkSound);
 	if (self.ChevSounds) then
 		for i=1,table.getn(self.ChevSounds) do
@@ -160,12 +159,15 @@ function ENT:Initialize()
 	self.Entity:SetUseType(SIMPLE_USE);
 	self.WireNoSound = false;
 	if (self.IsDHDSg1) then
-		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Disable Ring Rotation","Wire Disable DHD Sound");
-	elseif (self.IsDHDAtl) then
-		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Slow Mode","Wire Disable DHD Sound");
+		self:CreateWireInputs("Press Button","Disable Menu","Hide Letters","Disable Ring Rotation","Wire Disable DHD Sound","Buttons Mode","Lock Buttons","Lock Main Button","Lock to Gate [ENTITY]","Disable DHD");
+	elseif (self.IsDHDAtl and not self.IsCityDHD) then
+		self:CreateWireInputs("Press Button","Disable Menu","Hide Letters","Slow Mode","Wire Disable DHD Sound","Buttons Mode","Lock Buttons","Lock Main Button","Lock to Gate [ENTITY]","Disable DHD");
+	elseif (self.IsCityDHD) then	
+		self:CreateWireInputs("Press Button","Disable Menu","Hide Letters","Slow Mode","Wire Disable DHD Sound","Disable Iris Toggle","Buttons Mode","Lock Buttons","Lock Main Button","Lock to Gate [ENTITY]","Disable DHD");
 	else
-		self:CreateWireInputs("Press Button","Disable Menu","Disable Glyphs","Wire Disable DHD Sound");
+		self:CreateWireInputs("Press Button","Disable Menu","Hide Letters","Wire Disable DHD Sound","Buttons Mode","Lock Buttons","Lock Main Button","Lock to Gate [ENTITY]","Disable DHD");
 	end
+	self:CreateWireOutputs("Pressed Buttons [STRING]");
 	local dhd = {"dhd_atlantis","dhd_universe","dhd_infinity"}
 	for i=1,3 do
 	    if(self.Entity:GetClass()==dhd[i])then
@@ -177,9 +179,40 @@ function ENT:Initialize()
 	if(phys:IsValid()) then
 		phys:EnableMotion(false);
 	end
+	if self.IsCityDHD then 
+		self:Fire("SetBodyGroup",1);
+		self.Light = false;
+		self.WireNoIris = false;
+		timer.Create("LightThink"..self:EntIndex(), 0.5, 0, function() if IsValid(self.Entity) then self:LightThink() end end);
+		timer.Create("EnergyThink"..self:EntIndex(), 3.0, 0, function() if IsValid(self.Entity) then self:EnergyThink() end end);
+		self:EnergyThink();
+	end
 	self.Destroyed = false;
 	self:SetNetworkedBool("SG_GROUP_SYSTEM",GetConVar("stargate_group_system"):GetBool());
-	self.Entity:SpawnChevron()
+	self:SpawnChevron();
+	self:InitButtons();
+	util.PrecacheModel(self.ModelBroken); -- fix for delay on first broke
+	self.DisRingRotate = false;
+	self.LockedGate = NULL;
+	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
+	self.Disabled = false;
+	self.ButtonsMode = false;
+end
+
+function ENT:ResetButtons()
+	self:SetNetworkedString("ADDRESS","");
+	self:SetWire("Pressed Buttons","");
+	self.DialledAddress = {};
+	if(self.Chevron) then
+		for i=1,#self.Chevron do
+			local f = self.Chevron[i];
+			if IsValid(f) then f:Fire("skin",self.SkinNumber); end
+		end
+	end
+end
+
+function ENT:InitButtons(reset)
+	if reset then self:ResetButtons(); end
 	-- Now, check for near active gates and light up this DHD with the recently called address on this gate
 	local e = self:FindGate();
 	if(IsValid(e) and (e.IsOpen or e.Dialling or e.WireManualDial) and (e.DialledAddress or e.WireDialledAddress)) then
@@ -194,10 +227,6 @@ function ENT:Initialize()
 			self:AddChevron(chev,true,true);
 		end
 	end
-	util.PrecacheModel(self.ModelBroken); -- fix for delay on first broke
-	self.DisRingRotate = false;
-	self.LockedGate = NULL;
-	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
 end
 
 function ENT:SpawnChevron()
@@ -207,7 +236,7 @@ function ENT:SpawnChevron()
 	for i=1,table.getn(self.ChevronModel) do
 		if (self.ChevronModel[i] == "") then return e; end
 		local e = ents.Create("prop_dynamic");
-		util.PrecacheModel(self.ChevronModel[i]);
+		--util.PrecacheModel(self.ChevronModel[i]);
 		e:SetModel(self.ChevronModel[i]);
 		e:SetSolid(SOLID_VPHYSICS); -- fix zat chevron destroy
 		e:SetParent(self.Entity);
@@ -220,7 +249,7 @@ function ENT:SpawnChevron()
 		e.CAP_EH_NoTouch = true;
 		self.Chevron[i] = e;
 		--e.Symbol = table.KeyFromValue( self.ChevronNumber, i )
-		e:SetDerive(self.Entity); -- Derive Material/Color from "Parent"
+		--e:SetDerive(self.Entity); -- Derive Material/Color from "Parent"
 		e:Fire("skin",self.SkinNumber);
 	end
 	return e;
@@ -233,6 +262,7 @@ function ENT:Shutdown(delay)
 		function()
 			if(IsValid(e)) then
 				e.Entity:SetNetworkedString("ADDRESS","");
+				e:SetWire("Pressed Buttons","");
 				e.DialledAddress = {};
 				e.Target = nil;
 				timer.Remove("_StarGate.DeactivateDHDTimer"..e:EntIndex());
@@ -273,7 +303,7 @@ function ENT:TriggerInput(k,v)
 			if (v>=128 and v<=137) then char = string.char(v-80):upper(); -- numpad 0-9
 			elseif (v==139) then char = string.char(42):upper(); end -- numpad *
 			if(v == 13) then -- Enter Key
-				self:PressButton("DIAL",_,true);
+				self:PressButton("DIAL",nil,true);
 			elseif(v == 127) then -- Backspace key
 				local e = self:FindGate();
 				if not IsValid(e) then return end
@@ -281,10 +311,10 @@ function ENT:TriggerInput(k,v)
 				if (e.IsOpen) then
 					e:AbortDialling();
 				elseif (e.NewActive and #self.DialledAddress>0) then
-					self:PressButton(self.DialledAddress[table.getn(self.DialledAddress)],_,true);
+					self:PressButton(self.DialledAddress[table.getn(self.DialledAddress)],nil,true);
 				end
 			elseif(char:find("["..symbols.."]")) then -- Only alphanumerical and the @, #
-				self:PressButton(char,_,true);
+				self:PressButton(char,nil,true);
 			end
 		end
 	elseif (k == "Disable Ring Rotation" or k == "Slow Mode") then
@@ -295,11 +325,55 @@ function ENT:TriggerInput(k,v)
 			self.DisRingRotate = false;
 			self.Entity:SetNWBool("DisRingRotate",false);
 		end
-	elseif (k == "Disable Glyphs") then
+	elseif (k == "Hide Letters") then
 		if (v >= 1) then
 			self.Entity:SetNWBool("DisGlyphs",true);
 		else
 			self.Entity:SetNWBool("DisGlyphs",false);
+		end
+	elseif (k == "Disable DHD") then
+		if (v >= 1) then
+			if (not self.Disabled) then self:ResetButtons() end
+			self.Disabled = true;
+			self:SetNWBool("Disabled",true);
+			if self.IsCityDHD then self:SetSkin(0) end
+		else
+			if (self.Disabled) then self:InitButtons(true) end
+			self.Disabled = false;
+			self:SetNWBool("Disabled",false);
+			self.ButtonsMode = false;
+			self:SetNWBool("ButtonsMode",false);
+		end
+	elseif (k == "Buttons Mode") then
+		if (v >= 1) then
+			self.Disabled = true;
+			self:SetNWBool("Disabled",false);
+			if not self.ButtonsMode then self:ResetButtons() end
+			self.ButtonsMode = true;
+			self:SetNWBool("ButtonsMode",true);
+		else
+			if self.ButtonsMode then self:ResetButtons() end
+			self.ButtonsMode = false;
+			self:SetNWBool("ButtonsMode",false);
+			if (self:GetWire("Disable DHD")<1) then 
+				self.Disabled = false
+			else
+				self:SetNWBool("Disabled",true);
+			end
+		end
+	elseif (k == "Lock Buttons" and self.ButtonsMode) then
+		if (v >= 1) then
+			self.DisableBtns = true
+			self:SetNWBool("DisableBtns",true)
+		else
+			self.DisableBtns = false
+			self:SetNWBool("DisableBtns",false)
+		end
+	elseif (k == "Lock Main Button" and self.ButtonsMode) then
+		if (v >= 1) then
+			self.DisableMainBut = true
+		else
+			self.DisableMainBut = false
 		end
 	elseif (k == "Wire Disable DHD Sound") then
 		if (v>0) then
@@ -313,6 +387,8 @@ function ENT:TriggerInput(k,v)
 		else
 			self.WireNoIris = false;
 		end
+	elseif (k == "Lock to Gate") then
+		self:WireLockDHD(v);
 	end
 end
 
@@ -356,10 +432,9 @@ function ENT:DestroyEffect(noeffect)
 	self:SetNWBool("Busy",true);
 	self:SetNWBool("Destroyed",true);
 
-	util.PrecacheModel(self.ModelBroken);
 	self.Entity:SetModel(self.ModelBroken)
-	self.Entity:Fire("skin",self.SkinNumber/2);
-
+	self.Entity:Fire("skin",self.SkinNumber/2); -- CHECK THIS CODE
+	
 	local gate = self:FindGate();
 	if IsValid(gate) then
 		gate:Flicker(3);
@@ -463,8 +538,31 @@ function ENT:Touch(ent)
 	end
 end
 
+-- wiremod manual dhd assigning
+function ENT:WireLockDHD(gate)
+	if IsValid(gate) and (not gate.IsStargate or gate.IsSupergate or self.LockedGate==gate) then return end
+	if IsValid(self.LockedGate) then
+		self.LockedGate.LockedDHD = nil;
+		self.LockedGate:SetNWEntity("LockedDHD",NULL);
+	end
+	if IsValid(gate) then
+		if IsValid(gate.LockedDHD) then
+			gate.LockedDHD.LockedGate = nil;
+			gate.LockedDHD:SetNWEntity("LockedGate",NULL);
+		end
+		self.LockedGate = gate;
+		self:SetNWEntity("LockedGate",gate);
+		gate.LockedDHD = self.Entity;
+		gate:SetNWEntity("LockedDHD",self.Entity);
+	else
+		self.LockedGate = nil;
+		self:SetNWEntity("LockedGate",NULL);
+	end
+end
+
 --################# Finds a gate @aVoN
 function ENT:FindGate()
+	if (self.Disabled) then return end
 	if (IsValid(self.LockedGate)) then return self.LockedGate end
 	local gate;
 	local dist = self.Range;
@@ -485,14 +583,27 @@ end
 --################# Call address @aVoN
 function ENT:Use(p)
 	--Player is calling the gate and it is not busy
-	if(IsValid(p) and p:IsPlayer() and not self.busy and not self.Destroyed) then
-		local e = self:FindGate();
-		if(not IsValid(e) or e.jammed) then return end; -- Just necessary to make the hook below not being called if no gate is here to get dialled
-		if (GetConVar("stargate_group_system"):GetBool() and e:GetGateGroup()=="") then return end;
-		if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
-		self.LastPlayer = p;
+	if(IsValid(p) and p:IsPlayer() and not self.busy and not self.Destroyed and (not self.Disabled or self.ButtonsMode)) then
+		if (not self.ButtonsMode) then
+			local e = self:FindGate();
+			if(not IsValid(e) or e.jammed) then return end; -- Just necessary to make the hook below not being called if no gate is here to get dialled
+			if (GetConVar("stargate_group_system"):GetBool() and e:GetGateGroup()=="") then return end;
+			if(hook.Call("StarGate.Player.CanDialGate",GAMEMODE,p,e) == false) then return end;
+			self.LastPlayer = p;
+			local btn = self:GetCurrentButton(p);
+			if (btn and btn != "IRIS") then self:PressButton(btn); end
+		else
+			local btn = self:GetCurrentButton(p);
+			if btn and (btn=="DIAL" and not self.DisableMainBut or not self.DisableBtns and btn!="DIAL") then self:ButtonMode(btn); end
+			return false;
+		end
+	end
+	if (self.IsCityDHD and IsValid(p) and p:IsPlayer() and not self.Disabled) then -- small override for IRIS, to let it press even, if gate are activated
 		local btn = self:GetCurrentButton(p);
-		if (btn) then self:PressButton(btn); end
+		if (btn and btn == "IRIS" and not self.WireNoIris) then
+			local iris = StarGate.FindIris(self:FindGate());
+			if IsValid(iris) then iris:Toggle(); end
+		end
 	end
 	return false;
 end
@@ -551,6 +662,7 @@ function ENT:AddChevron(btn, nosound, lightup, gate, city, fail)
 				self.Entity:SetNetworkedBool("CITYBUSY",true);
 			end
 			self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialledAddress));
+			self:SetWire("Pressed Buttons",self:GetNWString("ADDRESS"));
 			if self.Chevron and IsValid(self.Chevron[self.ChevronNumber[btn]]) and lightup then
 				self.Chevron[self.ChevronNumber[btn]]:Fire("skin",self.SkinNumber+1);
 			end
@@ -605,7 +717,7 @@ function ENT:RemoveChevron(btn, lightup, gate)
 			action:Add({f=t.ResetVars,v={t},d=0})
 			t:RunActions(action);
 		end
-		if IsValid(self.Chevron[self.ChevronNumber[btn]]) then
+		if self.Chevron and IsValid(self.Chevron[self.ChevronNumber[btn]]) then
 			self.Chevron[self.ChevronNumber[btn]]:Fire("skin",self.SkinNumber);
 		end
 		if (self.Entity:GetClass()=="dhd_city" and btn == "#") then
@@ -614,6 +726,7 @@ function ENT:RemoveChevron(btn, lightup, gate)
 		end
 		self.DialledAddress=new_t;
 		self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialledAddress));
+		self:SetWire("Pressed Buttons",self:GetNWString("ADDRESS"));
 		if IsValid(gate) and lightup and btn != "DIAL" then
 			local n = table.getn(self.DialledAddress);
 			local action = gate.Sequence:New();
@@ -624,10 +737,22 @@ function ENT:RemoveChevron(btn, lightup, gate)
 	--end
 end
 
+-- buttons mode @AlexALX
+function ENT:ButtonMode(btn)
+	if (self.busy or self.Destroyed or not self.ButtonsMode) then return end
+	if self:GetClass()=="dhd_city" and not self:GetNetworkedBool("HasEnergy",false) then return end
+	local nosound = self.WireNoSound
+	if table.HasValue(self.DialledAddress,btn) then
+		self:RemoveChevron(btn);
+	else
+		self:AddChevron(btn, nosound, true);
+	end
+end
+
 --################# Press Button @aVoN
 -- This function is also used by the USE function and the ConCommand which is getting triggered by the GUI click
 function ENT:PressButton(btn, nolightup, no_menu)
-	if (self.busy or self.Destroyed) then return end
+	if (self.busy or self.Destroyed or self.Disabled) then return end
 	if self:GetClass()=="dhd_city" and not self:GetNetworkedBool("HasEnergy",false) then return end
 	local e = self:FindGate();
 	if not IsValid(e) then return end
@@ -641,11 +766,11 @@ function ENT:PressButton(btn, nolightup, no_menu)
 	-- #################  Random gate dialing for concept
 	if (btn and btn == "*" and num == 0) then
 		if (e:GetClass() == "stargate_universe") then return end
-		self:AddChevron(btn, nosound, lightup, e);
+		self:AddChevron(btn, nosound, false, e);
 		-- Prepare gate
 		local gates = {}
 		for _,v in pairs(ents.FindByClass("stargate_*")) do
-			if(v.IsStargate and self.Entity != v.Entity and v:GetClass() != "stargate_supegate" and v:GetClass() != "stargate_orlin") then
+			if(v.IsStargate and e != v and not v.GatePrivat and v:GetClass() != "stargate_supegate" and v:GetClass() != "stargate_orlin") then
 				if (v:GetGateGroup() == e:GetGateGroup() or v:GetLocale() == false and e:GetLocale() == false) then
 					table.insert(gates,v);
 				end
@@ -661,13 +786,14 @@ function ENT:PressButton(btn, nolightup, no_menu)
 			else
 				dialaddress = RandGate.GateAddress
 				if (RandGate.GateGroup != e.GateGroup) then
-					dialaddress = dialaddress..RandGate.GateGroup
-					if (string.len(e.GateGroup)==3 and string.len(RandGate.GateGroup)!=3) then
-						dialaddress = dialaddress.."@#"
+					if (string.len(RandGate.GateGroup)==3) then
+						dialaddress = dialaddress..RandGate.GateGroup
+					else
+						dialaddress = dialaddress..RandGate.GateGroup[1]
 					end
 				end
 			end
-			self:RemoveChevron(btn, false, lightup, e);
+			self:RemoveChevron(btn, false, false, e);
 			e:DialGate(dialaddress,true);
 		end);
 		self:SetBusy(7);
@@ -862,6 +988,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 								if not IsValid(self) then return end
 								table.insert(self.DialledAddress,"DIAL");
 								self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialledAddress));
+								self:SetWire("Pressed Buttons",self:GetNWString("ADDRESS"));
 								self.Entity:SetNetworkedBool("CITYBUSY",true);
 								e.DialledAddress = self.DialledAddress;
 								e:OnButtDialGate();
@@ -871,6 +998,7 @@ function ENT:PressButton(btn, nolightup, no_menu)
 						elseif (table.getn(self.DialledAddress)==9 or table.HasValue(self.DialledAddress,"#")) then
 							table.insert(self.DialledAddress,"DIAL");
 							self.Entity:SetNetworkedString("ADDRESS",string.Implode(",",self.DialledAddress));
+							self:SetWire("Pressed Buttons",self:GetNWString("ADDRESS"));
 							self.Entity:SetNetworkedBool("CITYBUSY",true);
 							e.DialledAddress = self.DialledAddress;
 							-- Set address, dialling type and start dialling

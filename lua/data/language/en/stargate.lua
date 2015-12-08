@@ -70,6 +70,8 @@ stargate_c_tool_18 = Enable Glyphs
 stargate_c_tool_18d = Disable Glyphs
 stargate_c_tool_19 = Atlantis Type
 stargate_c_tool_19d = Disable Atlantis Type
+stargate_c_tool_20 = Enable DHD
+stargate_c_tool_20d = Disable DHD
 
 // Stargate VGUI menus
 stargate_vgui_address = Address:

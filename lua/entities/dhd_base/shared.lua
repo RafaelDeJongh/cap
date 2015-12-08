@@ -355,3 +355,67 @@ properties.Add( "Stargate.DHD.Glyphs.Off",
 					end
 
 });
+
+
+properties.Add( "Stargate.DHD.On",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_20"),
+	Order		=	-98,
+	MenuIcon	=	"icon16/plugin_add.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("Disabled",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("Disable DHD",0);
+					end
+
+});
+
+properties.Add( "Stargate.DHD.Off",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_20d"),
+	Order		=	-98,
+	MenuIcon	=	"icon16/plugin_delete.png",
+
+	Filter		=	function( self, ent, ply )
+
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsDHD || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("Disabled",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "dhdmodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+						
+						ent:TriggerInput("Disable DHD",1);
+					end
+
+});

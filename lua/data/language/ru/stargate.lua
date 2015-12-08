@@ -66,6 +66,8 @@ stargate_c_tool_18 = Включить буквы
 stargate_c_tool_18d = Выключить буквы
 stargate_c_tool_19 = Атлантис Тип
 stargate_c_tool_19d = Выключить Атлантис Тип
+stargate_c_tool_20 = Включить наборное устройство
+stargate_c_tool_20d = Выключить наборное устройство
 
 // Stargate VGUI menus
 stargate_vgui_address = Адрес:

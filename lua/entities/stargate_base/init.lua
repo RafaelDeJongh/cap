@@ -75,7 +75,7 @@ function ENT:Initialize()
 	self.ResTransInterval = StarGate.CFG:Get("stargate","res_trans_interval",0.1);
 	self.MaxResTransfer = StarGate.CFG:Get("stargate","max_res_transfer",5000);
 	self.ResTransfer = StarGate.CFG:Get("stargate","resource_transfer",true);
-	
+
 	self.ResTransferClasses = {};
 	local classes = StarGate.CFG:Get("stargate","res_classes","");
 	if (classes!="") then
@@ -83,7 +83,7 @@ function ENT:Initialize()
 			self.ResTransferClasses[v:lower()] = true;
 		end
 	end
-	
+
 	self.WormHoleJumpDMG = 0;
 	self:SetNetworkedInt("DHDRange",self.DHDRange);
 	--################# General defines and inits
@@ -790,7 +790,7 @@ function ENT:TransferResource(resname,value)
 				if is_energy then
 					self.NextTransfer = CurTime()+self.EnergyTransInterval;
 				else
-					self.NextResTransfer = CurTime()+self.ResTransInterval;				
+					self.NextResTransfer = CurTime()+self.ResTransInterval;
 				end
 				return value;
 			end

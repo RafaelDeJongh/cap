@@ -1,21 +1,12 @@
-/*
-	DHD SENT for GarrysMod10
-	Copyright (C) 2007  aVoN
+--[[
+	DHD Code
+	Copyright (C) 2011 Madman07
+]]--
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+--################# Include
+if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("base")) then return end
 if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end
+
 ENT.Type = "anim"
 ENT.Base = "dhd_base"
 ENT.PrintName = "DHD (City)"
@@ -28,6 +19,7 @@ list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.IsDHD = true;
 ENT.IsGroupDHD = true;
 ENT.IsDHDAtl = true;
+ENT.IsCityDHD = true;
 
 ENT.Color = {
 	chevron="200 1 1"
@@ -178,4 +170,127 @@ function ENT:GetCurrentButton(p,multi)
 		end
 	end
 	return btn;
+end
+
+if SERVER then
+AddCSLuaFile();
+
+ENT.PlorkSound = "stargate/dhd_atlantis.mp3";
+ENT.LockSound = "stargate/chevron_lock_atlantis_incoming.mp3";
+ENT.Model = "models/ZsDaniel/atlantis_console/dhd.mdl"
+
+ENT.ChevronModel = {}
+-- make code shorter
+for i=1,37 do
+	table.insert(ENT.ChevronModel,"models/ZsDaniel/atlantis_console/buttons/b"..i..".mdl")
+end
+table.insert(ENT.ChevronModel,"") -- empty ones...
+table.insert(ENT.ChevronModel,"")
+
+ENT.ChevronNumber = {
+
+	A = 1,
+	B = 2,
+	C = 3,
+	D = 4,
+	E = 5,
+	F = 6,
+	G = 7,
+	H = 8,
+	I = 9,
+	J = 10,
+	K = 11,
+	L = 12,
+	M = 13,
+	N = 14,
+	O = 15,
+	P = 16,
+	["DIAL"] = 37,
+	Q = 17,
+	R = 18,
+	S = 19,
+	T = 20,
+
+	[1] = 21,
+	["1"] = 21,
+	[2] = 22,
+	["2"] = 22,
+	[3] = 23,
+	["3"] = 23,
+	[4] = 24,
+	["4"] = 24,
+	[5] = 25,
+	["5"] = 25,
+	[6] = 26,
+	["6"] = 26,
+	[7] = 27,
+	["7"] = 27,
+	[8] = 28,
+	["8"] = 28,
+	[9] = 29,
+	["9"] = 29,
+
+	U = 30,
+	V = 31,
+	W = 32,
+	[0] = 33,
+	["0"] = 33,
+	["!"] = 33,
+	X = 34,
+	Y = 35,
+	Z = 36,
+
+	["@"] = 0,
+	["#"] = 0,
+	["*"] = 0,
+}
+
+--################# SpawnFunction
+function ENT:SpawnFunction(p,tr)
+	if (not tr.Hit) then return end;
+	local pos = tr.HitPos;
+	local e = ents.Create("dhd_city");
+	e:SetPos(pos);
+	e:Spawn();
+	e:Activate();
+	local ang = p:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360
+	e:SetAngles(ang);
+	return e;
+end
+
+function ENT:LightThink()
+	if (not IsValid(self.Entity)) then return end
+	local ply = StarGate.FindPlayer(self.Entity:GetPos(), 300);
+
+	if (ply and not self.Light and self:GetNWBool("HasEnergy",false)) then
+		self.Light = true;
+		self.Entity:SetSkin(1);
+	elseif (not ply and self.Light or self.Light and not self:GetNWBool("HasEnergy",false)) then
+		self.Light = false;
+		self.Entity:SetSkin(0);
+	end
+end
+
+function ENT:EnergyThink()
+	if (not IsValid(self.Entity)) then return end
+
+	local e = self:FindGate();
+	if (IsValid(e) and e:CheckEnergy(true,true) or self.ButtonsMode) then
+		self:SetNWBool("HasEnergy",true);
+	else
+		self:SetNWBool("HasEnergy",false);
+	end
+end
+
+if (StarGate and StarGate.CAP_GmodDuplicator) then
+	duplicator.RegisterEntityClass( "dhd_city", StarGate.CAP_GmodDuplicator, "Data" )
+end
+
+else -- CLIENT
+
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+	ENT.Category = SGLanguage.GetMessage("stargate_category");
+	ENT.PrintName = SGLanguage.GetMessage("dhd_city");
+end
+
 end

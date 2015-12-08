@@ -627,7 +627,7 @@ if IsValid(@value 1) and @value 1.IsDHD and EXPADV.PPCheck(Context,@value 1) the
 	@value 1:TriggerInput("Press Button",@value 2:byte())
 end
 ]])
-Component:AddFunctionHelper( "stargateDHDPressButton", "e:s", "Sets stargate group." )
+Component:AddFunctionHelper( "stargateDHDPressButton", "e:s", "Pressing button on DHD." )
 
 Component:AddPreparedFunction( "stargateDHDPressButton", "wl:s", "",
 [[
@@ -635,7 +635,7 @@ if IsValid(@value 1) and @value 1.IsDHD then
 	@value 1:TriggerInput("Press Button",@value 2:byte())
 end
 ]])
-Component:AddFunctionHelper( "stargateDHDPressButton", "wl:s", "Sets stargate group." )
+Component:AddFunctionHelper( "stargateDHDPressButton", "wl:s", "Pressing button on DHD." )
 -------------------------------------------------------------------------
 
 Component:AddPreparedFunction( "stargateGetEnergyFromAddress", "e:s", "n",
