@@ -32,7 +32,7 @@ function ENT:Initialize()
 	self.MaxFrequency = 1500;
 
 	if (WireAddon) then
-		self:CreateWireInputs("Activate","Frequency");
+		self:CreateWireInputs("Activate","Frequency","Disable Use");
 		self:CreateWireOutputs("Activated","ActiveFrequency");
 	end
 	self:ShowOutput(true);
@@ -132,6 +132,7 @@ function ENT:Use(ply)
 		self.IsEnabled = true;
 		self:SetWire("Activated",1);
 	end*/
+	if self:GetWire("Disable Use")>0 then return end
 	net.Start("shieldid_sendinfo")
 	net.WriteEntity(self)
 	net.WriteUInt(self.Frequency,12)

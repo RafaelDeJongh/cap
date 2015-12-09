@@ -40,7 +40,7 @@ function SWEP:Deploy()
 	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
 end
 
-SWEP.Sounds = {SwingSound = Sound( "weapons/slam/throw.wav" )}
+SWEP.Sounds = {SwingSound = Sound( "weapons/slam/throw.wav" ), SwitchMode=Sound("buttons/button5.wav")}
 
 if SERVER then
 
@@ -232,6 +232,7 @@ function SWEP:SecondaryAttack()
 			self.WepMode = 1;
 		end
 		self:SetNWInt("Mode",self.WepMode);
+		self:EmitSound(self.Sounds.SwitchMode);
 		self.NextUse = CurTime() + 0.1;
 	end
 end
