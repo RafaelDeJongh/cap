@@ -63,6 +63,9 @@ Spacebuild Enhancement Pack: https://github.com/SnakeSVx/sbep
 
 ####Sidenotes
 This addon NO LONGER REQUIRES the Avons Stargate Pack.
+
 The Group System Addon IS MERGED WITH CAP therefore it is NOT REQUIRED.
+
 If you do install either of the above mentioned addons IT WILL CAUSE ERRORS AND BREAKS IN CARTERSPACK.
+
 This pack WILL NOT work on older versions of Garry’s Mod.
