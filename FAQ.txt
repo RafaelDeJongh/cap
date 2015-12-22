@@ -1,3 +1,5 @@
+Frequently Asked Questions
+
 How big is the complete addon?
 --------------------------------------------------------------
 The Stargate Carter Addon Pack is around 1.9 GigaBytes (double the size if you use the github repository).
