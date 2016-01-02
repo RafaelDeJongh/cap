@@ -302,11 +302,10 @@ if(meta and not meta.__SetMaterial) then
 		end
 	end
 	
-	/*
 	--################# K/V Setting @aVoN
 	meta.__SetKeyValue = meta.SetKeyValue;
 	meta.SetKeyValue = function(self,...)
-		if(not IsValid(self)) then return end;
+		if not self or not self.__SetKeyValue then return end
 		-- Default behaviour
 		self:__SetKeyValue(...);
 		-- Deriving Extra
@@ -326,7 +325,6 @@ if(meta and not meta.__SetMaterial) then
 			end
 		end
 	end
-	*/
 
 	--################# ent_fire commands @aVoN
 	meta.__Fire = meta.Fire;
