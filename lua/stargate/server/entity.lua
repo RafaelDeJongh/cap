@@ -301,7 +301,8 @@ if(meta and not meta.__SetMaterial) then
 			end
 		end
 	end
-
+	
+	/*
 	--################# K/V Setting @aVoN
 	meta.__SetKeyValue = meta.SetKeyValue;
 	meta.SetKeyValue = function(self,...)
@@ -325,6 +326,7 @@ if(meta and not meta.__SetMaterial) then
 			end
 		end
 	end
+	*/
 
 	--################# ent_fire commands @aVoN
 	meta.__Fire = meta.Fire;
