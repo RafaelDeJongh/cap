@@ -298,9 +298,10 @@ function ENT:Think()
 				util.PrecacheSound("tech/mcd_spawn.wav")
 		        self.Entity:EmitSound( "tech/asgard_teleport.mp3", 100, 75 )
 				timer.Simple(0.3,function()
-				    if(self.Ent:IsValid())then
+				    if(IsValid(self.Ent))then
 					    self.Ent:SetColor(Color(self.ColorR,self.ColorG,self.ColorB,255));
 				        self.Ent:SetMaterial(self.Material);
+						self.Ent = nil;
 					end
 				end);
 		        self.Ent:SetSolid(SOLID_VPHYSICS);
@@ -525,6 +526,12 @@ net.Receive("MCD",function(len,ply)
 	end
 	self:StartCreate(class,ply,data);
 end);
+
+function ENT:OnRemove()
+	if IsValid(self.Ent) then
+		self.Ent:Remove();
+	end
+end
 
 function ENT:PostEntityPaste(player, Ent,CreatedEntities)
 	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
