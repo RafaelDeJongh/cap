@@ -74,7 +74,7 @@ function ENT:Initialize()
 	self:SetWire("Objects",0);
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
-		phys:Wake();
+		--phys:Wake(); temporary disabled due to bug in gmod
 	end
 	self:ShowOutput(false);
 end
@@ -243,6 +243,7 @@ end
 
 --################# Init @Catdaemon,aVoN
 function ENT:Allowed(e)
+	if not e:GetPhysicsObject():IsValid() then return false end -- fix
 	if(not (self.Ents[e] or self.Disallowed[e:GetClass()] or e.IsStargate or e.IsDHD or e.IsRings or e:IsPlayer() and e:HasGodMode() or e==game.GetWorld() or e:GetModel():find("*"))) then -- "*" in modelname is always a brush/map entity
 		local allow = hook.Call("StarGate.Harvester.Ent",nil,e,self);
 		if (allow==false) then return false end

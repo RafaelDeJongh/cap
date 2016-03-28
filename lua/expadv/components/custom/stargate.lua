@@ -1070,7 +1070,7 @@ Component:AddFunctionHelper( "stargateAtlantisTPTeleport", "wl:s", "Uses atlanti
 Component:AddPreparedFunction( "stargateAtlantisTPAddressList", "e:", "ar",
 [[@define result = {}
 if IsValid(@value 1) and @value 1.IsAtlTP and EXPADV.PPCheck(Context,@value 1) then 
-	@result = @value 1:WireGetAddresses() 
+	@result = EXPADV.Components.stargate.LuaTablesToArrayOfTables(@value 1:WireGetAddresses()) 
 end
 @result.__type = "s"
 ]], "@result" )
@@ -1079,7 +1079,7 @@ Component:AddFunctionHelper( "stargateAtlantisTPAddressList", "e:", "Returns atl
 Component:AddPreparedFunction( "stargateAtlantisTPAddressList", "wl:", "ar",
 [[@define result = {}
 if IsValid(@value 1) and @value 1.IsAtlTP then 
-	@result = @value 1:WireGetAddresses() 
+	@result = EXPADV.Components.stargate.LuaTablesToArrayOfTables(@value 1:WireGetAddresses()) 
 end
 @result.__type = "s"
 ]], "@result" )

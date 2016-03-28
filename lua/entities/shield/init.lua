@@ -132,7 +132,7 @@ function ENT:Initialize()
 	end
 	-- Fixes a bug with "draw-on-passing". Sents who aren't awake do not trigger Touch! So wake them!
 	for k,_ in pairs(self.nocollide) do
-		if(k:IsValid()) then
+		if(k:IsValid() and k!=self) then -- calling wake on itself cause crazy physics after latest gmod update, temporary @ AlexALX
 			local phys = k:GetPhysicsObject();
 			if(phys:IsValid()) then
 				phys:Wake();

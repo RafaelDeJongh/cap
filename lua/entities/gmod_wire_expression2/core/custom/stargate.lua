@@ -14,6 +14,44 @@ if EGP and EGP.ValidFonts then
 	table.insert(EGP.ValidFonts,"Quiver");
 end
 
+-- Stupid lua table to e2 table convertation due to wiremod "fix" @ AlexALX
+local LuaTablesToArrayOfTables = function ( tbl )
+	local Array, n, ntypes, size = {}, {}, {}, 0
+	for _,data in pairs(tbl) do
+		// This code works fine, but use array in table shorter and faster
+		/*local n2, ntypes2, size2 = {}, {}, 1
+		for _,v in pairs(data) do
+			local Type
+			if isstring(v) then
+				Type = "s"
+			elseif isbool(v) then
+				Type = "b"
+			elseif isnumber(v) then
+				Type = "n"
+			elseif isvector(v) then
+				Type = "v"
+			elseif isangle(v) then
+				Type = "a"
+			elseif isentity(v) then
+				Type = "e"
+			end
+	 
+			if Type then 
+				n2[size2] = v
+				ntypes2[size2] = Type
+				size2 = size2+1
+			end
+		end*/
+		     
+		// only string indexes works with foreach in e2, but then order of array lost :( so old code is not compatible, sorry, blame wiremod devs
+		n[size] = data //{n=n2,ntypes=ntypes2,s={},stypes={},size=size2}
+		ntypes[size] = "r"
+		size = size+1
+	end	
+	Array = {n=n,ntypes=ntypes,s={},stypes={},size=size}
+	return Array
+end
+
 __e2setcost( 1 )
 
 e2function string entity:stargateAddress()
@@ -654,14 +692,14 @@ e2function number entity:stargateGetDistanceFromAddress(string address)
 	return this:WireGetEnergy(address:upper():sub(1,9),true);
 end
 
-e2function array wirelink:stargateAddressList()
-	if not IsValid(this) or not this.IsStargate then return {} end
-	return this:WireGetAddresses();
+e2function table wirelink:stargateAddressList()
+	if not IsValid(this) or not this.IsStargate then return LuaTablesToArrayOfTables({}) end
+	return LuaTablesToArrayOfTables(this:WireGetAddresses());
 end
 
-e2function array entity:stargateAddressList()
-	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return {} end
-	return this:WireGetAddresses();
+e2function table entity:stargateAddressList()
+	if not IsValid(this) or not this.IsStargate or not(isOwner(self,this) or self.player:IsAdmin()) then return LuaTablesToArrayOfTables({}) end
+	return LuaTablesToArrayOfTables(this:WireGetAddresses());
 end
 
 e2function void wirelink:stargateRandomAddress(number mode)
@@ -879,9 +917,9 @@ end
 
 __e2setcost( 10 )
 
-e2function array wirelink:stargateAtlantisTPAddressList()
-	if not IsValid(this) or not this.IsAtlTP then return {} end
-	return this:WireGetAddresses();
+e2function table wirelink:stargateAtlantisTPAddressList()
+	if not IsValid(this) or not this.IsAtlTP then return LuaTablesToArrayOfTables({}) end
+	return LuaTablesToArrayOfTables(this:WireGetAddresses());
 end
 
 __e2setcost( 1 )
@@ -946,9 +984,9 @@ end
 
 __e2setcost( 10 )
 
-e2function array entity:stargateAtlantisTPAddressList()
-	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return {} end
-	return this:WireGetAddresses();
+e2function table entity:stargateAtlantisTPAddressList()
+	if not IsValid(this) or not this.IsAtlTP or not(isOwner(self,this) or self.player:IsAdmin()) then return LuaTablesToArrayOfTables({}) end
+	return LuaTablesToArrayOfTables(this:WireGetAddresses());
 end
 
 __e2setcost( nil )

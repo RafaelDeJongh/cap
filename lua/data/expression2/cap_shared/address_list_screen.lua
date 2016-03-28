@@ -4,7 +4,7 @@
 @name Address list screen
 @inputs Refresh SG:wirelink
 @outputs ListOut:string
-@persist AddressList:array
+@persist AddressList:table
 @trigger
 
 if (Refresh==1) {
@@ -12,12 +12,13 @@ if (Refresh==1) {
     List = ""
 
     # get all addresses
-    foreach(K,V:array=AddressList) {
+    for(I=0,AddressList:count()-1) {
+        V = AddressList[I,array]
         Address = V[1,string] # Get address
         Name = V[2,string] # Get name
         Blocked = V[3,number] # Get blocked
 
-        if (K!=1) { List = List + "<br>" }
+        if (I!=0) { List = List + "<br>" }
         if (Blocked==1) {
             List = List + "BLOCKED! Address - " + Address + " Name - " + Name
         } else {

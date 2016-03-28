@@ -4,14 +4,15 @@
 @name Dial Closest Stargate
 @inputs SG:wirelink Button AllowBlocked
 @outputs True
-@persist AddressList:array
+@persist AddressList:table
 
 True=1
 
 if (Button & ~Button) {
     AddressList = SG:stargateAddressList()
     Min = -1
-    foreach(K,V:array=AddressList) {
+    for(I=0,AddressList:count()-1) {
+        V = AddressList[I,array]
         Address = V[1,string] # Get address
         Blocked = V[3,number] # Get blocked
         Distance = SG:stargateGetDistanceFromAddress(Address)

@@ -10,7 +10,7 @@
 @outputs True
 @persist RAM Pip Load1 LoadOver Loaded RB Loaded1 STD2:string STD STD1 IDs1
 @persist I1:table Day:string Month:string Year:string Hours:string Min:string Sec:string ChrA:string Pos:vector2
-@persist AddressN:array AddressG:array AddressB:array AddressO:string AddressList:array AdrPlus Adr
+@persist AddressN:array AddressG:array AddressB:array AddressO:string AddressList:table AdrPlus Adr
 @persist AAA GT:gtable ABt:table DPt:table AddressBook:string KeyDP KeyDPUser:entity DPL Start NewCol ETIDdp ETdp:entity
 @trigger
 if(~EGP&EGP){reset()}
@@ -47,7 +47,8 @@ AddressG:clear()
 AddressN:clear()
 AddressB:clear()
 AddressList=SG:stargateAddressList()
-foreach(I,V:array=AddressList) {
+for(I=1,AddressList:count()) {
+V = AddressList[I-1,array]
 Address = V[1,string] # Get address
 Name = V[2,string] # Get name
 Blocked = V[3,number] # Get blocked
