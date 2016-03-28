@@ -325,6 +325,7 @@ function SWEP:DoShoot()
 							else
 								v:SetArmor(0); -- Remove all armor
 							end
+							v:SetShouldServerRagdoll(true)	// Will make you able to vaporize with next shot.
 							v:TakeDamage(10,p); -- Will kill, definately (Exept for rollermines)
 						end
 						--################### Check for NPC-Ragdolls to make them dissovle when hit with the next shot
