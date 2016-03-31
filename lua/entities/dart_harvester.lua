@@ -72,7 +72,7 @@ function ENT:Initialize()
 	self.Ents={};
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
-		--phys:Wake(); temporary disabled due to bug in gmod
+		phys:Wake();
 	end
 end
 

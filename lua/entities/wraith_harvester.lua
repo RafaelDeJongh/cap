@@ -74,7 +74,7 @@ function ENT:Initialize()
 	self:SetWire("Objects",0);
 	local phys = self.Entity:GetPhysicsObject();
 	if(phys:IsValid()) then
-		--phys:Wake(); temporary disabled due to bug in gmod
+		phys:Wake();
 	end
 	self:ShowOutput(false);
 end
