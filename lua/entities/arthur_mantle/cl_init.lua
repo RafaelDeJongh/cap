@@ -180,8 +180,8 @@ local function checkfont(self)
 	surface.SetFont( "AncientsC" )
 	local w = surface.GetTextSize("SoMe TeXt HerE 12-12 %$");
 	surface.SetFont( "GlyphsC" )
-	local w2 = surface.GetTextSize("SoMe TeXt HerE 12-12 %$");
-	if (w==321 and w2==727) then
+	local w2 = surface.GetTextSize("SOMETEXTHERE0123#*xyz");
+	if (w==321 and (w2==716 or w2==733 and not system.IsWindows())) then
 		validfont = true
 	end
 	if (self.AFont!=self.TFont) then validfont = false end
@@ -233,13 +233,9 @@ function ENT:Draw()
 			end
 
 			local Col = Color(math.Rand(200,255),math.Rand(50,75),math.Rand(25,50),math.Rand(150,200));
-			if (not checkdata) then
+			if (not checkdata or not checkfont(self)) then
 				cam.Start3D2D(pos, ang, 0.05 );
-					draw.DrawText("DATA ERROR", "MantleErr", 0, 600, Col, TEXT_ALIGN_CENTER );
-				cam.End3D2D();
-			elseif (not checkfont(self)) then
-				cam.Start3D2D(pos, ang, 0.05 );
-					draw.DrawText("FONT ERROR", "MantleErr", 0, 600, Col, TEXT_ALIGN_CENTER );
+					draw.DrawText(not checkdata and "DATA ERROR" or "FONT ERROR", "MantleErr", 0, 600, Col, TEXT_ALIGN_CENTER );
 				cam.End3D2D();
 			else
 				cam.Start3D2D(pos, ang, 0.05 );

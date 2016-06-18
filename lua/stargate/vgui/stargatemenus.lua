@@ -919,7 +919,7 @@ function PANEL:SetSettings(entity,groupsystem)
 		self.VGUI.GroupStatus = vgui.Create("DLabel",self);
 
 		if (self.IsSGU) then
-			self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_type"));		
+			self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_type"));
 		else
 			self.VGUI.GroupLabel:SetText(SGLanguage.GetMessage("stargate_vgui_group"));
 		end
@@ -1787,16 +1787,14 @@ local sga = {
 }
 surface.CreateFont("stargate_address_glyphs_a", sga);
 
+local textsizes = {17.8,20,11,8} -- {sg1, atlantis, universe, normal text}, for windows
+if not system.IsWindows() then
+	textsizes = {18.9,17.5,11.5,9} -- for linux/osx, hope it works
+end
+
 local function TextSize(text,type)
 	local len = text:len()
-	local siz = len*17.8 -- sg1
-	if (type==1) then -- atlantis
-		siz = len*20;
-	elseif(type==2) then -- universe
-		siz = len*11;
-	elseif(type==3) then -- normal text
-		siz = len*8
-	end
+	local siz = len*textsizes[type+1];
 	return math.ceil(siz);
 end
 

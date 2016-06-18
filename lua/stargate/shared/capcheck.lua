@@ -237,7 +237,7 @@ local function Workshop_res_Installed()
 	return false;
 end
 
-if (Workshop_res_Installed() and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and not table.HasValue( addonlist, "Carter Addon Pack - Fonts" )) then
+--[[if (Workshop_res_Installed() and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ) and not table.HasValue( addonlist, "Carter Addon Pack - Fonts" )) then
 	local files_check = {"resource/fonts/anquietas.ttf","resource/fonts/quiver.ttf","resource/fonts/stargate_atlantis.ttf",
 	"resource/fonts/stargate_concept.ttf","resource/fonts/stargate_sg1.ttf","resource/fonts/stargate_universe.ttf"}
 	local manual = true;
@@ -260,7 +260,7 @@ if (Workshop_res_Installed() and not table.HasValue( addonlist, "Carter Addon Pa
 		MsgN("-------");
 		MsgN("Error #11\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
-end
+end  ]]
 if (not StarGate.WorkShop) then
 	if (cap_installed and not Workshop_res_Installed()) then
 		if (status != "Error") then
@@ -289,7 +289,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<489 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<490 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -377,9 +377,9 @@ if (table.getn(oldfiles)>0) then
 	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
-if (VERSION<160330) then
+if (VERSION<160424) then
 	if (status != "Error") then
-		status = "Error";
+		status = "Error";                 
 		MsgN("Status: "..status)
 	end
 	table.insert(StarGate_Group.ErrorMSG, {"Your GMod is out of date, please update it.","06"});
