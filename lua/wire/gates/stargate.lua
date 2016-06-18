@@ -397,11 +397,11 @@ GateActions["TransferEnergy"] = {
 
 GateActions["TransferResource"] = {
 	name = "Transfer resource between stargates",
-	inputs = { "Ent", "Value", "Transfer" },
-	inputtypes = { "WIRELINK", "NORMAL", "NORMAL" },
+inputs = { "Ent", "Resource", "Value", "Transfer" },
+inputtypes = { "WIRELINK", "STRING", "NORMAL", "NORMAL" },
 	outputtypes = { "STRING", "NORMAL" },
-	output = function(gate, Ent, Name, Value, Set)
-		if !IsValid(Ent) or !Ent.IsStargate then return 0 elseif Set>0 then return Ent:TransferResource(Name, Value) end
+	output = function(gate, Ent, Resource, Value, Set)
+		if !IsValid(Ent) or !Ent.IsStargate then return 0 elseif Set>0 then return Ent:TransferResource(Resource, Value) end
 	end,
 	label = function(Out)
 		return string.format ("Transferred = %s", Out)
