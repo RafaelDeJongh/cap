@@ -55,19 +55,21 @@ function SWEP:Initialize()
 	self.Weapon:SetWeaponHoldType(self.HoldType)
 end
 
---################### Deploy @aVoN
+--################### Deploy @aVoN || #tweaked by #CryptAlchemy (what's with the ##s???)
 function SWEP:Deploy()
 	-- Animation
 	self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
 	-- Muzzle
 	self:Muzzle();
 	if SERVER and IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Deploy,math.random(90,110),math.random(90,110)) end;
+	self.IsEngaged = true
 	return true;
 end
 
 --################### Muzzleflash @aVoN
 function SWEP:Muzzle()
 	if (not IsValid(self.Owner)) then return end
+	if(not self.IsEngaged) then return end
 	-- Muzzle
 	local fx = EffectData();
 	fx:SetScale(0);
@@ -81,6 +83,7 @@ end
 --################### Shoot @aVoN
 function SWEP:PrimaryAttack()
 	if(not IsValid(self.Owner) or (self.Owner:IsPlayer() and self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0)) then return end;
+	if(not self.IsEngaged) then return end;
 	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK);
 	-- Muzzle
 	self:Muzzle();
@@ -90,8 +93,29 @@ function SWEP:PrimaryAttack()
 	return true;
 end
 
---################### We don't have secondary @aVoN
-function SWEP:SecondaryAttack() return false end;
+--################### Disengage @CryptAlchemy
+
+function SWEP:SecondaryAttack()
+	if (not IsValid(self.Owner)) then return end
+	if(self.IsEngaged) then
+		-- Animation
+		self.Weapon:SendWeaponAnim(ACT_VM_SECONDARYATTACK);
+		-- Sound
+		if SERVER and IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Disengage,math.random(90,110),math.random(90,110)) end;
+		self.IsEngaged = false
+		return true;
+	else
+		-- Animation
+		self.Weapon:SendWeaponAnim(ACT_VM_DRAW);
+		-- Muzzle
+		self:Muzzle();
+		if SERVER and IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Deploy,math.random(90,110),math.random(90,110)) end;
+		self.IsEngaged = true
+		return true;
+	end
+end
+
+--################### We don't this stuffz @CryptAlchemy
 function SWEP:ShootEffects() return false end;
 function SWEP:ShootBullet() return false end;
 
@@ -99,7 +123,7 @@ if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("weapon")) then return end
 AddCSLuaFile();
-SWEP.Sounds = {Shot=Sound("pulse_weapon/staff_weapon.mp3"),Deploy=Sound("pulse_weapon/staff_engage.mp3"),Holster=Sound("pulse_weapon/staff_holster.mp3")};
+SWEP.Sounds = {Shot=Sound("pulse_weapon/staff_weapon.mp3"),Deploy=Sound("pulse_weapon/staff_engage.mp3"),Disengage=Sound("pulse_weapon/staff_disengage.mp3"),Holster=Sound("pulse_weapon/staff_holster.mp3")};
 
 --################### Init the SWEP @aVoN
 function SWEP:Initialize()
