@@ -6,7 +6,7 @@ The Stargate Carter Addon Pack is around 2 GigaBytes.
 
 ### Is this addon on the Steam Workshop?
 
-We brought the addon in its entirety to the workshop and put it into one collection for you to subscribe to: [Steam Workshop Collection](http://steamcommunity.com/sharedfiles/filedetails/?id=180077636)
+We brought the addon in its entirety to the workshop and put it into one collection for you to subscribe to: http://steamcommunity.com/sharedfiles/filedetails/?id=180077636
 
 Just follow the instructions placed in the description and you'll be ready to play with CAP!
 
