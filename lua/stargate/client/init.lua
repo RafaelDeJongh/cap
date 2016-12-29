@@ -22,7 +22,7 @@
 
 --################# Header ###################
 StarGate.HTTP = {
-	FORUM = "http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472",
+	FORUM = "http://steamcommunity.com/sharedfiles/filedetails/discussions/180077636",
 	BUGS = "https://github.com/RafaelDeJongh/cap/issues",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
 	SITE = "https://github.com/RafaelDeJongh/cap",
@@ -307,7 +307,7 @@ function StarGate.ShowCapMotd(title,text)
 		<li><a href="https://github.com/RafaelDeJongh/cap">Home</a> |</li>
 	    <li><a href="https://github.com/RafaelDeJongh/cap/commits/master">News</a> |</li>
 	    <li><a href="https://github.com/RafaelDeJongh/cap/wiki">Wiki</a> |</li>
-	    <li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">Support</a></li>
+	    <li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/180077636">Support</a></li>
 	</ul><hr>]]..text.."</body></html>";
 
 	MOTDHTMLFrame:SetHTML(html)

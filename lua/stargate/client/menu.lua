@@ -532,7 +532,7 @@ local info_page = [[<html>
 				<li><a href="https://github.com/RafaelDeJongh/cap/wiki/Download-&-Installation">Download</a> |</li>
 				<li><a href="https://github.com/RafaelDeJongh/cap/commits/master">News</a> |</li>
 				<li><a href="https://github.com/RafaelDeJongh/cap/wiki">Wiki</a> |</li>
-				<li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">Support</a></li>
+				<li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/180077636">Support</a></li>
             </ul>
         <div id="article">
          <h2>Missing Addon: The Stargate Carter Addon Pack</h2>
@@ -564,7 +564,7 @@ local info_page = [[<html>
     Updates and news can be found on the CAP Homepage located here:<br><a href="https://github.com/RafaelDeJongh/cap/commits/master">GitHub</a> <br>
     The Download page can be found with a full installation instruction here:<br><a href="https://github.com/RafaelDeJongh/cap/wiki/Download-&-Installation">Download & Installation</a><br>
     More information can be found on the CAP WIKI located here:<br><a href="https://github.com/RafaelDeJongh/cap/wiki">CAP Wiki</a><br>
-    Having troubles then visit our Forum:<br><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">steam forum</a><br>
+    Having troubles then visit our Forum:<br><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/180077636">steam forum</a><br>
 	If want to report a bug visit GitHub issues tracker:<br><a href="https://github.com/RafaelDeJongh/cap/issues">CAP Issues</a>
     </p>
         </div>
