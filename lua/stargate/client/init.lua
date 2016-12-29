@@ -22,15 +22,15 @@
 
 --################# Header ###################
 StarGate.HTTP = {
-	FORUM = "http://sg-carterpack.com/forum/",
-	BUGS = "http://sg-carterpack.com/forum/support/",
+	FORUM = "http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472",
+	BUGS = "https://github.com/RafaelDeJongh/cap/issues",
 	VER = "https://raw.github.com/RafaelDeJongh/cap/master/lua/cap_ver.lua",
-	SITE = "http://www.sg-carterpack.com/",
-	NEWS = "http://sg-carterpack.com/category/news/",
-	WIKI = "http://sg-carterpack.com/wiki/",
-	MULTI = "http://sg-carterpack.com/forums/forum/support/multi-language-support/", -- this is used by default for all languages, if not defined another url in language file.
+	SITE = "https://github.com/RafaelDeJongh/cap",
+	NEWS = "https://github.com/RafaelDeJongh/cap/commits/master",
+	WIKI = "https://github.com/RafaelDeJongh/cap/wiki",
+	--MULTI = "http://sg-carterpack.com/forums/forum/support/multi-language-support/", -- this is used by default for all languages, if not defined another url in language file.
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
-	CREDITS = "http://sg-carterpack.com/wiki/#credits",
+	CREDITS = "https://github.com/RafaelDeJongh/cap/wiki#credits",
 	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest"
 };
 StarGate.LATEST_VERSION = 0;
@@ -265,13 +265,12 @@ function StarGate.ShowCapMotd(title,text)
 	local MOTDHTMLFrame = vgui.Create( "HTML", TACFrame )
 	MOTDHTMLFrame:SetPos( 25, 40 )
 	MOTDHTMLFrame:SetSize( TACFrame:GetWide() - 50, TACFrame:GetTall() - 65 )
-
+    -- background-image: url(http://sg-carterpack.com/wp-content/uploads/2013/09/bg1.jpg);
 	local html = [[<html>
 	<head>
 	<style type='text/css'>
 		body {
 			background-color: #171717;
-			background-image: url(http://sg-carterpack.com/wp-content/uploads/2013/09/bg1.jpg);
 			background-repeat: repeat;
 			font-family: Verdana, Geneva, sans-serif;
 			color: #FFF;
@@ -305,10 +304,10 @@ function StarGate.ShowCapMotd(title,text)
 	</style>
 	</head>
 	<body><hr><ul id="nav">
-		<li><a href="http://sg-carterpack.com/">Home</a> |</li>
-	    <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
-	    <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
-	    <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
+		<li><a href="https://github.com/RafaelDeJongh/cap">Home</a> |</li>
+	    <li><a href="https://github.com/RafaelDeJongh/cap/commits/master">News</a> |</li>
+	    <li><a href="https://github.com/RafaelDeJongh/cap/wiki">Wiki</a> |</li>
+	    <li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">Support</a></li>
 	</ul><hr>]]..text.."</body></html>";
 
 	MOTDHTMLFrame:SetHTML(html)

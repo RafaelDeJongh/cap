@@ -113,7 +113,7 @@ vgui.Register("SHelpButton",PANEL,"Panel");
 
 local PANEL = {};
 PANEL.Data = {
-	URL="http://sg-carterpack.com/wiki/", -- Base URL
+	URL="https://github.com/RafaelDeJongh/cap/wiki/", -- Base URL
 	Width=ScrW()-100,
 	Heigth=ScrH()-100,
 }

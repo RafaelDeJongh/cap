@@ -459,16 +459,16 @@ hook.Add( "StargateTab", "AddEntityContent", function( pnlContent, tree, node )
 	end
 
 	local node = tree:AddNode( SGLanguage.GetMessage("spawninfo_title"), "icon16/information.png", true );
-
+    /*
 	local multi_url = SGLanguage.GetMessage("spawninfo_multi_url");
 	if (not SGLanguage.ValidMessage("spawninfo_multi_url")) then
 		multi_url = StarGate.HTTP.MULTI;
-	end
+	end*/
 	local cats = {
 		{SGLanguage.GetMessage("spawninfo_news"),StarGate.HTTP.NEWS,"icon16/newspaper.png"},
 		{SGLanguage.GetMessage("spawninfo_wiki"),StarGate.HTTP.WIKI,"icon16/page_white_text.png"},
 		{SGLanguage.GetMessage("spawninfo_forum"),StarGate.HTTP.FORUM,"icon16/group.png"},
-		{SGLanguage.GetMessage("spawninfo_multi"),multi_url,"icon16/user_go.png"},
+		//{SGLanguage.GetMessage("spawninfo_multi"),multi_url,"icon16/user_go.png"},
 		{SGLanguage.GetMessage("spawninfo_fp"),StarGate.HTTP.FACEPUNCH,"icon16/transmit_blue.png"},
 		{SGLanguage.GetMessage("spawninfo_donate"),StarGate.HTTP.DONATE,"icon16/money_add.png"},
 	}
@@ -528,11 +528,11 @@ local info_page = [[<html>
 		</head>
 		<body>
             <ul id="nav">
-                <li><a href="http://sg-carterpack.com/">Home</a> |</li>
-                <li><a href="http://sg-carterpack.com/download/">Download</a> |</li>
-                <li><a href="http://sg-carterpack.com/category/news/">News</a> |</li>
-                <li><a href="http://sg-carterpack.com/wiki/">Wiki</a> |</li>
-                <li><a href="http://sg-carterpack.com/forums/forum/support/">Support</a></li>
+				<li><a href="https://github.com/RafaelDeJongh/cap">Home</a> |</li>
+				<li><a href="https://github.com/RafaelDeJongh/cap/wiki/Download-&-Installation">Download</a> |</li>
+				<li><a href="https://github.com/RafaelDeJongh/cap/commits/master">News</a> |</li>
+				<li><a href="https://github.com/RafaelDeJongh/cap/wiki">Wiki</a> |</li>
+				<li><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">Support</a></li>
             </ul>
         <div id="article">
          <h2>Missing Addon: The Stargate Carter Addon Pack</h2>
@@ -548,7 +548,7 @@ local info_page = [[<html>
     After subscribing and downloading all the items you should be able to make use of all the functions included in the Carter Addon Pack.
     </p>
     <p>
-    For a full explenation on how to install this addon and its requirements please visit the <a href="http://sg-carterpack.com/download/">Download page on sg-carterpack.com</a>. This page will provide all the information required to download CAP completely through the Steam Workshop or Github.
+    For a full explenation on how to install this addon and its requirements please visit the <a href="https://github.com/RafaelDeJongh/cap/wiki/Download-&-Installation">Download page on sg-carterpack.com</a>. This page will provide all the information required to download CAP completely through the Steam Workshop or Github.
     </p>
     	<h2>What is The Stargate Carter Addon Pack?</h2>
     <p>
@@ -561,10 +561,11 @@ local info_page = [[<html>
     From piloting a starship to building bases, the Stargate Carter Pack provides players with great replayability, creativity, &amp; even devices for machines.
     </p>
     <p>
-    Updates and news can be found on the CAP Homepage located here:<br><a href="http://sg-carterpack.com">http://sg-carterpack.com</a> <br>
-    The Download page can be found with a full installation instruction here:<br><a href="http://sg-carterpack.com/download">http://sg-carterpack.com/download</a><br>
-    More information can be found on the CAP WIKI located here:<br><a href="http://sg-carterpack.com/wiki">http://sg-carterpack.com/wiki</a><br>
-    Having troubles or want to report a bug then visit our dedicated Forum:<br><a href="http://sg-carterpack.com/forum">http://sg-carterpack.com/forum</a>
+    Updates and news can be found on the CAP Homepage located here:<br><a href="https://github.com/RafaelDeJongh/cap/commits/master">GitHub</a> <br>
+    The Download page can be found with a full installation instruction here:<br><a href="https://github.com/RafaelDeJongh/cap/wiki/Download-&-Installation">Download & Installation</a><br>
+    More information can be found on the CAP WIKI located here:<br><a href="https://github.com/RafaelDeJongh/cap/wiki">CAP Wiki</a><br>
+    Having troubles then visit our Forum:<br><a href="http://steamcommunity.com/sharedfiles/filedetails/discussions/175394472">steam forum</a><br>
+	If want to report a bug visit GitHub issues tracker:<br><a href="https://github.com/RafaelDeJongh/cap/issues">CAP Issues</a>
     </p>
         </div>
 	</body>
@@ -738,7 +739,7 @@ function StarGate.Update_Check(Panel)
 		end
 
 		local VGUI = vgui.Create("SHelpButton",Panel);
-		VGUI:SetText("www.sg-carterpack.com");
+		VGUI:SetText("CAP GitHub");
 		VGUI:SetImage("icon16/star.png");
 		VGUI:SetURL(StarGate.HTTP.SITE);
 		Panel:AddPanel(VGUI);
