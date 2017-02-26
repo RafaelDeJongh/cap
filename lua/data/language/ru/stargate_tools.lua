@@ -407,3 +407,39 @@ stool_zpm_mk3_cleaned = Удалены все МНТ 3 поколения
 stool_zpm_mk3_limit = Достигнут лимит МНТ 3 поколения
 stool_zpm_mk3_fulldesc = Это МНТ 3 поколения, этот объект требует поддержку энергии. Если у вас нет Spacebuild или Environments аддона, тогда МНТ будет бесполезен для вас.
 stool_zpm_mk3_capacity = Емкость:
+
+// SGC Screens
+stool_sgcscreen_spawner = Создатель SGC Экрана
+stool_sgcscreen_create = Создаёт SGC Экран или SGC Сервер
+stool_sgcscreen_desc = Левый клик для создания SGC Экрана, Правый клик для создания SGC Сервера
+stool_sgcscreen_undone = SGC Экран удалён
+stool_sgcscreen_cleanup = SGC Экраны
+stool_sgcscreen_cleaned = Удалены все SGC Экраны
+stool_sgcscreen_limit = Достигнут лимит SGC Экранов
+stool_sgcscreen_limit_sv = Достигнут лимит SGC Серверов
+stool_sgcscreen_menu = Менеджер кодов
+stool_sgcscreen_fulldesc =[[SGC Экраны с тв сериала.
+
+Автор: glebqip
+Улучшения и тул - AlexALX]]
+stool_sgcscreen_sv = Опции сервера:
+stool_sgcscreen_cl = Опции экрана:
+stool_sgcscreen_conn_sv = Авто-соед. с ближайшим сервером
+stool_sgcscreen_conn_sg = Авто-соед. с ближайшими ЗВ
+stool_sgcscreen_conn_ic = Авто-соед. с ближайшим комп. диафрагмы
+stool_sgcscreen_conn_nb = Авто-соед. с ближайшей наквадах бомбой
+stool_sgcscreen_key = Кнопка выбора программы:
+stool_sgcscreen_keyd = Кнопка меню самоуничтожения:
+stool_sgcscreen_keyboard = Создать с клавиатурой
+stool_sgcscreen_keyboard_weld = Сделать клавиатуру привязанной к экрану
+stool_sgcscreen_program = Программа:
+stool_sgcscreen_program_1 = Наборный компьютер
+stool_sgcscreen_program_2 = Адресная книга
+stool_sgcscreen_program_3 = Информационый экран
+stool_sgcscreen_program_4 = Экран стабильности
+stool_sgcscreen_program_5 = Галактическая карта
+stool_sgcscreen_program_6 = 7 Шеврон
+stool_sgcscreen_program_7 = Активность врат
+stool_sgcscreen_program_8 = Выход энергии (фильм)
+stool_sgcscreen_program_9 = Выход энергии (сериал)
+stool_sgcscreen_program_10 = Флуктуация энергии

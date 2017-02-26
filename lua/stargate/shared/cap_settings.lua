@@ -16,6 +16,11 @@ local function build_cache()
 	for k,v in pairs(tools) do
 		--if (not v or not v.Entity or not v.Entity.Class or not v.Entity.Limit) then continue end
 		convars_cache["sbox_max"..v.Entity.Class] = v.Entity.Limit;
+		if (v.Entity.Limits) then
+			for c,l in pairs(v.Entity.Limits) do
+				convars_cache["sbox_max"..c] = l;
+			end
+		end
 	end
 end
 
@@ -25,15 +30,16 @@ net.Receive("_sg_convars",function(len,ply)
 	local get = util.tobool(net.ReadBit());
 	if (get) then
 		net.Start("_sg_convars")
+		net.WriteUInt(0,4)
 		net.WriteUInt(table.Count(convars_cache),8);
 		for k,v in pairs(convars_cache) do
 			net.WriteString(k);
-			net.WriteUInt(v,20);
 			if (k=="stargate_has_rd") then
 				net.WriteUInt(StarGate.HasResourceDistribution and 1 or 0,20);
 			else
 				net.WriteUInt(GetConVarNumber(k),20);
 			end
+			net.WriteUInt(v,20);
 		end
 		net.Send(ply)
 	else
@@ -48,6 +54,25 @@ net.Receive("_sg_convars",function(len,ply)
 	end
 end)
 
+local function CfgBackup(fil)
+	if (not file.IsDir("stargate/cfg/backup","DATA")) then
+		file.CreateDir("stargate/cfg/backup");
+	end
+	local cb = tonumber(StarGate.CFG:Get("cap_misc","cfgbackup",3)) or 3;
+	if (cb<1) then return end
+	for i=cb,1,-1 do
+		local ni = i-1
+		file.Delete("stargate/cfg/backup/"..fil..i..".txt")
+		if i!=1 and file.Exists("stargate/cfg/backup/"..fil..ni..".txt","DATA") then
+			-- damn, why there is no rename function? modification time lost =(
+			file.Write("stargate/cfg/backup/"..fil..i..".txt",file.Read("stargate/cfg/backup/"..fil..ni..".txt","DATA"))
+		end
+		if i==1 and file.Exists("stargate/cfg/"..fil..".txt","DATA") then
+			file.Write("stargate/cfg/backup/"..fil..i..".txt",file.Read("stargate/cfg/"..fil..".txt","DATA"))
+		end
+	end
+end
+
 local CfgTable = {};
 
 net.Receive("_sg_config",function(len,ply)
@@ -60,12 +85,12 @@ net.Receive("_sg_config",function(len,ply)
 		if (typ==3 or typ==4) then
 			StarGate.LoadConfig();
 		end
-		local ini = INIParser:new("stargate/config.txt",false,false,false,true);
+		local ini = INIParser:new("stargate/cfg/config.txt",false,false,false,true);
 		if (not ini) then
 			StarGate.LoadConfig();
-			ini = INIParser:new("stargate/config.txt",false,false,false,true);
+			ini = INIParser:new("stargate/cfg/config.txt",false,false,false,true);
 		end
-		local custom_config = INIParser:new("stargate/custom_config.txt",false,false,false,true);
+		local custom_config = INIParser:new("stargate/cfg/custom_config.txt",false,false,false,true);
 		-- Merge our custom config with the default one
 		if(ini and custom_config) then
 			for node,datas in pairs(custom_config.nodes) do
@@ -127,7 +152,7 @@ net.Receive("_sg_config",function(len,ply)
 		net.Send(ply);
 	elseif (typ==2) then
 		local cust = {"ent_groups_only","swep_groups_only","npc_groups_only","tool_groups_only","cap_disabled_ent","cap_disabled_swep","cap_disabled_npc","cap_disabled_tool"};
-		local ini = INIParser:new("stargate/config.txt",false,false,false,true);
+		local ini = INIParser:new("stargate/cfg/config.txt",false,false,false,true);
 		local write = "# Config generated using Config Editor from Stargate Settings Menu.\r\n";
 		write = write.."# Config generator created by AlexALX (c) 2014\r\n"
 		write = write.."# Carter Addon Pack - http://sg-carterpack.com/\r\n"
@@ -135,7 +160,7 @@ net.Receive("_sg_config",function(len,ply)
 		local cust_write = {};
 		if (not ini) then
 			StarGate.LoadConfig();
-			ini = INIParser:new("stargate/config.txt",false,false,false,true);
+			ini = INIParser:new("stargate/cfg/config.txt",false,false,false,true);
 		end
 		if (ini) then
 			for name,cfg in pairs(ini:get()) do
@@ -186,10 +211,11 @@ net.Receive("_sg_config",function(len,ply)
 				end
 			end
 		end
+		CfgBackup("custom_config")
 		if (table.Count(written)>0) then
-			file.Write("stargate/custom_config.txt",write);
+			file.Write("stargate/cfg/custom_config.txt",write);
 		else
-			file.Delete("stargate/custom_config.txt");
+			file.Delete("stargate/cfg/custom_config.txt");
 		end
 		StarGate.LoadConfig();
 		CfgTable = {};
@@ -214,10 +240,10 @@ net.Receive("_sg_config",function(len,ply)
 		if (typ==7) then
 			StarGate.LoadGroupConfig();
 		end
-		local ini = INIParser:new("stargate/custom_groups.txt",false,false,true,true);
+		local ini = INIParser:new("stargate/cfg/custom_groups.txt",false,false,true,true);
 		if (not ini) then
 			StarGate.LoadGroupConfig();
-			ini = INIParser:new("stargate/custom_groups.txt",false,false,true,true);
+			ini = INIParser:new("stargate/cfg/custom_groups.txt",false,false,true,true);
 		end
 		net.Start("_sg_config");
 		net.WriteUInt(4,8);
@@ -261,10 +287,11 @@ net.Receive("_sg_config",function(len,ply)
 				write = write..tostring(k).." = "..tostring(v).."\r\n";
 			end
 		end
+		CfgBackup("custom_groups")
 		if (table.Count(written)>0) then
-			file.Write("stargate/custom_groups.txt",write);
+			file.Write("stargate/cfg/custom_groups.txt",write);
 		else
-			file.Delete("stargate/custom_groups.txt");
+			file.Delete("stargate/cfg/custom_groups.txt");
 		end
 		StarGate.LoadGroupConfig();
 		CfgTable = {};
@@ -298,13 +325,110 @@ net.Receive("_sg_config",function(len,ply)
 				write = write..tostring(k).." = "..tostring(v).."\r\n";
 			end
 		end
+		CfgBackup("convars")
 		if (table.Count(written)>0) then
-			file.Write("stargate/convars.txt",write);
+			file.Write("stargate/cfg/convars.txt",write);
 		else
-			file.Delete("stargate/convars.txt");
+			file.Delete("stargate/cfg/convars.txt");
 		end
 	elseif(typ==10) then
-		file.Delete("stargate/convars.txt");
+		CfgBackup("convars")
+		file.Delete("stargate/cfg/convars.txt");
+	elseif(typ==11) then
+		local action = net.ReadUInt(4)
+		local vfiles = {"custom_config[%d]+.txt","custom_groups[%d]+.txt","convars[%d]+.txt"}
+		if (action==1) then
+			local rmf = net.ReadTable()
+			for k,v in pairs(rmf) do
+				local allow = false
+				for i,vf in pairs(vfiles) do
+					if k:find(vf) then 
+						allow = true
+						break
+					end
+				end
+				if (allow) then
+					file.Delete("stargate/cfg/backup/"..k)
+				end
+			end
+		elseif (action==2) then
+			local fil = net.ReadString()
+			local allow = false
+			for i,vf in pairs(vfiles) do
+				if fil:find(vf) then 
+					allow = true
+					break
+				end
+			end
+			if (allow and file.Exists("stargate/cfg/backup/"..fil,"DATA")) then
+				net.Start("_sg_config");
+				net.WriteUInt(5,8);
+				net.WriteUInt(1,4);
+				net.WriteString(file.Read("stargate/cfg/backup/"..fil,"DATA"))
+				net.Send(ply);
+			end
+		elseif (action==3) then
+			local fil = net.ReadString()
+			local allow = false
+			for i,vf in pairs(vfiles) do
+				if fil:find(vf) then 
+					allow = true
+					break
+				end
+			end
+			if (allow and file.Exists("stargate/cfg/backup/"..fil,"DATA")) then
+				if (fil:find("custom_config")) then
+					file.Write("stargate/cfg/custom_config.txt",file.Read("stargate/cfg/backup/"..fil,"DATA"));
+					StarGate.LoadConfig();
+				elseif (fil:find("custom_groups")) then
+					file.Write("stargate/cfg/custom_groups.txt",file.Read("stargate/cfg/backup/"..fil,"DATA"));
+					StarGate.LoadGroupConfig();
+				elseif (fil:find("convars")) then
+					local oldc = {}
+					local ini = INIParser:new("stargate/cfg/convars.txt",false);
+					if(ini) then
+						if (ini.nodes.cap_convars and ini.nodes.cap_convars[1]) then
+							for k,v in pairs(ini.nodes.cap_convars[1]) do
+								if (StarGate.CAP_Convars[k] or k:find("sbox_max")) then -- for security
+									oldc[k] = convars_cache[k];
+								end
+							end
+						end
+					end
+					file.Write("stargate/cfg/convars.txt",file.Read("stargate/cfg/backup/"..fil,"DATA"));
+					local ref = StarGate.LoadConvars()
+					for k,v in pairs(oldc) do
+						if ref[k]==nil then
+							RunConsoleCommand(k,convars_cache[k]);
+							ref[k] = convars_cache[k]
+						end
+					end
+					
+					net.Start("_sg_convars")
+					net.WriteUInt(1,4)
+					net.WriteUInt(table.Count(ref),8);
+					for k,v in pairs(ref) do
+						net.WriteString(k);
+						net.WriteUInt(v,20);
+					end
+					net.Send(ply)
+				end
+			end
+		else
+			net.Start("_sg_config");
+			net.WriteUInt(5,8);
+			net.WriteUInt(0,4);
+			local files = {}
+			local vfiles = {"custom_config*.txt","custom_groups*.txt","convars*.txt"}
+			for i,vf in pairs(vfiles) do
+				local f, d = file.Find("stargate/cfg/backup/"..vf, "DATA")
+				for k,v in pairs(f) do
+					files[v] = true
+				end
+			end
+			net.WriteTable(files)		
+			net.Send(ply);
+		end
 	end
 end)
 
@@ -421,6 +545,8 @@ local function SG_Settings_OpenNet()
 		{"stargate_cap_sbox_25", "wraith_harvester"},
 		{"stargate_cap_sbox_26", "zpm_mk3"},
 		{"stool_naq_bottle", "naquadah_bottle"},
+		{"stool_sgcscreen", "sgc_monitor"},
+		{"stool_sgcscreen_srv", "sgc_server"},
 	}
 	SetupConvars(sboxlimits,"sbox_max");
 
@@ -1060,7 +1186,7 @@ local function SG_Settings_OpenNet()
 		local slider = vgui.Create( "DOldNumSlider" , DVScrollBar);
 		slider.ConvarID = k;
 		limit_sliders[convar] = slider;
-		slider:SetPos(5, 5+35*i);
+		slider:SetPos(5, 5+40*i);
 		slider:SetSize(245, 50);
 		slider:SetText(val[1]);
 		slider:SetMin(0);
@@ -1069,7 +1195,9 @@ local function SG_Settings_OpenNet()
 		slider.Wang:SetText(SGGetConvar(convar));
 		slider:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
 		slider.OnValueChanged = function(self, fValue)
-			SGSetConvar(convar, fValue);
+			if not self.NoSend then
+				SGSetConvar(convar, fValue);
+			end
 			SetCapConvar("cap",self.ConvarID,convar,fValue);
 		end
 		slider.Wang.OnTextChanged = function(self)
@@ -1131,7 +1259,7 @@ local function SG_Settings_OpenNet()
 		local slider = vgui.Create( "DOldNumSlider" , DVScrollBar);
 		slider.ConvarID = k;
 		limit_sliders[convar] = slider;
-		slider:SetPos(5, 5+35*i);
+		slider:SetPos(5, 5+40*i);
 		slider:SetSize(245, 50);
 		slider:SetText(val[1]);
 		slider:SetMin(0);
@@ -1140,16 +1268,20 @@ local function SG_Settings_OpenNet()
 		slider.Wang:SetText(SGGetConvar(convar));
 		slider:SetToolTip(SGLanguage.GetMessage("stargate_menu_hint",convar));
 		slider.OnValueChanged = function(self, fValue)
-			SGSetConvar(convar, fValue);
+			if not self.NoSend then
+				SGSetConvar(convar, fValue);
+			end
 			SetCapConvar("sbox",self.ConvarID,convar,fValue);
 		end
 		slider.Wang.OnTextChanged = function(self)
+			if self.NoSend then return end
 			slider:ValueChanged(slider.Wang:GetValue());
-
 		end
 		SetCapConvar("sbox",k,convar,SGGetConvar(convar));
 		i = i + 1;
 	end
+	
+	CapPanel.LimitSliders = limit_sliders
 
 	local Frame = CapConvarFrame;
 	local cfgbutton = vgui.Create("DButton", Frame);
@@ -2078,8 +2210,8 @@ local function SG_Settings_OpenNet()
 
 	CfgPropertySheet.__SetActiveTab = PropertySheet.SetActiveTab;
 	CfgPropertySheet.SetActiveTab = function(self, active)
-		if (not self.CFGSended and active:GetText()==SGLanguage.GetMessage("stargate_cfg_tab3")) then
-			self.CFGSended = true;
+		if (not CfgPropertySheet.CFGSended and active:GetText()==SGLanguage.GetMessage("stargate_cfg_tab3")) then
+			CfgPropertySheet.CFGSended = true;
         	net.Start("_sg_config");
         	net.WriteUInt(5,8);
         	net.SendToServer();
@@ -2091,12 +2223,191 @@ local function SG_Settings_OpenNet()
 	CfgPropertySheet:AddSheet( SGLanguage.GetMessage("stargate_cfg_tab2"), CfgRestFrame, "icon16/server_edit.png", false, false )
 	CfgPropertySheet:AddSheet( SGLanguage.GetMessage("stargate_cfg_tab3"), CfgGroupFrame, "icon16/world_edit.png", false, false )
 
+	local BackupFrame = vgui.Create("DPanel");
+	BackupFrame.Paint = function(self)
+		// Small frames
+		local alpha = self:GetAlpha();
+		local col = Color( 170, 170, 170, alpha);
+		local col2 = Color( 100, 100, 100, alpha);
+		local bor = 6;
+		local diff = 2;
+
+		draw.RoundedBox( bor, 5-diff, 5-diff, 577+2*diff, 385+2*diff, col);
+		draw.RoundedBox( bor, 5, 5, 577, 385, col2);
+
+	end
+	
+	local laber = vgui.Create( "DLabel" , BackupFrame);
+	laber:SetFont("OldDefaultSmall");
+	laber:SetPos(10, 10);
+	laber:SetText(SGLanguage.GetMessage("stargate_cfg_backup_title"));
+	laber:SetSize(567, 15);
+	laber:SetContentAlignment(5);
+	--laber:CenterHorizontal()
+
+	local CfgList = vgui.Create( "DListView", BackupFrame )
+	CfgList:SetMultiSelect( true )
+	CfgList:SetPos(10,30)
+	CfgList:SetSize(567,sizeh-105);
+	CfgList:AddColumn(SGLanguage.GetMessage("stargate_cfg_backup_file"))
+	CfgList.DoDoubleClick = function(self,line,data)
+		local val = data:GetColumnText(1);
+		CapPanel:OpenCfgView(val,SGLanguage.GetMessage("stargate_cfg_backup_loading"))
+		net.Start("_sg_config")
+		net.WriteUInt(11,8);
+		net.WriteUInt(2,4);
+		net.WriteString(val)
+		net.SendToServer();
+	end
+	
+	local cfgbutton = vgui.Create("DButton", BackupFrame);
+	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_backup_delete"));
+	cfgbutton:SetImage("icon16/drive_delete.png");
+	cfgbutton:SetPos(10, 395);
+	cfgbutton:SetSize(185, 28);
+	cfgbutton.DoClick = function ( btn )
+		local rmf = {}
+		local lines = CfgList:GetSelected();
+		for k,v in pairs(lines) do
+			rmf[v:GetColumnText(1)] = true;
+			CfgList.CfgTable[v:GetColumnText(1)] = nil;
+			CfgList:RemoveLine(v:GetID());
+		end
+		if (table.Count(rmf)>0) then
+			net.Start("_sg_config")
+			net.WriteUInt(11,8);
+			net.WriteUInt(1,4);
+			net.WriteTable(rmf)
+			net.SendToServer();
+		end
+	end
+	
+	local cfgbutton = vgui.Create("DButton", BackupFrame);
+	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_backup_view"));
+	cfgbutton:SetImage("icon16/drive_magnify.png");
+	cfgbutton:SetPos(201, 395);
+	cfgbutton:SetSize(185, 28);
+	cfgbutton.DoClick = function ( btn )
+		local lines = CfgList:GetSelected();
+		for k,v in pairs(lines) do
+			CfgList:DoDoubleClick(k,v)
+			break 
+		end
+	end
+
+
+	local cfgbutton = vgui.Create("DButton", BackupFrame);
+	cfgbutton:SetText(SGLanguage.GetMessage("stargate_cfg_backup_load"));
+	cfgbutton:SetImage("icon16/drive_go.png");
+	cfgbutton:SetPos(392, 395);
+	cfgbutton:SetSize(185, 28);
+	local lastWarn
+	cfgbutton.DoClick = function ( btn )
+		if (lastWarn and IsValid(lastWarn) and lastWarn.Remove) then lastWarn:Remove() end
+		
+		local lines = CfgList:GetSelected();
+		local fil = ""
+		for k,v in pairs(lines) do
+			fil = v:GetColumnText(1)
+			break 
+		end
+		if (fil=="") then return end
+		
+		local edit = vgui.Create("DFrame",BackupFrame);
+		edit:SetSize(400,120);
+		edit:Center();
+		--local x,y = data:GetPos();
+		--edit:SetPos(sizew/2-200,y)
+		edit:SetTitle(SGLanguage.GetMessage("stargate_cfg_backup_con"));
+		edit:RequestFocus();
+		lastWarn = edit;
+
+		local label = vgui.Create("DLabel",edit);
+		label:SetPos(35,35);
+		label:SetText(SGLanguage.GetMessage("stargate_cfg_backup_desc_con",fil));
+		label:SizeToContents();
+
+		local img = vgui.Create("DImage",edit);
+		img:SetPos(10,47);
+		img:SetImage("icon16/error.png");
+		img:SetSize(16,16);
+
+		local butt = vgui.Create("DButton",edit);
+		butt:SetPos(40,85);
+		butt:SetText(SGLanguage.GetMessage("stargate_cfg_backup_cancel"));
+		butt:SetSize(150,25);
+		butt.DoClick = function(self)
+			edit:Remove();
+		end
+
+		local butt = vgui.Create("DButton",edit);
+		butt:SetPos(210,85);
+		butt:SetText(SGLanguage.GetMessage("stargate_cfg_backup_ok"));
+		butt:SetSize(150,25);
+		butt.DoClick = function(self)
+			net.Start("_sg_config")
+			net.WriteUInt(11,8);
+			net.WriteUInt(3,4);
+			net.WriteString(fil);
+			net.SendToServer();
+			GAMEMODE:AddNotify(SGLanguage.GetMessage("stargate_cfg_backup_loaded"), NOTIFY_GENERIC, 5);
+			surface.PlaySound( "buttons/button9.wav" );
+			edit:Remove();
+			CapPanel.CFGSended = false;
+        	net.Start("_sg_config");
+        	net.WriteUInt(5,8);
+        	net.SendToServer(); 
+			
+		end
+		surface.PlaySound("buttons/button2.wav");
+	end
+	
+	CapPanel.CfgList = function(self,tbl)
+		CfgList.CfgTable = tbl;
+		CfgList:Clear()
+		for k,v in pairs(tbl) do
+			CfgList:AddLine(k);
+		end
+		CfgList:SortByColumn(1)
+	end
+	
+	--local lastView	
+	CapPanel.OpenCfgView = function(self, name, data)
+		if (CapPanel.lastCfgView and IsValid(CapPanel.lastCfgView) and CapPanel.lastCfgView.Remove) then CapPanel.lastCfgView:Remove() end
+		local edit = vgui.Create("DFrame",BackupFrame);
+		edit:SetSize(550,350);
+		//edit:SetPos(sizew/2-200,sizeh/2-200);
+		edit:SetTitle(name);
+		edit:Center()
+		edit:RequestFocus();
+		CapPanel.lastCfgView = edit;
+
+		local label = vgui.Create("DTextEntry",edit);
+		label:SetPos(10,35);
+		label:SetText(data);
+		label.Text = data
+		label:SizeToContents();
+		label:Dock(FILL)
+		label:SetEditable(true)
+		label:SetMultiline(true)
+		label:SetVerticalScrollbarEnabled( true )
+		
+		edit.TxtField = label
+	end
+	
 	PropertySheet.__SetActiveTab = PropertySheet.SetActiveTab;
 	PropertySheet.SetActiveTab = function(self, active)
-		if (not self.CFGSended and active:GetText()==SGLanguage.GetMessage("stargate_menu_t4")) then
-			self.CFGSended = true;
+		if (not CapPanel.CFGSended and active:GetText()==SGLanguage.GetMessage("stargate_menu_t4")) then
+			CapPanel.CFGSended = true;
         	net.Start("_sg_config");
         	net.WriteUInt(0,8);
+        	net.SendToServer();
+		end
+		if (not CapPanel.CFGBackupSended and active:GetText()==SGLanguage.GetMessage("stargate_menu_t6")) then
+			--CapPanel.CFGBackupSended = true;
+        	net.Start("_sg_config");
+        	net.WriteUInt(11,8);
+			net.WriteUInt(0,4);
         	net.SendToServer();
 		end
 		PropertySheet:__SetActiveTab(active);
@@ -2106,18 +2417,36 @@ local function SG_Settings_OpenNet()
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t2"), CapConvarFrame, "icon16/server.png", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t4"), CfgFrame, "icon16/wrench.png", false, false )
 	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t5"), AdminFrame, "icon16/shield.png", false, false )
+	PropertySheet:AddSheet( SGLanguage.GetMessage("stargate_menu_t6"), BackupFrame, "icon16/drive_disk.png", false, false )
 end
 
 concommand.Add("stargate_settings",SG_Settings_Open);
 
 net.Receive("_sg_convars", function(len)
+	local mode = net.ReadUInt(4);
 	local count = net.ReadUInt(8);
+	local ref = {}
 	for i=1,count do
 		local name = net.ReadString();
-		sg_def_convars[name] = net.ReadUInt(20);
-		sg_convars[name] = net.ReadUInt(20);
+		sg_convars[name] = net.ReadUInt(20); 
+		if (mode==0) then
+			sg_def_convars[name] = net.ReadUInt(20);
+		else
+			ref[name] = sg_convars[name]
+		end             
 	end
-	SG_Settings_OpenNet();
+	if (mode==1) then
+		if (CapPanel and CapPanel.LimitSliders) then
+			for k,v in pairs(ref) do
+				local slider = CapPanel.LimitSliders[k]
+				slider.NoSend = true
+				slider:SetValue(v)
+				slider.NoSend = false
+			end
+		end
+	else
+		SG_Settings_OpenNet();
+	end
 end);
 
 local CFGEditor = {};
@@ -2133,7 +2462,7 @@ net.Receive("_sg_config", function(len)
 		local count = net.ReadUInt(16);
 		for i=1,count do
 			local name = net.ReadString();
-			local typ2 = net.ReadUInt(8)
+			local typ2 = net.ReadUInt(8)                
 			if (typ2==0) then
 				CFGEditor[cat][name] = net.ReadDouble();
 			elseif (typ2==1) then
@@ -2155,6 +2484,22 @@ net.Receive("_sg_config", function(len)
 		CFGEditor = {};
 		CFGEditor["stargate_custom_groups"] = {};
 		CFGEditor["stargate_custom_types"] = {};
+	elseif (typ==5) then
+		if (CapPanel and CapPanel.CfgList) then
+			local action = net.ReadUInt(4)
+			if (action==1) then
+				if (CapPanel.lastCfgView and IsValid(CapPanel.lastCfgView)) then
+					local str = net.ReadString()
+					if (str[1]=="#") then
+						str = "#"..str -- special fix
+					end
+					CapPanel.lastCfgView.TxtField:SetText(str);
+					CapPanel.lastCfgView.TxtField.OnTextChanged = function(self) self:SetText(str) return end
+				end
+			else		
+				CapPanel:CfgList(net.ReadTable());
+			end
+		end
 	end
 end)
 

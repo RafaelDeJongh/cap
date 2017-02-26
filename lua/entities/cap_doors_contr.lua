@@ -27,6 +27,7 @@ AddCSLuaFile()
 
 ENT.Sounds={
 	PressDest=Sound("door/dest_door_button.wav"),
+	LockedDest=Sound("gmod4phun/dest_door_lock_new.wav"),
 	PressAtl=Sound("door/atlantis_door_chime.wav"),
 	PressGoa=Sound("button/ring_button1.mp3"),
 	PressGoa2=Sound("button/ring_button2.mp3"),
@@ -57,17 +58,32 @@ end
 
 function ENT:TriggerInput(variable, value)
 	if (variable == "Press" and value > 0) then
-		self:BressButton();
+		self:PressButton();
 	end
 end
 
 function ENT:Use()
-	self:BressButton()
+	self:PressButton()
 end
 
-function ENT:BressButton()
+function ENT:PressButton()
 	if (self.Pressed) then return end;
-	self.Entity:SetSkin(1);
+	if (self.TypeS == 1) then -- if its Destiny door
+		local frame = self:FindDoor() -- apparently it returns the frame, so thats good
+		if IsValid(frame) then
+			if not frame.Lockdown then
+				if not frame.Door.Open then
+					self.Entity:SetSkin(1);
+				else
+					self.Entity:SetSkin(2);
+				end
+			elseif frame.Lockdown then
+				self.Entity:SetSkin(3);
+			end
+		end
+	else
+		self.Entity:SetSkin(1);
+	end
 	self:SetWire("Pressed",1);
 	self.Pressed = true;
 	timer.Create( "Skin"..self:EntIndex(), 1, 1, function()
@@ -78,7 +94,17 @@ function ENT:BressButton()
 		end
 	end);
 
-	if (self.TypeS == 1) then self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
+	local no_sound = false
+	if (self.TypeS == 1) then
+		local frame = self:FindDoor() -- apparently it returns the frame, so thats good
+		if IsValid(frame) then
+			if not frame.Lockdown then
+				self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
+			elseif frame.Lockdown then
+				no_sound = true
+				self.Entity:EmitSound(self.Sounds.LockedDest,100,math.random(90,110));
+			end
+		end
 	elseif (self.TypeS == 3) then
 		local SoundToPlay = math.random(0,1)
 		if(SoundToPlay==1) then
@@ -106,7 +132,7 @@ function ENT:BressButton()
 		end
 	else
 		local door = self:FindDoor();
-		if IsValid(door) and (door.NoButtons==0 or door.Owner==self.Owner) then door:Toggle(); end
+		if IsValid(door) and (door.NoButtons==0 or door.Owner==self.Owner) then door:Toggle(no_sound); end
 	end
 end
 

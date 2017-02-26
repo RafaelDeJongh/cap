@@ -31,7 +31,8 @@ StarGate.HTTP = {
 	--MULTI = "http://sg-carterpack.com/forums/forum/support/multi-language-support/", -- this is used by default for all languages, if not defined another url in language file.
 	FACEPUNCH = "http://www.facepunch.com/threads/1250181",
 	CREDITS = "https://github.com/RafaelDeJongh/cap/wiki#credits",
-	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest"
+	DONATE = "http://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=rafael_boba_fett%40msn%2ecom&lc=US&item_name=Carter%20Addon%20Pack&no_note=0&currency_code=EUR&bn=PP&2dDonationsBF&3adonate&2epng&3aNonHostedGuest",
+	TRANSLATE = "https://github.com/RafaelDeJongh/cap/wiki/How-to-translate-cap",
 };
 StarGate.LATEST_VERSION = 0;
 StarGate.CURRENT_VERSION = 0;
@@ -213,13 +214,14 @@ function StarGate.InstalledOnClient()
 	end
 	local ws_addonlist = {}
 	local cap_installed = false;
+	local tbl = StarGate.CAP_WS_ADDONS or {}
 	for _,v in pairs(engine.GetAddons()) do
 		if (v.mounted) then
-			table.insert(ws_addonlist, v.title);
-			if (table.HasValue(StarGate.CAP_WS_ADDONS or {}, v.title)) then cap_installed = true end
+			ws_addonlist[tonumber(v.wsid)] = v.title;
+			if (not cap_installed and tbl[tonumber(v.wsid)]) then cap_installed = true break end
 		end
 	end
-	if (table.HasValue(ws_addonlist,"Stargate Carter Addon Pack") or cap_installed) then StarGate.InstalledOnCl = true; return true end
+	if (ws_addonlist[175394472] or cap_installed) then StarGate.InstalledOnCl = true; return true end
 	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addonlist,"Carter Addon Pack - Resources")) then StarGate.InstalledOnCl = true; return true end
 	return false;
 end

@@ -38,16 +38,13 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		chevs = count-1;
 	end
 	--################# INBOUND AND DHD (fast) DIAL
+	local t = self.Entity.Target;
 	if(inbound or fast) then
-		local t = self.Entity.Target;
-		local add = 0.0;
-		if (IsValid(t)) then
-			add = self:GetDelay(inbound,fast,chevs,t:GetClass());
-		end
-		if (inbound and not fast and IsValid(t) and self:IsNewDial(t:GetClass())) then
-			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
+		if (inbound and not fast and IsValid(t) and t.IsNewSlowDial) then
+			action:Add({f=self.SetStatus,v={self,false,true,true},d=0.6}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1}); -- The 0.1 seconds prevents a bug where an incoming call overrides an outgoing (slow dial) and the first chevrons stays disabled (so we need definitely a shot delay!) - This additional 0.1 we take here has been removed on the chevron7-lock delay in the for loop below
-			action = self.Sequence:InstantOpen(action,self:GetDelaySlow(t:GetClass())-0.2,false,true);
+			local dly = self:CalcDelaySlow(t,true)
+			action = self.Sequence:InstantOpen(action,dly,false,true);
 		else
 			local rnd = {}; -- Increase randomness (makes it less artificial)
 			for i=1,chevs-2 do
@@ -61,7 +58,16 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 			elseif(chevs == 8)then
 			    rnds = rnds+rnd[7];
 			end
-			local delta = (4.8 - (rnds))/(chevs-1); -- Neede, so the eventhorizons get opened in the same time
+			local add = 0.0;
+			if (IsValid(t)) then
+				add = self:CalcDelayFast(t,inbound);
+			end
+			local del = 4.8+add
+			local delta = (del - (rnds))/(chevs-1); -- Neede, so the eventhorizons get opened in the same time
+			local add = 0
+			if (IsValid(t) and inbound and not fast) then
+				add = t:DialSlowTime(chevs,self)
+			end
 			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1}); -- The 0.1 seconds prevents a bug where an incoming call overrides an outgoing (slow dial) and the first chevrons stays disabled (so we need definitely a shot delay!) - This additional 0.1 we take here has been removed on the chevron7-lock delay in the for loop below
 			for i=1,9 do
@@ -150,24 +156,24 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		end
 	else
 		--################# OUTBOUND DIALLING (slow)
-		local delt = 20
+		local delt = 16
 		if (count == 9) then
-			delt = 24
+			delt = 18
 		elseif (count == 10) then
-			delt = 28
+			delt = 20
 		end
 		local rnd = {}; -- Increases randomness
-		for i=1,chevs do
+		for i=1,chevs-1 do
 			math.randomseed(os.clock()+i);
-			rnd[i] = math.random(300,400)/100;
+			rnd[i] = math.random(150,220)/100;
 		end
-		local rnds = rnd[1]+rnd[2]+rnd[3]+rnd[4]+rnd[5]+rnd[6]+rnd[7];
+		local rnds = rnd[1]+rnd[2]+rnd[3]+rnd[4]+rnd[5]+rnd[6];
 		if(chevs == 9)then
-		    rnds = rnds+rnd[8]+rnd[9];
+		    rnds = rnds+rnd[7]+rnd[8];
 		elseif(chevs == 8)then
-		    rnds = rnds+rnd[8];
+		    rnds = rnds+rnd[7];
 		end
-		local delta = (delt-(rnds))/chevs; -- Add delta values according to the random dialling speed to fit 7 seconds
+		local delta = (delt-(rnds))/(chevs-1); -- Add delta values according to the random dialling speed to fit 7 seconds
 		action:Add({f=self.SetStatus,v={self,false,1},d=0}); -- The 1 means, it's dailling slowly and "can be dialled in" (About Dialling out) - It's special for SG1 Gate and is handled in ENT:ActivateStargate()
 		for i=1,9 do
 			action:Add({f=self.ActivateChevron,v={self,i,false},d=0});
@@ -186,8 +192,8 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 				action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
 			end
 			-- Spinning ring
-			action:Add({f=self.ActivateRing,v={self,true},d=rnd[i]+delta}); -- Roll the ring
-			action:Add({f=self.ActivateRing,v={self,false},d=0}); -- Stop the ring
+			--action:Add({f=self.ActivateRing,v={self,true},d=rnd[i]+delta}); -- Roll the ring
+			--action:Add({f=self.ActivateRing,v={self,false},d=0}); -- Stop the ring
 			action:Add({f=self.DHDSetChevron,v={self,i},d=0});
 			-- Chevron lights
 			if(i == chevs) then
@@ -211,7 +217,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					action:Add({f=self.SetWire,v={self,"Dialing Address",DialAddress},d=0}); -- Wire
 					action:Add({f=self.SetWire,v={self,"Dialed Symbol",DialSymbol},d=0}); -- Wire
 					action:Add({f=self.SetWire,v={self,"Dialing Symbol",""},d=0}); -- Wire
-					action:Add({f=self.ChevronSound,v={self,7},d=1.5}); -- Chevron Locked
+					action:Add({f=self.ChevronSound,v={self,7},d=self.DialSlowDelay}); -- Chevron Locked
 				end
 			else
 				local s = i
@@ -223,7 +229,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 				action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
 				action:Add({f=self.SetWire,v={self,"Dialing Address",DialAddress},d=0}); -- Wire
 				action:Add({f=self.SetWire,v={self,"Dialed Symbol",DialSymbol},d=0}); -- Wire
-				action:Add({f=self.ActivateChevron,v={self,s,true},d=2.5}); -- The new chevron is getting locked in
+				action:Add({f=self.ActivateChevron,v={self,s,true},d=rnd[i]+delta}); -- The new chevron is getting locked in
 			end
 		end
 	end

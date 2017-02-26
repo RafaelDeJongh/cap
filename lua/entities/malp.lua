@@ -2,9 +2,11 @@ ENT.Type = "anim"
 ENT.Base = "base_anim"
 
 ENT.PrintName = "MALP"
-ENT.Author = "RononDex\n \n Mobile Analysis Labatory Probe"
+ENT.Author = "RononDex / AlexALX"
 ENT.Category = "Stargate Carter Addon Pack"
+ENT.Instructions = "Mobile Analysis Labatory Probe"
 list.Set("CAP.Entity", ENT.PrintName, ENT);
+if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSupportAndWire(ENT); end -- When you need to add LifeSupport and Wire capabilities, you NEED TO CALL this before anything else or it wont work!
 
 if SERVER then
 
@@ -45,11 +47,80 @@ function ENT:Initialize()
 	self:PhysicsInit(SOLID_VPHYSICS)
 
 	self.MalpWheels={}
+	
+	self.Healthh = 1000;
+	self.damaged = false;
 
-	self.environment={} -- LS Table
+	self.environment={
+		gravity = 1,
+		habitat = 1,
+		atmosphere = 1,
+		temperature = 288,
+		o2 = 20.94,
+		co2 = 0.04,
+		n2 = 78.08,
+		h2 = 0,
+		water = 0,
+	} -- LS Table
+	
 	self.NextUse=CurTime() -- For toggling
 
 	self.Sounds.LoopSound = CreateSound(self.Entity, self.Sounds.Drive);
+	
+	-- added by AlexALX
+	self:CreateWireInputs("Forward","Left","Right","Back");
+	self:CreateWireOutputs("Gravity","Habitat","Atmosphere","Temperature","O2 Percent","CO2 Percent","N2 Percent","H2 Percent","Water Level");
+	
+	if (CAF and CAF.GetAddon and CAF.GetAddon("Spacebuild") and table.Count(CAF.GetAddon("Spacebuild"):GetEnvironments())!=0) then
+		self.CAF = true;
+	end
+	
+	timer.Create("MALPWire_"..self:EntIndex(),0.25,0,function() if IsValid(self) then
+		if (not self.damaged) then
+			if (self.CAF) then
+				local Env = CAF.GetAddon("Spacebuild").FindEnvironmentOnPos(self:GetPos())
+		
+				if (Env.sbenvironment) then
+					self.environment.gravity = Env.sbenvironment.gravity or 0;
+					self.environment.temperature = Env.sbenvironment.temperature2 or 0;
+					self.environment.atmosphere = Env.sbenvironment.atmosphere or 0;
+					self.environment.o2 = Env.sbenvironment.air.o2per or 0;
+					self.environment.co2 = Env.sbenvironment.air.co2per or 0;
+					self.environment.h2 = Env.sbenvironment.air.hper or 0; 
+					self.environment.n2 = Env.sbenvironment.air.nper or 0;
+					self.environment.habitat = Env.sbenvironment.habitat or 0;	
+				else
+					self.environment.gravity = Env:GetGravity() or 0;
+					self.environment.temperature = Env:GetTemperature() or 0;
+					self.environment.atmosphere = Env:GetAtmosphere() or 0;
+					self.environment.o2 = Env:GetO2Percentage() or 0;
+					self.environment.co2 = Env:GetCO2Percentage() or 0;
+					self.environment.h2 = Env:GetHPercentage() or 0; 
+					self.environment.n2 = Env:GetNPercentage() or 0;
+					self.environment.habitat = Env.habitat or 0;	
+				end
+			else
+				local grav = self:GetPhysicsObject():IsGravityEnabled();
+				if (grav) then
+					local sv_grav = physenv.GetGravity().z
+					self.environment.gravity = math.Round(sv_grav*(-1) / 600,3);
+				else
+					self.environment.gravity = 0;
+				end
+			end
+			self.environment.water = self:WaterLevel();		
+		end 
+           
+		self:SetWire("Gravity",self.environment.gravity)
+		self:SetWire("Habitat",self.environment.habitat)
+		self:SetWire("Atmosphere",self.environment.atmosphere)
+		self:SetWire("Temperature",self.environment.temperature)
+		self:SetWire("O2 Percent",self.environment.o2)
+		self:SetWire("CO2 Percent",self.environment.co2)
+		self:SetWire("N2 Percent",self.environment.n2)
+		self:SetWire("H2 Percent",self.environment.h2)
+		self:SetWire("Water Level",self.environment.water)
+	end	end);
 end
 
 --########## Spawn our wheel props @RononDex
@@ -121,6 +192,8 @@ function ENT:OnRemove()
 		self:UnControl(self.Controler)
 	end
 	UpdateRenderTarget(NULL)
+	timer.Remove("MALPWire_"..self:EntIndex())
+	timer.Remove("MALP_DMG"..self:EntIndex())
 end
 
 --######### Take control @RononDex
@@ -146,25 +219,34 @@ function ENT:UnControl(p)
 	end
 end
 
+function ENT:SendData()
+	if not IsValid(self.Controler) or not self.environment then return end
+	umsg.Start("MALPData", self.Controler)
+		umsg.Entity(self)
+		umsg.Bool(self.SignalLost)
+		umsg.Float(self.environment.gravity or 0)
+		umsg.Short(self.environment.habitat or 0)
+		umsg.Short(self.environment.atmosphere or 0)
+		umsg.Short(self.environment.temperature or 0)
+		umsg.Float(self.environment.o2 or 0)
+		umsg.Float(self.environment.co2 or 0)
+		umsg.Float(self.environment.n2 or 0)
+		umsg.Float(self.environment.h2 or 0)
+		umsg.Short(self.environment.water or 0)
+	umsg.End()
+end
 
 function ENT:Think()
 
-	if(IsValid(self.Controler)) then
-		self.environment = self.environment or {};
-		umsg.Start("MALPData", self.Controler)
-			umsg.Bool(self.SignalLost)
-			umsg.Short(self.gravity2 or 1)
-			umsg.Short(self.environment.habitat or 1)
-			umsg.Short(self.environment.atmosphere or 1)
-			umsg.Short(self.environment.temperature or 288)
-		umsg.End()
-	end
+	if (self.Destroyed) then return end
 
-	if(self.HasRD) then
+	self:SendData()
+
+	/*if(self.HasRD) then
 		if(self.FirstPerson) then
 			self:Sense()
 		end
-	end
+	end*/
 
 	if(IsValid(self.Owner)) then
 		local dist = (self.Owner:GetPos() - self:GetPos()):Length();
@@ -186,12 +268,20 @@ function ENT:Think()
 						end
 					end
 				else
-					self.SignalLost = true;
+					if (self.SignalLost2==1) then
+						self.SignalLost = true;
+					else
+						self.SignalLost = false;
+					end
 					UpdateRenderTarget(NULL);
 				end
 			end
 		else
-			self.SignalLost = false;
+			if (self.SignalLost2==1) then
+				self.SignalLost = true;
+			else
+				self.SignalLost = false;
+			end
 			UpdateRenderTarget(self.RTCamera);
 		end
 	end
@@ -255,9 +345,16 @@ function ENT:Think()
 
 		end
 	end
+	
+	if (self:GetWire("Left")>0 or self:GetWire("Right")>0 or self:GetWire("Forward")>0 or self:GetWire("Back")>0) then
+		self:PhysicOverdrive(true) -- Added by Mad
+		self.WireControl = true;
+	elseif (self.WireControl) then
+		self.WireControl = false;
+	end
 
 	-- this sohuld be enabled or we have too slow camera rotation @AlexALX
-	if(self.Control) then
+	if(self.Control or self.WireControl) then
 		self:NextThink(CurTime())
 		return true
 	else
@@ -267,7 +364,7 @@ function ENT:Think()
 end
 
 --######### Added by Madman07 to avoid flying malp:p
-function ENT:PhysicOverdrive()
+function ENT:PhysicOverdrive(wire)
 	-- prevent malp flying @AlexALX
 	if (self.nextphys and self.nextphys>CurTime()) then return end
 	self.nextphys = CurTime()+0.1;
@@ -276,11 +373,11 @@ function ENT:PhysicOverdrive()
 	local trn = 0;
 	local dovel = false;
 
-	if(self.Controler:KeyDown("MALP","LEFT")) then trn = 70; dovel = true;
-	elseif(self.Controler:KeyDown("MALP","RIGHT")) then trn = -70; dovel = true; end
+	if(not wire and self.Controler:KeyDown("MALP","LEFT") or self:GetWire("Left")>0) then trn = 70; dovel = true;
+	elseif(not wire and self.Controler:KeyDown("MALP","RIGHT") or self:GetWire("Right")>0) then trn = -70; dovel = true; end
 
-	if(self.Controler:KeyDown("MALP","FWD")) then spd = 160; dovel = true;
-	elseif(self.Controler:KeyDown("MALP","BACK")) then spd = -100; dovel = true; end
+	if(not wire and self.Controler:KeyDown("MALP","FWD") or self:GetWire("Forward")>0) then spd = 160; dovel = true;
+	elseif(not wire and self.Controler:KeyDown("MALP","BACK") or self:GetWire("Back")>0) then spd = -100; dovel = true; end
 
 	local vel1 = self:GetForward()*(spd-trn);
 	local vel2 = self:GetForward()*(spd+trn);
@@ -422,27 +519,79 @@ function ENT:FindPlayerGate(dist)
 	return gate; -- Returns what we've found, a gate or no gate.
 end
 
+function ENT:OnTakeDamage(dmg)
+	if (self.Destroyed) then return end
+	local damage = dmg:GetDamage();
+	self.Healthh = self.Healthh - damage/2;
+	if (self.Healthh<300 and not self.damaged) then
+		timer.Create("MALP_DMG"..self:EntIndex(),0.05,0,function()
+			if IsValid(self) then self:Sense() end
+		end)
+		self.damaged = true
+	end
+
+	if (self.Healthh<0) then
+		self:Destroy();
+	end
+end
+
+function ENT:Destroy()
+	local effectdata = EffectData()
+	effectdata:SetStart(self.Entity:GetPos()) // not sure if we need a start and origin (endpoint) for this effect, but whatever
+	effectdata:SetOrigin(self.Entity:GetPos())
+	effectdata:SetScale(2)
+	util.Effect( "HelicopterMegaBomb", effectdata )
+	util.Effect("Explosion",effectdata,true,true);
+	constraint.RemoveAll(self)
+	self.SignalLost = true
+	UpdateRenderTarget(NULL);
+	self.Destroyed = true
+	if self.Sounds.LoopSound then
+		self.Sounds.LoopSound:Stop();
+		self.Sounds.LoopSound = nil;
+	end
+	
+	if(self.Control and not self.FirstPerson) then
+		self:UnControl(self.Controler)	
+	end
+	timer.Remove("MALP_DMG"..self:EntIndex())
+	
+	self:SendData()
+end
+
 --######### Get Environment info @RononDex
 function ENT:Sense()
 
-	if self.planet then
+	/*if self.planet then
 		self.gravity2 = self.gravity
 	else
 		self.gravity2 = 0
-	end
-	if (self.damaged == 1) then
-		local test = math.random(1, 10)
+	end*/
+	if (self.damaged) then
+		local test = math.random(1, 14)
 		if (test <= 2) then
-			self.environment.habitat = math.random(0, 1)
+			self.environment.habitat = math.random(0,1)
 		elseif (test <= 3) then
-			self.environment.atmosphere = self.environment.atmosphere + math.random(-100, 100)
+			self.environment.atmosphere = math.random(0, 1)
 		elseif (test <= 4) then
-			self.environment.temperature = self.environment.temperature + math.random((1 - self.environment.temperature), self.environment.temperature)
+			self.environment.temperature = math.random(0, 1200)
 		elseif (test <= 5) then
-			self.gravity2 = self.gravity + math.random(-1, 1)
+			self.environment.gravity = math.Rand(0, 10)
+		elseif (test <= 6) then
+			local total = 100
+			self.environment.o2 = math.Rand(0, 100)
+			total = total-self.environment.o2
+			self.environment.co2 = math.Rand(0, total)
+			total = total-self.environment.co2
+			self.environment.n2 = math.Rand(0, total)
+			total = total-self.environment.n2
+			self.environment.h2 = math.Rand(0, total)
+		elseif (test <= 7) then
+			self.environment.water = math.random(0, 3)
 		end
+		--self.SignalLost2 = math.random(0,1)
 	end
-	self.gravity2 = self.gravity2 * 100
+	//self.gravity2 = self.gravity2 * 100
 end
 
 function ENT:PreEntityCopy()
@@ -540,17 +689,24 @@ function ENT:Draw() self:DrawModel() end
 function ENT:Initialize()
 
 	self.KBD = self.KBD or KBD:CreateInstance(self)
+	self.gravity = 0;
+	self.habitat = 0;
+	self.atmosphere = 0;
+	self.temp = 0;
+	self.o2 = 0;
 
 end
 
 
 local function SetData(um)
 	local p = LocalPlayer()
-	p.SignalLost = um:ReadBool()
-	gravity = um:ReadShort()
-	habitat = um:ReadShort()
-	atmosphere = um:ReadShort()
-	temp = um:ReadShort()
+	local ent = um:ReadEntity()
+	ent.SignalLost = um:ReadBool()
+	ent.gravity = um:ReadFloat()
+	ent.habitat = um:ReadShort()
+	ent.atmosphere = um:ReadShort()
+	ent.temp = um:ReadShort()
+	ent.o2 = um:ReadFloat()
 end
 usermessage.Hook("MALPData", SetData)
 
@@ -607,11 +763,12 @@ local function RenderMALPHud()
 
 			-- this is the distance at which we start losing the signal
 			local badDist = 5000-350;
-
+                       
 			if (dist > badDist) then
-				if(p.SignalLost) then
+				if(malp.SignalLost) then
 					-- FIXME: make a better effect (tv static or something)
 					local n = dist-badDist;
+					if (malp.SignalLost) then n = badDist; end
 
 					mat:SetFloat( "$blur", (n/20)*(math.sin(time)+3));
 					render.UpdateScreenEffectTexture();
@@ -647,8 +804,8 @@ local function RenderMALPHud()
 			surface.DrawTexturedRect(0, h-height, width, height);
 
 			local alpha, signal = 255, 2;
-			if (dist > MAXDIST) then
-				if(p.SignalLost) then
+			if (dist > MAXDIST or malp.SignalLost) then
+				if(malp.SignalLost) then
 					alpha = math.abs(math.sin(2*time)*255);
 					signal = 1;
 				end
@@ -662,16 +819,18 @@ local function RenderMALPHud()
 
 			-- If SB isn't installed, it'll show default values. I think it's better than having nothing in the corner
 
-			local habitable = habit or 1;
-			local mgravity = gravity or 1;
-			local pressure = atmosphere or 1;
-			local temperature = temp or 288;
+			local habitable = malp.habitat;
+			local mgravity = math.Round(malp.gravity,2);
+			local pressure = malp.atmosphere;
+			local temperature = malp.temp;
 
 			if(habitable == 1) then habitable = "Yes"; else habitable = "No"; end
+			if(pressure == 1) then pressure = "Yes"; else pressure = "No"; end
+			pressure = pressure.." ("..math.Round(malp.o2,2).."% O2)"
 
 			-- too far: don't show the information
-			if(dist > MAXDIST) then
-				if(p.SignalLost) then -- Too far away and no active gate connecting the signals
+			if(dist > MAXDIST or malp.SignalLost) then
+				if(malp.SignalLost) then -- Too far away and no active gate connecting the signals
 					habitable = "-";
 					mgravity = "-";
 					pressure = "-";
@@ -681,7 +840,7 @@ local function RenderMALPHud()
 
 			draw.SimpleText("Habitable: "..habitable,FONT, 955*widthMul, 862*heightMul, color_white);
 			draw.SimpleText("Gravity: "..mgravity.." G",FONT, 955*widthMul, 891*heightMul, color_white);
-			draw.SimpleText("Pressure: "..pressure.." Bar",FONT, 955*widthMul, 920*heightMul, color_white);
+			draw.SimpleText("Atmosphere: "..pressure,FONT, 955*widthMul, 920*heightMul, color_white);
 			draw.SimpleText("Temperature: "..temperature.." K",FONT, 955*widthMul, 949*heightMul, color_white);
 		end
 	end

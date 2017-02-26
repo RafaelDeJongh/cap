@@ -292,6 +292,8 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 language.Add("ramp",SGLanguage.GetMessage("ramp_kill"));
 end
 
+ENT.RenderGroup = RENDERGROUP_BOTH
+
 function ENT:Initialize()
 	self.Emitter = ParticleEmitter(self.Entity:GetPos());
 end
@@ -352,5 +354,15 @@ function ENT:SmokeTopLeft()
 		particle:SetAirResistance( 10 );
 		--self.Emitter:Finish()
 end
+
+end
+
+if CLIENT then
+
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("icarus_ramp",SGLanguage.GetMessage("ramp_kill"));
+end
+
+ENT.RenderGroup = RENDERGROUP_BOTH
 
 end

@@ -8,7 +8,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Medium Turret"
-ENT.Author = "Madman07, Boba Fett"
+ENT.Author = "Madman07, Rafael De Jongh"
 ENT.Instructions= "Kill the blue Aliens!"
 ENT.Contact = "madman097@gmail.com"
 ENT.Category = "Stargate Carter Addon Pack: Weapons"

@@ -118,6 +118,8 @@ weapon_misc_nox = Руки Ноксов
 weapon_misc_nox_desc = Левый Клик: Открыть Меню набора Звёздных Врат, Правый Клик: Лечить друга.
 weapon_misc_adrenaline = Инжектор Адреналина
 weapon_misc_atl_medkit = Аптечка Атлантиды
+weapon_misc_lucian_door_opener = Люсианский открыватель дверей
+weapon_misc_lucian_door_opener_desc = Открывет двери вселенной\n\nЛевый клик для размещения устройства
 
 // Stools Cats
 stool_cat = Звёздные Врата
@@ -161,6 +163,8 @@ stool_tshieldc = Токра Контроллер Щита
 stool_tolland = Блокиратор Оружия Толлан
 stool_harvester = Собиратель рейфов
 stool_controlpanel = Панель управления
+stool_sgcscreen = SGC Экраны
+stool_sgcscreen_srv = SGC Сервера
 
 // Stool Names - Energy
 stool_asuran_hub = Асуран МНТ Хаб
@@ -329,6 +333,8 @@ shieldid_title = Идентификатор щита
 shieldid_frequency = Частота
 shieldid_toggle = Вкл/Выкл
 shieldid_save = Сохранить
+shieldid_on = Включить
+shieldid_off = Выключить
 
 // destiny timer
 destimer_title = Таймер Судьбы
@@ -403,6 +409,17 @@ antiprior_c_1 = Владелец и друзья
 antiprior_c_2 = Только владелец
 antiprior_c_3 = Никто
 
+// SGC Screen menu
+sgcscreen_title = StarGate Command - Менеджер кодов
+sgcscreen_code = Код
+sgcscreen_dcode = Код самоуничтожения
+sgcscreen_rcode = Код отмены
+sgcscreen_desc = Описание
+sgcscreen_save = Сохранить
+sgcscreen_cancel = Отмена
+// make sure to check this field, change \n positions to fit in menu
+sgcscreen_info = Требовать наличия двух игроков, чтобы\nначать/отменить самоуничтожение. В данном\nслучае вам надо ввести два разных кода.
+
 // huds
 hud_status = Статус
 hud_energy = Энергия
@@ -465,6 +482,7 @@ vis_refl_rings = Эффект приломления
 vis_sm_laser = Маленькие лазеры
 vis_charge_up = Эффект зарядки
 vis_refl_sphere = Сферы приломления
+vis_reset_menu = Сбросить меню врат
 
 // keybinder
 key_move_title = Перемещение

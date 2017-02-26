@@ -411,3 +411,39 @@ stool_zpm_mk3_cleaned = Removed all Zero Point Modules
 stool_zpm_mk3_limit = Hit the Zero Point Module limit
 stool_zpm_mk3_fulldesc = This is the Zpm MK3, this tool requires SpaceBuild or the Environments addon. If you don't have it, this Zpm MK3 is quite useless for you.
 stool_zpm_mk3_capacity = Capacity:
+
+// SGC Screens
+stool_sgcscreen_spawner = SGC Screen Spawner
+stool_sgcscreen_create = Creates a SGC Screen or SGC Server
+stool_sgcscreen_desc = Left click to spawn SGC Screen, Right click to spawn SGC Server
+stool_sgcscreen_undone = SGC Screen removed
+stool_sgcscreen_cleanup = SGC Screens
+stool_sgcscreen_cleaned = Removed all SGC Screens
+stool_sgcscreen_limit = Hit the SGC Screens limit
+stool_sgcscreen_limit_sv = Hit the SGC Servers limit
+stool_sgcscreen_menu = Codes manager
+stool_sgcscreen_fulldesc =[[This is the SGC Screens from tv series.
+
+Author: glebqip
+Improvements and stool by AlexALX]]
+stool_sgcscreen_sv = Server options:
+stool_sgcscreen_cl = Screen options:
+stool_sgcscreen_conn_sv = Auto-connect to nearest server
+stool_sgcscreen_conn_sg = Auto-connect to nearest stargate
+stool_sgcscreen_conn_ic = Auto-connect to nearest iris computer
+stool_sgcscreen_conn_nb = Auto-connect to nearest naquadah bomb
+stool_sgcscreen_key = Program selection key:
+stool_sgcscreen_keyd = Self-descruct menu key:
+stool_sgcscreen_keyboard = Spawn with keyboard
+stool_sgcscreen_keyboard_weld = Make keyboard parented to screen
+stool_sgcscreen_program = Program:
+stool_sgcscreen_program_1 = Dialing computer
+stool_sgcscreen_program_2 = Address book
+stool_sgcscreen_program_3 = Gate data monitor
+stool_sgcscreen_program_4 = Gate integrity monitor
+stool_sgcscreen_program_5 = Galaxy map
+stool_sgcscreen_program_6 = 7 Chevron
+stool_sgcscreen_program_7 = Gate active
+stool_sgcscreen_program_8 = Energy output (movie)
+stool_sgcscreen_program_9 = Energy output (series)
+stool_sgcscreen_program_10 = Energy flux

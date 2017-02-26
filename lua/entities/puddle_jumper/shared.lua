@@ -5,7 +5,7 @@ ENT.Base = "base_anim"
 ENT.Type = "vehicle"
 
 ENT.PrintName = "Puddle Jumper"
-ENT.Author = "RononDex, Iziraider, Boba Fett"
+ENT.Author = "RononDex, Iziraider, Rafael De Jongh"
 ENT.Category = "Stargate Carter Addon Pack: Ships"
 ENT.AutomaticFrameAdvance = true
 

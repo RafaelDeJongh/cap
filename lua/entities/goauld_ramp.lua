@@ -2,7 +2,7 @@
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "2010 Ramp"
-ENT.Author = "Llapp, Boba Fett"
+ENT.Author = "Llapp, Rafael De Jongh"
 ENT.Category = "Stargate Carter Addon Pack"
 
 ENT.Spawnable = false
@@ -125,5 +125,13 @@ end
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "goauld_ramp", StarGate.CAP_GmodDuplicator, "Data" )
 end
+
+else
+
+if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
+language.Add("goauld_ramp",SGLanguage.GetMessage("ramp_kill"));
+end
+
+ENT.RenderGroup = RENDERGROUP_BOTH
 
 end

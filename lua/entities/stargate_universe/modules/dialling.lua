@@ -38,16 +38,17 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 	--################# INBOUND
 	if(inbound or fast) then
 		local t = self.Entity.Target;
-		local add = 0.0;
-		if (IsValid(t)) then
-			add = self:GetDelay(inbound,fast,runs,t:GetClass());
-		end
-		if (inbound and not fast and IsValid(t) and self:IsNewDial(t:GetClass())) then
-			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
+		if (inbound and not fast and IsValid(t) and t.IsNewSlowDial) then
+			action:Add({f=self.SetStatus,v={self,false,true,true},d=0.6}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 			action:Add({f=self.PlaySpVal,v={self,true},d=0});
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1}); -- The 0.1 seconds prevents a bug where an incoming call overrides an outgoing (slow dial) and the first chevrons stays disabled (so we need definitely a shot delay!) - This additional 0.1 we take here has been removed on the chevron7-lock delay in the for loop below
-			action = self.Sequence:InstantOpen(action,self:GetDelaySlow(t:GetClass()),false,true);
+			local dly = self:CalcDelaySlow(t,true)
+			action = self.Sequence:InstantOpen(action,dly,false,true);
 		else
+			local add = 0
+			if (IsValid(t) and inbound and not fast) then
+				add = t:DialSlowTime(runs,self)
+			end
 		    action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 			action:Add({f=self.PlaySpVal,v={self,true},d=0});
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1}); -- The 0.1 seconds prevents a bug where an incoming call overrides an outgoing (slow dial) and the first chevrons stays disabled (so we need definitely a shot delay!) - This additional 0.1 we take here has been removed on the chevron7-lock delay in the for loop below
@@ -66,7 +67,11 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					action:Add({f=self.SetWire,v={self,"Dialing Symbol",tostring(address[1])},d=0}); -- Wire
 				end
 			end
-		    action:Add({f=self.ActivateGateSound,v={self,i},d=0.8});
+			local add = 0.0
+			if (IsValid(t)) then
+				add = self:CalcDelayFast(t,inbound);
+			end
+		    action:Add({f=self.ActivateGateSound,v={self,i},d=0.8+add});
 			local delspin = 0.2;
 	        if(inbound and self.InboundSymbols!=1)then
 		        delspin = 3;
@@ -201,7 +206,12 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 			    action:Add({f=self.DHDSetChevron,v={self,i},d=0.7});
 			elseif(i==runs)then
 			    if(not fail)then
-			      	action:Add({f=self.DHDSetChevron,v={self,i},d=1});
+					local t = self.Entity.Target
+					local dly = self.DialSlowDelay
+					if (IsValid(t)) then
+						dly = self:CalcDelaySlow(t)
+					end
+					action:Add({f=self.DHDSetChevron,v={self,i},d=dly});
 			    else
 				    if (busy) then
 				    	action:Add({f=self.SetWire,v={self,"Chevron",runs},d=0}); -- Wire
@@ -230,7 +240,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 	if(not fail) then
 		action:Add({f=self.FloorChevron,v={self,true},d=0}); -- change the floor chevron skin
 		action:Add({f=self.SguRampSetSkin,v={self,true},d=0}); -- change the sgu ramp skin
-		action:Add({f=self.DHDSetChevron,v={self,count},d=0}); -- Activate near DHDs
+		action:Add({f=self.DHDSetChevron,v={self,count},d=0}); -- Activate near DHDs		
 	end
 	return action;
 end

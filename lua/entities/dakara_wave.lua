@@ -8,6 +8,7 @@ ENT.Spawnable        = false
 ENT.AdminSpawnable   = false
 
 ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.DoNotDuplicate = true 
 
 if CLIENT then
 

@@ -25,6 +25,7 @@ ENT.IgnoreTouch = true;
 ENT.CAP_NotSave = true;
 ENT.NoAutoClose = true; -- Will not cause an autoclose event on the stargates!
 ENT.CDSIgnore = true; -- CDS Immunity
+ENT.DoNotDuplicate = true 
 function ENT:gcbt_breakactions() end; ENT.hasdamagecase = true; -- GCombat invulnarability!
 
 end

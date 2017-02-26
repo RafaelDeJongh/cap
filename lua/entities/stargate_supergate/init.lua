@@ -51,6 +51,7 @@ function ENT:Initialize()
 	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetColor(Color(0,0,0,0));
+	self.DeriveIgnoreParent = true
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 	self.Segments = {};
 	self.EffectSegments = {};
@@ -63,7 +64,6 @@ function ENT:Initialize()
 	local effblock;
 
 	timer.Create( "Spawning"..self:EntIndex(), 0.1, 72, function()
-
 		local ent = self.Entity;
 		local ang = self.Entity:GetAngles();
 		local forw = self.Entity:GetForward();
@@ -81,6 +81,10 @@ function ENT:Initialize()
 		block:Spawn();
 		block:Activate();
 		block:SetParent(ent);
+		block:SetDerive(ent);
+		if (i!=0) then
+			block:SetColor(ent.Segments[1]:GetColor())
+		end
 		--block.CAP_NotSave = true;
 
 		local ed = EffectData()
@@ -118,7 +122,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Disable Menu","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -220,12 +224,14 @@ function ENT:Fade(segment, tofull)
 		segment.direction = -16;
 		segment.alpha = 255;
 	end
+	local color = self.Segments[1]:GetColor()
 	timer.Create("FadeSegmentss"..segment:EntIndex(),0.001,16,function()
 		if (IsValid(segment)) then
 			segment.alpha = segment.alpha + segment.direction;
 			if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
 			if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
-			segment:SetColor(Color(255,255,255,segment.alpha))
+			color.a = segment.alpha
+			segment:SetColor(color)
 		end
 	end);
 end
@@ -279,12 +285,14 @@ function ENT:Fades(segment, tofull)
 		segment.direction = -16;
 		segment.alpha = 255;
 	end
+	local color = self.Segments[1]:GetColor()
 	timer.Create("FadeSegmentss"..segment:EntIndex(),0.001,13,function()
 		if (IsValid(segment)) then
 			segment.alpha = segment.alpha + segment.direction;
 			if (not tofull and segment.alpha < 17 ) then segment.alpha = 0 end
 			if (tofull and segment.alpha > 237 ) then segment.alpha = 255 end
-			segment:SetColor(Color(255,255,255,segment.alpha))
+			color.a = segment.alpha
+			segment:SetColor(color)
 		end
 	end);
 end
@@ -295,6 +303,11 @@ function ENT:GateSound()
     self.ActiveSound = CreateSound(self.Entity, Sound(self.Sounds.Dial));
     self.ActiveSound:Play();
 	--self.ActiveSound:ChangeVolume(100);
+end
+
+function ENT:OnEventHorizonType(eh,reset,type,Data)
+	if (reset) then return end
+	eh:SetPos(eh:GetPos()-eh:GetUp()*2375)
 end
 
 --################# @Madman07 Disactivate Light Effect

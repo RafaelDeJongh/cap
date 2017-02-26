@@ -37,14 +37,12 @@ function ENT.Sequence:Dial(inbound,fast,fail)
 	action:Add({f=self.SetWire,v={self,"Dialing Address",dialaddress},d=0}); -- Wire
 	--################# INBOUND AND DHD (fast) DIAL
 	if(inbound or fast) then
-	    local add = self:GetDelay(inbound,fast,0,"stargate_supergate");
 		action:Add({f=self.GateSound,v={self},d=0}); -- Sound
 		if (inbound and not fast) then
 			action:Add({f=self.SetStatus,v={self,false,true,true},d=29});
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1});
 			action:Add({f=self.LightUps,v={self, 0.07},d=7}); -- Lights income
 		end
-		add = add + 0.1
 		if (inbound and fast) then
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.1});
 			action:Add({f=self.LightUps,v={self, 0.07},d=7}); -- Lights income

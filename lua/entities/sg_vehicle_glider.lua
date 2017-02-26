@@ -22,7 +22,7 @@ ENT.Type = "vehicle"
 ENT.Base = "sg_vehicle_base"
 
 ENT.PrintName = "Death Glider"
-ENT.Author	= "RononDex, Iziraider, Boba Fett"
+ENT.Author	= "RononDex, Iziraider, Rafael De Jongh"
 ENT.Contact	= ""
 ENT.Purpose	= ""
 ENT.Instructions= ""

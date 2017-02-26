@@ -26,7 +26,7 @@ function EFFECT:Init(data)
 	if(not (mdl and mdl ~= "" and mdl ~= "models/error.mdl")) then return end; -- Stops crashing ppl
 	if(self.Material:GetName() == "___error") then return end; -- Also fixed ppl crashing
 	self.Entity:SetModel(mdl);
-	self.Entity:SetPos(e:GetPos());
+	self.Entity:SetPos(data:GetOrigin());
 	self.Entity:SetAngles(e:GetAngles());
 	self.Entity:SetParent(e);
 	self.LifeTime = data:GetScale(); -- How long does the effect last?
@@ -34,15 +34,21 @@ function EFFECT:Init(data)
 	self.Spawned = CurTime();
 	self.LastMul = 0;
 	self.Parent = e;
-	e.CurrentHorizonEffect = self.Entity;
+	self:SetRenderBounds(Vector(1,1,1)*-1024,Vector(1,1,1)*1024);
 	self.Draw = true;
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
+	self.Main = util.tobool(data:GetRadius())
+	if (self.Main) then
+		e.CurrentHorizonEffect = self.Entity;
+	else
+		e.CurrentHorizonEffect2 = self.Entity;
+	end
 end
 
 --################# Think @aVoN
 function EFFECT:Think()
 	local valid = (self.Draw and (self.Spawned+self.LifeTime) > CurTime());
-	if(not valid and IsValid(self.Parent) and self.Parent.SetAlpha) then
+	if(not valid and IsValid(self.Parent) and self.Parent.SetAlpha and self.Main) then
 		self.Parent:SetAlpha(255); -- May fix that bug where the EH gets opened and stays "half invisible"
 		--self.Parent.AllowBacksideDrawing = true; -- This tells the "EH-Backside" only to draw at 150
 	end
@@ -51,7 +57,7 @@ end
 
 --################# Render @aVoN
 function EFFECT:Render()
-	if(self.Draw and not (self.Parent and self.Parent:IsValid() and self.Parent.CurrentHorizonEffect == self.Entity)) then
+	if(self.Draw and not (self.Parent and self.Parent:IsValid() and (self.Main and self.Parent.CurrentHorizonEffect==self.Entity or not self.Main and self.Parent.CurrentHorizonEffect2==self.Entity))) then
 		self.Draw = false;
 		return;
 	end
@@ -67,13 +73,13 @@ function EFFECT:Render()
 		mul = 1-math.Clamp((CurTime()-(self.Spawned+diff))/self.FadeTime,0,1);
 	end
 	-- Start the horizon's ripple effect
-	if(self.LastMul > mul) then
+	if(self.Main and self.LastMul > mul) then
 		self.Parent.DrawRipple = true;
 	end
 	self.LastMul = mul;
 	self.Entity:SetColor(Color(255,255,255,mul*130));
 	-- This is a workaround. It will regulated the alpha of the EH to go "down" to it's "Maximum Limit". So from the front it stays at 255, but from the back it will go down from 255 to 150 slowly so it doesnt look so sloppy from behind
-	if(IsValid(self.Parent) and self.Parent.SetAlpha) then
+	if(self.Main and IsValid(self.Parent) and self.Parent.SetAlpha) then
 		self.Parent:SetAlpha(mul*350,true);
 	end
 	render.MaterialOverride(self.Material);

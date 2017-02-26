@@ -106,7 +106,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Activate chevron number [STRING]","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Activate chevron number [STRING]","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -244,6 +244,17 @@ function ENT:Shutdown()
 		self.Entity:SetNWBool("ActChevronsL",false);
 	end
 end
+
+function ENT:DialSlowTime(chevs,caller)
+	local dly = 17
+	if (chevs==8) then dly = 19;
+	elseif (chevs==9) then dly = 21 end
+	if (caller.EventHorizonData.OpeningDelay>self.EventHorizonData.OpeningDelay) then
+		dly = dly - (caller.EventHorizonData.OpeningDelay-self.EventHorizonData.OpeningDelay)
+	end
+	dly = dly - caller.DialFastTime
+	return dly                 
+end 
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "stargate_tollan", StarGate.CAP_GmodDuplicator, "Data" )

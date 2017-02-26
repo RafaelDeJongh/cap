@@ -23,6 +23,7 @@ ENT.PrintName		= "Nuke"
 ENT.Author			= "Teta_Bonita(Re-written by DrFattyJr)"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
+ENT.DoNotDuplicate = true 
 
 if SERVER then
 
@@ -44,7 +45,7 @@ function ENT:Initialize()
 
 	-- Set Up main varibles
 	self.Scale = (self.Scale or 100)
-	self.SplodePos = (self.SplodePos or Vector(0,0,0))
+	self.SplodePos = (self.SplodePos or self:GetPos())
 
 
 	--Tell the client where the nuke is.

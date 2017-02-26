@@ -101,7 +101,12 @@ function SWEP:SecondaryAttack()
 		-- Animation
 		self.Weapon:SendWeaponAnim(ACT_VM_SECONDARYATTACK);
 		-- Sound
-		if SERVER and IsValid(self) and IsValid(self.Owner) then self.Owner:EmitSound(self.Sounds.Disengage,math.random(90,110),math.random(90,110)) end;
+		if SERVER and IsValid(self) and IsValid(self.Owner) then 
+			timer.Simple(0.3,function()
+				if not IsValid(self) or not IsValid(self.Owner) then return end
+				self.Owner:EmitSound(self.Sounds.Holster,math.random(90,110),math.random(90,110)) 
+			end )
+		end;
 		self.IsEngaged = false
 		return true;
 	else
@@ -148,7 +153,9 @@ end
 
 --################### Holster @aVoN
 function SWEP:Holster()
-	self.Owner:EmitSound(self.Sounds.Holster,90,math.random(90,110));
+	if self.IsEngaged then
+		self.Owner:EmitSound(self.Sounds.Holster,90,math.random(90,110));
+	end
 	return true;
 end
 

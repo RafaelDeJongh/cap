@@ -37,7 +37,7 @@ function EFFECT:Init(data)
 	self.AimVector	= self.TargetEnt:GetUp();
 	self.Draw		= false;
 
-	self.Entity:SetRenderBoundsWS(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
+	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
 end
 
 function EFFECT:Think()

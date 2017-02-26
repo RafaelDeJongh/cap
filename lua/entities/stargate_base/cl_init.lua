@@ -181,6 +181,7 @@ end
 local stargates = {};
 function ENT:Initialize()
 	table.insert(stargates,self.Entity);
+	self.EventHorizonLightColor = self.EventHorizonData.LightColor or self.EventHorizonData.BaseClass.LightColor
 end
 
 --################# Think function, to set the gates address @aVoN

@@ -10,7 +10,7 @@ ENT.Type 			= "anim"
 ENT.Base 			= "base_anim"
 
 ENT.PrintName	= "Asgard Transporter"
-ENT.Author = "PiX06, aVoN, Boba Fett, AlexALX"
+ENT.Author = "PiX06, aVoN, Rafael De Jongh, AlexALX"
 ENT.Contact = "pix06@hotmail.co.uk"
 ENT.Category = "Stargate Carter Addon Pack"
 

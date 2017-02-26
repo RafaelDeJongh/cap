@@ -118,6 +118,8 @@ weapon_misc_nox = Nox Hands
 weapon_misc_nox_desc = Left Click: Open Stargate dialing menu, Right Click: Heal your friend.
 weapon_misc_adrenaline = Adrenaline Shot
 weapon_misc_atl_medkit = Atlantis Medical Kit
+weapon_misc_lucian_door_opener = Lucian Door Opener
+weapon_misc_lucian_door_opener_desc = Open Destiny Doors\n\nLeft Click to place Device
 
 // Stools Cats
 stool_cat = Stargate
@@ -161,6 +163,8 @@ stool_tshieldc = Tokra Shield Controller
 stool_tolland = Tollan Weapon Disabler
 stool_harvester = Harvester
 stool_controlpanel = Control Panel
+stool_sgcscreen = SGC Screens
+stool_sgcscreen_srv = SGC Servers
 
 // Stool Names - Energy
 stool_asuran_hub = Asuran ZPM Hub
@@ -329,6 +333,8 @@ shieldid_title = Shield Identifier
 shieldid_frequency = Frequency
 shieldid_toggle = Toggle
 shieldid_save = Save
+shieldid_on = Activate
+shieldid_off = Deactivate
 
 // destiny timer
 destimer_title = Destiny Timer
@@ -403,6 +409,17 @@ antiprior_c_1 = Owner and friends
 antiprior_c_2 = Only for owner
 antiprior_c_3 = No one
 
+// SGC Screen menu
+sgcscreen_title = StarGate Command - Codes Manager
+sgcscreen_code = Code
+sgcscreen_dcode = Self-destruct code
+sgcscreen_rcode = Reset code
+sgcscreen_desc = Description
+sgcscreen_save = Save
+sgcscreen_cancel = Cancel
+// make sure to check this field, change \n positions to fit in menu
+sgcscreen_info = Require two players to start/cancel self-desctruct.\nIn this case you need enter two different codes.
+
 // huds
 hud_status = Status
 hud_energy = Energy
@@ -465,6 +482,7 @@ vis_refl_rings = Refraction Ring Pulse
 vis_sm_laser = Small lasers
 vis_charge_up = Charge up rings
 vis_refl_sphere = Refraction spheres
+vis_reset_menu = Reset stargate menu
 
 // keybinder
 key_move_title = Movement

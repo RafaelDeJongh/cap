@@ -7,7 +7,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "dhd_base"
 ENT.PrintName = "DHD (Concept)"
-ENT.Author = "aVoN, Madman07, Boba Fett, MarkJaw, AlexALX"
+ENT.Author = "aVoN, Madman07, Rafael De Jongh, MarkJaw, AlexALX"
 list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.Category = "Stargate Carter Addon Pack: Gates and Rings"
 ENT.IsDHD = true;

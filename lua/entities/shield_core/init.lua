@@ -152,6 +152,8 @@ function ENT:Initialize()
 		self.Col = Vector(tonumber(args[1]),tonumber(args[2]),tonumber(args[3]));
 		self.Entity:SetNetworkedVector("Col", self.Col);
     end);
+	
+	self:SpawnButton()
 
 end
 
@@ -180,6 +182,21 @@ function ENT:SpawnFunction( ply, tr )
 	return ent;
 end
 
+function ENT:SpawnButton()
+	local button = ents.Create("shield_core_button");
+	button:SetParent(self);
+	button:SetRenderMode(RENDERMODE_TRANSALPHA);
+	button.Parent = self;
+	button:SetPos(self:GetPos()-self:GetForward()*0.2+self:GetRight()*40+self:GetUp()*20)
+	button:SetAngles(self:GetAngles()+Angle(0,0,0))
+	button:SetColor(Color(0,0,0,0))
+	button:DrawShadow(false)
+	button:Spawn();
+	button:Activate();
+	self.Button = button	
+	if CPPI and IsValid(p) and button.CPPISetOwner then button:CPPISetOwner(p) end
+end
+
 function ENT:OnRemove()
 	StarGate.WireRD.OnRemove(self);
 	if IsValid(self.Shield) then self.Shield:Remove() end
@@ -189,7 +206,7 @@ function ENT:OnRemove()
 	if IsValid(self.Player) then self.Player:SetViewEntity(self.Player); end
 end
 
-function ENT:Use(ply)
+function ENT:TrueUse(ply)
 	if(not self.Busy and ply == self.Owner and not self.Pressed)then
 		self:Status(false, true); -- shutdown old shield, close emmiter
 

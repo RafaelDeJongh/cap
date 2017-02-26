@@ -1,7 +1,7 @@
 ENT.Type = "anim"
 ENT.Base = "ring_base"
 ENT.PrintName = "Rings (Ori)"
-ENT.Author = "Catdaemon, Madman07, Boba Fett"
+ENT.Author = "Catdaemon, Madman07, Rafael De Jongh"
 ENT.Instructions = "Place where desired, USE to set its address."
 ENT.Category = 	"Stargate Carter Addon Pack: Gates and Rings"
 

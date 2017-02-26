@@ -188,7 +188,7 @@ function ENT:Initialize()
 	self:AddChevron();
 	self.IsConcept = false;
 	self.RingInbound = false;
-	self.InfDefaultEH = false;
+	hook.Add("Tick", self, self.RingTickInfinity);
 end
 
 --#################  Called when stargate_group_system changed
@@ -257,7 +257,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","SG1 Event Horizon");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -435,8 +435,8 @@ function ENT:StopFormula(y,x,n,n2)
 end
 
 --################# Think function added by AlexALX
-function RingTickInfinity()
-	for k,self in pairs(ents.FindByClass("stargate_infinity")) do
+function ENT:RingTickInfinity()
+	--for k,self in pairs(ents.FindByClass("stargate_infinity")) do
 		if (IsValid(self.Ring)) then
 			if (self.Outbound and self.Ring.Moving and self.DiallingSymbol != "") then
 				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
@@ -537,9 +537,9 @@ function RingTickInfinity()
 				end
 			end
 		end
-	end
+	--end
 end
-hook.Add("Tick", "RingTick Infinity", RingTickInfinity);
+--hook.Add("Tick", "RingTick Infinity", RingTickInfinity);
 
 function ENT:SetDiallingSymbol(symbol)
 	if (symbol) then
@@ -673,20 +673,6 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.RingInbound = false;
 			self.Entity:SetNWBool("ActSGCT",false);
 			self:SetWire("SGC Type",false);
-		end
-	elseif(k == "SG1 Event Horizon") then
-		if (v>=1) then
-			self.InfDefaultEH = true;
-			self.Entity:SetNWBool("ActInf_SG1_EH",true);
-			if (IsValid(self.EventHorizon)) then
-				self.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
-			end
-		else
-			self.InfDefaultEH = false;
-			self.Entity:SetNWBool("ActInf_SG1_EH",false);
-			if (IsValid(self.EventHorizon)) then
-				self.EventHorizon:SetMaterial("CoS/stargate/effect_02.vmt");
-			end
 		end
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then

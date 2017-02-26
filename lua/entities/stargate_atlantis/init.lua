@@ -55,11 +55,10 @@ ENT.Sounds = {
 -- In which slot do the chevron a lock?
 ENT.ChevronLocks = {4,8,12,24,28,32,36,16,20};
 ENT.ChevronLocksb = {4,8,12,24,28,32,36,16,20};
-ENT.ChevronLocks8 = {4,8,12,16,24,28,32,36,20};
-ENT.ChevronLocks9 = {4,8,12,16,20,24,28,32,36};
 ENT.ChevronLocks8o = {4,8,12,24,28,32,16,36,20};
 ENT.ChevronLocks9o = {4,8,12,24,28,32,16,20,36};
 --ENT.AlwaysFast = true; -- Tells the activation code in stargate_base/events.lua:ActivateStargate() not to add a delay when called by this gate here (Atlantis always dials fast!)
+
 --################# SENT CODE ###############
 
 --################# Init @aVoN
@@ -82,6 +81,7 @@ function ENT:Initialize()
 	self.SpinLight = 1;
 	self.AtlType = false;
 	self.AtlTypeAct = false;
+	self.FasterDial = false; 
 
 	timer.Create("AtlTypeThink"..self:EntIndex(), 5.0, 0, function() if IsValid(self) then self:AtlTypeThink() end end);
 end
@@ -135,11 +135,11 @@ function ENT:ChangeSystemType(groupsystem)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Turn on ring light","Activate chevron numbers [STRING]","Disable Menu","Atlantis Type");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Turn on ring light","Activate chevron numbers [STRING]","Disable Menu","Atlantis Type","Alternative Slow Dial","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Atlantis Type","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Active Glyph","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","Atlantis Type","Alternative Slow Dial","Received [STRING]");
 end
 
 --################# Either allow the player to spawn this or not
@@ -172,6 +172,7 @@ function ENT:AddRing()
 		e:DrawShadow(false);
 		e:Spawn();
 		e:Activate();
+		e:SetRenderMode(RENDERMODE_TRANSALPHA);
 		self.Ring.Dial[i] = e;
 		e = nil;
 		e = ents.Create("prop_dynamic_override");
@@ -191,14 +192,17 @@ end
 function ENT:RingLight(light,inbound,shutdown,atlantis)
 	local ring = self.Ring.Dial;
 	if(inbound) then ring = self.Ring.Incoming end;
+	local col = self.Entity:GetColor()
 	if (atlantis) then
 		for i=1,2 do
-			ring[i]:SetColor(Color(255,255,255,100));
+			col.a = 100
+			ring[i]:SetColor(col);
 		end
 		self.AtlTypeAct = true;
 	else
 		for i=1,2 do
-			ring[i]:SetColor(Color(255,255,255,255));
+			col.a = 255
+			ring[i]:SetColor(col);
 		end
 		self.AtlTypeAct = false;
 	end
@@ -307,11 +311,15 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		self.Entity:SetNWBool("AtlType",util.tobool(v));
 		self:AtlTypeThink();
 		self:SetWire("Atlantis Type",util.tobool(v));
+	elseif(k == "Alternative Slow Dial") then
+		self.FasterDial = util.tobool(v);
+		self.Entity:SetNWBool("FasterDial",util.tobool(v));
+		self:SetWire("Alternative Slow Dial",util.tobool(v));
 	end
 end
 
 --################# Activates or deactivates a chevron @aVoN
-function ENT:ActivateChevron(chev,b,inbound,body)
+function ENT:ActivateChevron(chev,b,inbound,body,fasterdial)
 	if(not (self and self.Chevron)) then return end;
 	if(self.Chevron[chev]) then
 		if(b) then
@@ -327,7 +335,7 @@ function ENT:ActivateChevron(chev,b,inbound,body)
 			if(not inbound) then
 				self.Entity:Fire("SetBodyGroup",body);
 			end
-			if(not inbound and not fast)then
+			if(not inbound and not fast and (not fasterdial or chev==7))then
 			    self:RingSound(false);
 			end
 		else
@@ -420,6 +428,23 @@ function ENT:Shutdown(fail,play_sound)
 		self:RingLight(36,true,false,true);
 	end
 end
+
+function ENT:DialSlowTime(chevs,caller)
+	local dly = 21.33
+	if (self.FasterDial) then
+		dly = 12.7
+		if (chevs==8) then dly = 16.5;
+		elseif (chevs==9) then dly = 19.7; end
+	else
+		if (chevs==8) then dly = 27.15;
+		elseif (chevs==9) then dly = 31.65 end
+	end
+	if (caller.EventHorizonData.OpeningDelay>self.EventHorizonData.OpeningDelay) then
+		dly = dly - (caller.EventHorizonData.OpeningDelay-self.EventHorizonData.OpeningDelay)
+	end
+	dly = dly - caller.DialFastTime
+	return dly
+end 
 
 if (StarGate and StarGate.CAP_GmodDuplicator) then
 	duplicator.RegisterEntityClass( "stargate_atlantis", StarGate.CAP_GmodDuplicator, "Data" )

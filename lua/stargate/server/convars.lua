@@ -128,17 +128,20 @@ end
 hook.Add("PlayerInitialSpawn", "StarGate.SystemType", FirstSpawn)
 
 function StarGate.LoadConvars()
-	if (not file.Exists("stargate/convars.txt","DATA")) then return end
+	if (not file.Exists("stargate/cfg/convars.txt","DATA")) then return end
 
-	local ini = INIParser:new("stargate/convars.txt",false);
+	local rtbl = {}
+	local ini = INIParser:new("stargate/cfg/convars.txt",false);
 	if(ini) then
 		if (ini.nodes.cap_convars and ini.nodes.cap_convars[1]) then
 			for k,v in pairs(ini.nodes.cap_convars[1]) do
 				if (StarGate.CAP_Convars[k] or k:find("sbox_max")) then -- for security
 					RunConsoleCommand(k,v);
+					rtbl[k] = v
 				end
 			end
 		end
 	end
+	return rtbl
 end
 StarGate.LoadConvars();

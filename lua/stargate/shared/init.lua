@@ -67,6 +67,9 @@ function StarGate.Init()
 	else
 		StarGate.HasWire = false;
 	end
+	if (not file.IsDir("stargate","DATA")) then
+		file.CreateDir("stargate","DATA");
+	end
 end
 StarGate.Init(); -- Call the Init
 

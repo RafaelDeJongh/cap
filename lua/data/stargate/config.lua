@@ -382,6 +382,7 @@ blast_damage = 300
 [cap_misc]
 allow_drop_weapons = true
 ship_shield = true
+cfgbackup = 4
 
 # Group-only ents
 # add_shield means add shield icon to spawnmenu

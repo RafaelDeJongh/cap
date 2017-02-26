@@ -74,9 +74,14 @@ function TOOL:Register()
 		end
 	end
 	-- Add the SG Spawner code to the ToolObject
-	if SERVER then
+	if SERVER then	
 		if(class) then
 			CreateConVar("sbox_max"..class,self.Entity.Limit);
+			if (self.Entity.Limits) then
+				for k,v in pairs(self.Entity.Limits) do
+					CreateConVar("sbox_max"..k,v);
+				end
+			end
 			-- First, we register the SENT to the stargate spawning code
 			if (StarGate.TOOL and not self.CustomSpawnCode) then StarGate.TOOL.CreateSpawner(class,unpack(self.Entity.Keys or {})); end -- Creates the spawner
 			self.SpawnSENT = function(self,p,trace,...)
@@ -87,7 +92,6 @@ function TOOL:Register()
 					p:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 					return;
 				end
-				if (table.HasValue(StarGate.SlGort,p:SteamID())) then return end
 				if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then return end
 				-- Now, spawn the SENT
 				if (StarGate.TOOL) then
@@ -113,7 +117,6 @@ function TOOL:Register()
 						e:Remove();
 						return;
 					end
-					if (IsValid(p) and table.HasValue(StarGate.SlGort,p:SteamID())) then e:Remove(); return end
 					if (StarGate.NotSpawnable(self.Mode,p,"tool") ) then e:Remove(); return end
 					self.PreEntitySpawn(self,p,e,...);
 				end

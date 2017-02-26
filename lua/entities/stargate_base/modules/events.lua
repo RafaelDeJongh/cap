@@ -184,6 +184,7 @@ function ENT:Open()
 	end
 	e:SetAngles(self.Entity:GetAngles());
 	e:SetParent(self.Entity);
+	--e:SetColor(self.Entity:GetColor())
 	-- Set another sound to the gate (must be done before spawning it)
 	if(self.Sounds and self.Sounds.Open) then
 		e.Sounds.Open = self.Sounds.Open;
@@ -455,7 +456,7 @@ function ENT:OnButtActivateStargate(inbound)
 						fail = true;
 					end
 					if(not DEBUG and not fail) then -- No debug, no instant open
-						local dly = 0.5 + self:GetDelaySG1(self.Target:GetClass(),self.Target.Classic);
+						local dly = 0.5 + self:GetDelayNN(self.Target);
 						if (self.OnButtLock) then
 							local act = action;
 							action = self.Sequence:New();

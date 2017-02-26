@@ -28,9 +28,9 @@ ENT.Sounds = {
 	LockDHD=Sound("stargate/universe/chevron.mp3"),
 	Chevron={Sound("stargate/universe/chevron.mp3"),Sound("stargate/universe/chevron2.mp3")},
 	Fail=Sound("stargate/dial_fail.mp3"),
-	Flicker=Sound("stargate/orlin/gateflicker.wav"),
 	OnButtonLock=Sound("stargate/stargate/dhd/dhd_usual_dial.wav"),
 }
+
 --################# SENT CODE ###############
 
 --################# Init @assassin21,aVoN,Llapp
@@ -72,7 +72,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Transmit [STRING]","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Transmit [STRING]","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -241,34 +241,11 @@ function ENT:Think()
 		        for i=1,7 do
                     self.Entity:SetNWBool("chevron"..i,false);
 		        end
-			    if(IsValid(self.Entity.Target) and IsValid(self.Entity.Target.EventHorizon) and IsValid(self.Entity) and IsValid(self.Entity.EventHorizon) and self.EHOpen)then
-					self.EventHorizon:SetMaterial("sgorlin/effect_shock.vmt");
-					self.EventHorizon.Unstable = true;
-					self.EventHorizon:BufferEmpty();
-					if(self.Target.Entity:GetClass() == "stargate_universe") then
-					    self.Target.EventHorizon:SetMaterial("sgu/effect_shock.vmt");
-					elseif(self.Target.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH) then
-					  	self.Target.EventHorizon:SetColor(Color(255,255,255,math.random(55,165)));
-					  	self.Target.EventHorizon:SetNWBool("Flicker",true);
-					else
-						self.Target.EventHorizon:SetMaterial("sgorlin/effect_shock.vmt");
-					end
-					self.Target.EventHorizon.Unstable = true;
-					self.Target.EventHorizon:BufferEmpty();
-		            self.Entity.Target:EmitSound(self.Sounds.Flicker,90,math.random(97,103));
-					--self.Flicker = util.PrecacheSound(self.Sounds.Flicker);
-                   -- self.Flicker = CreateSound(self.Entity, Sound(self.Sounds.Flicker));
-					--self.Flicker:PlayEx(1, 200)
-                    --self.Flicker:Play();
-	                --self.Flicker:ChangeVolume(100);
-					--self.Flicker = util.PrecacheSound(self.Sounds.Flicker);
-                    --self.Flicker = CreateSound(self.Entity.Target, Sound(self.Sounds.Flicker));
-					--self.Flicker:PlayEx(1, 200)
-                    --self.Flicker:Play();
-	                --self.Flicker:ChangeVolume(100);
-					--self.Entity:EmitSound("stargate/orlin/gate_flicker.mp3",90,math.random(110,120));
-					--self.Entity.Target:EmitSound("stargate/orlin/gate_flicker.mp3",90,math.random(110,120));
-		        end
+				if (self.EHOpen and IsValid(self.EventHorizon)) then
+					local target = self.Target
+					if (!IsValid(target)) then target = false end
+					self:SubFlicker(target,false,false,0.3)
+				end
 		        self:Sparks();
 		        timer.Simple(0.1, function()
 		        	if (not IsValid(self.Entity)) then return end
@@ -279,23 +256,6 @@ function ENT:Think()
 		                    self.SparkEnt:Fire("StopSpark", "", 0);
 		                end
 	                end
-					timer.Simple(0.2,function()
-		                if(IsValid(self.Target) and IsValid(self.Target.EventHorizon) and IsValid(self.Entity) and IsValid(self.Entity.EventHorizon) and self.EHOpen)then
-				            --self.Entity.EventHorizon:SetColor(255,255,255,255);
-			                --self.Entity.Target.EventHorizon:SetColor(255,255,255,255);
-							self.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
-							self.EventHorizon.Unstable = false;
-							if(self.Target.Entity:GetClass() == "stargate_universe")then
-								self.Target.EventHorizon:SetMaterial("sgu/effect_02.vmt");
-							elseif(self.Target.Entity:GetClass() == "stargate_infinity" and not self.InfDefaultEH)then
-								self.Target.EventHorizon:SetColor(Color(255,255,255,255));
-								self.Target.EventHorizon:SetNWBool("Flicker",false);
-							else
-								self.Target.EventHorizon:SetMaterial("sgorlin/effect_02.vmt");
-							end
-							self.Target.EventHorizon.Unstable = false;
-    		            end
-		            end);
 	            end);
 		    end
 	    end

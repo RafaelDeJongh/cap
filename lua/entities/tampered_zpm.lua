@@ -8,7 +8,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Tampered ZPM"
-ENT.Author = "Llapp, Boba Fett, Progsys"
+ENT.Author = "Llapp, Rafael De Jongh, Progsys"
 ENT.WireDebugName = "Tampered ZPM"
 ENT.Category = "Stargate Carter Addon Pack"
 

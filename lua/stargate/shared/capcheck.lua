@@ -48,15 +48,16 @@ StarGate_Group.ErrorMSG_HTML = {};
 if (SERVER) then
 	util.AddNetworkString( "CAP_ERROR" );
 	util.AddNetworkString( "CL_CAP_ERROR" );
-end
+end                                                                     
 
-StarGate.CAP_WS_ADDONS = {"Carter Addon Pack: Atlantis", "Carter Addon Pack: CapBuild", "Carter Addon Pack: CatWalkBuild", "Carter Addon Pack: DHD",
-	"Carter Addon Pack: DHD Extra", "Carter Addon Pack: Extra Materials", "Carter Addon Pack: Life Support", "Carter Addon Pack: Maps",
-	"Carter Addon Pack: Event Horizons", "Carter Addon Pack: Optional Ramps Pack", "Carter Addon Pack: Player Models", "Carter Addon Pack: Player Weapons",
-	"Carter Addon Pack: Props", "Carter Addon Pack: Ramps Important", "Carter Addon Pack: Ramps Pack", "Carter Addon Pack: Resources",
-	"Carter Addon Pack: Ring Ramps", "Carter Addon Pack: Rings", "Carter Addon Pack: Shields and Protection", "Carter Addon Pack: Sounds",
-	"Carter Addon Pack: Stargate", "Carter Addon Pack: Stargate Extras", "Carter Addon Pack: Stargate Universe", "Carter Addon Pack: Stargate Universe Extras",
-	"Carter Addon Pack: Supergate", "Carter Addon Pack: Tool Weapons", "Carter Addon Pack: Vehicles Pack1", "Carter Addon Pack: Vehicles Pack2", "Carter Addon Pack: Weapons",
+StarGate.CAP_WS_ADDONS = {[180088121]="Carter Addon Pack: Atlantis", [180088756]="Carter Addon Pack: CapBuild", [180092028]="Carter Addon Pack: CatWalkBuild", [180094475]="Carter Addon Pack: DHD",
+	[180095275]="Carter Addon Pack: DHD Extra", [180095434]="Carter Addon Pack: Extra Materials", [180095783]="Carter Addon Pack: Life Support", [180098639]="Carter Addon Pack: Maps",
+	[180225064]="Carter Addon Pack: Event Horizons", [180214862]="Carter Addon Pack: Optional Ramps Pack", [180266528]="Carter Addon Pack: Player Models", [180266528]="Carter Addon Pack: Player Weapons",
+	[180210973]="Carter Addon Pack: Props", [180212109]="Carter Addon Pack: Ramps Important", [180213250]="Carter Addon Pack: Ramps Pack", [180215491]="Carter Addon Pack: Resources",
+	[180216309]="Carter Addon Pack: Ring Ramps", [180217191]="Carter Addon Pack: Rings", [180220324]="Carter Addon Pack: Shields and Protection", [180222569]="Carter Addon Pack: Sounds",
+	[180223815]="Carter Addon Pack: Stargate", [180226239]="Carter Addon Pack: Stargate Extras", [180228917]="Carter Addon Pack: Stargate Universe", [180229838]="Carter Addon Pack: Stargate Universe Extras",
+	[180227098]="Carter Addon Pack: Supergate", [180227777]="Carter Addon Pack: Tool Weapons", [180230992]="Carter Addon Pack: Vehicles Pack1", [180231308]="Carter Addon Pack: Vehicles Pack2", 
+	[180232188]="Carter Addon Pack: Weapons",[872872435]="Carter Addon Pack: Extras"
 }
 
 local ws_addonlist = {}
@@ -64,8 +65,8 @@ local cap_installed = false;
 
 for _,v in pairs(engine.GetAddons()) do
 	if (v.mounted) then
-		table.insert(ws_addonlist, v.title);
-		if (not cap_installed and table.HasValue(StarGate.CAP_WS_ADDONS, v.title)) then cap_installed = true end
+		ws_addonlist[tonumber(v.wsid)] = v.title;
+		if (not cap_installed and StarGate.CAP_WS_ADDONS[tonumber(v.wsid)]) then cap_installed = true end
 	end
 end
 
@@ -75,7 +76,7 @@ local function Workshop_res_Check()
 	local tmp = StarGate.CAP_WS_ADDONS;
 	local ret = {}; -- damn, if use table.remove directly in loop, it work incorrect.
 	for k,v in pairs(tmp) do
-		if not table.HasValue(ws_addonlist, v) then table.insert(ret,v); end
+		if not ws_addonlist[k] then ret[k] = v; end
 	end
 	ws_cache = ret;
 	return ret;
@@ -156,8 +157,8 @@ if (CLIENT) then
 			if (type(v)=="table") then
 				local adds = "";
 				for t,a in pairs(v[2]) do
-					if (v[1]=="sg_err_09") then
-						adds = adds.."<br>"..a:Replace("Carter Addon Pack:","CAP:");
+					if (v[1]=="sg_err_09") then                            
+						adds = adds.."<br><a href='http://steamcommunity.com/sharedfiles/filedetails/?id="..t.."'>"..a:Replace("Carter Addon Pack:","CAP:").."</a>";
 					else
 						adds = adds.."<br>"..a;
 					end
@@ -289,7 +290,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_02");
 		MsgN("-------");
 		MsgN("Error #02\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	elseif (not cap_ver or cap_ver==0 or cap_ver<490 and (game.SinglePlayer() or SERVER)) then
+	elseif (not cap_ver or cap_ver==0 or cap_ver<493 and (game.SinglePlayer() or SERVER)) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -298,7 +299,7 @@ if (not StarGate.WorkShop) then
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_03");
 		MsgN("-------");
 		MsgN("Error #03\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" )) then
+	end if (ws_addonlist[175394472]) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -327,7 +328,7 @@ else
 		table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_09",Workshop_res_Check()});
 		MsgN("-------");
 		MsgN("Error #09\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	end	if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
+	end	if (ws_addonlist[175394472] and (not cap_installed and not table.HasValue( addonlist, "Carter Addon Pack - Resources" ))) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -354,7 +355,7 @@ else
 		table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_10");
 		MsgN("-------");
 		MsgN("Error #10\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-	end if (table.HasValue( ws_addonlist, "Stargate Carter Addon Pack" ) and table.HasValue( addonlist, "Carter Addon Pack" )) then
+	end if (ws_addonlist[175394472] and table.HasValue( addonlist, "Carter Addon Pack" )) then
 		if (status != "Error") then
 			status = "Error";
 			MsgN("Status: "..status)
@@ -395,7 +396,7 @@ end if (not WireAddon and not file.Exists("weapons/gmod_tool/stools/wire_adv.lua
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_07");
 	MsgN("-------");
 	MsgN("Error #07\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not table.HasValue(ws_addonlist,"Wiremod") and not table.HasValue(js_addonlist,"Wiremod")) then
+elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not ws_addonlist[160250458] and not table.HasValue(js_addonlist,"Wiremod")) then
 	if (status != "Error") then
 		status = "Error";
 		MsgN("Status: "..status)

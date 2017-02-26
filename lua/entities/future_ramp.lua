@@ -92,7 +92,9 @@ end
 if CLIENT then
 
 if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
-language.Add("ramp",SGLanguage.GetMessage("ramp_kill"));
+language.Add("future_ramp",SGLanguage.GetMessage("ramp_kill"));
 end
+
+ENT.RenderGroup = RENDERGROUP_BOTH
 
 end

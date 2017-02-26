@@ -3,7 +3,7 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 SWEP.PrintName = SGLanguage.GetMessage("weapon_ori_staff");
 SWEP.Category = SGLanguage.GetMessage("weapon_cat");
 end
-SWEP.Author = "RononDex, Boba Fett"
+SWEP.Author = "RononDex, Rafael De Jongh"
 SWEP.Purpose = "Kill the non believers"
 SWEP.Instructions = "Shoot the Non Believers"
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);

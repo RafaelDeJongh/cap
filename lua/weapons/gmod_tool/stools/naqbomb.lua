@@ -55,7 +55,7 @@ function TOOL:LeftClick(t)
 
 	local e = self:SpawnSENT(p,t,model,detcode,abcode,time,yield, hud, cart, autoweld);
 	if (not IsValid(e)) then return end
-	if (cart) then e:SetPos(e:GetPos()+Vector(0,0,25)) end
+	if (cart and model=="models/markjaw/gate_buster.mdl") then e:SetPos(e:GetPos()+Vector(0,0,25)) end
 	e:Setup(detcode, abcode, yield, time, hud, cart, p)
 
 	if (weld and not cart) then local c = self:Weld(e,t.Entity,true);

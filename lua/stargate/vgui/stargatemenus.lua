@@ -129,6 +129,10 @@ concommand.Add("stargate_reset_menu",function(ply)
 	RVGUI:SetCookie("SG.Size.H",nil);
 	RVGUI:SetCookie("SG.Pos.X",nil);
 	RVGUI:SetCookie("SG.Pos.Y",nil);
+	RVGUI:SetCookieName("StarGate.SAddressSelect"); 
+	RVGUI:SetCookie("ColumnSort",nil);
+	RVGUI:SetCookie("ColumnSortDesc",nil);	
+	RVGUI:SetCookie("DHDDial",nil);	
 	RVGUI:Remove();
 end)
 
@@ -211,6 +215,8 @@ function PANEL:SetSettings(entity,groupsystem,alternatemenu,candialg)
 	self.Alternative = alternatemenu;
 	self.CanDialGroups = candialg;
 	self.Class = entity:GetClass();
+	
+	self.AlphaTime = CurTime(); -- For the FadeIn/Out
 
 	if (self.Alternative) then
 		self:SetCookieName("StarGate.SControlePanel_Alt");
@@ -368,6 +374,7 @@ function PANEL:SetSettings(entity,groupsystem,alternatemenu,candialg)
 			self.VGUI.LocaleCheckbox:SetTooltip(tip);
 			self.VGUI.LocaleCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 			self.VGUI.LocaleCheckbox.Button.ConVarChanged = function(CheckBox)
+				if((self.AlphaTime or 0)+0.3 >= CurTime()) then return end -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
 				local b = util.tobool(CheckBox:GetChecked());
 				if(IsValid(self.Entity)) then
 					self.Entity:SetLocale(b);
@@ -392,6 +399,7 @@ function PANEL:SetSettings(entity,groupsystem,alternatemenu,candialg)
 			self.VGUI.GalaxyCheckbox:SetWide(110);
 			self.VGUI.GalaxyCheckbox.Label:SetTooltip(tip); -- Workaround/Fix
 			self.VGUI.GalaxyCheckbox.Button.ConVarChanged = function(CheckBox)
+				if((self.AlphaTime or 0)+0.3 >= CurTime()) then return end -- Avoids the VGUI sending "SetGateAddress" everytime we open it!
 				local b = util.tobool(CheckBox:GetChecked());
 				if(IsValid(self.Entity)) then
 					self.Entity:SetGalaxy(b);
@@ -609,6 +617,7 @@ function PANEL:SetSettings(entity,groupsystem,candialg,nox,orlin)
 	self.Data.PosX = self:GetCookie("SG.Pos.X",10);
 	self.Data.PosY = self:GetCookie("SG.Pos.Y",10);
 
+	self.AlphaTime = CurTime()
 	self.LastEntity = nil;
 	-- Keyboard/Mouse behaviour
 	self.Entity = entity;
@@ -1986,7 +1995,8 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 		self.VGUI.Width = 80;
 		self.VGUI.AddressListView:AddColumn(SGLanguage.GetMessage("stargate_vgui_name2"));
 	end
-	self.VGUI.AddressListView:SortByColumn(1,true);
+	//self.VGUI.AddressListView:SortByColumn(1,true);
+	//self:SortColumns()
 	self.VGUI.AddressListView.OnRowSelected = function(ListView,Row)
 		local selected = ListView:GetSelectedLine();
 		if (ListView:GetLine(selected).Blocked) then ListView:GetLine(selected):SetSelected(false); self.LastSelected = 0; return end
@@ -2005,7 +2015,15 @@ function PANEL:SetSettings(entity,groupsystem,candialg,hidedialmode)
 	end
 	self.VGUI.AddressListView.DoDoubleClick = function(ListView,id,List)
 		self:DialGate(List:GetColumnText(self.AddressColumn));
-	end
+	end 
+	for k,v in pairs(self.VGUI.AddressListView.Columns) do
+		v._DoClick = v.DoClick
+		v.DoClick = function() 
+			v:_DoClick();
+			self:SetCookie("ColumnSort",k);
+			self:SetCookie("ColumnSortDesc",v:GetDescending() and 0 or 1);
+		end
+	end    
 
 	--local w = 40
 	--if (SGLanguage.ValidMessage("stargate_vgui_search_width")) then w = SGLanguage.GetMessage("stargate_vgui_search_width") end
@@ -2473,7 +2491,22 @@ function PANEL:AddGatesToList(s)
 			end
 		end
 	end
-	self.VGUI.AddressListView:SortByColumn(1,true); -- Resort by addresses
+	
+	self:SortColumns()
+	
+end
+
+function PANEL:SortColumns()
+	local desc = self:GetCookie("ColumnSortDesc",1)==1 and true or false
+	local col = tonumber(self:GetCookie("ColumnSort",1))
+	self.VGUI.AddressListView:SortByColumn(col,desc);
+	-- fix for column click
+	for k,v in pairs(self.VGUI.AddressListView.Columns) do
+		if (k==col) then
+			v:SetDescending( not desc )
+			break
+		end
+	end
 end
 
 --################# If DHD is concept added by AlexALX

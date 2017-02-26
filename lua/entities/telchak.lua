@@ -6,7 +6,7 @@
 ENT.Type 			= "anim"
 ENT.Base 			= "base_anim"
 ENT.PrintName		= "Telchak healing device"
-ENT.Author			= "Madman07, Boba Fett"
+ENT.Author			= "Madman07, Rafael De Jongh"
 ENT.Contact			= ""
 ENT.Purpose			= ""
 ENT.Instructions	= "Only for Ancients."

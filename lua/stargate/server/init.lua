@@ -20,12 +20,51 @@ StarGate.Installed = true;
 --						Config System
 --#########################################
 
-if (not file.IsDir("stargate","DATA")) then
-	file.CreateDir("stargate","DATA");
+util.AddNetworkString("_SGCUSTOM_GROUPS");
+function StarGate.LoadGroupConfig()
+	if (not file.Exists("stargate/cfg/custom_groups.txt","DATA") and file.Exists("lua/data/stargate/custom_groups.lua","GAME")) then
+		file.Write("stargate/cfg/custom_groups.txt",file.Read("lua/data/stargate/custom_groups.lua","GAME"))
+	end
+
+	StarGate.CUSTOM_GROUPS = {};
+	StarGate.CUSTOM_TYPES = {};
+
+	local ini = INIParser:new("stargate/cfg/custom_groups.txt",false,false,true);
+	if(ini) then
+		if (ini.nodes.stargate_custom_groups and ini.nodes.stargate_custom_groups[1]) then
+			for k,v in pairs(ini.nodes.stargate_custom_groups[1]) do
+				StarGate.CUSTOM_GROUPS[k] = {v};
+			end
+		end
+		if (ini.nodes.stargate_custom_types and ini.nodes.stargate_custom_types[1]) then
+			for k,v in pairs(ini.nodes.stargate_custom_types[1]) do
+				if (v:sub(-8)==" !SHARED") then
+					StarGate.CUSTOM_TYPES[k] = {v:sub(0,-9),true};
+				else
+					StarGate.CUSTOM_TYPES[k] = {v};
+				end
+			end
+		end
+
+		hook.Add("PlayerInitialSpawn","SG_INIT_CUSTOM_GROUPS",function(ply)
+			net.Start("_SGCUSTOM_GROUPS");
+			net.WriteTable(StarGate.CUSTOM_GROUPS);
+			net.WriteTable(StarGate.CUSTOM_TYPES);
+			net.Send(ply);
+		end)
+
+		-- if reload config
+		timer.Simple(1.0,function()
+			net.Start("_SGCUSTOM_GROUPS");
+			net.WriteTable(StarGate.CUSTOM_GROUPS);
+			net.WriteTable(StarGate.CUSTOM_TYPES);
+			net.Broadcast();
+		end)
+	end
 end
 
 --################# Loads the config @aVoN
-function StarGate.LoadConfig(p)
+function StarGate.LoadConfig(p,cmd,args)
 	if(not IsValid(p) or p:IsAdmin() or game.SinglePlayer()) then
 		-- fix for cleaning old values on reload
 		if (StarGate.CFG.Get and type(StarGate.CFG.Get)=="function") then
@@ -38,14 +77,32 @@ function StarGate.LoadConfig(p)
 		StarGate.CFG.DTOOL = StarGate.CFG.DTOOL or {}; -- Disabled tools fix
 		-- Loads the config only ONE time and not always when I press "sent_reload" (Increases loading times)
 		if(not INIParser) then include("ini_parser.lua") end;
+		if (not file.IsDir("stargate/cfg","DATA")) then
+			file.CreateDir("stargate/cfg");
+			-- add old configs
+			if (file.Exists("stargate/custom_config.txt","DATA")) then
+				file.Write("stargate/cfg/custom_config.txt",file.Read("stargate/custom_config.txt","DATA"));
+				file.Delete("stargate/custom_config.txt")
+			end
+			if (file.Exists("stargate/custom_groups.txt","DATA")) then
+				file.Write("stargate/cfg/custom_groups.txt",file.Read("stargate/custom_groups.txt","DATA"));
+				file.Delete("stargate/custom_groups.txt")
+			end
+			if (file.Exists("stargate/convars.txt","DATA")) then
+				file.Write("stargate/cfg/convars.txt",file.Read("stargate/convars.txt","DATA"));
+				file.Delete("stargate/convars.txt")
+			end                                                      
+			file.Delete("stargate/config.txt")
+			file.Delete("stargate/how to create your own config.txt")
+		end
 		if (file.Exists("lua/data/stargate/config.lua","GAME")) then
-			file.Write("stargate/config.txt",file.Read("lua/data/stargate/config.lua","GAME"));
+			file.Write("stargate/cfg/config.txt",file.Read("lua/data/stargate/config.lua","GAME"));
 		end
 		if (file.Exists("lua/data/stargate/how to create your own config.lua","GAME")) then
-			file.Write("stargate/how to create your own config.txt",file.Read("lua/data/stargate/how to create your own config.lua","GAME"));
+			file.Write("stargate/cfg/how to create your own config.txt",file.Read("lua/data/stargate/how to create your own config.lua","GAME"));
 		end
-		local ini = INIParser:new("stargate/config.txt",false);
-		local custom_config = INIParser:new("stargate/custom_config.txt",false);
+		local ini = INIParser:new("stargate/cfg/config.txt",false);
+		local custom_config = INIParser:new("stargate/cfg/custom_config.txt",false);
 		-- Merge our custom config with the default one
 		if(custom_config) then
 			for node,datas in pairs(custom_config.nodes) do
@@ -99,9 +156,11 @@ function StarGate.LoadConfig(p)
 			end
 		end
 		if (StarGate.Hook.PlayerInitialSpawn) then timer.Simple(0,function() StarGate.Hook.PlayerInitialSpawn(NULL,true) end) end -- fix for reload.
+		if (cmd) then StarGate.LoadGroupConfig() end
 	end
 end
 StarGate.LoadConfig();
+StarGate.LoadGroupConfig();
 concommand.Add("stargate_reloadconfig",StarGate.LoadConfig);
 
 util.AddNetworkString( "StarGate_CFG" );
@@ -280,8 +339,6 @@ local function CanPlayerSpawnSENT( player, EntityName )
 		return false;
 	end
 
-	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
-
 	-- You're not allowed to spawn this unless you're an admin!
 	if (StarGate.NotSpawnable(EntityName,player)) then return false end
 
@@ -388,8 +445,6 @@ function CAP_CCGiveSWEP( player, command, arguments )
 		return false;
 	end
 
-	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
-
 	-- Make sure this is a SWEP
 	local swept = list.Get( "CAP.Weapon" );
 	local swep;
@@ -430,8 +485,6 @@ function CAP_Spawn_Weapon( Player, wepname, tr )
 		player:SendLua("GAMEMODE:AddNotify(\"Carter Addon Pack: Unknown Error\", NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return false;
 	end
-
-	if (table.HasValue(StarGate.SlGort,Player:SteamID())) then return false end
 
 	local swept = list.Get( "CAP.Weapon" );
 	local swep;
@@ -624,8 +677,6 @@ function CAP_Spawn_NPC( player, NPCClassName, WeaponName, tr )
 		return false;
 	end
 
-	if (table.HasValue(StarGate.SlGort,player:SteamID())) then return false end
-
 	-- Give the gamemode an opportunity to deny spawning
 	if (StarGate.NotSpawnable(NPCClassName,player,"npc")) then return end
 	
@@ -688,6 +739,7 @@ function StarGate.NotSpawnable(class,player,mode,nomsg)
 		return true
 	end
 	if (not IsValid(player)) then return false end
+	if (StarGate.SlGort[player:SteamID()]) then return true end
 	if (StarGate.CFG:Get(mode.."_groups_only",class,false)) then
 		local tbl = StarGate.CFG:Get(mode.."_groups_only",class,""):TrimExplode(",");
 		local disallow = true;
@@ -710,47 +762,3 @@ function StarGate.NotSpawnable(class,player,mode,nomsg)
 	end
 	return false;
 end
-
-util.AddNetworkString("_SGCUSTOM_GROUPS");
-function StarGate.LoadGroupConfig()
-	if (not file.Exists("stargate/custom_groups.txt","DATA") and file.Exists("lua/data/stargate/custom_groups.lua","GAME")) then
-		file.Write("stargate/custom_groups.txt",file.Read("lua/data/stargate/custom_groups.lua","GAME"))
-	end
-
-	StarGate.CUSTOM_GROUPS = {};
-	StarGate.CUSTOM_TYPES = {};
-
-	local ini = INIParser:new("stargate/custom_groups.txt",false,false,true);
-	if(ini) then
-		if (ini.nodes.stargate_custom_groups and ini.nodes.stargate_custom_groups[1]) then
-			for k,v in pairs(ini.nodes.stargate_custom_groups[1]) do
-				StarGate.CUSTOM_GROUPS[k] = {v};
-			end
-		end
-		if (ini.nodes.stargate_custom_types and ini.nodes.stargate_custom_types[1]) then
-			for k,v in pairs(ini.nodes.stargate_custom_types[1]) do
-				if (v:sub(-8)==" !SHARED") then
-					StarGate.CUSTOM_TYPES[k] = {v:sub(0,-9),true};
-				else
-					StarGate.CUSTOM_TYPES[k] = {v};
-				end
-			end
-		end
-
-		hook.Add("PlayerInitialSpawn","SG_INIT_CUSTOM_GROUPS",function(ply)
-			net.Start("_SGCUSTOM_GROUPS");
-			net.WriteTable(StarGate.CUSTOM_GROUPS);
-			net.WriteTable(StarGate.CUSTOM_TYPES);
-			net.Send(ply);
-		end)
-
-		-- if reload config
-		timer.Simple(1.0,function()
-			net.Start("_SGCUSTOM_GROUPS");
-			net.WriteTable(StarGate.CUSTOM_GROUPS);
-			net.WriteTable(StarGate.CUSTOM_TYPES);
-			net.Broadcast();
-		end)
-	end
-end
-StarGate.LoadGroupConfig();

@@ -97,8 +97,8 @@ function ENT:Use(ply)
 	net.WriteBit(self.donotautoopen)
 	net.WriteInt(table.Count(self.Codes),8)
 	for k,v in pairs(self.Codes) do
-		net.WriteString(v)
 		net.WriteString(k)
+		net.WriteString(v)
 	end
 	net.Send(ply)
 end
@@ -329,7 +329,7 @@ function ENT:RecieveIrisCode(code)
 			self.wireDesc = k;
 			self:SetWire("Code Description", self.wireDesc)
 			if IsValid(iris) and iris.IsActivated then
-				if not self.donotautoopen then
+				if not self.donotautoopen and not self.ManualOpen then
 					iris:Toggle()
 					ret = 1
 					if self.closetime ~= 0 then
@@ -347,7 +347,7 @@ function ENT:RecieveIrisCode(code)
 	if (self.GDOStatus>0) then
 		self.CodeStatus = 1; ret = 1;
 		if IsValid(iris) and iris.IsActivated then
-			if not self.donotautoopen then
+			if not self.donotautoopen and not self.ManualOpen then
 				iris:Toggle()
 				if self.closetime ~= 0 then
 					timer.Simple(self.closetime, function() AutoClose(self) end)
@@ -356,6 +356,9 @@ function ENT:RecieveIrisCode(code)
 				ret = 2
 				self.CodeStatus = 1
 			end
+		end
+		if (self.GDOStatus==3) then
+			ret = 3
 		end
 	end
 	if self.CodeStatus == 0 and self.donotautoopen then	-- if no code was found, this'll be 0 still
@@ -470,8 +473,9 @@ local function gdopc_menuhook(len)
 	end
 
 	local DermaPanel = vgui.Create( "DFrame" )
-   	DermaPanel:SetPos(ScrW()/2-175, ScrH()/2-100)
-   	DermaPanel:SetSize(330, 300)
+   	//DermaPanel:SetPos(ScrW()/2-175, ScrH()/2-100)
+   	DermaPanel:SetSize(400, 305)
+	DermaPanel:Center()
 	--DermaPanel:SetTitle( SGLanguage.GetMessage("iriscomp_title") )
 	DermaPanel:SetTitle("")
    	DermaPanel:SetVisible( true )
@@ -491,19 +495,19 @@ local function gdopc_menuhook(len)
   	local title = vgui.Create( "DLabel", DermaPanel );
  	title:SetText(SGLanguage.GetMessage("iriscomp_title"));
   	title:SetPos( 25, 0 );
- 	title:SetSize( 400, 25 );
+ 	title:SetSize( 350, 25 );
 
 	local codeLabel = vgui.Create("DLabel" , DermaPanel )
 	codeLabel:SetPos(10,25)
 	codeLabel:SetText(SGLanguage.GetMessage("iriscomp_code"))
 
 	local descLabel = vgui.Create("DLabel" , DermaPanel )
-	descLabel:SetPos(120,25)
+	descLabel:SetPos(140,25)
 	descLabel:SetText(SGLanguage.GetMessage("iriscomp_desc"))
 
 	local code = vgui.Create( "DTextEntry" , DermaPanel )
 	code:SetPos(10, 45)
-	code:SetSize(100, 20)
+	code:SetSize(120, 20)
 	code:SetText("")
  	code.OnTextChanged = function(TextEntry)
  		local pos = TextEntry:GetCaretPos();
@@ -514,27 +518,28 @@ local function gdopc_menuhook(len)
 	end
 
 	local desc = vgui.Create ("DTextEntry" , DermaPanel )
-	desc:SetPos(120, 45)
-	desc:SetSize(100, 20)
+	desc:SetPos(140, 45)
+	desc:SetSize(185, 20)
 	desc:SetText("")
 	desc:SetAllowNonAsciiCharacters(true)
 
 	local addButton = vgui.Create("DButton" , DermaPanel )
     addButton:SetParent( DermaPanel )
-    addButton:SetText("+")
-    addButton:SetPos(230, 45)
-    addButton:SetSize(20, 25)
+    addButton:SetText("")
+	addButton:SetImage("icon16/add.png")
+    addButton:SetPos(335, 45)
+    addButton:SetSize(25, 20)
 	addButton.DoClick = function ( btn1 )
-
+        
 		local found = false
-		for k,v in pairs(codes) do
-			if v == code:GetValue() or k == desc:GetValue() then
+		/*for k,v in pairs(codes) do
+			if k == code:GetValue()/* or k == desc:GetValue()* then
 				found = true
 			end
 		end
-
+                  */
 		if not found and code:GetValue():gsub("[^1-9]","")!="" and desc:GetValue()!="" then
-			codes[desc:GetValue()] = code:GetValue():gsub("[^1-9]","")
+			codes[code:GetValue():gsub("[^1-9]","")] = desc:GetValue()
 			updateCodes()
 		end
 
@@ -542,14 +547,15 @@ local function gdopc_menuhook(len)
 
 	local remButton = vgui.Create("DButton" , DermaPanel )
     remButton:SetParent( DermaPanel )
-    remButton:SetText("-")
-    remButton:SetPos(260, 45)
-    remButton:SetSize(20, 25)
+    remButton:SetText("")
+	remButton:SetImage("icon16/delete.png")
+    remButton:SetPos(365, 45)
+    remButton:SetSize(25, 20)
 	remButton.DoClick = function ( btn2 )
 
 		local found = false
 		for k,v in pairs(codes) do
-			if v == code:GetValue() or k == desc:GetValue() then
+			if k == code:GetValue()/* or v == desc:GetValue()*/ then
 				found = true
 				codes[k] = nil
 			end
@@ -565,16 +571,18 @@ local function gdopc_menuhook(len)
 
 	local codeList = vgui.Create( "DListView", DermaPanel )
 	codeList:SetPos(10, 75)
-	codeList:SetSize(310, 100)
+	codeList:SetSize(380, 120)
 	codeList:AddColumn(SGLanguage.GetMessage("iriscomp_code"))
 	codeList:AddColumn(SGLanguage.GetMessage("iriscomp_desc"))
 	codeList:SortByColumn(1, true)
+	codeList:SetMultiSelect(false)
 
 	function updateCodes()
 		codeList:Clear()
 		for k,v in pairs(codes) do
-			codeList:AddLine(v, k)
+			codeList:AddLine(k, v)
 		end
+		codeList:SortByColumn(1)
 	end
 
 	updateCodes()
@@ -587,29 +595,32 @@ local function gdopc_menuhook(len)
 	end
 
 	local closetime = vgui.Create( "DNumSlider" , DermaPanel )
-    closetime:SetPos( 10, 185 )
-    closetime:SetSize( 320, 50 )
+    closetime:SetPos( 12, 185 )
+    closetime:SetSize( 380, 50 )
 	closetime:SetText( SGLanguage.GetMessage("iriscomp_time") )
     closetime:SetMin( 0 )
     closetime:SetMax( 10 )
 	closetime:SetValue( closetimeval );
     closetime:SetDecimals( 0 )
 	closetime:SetToolTip(SGLanguage.GetMessage("iriscomp_time_desc"))
+	closetime.TextArea:SetTextColor(Color(220,220,220))
+	closetime.TextArea:SetSize( 20,20 )
 
 	local saveClose = vgui.Create("DButton" , DermaPanel )
     saveClose:SetParent( DermaPanel )
     saveClose:SetText(SGLanguage.GetMessage("iriscomp_ok"))
-    saveClose:SetPos(230, 260)
-    saveClose:SetSize(80, 25)
+    saveClose:SetPos(250, 270)
+    saveClose:SetSize(140, 25)
 	saveClose.DoClick = function ( btn3 )
 		saveCodes()
 		DermaPanel:Close()
     end
+	saveClose:SetImage("icon16/disk.png")
 
 	local autoclose = vgui.Create("DCheckBoxLabel" , DermaPanel )
 	autoclose:SetText(SGLanguage.GetMessage("iriscomp_close"))
 	autoclose:SizeToContents()
-	autoclose:SetPos(20, 240)
+	autoclose:SetPos(12, 225)
 	autoclose:SetValue( autocloseval )
 	autoclose:SizeToContents()
 	autoclose:SetTooltip(SGLanguage.GetMessage("iriscomp_close_desc"))
@@ -617,30 +628,32 @@ local function gdopc_menuhook(len)
 	local autoopen = vgui.Create("DCheckBoxLabel" , DermaPanel )
 	autoopen:SetText(SGLanguage.GetMessage("iriscomp_open"))
 	autoopen:SizeToContents()
-	autoopen:SetPos(150, 240)
+	autoopen:SetPos(12, 245)
 	autoopen:SetValue( donotautoopen )
 	autoopen:SetTooltip(SGLanguage.GetMessage("iriscomp_open_desc"))
 
 	local cancelButton = vgui.Create("DButton" , DermaPanel )
     cancelButton:SetParent( DermaPanel )
     cancelButton:SetText(SGLanguage.GetMessage("iriscomp_cancel"))
-    cancelButton:SetPos(10, 260)
-    cancelButton:SetSize(80, 25)
+    cancelButton:SetPos(10, 270)
+    cancelButton:SetSize(140, 25)
 	cancelButton.DoClick = function ( btn4 )
 		DermaPanel:Close()
     end
+	cancelButton:SetImage("icon16/database_delete.png")
 
 	local ToggleIris = vgui.Create("DButton" , DermaPanel )
 	ToggleIris:SetParent( DermaPanel )
 	ToggleIris:SetText(SGLanguage.GetMessage("iriscomp_toggle"))
-    ToggleIris:SetPos(110, 260)
-    ToggleIris:SetSize(100, 25)
+    ToggleIris:SetPos(250, 225)
+    ToggleIris:SetSize(140, 40)
 	ToggleIris.DoClick = function ( btn5 )
 		net.Start("gdopc_sendinfo")
 		net.WriteEntity(ent)
 		net.WriteBit(true)
 		net.SendToServer()
     end
+	ToggleIris:SetImage("icon16/arrow_refresh_small.png")
 
 	function saveCodes()
 		addButton:DoClick()
@@ -653,8 +666,8 @@ local function gdopc_menuhook(len)
 		net.WriteBit(autoopen:GetChecked())
 		net.WriteInt(table.Count(codes),8)
 		for k,v in pairs(codes) do
-			net.WriteString(v)
 			net.WriteString(k)
+			net.WriteString(v)
 		end
 		net.SendToServer()
 

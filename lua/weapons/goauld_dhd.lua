@@ -8,7 +8,7 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_gdhd");
 SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
 end
-SWEP.Author = "Madman07, Boba Fett";
+SWEP.Author = "Madman07, Rafael De Jongh";
 SWEP.Contact = "";
 SWEP.Purpose = "";
 SWEP.Instructions = "Left Click = Open dial menu and plant the DHD.";

@@ -38,7 +38,7 @@ function EFFECT:Init(data)
 	self.AimVector	= self.TargetEnt:GetForward();
 	self.Draw		= false;
 
-	self.Entity:SetRenderBoundsWS(-1*Vector(1,1,1)*100000000000,Vector(1,1,1)*100000000000);
+	self.Entity:SetRenderBounds(-1*Vector(1,1,1)*10000000,Vector(1,1,1)*10000000);
 end
 
 function EFFECT:Think()
@@ -49,7 +49,7 @@ function EFFECT:Think()
 
 	local iris = StarGate.FindEntInsideSphere(self.StartPos, 50, "stargate_iris");
 
-	self.Entity:SetRenderBoundsWS(self.StartPos,self.StargateTrace.HitPos);
+	self.Entity:SetRenderBounds(self.StartPos,self.StargateTrace.HitPos);
 
 	self.Draw = not (IsValid(iris[1]) and iris[1]:GetNWBool("Activated"));
 	return true

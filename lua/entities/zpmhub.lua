@@ -7,7 +7,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim" --gmodentity
 ENT.PrintName = "ZPM Hub Mk2"
-ENT.Author = "Llapp, cooldudetb, Boba Fett"
+ENT.Author = "Llapp, cooldudetb, Rafael De Jongh"
 ENT.Category = "Stargate Carter Addon Pack"
 ENT.WireDebugName = "ZPM Hub Mk2"
 

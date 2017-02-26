@@ -197,10 +197,9 @@ end
 --##################################
 
 local meta = FindMetaTable("Entity");
-if(meta and not meta.__SetMaterial) then
+if(meta/* and not meta.__SetMaterial*/) then
 
 	--################# Set Derive @aVoN
-	meta.__SetMaterial = meta.SetMaterial;
 	meta.SetDerive = function(self,e)
 		-- Unset old derived parent first
 		if(IsValid(self.__DeriveParent)) then
@@ -215,10 +214,12 @@ if(meta and not meta.__SetMaterial) then
 			self.__DeriveParent = e;
 			e.__DerivedEntities = e.__DerivedEntities or {};
 			table.insert(e.__DerivedEntities,self);
-			-- Copy Material and Color now!
-			self:SetMaterial(e:GetMaterial());
-			self:SetColor(e:GetColor());
-			self:SetRenderMode(e:GetRenderMode());
+			if (not e.DeriveIgnoreParent) then 
+				-- Copy Material and Color now!
+				self:SetMaterial(e:GetMaterial());
+				self:SetColor(e:GetColor());
+				self:SetRenderMode(e:GetRenderMode());
+			end
 		else
 			self.__DeriveParent = nil; -- No Valid entity given
 		end
@@ -242,7 +243,7 @@ if(meta and not meta.__SetMaterial) then
 	end
 
 	--################# Sets the Nowdraw to the Derving entities too @aVoN
-	meta.__SetNoDraw = meta.SetNoDraw;
+	meta.__SetNoDraw = meta.__SetNoDraw or meta.SetNoDraw;
 	meta.SetNoDraw = function(self,...)
 		if(not IsValid(self)) then return end;
 		self:__SetNoDraw(...);
@@ -256,10 +257,13 @@ if(meta and not meta.__SetMaterial) then
 	end
 
 	--################# SetMaterial @aVoN
+	meta.__SetMaterial = meta.__SetMaterial or meta.SetMaterial;
 	meta.SetMaterial = function(self,...)
 		if(not IsValid(self)) then return end;
 		-- Default behaviour
-		self:__SetMaterial(...);
+		if (not self.DeriveIgnoreParent) then
+			self:__SetMaterial(...);
+		end
 		-- Deriving Extra
 		if(self.__DerivedEntities) then
 			for _,v in pairs(self.__DerivedEntities) do
@@ -271,11 +275,13 @@ if(meta and not meta.__SetMaterial) then
 	end
 
 	--################# SetColor @aVoN
-	meta.__SetColor = meta.SetColor;
+	meta.__SetColor = meta.__SetColor or meta.SetColor;
 	meta.SetColor = function(self,...)
 		if(not IsValid(self)) then return end;
 		-- Default behaviour
-		self:__SetColor(...);
+		if (not self.DeriveIgnoreParent) then
+			self:__SetColor(...);
+		end
 		-- Deriving Extra
 		if(self.__DerivedEntities) then
 			for _,v in pairs(self.__DerivedEntities) do
@@ -284,14 +290,19 @@ if(meta and not meta.__SetMaterial) then
 				end
 			end
 		end
+		if self.DeriveOnSetColor then
+			self:DeriveOnSetColor(...)
+		end
 	end
 
 	--################# SetColor @aVoN
-	meta.__SetRenderMode = meta.SetRenderMode;
+	meta.__SetRenderMode = meta.__SetRenderMode or meta.SetRenderMode;
 	meta.SetRenderMode = function(self,...)
 		if(not IsValid(self)) then return end;
 		-- Default behaviour
-		self:__SetRenderMode(...);
+		if (not self.DeriveIgnoreParent) then
+			self:__SetRenderMode(...);
+		end
 		-- Deriving Extra
 		if(self.__DerivedEntities) then
 			for _,v in pairs(self.__DerivedEntities) do
@@ -303,20 +314,18 @@ if(meta and not meta.__SetMaterial) then
 	end
 	
 	--################# K/V Setting @aVoN
-	meta.__SetKeyValue = meta.SetKeyValue;
+	meta.__SetKeyValue = meta.__SetKeyValue or meta.SetKeyValue;
 	meta.SetKeyValue = function(self,...)
 		if not IsValid(self) then return end
+		local keys = {renderamt=true,rendercolor=true,renderfx=true,rendermode=true}
 		-- Default behaviour
-		self:__SetKeyValue(...);
+		if (not self.DeriveIgnoreParent or not keys[key]) then
+			self:__SetKeyValue(...);
+		end
 		-- Deriving Extra
 		if(self.__DerivedEntities) then
 			local key = (({...})[1] or ""):lower();
-			if(
-				key == "renderamt" or
-				key == "rendercolor" or
-				key == "renderfx" or
-				key == "rendermode"
-			) then
+			if(keys[key]) then
 				for _,v in pairs(self.__DerivedEntities) do
 					if(IsValid(v)) then
 						v:SetKeyValue(...);
@@ -327,18 +336,18 @@ if(meta and not meta.__SetMaterial) then
 	end
 
 	--################# ent_fire commands @aVoN
-	meta.__Fire = meta.Fire;
+	meta.__Fire = meta.__Fire or meta.Fire;
 	meta.Fire = function(self,...)
 		if(not IsValid(self)) then return end;
+		local keys = {color=true,alpha=true}
 		-- Default behaviour
-		self:__Fire(...);
+		if (not self.DeriveIgnoreParent or not keys[key]) then
+			self:__Fire(...);
+		end
 		-- Deriving Extra
 		if(self.__DerivedEntities) then
 			local key = (({...})[1] or ""):lower();
-			if(
-				key == "color" or
-				key == "alpha"
-			) then
+			if(keys[key]) then
 				for _,v in pairs(self.__DerivedEntities) do
 					if(IsValid(v)) then
 						v:Fire(...);

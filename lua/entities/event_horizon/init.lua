@@ -38,8 +38,9 @@ ENT.IgnoreTouch = true; -- This tells the physical objects like drones or staff 
 ENT.CDSIgnore = true; -- Fixes Combat Damage System destroying this entity
 ENT.DrawEnterEffectTime = 0;
 ENT.CAP_NotSave = true;
+ENT.DoNotDuplicate = true 
 
-ENT.Model = Model("models/zup/stargate/stargate_horizon.mdl");
+ENT.DefModel = "models/zup/stargate/stargate_horizon.mdl"
 ENT.Sounds = {
 	Idle=Sound("stargate/wormhole_loop.wav"),
 	Teleport={Sound("stargate/teleport.mp3"),Sound("stargate/teleport_2.mp3"),Sound("stargate/teleport_3.mp3"),Sound("stargate/teleport_4.mp3"),Sound("stargate/teleport_5.mp3"),Sound("stargate/teleport_6.mp3"),Sound("stargate/teleport_7.mp3"),Sound("stargate/teleport_8.mp3")},
@@ -118,12 +119,7 @@ function ENT:Initialize()
 	self.Sounds = table.Copy(self.Sounds);
 	local parent = self.Entity:GetParent();
 
-	if(IsValid(parent)) then
-		if(parent.Models and parent.Models.EventHorizon) then
-			self.Entity:SetModel(parent.Models.EventHorizon); -- That gate we belong to requests a custom eventhoriton
-		else
-			self.Entity:SetModel(self.Model);
-		end
+	if(IsValid(parent)) then	
 		if(parent.Sounds and parent.Sounds.Open) then
 			self.Sounds.Open = parent.Sounds.Open;
 		end
@@ -135,9 +131,15 @@ function ENT:Initialize()
 		end
 		if (parent.GateSpawnerSpawned) then
 			self.GateSpawnerSpawned = true;
+		end		
+		if (parent.EHColor) then
+			self.EHColor = parent.EHColor
 		end
 	end
 
+	self.Material = ""
+	self.UnstableMaterial = ""
+	self.Model = self.DefModel
 	self.Entity:EHType()
 	self.Entity:PhysicsInit(SOLID_VPHYSICS);
 	self.Entity:SetMoveType(MOVETYPE_NONE);
@@ -146,7 +148,11 @@ function ENT:Initialize()
 	self.Entity:DrawShadow(false);
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 	-- Do not draw the model now (Alpha must be 1 because for some mystical reason, setting this to 0 makes effects not draw on it. Seems like Valva/garry added stuff not to draw things which actually have alpha = 0 to save performance) -- STILL? I've seen, it works with 0 now too
-	self.Entity:SetColor(Color(255,255,255,0));
+	local col = table.Copy(self.EHColor or self.DefColor)
+	self:SetEHColor(col);
+	col = table.Copy(col)
+	col.a = 0
+	self:SetColor(col)
 	self.Created = CurTime();
 	self.AutoClose = StarGate.CFG:Get("stargate","autoclose",true);
 	self.WaterNoClose = StarGate.CFG:Get("stargate","water_noclose",true);
@@ -188,23 +194,75 @@ function ENT:Initialize()
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
 end
 
-function ENT:EHType()
-	local class = self:GetParent():GetClass();
-	if(class=="stargate_orlin")then
-	    self.Entity:SetModel("models/sgorlin/stargate_horizon_orlin.mdl");
-		--self.Entity:SetMaterial("Zup/Stargate/effect_02.vmt")
-	elseif(class=="stargate_universe")then
-	        self.Entity:SetMaterial("sgu/effect_02.vmt")
-            self.Entity:SetModel(self.Model);
-            self.Entity:SetNetworkedBool("universe",true);
-	elseif(class=="stargate_supergate")then
-		self.Entity:SetModel("models/iziraider/supergate/eh.mdl")
-		self.Entity:SetPos(self.Entity:GetPos()-self.Entity:GetUp()*2375)
+function ENT:EHType(reset)
+	if (reset) then
+		self.Material = ""
+		self.UnstableMaterial = ""
+		self.Model = self.DefModel
+	end
+	
+	local parent = self:GetParent()
+	local type = parent.EventHorizonType;
+	local Data = StarGate.EventHorizonTypes[type] or {}
+
+	self.DefColor = table.Copy(Data.Color) or Color(255,255,255)
+	
+	if (Data.LightColor) then
+		self.Entity:SetNWVector("LightColR",Data.LightColor.r);
+		if (not Data.LightColor.sync) then
+			self.Entity:SetNWVector("LightColG",Data.LightColor.g);
+			self.Entity:SetNWVector("LightColB",Data.LightColor.b);
+		end
+		self.Entity:SetNWBool("LightSync",Data.LightColor.sync);
+	end
+	
+	if (Data.Material) then self.Material = Data.Material end
+	self.Entity:SetMaterial(self.Material);
+	if (Data.UnstableMaterial) then self.UnstableMaterial = Data.UnstableMaterial end
+	
+	if (parent.EventHorizonData.Model) then self.Model = parent.EventHorizonData.Model end
+	self.Entity:SetModel(self.Model);
+	
+	if (parent.OnEventHorizonType) then
+		parent:OnEventHorizonType(self,reset,type,Data)
+	end
+end
+
+function ENT:SetEHColor(col)
+	self.Color = col
+	self:SetColor(self.Color)
+	if (self.Color.r!=self.DefColor.r or self.Color.g!=self.DefColor.g or self.Color.b!=self.DefColor.b) then
+	    self.Entity:SetNWBool("LightCustom",true);
+		--self.Entity:SetNWVector("LightColor",self.Color)
 	else
-	    if(class=="stargate_infinity" and not self:GetParent().InfDefaultEH)then
-	        self.Entity:SetMaterial("CoS/stargate/effect_02.vmt")
-	    end
-		self.Entity:SetModel(self.Model);
+	    self.Entity:SetNWBool("LightCustom",false);	
+	end
+end
+
+function ENT:Flicker(reset)
+	if (reset) then
+		if (self.UnstableMaterial!="") then
+			self:SetMaterial(self.Material);
+		else
+		    self:SetNWBool("Flicker",false);
+		end
+		--self:SetColor(Color(255,255,255,255)); -- fix invisible eh sometimes in mp
+		self:SetColor(self.Color)
+		self.Unstable = false;              
+	else
+		if (self.UnstableMaterial!="") then
+			self:SetMaterial(self.UnstableMaterial);
+		else
+			local col = table.Copy(self.Color)
+			col.a = math.random(55,165)
+		    self:SetColor(col) -- legacy
+			self:SetNWBool("Flicker",true);
+		end
+		if not self.ShuttingDown then
+			self:EmitSound(self:GetParent().UnstableSound,90,math.random(97,103));
+		end
+		self.Unstable = true;
+		self:BufferEmpty();
 	end
 end
 
@@ -274,32 +332,18 @@ function ENT:Open()
     	if (nox_type) then
 			self.OpeningDelay = 0.87;
 			self.OpenTime = 0.9;
-    	elseif (class=="stargate_orlin") then
-			self.OpeningDelay = 0.8;
-			self.OpenTime = 2.2;
-    	elseif (class=="stargate_supergate") then
-			self.OpeningDelay = 0.8;
-			self.OpenTime = 5.3;
-    	elseif (class=="stargate_universe") then
-			self.OpeningDelay = 0.8;
-			self.OpenTime = 2.2;
-    	elseif (class=="stargate_atlantis") then
-			self.OpeningDelay = 0.9;
-			self.OpenTime = 2.2;
-    	elseif (class=="stargate_movie" and not self:GetParent().Classic) then
-			self.OpeningDelay = 0.8;
-			self.OpenTime = 2.5;
-    	else
-			self.OpeningDelay = 1.5;
-			self.OpenTime = 2.2;
-			gt = 1;
+		else
+			local EHData = self:GetParent().EventHorizonData
+			self.OpeningDelay = EHData.OpeningDelay
+			self.OpenTime = EHData.OpenTime
+			gt = EHData.NNFix
 		end
 
         --##### This effect simply is the eventhorizon creation effect. It's NOT the kawoosh!
 		if self.OpenEffect then
 			local fx = EffectData();
 			fx:SetEntity(e);
-			fx:SetRadius(gt);
+			fx:SetRadius(gt or 0);
 			fx:SetOrigin(e:GetPos());
 			fx:SetScale(self.OpeningDelay+0.2); -- The additional delay stops the effect from stopping to early so the other (below) is getting started to late (Noticabel by a short flicker)
 			util.Effect("eventhorizon_open",fx,true,true);
@@ -327,12 +371,12 @@ function ENT:Open()
                                 --##### Start opening
                                 e:SetNWEntity("Target",self.Target); -- Tell clientside what our target is (Necessary for the ENT:GetTeleportedVector function, if used clientside)
                                 local pos = e:GetPos();
-                                e:SetColor(Color(255,255,255,255)); -- Draw model now
+                                e:SetColor(e.Color); -- Draw model now
                                 -- May fixes this bug where the EH is invisible
                                 timer.Simple(e.OpenTime+0.3, -- Compensates up to a ping of 300 ms
                                         function()
                                                 if(IsValid(e)) then
-                                                        e:SetColor(Color(255,255,255,255)); -- Draw model (just to be sure)
+                                                        e:SetColor(e.Color); -- Draw model (just to be sure)
                                                 end
                                         end
                                 );
@@ -352,10 +396,11 @@ function ENT:Open()
                                 else
                                 	fx:SetScale(e.OpenTime); -- Time in seconds until it dies
                                 end
-                                timer.Simple(0.6,function() if(IsValid(self)) then self:SetNWBool("AllowBacksideDrawing",true); self.Entity:SetColor(Color(255,255,255,255)); end end)
+                                timer.Simple(0.6,function() if(IsValid(self)) then self:SetNWBool("AllowBacksideDrawing",true); self.Entity:SetColor(self.Color); end end)
                                 timer.Simple(e.OpenTime,function()
 									if(IsValid(self)) then
 										self.ValidOpen = true;
+										self:SetColor(self.Color);
 									end
 								end);
 								if not nox_type then
@@ -368,66 +413,44 @@ function ENT:Open()
 									end
 								end
 								if self.OpenEffect then
-									util.Effect("eventhorizon_stabilize",fx,true,true);
+									-- proper rendering fix
+									fx:SetOrigin(pos+e:GetForward()*0.3);
+									fx:SetRadius(0)
+									util.Effect("eventhorizon_stabilize",fx);
+									fx:SetOrigin(pos-e:GetForward()*0.3);
+									fx:SetRadius(1)
+									util.Effect("eventhorizon_stabilize",fx);
 								end
                                 --##### The Kawoosh (Yeah, that thing which comes out the gate and kills peopl/stuff)
 					if (not blocked and not nox_type) then -- gate is not blocked - Add kawoosh
 					local fx = EffectData();
 					fx:SetEntity(e);
 					--##################### @ Llapp
-					if(self.Entity:GetParent():GetClass()=="stargate_orlin")then
-						fx:SetRadius(2);
-					    util.Effect("stargate_kawoosh",fx,true,true);
-					    -- This will kill people
-					    local pos = self.Entity:GetPos();
-					    local normal = self.Entity:GetForward();
-					    local radius = self.Entity:BoundingRadius()*(1/6);
-					    self:EHDissolve(pos+radius*normal,radius);
-					    self:EHDissolve(pos+3*radius*normal,radius);
-					    self:EHDissolve(pos+5*radius*normal,radius);
-					elseif(self.Entity:GetParent():GetClass()=="stargate_supergate")then
-						fx:SetRadius(3);
-					    util.Effect("stargate_kawoosh",fx,true,true);
-					    -- This will kill people
-					    local pos = self.Entity:GetPos();
-					    local normal = self.Entity:GetForward();
-					    local radius = self.Entity:BoundingRadius()*0.6;
-					    self:EHDissolve(pos+radius*normal,radius);
-					    self:EHDissolve(pos+3*radius*normal,radius);
-					    self:EHDissolve(pos+5*radius*normal,radius);
-					elseif(self.Entity:GetParent():GetClass()=="stargate_movie" and not self.Entity:GetParent().Classic)then
-						local fx2 = EffectData();
-						fx2:SetEntity(e);
-						fx:SetRadius(4);
-					    util.Effect("stargate_kawoosh",fx,true,true);
-					    -- This will kill people
-					    local pos = self.Entity:GetPos();
-					    local normal = self.Entity:GetForward();
-					    local radius = self.Entity:BoundingRadius()*(1/3);
-						timer.Simple(2.0,function()	if (IsValid(self)) then
-							self:EHDissolve(pos-radius*normal,radius);
-							local fx = EffectData()
-							fx:SetEntity(e);
-							util.Effect("stargate_kawoosh_movie",fx,true,true);
-						end	end);
-					    self:EHDissolve(pos+radius*normal,radius);
-					    self:EHDissolve(pos+3*radius*normal,radius);
-					    self:EHDissolve(pos+5*radius*normal,radius);
-					else
-						if (self.Entity:GetParent():GetClass()=="stargate_universe") then
-							fx:SetRadius(1);
-						else
-							fx:SetRadius(0);
-						end
-						util.Effect("stargate_kawoosh",fx,true,true);
-					    -- This will kill people
-					    local pos = self.Entity:GetPos();
-					    local normal = self.Entity:GetForward();
-					    local radius = self.Entity:BoundingRadius()*(1/3);
-					    self:EHDissolve(pos+radius*normal,radius);
-					    self:EHDissolve(pos+3*radius*normal,radius);
-					    self:EHDissolve(pos+5*radius*normal,radius);
+					-- recode by AlexALX
+					local Gate = self.Entity:GetParent()
+					local Data = self.KawooshTypes[Gate.EventHorizonKawoosh or "sg1"];
+					self.KawooshData = Data.KawooshDmg;
+					fx:SetRadius(Gate.EventHorizonType=="universe" and 1 or 0);
+					fx:SetMagnitude(Data.ID)
+					util.Effect("stargate_kawoosh",fx,true,true);
+					-- This will kill people
+					local pos = self.Entity:GetPos();
+					local normal = self.Entity:GetForward();
+					local radius = self.Entity:BoundingRadius()*Data.KawooshDmg[1];
+					if (Data.BackKawooshTime) then
+						timer.Simple(Data.BackKawooshTime,function()	
+							if (IsValid(self)) then
+								self:EHDissolve(pos-radius*normal,radius);
+								local fx = EffectData()
+								fx:SetEntity(e);
+								fx:SetRadius(Gate.EventHorizonType=="universe" and 1 or 0);
+								util.Effect("stargate_kawoosh_movie",fx,true,true);
+							end	
+						end);
 					end
+					self:EHDissolve(pos+radius*normal,radius);
+					self:EHDissolve(pos+3*radius*normal,radius);
+					self:EHDissolve(pos+5*radius*normal,radius);
 				end
                                 --##### Refract to the event horizon (Because people complained it's to less)
                                 local fx = EffectData();
@@ -455,22 +478,11 @@ function ENT:EHDissolve(pos,radius)
 	e:SetParent(self.Entity);
 	if (self.GateSpawnerSpawned) then e.GateSpawnerSpawned = true; end
 	e:Spawn();
-	if (IsValid(self:GetParent()) and self:GetParent():GetClass()=="stargate_supergate") then
-		for i=0,36 do
-			e:Fire("hurt","",0.12*i);
-		end
-		e:Fire("kill","",4.4);
-	elseif (IsValid(self:GetParent()) and self:GetParent():GetClass()=="stargate_movie" and not self:GetParent().Classic) then
-		for i=0,16 do
-			e:Fire("hurt","",0.12*i);
-		end
-		e:Fire("kill","",2.0);
-	else
-		for i=0,12 do
-			e:Fire("hurt","",0.12*i);
-		end
-		e:Fire("kill","",1.5);
+	local Data = self.KawooshData;
+	for i=0,Data[2] do
+		e:Fire("hurt","",0.12*i);
 	end
+	e:Fire("kill","",Data[3]);
 	-- Start dissolving the crap!
 	if(StarGate.CFG:Get("stargate","disintegrate",true)) then
 		timer.Simple(0.01,function() if IsValid(self.Entity) then self:DissolveEntities(pos,radius) end end);
@@ -557,7 +569,7 @@ end
 function ENT:Shutdown(override)
 	if(self.ShuttingDown or (not self:IsOpen() and not override)) then return end; -- Aready shutting down or not opened yets
 	--self:StopSound(self.Sounds.Idle,0.4);
-	self.Entity:SetColor(Color(255,255,255,255));
+	--self.Entity:SetColor(Color(255,255,255,255));
 	if (self.IdleSound) then self.IdleSound:Stop() end
 	timer.Remove("EventHorizonEffect"..self.Entity:EntIndex());
 	timer.Remove("EventHorizonOpening"..self.Entity:EntIndex());

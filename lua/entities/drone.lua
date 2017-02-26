@@ -25,6 +25,7 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
 ENT.CAP_NotSave = true
+ENT.DoNotDuplicate = true 
 
 if SERVER then
 

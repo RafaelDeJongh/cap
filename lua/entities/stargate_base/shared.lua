@@ -28,6 +28,31 @@ ENT.WireDebugName = "Stargate";
 ENT.IsStargate = true;
 ENT.IsGroupStargate = true;
 
+ENT.EventHorizonData = {
+	OpeningDelay = 0.9,
+	OpenTime = 2.2,
+	Type = "sg1",
+	Kawoosh = "sg1",
+	NNFix = 0,
+}
+
+StarGate.RegisterEventHorizon("sg1",{
+	ID=1,
+	Name=SGLanguage.GetMessage("stargate_c_tool_21_sg1"),
+	Material="",
+	UnstableMaterial="sgorlin/effect_shock.vmt",
+	LightColor={
+		r = Vector(20,40),
+		g = Vector(60,80),
+		b = Vector(150,230),
+		sync = false, -- sync random (for white), will be used only first value from this table (r)
+	},
+	Color=Color(255,255,255),
+})
+
+ENT.DialSlowDelay = 1.0
+ENT.DialFastTime = 7.0
+
 --################# SENT CODE ###############
 --################# Defines
 -- Stores the chevron positions for the dyn-lights
@@ -315,66 +340,160 @@ properties.Add( "Stargate.RingRotate.Off",
 
 });
 
-properties.Add( "Stargate.InfinityEH.On",
+properties.Add( "Stargate.EHType",
 {
-	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_17"),
-	Order		=	-110,
-	MenuIcon	=	"icon16/plugin_disabled.png",
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_21"),
+	Order		=	-107,
+	MenuIcon	=	"icon16/images.png",
 
 	Filter		=	function( self, ent, ply )
-						local vg = {"stargate_infinity"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						local nvg = {"stargate_supergate"}
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || table.HasValue(nvg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
 						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
 
-	Action		=	function( self, ent )
+	MenuOpen = function( self, option, ent, tr )
+		local submenu = option:AddSubMenu()
+		local eh = ent:GetNWString("EventHorizonType","sg1");
+		local types = {} -- fixed order
+		for k,v in pairs(StarGate.EventHorizonTypes) do
+			types[v.ID] = {k,v.Name}
+		end
+		
+		for k,eht in pairs(types) do
+			local option = submenu:AddOption(eht[2], function() self:SetEh( ent, eht[1] ) end )
+			if ( eh == eht[1] ) then
+				option:SetChecked( true )
+			end
+		end
+	end,
+
+	SetEh		=	function( self, ent, eht )
 
 						self:MsgStart()
-							net.WriteEntity( ent )
+							net.WriteEntity(ent)
+							net.WriteString(eht)
 						self:MsgEnd()
 
 					end,
+
+	Action 		= 	function() end,
 
 	Receive		=	function( self, length, player )
 
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent:TriggerInput("SG1 Event Horizon",1);
+						ent.EventHorizonType = net.ReadString();
+						ent:SetNWString("EventHorizonType",ent.EventHorizonType);
+						if (IsValid(ent.EventHorizon)) then
+							ent.EventHorizon:EHType(true);
+						end
 					end
 
 });
 
-properties.Add( "Stargate.InfinityEH.Off",
+properties.Add( "Stargate.EHColor",
 {
-	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_17d"),
-	Order		=	-110,
-	MenuIcon	=	"icon16/plugin.png",
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_23"),
+	Order		=	-106,
+	MenuIcon	=	"icon16/color_wheel.png",
 
 	Filter		=	function( self, ent, ply )
-                        local vg = {"stargate_infinity"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActInf_SG1_EH",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
 						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
 					end,
 
-	Action		=	function( self, ent )
-
+	Action 		= 	function(self, ent) 
+		StarGate.ColorMenu(self,ent)
+	end,
+	
+	SetCol		=	function( self, ent, color)
+					if not IsValid(ent) then return end
 						self:MsgStart()
-							net.WriteEntity( ent )
+							net.WriteEntity(ent)
+							net.WriteVector(Vector(color.r,color.g,color.b))
 						self:MsgEnd()
 
 					end,
-
+					
 	Receive		=	function( self, length, player )
 
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent:TriggerInput("SG1 Event Horizon",0);
+						local col = net.ReadVector();
+						ent:TriggerInput("Event Horizon Color",col)
 					end
 
 });
+
+if CLIENT then
+
+function StarGate.ColorMenu(prop,ent)
+	local Frame = vgui.Create( "DFrame" )
+	Frame:SetSize( 330, 300 )
+	Frame:Center()
+	Frame:MakePopup()
+	Frame:SetTitle("")
+   	Frame:SetVisible( true )
+   	Frame:SetDraggable( false )
+   	Frame:ShowCloseButton( true )
+	Frame.Paint = function(self,w,h)
+        surface.SetDrawColor( 80, 80, 80, 185 )
+        surface.DrawRect( 0, 0, w, h )
+    end
+
+  	local title = vgui.Create( "DLabel", Frame );
+ 	title:SetText(SGLanguage.GetMessage("stargate_c_tool_23"));
+  	title:SetPos( 25, 0 );
+ 	title:SetSize( 310, 25 );
+	
+	local image = vgui.Create("DImage" , Frame);
+    image:SetSize(16, 16);
+    image:SetPos(5, 5);
+    image:SetImage("gui/cap_logo");
+	
+	local Mixer = vgui.Create( "DColorMixer", Frame )
+	Mixer:SetAlphaBar( false ) 	
+	Mixer:SetPos( 10, 30 )
+	Mixer:SetSize( 310, 235 )
+	local col = ent:GetNWVector("EHColor",Vector(255,255,255))
+	Mixer:SetColor(Color(col.x,col.y,col.z))
+	
+	local Save = vgui.Create( "DButton", Frame )
+	Save:SetPos( 220, 270 )
+	Save:SetSize( 100, 25 )
+	Save:SetImage("icon16/disk.png")
+	Save:SetText(SGLanguage.GetMessage("stargate_c_tool_23a"))
+	Save.DoClick = function(self, val)
+		prop:SetCol(ent,Mixer:GetColor())
+		Frame:Close()
+	end
+	
+	local Reset = vgui.Create( "DButton", Frame )
+	Reset:SetPos( 90, 270 )
+	Reset:SetSize( 100, 25 )
+	Reset:SetImage("icon16/arrow_refresh.png")
+	Reset:SetText(SGLanguage.GetMessage("stargate_c_tool_23r"))
+	Reset:CenterHorizontal()
+	Reset.DoClick = function(self, val)
+		prop:SetCol(ent,Color(0,0,0))
+		Frame:Close()
+	end
+	
+	local Cancel = vgui.Create( "DButton", Frame )
+	Cancel:SetPos( 10, 270 )
+	Cancel:SetSize( 100, 25 )
+	Cancel:SetImage("icon16/database_delete.png")
+	Cancel:SetText(SGLanguage.GetMessage("stargate_c_tool_23c"))
+	Cancel.DoClick = function(self, val)
+		Frame:Close()
+	end
+end
+
+end

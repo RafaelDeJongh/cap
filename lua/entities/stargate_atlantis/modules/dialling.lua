@@ -33,35 +33,32 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 	elseif (inbound) then
 		address = {};
 	end
-	local add = 0;
 	local chevs = 7
 	self.ChevronLocks = self.ChevronLocksb;
 	if (count == 9) then
 		chevs = 8
-		if (inbound) then
+		if (not inbound) then
 			self.ChevronLocks = self.ChevronLocks8;
-		else
-			self.ChevronLocks = self.ChevronLocks8o;
 		end
 	elseif (count == 10) then
 		chevs = 9
-		if (inbound) then
-			self.ChevronLocks = self.ChevronLocks9;
-		else
+		if (not inbound) then
 			self.ChevronLocks = self.ChevronLocks9o;
 		end
 	end
 	local t = self.Entity.Target;
-	if (IsValid(t)) then
-		add = self:GetDelay(inbound,fast,chevs,t:GetClass());
-	end
 	--################# INBOUND DIALLING
 	if(inbound) then
-		if (inbound and not fast and IsValid(t) and self:IsNewDial(t:GetClass())) then
-			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
-			action:Add({f=self.SetStatus,v={self,false,true},d=0.2});
-			action = self.Sequence:InstantOpen(action,self:GetDelaySlow(t:GetClass())-0.3,false,true);
+		if (inbound and not fast and IsValid(t) and t.IsNewSlowDial) then
+			action:Add({f=self.SetStatus,v={self,false,true,true},d=0.6}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
+			action:Add({f=self.SetStatus,v={self,false,true},d=0.1});
+			local dly = self:CalcDelaySlow(t,true)
+			action = self.Sequence:InstantOpen(action,dly,false,true);
 		else
+			local add = 0
+			if (IsValid(t)) then
+				add = self:CalcDelayFast(t,inbound);
+			end
 			add = add + 2.5; -- The delay is necessary because the diallin below takes about 4.5 seconds with a delay of 0.1 second between each light
 			local rnd = {};
 			for i=1,chevs do
@@ -78,6 +75,9 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					rnd[i] = math.random(14,17)/100;
 					add = add + (0.1-rnd[i])*4;
 				end
+			end
+			if IsValid(t) and not fast then
+				add = add + t:DialSlowTime(chevs,self)
 			end
 			action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 			action:Add({f=self.SetStatus,v={self,false,true},d=0.2});
@@ -133,16 +133,16 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					action:Add({f=self.RingLight,v={self,0},d=0.4}); -- Stop the spinning light - We don't need it anymore
 				else
 					-- Spinning light
-					local chevron = self.ChevronLocks[i+1] - 4; -- The startindex!
+					local chevron = self.ChevronLocks[s]; -- The startindex!
 					local rounds = 4;
 					if(i == 3 and chevs == 7) then
-						-- First of all, we need it to spin through more chevrons (might look ugly, i know)
 						rounds = 12;
-						chevron = self.ChevronLocks[8] - 4
+					elseif(i == 3 and (chevs == 8 or chevs==9)) then
+						rounds = 4;
 					elseif(i == 4 and chevs == 8) then
-						-- First of all, we need it to spin through more chevrons (might look ugly, i know)
 						rounds = 8;
-						chevron = self.ChevronLocks[9] - 4
+					elseif(i == 5 and chevs == 9) then
+						rounds = 4;
 					end
 					for k=1,rounds do
 						action:Add({f=self.RingLight,v={self,chevron+k,true},d=rnd[1+i]});
@@ -160,6 +160,9 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 			dir = 1;
 			spin = 14;
 			chevacdelay = 0.4;
+		elseif (self.FasterDial) then
+			chevacdelay = 0
+			spintime = 0.05
 		end
 		--################# OUTBOUND DIALLING
 		local runs = 6
@@ -171,8 +174,9 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 			runs = 8
 			rand = 7
 		end
+		
 		-- Random delay
-		action:Add({f=self.SetStatus,v={self,false,true},d=add});
+		action:Add({f=self.SetStatus,v={self,false,true},d=0});
 		for i=1,9 do
 			action:Add({f=self.ActivateChevron,v={self,i,false,true},d=0});
 		end
@@ -197,19 +201,22 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		elseif(chevs == 8)then
 		    rnds = rnds+rnd[7]-1;
 		end
+		
+        local add = 0
+		if (IsValid(t) and fast) then
+			add = self:CalcDelayFast(t,inbound);
+		end
+
     	-- Time offsets
-    	local delta = (5.5 - rnds)/rand;
+		local del = 5.5+add
+    	local delta = (del - rnds)/rand;
     	for i=1,runs do
     		rnd[i] = math.Round((rnd[i]+delta)*10)/10;
     	end
     	if(chevs == 9 or fast)then
 		    rnds = rnd[1]+rnd[2]+rnd[3]+rnd[4]+rnd[5]+rnd[6];
 		    if(chevs == 9)then
-			    local sguslowfix = 0;
-			    if(not fast)then
-				    sguslowfix = 0.5;
-				end
-		        rnds = rnds+rnd[7]+rnd[8]+sguslowfix;
+		        rnds = rnds+rnd[7]+rnd[8];
 		    elseif(chevs == 8)then
 		        rnds = rnds+rnd[7];
 		    end
@@ -270,11 +277,11 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 					end
 				end
 				action:Add({f=self.SetChevrons,v={self,s,1},d=0}); -- Wire
-				action:Add({f=self.ActivateChevron,v={self,s,true,false,b},d=chevacdelay});
+				action:Add({f=self.ActivateChevron,v={self,s,true,false,b,self.FasterDial},d=chevacdelay});
 				action:Add({f=self.SetWire,v={self,"Dialing Symbol",DialNextSymbol},d=0}); -- Wire
 				if(i == chevs) then
 					-- Delay correction, or the gate openes to fast or slow because of the random dialling times
-					local correction = 5.5 - (rnds);
+					local correction = del - (rnds);
 					if (busy) then
 						action:Add({f=self.RingLight,v={self,0},d=1.4 + correction}); -- Stop the spinning light - We don't need it anymore
 						action:Add({f=self.SetWire,v={self,"Chevron",-chevs},d=0}); -- Tell Wire, we failed to lock!
@@ -289,7 +296,9 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		    		    rounds = (rnd[i]*10-4)*2; -- Calculate the necessary rounds for each spin
 					else
 					    rounds = 40;
-						action:Add({f=self.RingSound,v={self,true},d=0});
+						if (not self.FasterDial) then
+							action:Add({f=self.RingSound,v={self,true},d=0});
+						end
 		    		  	if(i == 2 or i == 4)then
 	    		  	        rounds = 32;
 	    		  	    elseif(i == 3)then

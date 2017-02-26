@@ -7,7 +7,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Dakara Weapon"
-ENT.Author = "Madman07, Boba Fett, Iziraider"
+ENT.Author = "Madman07, Rafael De Jongh, Iziraider"
 ENT.Category = "Stargate Carter Addon Pack: Weapons"
 ENT.WireDebugName = "Dakara Weapon"
 

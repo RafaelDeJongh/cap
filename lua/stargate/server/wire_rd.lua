@@ -312,7 +312,7 @@ end
 function StarGate.WireRD.AddResource(self,resource,maximum,default)
 	if(self.HasRD) then
 		if(StarGate.RDThree()) then
-			RD.AddResource(self.Entity,resource,maximum or 0,default or 0);
+			if RD then RD.AddResource(self.Entity,resource,maximum or 0,default or 0); end
 			--FIXME: Add LS3 registering here.
 		elseif(StarGate.RDEnv()) then
 			if not self.maxresources then self.maxresources = {} end

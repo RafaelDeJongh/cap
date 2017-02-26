@@ -1,13 +1,36 @@
 ENT.Type = "anim"
 ENT.Base = "stargate_base"
 ENT.PrintName = "Stargate (Universe)"
-ENT.Author = "Madman07, Llapp, Boba Fett, TheSniper9, AlexALX"
+ENT.Author = "Madman07, Llapp, Rafael De Jongh, TheSniper9, AlexALX"
 ENT.Category = "Stargate Carter Addon Pack: Gates and Rings"
 
 list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.WireDebugName = "Stargate Universe"
 
+ENT.IsNewSlowDial = true; // this gate use new slow dial (with chevron lock on symbol)
 ENT.IsUniverseGate = true;
+
+ENT.EventHorizonData = {
+	OpeningDelay = 0.8,
+	OpenTime = 2.2,
+	Type = "universe",
+	NNFix = 0,
+}
+       
+StarGate.RegisterEventHorizon("universe",{
+	ID=3,
+	Name=SGLanguage.GetMessage("stargate_c_tool_21_universe"),
+	Material="sgu/effect_02.vmt",
+	UnstableMaterial="sgu/effect_shock.vmt",
+	LightColor={
+		r = Vector(200,230),
+		sync = true, -- sync random (for white), will be used only first value from this table (r)
+	},
+	Color=Color(255,255,255),
+})
+		
+ENT.DialSlowDelay = 1.0
+ENT.DialFastTime = 7.4
 
 function ENT:GetRingAng()
 	if not IsValid(self.EntRing) then self.EntRing=self:GetNWEntity("EntRing") if not IsValid(self.EntRing) then return end end   -- Use this trick beacause NWVars hooks not works yet...

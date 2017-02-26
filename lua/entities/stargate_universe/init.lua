@@ -38,6 +38,12 @@ ENT.Mats = {
   On="The_Sniper_9/Universe/Stargate/UniverseChevronOn.vmt",
 }
 
+ENT.MatsSymb = {
+  Off="the_sniper_9/universe/stargate/symbols.vmt",
+  On="the_sniper_9/universe/stargate/symbolson.vmt",
+  ColOff=Color(70,70,70),
+}
+
 --################# Added by AlexALX
 
 ENT.SymbolsLockGroup = {
@@ -135,6 +141,7 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_VPHYSICS);
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 	self.Entity:SetColor(Color(0,0,0,1)); --this make the entity invisible but alpha must be 1 for dynamic lights!
+	self.DeriveIgnoreParent = true
 	self.BaseClass.Initialize(self); -- BaseClass Initialize call
 	self:AddModels();
 	self.Speed = false;
@@ -152,6 +159,7 @@ function ENT:Initialize()
 	self.WireSpinSpeed = false;
 	self.ActSymSound = false;
 	self.WireSpinDir = false;
+	hook.Add("Tick", self, self.RingTickUniverse);	
 end
 
 --#################  Called when stargate_group_system changed
@@ -218,7 +226,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Encode Symbol","Symbols Lock","Force Encode Symbol [STRING]","Force Lock Symbol [STRING]","Inbound Symbols","Activate Chevrons","Activate All Symbols","Activate Symbols [STRING]","Activate Symbols Sound","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Encode Symbol","Symbols Lock","Force Encode Symbol [STRING]","Force Lock Symbol [STRING]","Inbound Symbols","Activate Chevrons","Activate All Symbols","Activate Symbols [STRING]","Activate Symbols Sound","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -250,6 +258,7 @@ function ENT:AddModels()
 	e2:SetPos(pos);
 	e2:SetParent(self.Entity);
 	e2:DrawShadow(true);
+	e2:SetDerive(self)
 	e2:Spawn();
 	e2:Activate();
 	self.Gate = e2;
@@ -263,6 +272,7 @@ function ENT:AddModels()
 	e3:SetPos(pos);
 	e3:SetParent(self.Gate);
 	e3:DrawShadow(true);
+	e3:SetDerive(self)
 	e3:Spawn();
 	e3:Activate();
 	self.Chevron = e3;
@@ -283,8 +293,10 @@ function ENT:AddSymbols()
 		e:SetModel(self.Models.Symbol);
 		e:SetKeyValue("solid",0);
 		e:SetParent(self.Gate);
+		e:SetMaterial(self.MatsSymb.Off)
 		--e:SetDerive(self.Gate); -- Derive Material/Color from "Parent"
 		e:DrawShadow(false);
+		e:SetDerive(self)
 		e:SetPos(pos);
 		local a = angForw*(i*8);
 		e:SetAngles(ang-Angle(a[1],a[2],a[3]));
@@ -296,7 +308,30 @@ function ENT:AddSymbols()
 		self.ColG[i] = color.g;
 		self.ColB[i] = color.b;
 		self.ColA[i] = color.a;
-		e:SetColor(Color(40,40,40,255));
+		e:SetColor(self.MatsSymb.ColOff);
+	end
+end
+
+function ENT:DeriveOnSetColor(color)
+	self.BaseClass.DeriveOnSetColor(self,color)
+	if (not self.Chevron) then return end
+	local coloff = self.MatsSymb.ColOff
+	local colon = Color(255,255,255)
+	if (self.Chevron:GetColor()!=Color(255,255,255)) then
+		coloff = self.Chevron:GetColor()
+		colon = self.Chevron:GetColor()
+		coloff.r = coloff.r*(self.MatsSymb.ColOff.r/255)
+		coloff.g = coloff.g*(self.MatsSymb.ColOff.r/255)
+		coloff.b = coloff.b*(self.MatsSymb.ColOff.r/255)
+	end
+	
+	for i=1,45 do
+		local On = self.Symbols[i]:GetMaterial()==self.MatsSymb.On
+		if (On) then
+			self.Symbols[i]:SetColor(colon);
+		else
+			self.Symbols[i]:SetColor(coloff);
+		end
 	end
 end
 
@@ -306,12 +341,27 @@ function ENT:ChangeSkin(skin,inbound,symbol)
 	    if(IsValid(self.Entity))then
 		    if(skin > 1 and symbol and symbol!="" and (not inbound or self.InboundSymbols==1))then
 			    local i = self.SymbolsLock[tonumber(symbol) or symbol][2]; --self.SymbolPositions[skin-1];
-    			self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+    			--self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+				local col = Color(255,255,255) 
+				if (self.Chevron:GetColor()!=Color(255,255,255)) then
+					col = self.Chevron:GetColor()
+				end
+				self.Symbols[i]:SetColor(col)
+				self.Symbols[i]:SetMaterial(self.MatsSymb.On);
 			elseif(skin == 0)then
 			    for i=1,45 do
 				    local c = self.Symbols[i]:GetColor();
+					local col = self.MatsSymb.ColOff 
+					if (self.Chevron:GetColor()!=Color(255,255,255)) then
+						col = self.Chevron:GetColor()
+						col.r = col.r*(self.MatsSymb.ColOff.r/255)
+						col.g = col.g*(self.MatsSymb.ColOff.r/255)
+						col.b = col.b*(self.MatsSymb.ColOff.r/255)
+					end
 				    if(self.ColA[i] == c.a)then
-				        self.Symbols[i]:SetColor(Color(40,40,40,255));
+				        --self.Symbols[i]:SetColor(self.MatsSymb.ColOff);
+						self.Symbols[i]:SetColor(col)
+						self.Symbols[i]:SetMaterial(self.MatsSymb.Off);
                     end
 				end
 				self.Chevron:SetMaterial(self.Mats.Off);
@@ -328,13 +378,21 @@ function ENT:ActivateSymbols(deactivate,syms)
 	if (syms and syms!="") then
 		local s = syms:gsub("[^"..self.WireCharters.."]",""):TrimExplode("")
 		for i=1,45 do
-			self.Symbols[i]:SetColor(Color(40,40,40,255));
+			self.Symbols[i]:SetColor(self.MatsSymb.ColOff);
+			self.Symbols[i]:SetMaterial(self.MatsSymb.Off);
 		end
 		local s2 = "";
+		
+		local col = Color(255,255,255) --Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i])
+		if (self.Chevron:GetColor()!=Color(255,255,255)) then
+			col = self.Chevron:GetColor()
+		end
+		
 		for k,v in pairs(s) do
 			if (s2:find(v)) then continue end
 		    local i = self.SymbolsLock[tonumber(v) or v][2]; --self.SymbolPositions[skin-1];
-    		self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+    		self.Symbols[i]:SetColor(col);
+			self.Symbols[i]:SetMaterial(self.MatsSymb.On);
     		s2 = s2..v;
 		end
 		if (self.ActSymSound and table.Count(s)>0) then
@@ -342,12 +400,27 @@ function ENT:ActivateSymbols(deactivate,syms)
 		end
 	else
 		if (not deactivate) then
+			local col = Color(255,255,255) --Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i])
+			if (self.Chevron:GetColor()!=Color(255,255,255)) then
+				col = self.Chevron:GetColor()
+			end
+		
 			for i=1,45 do
-				self.Symbols[i]:SetColor(Color(self.ColR[i],self.ColG[i],self.ColB[i],self.ColA[i]));
+				self.Symbols[i]:SetColor(col);
+				self.Symbols[i]:SetMaterial(self.MatsSymb.On);
 			end
 		else
+			local col = self.MatsSymb.ColOff
+			if (self.Chevron:GetColor()!=Color(255,255,255)) then
+				col = self.Chevron:GetColor()
+				col.r = col.r*(self.MatsSymb.ColOff.r/255)
+				col.g = col.g*(self.MatsSymb.ColOff.r/255)
+				col.b = col.b*(self.MatsSymb.ColOff.r/255)
+			end
+		
 			for i=1,45 do
-			    self.Symbols[i]:SetColor(Color(40,40,40,255));
+			    self.Symbols[i]:SetColor(col);
+				self.Symbols[i]:SetMaterial(self.MatsSymb.Off);
 			end
 		end
 	end
@@ -391,32 +464,45 @@ function ENT:SpinSound(spin)
 	end
 end
 
---############# let the gate rotate with acc/decc
+--############# let the gate rotate with acc/decc @llapp
+-- total recode by AlexALX, making it undepent to server tickrate/fps
 function ENT:Rotation(sse)
     local spr = self.Speroll;
 	local e = self.Entity;
 	local g = self.Gate;
-	if (not IsValid(g)) then return end
-	local speed,speed2,speed3,speed4 = 0.02,0.18,0.22,1;
-	if (self.WireSpin and not self.WireSpinSpeed) then speed,speed2,speed3,speed4 = 0.01, 0.09, 0.11, 0.5; end
-	if(sse == 1 and spr < speed4 and spr > -speed)then
-        spr = spr + speed;
-		self.PlaySp = true;
-   	elseif(sse == -1 and spr > -speed4 and spr < speed)then
-   	    spr = spr - speed;
-		self.PlaySp = true;
-   	elseif(sse == 2 and spr < speed4+speed and spr > 0)then
-        spr = spr - speed;
-    elseif(sse == -2 and spr > -speed4-speed and spr < 0)then
-	    spr = spr + speed;
-    end
-	if(((spr > speed2 and spr < speed3) or (spr < -speed2 and spr > -speed3)) and (sse == 2 or sse == -2))then
+	if not IsValid(g) or self.SpinSpeed==0 then return end
+	local mul = 66 / (1/FrameTime())
+	if (mul<1) then mul = 1 end
+	local speed,sspeed,sspeed2 = 1*mul,0.02*mul,0.18*mul
+	if (self.WireSpin and not self.WireSpinSpeed) then speed,sspeed,sspeed2 = 0.5*mul,0.01*mul,0.09*mul end
+	if (sse == 1 and spr < speed) then
+		spr = math.Clamp(spr+speed,spr,spr+sspeed*mul)
+	elseif (sse == 2 and spr > sspeed) then
+		spr = math.Clamp(spr-speed,spr-sspeed*mul,spr)
+	elseif (sse == -1 and spr > -speed) then
+		spr = math.Clamp(spr-speed,spr-sspeed*mul,spr)
+	elseif (sse == -2 and spr < -sspeed) then
+		spr = math.Clamp(spr+speed,spr,spr+sspeed*mul)
+	end
+	if(((spr > sspeed and spr < sspeed2) or (spr < -sspeed and spr > -sspeed2)) and (sse == 2 or sse == -2))then
 	    self:SpinSound(false);
 	    self.Entity:SetWire("Ring Rotation",0);
 		self:StopRollSound();
-	elseif(spr > 0 and spr < speed)then
+		--[[if (not timer.Exists("SGUniRotFix"..self:EntIndex())) then
+			timer.Create("SGUniRotFix"..self:EntIndex(),0.4,1,function() 
+				self.SpinSpeed = 0;
+				self.WireSpin = false; 
+			end)
+		end    ]]
+	elseif(spr > 0 and spr <= sspeed or spr < 0 and spr >= -sspeed) then
+		--timer.Remove("SGUniRotFix"..self:EntIndex())
    	    spr = 0;
    		self.SpinSpeed = 0;
+		self.WireSpin = false; -- fix for manual spin rotation bug
+		--self.Speed = 0;
+		/*local y = tonumber(math.NormalizeAngle(self.Gate.Entity:GetLocalAngles().r));
+		if (y<0) then y = y+360; end;
+		print(y)*/
    	end
 	self.Speroll = spr;
    	if(spr ~= 0)then
@@ -424,20 +510,17 @@ function ENT:Rotation(sse)
         g:SetAngles(g:GetAngles() + Angle(0,0,spr));
         g:SetParent(e);
    	end
-	local val = (g:GetAngles().p + g:GetAngles().y + g:GetAngles().r) % 360;
-	local angGate = math.floor(val);
-	val = string.Explode(".",tostring(val));
-	if (val[2]) then
-		val = tonumber(string.format("%f","0."..val[2]));
-	else val = 0 end
-	local va = 24;
-	if(val > 0.5)then va = 25 end ;
-	local angEnt = math.floor((e:GetAngles().p + e:GetAngles().y + e:GetAngles().r - va) % 360);
-	if(angGate == angEnt and self.Stop and spr >= speed4)then
-	    self:SetSpeed(false);
+	if (self.Stop and spr >= speed) then
+		local y = tonumber(math.NormalizeAngle(self.Gate.Entity:GetLocalAngles().r));
+		--if (y<0) then y = y+360 end
+		local ys = 25
+		if (y>-ys and y<0) then
+			self:SetSpeed(false);
+		end
 	end
+	
 	if(spr == 0 and self.Stop)then
-	    g:SetAngles(Angle(e:GetAngles().p,e:GetAngles().y,e:GetAngles().r));
+	    g:SetAngles(e:GetAngles());
 	    self.Stop = false;
 	    if(self.PlaySp)then
 	    	self.PlaySp = false;
@@ -449,12 +532,12 @@ function ENT:Think()
 	if (not IsValid(self)) then return false end;
     self:Rotation(self.SpinSpeed);
     self:UpdateEntity();
-	self.Entity:NextThink(CurTime()+0.001);
+	self.Entity:NextThink(CurTime()+(1/66)); -- fix for tickrate >66, this is lua limitation due to float precision
 	return true;
 end
 
 function ENT:UpdateEntity()
-  self.Entity:SetColor(Color(0,0,0,1));
+  self.Entity:__SetColor(Color(0,0,0,1));
 end
 
 -- Damn, I spent the whole day and night for calculating this formula.
@@ -498,20 +581,20 @@ function ENT:StopFormula(y,x,n,n2)
 end
 
 --################# Tick function added by AlexALX
-function RingTickUniverse()
-	for _,self in pairs(ents.FindByClass("stargate_universe")) do
+function ENT:RingTickUniverse()
+	--for _,self in pairs(ents.FindByClass("stargate_universe")) do
 		if (IsValid(self.Gate)) then
 			if ((self.Outbound or self.WireSpin) and self.Gate.Moving) then
 				local y = tonumber(math.NormalizeAngle(self.Gate.Entity:GetLocalAngles().r));
 				if (y<0) then y = y+360; end;
 				local reset = true;
 				local symbols = self.SymbolsLock;
-				local s1,s2 = 7.5,4.5;
-				local s3,s4 = 6.8,5.2;
+				local so,so1,so2 = 12.125,1.5,0.8			
 				if (self.WireSpinSpeed or not self.WireSpin) then
-					s1,s2 = 26.5,23.5;
-					s3,s4 = 25,24;
+					so,so1,so2 = 24.5,1.5,1
 				end
+				local s1,s2 = so+so1,so-so1
+				local s3,s4 = so+so2,so-so2
 				for k, v in pairs(symbols) do
 					local symbol = self:StopFormula(y,tonumber(self.SymbolsLock[tonumber(k) or k][1]),s1,s2);
 					if (symbol) then
@@ -534,6 +617,7 @@ function RingTickUniverse()
 						local x = tonumber(self.SymbolsLock[tonumber(nsym) or nsym][1]);
 						if (self:StopFormula(y,x,s3,s4) and not self.Shutingdown) then
 							if (encode or lock) then
+								--print(y)
 								self:TriggerInput("Rotate Ring",0);
 								timer.Simple(1,function()
 									if (IsValid(self)) then
@@ -545,6 +629,7 @@ function RingTickUniverse()
 									end
 								end)
 							else
+								--print(y)
 								self:SetSpeed(false);
 								self.Entity:DHDSetAllBusy();
 								self.Gate.Moving = false;
@@ -555,9 +640,9 @@ function RingTickUniverse()
 				end
 			end
 		end
-	end
+	--end
 end
-hook.Add("Tick", "RingTick Universe", RingTickUniverse);
+--hook.Add("Tick", "RingTick Universe", RingTickUniverse);
 
 function ENT:SetDiallingSymbol(symbol)
 	if (symbol) then
@@ -709,9 +794,12 @@ function ENT:TriggerInput(k,v,mobile,mdhd,ignore)
 				self.Entity:SetNWBool("ActRotRingL",true);
 			end
 		elseif (self.WireSpin) then
-			self.WireSpin = false;
+			--self.WireSpin = false;
 			self:SetSpeed(false);
 			self.WireBlock = true;
+			/*local y = tonumber(math.NormalizeAngle(self.Gate.Entity:GetLocalAngles().r));
+			if (y<0) then y = y+360; end;
+			print(y)*/
 			if (timer.Exists("StarGate.Universe.WireBlock_"..self.Entity:EntIndex())) then
 				timer.Remove("StarGate.Universe.WireBlock_"..self.Entity:EntIndex());
 			end
@@ -725,8 +813,10 @@ function ENT:TriggerInput(k,v,mobile,mdhd,ignore)
 	elseif(k == "Ring Speed Mode" and IsValid(self.Gate) and not self.Active and (not self.NewActive or self.WireManualDial)) then
 		if (v >= 1) then
 			self.WireSpinSpeed = true;
+			if (self.Speroll>0) then self.Speroll = self.Speroll*2 end
 		else
 			self.WireSpinSpeed = false;
+			if (self.Speroll>0) then self.Speroll = self.Speroll/2 end
 		end
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock and not self.WireSpin) then
 		if (v >= 1) then

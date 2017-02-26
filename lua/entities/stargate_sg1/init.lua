@@ -187,6 +187,7 @@ function ENT:Initialize()
 	self:AddChevron();
 	self.IsConcept = false;
 	self.RingInbound = false;
+	hook.Add("Tick", self, self.RingTickSG1);
 end
 
 --#################  Called when stargate_group_system changed
@@ -255,7 +256,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -444,8 +445,8 @@ function ENT:StopFormula(y,x,n,n2)
 end
 
 --################# Think function added by AlexALX
-function RingTickSG1()
-	for k,self in pairs(ents.FindByClass("stargate_sg1")) do
+function ENT:RingTickSG1()
+	--for k,self in pairs(ents.FindByClass("stargate_sg1")) do
 		if (IsValid(self.Ring)) then
 			if (self.Outbound and self.Ring.Moving and self.DiallingSymbol != "") then
 				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
@@ -546,9 +547,9 @@ function RingTickSG1()
 				end
 			end
 		end
-	end
+	--end
 end
-hook.Add("Tick", "RingTick SG1", RingTickSG1);
+--hook.Add("Tick", "RingTick SG1", RingTickSG1);
 
 function ENT:SetDiallingSymbol(symbol)
 	if (symbol) then

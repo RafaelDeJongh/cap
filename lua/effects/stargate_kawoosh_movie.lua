@@ -23,11 +23,13 @@ function EFFECT:Init(data)
 	local mdl = e:GetModel();
 	if(not (mdl and mdl ~= "" and mdl ~= "models/error.mdl")) then return end; -- Stops crashing ppl
 	local pos = e:GetPos();
-	self.Entity:SetPos(pos);
+	self.Entity:SetPos(pos);  
 	self.Entity:SetParent(e);
+	
+	local Universe = util.tobool(math.Round(data:GetRadius()));
 
 	if StarGate.VisualsMisc("cl_kawoosh_material",true) then
-		self.Smoke = ("particle/Smoke01_L")
+		self.Smoke = ("particle/Smoke01_L"..(Universe and "_U" or ""))
 	else
 		self.Smoke = ("particle/Smoke01_G")
 	end
@@ -69,7 +71,11 @@ function EFFECT:Init(data)
 			particle:SetRollDelta(math.Rand((-1*self.Data.RollS),self.Data.RollS)); --How fast it rolls
 			particle:SetGravity(-1*forward*self.Data.Length*ParticleDensity*mul);
 			particle:SetVelocity(forward*self.Data.Length*ParticleDensity);
-			particle:SetColor(180,225,255);
+			if (Universe) then
+				particle:SetColor(209,218,234);
+			else
+				particle:SetColor(180,225,255);
+			end
 			--180,225,255
 			--200,235,255 to light
 		end

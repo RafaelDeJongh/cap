@@ -351,10 +351,16 @@ function StarGate.TintGate(gate)
       gate.excessPower = 0
    end
 
+   local col = gate.OrigColor or Color(255,255,255)
+   
    local tintAmount = 255 * (gate.excessPower / gate.excessPowerLimit)
+   /*if (col.r!=255) then
+		col.r = col.r + (tintAmount-col.r)
+   end */
 
    -- fix for universe stargate by AlexALX
-   if (gate:GetClass()=="stargate_universe" and IsValid(gate.Gate) and IsValid(gate.Chevron)) then
+   -- new fix much better now in meta/universe code
+   /*if (gate:GetClass()=="stargate_universe" and IsValid(gate.Gate) and IsValid(gate.Chevron)) then
 		gate.Gate:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255))
 		gate.Chevron:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255))
 	    for i=1,45 do
@@ -366,22 +372,30 @@ function StarGate.TintGate(gate)
 		        gate.Symbols[i]:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255));
           	end
 		end
-   elseif (gate:GetClass()!="stargate_universe") then
-      gate:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255))
-   end
+   elseif (gate:GetClass()!="stargate_universe") then    */
+        
+      gate:SetColor(Color(math.Clamp(col.r + tintAmount,0,255), math.Clamp(col.g - tintAmount,0,255), math.Clamp(col.b - tintAmount,0,255), col.a))
+   --end
+   
+   -- also custom color support
 
-   if(gate.chevron7) then
+   /*if(gate.chevron7) then
       gate.chevron7:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255))
-   end
+   end */
 
    local iris = StarGate.GetIris(gate)
 
    if(StarGate.IsEntityValid(iris)) then
       tintAmount = math.min(tintAmount * 2, 128)
+	  
+	  local col = iris.OrigColor or Color(255,255,255)
 
       --Msg("Setting ", iris, " colour(255, ", 255 - tintAmount, ", ", 255 - tintAmount, ")\n")
-      iris:SetColor(Color(255, 255 - tintAmount, 255 - tintAmount, 255))
+      iris:SetColor(Color(math.Clamp(col.r + tintAmount,0,255), math.Clamp(col.g - tintAmount,0,255), math.Clamp(col.b - tintAmount,0,255), col.a))
+	  iris.OrigColor = col
    end
+   
+   gate.OrigColor = col
 end
 
 function StarGate.EmitHeat(pos, damage, radius, inflictor)
@@ -860,4 +874,4 @@ function StarGate.RandomGateName(ply,ent,count,wire,mode)
     end
 end
 
-hook.Add("PlayerSpawnedSENT","RandomGateName",StarGate.RandomGateName)
+hook.Add("PlayerSpawnedSENT","RandomGateName",StarGate.RandomGateName)       

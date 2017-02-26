@@ -3,7 +3,7 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 SWEP.PrintName = SGLanguage.GetMessage("weapon_misc_jumper");
 SWEP.Category = SGLanguage.GetMessage("weapon_misc_cat");
 end
-SWEP.Author = "RononDex, Boba Fett"
+SWEP.Author = "RononDex, Rafael De Jongh"
 SWEP.Purpose = "Use features of Jumper"
 SWEP.Instructions = "Primary: Cloak \n Secondary: Door \n Reload: Selfdestruct"
 list.Set("CAP.Weapon", SWEP.PrintName or "", SWEP);

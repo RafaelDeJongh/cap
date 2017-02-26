@@ -3,7 +3,7 @@ if (SGLanguage!=nil and SGLanguage.GetMessage!=nil) then
 	SWEP.PrintName = SGLanguage.GetMessage("weapon_tac");
 	SWEP.Category = SGLanguage.GetMessage("weapon_cat");
 end
-SWEP.Author = "Ronon Dex, Boba Fett, AlexALX";
+SWEP.Author = "Ronon Dex, Rafael De Jongh, AlexALX";
 SWEP.Contact = "";
 SWEP.Purpose = "";
 SWEP.Instructions = "Throw with Left Click, Change Mode with Right Click";

@@ -3,6 +3,7 @@ stargate_menu_t2 = Cap Limits
 stargate_menu_t3 = Misc Convars
 stargate_menu_t4 = Config Editor
 stargate_menu_t5 = Admin Tools
+stargate_menu_t6 = Config Backups
 stargate_menu_hint = Convar: %s
 stargate_menu_sp = Note: this settings work only in multiplayer.
 stargate_menu_01 = Stargate Menu
@@ -201,6 +202,19 @@ stargate_cfg_grp_reload = Reload groups
 stargate_cfg_grp_reloaded = Stargate groups successfully reloaded!
 stargate_cfg_grp_save = Save groups and reload
 stargate_cfg_grp_saved = Stargate groups successfully saved!
+
+// Config Backups
+stargate_cfg_backup_title = Config Backups Manager
+stargate_cfg_backup_file = File name
+stargate_cfg_backup_loading = Loading...
+stargate_cfg_backup_loaded = Settings restored
+stargate_cfg_backup_delete = Remove
+stargate_cfg_backup_view = View
+stargate_cfg_backup_load = Load
+stargate_cfg_backup_con = Restore config
+stargate_cfg_backup_desc_con = Do you want to restore the values from %s file?\nThis action cannot be undone!\nAll current settings will be lost!
+stargate_cfg_backup_cancel = Cancel
+stargate_cfg_backup_ok = Restore
 
 // Stargate Config Editor
 sg_sets_global[damage] = Damage
@@ -512,3 +526,5 @@ sg_sets[cap_misc][allow_drop_weapons] = Allow drop weapons
 sg_sets[cap_misc][allow_drop_weapons][desc] = Allow drop player weapons?
 sg_sets[cap_misc][ship_shield] = Allow ship shields
 sg_sets[cap_misc][ship_shield][desc] = Allow shields on cap ships?
+sg_sets[cap_misc][cfgbackup] = Config backups
+sg_sets[cap_misc][cfgbackup][desc] = How many store config backups? Use 0 to disable.

@@ -25,6 +25,7 @@ AddCSLuaFile()
 ENT.Sounds={
 	DestOpen=Sound("door/dest_door_open.wav"),
 	DestClose=Sound("door/dest_door_close.wav"),
+    LockedDest=Sound("gmod4phun/dest_door_lock_new.wav"),
 	Lock=Sound("door/dest_door_lock.wav"),
 	AtlOpen=Sound("door/atlantis_door_open.wav"),
 	AtlClose=Sound("door/atlantis_door_close.wav"),
@@ -108,7 +109,14 @@ function ENT:TriggerInput(variable, value)
 		self:Toggle();
 	elseif (variable == "Lockdown") then
 		if (value == 1) then
-			if self.Door.Open then self:Toggle() end
+			if self.Door.Open then 
+				self:Toggle() 
+				timer.Simple(2.5, function() 
+					if IsValid(self) and IsValid(self.Door) and self.Lockdown and not self.Door.Open then 
+						self.Entity:EmitSound(self.Sounds.LockedDest,100,100) 
+					end 
+				end)
+			end
 			self.Lockdown = true;
 		else
 			self.Lockdown = false;
@@ -124,13 +132,13 @@ function ENT:TriggerInput(variable, value)
 	end
 end
 
-function ENT:Toggle()
+function ENT:Toggle(no_snd)
 	if not IsValid(self.Door) then return end
 	if (not self.Lockdown) then
 		self.Door:Toggle();
 		self:SetWire("Opened",self.Door.Open);
-	elseif (self.Door:GetModel()=="models/madman07/doors/dest_door.mdl") then
-		self.Entity:EmitSound(self.Sounds.Lock,100,math.random(90,110));
+	elseif (self.Door:GetModel()=="models/madman07/doors/dest_door.mdl" and not no_snd) then
+		self.Entity:EmitSound(self.Sounds.LockedDest,100,math.random(90,110));
 	end
 end
 

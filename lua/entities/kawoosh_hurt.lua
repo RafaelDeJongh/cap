@@ -9,6 +9,7 @@ ENT.PrintName = "Kawoosh"
 ENT.Author = "AlexALX"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
+ENT.DoNotDuplicate = true 
 
 if SERVER then
 

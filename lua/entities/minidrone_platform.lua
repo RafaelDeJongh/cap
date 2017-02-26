@@ -7,7 +7,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Minidrone Platform"
-ENT.Author = "aVoN, RononDex, Madman07, Boba Fett"
+ENT.Author = "aVoN, RononDex, Madman07, Rafael De Jongh"
 ENT.Category = "Stargate Carter Addon Pack: Weapons"
 ENT.WireDebugName = "Minidrone Platform"
 

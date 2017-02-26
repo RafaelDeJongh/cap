@@ -41,6 +41,7 @@ function EFFECT:Init(data)
 	self.Parent = e;
 	self.Draw = true;
 	self.OneTimeActivated = false;
+	self:SetRenderBounds(Vector(1,1,1)*-1024,Vector(1,1,1)*1024);
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
 end
 

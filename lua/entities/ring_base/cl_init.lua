@@ -1,5 +1,7 @@
 include('shared.lua')
 
+ENT.RenderGroup = RENDERGROUP_BOTH
+
 function ENT:Initialize()
 	self.DAmt=0
 end

@@ -6,7 +6,7 @@ SWEP.Category = SGLanguage.GetMessage("weapon_cat");
 else
 SWEP.PrintName = "Dagger";
 end
-SWEP.Author			= "Boba Fett, Madman07";
+SWEP.Author			= "Rafael De Jongh, Madman07";
 SWEP.Contact		= "";
 SWEP.Instructions	= "Left click to stab!";
 SWEP.Purpose		= "Kill Jaffa's symbionts.";

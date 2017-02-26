@@ -6,7 +6,7 @@ ENT.Base             = "base_anim"
 
 ENT.PrintName        = "Gate Weapon"
 ENT.WireDebugName    = "Gate Weapon"
-ENT.Author           = "PyroSpirit, Madman07, Boba Fett"
+ENT.Author           = "PyroSpirit, Madman07, Rafael De Jongh"
 ENT.Contact		      = "forums.facepunchstudios.com"
 ENT.Category 		 = "Stargate Carter Addon Pack: Weapons"
 

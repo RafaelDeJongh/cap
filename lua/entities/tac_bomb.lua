@@ -1,7 +1,7 @@
 ENT.Type 		= "anim";
 ENT.Base 		= "base_anim";
 ENT.PrintName	= "Tac";
-ENT.Author		= "Ronon Dex, Boba Fett, AlexALX";
+ENT.Author		= "Ronon Dex, Rafael De Jongh, AlexALX";
 ENT.Contact		= "";
 ENT.Spawnable        = false
 ENT.AdminSpawnable   = false

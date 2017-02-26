@@ -214,7 +214,7 @@ if CLIENT then
 
 	    local ToggleActive = vgui.Create("DButton" , DermaPanel )
 		ToggleActive:SetParent( DermaPanel )
-		ToggleActive:SetText(SGLanguage.GetMessage("shieldid_toggle"))
+		ToggleActive:SetText(SGLanguage.GetMessage("shieldid_"..(active and "off" or "on")))
 	    ToggleActive:SetPos(30, 60)
 		if (active) then
 			ToggleActive:SetImage("icon16/lightbulb.png")		
@@ -229,9 +229,11 @@ if CLIENT then
 			net.SendToServer()
 			active = !(active)
 			if (active) then
-				ToggleActive:SetImage("icon16/lightbulb.png")		
+				ToggleActive:SetImage("icon16/lightbulb.png")	
+				ToggleActive:SetText(SGLanguage.GetMessage("shieldid_off"))					
 			else
 				ToggleActive:SetImage("icon16/lightbulb_off.png")
+				ToggleActive:SetText(SGLanguage.GetMessage("shieldid_on"))	
 			end
 	    end
 	end

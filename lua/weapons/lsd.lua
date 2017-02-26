@@ -111,7 +111,38 @@ local matScreen = Material("Markjaw/LSD/screen");
 local RTTexture = GetRenderTarget("LSD_Screen", 512, 1024);
 
 local dot = surface.GetTextureID("Markjaw/LSD/dot");
+local dot_white = surface.GetTextureID("gmod4phun/lsd_dot_white");
 local bg = surface.GetTextureID("Markjaw/LSD/screen_bg");
+
+-- should be like this for perfomance reasons, table.hasvalue is bad solution @ AlexALX
+local LSD_Bad_NPC_List = {
+	["npc_metropolice"] = true,
+	["npc_combine_s"] = true,
+	["npc_stalker"] = true,
+	["npc_cscanner"] = true,
+	["npc_clawscanner"] = true,
+	["npc_rollermine"] = true,
+	["npc_turret_floor"] = true,
+	["npc_manhack"] = true,
+	["npc_strider"] = true,
+	["npc_helicopter"] = true,
+	["npc_combinegunship"] = true,
+	["npc_combine_camera"] = true,
+	["npc_turret_ceiling"] = true,
+	["npc_antlion"] = true,
+	["npc_antlion_worker"] = true,
+	["npc_antlion_guard"] = true,
+	["npc_antlion_guardian"] = true,
+	["npc_headcrab"] = true,
+	["npc_headcrab_fast"] = true,
+	["npc_headcrab_black"] = true,
+	["npc_zombie"] = true,
+	["npc_fastzombie"] = true,
+	["npc_poisonzombie"] = true,
+	["npc_barnacle"] = true,
+	["npc_fastzombie_torso"] = true,
+	["npc_zombie_torso"] = true,
+}
 
 function SWEP:RenderScreen()
     local NewRT = RTTexture;
@@ -133,16 +164,23 @@ function SWEP:RenderScreen()
         surface.SetTexture( bg );
         surface.DrawTexturedRect( 0, 0, 512, 1024);
 
-		surface.SetTexture(dot);
+		--surface.SetTexture(dot);
 
 		for k, v in pairs(ents.GetAll()) do
 			if v:IsNPC() or v:IsPlayer() then
+				if v:IsNPC() and LSD_Bad_NPC_List[v:GetClass()] then
+					surface.SetDrawColor(255,100,0,255)
+					surface.SetTexture(dot_white);
+				else 
+					surface.SetDrawColor(255,255,255,255)
+					surface.SetTexture(dot);
+				end
 				local ang = ply:GetAngles();
 				local pos = ply:GetPos() - v:GetPos();
 				pos:Rotate(Angle(0, -1*ang.Yaw, 0));
 				local x1 = 256 + pos.y/5;
 				local y1 = 512 + 0.3*pos.x;
-				if (math.abs(pos.z)<200) then
+				if (math.abs(pos.z)<350) then -- more z for flying npcs
 					surface.DrawTexturedRect(x1-16, y1-24, 32, 48);
 				end
 			end
@@ -220,7 +258,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-	self.Sound:PlayEx(0.9,100);
+	self.Sound:PlayEx(0.5,100);
 	return true
 end
 

@@ -1,7 +1,7 @@
 ENT.Type 		= "anim";
 ENT.Base 		= "base_anim";
 ENT.PrintName	= "Wraith Grenade";
-ENT.Author		= "Ronon Dex, Boba Fett";
+ENT.Author		= "Ronon Dex, Rafael De Jongh";
 ENT.Contact		= "";
 ENT.Spawnable        = false
 ENT.AdminSpawnable   = false

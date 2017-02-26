@@ -6,7 +6,7 @@
 ENT.Type = "anim"
 ENT.Base = "dhd_base"
 ENT.PrintName = "DHD (Atlantis)"
-ENT.Author = "aVoN, Madman07, Llapp, Boba Fett, MarkJaw, AlexALX"
+ENT.Author = "aVoN, Madman07, Llapp, Rafael De Jongh, MarkJaw, AlexALX"
 ENT.Category = 	"Stargate Carter Addon Pack: Gates and Rings"
 
 list.Set("CAP.Entity", ENT.PrintName, ENT);

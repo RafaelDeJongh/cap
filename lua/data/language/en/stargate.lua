@@ -72,6 +72,16 @@ stargate_c_tool_19 = Atlantis Type
 stargate_c_tool_19d = Disable Atlantis Type
 stargate_c_tool_20 = Enable DHD
 stargate_c_tool_20d = Disable DHD
+stargate_c_tool_21 = Event horizon type
+stargate_c_tool_21_sg1 = Standart (SG1)
+stargate_c_tool_21_universe = Universe
+stargate_c_tool_21_infinity = Infinity
+stargate_c_tool_22 = Alternative slow dial
+stargate_c_tool_22d = Disable alternative slow dial
+stargate_c_tool_23 = Event Horizon Color
+stargate_c_tool_23a = Apply
+stargate_c_tool_23r = Reset
+stargate_c_tool_23c = Cancel
 
 // Stargate VGUI menus
 stargate_vgui_address = Address:

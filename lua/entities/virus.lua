@@ -7,7 +7,7 @@ if (StarGate!=nil and StarGate.LifeSupportAndWire!=nil) then StarGate.LifeSuppor
 ENT.Type 			= "anim"
 ENT.Base 			= "base_gmodentity"
 ENT.PrintName		= "Virus"
-ENT.Author			= "Llapp, Boba Fett, Assassin21"
+ENT.Author			= "Llapp, Rafael De Jongh, Assassin21"
 ENT.Contact			= ""
 ENT.Purpose			= ""
 ENT.Instructions	= ""

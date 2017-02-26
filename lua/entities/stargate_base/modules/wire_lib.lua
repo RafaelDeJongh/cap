@@ -167,7 +167,7 @@ function ENT:WireActivateStargate(inbound)
 					fail = true;
 				end
 				if(not DEBUG and not fail) then -- No debug, no instant open
-					local dly = self:GetDelaySG1(self.Target:GetClass(),self.Target.Classic);
+					local dly = self:GetDelayNN(self.Target);
 					if (not inbound) then
 						action = self.Sequence:InstantOpen(nil,0 + dly,true,inbound,true) + action;
 						action = self.Sequence:SeqChevron7Lock(#self.DialledAddress-1, self.DialledAddress) + action;

@@ -21,13 +21,13 @@ end
 TOOL.Entity.Class = "ramp";
 TOOL.Entity.Keys = {"model"};
 TOOL.Entity.Limit = 50;
-TOOL.Topic["name"] = SGLanguage.GetMessage("stool_ramps_spawner");
-TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_ramps_create");
-TOOL.Topic[0] = SGLanguage.GetMessage("stool_ramps_desc");
-TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_ramps_undone");
-TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_ramps_cleanup");
-TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_ramps_cleaned");
-TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_ramps_limit");
+TOOL.Topic["name"] = SGLanguage.GetMessage("stool_ramp_spawner");
+TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_ramp_create");
+TOOL.Topic[0] = SGLanguage.GetMessage("stool_ramp_desc");
+TOOL.Language["Undone"] = SGLanguage.GetMessage("stool_ramp_undone");
+TOOL.Language["Cleanup"] = SGLanguage.GetMessage("stool_ramp_cleanup");
+TOOL.Language["Cleaned"] = SGLanguage.GetMessage("stool_ramp_cleaned");
+TOOL.Language["SBoxLimit"] = SGLanguage.GetMessage("stool_ramp_limit");
 
 function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:IsPlayer()) then return false end;

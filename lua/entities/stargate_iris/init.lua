@@ -70,6 +70,10 @@ function ENT:Initialize()
 	if (pewpew and pewpew.NeverEverList and not table.HasValue(pewpew.NeverEverList,self.Entity:GetClass())) then table.insert(pewpew.NeverEverList,self.Entity:GetClass()); end -- pewpew support
 end
 
+function ENT:DeriveOnSetColor(color)
+	self.OrigColor = color
+end
+
 --################# Registers specific models to animations @aVoN
 function ENT:RegisterModules()
 	-- Valid Model registered to an existing animation sequence?

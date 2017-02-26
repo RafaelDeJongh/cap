@@ -49,8 +49,9 @@ function EFFECT:Init(data)
 	self.FrameRate = 25; -- This is for the collapse effect
 	self.FrameEnd = 17; -- The last frame of the animated texture above
 	self.Size = e:BoundingRadius()*1.4; -- The "Collapse's" size
-	self.Draw = true;
+	self:SetRenderBounds(Vector(1,1,1)*-1024,Vector(1,1,1)*1024);
 	self.Entity:SetRenderMode(RENDERMODE_TRANSALPHA);
+	self.Draw = true;
 end
 
 --################# Think @aVoN

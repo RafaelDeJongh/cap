@@ -22,7 +22,7 @@ ENT.Type = "vehicle"
 ENT.Base = "sg_vehicle_base"
 
 ENT.PrintName = "Destiny Shuttle"
-ENT.Author	= "RononDex, Iziraider, Madman, Boba Fett"
+ENT.Author	= "RononDex, Iziraider, Madman, Rafael De Jongh"
 ENT.Contact	= ""
 ENT.Purpose	= ""
 ENT.Instructions= ""

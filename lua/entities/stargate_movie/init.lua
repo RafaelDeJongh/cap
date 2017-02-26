@@ -215,6 +215,7 @@ function ENT:Initialize()
 	self.RingInbound = false;
 	self.ChevLight = false;
 	self.Classic = false;
+	hook.Add("Tick", self, self.RingTickMovie);
 end
 
 --#################  Called when stargate_group_system changed
@@ -283,7 +284,7 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Chevron Light","Classic Mode","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevrons Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Chevron Light","Classic Mode","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevrons Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
@@ -460,8 +461,8 @@ function ENT:StopFormula(y,x,n,n2)
 end
 
 --################# Think function added by AlexALX
-function RingTickMovie()
-	for _,self in pairs(ents.FindByClass("stargate_movie")) do
+function ENT:RingTickMovie()
+	--for _,self in pairs(ents.FindByClass("stargate_movie")) do
 		if (IsValid(self.Ring)) then
 			if (self.Outbound and self.Ring.Moving and self.DiallingSymbol != "" and self.DiallingChevron != "") then
 				local angle = tonumber(math.NormalizeAngle(self.Ring.Entity:GetLocalAngles().r))+3;
@@ -681,9 +682,9 @@ function RingTickMovie()
 				end
 			end
 		end
-	end
+	--end
 end
-hook.Add("Tick", "RingTick Movie", RingTickMovie);
+--hook.Add("Tick", "RingTick Movie", RingTickMovie);
 
 function ENT:SetDiallingSymbol(symbol,chev)
 	if (symbol and chev) then
@@ -845,6 +846,9 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 		else
 			self.Classic = false;
 			self.Entity:SetNWBool("ActMCl",false);
+		end
+		if (not self.Active and (not self.NewActive or self.WireManualDial)) then
+			self:ApplyClassic()
 		end
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
@@ -1024,6 +1028,19 @@ function ENT:Shutdown() -- It is called at the end of ENT:Close or ENT.Sequence:
 		self.Entity:SetNWBool("ActRotRingL",false);
 		self:SetWire("Ring Symbol",""); -- Wire
 		self:SetWire("Ring Chev7 Symbol",""); -- Wire
+		self:ApplyClassic()
+	end
+end
+
+function ENT:ApplyClassic()
+	if (self.Classic) then
+		self.Sounds = self.SoundsClassic;
+		self.EventHorizonData = self.EventHorizonDataClassic;
+		self.EventHorizonKawoosh = "sg1";
+	else
+		self.Sounds = self.SoundsBak;
+		self.EventHorizonData = self.EventHorizonDataBak;
+		self.EventHorizonKawoosh = "movie";
 	end
 end
 

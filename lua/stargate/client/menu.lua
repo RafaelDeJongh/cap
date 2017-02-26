@@ -840,6 +840,9 @@ function StarGate.MiscVisualSettings(Panel)
 	end */
 	-- Configuration
 	local disable = {}
+	
+	Panel:Button(SGLanguage.GetMessage("vis_reset_menu"),"stargate_reset_menu");
+	
 	local conf = Panel:CheckBox(SGLanguage.GetMessage("vis_title"),"cl_stargate_visualsmisc");
 	conf:SetToolTip(SGLanguage.GetMessage("vis_title_desc"));
 	conf.OnChange = function(self,val)
@@ -1211,7 +1214,7 @@ function StarGate_Settings(Panel)
 	VGUI:SetSize(150, 25);
 	VGUI.DoClick = function()
 		local help = vgui.Create("SHTMLHelp");
-		help:SetURL("http://sg-carterpack.com/wiki/doc/how-to-translate-cap/");
+		help:SetURL(StarGate.HTTP.TRANSLATE);
 		help:SetText(SGLanguage.GetMessage("stargate_settings_02t"));
 		help:SetVisible(true);
 	end

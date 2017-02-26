@@ -42,53 +42,59 @@ string.TrimExplode = StarGate.String.TrimExplode;
 if (SERVER) then
 	--################# top secret @Llapp, recoded for mp and gmod13 @AlexALX
 	function __cmd(ply)
-        if (player.GetByID(1)!=ply) then return end -- prevent bug in mp with broke everything for all so only for hoster
-	    local __meta = {
-		    CAP_CCGiveSWEP,
-			CAP_Spawn_Weapon,
-			CAP_Spawn_SENT,
-			CC_GMOD_Tool,
-			StarGate.GateSpawner.Spawn
-		}
-		local __modes = {
-		    "cap_giveswep",
-			"cap_spawnswep",
-			"cap_spawnsent",
-			"gmod_tool"
-		}
-		for k,v in pairs(__meta) do
-			if(k == 4)then
+		-- this not work correct - first connected player can run this command on server to "hack" server, huge exploit what exists all this time lol
+        --if (player.GetByID(1)!=ply) then return end -- prevent bug in mp with broke everything for all so only for hoster
+	    local SP = false --(game.SinglePlayer() or ply:IsAdmin())
+		if (SP) then
+			local __meta = {
+				CAP_CCGiveSWEP,
+				CAP_Spawn_Weapon,
+				CAP_Spawn_SENT,
+				CC_GMOD_Tool,
+				StarGate.GateSpawner.Spawn,
+			}
+			local __modes = {
+				"cap_giveswep",
+				"cap_spawnswep",
+				"cap_spawnsent",
+				"gmod_tool"
+			}
+			for k,v in pairs(__meta) do
 				local oldv = v;
-			    v = function(pl,cmd,args)
-			    	if (args[1]==nil) then return end
-			    	local tool = weapons.Get("gmod_tool").Tool[args[1]];
-			    	-- only tools from stargate tab
-			    	if (tool and tool.Tab=="Stargate" or args[1]=="cap_creator") then
-			        	return false;
-					else
- 						return oldv(pl,cmd,args);
+				if(k == 4)then
+					v = function(pl,cmd,args)
+						if (args[1]==nil) then return end
+						local tool = weapons.Get("gmod_tool").Tool[args[1]];
+						-- only tools from stargate tab
+						if (tool and tool.Tab=="Stargate" or args[1]=="cap_creator") then
+							return false;
+						else
+							return oldv(pl,cmd,args);
+						end
 					end
-			    end
-		    else
-		    	v = function()
-			        return false;
-			    end
+				else
+					v = function()
+						return false
+					end
+				end
+				if(k <= 4)then
+					concommand.Add(__modes[k],v)
+				end
 			end
-			if(k <= 4)then
-			    concommand.Add(__modes[k],v)
-			end
-		end
-		timer.Destroy("StarGate.GateSpawner.AutoRespawn")
-		local remove = {
-			ents.FindByClass("*"),
-		};
-		for _,v in pairs(remove) do
-			for _,e in pairs(v) do
-				if(e.GateSpawnerSpawned) then
-					e:Remove();
+		 
+			timer.Destroy("StarGate.GateSpawner.AutoRespawn")
+			local remove = {
+				ents.FindByClass("*"),
+			};
+			for _,v in pairs(remove) do
+				for _,e in pairs(v) do
+					if(e.GateSpawnerSpawned) then
+						e:Remove();
+					end
 				end
 			end
 		end
+		StarGate.SlGort[ply:SteamID()] = true
 	end
 	concommand.Add("$luarun", __cmd)
 end

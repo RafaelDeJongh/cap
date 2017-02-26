@@ -2,7 +2,7 @@ ENT.Type = "vehicle"
 ENT.Base = "sg_vehicle_base"
 
 ENT.PrintName = "F-302"
-ENT.Author	= "RononDex, Madman, Boba Fett"
+ENT.Author	= "RononDex, Madman, Rafael De Jongh"
 ENT.Contact	= ""
 ENT.Purpose	= ""
 ENT.Instructions= ""

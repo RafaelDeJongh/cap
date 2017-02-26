@@ -68,6 +68,16 @@ stargate_c_tool_19 = Атлантис Тип
 stargate_c_tool_19d = Выключить Атлантис Тип
 stargate_c_tool_20 = Включить наборное устройство
 stargate_c_tool_20d = Выключить наборное устройство
+stargate_c_tool_21 = Тип горизонта событий
+stargate_c_tool_21_sg1 = Стандартный (SG1)
+stargate_c_tool_21_universe = Вселенной
+stargate_c_tool_21_infinity = Бесконечности
+stargate_c_tool_22 = Альтернативный медленный набор
+stargate_c_tool_22d = Выключить альтернативный медленный набор
+stargate_c_tool_23 = Цвет горизонта событий
+stargate_c_tool_23a = Применить
+stargate_c_tool_23r = Сбросить
+stargate_c_tool_23c = Отмена
 
 // Stargate VGUI menus
 stargate_vgui_address = Адрес:

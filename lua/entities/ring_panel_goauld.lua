@@ -6,7 +6,7 @@
 ENT.Type 			= "anim"
 ENT.Base 			= "ring_panel"
 ENT.PrintName		= "Ring Panel (Goauld)"
-ENT.Author			= "Madman07, Boba Fett, Catdaemon, aVoN"
+ENT.Author			= "Madman07, Rafael De Jongh, Catdaemon, aVoN"
 ENT.Contact			= ""
 ENT.Purpose			= ""
 ENT.Instructions	= ""

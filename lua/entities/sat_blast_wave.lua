@@ -19,6 +19,7 @@
 ENT.Type = "anim";
 ENT.Base = "base_anim"
 ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.DoNotDuplicate = true 
 
 function ENT:GetEntRadius()
    return self.Entity:GetNetworkedInt("blast_radius", 5);

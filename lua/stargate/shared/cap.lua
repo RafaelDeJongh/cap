@@ -535,3 +535,8 @@ function StarGate.LOS(ent1, enttab, postab)
 
 	return hitent,hitentpos
 end
+
+StarGate.EventHorizonTypes = StarGate.EventHorizonTypes or {}
+function StarGate.RegisterEventHorizon(type,data)
+	StarGate.EventHorizonTypes[type] = data
+end

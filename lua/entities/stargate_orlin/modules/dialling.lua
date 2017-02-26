@@ -33,20 +33,13 @@ function ENT.Sequence:Dial(inbound,fast,fail)
 	--################# INBOUND AND DHD (fast) DIAL
 	if(fast or not fast) then
 		local t = self.Entity.Target;
-		local add = 0.0;
-		if (IsValid(t)) then
-			add = self:GetDelay(inbound,fast,count-1,t:GetClass());
-		end
-		local rnd = {}; -- Increase randomness (makes it less artificial)
-		for i=1,5 do
-			math.randomseed(os.clock()+i);
-			rnd[i] = math.random(30,100)/100;
-		end
-		rnd[6] = 1;
-		local delta = (4.8 - (rnd[1]+rnd[2]+rnd[3]+rnd[4]+rnd[5]+rnd[6]))/6; -- Neede, so the eventhorizons get opened in the same time
-		action:Add({f=self.SetStatus,v={self,false,true,true},d=add}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
+		action:Add({f=self.SetStatus,v={self,false,true,true},d=0}); -- The first true tells, "we are in use", but the last tells wire NOT to indicate us as "Active". Otherwise, on a slow dial-in, a gate becomes "Wire-Active" even if it's not currently dialling
 		action:Add({f=self.SetStatus,v={self,false,true},d=0.1}); -- The 0.1 seconds prevents a bug where an incoming call overrides an outgoing (slow dial) and the first chevrons stays disabled (so we need definitely a shot delay!) - This additional 0.1 we take here has been removed on the chevron7-lock delay in the for loop below
-        action:Add({f=self.GateSound,v={self},d=6.9});
+		local add = 0
+		if (IsValid(t)) then
+			add = self:CalcDelayFast(t,inbound);
+		end
+		action:Add({f=self.GateSound,v={self},d=6.9+add});
 		--Chevron 1-7
 		for i=1,7 do
 			-- Chevron lights

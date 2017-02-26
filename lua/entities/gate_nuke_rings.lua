@@ -4,6 +4,7 @@ ENT.PrintName		= "Nuke Rings"
 ENT.Author			= "DrFattyJr"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
+ENT.DoNotDuplicate = true 
 
 if SERVER then
 
@@ -23,7 +24,7 @@ function ENT:Initialize()
 	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE);
 	self:DrawShadow(false);
 
-	self.StartPos 	= (self.StartPos or Vector(0,0,0))
+	self.StartPos 	= (self.StartPos or self:GetPos())
 	self.ANG	= (self.ANG or Angle(90,90,0))
 	self.Scale	= (self.Scale or 100)
 
