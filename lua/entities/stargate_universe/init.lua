@@ -449,6 +449,10 @@ function ENT:StopAtStartPos()
 	self.Stop = true;
 end
 
+function ENT:SetStop(stop)
+	self.Stop = stop;
+end
+
 function ENT:SpinSound(spin)
     if(spin)then
 	    util.PrecacheSound(self.Sounds.GateRoll)
@@ -484,7 +488,7 @@ function ENT:Rotation(sse)
 	elseif (sse == -2 and spr < -sspeed) then
 		spr = math.Clamp(spr+speed,spr,spr+sspeed*mul)
 	end
-	if(((spr > sspeed and spr < sspeed2) or (spr < -sspeed and spr > -sspeed2)) and (sse == 2 or sse == -2))then
+	if(((spr >= sspeed and spr <= sspeed2) or (spr <= -sspeed and spr >= -sspeed2)) and (sse == 2 or sse == -2))then
 	    self:SpinSound(false);
 	    self.Entity:SetWire("Ring Rotation",0);
 		self:StopRollSound();
@@ -494,7 +498,7 @@ function ENT:Rotation(sse)
 				self.WireSpin = false; 
 			end)
 		end    ]]
-	elseif(spr > 0 and spr <= sspeed or spr < 0 and spr >= -sspeed) then
+	elseif(spr > 0 and spr < sspeed or spr < 0 and spr > -sspeed) then
 		--timer.Remove("SGUniRotFix"..self:EntIndex())
    	    spr = 0;
    		self.SpinSpeed = 0;

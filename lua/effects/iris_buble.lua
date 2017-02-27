@@ -18,7 +18,7 @@ function EFFECT:Init(data)
 	self:SetModel(Model("models/Madman07/shields/goauld_iris.mdl"));
 	self:SetPos(e:GetPos());
 	self:SetColor(Color(200,100,0,1));
-	self:SetRenderMode(RENDERMODE_TRANSALPHA);
+	self:SetRenderMode(RENDERMODE_GLOW);
 	local offset = Vector(1,1,1)*100000000000;
 	self:SetRenderBounds(-1*offset,offset); -- FIX
 end

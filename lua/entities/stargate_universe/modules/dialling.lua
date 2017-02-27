@@ -136,6 +136,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 
 		if (self.WireSpin and not self.WireSpinDir) then
 			action:Add({f=self.SetSpeed,v={self,false},d=0.3}); -- Roll Forward
+			action:Add({f=self.StopAtStartPos,v={self,true},d=3.5});
 		end
 		self.WireSpin = false;
 

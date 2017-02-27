@@ -38,7 +38,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 	if (count == 9) then
 		chevs = 8
 		if (not inbound) then
-			self.ChevronLocks = self.ChevronLocks8;
+			self.ChevronLocks = self.ChevronLocks8o;
 		end
 	elseif (count == 10) then
 		chevs = 9

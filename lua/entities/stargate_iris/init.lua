@@ -41,6 +41,9 @@ function ENT:Initialize()
 	self.Entity:SetSolid(SOLID_NONE);
 	self.Entity:DrawShadow(false);
 	self.Entity:SetNoDraw(true);
+	if (self:GetModel()=="models/zup/stargate/sga_shield.mdl") then
+		self:SetRenderMode(RENDERMODE_GLOW)
+	end
 	self:CreateWireInputs("Activate","Toggle");
 	self:CreateWireOutputs("Activated");
 	self.LastMoveable = true;

@@ -353,6 +353,11 @@ function ENT:Open()
 		else
 			self.Entity:EmitSound(self.Sounds.Open,90,math.random(98,102));
 		end
+		
+		local Gate = self.Entity:GetParent()
+		local Data = self.KawooshTypes[Gate.EventHorizonKawoosh or "sg1"];
+		self.KawooshData = Data.KawooshDmg;
+		
         timer.Create("EventHorizonOpening"..self.Entity:EntIndex(),self.OpeningDelay,1,
                 function()
                         if(IsValid(e)) then
@@ -396,11 +401,12 @@ function ENT:Open()
                                 else
                                 	fx:SetScale(e.OpenTime); -- Time in seconds until it dies
                                 end
-                                timer.Simple(0.6,function() if(IsValid(self)) then self:SetNWBool("AllowBacksideDrawing",true); self.Entity:SetColor(self.Color); end end)
+                                timer.Simple(0.6,function() if(IsValid(self)) then self.Entity:SetColor(self.Color); end end)
                                 timer.Simple(e.OpenTime,function()
 									if(IsValid(self)) then
 										self.ValidOpen = true;
 										self:SetColor(self.Color);
+										self:SetNWBool("AllowBacksideDrawing",true);
 									end
 								end);
 								if not nox_type then

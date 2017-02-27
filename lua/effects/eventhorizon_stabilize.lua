@@ -77,10 +77,11 @@ function EFFECT:Render()
 		self.Parent.DrawRipple = true;
 	end
 	self.LastMul = mul;
+	
 	self.Entity:SetColor(Color(255,255,255,mul*130));
 	-- This is a workaround. It will regulated the alpha of the EH to go "down" to it's "Maximum Limit". So from the front it stays at 255, but from the back it will go down from 255 to 150 slowly so it doesnt look so sloppy from behind
 	if(self.Main and IsValid(self.Parent) and self.Parent.SetAlpha) then
-		self.Parent:SetAlpha(mul*350,true);
+		self.Parent:SetAlpha(math.Clamp(mul*350,150,255),true);
 	end
 	render.MaterialOverride(self.Material);
 	self.Entity:DrawModel();
