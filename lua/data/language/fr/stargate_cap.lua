@@ -161,6 +161,8 @@ stool_tshieldc = Contrôleur bouclier Tok'ra
 stool_tolland = Désactiveur d'armes Tollan
 stool_harvester = Téléporteur Wraith
 stool_controlpanel = Panneau de Contrôle
+stool_sgcscreen = Écran du SGC
+stool_sgcscreen_srv = Serveur du SGC
 
 // Stool Names - Energy
 stool_asuran_hub = Hub E2PZ Asuran
