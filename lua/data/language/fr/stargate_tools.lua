@@ -428,7 +428,7 @@ Améliorations et stool par AlexALX]]
 stool_sgcscreen_sv = Option du serveur:
 stool_sgcscreen_cl = Option de l'écran:
 stool_sgcscreen_conn_sv = Connexion automatique au serveur le plus proche
-stool_sgcscreen_conn_sg = Connexion automatique ala porte des étoiles la plus proche
+stool_sgcscreen_conn_sg = Connexion automatique a la porte des étoiles la plus proche
 stool_sgcscreen_conn_ic = Connexion automatique a l'ordinateur à iris le plus proche
 stool_sgcscreen_conn_nb = Connexion automatique a la bombe au Naquadah la plus proche
 stool_sgcscreen_keyd = Touche de menu auto-détruire:
