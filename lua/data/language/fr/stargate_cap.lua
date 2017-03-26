@@ -380,7 +380,7 @@ sgcscreen_desc = Description
 sgcscreen_save = Sauvegarder
 sgcscreen_cancel = Annuler
 // make sure to check this field, change \n positions to fit in menu
-sgcscreen_info = Exige deux joueurs de démarrer / annuler l'auto-destruction.\nDans ce cas, vous devez saisir deux codes différents.
+sgcscreen_info = Exige deux joueurs pour démarrer / annuler l'auto-destruction.\nDans ce cas, vous devez saisir deux codes différents.
 
 //Shield Identifier
 shieldid_title = Shield Identifier
