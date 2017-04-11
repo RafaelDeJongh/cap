@@ -60,7 +60,7 @@ if SERVER then
       -- Backspace, close gate
       if key == 127 and self:GetServerBool("Connected",false) and self:GetServerBool("Active",false) and value then self.Entity.Server.LockedGate:AbortDialling() end
     end
-    if key == 13 and value then
+    if key == 10 and value then
       self.Entity.Screens[1].EnteredAddress = self:GetServerString("Address"..(self:GetMonitorInt("ABSelected",0)+1),"")
       self.Entity.Screen = 1
     end
