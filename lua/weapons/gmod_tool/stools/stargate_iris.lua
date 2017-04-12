@@ -26,7 +26,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_iris");
 --TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["toggle"] = 9;
 TOOL.ClientConVar["activate"] = 12;
-TOOL.ClientConVar["deactivate"] = 13;
+TOOL.ClientConVar["deactivate"] = StarGate.KeyEnter;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/zup/Stargate/iris.mdl";
 TOOL.GhostExceptions = {"stargate_atlantis","stargate_sg1","stargate_tollan","stargate_infinity","stargate_universe","stargate_ori"}; -- Add your entity class to this, to stop drawing the GhostPreview on this

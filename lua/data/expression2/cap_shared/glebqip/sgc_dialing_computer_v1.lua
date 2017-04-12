@@ -94,7 +94,7 @@ if(clk("LD4")){EGP:egpSetText(4,"GPUSpeed:"+egpMaxUmsgPerSecond():toString()+" B
 if(clk("LD5")&!->Key){
 EGP:egpSetText(5,"Error! Keyboard not detected! Waiting keyboard connect.") if(!Pip){timer("errpip",1) Pip=1} EGP:egpColor(5,vec(255,0,0)) timer("LD5",1000)}
 if(clk("LD5")&->Key){EGP:egpSetText(5,"Keyboard... OK!") EGP:egpColor(5,vec(255,255,255)) Pip=0 timer("LD6",randint(800,1300))}
-if(egpMaxObjects()<440&~Key&Key==13&IDs1){IDsOverride=1 IDs1=0}
+if(egpMaxObjects()<440&~Key&Key==10&IDs1){IDsOverride=1 IDs1=0}
 if(clk("LD6")&egpMaxObjects()>=440&!IDsOverride){EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") EGP:egpColor(6,vec(255,255,255)) timer("LD7",randint(150,300)) Pip=0}
 if(clk("LD6")&(egpMaxObjects()<440&IDsOverride)){EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's Override ID's protection!") EGP:egpColor(6,vec(255,255,0)) timer("LD7",randint(50,300)) Pip=0}
 if(clk("LD6")&egpMaxObjects()<440&!IDsOverride){IDs1=1 EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's. Need a 440 ID's. Waiting a wire_egp_max_objects 440!") if(!Pip){timer("errpip",1) Pip=1} timer("LD6",150) EGP:egpColor(6,vec(255,0,0))}
@@ -663,9 +663,9 @@ if(~Key&Key!=127&!Active){CHKRM=0 stoptimer("CHKRM")}
 if(clk("CHKRM")){EnteredAdress=""}
 if(changed(AddressBook)&AddressBook:length()>0&!Active&EnteredAdress!=AddressBook){EnteredAdress=AddressBook AdrBlock=1} if(changed(AddressBook)&AddressBook:length()==0|Active){AdrBlock=0}
 if(changed(AddressBook)&AddressBook:length()>0&!Active&EnteredAdress==AddressBook&!AdrBlock){DialString=EnteredAdress timer("SSDT",100)}
-if(~Key&Key==13&!Correct&EnteredAdress:length()>5&EnteredAdress:length()<9&!EnteredAdress:find("#")){EnteredAdress=EnteredAdress+"#"}
-if(~Key&((Key==13&Correct)|Key==124)){DialString=EnteredAdress}
-if(~Key&(Key==13&Correct)|Key==124){EnteredAdress="" timer("SSDT",100)} if(clk("SSDT")){StartStringDial=1 EnteredAdress="" timer("SSDT1",100)}  if(clk("SSDT1")){StartStringDial=0}
+if(~Key&Key==10&!Correct&EnteredAdress:length()>5&EnteredAdress:length()<9&!EnteredAdress:find("#")){EnteredAdress=EnteredAdress+"#"}
+if(~Key&((Key==10&Correct)|Key==124)){DialString=EnteredAdress}
+if(~Key&(Key==10&Correct)|Key==124){EnteredAdress="" timer("SSDT",100)} if(clk("SSDT")){StartStringDial=1 EnteredAdress="" timer("SSDT1",100)}  if(clk("SSDT1")){StartStringDial=0}
 if(~Key&Key==127&Active){Close=1} if(~Key&Key!=127){Close=0}
 if(~Key&Key==61){Iris=1}else{Iris=0}
 if(~Key&Key==129){DialingMode=0}
