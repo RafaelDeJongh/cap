@@ -9,7 +9,7 @@ TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_giris");
 TOOL.ClientConVar["toggle"] = 3;
 TOOL.ClientConVar["activate"] = 12;
-TOOL.ClientConVar["deactivate"] = 13;
+TOOL.ClientConVar["deactivate"] = StarGate.KeyEnter;
 
 TOOL.Entity.Class = "goauld_iris";
 TOOL.Entity.Keys = {"toggle","activate","deactivate","IsActivated"}; -- These keys will get saved from the duplicator

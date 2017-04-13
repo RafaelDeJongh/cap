@@ -126,7 +126,7 @@ function ENT:UpdateProgram()
 end
 
 function ENT:Trigger(key, value)
-  if key == 13 and value and self.MenuChoosed > 0 and self.Screens[self.MenuChoosed] then
+  if key == StarGate.KeyEnter and value and self.MenuChoosed > 0 and self.Screens[self.MenuChoosed] then
     self.Screen = self.MenuChoosed
     self.MenuChoosed = 0
     self:UpdateProgram()
