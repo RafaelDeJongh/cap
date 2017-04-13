@@ -37,7 +37,7 @@ if SERVER then
         self.EnteredAddress = self.EnteredAddress..char:upper()
       end
       --Enter, try dial or get error
-      if key == 13 and value and #self.EnteredAddress >=6 then
+      if key == StarGate.KeysConst[KEY_ENTER] and value and #self.EnteredAddress >=6 then
         if 6 <= #self.EnteredAddress and #self.EnteredAddress < 9 and self.EnteredAddress[#self.EnteredAddress] ~= "#" then
           self.EnteredAddress = self.EnteredAddress.."#"
         elseif #self.EnteredAddress > 6 then

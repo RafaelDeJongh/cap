@@ -97,7 +97,7 @@ if(clk("LD4")){RAM=0 EGP:egpSetText(4,"GPUSpeed:"+egpMaxUmsgPerSecond():toString
 if(clk("LD5")&KeyDP==-1){
 EGP:egpSetText(5,"Error! Keyboard not detected! Waiting keyboard connect.") if(!Pip){timer("errpip",1) Pip=1} EGP:egpColor(5,vec(255,0,0)) timer("LD5",1000)}
 if(clk("LD5")&KeyDP!=-1){EGP:egpSetText(5,"Keyboard... OK!") EGP:egpColor(5,vec(255,255,255)) Pip=0 timer("LD6",randint(800,1300))}
-if(egpMaxObjects()<196&changed(KeyDP)&KeyDP==13&IDs1){IDsOverride=1 IDs1=0}
+if(egpMaxObjects()<196&changed(KeyDP)&(KeyDP==13|KeyDP==10)&IDs1){IDsOverride=1 IDs1=0}
 if(clk("LD6")&egpMaxObjects()>=196&!IDsOverride){EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's OK!") EGP:egpColor(6,vec(255,255,255)) timer("LD7",randint(50,300)) Pip=0}
 if(clk("LD6")&(egpMaxObjects()<196&IDsOverride)){EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's Override ID's protection!") EGP:egpColor(6,vec(255,255,0)) timer("LD7",randint(50,300)) Pip=0}
 if(clk("LD6")&egpMaxObjects()<196&!IDsOverride){IDs1=1 EGP:egpSetText(6,"GPUMemory:"+egpMaxObjects():toString()+" ID's. Need a 196 ID's. Waiting a wire_egp_max_objects 196!") if(!Pip){timer("errpip",1) Pip=1} timer("LD6",150) EGP:egpColor(6,vec(255,0,0))}
@@ -288,7 +288,7 @@ if(AddressG:count()>7){if(~Key&Key==18&Adr<7){Adr++}} if(AddressG:count()<=7){if
 if(~Key&Key==17&Adr>1){Adr--}
 if(~Key&Key==20&AdrPlus<AddressG:count()-7){AdrPlus++}
 if(~Key&Key==19&AdrPlus>0){AdrPlus--}
-if(~Key&Key==13){AddressBook=AddressG[Adr+AdrPlus,string]} if(~Key&Key!=13){AddressBook=""}
+if(~Key&(Key==13|Key==10)){AddressBook=AddressG[Adr+AdrPlus,string]} if(~Key&Key!=13&Key!=10){AddressBook=""}
 if(clk("update")){
 #if((PosX>414&PosY>119)&(PosX<428&PosY<131)&KeyUse){Addr=1} elseif((PosX>414&PosY>150)&(PosX<428&PosY<162)&KeyUse){Addr=1} elseif((PosX>414&PosY>181)&(PosX<428&PosY<193)&KeyUse){Addr=1} elseif((PosX>414&PosY>212)&(PosX<428&PosY<224)&KeyUse){Addr=1} elseif((PosX>414&PosY>243)&(PosX<428&PosY<255)&KeyUse){Addr=1} elseif((PosX>414&PosY>274)&(PosX<428&PosY<286)&KeyUse){Addr=1} elseif((PosX>414&PosY>305)&(PosX<428&PosY<317)&KeyUse){Addr=1} else {Addr=0}
 #if(Addr){AddressOut=AddressG[Adr+AdrPlus,string]}

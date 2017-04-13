@@ -168,11 +168,8 @@ function ENT:Initialize()
 		self:CreateWireInputs("Press Button","Disable Menu","Hide Letters","Wire Disable DHD Sound","Buttons Mode","Lock Buttons","Lock Main Button","Lock to Gate [ENTITY]","Disable DHD");
 	end
 	self:CreateWireOutputs("Pressed Buttons [STRING]");
-	local dhd = {"dhd_atlantis","dhd_universe","dhd_infinity"}
-	for i=1,3 do
-	    if(self.Entity:GetClass()==dhd[i])then
-	        self.Entity:Fire("skin",i);
-	    end
+	if (self.SkinBase != nil) then
+		self.Entity:Fire("skin",self.SkinBase);
 	end
 	self.Range = StarGate.CFG:Get("dhd","range",1000);
 	local phys = self.Entity:GetPhysicsObject();
@@ -302,9 +299,9 @@ function ENT:TriggerInput(k,v)
 			local char = string.char(v):upper();
 			if (v>=128 and v<=137) then char = string.char(v-80):upper(); -- numpad 0-9
 			elseif (v==139) then char = string.char(42):upper(); end -- numpad *
-			if(v == 13) then -- Enter Key
+			if(v == StarGate.KeysConst[KEY_ENTER]) then -- Enter Key
 				self:PressButton("DIAL",nil,true);
-			elseif(v == 127) then -- Backspace key
+			elseif(v == StarGate.KeysConst[KEY_BACKSPACE]) then -- Backspace key
 				local e = self:FindGate();
 				if not IsValid(e) then return end
 				if (GetConVar("stargate_dhd_close_incoming"):GetInt()==0 and e.IsOpen and not e.Outbound) then return end -- if incoming, then we can do nothign

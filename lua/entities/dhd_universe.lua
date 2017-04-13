@@ -26,6 +26,7 @@ AddCSLuaFile();
 ENT.PlorkSound = "stargate/universe/chevron.mp3"; -- The old sound
 ENT.LockSound = false;
 ENT.SkinNumber = 4;
+ENT.SkinBase = 2;
 
 --################# SpawnFunction
 function ENT:SpawnFunction(p,tr)
@@ -37,7 +38,6 @@ function ENT:SpawnFunction(p,tr)
 	e:Activate();
 	local ang = p:GetAimVector():Angle(); ang.p = 15; ang.r = 0; ang.y = (ang.y+180) % 360
 	e:SetAngles(ang);
-	e:Fire("skin",2);
 	e:CartersRampsDHD(tr);
 	return e;
 end

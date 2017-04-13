@@ -12,3 +12,5 @@ ENT.EventHorizonData = {
 	OpenTime = 2.2,
 	NNFix = 1,
 }
+
+ENT.StargateTwoPoO = true

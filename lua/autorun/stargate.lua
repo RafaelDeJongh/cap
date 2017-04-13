@@ -33,8 +33,10 @@ end      */
 
 local function ValidToExecute(fl,state)
 	/*
-	local files = {		code = {
-			module="StarGate CAP - Base Code",			server="any",
+	local files = {
+		code = {
+			module="StarGate CAP - Base Code",
+			server="any",
 			client={"cl_convars.lua","cl_visualssettings.lua","keyboard.lua","menu.lua","packversion.lua","settings.lua"},
 			shared={"bullets.lua","cap.lua","keyboard.lua","lib.lua","matrix.lua","misc.lua","print_r.lua","protection.lua","stargateextras.lua","tracelines.lua"},
 			vgui={"shelpbutton.lua","shtmlhelp.lua"}

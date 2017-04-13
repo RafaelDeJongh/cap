@@ -181,10 +181,19 @@ function SWEP:PrimaryAttack()
 			self.Throw = CurTime()+1;
 		else
 			if(self.ThrownTac) then
-				if(not self.Tac.Smoke) then
-					self.Tac:Destroy();
+				if (not IsValid(self.Tac)) then
+					self.ThrownTac = false
+					self.CanThrow = true
+					self:SetNWBool("CanThrow",true)
+					if (self.Ammo<=0) then
+						self:Remove()
+					end
 				else
-					self.Tac:StartSmoke();
+					if(not self.Tac.Smoke) then
+						self.Tac:Destroy();
+					else
+						self.Tac:StartSmoke();
+					end
 				end
 			end
 		end

@@ -23,8 +23,8 @@ TOOL.Category="Weapons";
 TOOL.Name=SGLanguage.GetMessage("stool_staff");
 
 -- The keys for the numpad. 1 is shoot, 2 is explode all current shots
-TOOL.ClientConVar["shoot"] = 1;
-TOOL.ClientConVar["explode"] = 2;
+TOOL.ClientConVar["shoot"] = KEY_PAD_0;
+TOOL.ClientConVar["explode"] = KEY_PAD_1;
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["shaft"] = 1;

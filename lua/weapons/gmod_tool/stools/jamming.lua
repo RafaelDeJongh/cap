@@ -10,7 +10,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_jamming");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["immunity"] = 0;
 TOOL.ClientConVar["size"] = 100;
-TOOL.ClientConVar["toggle"] = 3;
+TOOL.ClientConVar["toggle"] = KEY_PAD_2;
 
 TOOL.ClientConVar["model"] = "models/micropro/shield_gen.mdl";
 TOOL.List = "JammModels";

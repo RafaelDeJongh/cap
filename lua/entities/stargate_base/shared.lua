@@ -283,8 +283,7 @@ properties.Add( "Stargate.RingRotate.On",
 	MenuIcon	=	"icon16/plugin_disabled.png",
 
 	Filter		=	function( self, ent, ply )
-						local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActRotRingL",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateRingRotate || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActRotRingL",false)) then return false end
 						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
@@ -315,8 +314,7 @@ properties.Add( "Stargate.RingRotate.Off",
 	MenuIcon	=	"icon16/plugin.png",
 
 	Filter		=	function( self, ent, ply )
-                        local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !table.HasValue(vg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActRotRingL",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateRingRotate || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActRotRingL",false)) then return false end
 						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
@@ -347,8 +345,7 @@ properties.Add( "Stargate.EHType",
 	MenuIcon	=	"icon16/images.png",
 
 	Filter		=	function( self, ent, ply )
-						local nvg = {"stargate_supergate"}
-						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || table.HasValue(nvg,ent:GetClass()) || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || ent.StargateNoEHSelect || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
 						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
 						return true
 
@@ -428,6 +425,112 @@ properties.Add( "Stargate.EHColor",
 
 						local col = net.ReadVector();
 						ent:TriggerInput("Event Horizon Color",col)
+					end
+
+});
+
+properties.Add( "Stargate.SGCType.On",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_13"),
+	Order		=	-150,
+	MenuIcon	=	"icon16/plugin_disabled.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateHasSGCType || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("ActSGCT",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("SGC Type",1);
+					end
+
+});
+
+properties.Add( "Stargate.SGCType.Off",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_13d"),
+	Order		=	-150,
+	MenuIcon	=	"icon16/plugin.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateHasSGCType || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("ActSGCT",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("SGC Type",0);
+					end
+
+});
+
+properties.Add( "Stargate.PoO",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_14"),
+	Order		=	-170,
+	MenuIcon	=	"icon16/plugin_link.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateTwoPoO || ent:GetNWBool("GateSpawnerProtected",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	MenuOpen = function( self, option, ent, tr )
+		local submenu = option:AddSubMenu()
+		local poo = ent:GetNWInt("Point_of_Origin",0);
+		for i=0,2 do
+			local option = submenu:AddOption( SGLanguage.GetMessage("stargate_c_tool_14_"..i+1), function() self:SetPoo( ent, i ) end )
+			if ( poo == i ) then
+				option:SetChecked( true )
+			end
+		end
+	end,
+
+	SetPoo		=	function( self, ent, i )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+							net.WriteInt(i,8)
+						self:MsgEnd()
+
+					end,
+
+	Action 		= 	function() end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("Set Point of Origin",net.ReadInt(8));
 					end
 
 });

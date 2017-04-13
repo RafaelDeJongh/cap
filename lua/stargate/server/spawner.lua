@@ -104,7 +104,11 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 	if(v.position and v.classname) then
 		if (StarGate_Group and StarGate_Group.Error == true or StarGate_Group==nil or StarGate_Group.Error==nil) then return end
 		--if (not GateSpawner_CheckModule(v.classname,v.model)) then return end
-		if (StarGate.CFG:Get("cap_disabled_ent",v.classname,false)) then return end
+		if (StarGate.CFG and StarGate.CFG:Get("cap_disabled_ent",v.classname,false)) then return end
+		if (v.classname=="prop_physics" and StarGate.CFG and not StarGate.CFG:Get("gatespawner","sv_spawn_props",true)) then return end
+		local IsIris = v.classname:find("iris");
+		if (IsIris and StarGate.CFG and not StarGate.CFG:Get("gatespawner","sv_spawn_iris",true)) then return end
+		if (hook.Call("StarGate.GateSpawner.Spawn",GAMEMODE,v.classname,v,protect) == false) then return end
 		local e = ents.Create(v.classname);
 		if (not IsValid(e)) then return nil end
 		e.GateSpawnerSpawned = true;
@@ -114,7 +118,6 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local pos = Vector(unpack(v.position:TrimExplode(" ")));
 		local IsGate = v.classname:find("stargate_") and not v.classname:find("iris");
 		local IsGroupGate = (v.classname:find("stargate_") and v.classname != "stargate_supergate");
-		local IsIris = v.classname:find("iris");
 		local IsDHD = v.classname:find("dhd_");
 		local IsRing = v.classname:find("ring_base_");
 		local IsRingP = v.classname:find("ring_panel_");
@@ -127,8 +130,6 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 		local IsDoors = string.lower(v.classname):find("cap_doors_frame");
 		local IsDoorsButton = string.lower(v.classname):find("cap_doors_contr");
 		local IsConsole = string.lower(v.classname):find("cap_console");
-
-		if (IsIris and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","sv_gatespawner",true)) then e:Remove(); return end
 
 		local IsSGULightUp = v.classname:find("bearing") or v.classname:find("floorchevron");
 
@@ -417,6 +418,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 				elseif(v.__id and (IsGate or IsRing or IsRingP)) then
 					e.__id = v.__id;
 				end
+				hook.Call("StarGate.GateSpawner.SpawnPost",GAMEMODE,e,v)
 			end
 		);
 		return e;
@@ -540,8 +542,8 @@ end
 -- ############### Auto Respawner @aVoN
 function StarGate.GateSpawner.AutoRespawn()
 	-- FIXME: Add config for enabled/disabled again
-	if(DEBUG) then return end;
-	--if(StarGate.spawner_enabled and StarGate.spawner_autorespawn) then
+	-- Ok, fixed after 10 years :D @ AlexALX
+	if (DEBUG or StarGate.CFG and not StarGate.CFG:Get("gatespawner","auto_respawn",true)) then return end
 	if (StarGate.GateSpawner.Spawned) then
 		--local add = {};
 		local i = 0; -- For delayed spawning

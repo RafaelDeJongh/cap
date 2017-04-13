@@ -24,10 +24,10 @@ TOOL.Category="Weapons";
 TOOL.Name=SGLanguage.GetMessage("stool_drones");
 
 -- The keys for the numpad. 1 is shoot, 2 is explode all current shots
-TOOL.ClientConVar["explode"] = 0;
-TOOL.ClientConVar["shoot"] = 1;
-TOOL.ClientConVar["track"] = 2;
-TOOL.ClientConVar["eye_track"] = 3;
+TOOL.ClientConVar["explode"] = KEY_PAD_MINUS;
+TOOL.ClientConVar["shoot"] = KEY_PAD_0;
+TOOL.ClientConVar["track"] = KEY_PAD_1;
+TOOL.ClientConVar["eye_track"] = KEY_PAD_2;
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;
 -- The default model for the GhostPreview

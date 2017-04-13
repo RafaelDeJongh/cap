@@ -254,12 +254,18 @@ sg_sets[stargate][res_trans_interval][desc] = Интервал между пер
 sg_sets[stargate][res_classes] = Разрешённые ресурсы
 sg_sets[stargate][res_classes][desc] = Разрешённые ресурсы для передачи, разделяйте запятой, оставте пустым чтобы разрешить любой ресурс\nПример: water,oxygen,heavy water
 
-// Stargate iris
-sg_sets[stargate_iris] = Диафрагма звёздных врат
-sg_sets[stargate_iris][gatespawner] = Спавн на вратах сервера
-sg_sets[stargate_iris][gatespawner][desc] = Разрешить создавать диафрагму на вратах сервера игроками
-sg_sets[stargate_iris][sv_gatespawner] = Спавн сервером (gatespawner'ом)
-sg_sets[stargate_iris][sv_gatespawner][desc] = Разрешить создавать диафрагму сервером (самим gatespawner'ом)
+// Stargate gatespawner config
+sg_sets[gatespawner] = Gatespawner
+sg_sets[gatespawner][spawn_iris] = Спавн диафрагмы на вратах сервера
+sg_sets[gatespawner][spawn_iris][desc] = Разрешить создавать диафрагму на вратах сервера игроками
+sg_sets[gatespawner][sv_spawn_iris] = Спавн сохранённых диафрагм
+sg_sets[gatespawner][sv_spawn_iris][desc] = Разрешить спавн сохранённых диафрагм сервером (gatespawner'ом)
+sg_sets[gatespawner][sv_spawn_props] = Спавн сохранённых пропов
+sg_sets[gatespawner][sv_spawn_props][desc] = Разрешить спавн сохранённых пропов сервером (gatespawner'ом)
+sg_sets[gatespawner][sv_save_props] = Сохранять сваренные пропы
+sg_sets[gatespawner][sv_save_props][desc] = Разрешить сохранение сваренных пропов к вратам/кольцам gatespawner'ом
+sg_sets[gatespawner][auto_respawn] = Авто респавн при удалении
+sg_sets[gatespawner][auto_respawn][desc] = Автоматически восстанавливать удалённые объекты
 
 // DHD
 sg_sets[dhd] = Наборное устройство (DHD)

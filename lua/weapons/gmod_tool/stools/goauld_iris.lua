@@ -7,9 +7,9 @@ include("weapons/gmod_tool/stargate_base_tool.lua");
 
 TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_giris");
-TOOL.ClientConVar["toggle"] = 3;
-TOOL.ClientConVar["activate"] = 12;
-TOOL.ClientConVar["deactivate"] = 13;
+TOOL.ClientConVar["toggle"] = KEY_PAD_2;
+TOOL.ClientConVar["activate"] = KEY_B;
+TOOL.ClientConVar["deactivate"] = KEY_C;
 
 TOOL.Entity.Class = "goauld_iris";
 TOOL.Entity.Keys = {"toggle","activate","deactivate","IsActivated"}; -- These keys will get saved from the duplicator
@@ -40,7 +40,7 @@ function TOOL:LeftClick(t)
 	if(t.Entity and t.Entity:GetClass() == self.Entity.Class) then
 		return true;
 	end
-	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","gatespawner",true)) then
+	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("gatespawner","spawn_iris",true)) then
 	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end

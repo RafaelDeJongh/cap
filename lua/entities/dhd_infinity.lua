@@ -34,6 +34,7 @@ ENT.ChevSounds = {
 	Sound("stargate/dhd/sg1/press_7.mp3")
 }
 ENT.SkinNumber = 6;
+ENT.SkinBase = 3;
 
 --################# SpawnFunction
 function ENT:SpawnFunction(p,tr)

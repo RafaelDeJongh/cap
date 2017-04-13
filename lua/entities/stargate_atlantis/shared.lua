@@ -13,6 +13,9 @@ ENT.EventHorizonData = {
 	NNFix = 0,
 }
 
+-- this names should be unique for each option!
+-- if you using this code as base for another gate please change this names to new one!
+-- also you need to change class name in this checks
 properties.Add( "Stargate.Atl.RingLight.On",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_08"),

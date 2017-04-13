@@ -26,8 +26,8 @@ TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_harvester");
 
 -- CliebtConVars
-TOOL.ClientConVar["spit"] = 2;
-TOOL.ClientConVar["suck"] = 1;
+TOOL.ClientConVar["spit"] = KEY_PAD_1;
+TOOL.ClientConVar["suck"] = KEY_PAD_0;
 TOOL.ClientConVar["always_down"] = 0;
 TOOL.ClientConVar["autolink"] = 1;
 TOOL.ClientConVar["autoweld"] = 1;

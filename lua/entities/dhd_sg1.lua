@@ -44,7 +44,6 @@ function ENT:SpawnFunction(p,tr)
 	e:Activate();
 	local ang = p:GetAimVector():Angle(); ang.p = 15; ang.r = 0; ang.y = (ang.y+180) % 360
 	e:SetAngles(ang);
-	e:Fire("skin",0);
 	e:CartersRampsDHD(tr);
 	return e;
 end

@@ -17,7 +17,7 @@ if (Go) {
     X++
     Dial_Address = toByte(Str:index(X))
     if (X > Str:length()) {
-        Go = 0, X = 0, Dial_Address = 13
-    } #13 is for Enter
+        Go = 0, X = 0, Dial_Address = 10
+    } #10 is for Enter, in old wiremod (pre-2017) Enter key code is 13
 }
 # ps button should be toggle

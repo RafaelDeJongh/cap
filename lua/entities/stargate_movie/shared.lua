@@ -25,6 +25,10 @@ ENT.EventHorizonDataClassic = {
 ENT.DialSlowDelay = 2.0
 ENT.EventHorizonData = ENT.EventHorizonDataBak
 
+ENT.StargateRingRotate = true
+ENT.StargateHasSGCType = true
+ENT.StargateTwoPoO = true
+
 function ENT:GetRingAng()
 	if not IsValid(self.EntRing) then self.EntRing=self:GetNWEntity("EntRing") if not IsValid(self.EntRing) then return end end   -- Use this trick beacause NWVars hooks not works yet...
 	local angle = tonumber(math.NormalizeAngle(self.EntRing:GetLocalAngles().r));

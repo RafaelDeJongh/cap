@@ -32,12 +32,17 @@ StarGate.RegisterEventHorizon("universe",{
 ENT.DialSlowDelay = 1.0
 ENT.DialFastTime = 7.4
 
+ENT.StargateRingRotate = true
+
 function ENT:GetRingAng()
 	if not IsValid(self.EntRing) then self.EntRing=self:GetNWEntity("EntRing") if not IsValid(self.EntRing) then return end end   -- Use this trick beacause NWVars hooks not works yet...
 	local angle = tonumber(math.NormalizeAngle(self.EntRing:GetLocalAngles().r));
 	return (angle<0) and angle+360 or angle
 end
 
+-- this names should be unique for each option!
+-- if you using this code as base for another gate please change this names to new one!
+-- also you need to change class name in this checks
 properties.Add( "Stargate.Uni.SymLight.On",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_10"),

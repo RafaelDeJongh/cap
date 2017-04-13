@@ -24,9 +24,9 @@ TOOL.Name=SGLanguage.GetMessage("stool_iris");
 
 --TOOL.ClientConVar["autolink"] = 1;
 --TOOL.ClientConVar["autoweld"] = 1;
-TOOL.ClientConVar["toggle"] = 9;
-TOOL.ClientConVar["activate"] = 12;
-TOOL.ClientConVar["deactivate"] = 13;
+TOOL.ClientConVar["toggle"] = KEY_PAD_2;
+TOOL.ClientConVar["activate"] = KEY_B;
+TOOL.ClientConVar["deactivate"] = KEY_C;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/zup/Stargate/iris.mdl";
 TOOL.GhostExceptions = {"stargate_atlantis","stargate_sg1","stargate_tollan","stargate_infinity","stargate_universe","stargate_ori"}; -- Add your entity class to this, to stop drawing the GhostPreview on this
@@ -70,7 +70,7 @@ function TOOL:LeftClick(t)
 	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err2\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 	    return
 	end
-	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("stargate_iris","gatespawner",true)) then
+	if (t.Entity.GateSpawnerSpawned and StarGate.CFG and not StarGate.CFG:Get("gatespawner","spawn_iris",true)) then
 	    p:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"stool_stargate_iris_err3\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
 		return
 	end

@@ -1,9 +1,9 @@
 // Rings
 ring_ancient = Кольца (Древних)
-ring_goauld = Кольца (Гоаугдов)
+ring_goauld = Кольца (Гоаулдов)
 ring_ori = Кольца (Орай)
 ring_panel_ancient = Панель для Колец (Древних)
-ring_panel_goauld = Панель для Колец (Гоаугдов)
+ring_panel_goauld = Панель для Колец (Гоаулдов)
 ring_panel_ori = Панель для Колец (Орай)
 ring_name = Задайте адрес кольцам (только цифры!):
 ring_dial = Введите адрес назначения (только цифры!):

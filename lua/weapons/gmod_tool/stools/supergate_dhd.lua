@@ -11,7 +11,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_sdhd");
 
 --TOOL.ClientConVar["autolink"] = 1; -- No lifesupport added yet
 --TOOL.ClientConVar["autoweld"] = 1;
-TOOL.ClientConVar["toggle"] = 7;
+TOOL.ClientConVar["toggle"] = KEY_PAD_8;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/Madman07/supergate_dhd/supergate_dhd.mdl";
 -- Holds modles for a selection in the tooltab and allows individual Angle and Position offsets {Angle=Angle(1,2,3),Position=Vector(1,2,3} for the GhostPreview

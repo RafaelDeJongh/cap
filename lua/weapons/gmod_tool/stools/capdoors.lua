@@ -8,7 +8,7 @@ include("weapons/gmod_tool/stargate_base_tool.lua");
 TOOL.Category="Tech";
 TOOL.Name=SGLanguage.GetMessage("stool_door");
 TOOL.ClientConVar["autoweld"] = 1;
-TOOL.ClientConVar["toggle"] = 3;
+TOOL.ClientConVar["toggle"] = KEY_PAD_2;
 TOOL.ClientConVar["diff_text"] = 0;
 TOOL.ClientConVar["model"] = "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl";
 TOOL.ClientConVar["doormodel"] = "";

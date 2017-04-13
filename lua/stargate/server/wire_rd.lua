@@ -560,3 +560,20 @@ function StarGate.WireRD.PostEntityPaste(self,Player,Ent,CreatedEntities)
 		end
 	end
 end
+
+
+-- damn new wiremod update.
+
+StarGate.KeysConst = StarGate.KeysConst or {
+	[KEY_ENTER] = 10,
+	[KEY_BACKSPACE] = 127,
+}
+
+hook.Add( "Initialize", "StarGate.Wiremod.KeysInit", function()
+
+if (Wire_Keyboard_Remap and Wire_Keyboard_Remap.American and Wire_Keyboard_Remap.American.normal) then
+	 StarGate.KeysConst[KEY_ENTER] = Wire_Keyboard_Remap.American.normal[KEY_ENTER]
+	 StarGate.KeysConst[KEY_BACKSPACE] = Wire_Keyboard_Remap.American.normal[KEY_BACKSPACE]
+end
+	
+end)

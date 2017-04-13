@@ -254,12 +254,18 @@ sg_sets[stargate][res_trans_interval][desc] = Resource transfer cycle inteval in
 sg_sets[stargate][res_classes] = Allowed resource classes
 sg_sets[stargate][res_classes][desc] = Allowed resource classes to transfer, separate by comma, keep empty to allow any resources\nexample usage: water,oxygen,heavy water
 
-// Stargate iris
-sg_sets[stargate_iris] = Stargate iris
-sg_sets[stargate_iris][gatespawner] = Spawn on gatespawner
-sg_sets[stargate_iris][gatespawner][desc] = Allow spawn on gatespawner gates by players
-sg_sets[stargate_iris][sv_gatespawner] = Spawn by server (gatespawner)
-sg_sets[stargate_iris][sv_gatespawner][desc] = Allow spawn on gatespawner gates by server (gatespawner itself)
+// Stargate gatespawner config
+sg_sets[gatespawner] = Gatespawner
+sg_sets[gatespawner][spawn_iris] = Spawn iris on gatespawner gates
+sg_sets[gatespawner][spawn_iris][desc] = Allow spawn iris on gatespawner gates by players
+sg_sets[gatespawner][sv_spawn_iris] = Spawn saved iris
+sg_sets[gatespawner][sv_spawn_iris][desc] = Allow spawn saved iris by gatespawner (server)
+sg_sets[gatespawner][sv_spawn_props] = Spawn saved props
+sg_sets[gatespawner][sv_spawn_props][desc] = Allow spawn saved props by gatespawner (server)
+sg_sets[gatespawner][sv_save_props] = Save welded props
+sg_sets[gatespawner][sv_save_props][desc] = Allow save welded props to gates/rings by gatespawner
+sg_sets[gatespawner][auto_respawn] = Auto respawn on removal
+sg_sets[gatespawner][auto_respawn][desc] = Auto restore gatespawner spawned entities if it was removed
 
 // DHD
 sg_sets[dhd] = DHD (Dial Home Device)

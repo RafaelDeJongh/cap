@@ -10,7 +10,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_tolland");
 TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["immunity"] = 0;
 TOOL.ClientConVar["size"] = 100;
-TOOL.ClientConVar["toggle"] = 3;
+TOOL.ClientConVar["toggle"] = KEY_PAD_3;
 
 TOOL.ClientConVar["model"] = "models/Iziraider/disabler/disabler.mdl";
 TOOL.List = "DisablerModels";

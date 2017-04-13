@@ -24,7 +24,7 @@ TOOL.Name=SGLanguage.GetMessage("stool_mdhd");
 
 --TOOL.ClientConVar["autolink"] = 1; -- No lifesupport added yet
 TOOL.ClientConVar["autoweld"] = 1;
-TOOL.ClientConVar["toggle"] = 7;
+TOOL.ClientConVar["toggle"] = KEY_PAD_6;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/props_c17/clock01.mdl";
 -- Holds modles for a selection in the tooltab and allows individual Angle and Position offsets {Angle=Angle(1,2,3),Position=Vector(1,2,3} for the GhostPreview

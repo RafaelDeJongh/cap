@@ -27,7 +27,7 @@ TOOL.ClientConVar["autoweld"] = 1;
 TOOL.ClientConVar["immunity"] = 0;
 TOOL.ClientConVar["size"] = 1;
 TOOL.ClientConVar["attached"] = 1;
-TOOL.ClientConVar["toggle"] = 3;
+TOOL.ClientConVar["toggle"] = KEY_PAD_2;
 -- The default model for the GhostPreview
 TOOL.ClientConVar["model"] = "models/props_c17/clock01.mdl";
 TOOL.ClientConVar["phase_shift"] = 0;

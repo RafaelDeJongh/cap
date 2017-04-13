@@ -25,7 +25,7 @@ if SERVER then
   end
   function SCR:Trigger(curr,key,value)
     if not curr then return end
-    if key == 13 and value and IsValid(self.Entity.Server) and IsValid(self.Entity.Server.LockedGate) then
+    if key == StarGate.KeysConst[KEY_ENTER] and value and IsValid(self.Entity.Server) and IsValid(self.Entity.Server.LockedGate) then
       self.Move = not self.Move
       self.Entity.Server.LockedGate.RingSpeed = 0
       --self.Server.LockedGate:ActivateRing(self.Move,false)

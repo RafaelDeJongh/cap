@@ -27,6 +27,7 @@ AddCSLuaFile()
 ENT.PlorkSound = "stargate/dhd_atlantis.mp3";
 ENT.LockSound = "stargate/chevron_lock_atlantis_incoming.mp3";
 ENT.SkinNumber = 2;
+ENT.SkinBase = 1;
 
 --################# SpawnFunction
 function ENT:SpawnFunction(p,tr)
@@ -38,7 +39,6 @@ function ENT:SpawnFunction(p,tr)
 	e:Activate();
 	local ang = p:GetAimVector():Angle(); ang.p = 15; ang.r = 0; ang.y = (ang.y+180) % 360
 	e:SetAngles(ang);
-	e:Fire("skin",1);
 	e:CartersRampsDHD(tr);
 	return e;
 end

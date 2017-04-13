@@ -18,3 +18,5 @@ ENT.EventHorizonData = {
 	Model = "models/iziraider/supergate/eh.mdl",
 	Kawoosh = "supergate",
 }
+
+ENT.StargateNoEHSelect = true

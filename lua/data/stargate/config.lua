@@ -98,12 +98,18 @@ res_trans_interval = 0.1
 # allowed resources to transfer, separate by comma, keep empty to allow any resources, example usage: water,oxygen,heavy water
 res_classes = 
 
-#### Stargate iris config
-[stargate_iris]
-# Allow spawn on gatespawner gates by players
-gatespawner=true
-# Allow spawn on gatespawner gates by server (gatespawner itself)
-sv_gatespawner=true
+#### Stargate gatespawner config
+[gatespawner]
+# Allow spawn iris on gatespawner gates by players
+spawn_iris=true
+# Allow spawn saved iris by gatespawner (server)
+sv_spawn_iris=true
+# Allow spawn saved props by gatespawner (server)
+sv_spawn_props=true
+# Allow save welded props to gates/rings by gatespawner
+sv_save_props=true
+# Auto respawn entities if removed
+auto_respawn=true
 
 #### DHD config
 [dhd]
