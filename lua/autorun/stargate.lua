@@ -8,7 +8,7 @@ StarGate.WorkShop = false;
 StarGate.CapVer = 0;
 
 -- Wiremod devs broke this originally :(
-StarGate.KeyEnter = Wire_Keyboard_Remap[KEY_ENTER];
+StarGate.KeyEnter = 10;
 
 -- Only loads serverside files on server,clientside files on client, shared on both and vgui on client
 local function ValidToInclude(state)
