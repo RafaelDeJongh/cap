@@ -19,7 +19,7 @@ if SERVER then
     end
   end
   function SCR:Trigger(curr,key, value)
-    if not curr or self:GetMonitorInt("SDState",0) ~= 0 then return end
+    if self:GetMonitorInt("SDState",0) ~= 0 then return end
     if self:GetMonitorBool("ServerConnected",false) then
        -- \, iris toggle
       if key == 92 and value then self.Entity.Server.Iris = not self.Entity.Server.Iris end
@@ -37,7 +37,7 @@ if SERVER then
         self.EnteredAddress = self.EnteredAddress..char:upper()
       end
       --Enter, try dial or get error
-      if key == 13 and value and #self.EnteredAddress >=6 then
+      if key == 10 and value and #self.EnteredAddress >=6 then
         if 6 <= #self.EnteredAddress and #self.EnteredAddress < 9 and self.EnteredAddress[#self.EnteredAddress] ~= "#" then
           self.EnteredAddress = self.EnteredAddress.."#"
         elseif #self.EnteredAddress > 6 then
