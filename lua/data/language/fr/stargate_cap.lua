@@ -161,6 +161,8 @@ stool_tshieldc = Contrôleur bouclier Tok'ra
 stool_tolland = Désactiveur d'armes Tollan
 stool_harvester = Téléporteur Wraith
 stool_controlpanel = Panneau de Contrôle
+stool_sgcscreen = Écran du SGC
+stool_sgcscreen_srv = Serveur du SGC
 
 // Stool Names - Energy
 stool_asuran_hub = Hub E2PZ Asuran
@@ -367,3 +369,23 @@ asgardtp_wrong = Mauvaises Coordonées! (peut-être pas dans la map?)
 asgardtp_error = Cible ou destination invalide! (rafraichir la liste?)
 asgardtp_jamming = Impossible de téléporter à ces Coordonées - Brouilleur en ligne.
 asgardtp_succ = Téléportation éfféctuée.
+
+
+// SGC Screen menu
+sgcscreen_title = Gestionnaire de code - SGC
+sgcscreen_code = Code
+sgcscreen_dcode = Code d'auto-destruction
+sgcscreen_rcode = Code de réinitialisation
+sgcscreen_desc = Description
+sgcscreen_save = Sauvegarder
+sgcscreen_cancel = Annuler
+// make sure to check this field, change \n positions to fit in menu
+sgcscreen_info = Exige deux joueurs pour démarrer / annuler l'auto-destruction.\nDans ce cas, vous devez saisir deux codes différents.
+
+//Shield Identifier
+shieldid_title = Shield Identifier
+shieldid_frequency = Fréquence
+shieldid_toggle = Toggle
+shieldid_save = Sauvegarder
+shieldid_on = Activer
+shieldid_off = Désactiver
