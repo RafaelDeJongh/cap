@@ -106,20 +106,20 @@ if SERVER then
       if char and value and #self.SelfDestructCode < 8 then
         self.SelfDestructCode = self.SelfDestructCode..char
       end
-      if key == 13 and value and #self.SelfDestructCode >= 1 then
+      if key == 10 and value and #self.SelfDestructCode >= 1 then
         self.SelfDestructState = 2
         self.SelfDestructDetect = CurTime()
         --self.SelfDestructEnterCode = false
       end
       return true
     elseif self.SelfDestructState == 2 then
-      if key == 13 and value then
+      if key == 10 and value then
         self.SelfDestructCode = ""
         self.SelfDestructState = 0
       end
       return true
     elseif self.SelfDestructState == -1 then
-      if key == 13 and value then
+      if key == 10 and value then
         self.SelfDestructCode = ""
         self.SelfDestructState = 0
       end
@@ -133,7 +133,7 @@ if SERVER then
       if char and value and #self.SelfDestructResetCode < 8 then
         self.SelfDestructResetCode = self.SelfDestructResetCode..char
       end
-      if key == 13 and value and #self.SelfDestructResetCode >= 1 then
+      if key == 10 and value and #self.SelfDestructResetCode >= 1 then
         local server = self.Entity.Server
         local good = false
         --Check for good code
