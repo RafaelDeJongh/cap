@@ -302,7 +302,7 @@ function ENT:TriggerInput(k,v)
 			local char = string.char(v):upper();
 			if (v>=128 and v<=137) then char = string.char(v-80):upper(); -- numpad 0-9
 			elseif (v==139) then char = string.char(42):upper(); end -- numpad *
-			if(v == 13) then -- Enter Key
+			if(v == StarGate.KeyEnter) then -- Enter Key
 				self:PressButton("DIAL",nil,true);
 			elseif(v == 127) then -- Backspace key
 				local e = self:FindGate();
