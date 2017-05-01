@@ -1,5 +1,9 @@
+// All lines/sentences what come after "//" is comments and shouldn't be translated!
+
+// Global language name, will be displayed in language settings
 global_lang_name = Français
 
+// Stargate and DHD names
 stargate_category = Portes et anneaux
 stargate_address = Adresse
 stargate_group = Groupe
@@ -52,10 +56,32 @@ stargate_c_tool_12b = Activer tous symboles en arrivée
 stargate_c_tool_12d = Désactiver symboles en arrivée
 stargate_c_tool_13 = Type SGC
 stargate_c_tool_13d = Désactiver Type SGC
+stargate_c_tool_14 = Point d'origine
+stargate_c_tool_14_1 = Mode automatique (defaut)
+stargate_c_tool_14_2 = Terre
+stargate_c_tool_14_3 = Abydos
 stargate_c_tool_15 = Activer mode classique
 stargate_c_tool_15d = Désactiver mode classique
 stargate_c_tool_16 = Activer lumière chevrons
 stargate_c_tool_16d = Désactiver lumière chevrons
+stargate_c_tool_17 = Activer l'horizon des êvénements de SG1
+stargate_c_tool_17d = Désactiver l'horizon des êvénements de SG1
+stargate_c_tool_18 = Activer Glyphs
+stargate_c_tool_18d = Désactiver Glyphs
+stargate_c_tool_19 = Type Atlantis
+stargate_c_tool_19d = Désactiver le type Atlantis
+stargate_c_tool_20 = Activer DHD
+stargate_c_tool_20d = Désactiver DHD
+stargate_c_tool_21 = Type d'horizon des êvénements
+stargate_c_tool_21_sg1 = Standart (SG1)
+stargate_c_tool_21_universe = Universe
+stargate_c_tool_21_infinity = Infinity
+stargate_c_tool_22 = Dial lent alternatif
+stargate_c_tool_22d = Désactiver dial lent alternatif
+stargate_c_tool_23 = Couleur de l'horizon des êvénements
+stargate_c_tool_23a = Appliquer
+stargate_c_tool_23r = Réinitialiser
+stargate_c_tool_23c = Annuler
 
 // Stargate VGUI menus
 stargate_vgui_address = Adresse:
@@ -136,6 +162,19 @@ stargate_updater_02 = Votre Version du CAP est dépassée!\nVotre Version: %s De
 stargate_updater_03 = Veuillez mettre à jour le CAP pour obtenir\nles nouvelles fonctionnalités et corrections de bugs!
 stargate_updater_04 = Fermer
 
+// spawn menu info
+spawninfo_title = Information
+spawninfo_load = Chargement...
+spawninfo_news = Nouvelles
+spawninfo_wiki = Wiki
+spawninfo_forum = Forum d'entraide
+spawninfo_multi = Support multi-languages
+// you can create own language support thread in this forum and replace url with your link
+spawninfo_multi_url = http://sg-carterpack.com/forums/forum/support/multi-language-support/
+// if you changed link, then also change "spawninfo_multi" to "Your_Language Support" written in your language.
+spawninfo_fp = Fil d'actualité Facepunch
+spawninfo_donate = Faire un don
+
 // Stool - Credits tab
 stargate_credits_01 = Crédits
 stargate_credits_02 = Ici, Vous pouvez rapporter tout bugs. si vous ne pouvez taper dans la zone de texte html, visitez %s avec votre navigateur.
@@ -150,9 +189,17 @@ stargate_credits_10 = Les changements s'appliquerons après le redémarrage de G
 stargate_credits_11 = Le Carter's Pack Requière la dernière version du WireMod.
 stargate_credits_12 = Le Carter's Addon Pack bénéficie de la licence:
 stargate_credits_13 = Bugs
+stargate_credits_14 = Si vous aimez ce que nous avons proposé ici et que vous voulez soutenir les développeurs, vous pouvez faire un don ici:
+stargate_credits_15 = Faire un don
 
 // Stool - Settings/Language tab
+stargate_settings_01 = Paramètres
+stargate_settings_02 = Visiter la page
+stargate_settings_02t = Comment traduire le Carter Addon Pack
 stargate_settings_03 = Langues supportés:
+stargate_settings_04 = Affecter aux menus du CAP, au entité et aux autres choses (si traduit).
 stargate_settings_05 = Si vous désirez traduire dans votre langue:
 stargate_settings_06 = Entrez votre langue:
-stargate_settings_08 = Traduit et re-traduit par Juge Gabranth\n\nTraduction Française par Juge Gabranth, Relic, Xenon , glomzubuk , Jcfag2 & Graywolf
+stargate_settings_07 = Changements appliqué après le rechargement de la map ou de Garry's Mod.
+stargate_settings_08 = Traduit et re-traduit par Juge Gabranth\n\nTraduction Française par Juge Gabranth, Relic, Xenon , glomzubuk , Jcfag2, Graywolf & rorog2
+stargate_settings_09 = Bibliothèque multi-languages crée par AlexALX.

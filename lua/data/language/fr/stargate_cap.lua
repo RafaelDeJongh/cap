@@ -118,6 +118,8 @@ weapon_misc_nox = Main Nox
 weapon_misc_nox_desc = Clic gauche: Ouvre le menu des portes de étoiles\nClic droit: Soigne un allié proche.
 weapon_misc_adrenaline = Dose D'Adrenaline
 weapon_misc_atl_medkit = Kit de soin d'Atlantis
+weapon_misc_lucian_door_opener = Ouvre-porte Lucian
+weapon_misc_lucian_door_opener_desc = Ouvre les portes du Destinée\n\nClique gauche pour placer l'appareil
 
 // Stools Cats
 stool_cat = Portes des étoiles
@@ -255,13 +257,16 @@ atl_tp_04 = Téléporter
 atl_tp_05 = Destination
 atl_tp_06 = Privée
 atl_tp_07 = Téléporteur privée, invisible dans le menu, mais peut-être contacter!
+atl_tp_08 = Définit si il faut utiliser un groupe local ou non
 atl_tp_error = Ce nom est déjà utiliser!
 atl_tp_local = Locale
 atl_tp_group = Groupe
 atl_tp_name = Nom
 
 // Misc
+//
 kawoosh_hurt = Vortex instable
+event_horizon = Horizon des êvénements
 gate_nuke = Radiation
 drone_kill = Drone
 energy_pulse_kill = Choc énergétique
@@ -323,22 +328,30 @@ iriscomp_cancel = Annulez
 iriscomp_toggle = Activer/Desactiver l'Iris
 iriscomp_ok = Sauvegarder
 
+//Shield Identifier
+shieldid_title = Shield Identifier
+shieldid_frequency = Fréquence
+shieldid_toggle = Toggle
+shieldid_save = Sauvegarder
+shieldid_on = Activer
+shieldid_off = Désactiver
+
 // destiny timer
 destimer_title = Timeur de Destiné
 destimer_time = Définir le temps:
 destimer_autostart = Démarage Automatique
-destimer_autostart_desc = Automatic starting counter after stargate opens.
+destimer_autostart_desc = Le Timeur démarre automatiquement après l'ouverture de la porte des étoiles.
 destimer_autostop = Remise à zéro automatique
-destimer_autostop_desc = Automatic reseting counter after stargate closes. Uncheck this if you want manualy start/stop counter.
+destimer_autostop_desc = Réinitialisation automatique du Timeur après fermeture du Stargate. Décochez cette case si vous souhaitez démarrer/arrêter le Timeur manuellement.
 destimer_autoclose = Fermeture Automatique
-destimer_autoclose_desc = Automatic closes stargate when time is ended.
+destimer_autoclose_desc = Fermer automatique la porte des étoiles quand le Timeur est fini.
 destimer_countup = Compter à l'envers
-destimer_countup_desc = If checked, then counter will count up.
+destimer_countup_desc = Si sélectionner, alors le timeur compte vers le haut.
 destimer_font = Police de caractère normale
-destimer_font_desc = If checked, then will be used normal font.
+destimer_font_desc = Si sélectionner, alors vous utiliser une police normale.
 destimer_save = Sauvegarder
-destimer_start = Démarer le Compteur
-destimer_stop = Arreter le Compteur
+destimer_start = Démarer le Timeur
+destimer_stop = Arreter le Timeur
 destimer_reset = Remetre à zéro le compteur
 destimer_close = Fermer la Porte des Étoiles
 destimer_error = On ne peut pas démarer le timeur quand la porte des étoiles est fermée avec l'option de remise à zéro automatique!
@@ -370,6 +383,31 @@ asgardtp_error = Cible ou destination invalide! (rafraichir la liste?)
 asgardtp_jamming = Impossible de téléporter à ces Coordonées - Brouilleur en ligne.
 asgardtp_succ = Téléportation éfféctuée.
 
+// MCD
+mcd_title = Dispositif de construction moléculaire - Menu de création
+mcd_device = Choisir un appareil
+mcd_device_desc = Sélectionner une entité.
+mcd_replicator = Réplicateur
+mcd_toggle = Mettre le Toogle
+mcd_toggle_desc = Mettre le Toggle pour cette appareil.
+mcd_color = Choisir la couleur pour le bouclier.
+mcd_size = Taille
+mcd_size_desc = Choisir la taille pour cette appareil.
+mcd_strengh = Rapide - Fort
+mcd_close = Fermer
+mcd_create = Créer
+mcd_progress = Progression
+mcd_effcolor = Couleur de l'effet
+mcd_effcolor_desc = Définir la couleur de l'effet de création.
+mcd_settings = paramètres additionnels
+mcd_nosettings = Pas de paramètres supplémentaires disponibles.
+mcd_classname = Classname: %s
+
+// anti-prior
+antiprior_c_t = Mode immunité
+antiprior_c_1 = Moi et mes amis
+antiprior_c_2 = Seulement pour moi
+antiprior_c_3 = Personne
 
 // SGC Screen menu
 sgcscreen_title = Gestionnaire de code - SGC
@@ -380,7 +418,22 @@ sgcscreen_desc = Description
 sgcscreen_save = Sauvegarder
 sgcscreen_cancel = Annuler
 // make sure to check this field, change \n positions to fit in menu
-sgcscreen_info = Exige deux joueurs pour démarrer / annuler l'auto-destruction.\nDans ce cas, vous devez saisir deux codes différents.
+sgcscreen_info = Exige deux joueurs pour démarrer/annuler l'auto-destruction.\nDans ce cas, vous devez saisir deux codes différents.
+
+// huds
+hud_status = Statut
+hud_energy = Energie
+hud_capacity = Capacité
+hud_capacities = Capacités
+hud_naquadah = Naquadah
+hud_sts_active = Actif
+hud_sts_inactive = Inactif
+hud_sts_connected = Conneter
+hud_sts_disconnected = Déconnecter
+hud_sts_depleted = Vide
+
+// jumper hud
+jumper_hud_dial = Composition:
 
 //Shield Identifier
 shieldid_title = Shield Identifier
@@ -389,3 +442,33 @@ shieldid_toggle = Toggle
 shieldid_save = Sauvegarder
 shieldid_on = Activer
 shieldid_off = Désactiver
+
+// Limits reached
+entity_limit_ag3 = Limite de satellites AG-3 atteinte!
+entity_limit_anc_obelisk = Limite d'obélisque anciens atteinte!
+entity_limit_app_core = Apple Core limit reached!
+entity_limit_asgard_beam = Limite de Rayon Asgard atteinte!
+entity_limit_asuran_weap = Limite d'arme de porte Asuran atteinte!
+entity_limit_dakara = Limite d'arme de Dakara atteinte!
+entity_limit_dest_console = Limite de console du Destinée atteinte!
+entity_limit_shaped = Shaped Charge limit reached!
+entity_limit_overloader = Limite de Surchargeur de porte atteinte!
+entity_limit_horizon = Limite de missile Horizon atteinte!
+entity_limit_iris_pc = Limite d'ordinateur à iris atteinte!
+entity_limit_kino = Limite de Kino atteinte!
+entity_limit_kino_dis = Limite de distributeur de Kino atteinte!
+entity_limit_holo = Limite d'hologramme Ancien atteinte!
+entity_limit_drone_laun = Limite de Lanceur de drone atteinte!
+entity_limit_minidrone = Limite de plateforme de Minidorne atteinte!
+entity_limit_mcd = Limite de MCD atteinte!
+entity_limit_ori_beam = Limite de Rayon Ori atteinte!
+entity_limit_ori_sat = Limite de satellites Ori atteinte!
+entity_limit_ships = Limite de vaisseaux atteinte!
+entity_limit_dest_main = Limite d'Arme Principale du Destinée atteinte!
+entity_limit_dest_med = Limite de Tourelles Moyenne du Destinée atteinte!
+entity_limit_dest_tur = Limite de Tourelle du Destinée atteinte!
+entity_limit_ship_rail = Limite de Railgun de vaisseaux atteinte!
+entity_limit_toll_ion = Limite de Canon à Ion Tollan atteinte!
+entity_limit_shield_core = Limite de Bouclier du Destinée atteinte!
+entity_limit_sod_obelisk = Limite d'obélisk Sodan atteinte!
+entity_limit_stat_rail = Limite de Railgun Stationnaire atteinte! 
