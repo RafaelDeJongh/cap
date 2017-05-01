@@ -128,7 +128,7 @@ function ENT:Initialize(ply)
 	--############## Standard Crap
 	self:SetModel("models/Iziraider/jumper/jumper.mdl"); -- Hooray Izi's model
 	self:PhysicsInit(SOLID_VPHYSICS);
-	self:SetMoveType(MOVETYPE_VPHYSICS);
+	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS);
 	self:StartMotionController();
 	self:SetUseType(SIMPLE_USE);
@@ -153,7 +153,6 @@ function ENT:Initialize(ply)
 		RIGHT=0,
 		UP=0,
 	};
-
 
 	if(self.HasRD) then
 		if(self.CanHaveLS) then
@@ -286,7 +285,8 @@ function ENT:Think()   --######### Do a lot of stuff@ RononDex
 
 	--########## Mostly key presses
 	if(IsValid(self.Pilot) and self.Inflight) then
-
+        self.Pilot:SetPos(self:GetPos());
+        self.Pilot:SetColor(Color(255,255,255,0));
 		if(self.Exited and self.Autopilot) then
 			self:AutoPilot(false);
 		end
@@ -578,7 +578,7 @@ end);
 
 hook.Add("PlayerEnteredVehicle","JumperSeatEnter", function(p,v)
 	if(IsValid(v)) then
-		if(IsValid(p) and p:IsPlayer()) then
+		if(IsValid(p)) then
 			if(v.IsJumperSeat) then
 				p:SetNetworkedEntity("JumperSeat",v);
 				p:SetNetworkedEntity("JumperPassenger",v:GetParent());

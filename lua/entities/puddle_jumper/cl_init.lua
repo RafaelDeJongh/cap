@@ -257,17 +257,13 @@ function ENT:Draw()
 					self:SetColor(invisible);
 					self.RenderGroup = RENDERGROUP_BOTH;
 				else
-					for a,p in pairs(ents.GetAll()) do
-						if(p:IsPlayer()) then
-							if(self:InJumper(p)) then
-								self:SetColor(visible);
-								self.RenderGroup = RENDERGROUP_OPAQUE;
-							else
-								self:SetColor(invisible);
-								self.RenderGroup = RENDERGROUP_BOTH;
-							end
-						end
-					end
+                    if(self:InJumper(p)) then
+                        self:SetColor(visible);
+                        self.RenderGroup = RENDERGROUP_OPAQUE;
+                    else
+                        self:SetColor(invisible);
+                        self.RenderGroup = RENDERGROUP_BOTH;
+                    end
 				end
 			else
 				self:SetColor(visible);
@@ -597,9 +593,9 @@ function ENT:JumperEffects(b)
 
 			-- Blue core
 			if(StarGate.VisualsShips("cl_jumper_sprites")) then
- 				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-10);
+ 				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-20);
 				particle:SetVelocity(vel - 500*FWD);
-				particle:SetDieTime(0.015);
+				particle:SetDieTime(0.025);
 				particle:SetStartAlpha(150);
 				particle:SetEndAlpha(150);
 				particle:SetStartSize(22.5);

@@ -96,6 +96,7 @@ function ENT:Think()
 
 	if(self.Inflight) then
 		if(IsValid(self.Pilot)) then
+            self.Pilot:SetPos(self:GetPos());
 			if(self.Pilot:KeyDown(self.Vehicle,"BOOM")) then
 				self:Bang(); return
 			end
@@ -144,6 +145,8 @@ function ENT:Enter(p) --####### Get in @RononDex
 		end
 		self.Inflight = true;
 		self.Pilot = p;
+        self.Pilot:SetRenderMode(RENDERMODE_TRANSALPHA);
+        self.Pilot:SetColor(Color(255,255,255,0));
 		self.NextExit = CurTime()+1;
 	end
 end
@@ -172,6 +175,7 @@ function ENT:Exit(kill) --####### Get out @RononDex
 		self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
 		self.Pilot:SetViewEntity( NULL )
 		self.Pilot:SetHealth(self.PlayerHealth);
+        self.Pilot:SetColor(Color(255,255,255,255));
 		for _,v in pairs(self.WeaponsTable) do
 			self.Pilot:Give(tostring(v));
 		end
@@ -304,7 +308,7 @@ function ENT:PhysicsSimulate( phys, deltatime )--############## Flight code@ Ron
 		FlightPhys.deltatime = deltatime;
 		FlightPhys.pos = self:GetPos()+(FWD*self.Accel.FWD)+(UP*self.Accel.UP)+(RIGHT*self.Accel.RIGHT);
 
-		self.Pilot:SetPos(pos);
+		
 		phys:ComputeShadowControl(FlightPhys);
 	end
 	if (not self.Inflight and self.HoverAlways) then

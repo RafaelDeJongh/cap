@@ -198,6 +198,32 @@ function ENT:SpawnSeats(p)
 
 end
 
+function ENT:SpawnPilot(pos)
+
+	if(IsValid(self.Pilot)) then
+		local e = ents.Create("prop_physics");
+		e:SetModel(self.Pilot:GetModel());
+		e:SetPos(pos)
+		local ang = self:GetAngles();
+		if(self.PilotAngle) then
+			ang = self:GetAngles() + self.PilotAngle;
+		end
+		e:SetAngles(ang)
+		e:SetParent(self);
+		e:Spawn();
+		e:Activate();
+		
+		local anim = "sit_rollercoaster";
+		if(self.PilotAnim) then	
+			anim = self.PilotAnim;
+		end
+		e:SetSequence(e:LookupSequence(anim));
+		
+		self.PilotAvatar = e;
+		self:SetNWEntity("PilotAvatar",e);
+	end
+end
+
 function ENT:RemoveAll()
 
 	for _,v in pairs(self.Buttons or {}) do
@@ -215,6 +241,10 @@ function ENT:RemoveAll()
 	if IsValid(self.Door) then
 		self.Door:Remove();
 	end
+    
+    if(IsValid(self.PilotAvatar)) then
+        self.PilotAvatar:Remove();
+    end
 
 	if IsValid(self.BulkDoor) then
 		self.BulkDoor:Remove();

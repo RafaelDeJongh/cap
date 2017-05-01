@@ -243,7 +243,11 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				self.CanDoCloak=false
 				self.CanShield=true
 
-				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(false); end
+				if IsValid(self.Pilot) then 
+                    self.Pilot:SetNoTarget(false); 
+                    self:SpawnPilot(self:GetPos()+self:GetForward()*47.5+self:GetUp()*-17.5+self:GetRight()*32.5);
+                end
+                
 				timer.Simple( 1.75, function()
 					self.CanDoCloak=true;
 					self.Cloaked = false;
@@ -263,7 +267,12 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 					util.Effect("cloaking",fx,true,true);
 				end
 
-				if IsValid(self.Pilot) then self.Pilot:SetNoTarget(true); end
+				if IsValid(self.Pilot) then 
+                    self.Pilot:SetNoTarget(true);
+                    if(IsValid(self.PilotAvatar)) then
+                        self.PilotAvatar:Remove();
+                    end
+                end
 				self.Cloaked = true
 				if(self.WepPods) then
 					if(self.DronePropsMade) then

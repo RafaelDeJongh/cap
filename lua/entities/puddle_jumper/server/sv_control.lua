@@ -1,4 +1,4 @@
-
+ENT.PlayerColor = Color(255,255,255,255);
 function ENT:ExitJumper() --################# Get out the jumper@RononDex
 	if (IsValid(self.Pilot)) then
 		StarGate.KeyBoard.ResetKeys(self.Pilot,"PuddleJumper");
@@ -11,15 +11,22 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 		self.Pilot:SetPos(self:GetPos()+self:GetForward()*15+self:GetUp()*-40)
 		self.AllowActivation=false
 		self.Pilot:SetHealth(self.health)
-		self.Pilot:SetMoveType(MOVETYPE_WALK)
+		self.Pilot:SetMoveType(MOVETYPE_WALK);
+		self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
 		--self.Pilot:SetScriptedVehicle(NULL)
 		self.Pilot:SetNetworkedEntity("ScriptedVehicle", NULL)
 		self.Pilot:SetViewEntity(NULL)
+        self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
+        self.Pilot:SetColor(self.PlayerColor);
 		for k,v in pairs(self.PWeapons) do
 			self.Pilot:Give(tostring(v))
 		end
 		self.Pilot = nil;
 	end
+    
+    if(IsValid(self.PilotAvatar)) then
+        self.PilotAvatar:Remove(); 
+    end
 
 	if(IsValid(self)) then
 		self:EmitSound(self.Sounds.Shutdown,100,100)
@@ -119,7 +126,6 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		self:GetPhysicsObject():Wake()
 		self:GetPhysicsObject():EnableMotion(true)
 		self.Inflight = true
-		self.Pilot = true
 		self.Pilot=ply
 		self:SetWire("Driver",self.Pilot)
 		self.Roll=0
@@ -143,7 +149,6 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		self.AllowActivation=false
 		self.LiftOff = true
 		self:EmitSound(self.Sounds.Startup, 100, 100)
-		ply:SetMoveType(MOVETYPE_OBSERVER)
 		ply:DrawViewModel(false)
 		ply:DrawWorldModel(false)
 
@@ -157,9 +162,13 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
 		ply:SetNetworkedBool("isFlyingjumper",true)
 		ply:SetNetworkedEntity("jumper",self)
 		self:SetNetworkedBool("JumperInflight",true);
-
+        self.PlayerColor = ply:GetColor() or Color(255,255,255,255);
+		ply:SetRenderMode(RENDERMODE_TRANSALPHA);
+		ply:SetColor(Color(255,255,255,0));
+		ply:SetMoveType(MOVETYPE_OBSERVER);		
+		ply:SetCollisionGroup(COLLISION_GROUP_WEAPON);
 		ply:SetEyeAngles(self:GetAngles());
-
+        if(!self.Cloaked) then self:SpawnPilot(self:GetPos()+self:GetForward()*47.5+self:GetUp()*-17.5+self:GetRight()*32.5) end;
 		ply:Flashlight(false);
 		
 	end
