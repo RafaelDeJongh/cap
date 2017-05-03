@@ -228,51 +228,6 @@ local function SetData(um) --############# Recieve Data from the Server @RononDe
 end
 usermessage.Hook("jumperData", SetData)
 
-
-
-local invisible = Color(255,255,255,1);
-local visible = Color(255,255,255,255);
-function ENT:Draw()
-	self.BaseClass.Draw(self);
-	if(game.SinglePlayer()) then
-		local p = LocalPlayer();
-		local Jumper = p:GetNWEntity("jumper");
-		local IsInJumper = (Jumper == self.Entity); -- Is this "LocalPlayer" in/out jumper?
-		local IsDriver = p:GetNWBool("isFlyingjumper",false) and IsInJumper;
-		local Inflight = self:GetNetworkedBool("JumperInflight",false);
-		local Cloaked = self:GetNetworkedBool("Cloaked",false);
-
-
-		if(IsValid(self)) then
-			if(Cloaked) then
-				if(Inflight and IsInJumper) then
-					if(View.FirstPerson) then
-						self:SetColor(visible);
-						self.RenderGroup = RENDERGROUP_OPAQUE;
-					else
-						self:SetColor(invisible);
-						self.RenderGroup = RENDERGROUP_BOTH;
-					end
-				elseif(Inflight and not p:GetNWBool("isFlyingjumper")) then
-					self:SetColor(invisible);
-					self.RenderGroup = RENDERGROUP_BOTH;
-				else
-                    if(self:InJumper(p)) then
-                        self:SetColor(visible);
-                        self.RenderGroup = RENDERGROUP_OPAQUE;
-                    else
-                        self:SetColor(invisible);
-                        self.RenderGroup = RENDERGROUP_BOTH;
-                    end
-				end
-			else
-				self:SetColor(visible);
-				self.RenderGroup = RENDERGROUP_OPAQUE;
-			end
-		end
-	end
-end
-
 local num = 3.3;
 local y = ScrH()/4*num;
 function ENT:Think() --#########################  Overly complex think function @ RononDex,LightDemon,aVoN
@@ -330,41 +285,6 @@ function ENT:Think() --#########################  Overly complex think function 
 		if(not self.LSD.Active) then
 			if(View.FirstPerson) then
 				self.LSD:Activate();
-			end
-		end
-	end
-
-	if(game.SinglePlayer()) then
-		local min = self:GetPos()+self:GetForward()*100+self:GetUp()*50+self:GetRight()*50;
-		local max = self:GetPos()-self:GetForward()*190-self:GetUp()*50-self:GetRight()*50;
-		if(IsValid(self) and not Inflight) then
-			for k,v in pairs(ents.FindInBox(min,max)) do
-				local renderm = v:GetRenderMode();
-				if(v:IsPlayer() or v:IsNPC()) then
-					local wep = v:GetActiveWeapon();
-					if(IsValid(wep)) then local wepren = wep:GetRenderMode() end;
-					if(self:InJumper(v)) then
-						if(self.Cloaked) then
-							v:SetRenderMode( RENDERMODE_TRANSALPHA )
-							v:SetColor(invisible);
-							if(IsValid(v:GetActiveWeapon())) then
-								wep:SetRenderMode(RENDERMODE_TRANSALPHA);
-								wep:SetColor(invisible);
-							end
-						else
-							if(renderm != v:GetRenderMode()) then
-								v:SetRenderMode(renderm);
-							end
-							v:SetColor(visible);
-							if(IsValid(wep)) then
-								if(wepren != wep:GetRenderMode() and IsValid(wepren)) then
-									wep:SetRenderMode(wepren);
-								end
-								wep:SetColor(visible);
-							end
-						end
-					end
-				end
 			end
 		end
 	end
@@ -593,7 +513,7 @@ function ENT:JumperEffects(b)
 
 			-- Blue core
 			if(StarGate.VisualsShips("cl_jumper_sprites")) then
- 				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-20);
+ 				local particle = self.Emitter:Add("sprites/bluecore",pos+FWD*-21);
 				particle:SetVelocity(vel - 500*FWD);
 				particle:SetDieTime(0.025);
 				particle:SetStartAlpha(150);

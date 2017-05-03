@@ -218,18 +218,8 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 	if(self.CanCloak)then
 		if(self.CanDoCloak)then
 			if(self.Cloaked)then
-				if(not game.SinglePlayer()) then
-					self:Status(false)
-				else
-					self:EmitSound(self.Sounds.Uncloak,80,math.random(90,110))
-					local fx = EffectData();
-						local pos = self:GetPos();
-						fx:SetOrigin(pos);
-						fx:SetStart(pos);
-						fx:SetEntity(self);
-						fx:SetScale(-2);
-					util.Effect("cloaking",fx,true,true);
-				end
+				self:Status(false)
+
 				
 				if(self.Inflight)then
 					self:ToggleRotorwash(true)
@@ -251,21 +241,12 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				timer.Simple( 1.75, function()
 					self.CanDoCloak=true;
 					self.Cloaked = false;
+                    self:ToggleButtonColor();
 					self:SetNetworkedBool("Cloaked",false);
 				end);
 			else
-				if(not game.SinglePlayer()) then
-					self:Status(true)
-				else
-					self:EmitSound(self.Sounds.Cloak,100,math.random(80,100))
-					local fx = EffectData();
-					local pos = self:GetPos();
-					fx:SetOrigin(pos);
-					fx:SetStart(pos);
-					fx:SetEntity(self);
-					fx:SetScale(2);
-					util.Effect("cloaking",fx,true,true);
-				end
+				self:Status(true)
+
 
 				if IsValid(self.Pilot) then 
                     self.Pilot:SetNoTarget(true);
@@ -274,6 +255,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
                     end
                 end
 				self.Cloaked = true
+                self:ToggleButtonColor();
 				if(self.WepPods) then
 					if(self.DronePropsMade) then
 						self:RemoveDrones()
@@ -288,6 +270,7 @@ function ENT:ToggleCloak() --############# Toggle Cloak @ RononDex
 				self.CanDoCloak=false
 				timer.Simple( 2, function() self.CanDoCloak=true end)
 			end
+            
 		end
 	end
 
@@ -330,4 +313,15 @@ function ENT:TogglePods() --############# Toggle Engine Pods @ RononDex
 			self.NextUse.EnginePods = CurTime() + self:SequenceDuration(self.sequence);
 		end
 	end
+end
+
+
+function ENT:ToggleButtonColor()
+    if(self.Inflight) then return end;
+    for k,v in pairs(self.Buttons) do
+        if(IsValid(v)) then
+            v:Remove();
+        end
+    end
+    self:SpawnToggleButton(self.Owner);
 end

@@ -250,7 +250,7 @@ function ENT:StartTouch(e,delay_deletion)
 		if(t.HitSky) then self:StartRemoving(delay_deletion) return end;
 		-- Need to replace this with a better one!
 		if(e and self.Fuel > 0 and (self.Parent and self.Parent:IsValid())) then
-			if(not e.NoCollide) then self:Blast(pos) end; -- Do not explode on shields!
+			if(not e.NoCollide or e:GetClass() == "worldspawn") then self:Blast(pos) end; -- Do not explode on shields!
 			self:StartRemoving(delay_deletion);
 		else
 			self.Entity:SetNWBool("fade_out",true);

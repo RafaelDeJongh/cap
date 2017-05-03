@@ -165,6 +165,7 @@ function ENT:EnterJumper(ply) --############### Get in the jumper @ RononDex
         self.PlayerColor = ply:GetColor() or Color(255,255,255,255);
 		ply:SetRenderMode(RENDERMODE_TRANSALPHA);
 		ply:SetColor(Color(255,255,255,0));
+        ply:SpectateEntity(self);
 		ply:SetMoveType(MOVETYPE_OBSERVER);		
 		ply:SetCollisionGroup(COLLISION_GROUP_WEAPON);
 		ply:SetEyeAngles(self:GetAngles());

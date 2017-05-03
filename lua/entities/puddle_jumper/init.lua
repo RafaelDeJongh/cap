@@ -433,7 +433,11 @@ function ENT:Use(ply)   --######### What happens when you press E?@ RononDex
 	local pos = self:WorldToLocal(ply:GetPos()) - COCKPIT_POS
 	if ((pos.x > -20 and pos.x < 100)and(pos.y > -90 and pos.y < 90)and(pos.z > -2 and pos.z < 80)) then
 		if(not(self.Inflight)) then
-			self:EnterJumper(ply)
+            if(ply:KeyDown(self.Vehicle,"CLOAK") and IsValid(self.FrontSeat)) then
+                ply:EnterVehicle(self.FrontSeat);
+            else
+                self:EnterJumper(ply);
+            end
 		end
 	end
 end
@@ -562,10 +566,11 @@ hook.Add( "PlayerSilentDeath","JumperPlayerDeath", function(p)
 	end
 end);
 
-hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
+hook.Add("PlayerLeaveVehicle", "PuddleJumperSeatExit", function(p,v)
 	if(IsValid(p) and IsValid(v)) then
 		if(v.IsJumperSeat) then
 			local Jumper = v.Jumper;
+            v:SetThirdPersonMode(false);
 			p:SetNetworkedBool("JumperPassenger",false);
 			p:SetNetworkedEntity("JumperSeat",NULL);
 			p:SetPos(Jumper:GetPos()+Jumper:GetUp()*-30+Jumper:GetForward()*-100);
@@ -576,7 +581,7 @@ hook.Add("PlayerLeaveVehicle", "JumperSeatExit", function(p,v)
 	end
 end);
 
-hook.Add("PlayerEnteredVehicle","JumperSeatEnter", function(p,v)
+hook.Add("PlayerEnteredVehicle","PuddleJumperSeatEnter", function(p,v)
 	if(IsValid(v)) then
 		if(IsValid(p)) then
 			if(v.IsJumperSeat) then

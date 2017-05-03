@@ -89,7 +89,7 @@ function PANEL:Paint()
 		multiply = 5;
 	elseif(ScrW()==1920 and ScrH()==1080) then
 		multiply = -15;
-	elseif(ScrW()==1600 and ScrH()==900) then
+	elseif(ScrH()==900) then
 		multiply = -10;
 	end
 	

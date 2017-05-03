@@ -137,6 +137,7 @@ function ENT:SpawnDroneProps()
 
 	local pos = self:GetPos()+self:GetUp()*-55
 	local dronePos;
+    self:RemoveDrones();
 	for i=1,6 do
 		if(not(self.DronePropFired[i])) then
 			if(i==1) then
