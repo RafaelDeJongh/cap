@@ -27,7 +27,7 @@ include("modules/dialling.lua");
 -- Models
 ENT.Models = {
 	Base="models/Madman07/Stargate/base_atlantis.mdl",
-	Chevron="models/Madman07/Stargate/chevron.mdl",
+	/*Chevron="models/Madman07/Stargate/chevron.mdl",*/ Chevron="models/gmod4phun/chevron_atlantis.mdl",
 	Dial={
 		"models/zup/stargate/sga_dial_part1.mdl",
 		"models/zup/stargate/sga_dial_part2.mdl",

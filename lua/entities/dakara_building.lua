@@ -299,17 +299,25 @@ function ENT:OnRemove(ply)
 	if IsValid(self.SecretButton2) then self.SecretButton2:Remove() end
 end
 
-function ENT:Think(ply)
-	if (not IsValid(self)) then return end
-	local e = ents.FindInSphere(self:GetPos()+Vector(0,0,1000), 1000);
-	for _,v in pairs(e) do
-		if (v:IsPlayer() and v:GetMoveType() == MOVETYPE_NOCLIP) then
-			v:SetMoveType(MOVETYPE_WALK)
+local PlayersInDakara = {} -- players inside a dakara building
+
+function ENT:Think() -- if player is in in dakara and has noclip on, turn it off
+	for _, ply in pairs(ents.FindInSphere(self:GetPos()+Vector(0,0,1000), 1080)) do
+		if ply:IsPlayer() then
+			PlayersInDakara[ply] = true
+			ply:SetMoveType(MOVETYPE_WALK)
 		end
 	end
-	self.Entity:NextThink(CurTime());
-	return true;
+	self:NextThink(CurTime())
+	return true
 end
+
+-- if player is in dakara range, dont turn on noclip
+hook.Add("PlayerNoClip", "Dakara.DisableNoclip", function(ply)
+	local old = PlayersInDakara[ply]
+	PlayersInDakara[ply] = false
+	return !old
+end)
 
 --########## Run the anim that's set in the arguements @RononDex
 function ENT:Anims(e,anim,delay,nosound,sound)

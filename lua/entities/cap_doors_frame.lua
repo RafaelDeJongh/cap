@@ -95,6 +95,10 @@ function ENT:Think()
 			self.DoorPhys:EnableMotion(true);
 		end
 	end
+	
+	if self.Lockdown and self.Door.Open and self.Door:GetCycle() == 1 then -- when door is open and it is lockdown (shouldnt be open), auto close them
+		self.Door:Toggle()
+	end
 
 	self:NextThink(CurTime()+0.1);
 	return true;

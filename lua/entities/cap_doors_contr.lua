@@ -102,7 +102,7 @@ function ENT:PressButton()
 				self.Entity:EmitSound(self.Sounds.PressDest,100,math.random(90,110));
 			elseif frame.Lockdown then
 				no_sound = true
-				self.Entity:EmitSound(self.Sounds.LockedDest,100,math.random(90,110));
+				self.Entity:EmitSound(self.Sounds.LockedDest,100,100); -- dont put random pitch, it sounds weird then
 			end
 		end
 	elseif (self.TypeS == 3) then
