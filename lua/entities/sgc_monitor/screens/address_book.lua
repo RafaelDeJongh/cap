@@ -48,6 +48,28 @@ if SERVER then
     --self.OldScroll = self.Scroll
     --
   end
+  
+  function SCR:FindGate()
+    local gate
+    local iris
+    local dist = 1000
+    local pos = self.Entity:GetPos()
+    for _,v in pairs(ents.FindByClass("stargate_*")) do
+      if(v.IsStargate and (not IsValid(v.LockedIrisComp) or v.LockedIrisComp==self)) then
+        local sg_dist = (pos - v:GetPos()):Length()
+        if(dist >= sg_dist) then
+          dist = sg_dist
+          gate = v
+          local ir = v:GetIris();
+          if (IsValid(ir)) then
+            iris = ir;
+          end
+        end
+      end
+    end
+    return gate, iris
+  end
+  
   function SCR:Trigger(curr,key,value)
     if not curr then return end
     local count = self:GetServerBool("Connected",false) and self:GetServerInt("AddressCount",0) or 0
@@ -55,8 +77,10 @@ if SERVER then
       return
     end
     if self:GetMonitorBool("ServerConnected",false) then
+      local gate, iris
+      gate, iris = self:FindGate()
        -- \, iris toggle
-      if key == 92 and value then self.Entity.Server.Iris = not self.Entity.Server.Iris end
+      if key == 92 and value then iris:Toggle() end
       -- Backspace, close gate
       if key == 127 and self:GetServerBool("Connected",false) and self:GetServerBool("Active",false) and value then self.Entity.Server.LockedGate:AbortDialling() end
     end
