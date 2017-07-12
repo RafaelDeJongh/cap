@@ -22,7 +22,7 @@ if SERVER then
     if not curr or self:GetMonitorInt("SDState",0) ~= 0 then return end
     if self:GetMonitorBool("ServerConnected",false) then
        -- \, iris toggle
-      if key == 92 and value then self.Entity.Server.Iris = not self.Entity.Server.Iris end
+      if key == 92 and value then self.Entity.Server:ToggleIris() end
       -- Backspace, close gate
       if key == 127 and self:GetServerBool("Connected",false) and self:GetServerBool("Active",false) and value then self.Entity.Server.LockedGate:AbortDialling() end
     end

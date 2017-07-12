@@ -708,6 +708,12 @@ function ENT:Think()
 	return true
 end
 
+function ENT:ToggleIris()
+	if IsValid(self.LockedGate) then
+		self.Iris = self.LockedGate:IrisToggle()
+	end
+end
+
 function ENT:TriggerInput(key, value)
   if (key=="Power") then
     if (value>0) then

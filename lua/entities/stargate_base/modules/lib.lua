@@ -1401,7 +1401,9 @@ function ENT:IrisToggle()
 	local iris = self:GetIris();
 	if (IsValid(iris)) then
 		iris:Toggle();
+		return iris.IsActivated
 	end
+	return false
 end
 
 --################# On Button Chevron Press Feature @Madman07

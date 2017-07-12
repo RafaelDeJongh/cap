@@ -139,8 +139,9 @@ function TOOL:RightClick(t)
 			e.FindBomb = true
 		end
 	end
-	
-	e:InitCodes(p)		
+
+	-- has to be delay, or not work in multiplayer
+	timer.Simple(0,function() if IsValid(e) then e:InitCodes(p) end end)
 	local c = self:Weld(e,t.Entity,weld);
 	self:AddUndo(p,e,c);
 	self:AddCleanup(p,c,e);

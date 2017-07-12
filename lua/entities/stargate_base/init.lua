@@ -630,7 +630,7 @@ function ENT:TriggerInputDefault(k,v,mobile,mdhd)
 			self.Target:SetWire("Received", v);
 		end
 	elseif(k == "Event Horizon Type") then
-		if (table.HasValue(StarGate.EventHorizonTypes,v) and not self.IsSuperGate and not self.IsStargateOrlin) then
+		if (StarGate.EventHorizonTypes[v] and not self.IsSuperGate) then
 			self.EventHorizonType = v;
 			self:SetNWString("EventHorizonType",self.EventHorizonType);
 			if (IsValid(self.EventHorizon)) then
