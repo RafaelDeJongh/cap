@@ -12,6 +12,7 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("ship
 AddCSLuaFile()
 
 ENT.CAP_NotSave = true;
+ENT.CAP_ForceCloak = true;
 
 function ENT:Initialize()
 

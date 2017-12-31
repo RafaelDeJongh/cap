@@ -394,6 +394,9 @@ function ENT:ToggleDoors(d,set)
 			self:ResetSequence("hide");
 			self.Open = true;
 			self.Door:SetSolid(SOLID_NONE);
+			if (IsValid(self.Cloak)) then 
+				self.Cloak:Cloak(self.Door,true)
+			end
 			self.Door:EmitSound(self.Sounds.Close,80,100);
 		end
 	elseif(d=="inc" and IsValid(self.Door2)) then
@@ -412,6 +415,9 @@ function ENT:ToggleDoors(d,set)
 			self.Door2:ResetSequence("close");
 			self.Door2.Open = true;
 			self.Door2:SetSolid(SOLID_NONE)
+			if (IsValid(self.Cloak)) then 
+				self.Cloak:Cloak(self.Door2,true)
+			end
 			self.Door2:EmitSound(self.Sounds.OpenC,80,100);
 		end
 	elseif(d=="ine" and IsValid(self.Door3)) then
@@ -430,6 +436,9 @@ function ENT:ToggleDoors(d,set)
 			self.Door3:ResetSequence("close");
 			self.Door3.Open = true;
 			self.Door3:SetSolid(SOLID_NONE)
+			if (IsValid(self.Cloak)) then 
+				self.Cloak:Cloak(self.Door3,true)
+			end
 			self.Door3:EmitSound(self.Sounds.OpenC,80,100);
 		end
 	end
@@ -576,7 +585,7 @@ function ENT:Status(b,nosound)
 	if(b) then
 		if(not(self:Enabled())) then
 			local e = ents.Create("cloaking")
-			e.Size = 300
+			e.Size = 350
 			e:SetPos(self:GetPos()+Vector(0,0,70))
 			e:SetAngles(self:GetAngles())
 			e:SetParent(self.Entity)

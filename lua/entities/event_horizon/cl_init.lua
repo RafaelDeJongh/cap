@@ -171,7 +171,7 @@ usermessage.Hook( "StarGate.EventHorizon.SecretStart", function(um)
 	hook.Add("EntityEmitSound","Stargate.EH.Secret",function() return false end)
 	hook.Add("PlayerBindPress","Stargate.EH.Secret",function() return true end)
 	--timer.Create("Stargate.EH.Secret",0.1,1,function()
-	hook.Add("PreRender","Stargate.EH.Secret",function()
+	hook.Add("PostRender","Stargate.EH.Secret",function()
 		if ( mat_Overlay[rnd] == nil ) then
 			--mat_Overlay = Material( "effects/tp_eyefx/tpeye3" )
 			mat_Overlay[rnd] = StarGate.MaterialFromVMT(
@@ -209,7 +209,7 @@ end)
 
 usermessage.Hook( "StarGate.EventHorizon.SecretReset", function(um)
 	local e = LocalPlayer();
-	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
 	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
 	hook.Remove("RenderScreenspaceEffects","Stargate.EH.Secret");
@@ -219,7 +219,7 @@ end)
 
 usermessage.Hook( "StarGate.EventHorizon.SecretOut", function(um)
 	local e = LocalPlayer();
-	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
 	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
 	started = CurTime();
@@ -271,7 +271,7 @@ end)
 
 usermessage.Hook( "StarGate.EventHorizon.SecretStop", function(um)
 	local e = LocalPlayer();
-	hook.Remove("PreRender","Stargate.EH.Secret");
+	hook.Remove("PostRender","Stargate.EH.Secret");
 	hook.Remove("EntityEmitSound","Stargate.EH.Secret");
 	hook.Remove("PlayerBindPress","Stargate.EH.Secret");
 	hook.Remove("RenderScreenspaceEffects","Stargate.EH.Secret");

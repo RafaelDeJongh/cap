@@ -254,6 +254,7 @@ function TOOL:ControlsPanel(Panel)
 	Panel:AddControl("PropSelect",{Label=SGLanguage.GetMessage("stool_model"),ConVar="sgc_screen_model",Category="",Models=models});
 	
 	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_sgcscreen_fulldesc")})	
+	Panel:AddControl("Label", {Text = SGLanguage.GetMessage("stool_sgcscreen_controls")})
 end
 
 TOOL:Register();

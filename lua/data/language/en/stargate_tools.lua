@@ -425,7 +425,30 @@ stool_sgcscreen_menu = Codes manager
 stool_sgcscreen_fulldesc =[[This is the SGC Screens from tv series.
 
 Author: glebqip
-Improvements and stool by AlexALX]]
+Improvements and stool by AlexALX
+
+---------
+
+How to use:
+
+1. Place your screens using the tool by left-clicking.
+2. Place your SGC computer using the tool by right-clicking.
+3. Hold C and right-click on your SGC computer to set your codes.
+4. To turn the system on, press e on the computer.
+5. To turn the system off, hold e on the computer.]]
+
+stool_sgcscreen_controls =[[Controls:
+
+- Press numpad 0 (by default) to switch between programs and press enter to select program after highlighting it using arrow keys.
+- To self destruct, go to the Gate Active screen and hold numpad 1; type in your code; press enter; press numpad 1 to activate the bomb.
+- To abort, go to the Gate Active screen and type your abort code only. Then press enter.
+- To dial, go to your address book screen and select one of the addresses with arrow keys and hit enter twice.
+- To manually dial, enter your desired address into the dialing computer screen.
+- To turn your screens on and off individually, press e on them.
+- To shut the gate down, press backspace on the dialing computer screen.
+- To scroll in galaxy map you need use "Page Up/Down" Keys and then arrows (left/right/up/down).
+
+Instruction by CryptAlchemy]]
 stool_sgcscreen_sv = Server options:
 stool_sgcscreen_cl = Screen options:
 stool_sgcscreen_conn_sv = Auto-connect to nearest server

@@ -317,7 +317,7 @@ function ENT:Cloak(e,b)
 	if((e:GetModel() or ""):find("*")) then return end; -- Do not cloak brushes (like athmospheres in spacebuild)
 	local phys = e:GetPhysicsObject();
 	local class = e:GetClass();
-	if(e:GetCollisionGroup() == COLLISION_GROUP_PROJECTILE or phys:IsValid() or class == "prop_dynamic") then
+	if(e:GetCollisionGroup() == COLLISION_GROUP_PROJECTILE or phys:IsValid() or class == "prop_dynamic" or e.CAP_ForceCloak) then
 		local time = CurTime();
 		if((e.LastCloakEvent or 0) + 0.1 > time) then return end;
 		e.LastCloakEvent = time;
