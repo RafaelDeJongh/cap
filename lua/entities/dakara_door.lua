@@ -14,6 +14,7 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
 ENT.AutomaticFrameAdvance = true
+ENT.Untouchable = true
 
 if SERVER then
 

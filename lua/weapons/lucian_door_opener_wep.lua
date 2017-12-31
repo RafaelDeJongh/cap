@@ -38,20 +38,26 @@ function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end
 
-function SWEP:DelayedAnim(time,anim)
-	timer.Simple(time, function() if !self:IsValid() then return end
-		self:SendWeaponAnim(anim)
-	end)
+function SWEP:DelayedAnim(anim,time)
+	local p = self.Owner
+	local vm = p:GetViewModel()
+	if not vm then return end
+	if time then
+		timer.Simple(time, function() if !IsValid(vm) then return end
+			vm:SendViewModelMatchingSequence(vm:LookupSequence(anim))
+		end)
+	else
+		vm:SendViewModelMatchingSequence(vm:LookupSequence(anim))
+	end
 end
 
 --################### Deploy @aVoN
 function SWEP:Deploy()
-
-	self:SendWeaponAnim(ACT_VM_DRAW)
+	self:DelayedAnim("c_lucian_draw")
 	self:SetNextPrimaryFire(CurTime()+0.8)
 	self:SetNextSecondaryFire(CurTime()+0.8)
 	self:SetHolsterDelay(0.55)
-	self:DelayedAnim(0.5,ACT_VM_IDLE)
+	self:DelayedAnim("c_lucian_idle",0.5)
 	
 	return true;
 end
@@ -59,8 +65,7 @@ end
 function SWEP:SpawnLucian()
 	local p = self.Owner;
 	
-	--p:SelectWeapon("weapon_physgun");
-	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	self:DelayedAnim("c_lucian_apply_device")
 	
 	timer.Simple(0.8, function() if not IsValid(self) then return end
 	
@@ -70,21 +75,44 @@ function SWEP:SpawnLucian()
 		ang.p = 0; ang.r = 0; ang.y = (ang.y+90) % 360;
 		
 		if(IsValid(tr.Entity))then
-	--		 ang = ang + tr.Entity:GetAngles();
-	--		 ang.p = 0; ang.r = (ang.r+90) % 360; ang.y = (ang.y+180) % 360;
 			ang = tr.HitNormal:Angle();
 			ang.p = ang.p+90;
 		end
 
 		if(IsValid(tr.Entity) and not tr.Entity:GetClass() == "cap_doors" or tr.StartPos:Distance(pos)>75 or not IsValid(tr.Entity))then
-			self:SendWeaponAnim(ACT_VM_IDLE)
+			self:DelayedAnim("c_lucian_idle")
 			return;
 		end
 		
 		if not SERVER then return end -- damn have you tested this in multiplayer? @ AlexALX
 		
-		if IsValid(tr.Entity) and tr.Entity.Attached then self:SendWeaponAnim(ACT_VM_IDLE) return end -- dont attach it again
-		if IsValid(tr.Entity) and IsValid(tr.Entity.Door) and tr.Entity.Door.Attached then self:SendWeaponAnim(ACT_VM_IDLE) return end -- dont attach it again
+		if IsValid(tr.Entity) and tr.Entity.Attached then self:DelayedAnim("c_lucian_idle") return end -- dont attach it again
+		if IsValid(tr.Entity) and IsValid(tr.Entity.Door) and tr.Entity.Door.Attached then self:DelayedAnim("c_lucian_idle") return end -- dont attach it again
+		
+		/*local TRACED = tr.Entity
+		local TARGET = TRACED
+		
+		if TRACED:GetClass() == "cap_doors_frame" then
+			TARGET = TRACED.Door
+		end
+		
+		if TARGET:GetClass() != "cap_doors" or TARGET:GetClass() != "cap_doors_frame" then return end
+		
+		local ent = ents.Create("lucian_door_opener");
+		ent:SetPos(TARGET:LocalToWorld(Vector(0,0,0)))
+		ent:SetAngles(TARGET:LocalToWorldAngles(Angle(90,0,0)))
+		ent:Spawn();
+		ent:Activate();
+		ent.Owner = p;
+		ent:Touch(TARGET)
+		
+		print("shoulda spawned")
+		
+		local phys = ent:GetPhysicsObject();
+		if IsValid(phys) then
+			phys:EnableMotion(true)
+		end*/
+		
 		
 		if tr.Entity:GetClass() == "cap_doors" and tr.Entity:GetModel() == "models/madman07/doors/dest_door.mdl" then
 			local ent = ents.Create("lucian_door_opener");
@@ -100,7 +128,6 @@ function SWEP:SpawnLucian()
 				phys:EnableMotion(true)
 			end
 			
-			self:Remove()
 		elseif tr.Entity:GetClass() == "cap_doors_frame" and tr.Entity:GetModel() == "models/madman07/doors/dest_frame.mdl" then
 			if !IsValid(tr.Entity.Door) then return end
 			local ent = ents.Create("lucian_door_opener");
@@ -116,32 +143,29 @@ function SWEP:SpawnLucian()
 				phys:EnableMotion(true)
 			end
 			
-			self:Remove()
-		
 		end
+		
+		self.Owner:ConCommand("lastinv")
+		self.Owner:StripWeapon(self:GetClass())
 		
 	end)
 
 end
 
---########## Take control of the MALP @RononDex
 function SWEP:PrimaryAttack()
-
+	self:SetNextPrimaryFire(CurTime() + (1))
 	self:SpawnLucian()
 
 end
 
-
---########### Loose control of the MALP @RononDex
 function SWEP:SecondaryAttack()
 
 end
 
---################### Holster @aVoN
 function SWEP:SetHolsterDelay(time)
 	self.CanHolster = false
 	timer.Simple(time, function() if !self:IsValid() then return end
-	self.CanHolster = true
+		self.CanHolster = true
 	end)
 end
 
@@ -177,10 +201,9 @@ function SWEP:Holster(wep)
 		end
 		
 		self.Status = "holster_start"
-		self:SendWeaponAnim(ACT_VM_HOLSTER); -- Animation
+		self:DelayedAnim("c_lucian_holster")
 		self:SetNextPrimaryFire(CT + (1))
 		self:SetNextSecondaryFire(CT + (1))
-		--if SERVER then self.Owner:EmitSound(self.Sounds.Holster,90) end
 	end
 
 	return false

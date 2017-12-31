@@ -13,9 +13,58 @@ ENT.Category = "Stargate Carter Addon Pack"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 ENT.AutomaticFrameAdvance = true
 
 ENT.Untouchable = true
+
+-----------------------------------CLIENT----------------------------------
+-- door clipping
+if CLIENT then
+	function ENT:Draw()
+		self.clipDist1 = 0 -- clipping plane 1 distance
+		self.clipDist2 = 0 -- clipping plane 2 distance
+		self.dir = Vector(0,0,1) -- direction vector of the doors
+		self.offset = 0 -- offset of clipping plane (for destiny bridge door)
+		
+		if (self:GetModel() == "models/madman07/doors/atl_door1.mdl" || self:GetModel() == "models/madman07/doors/atl_door2.mdl") then
+			self.clipDist1 = 50
+			self.clipDist2 = 50
+			self.dir = self:GetRight()
+		elseif (self:GetModel() == "models/madman07/doors/dest_door.mdl") then
+			self.clipDist1 = 40
+			self.clipDist2 = 40
+			self.dir = self:GetRight()
+		elseif (self:GetModel() == "models/madman07/doors/atl_door3.mdl") then
+			self.clipDist1 = 78
+			self.clipDist2 = 46
+			self.dir = self:GetRight()
+		elseif (self:GetModel() == "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl") then
+			self.clipDist1 = 0.1
+			self.clipDist2 = 137
+			self.dir = self:GetUp()
+			self.offset = 0.2
+		else
+			self.clipDist1 = 50
+			self.clipDist2 = 50
+			self.dir = self:GetRight()
+		end
+
+		local normal = self.dir*self.clipDist1
+		local distance = normal:Dot(self:GetPos()-normal) + self.offset
+		local normal2 = self.dir*-self.clipDist2
+		local distance2 = normal2:Dot(self:GetPos()-normal2)
+
+		local oldclip = render.EnableClipping( true )
+		render.PushCustomClipPlane( normal, distance );
+		render.PushCustomClipPlane( normal2, distance2 );
+			self:SetupBones()
+			self:DrawModel()
+		render.PopCustomClipPlane();
+		render.PopCustomClipPlane();
+		render.EnableClipping( oldclip )
+	end
+end
 
 if SERVER then
 

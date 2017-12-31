@@ -1,6 +1,6 @@
 /*
 	Lucian Door Opener
-	Copyright (C) 2015 Gmod4phun
+	Copyright (C) 2017 Gmod4phun
 */
 
 ENT.Type = "anim"
@@ -8,11 +8,13 @@ ENT.Base = "base_anim"
 ENT.PrintName = "Lucian Door Opener"
 ENT.Author = "Gmod4phun"
 ENT.Category = "Stargate Carter Addon Pack"
+ENT.RenderGroup = RENDERGROUP_BOTH
 
---list.Set("CAP.Entity", ENT.PrintName, ENT);
 ENT.WireDebugName = "Lucian Door Opener"
 
 ENT.AutomaticFrameAdvance = true
+
+ENT.Untouchable = true
 
 if CLIENT then
 
@@ -36,24 +38,67 @@ ENT.SpritePositions = {
 }
 
 ENT.SpriteColor = Color(255,0,0,255)
-/*
-function ENT:Initialize()
-	self:SetPredictable(false)
-end*/
 
 function ENT:Draw()
+	self:SetupBones()
+	self:SetRenderMode(RENDERMODE_TRANSALPHA)
     self:DrawModel();
 	
 	render.SetMaterial( Material("sprites/bluecore") )
-	for i=1,table.Count(self.SpritePositions) do
-		render.DrawSprite( self:LocalToWorld(self.SpritePositions[i]), 0.2, 0.2, self.Entity.SpriteColor )
+	for i=1, #self.SpritePositions do
+		render.DrawSprite( self:LocalToWorld(self.SpritePositions[i]), 0.2, 0.2, self.SpriteColor )
 	end
 	
+end
+
+function ENT:DrawTranslucent()
+	self:Draw()
 end
 
 function ENT:OnRemove()
 end
 
+end
+
+function ENT:GetPair() -- returns the 2 LDO entities
+	if IsValid(self) and IsValid(self.SecondLucianDevice) then
+		return {self, self.SecondLucianDevice}
+	elseif IsValid(self) and IsValid(self.MainLDO) then
+		return {self, self.MainLDO}
+	else
+		return NULL, NULL -- in case one of them wasnt found
+	end
+end
+
+if SERVER then
+	util.AddNetworkString("CAP_LDO_SpriteColorUpdate")
+end
+
+function ENT:UpdateSpriteColor(color) -- convenient function to change the color (server and client) if needed
+	local e = self
+	local tab = e:GetPair()
+	if CLIENT then
+		for _,device in pairs(tab) do
+			device.SpriteColor = color
+		end
+	else
+		net.Start("CAP_LDO_SpriteColorUpdate")
+		net.WriteTable(tab)
+		net.WriteColor(color)
+		net.Broadcast()
+	end
+end
+
+if CLIENT then
+	net.Receive( "CAP_LDO_SpriteColorUpdate", function()
+		local tab = net.ReadTable()
+		local color = net.ReadColor()
+		for _,device in pairs(tab) do
+			if device != NULL then
+				device.SpriteColor = color
+			end
+		end
+	end)
 end
 
 if SERVER then
@@ -63,81 +108,58 @@ if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devi
 AddCSLuaFile();
 
 function ENT:Initialize()
-	self.Entity:SetModel("models/gmod4phun/lucian_door_opener.mdl");
-	self.Entity:PhysicsInit(SOLID_VPHYSICS);
-	self.Entity:SetMoveType(MOVETYPE_VPHYSICS);
-	self.Entity:SetSolid(SOLID_VPHYSICS);
-	self:SetUseType(ONOFF_USE)
-	self.Entity.Attached = false
-	self.Entity.SecondAttached = false
-	self.Entity.TargetDoor = nil
-	self.Entity.IsMain = nil
-	self.CanUse = CurTime()
-	self.GetTimer = 0
+	self:SetModel("models/gmod4phun/lucian_door_opener.mdl");
+	self:PhysicsInit(SOLID_VPHYSICS);
+	self:SetMoveType(MOVETYPE_VPHYSICS);
+	self:SetSolid(SOLID_VPHYSICS);
+	self:SetUseType(SIMPLE_USE)
+	self.Attached = false
+	self.SecondAttached = false
+	self.TargetDoor = nil
+	self.IsMain = nil
+	self.CanUse = true
 	self.Activator = NULL
 end
-/*
-function ENT:SpawnFunction( ply, tr )
-	if ( !tr.Hit ) then return end
-
-	local ang = ply:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+180) % 360;
-
-	local ent = ents.Create("lucian_door_opener");
-	ent:SetAngles(ang);
-	ent:SetPos(tr.HitPos);
-	ent:Spawn();
-	ent:Activate();
-
-	local phys = ent:GetPhysicsObject()
-	if IsValid(phys) then phys:EnableMotion(true) end
-
-	return ent
-end*/
 
 function ENT:RemoveBothLDO()
-	if IsValid(self.Entity) then
-		self.Entity:Remove()
+	if IsValid(self) then
+		self:Remove()
 	end
-	if IsValid(self.Entity) and IsValid(self.Entity.SecondLucianDevice) then
-		self.Entity.SecondLucianDevice:Remove()
+	if IsValid(self) and IsValid(self.SecondLucianDevice) then
+		self.SecondLucianDevice:Remove()
 	end
-	if IsValid(self.Entity) and IsValid(self.Entity.MainLDO) then
-		self.Entity.MainLDO:Remove()
+	if IsValid(self) and IsValid(self.MainLDO) then
+		self.MainLDO:Remove()
 	end
 end
 
-function ENT:Use(activator,_,use)
+function ENT:Use(activator)
+
+	if !self.CanUse then return end
 	
-	if self.CanUse>CurTime() then
-		if (use==0) then
-			self.GetTimer = 0
-			self.Activator = NULL
-		end
+	if not IsValid(self.TargetDoor) then return end
+
+	if IsValid(self) and IsValid(self.TargetDoor) and activator:KeyDown(IN_WALK) then -- Let us pick up when holding ALT and press E
+		activator:Give("lucian_door_opener_wep")
+		self:RemoveBothLDO()
 		return
 	end
 
-	if not IsValid(self.TargetDoor) then return end
+	if IsValid(self) and IsValid(self.TargetDoor) and !activator:KeyDown(IN_WALK) then
 	
-	self.CanUse = CurTime()+2.5
-	self.GetTimer = CurTime()+0.75
-	self.Activator = activator
-	
-	/*if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) and activator:KeyDown(IN_WALK) then
-		activator:Give("lucian_door_opener_wep")
-		self.Entity:RemoveBothLDO()
-		return
-	end*/
-
-	if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) and !activator:KeyDown(IN_WALK) then
-	
-		if self.Entity.TargetDoor.Open != true and self.Entity.TargetDoor.CanDoAnim then
-			self.Entity:EmitSound("npc/scanner/cbot_servoscared.wav",70,100)
-			timer.Simple(0.7, function() if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) then self.Entity:EmitSound("npc/scanner/combat_scan4.wav",70,100) end end)
-			timer.Simple(1.2, function() if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) then self.Entity.TargetDoor:Toggle() end end)
+		if self.TargetDoor.Open != true and self.TargetDoor.CanDoAnim then
+			self.CanUse = false
+			self:EmitSound("npc/scanner/cbot_servoscared.wav",70,100)
+			timer.Simple(0.7, function() if IsValid(self) and IsValid(self.TargetDoor) then self:EmitSound("npc/scanner/combat_scan4.wav",70,100) self:UpdateSpriteColor(Color(0,255,0)) end end)
+			timer.Simple(1.2, function() if IsValid(self) and IsValid(self.TargetDoor) then self.TargetDoor:Toggle() end end)
+			timer.Simple(2.0, function() if IsValid(self) and IsValid(self.TargetDoor) then self:UpdateSpriteColor(Color(255,0,0)) end end)
+			timer.Simple(3.0, function() if IsValid(self) and IsValid(self.TargetDoor) then self.CanUse = true end end)
 		end
 		
-		if self.Entity.TargetDoor.Open == true and self.Entity.TargetDoor.CanDoAnim then
-			self.Entity.TargetDoor:Toggle()
+		if self.TargetDoor.Open == true and self.TargetDoor.CanDoAnim then
+			self.CanUse = false
+			self.TargetDoor:Toggle()
+			timer.Simple(2.0, function() if IsValid(self) and IsValid(self.TargetDoor) then self.CanUse = true end end)
 		end
 	
 	end
@@ -148,93 +170,79 @@ function ENT:Touch(ent)
 	
 	if ent:GetClass() == "cap_doors" and ent:GetModel() == "models/madman07/doors/dest_door.mdl" and ent.Attached != true then
 		ent.Attached = true
-		self.Entity.IsMain = true
-		self.Entity.TargetDoor = ent
-		self.Entity:SetPos(self.Entity.TargetDoor:LocalToWorld(Vector(0,0,0)))
-		self.Entity:SetAngles(self.Entity.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
-		self.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD)
-		self.Entity:FollowBone(self.Entity.TargetDoor, self.Entity.TargetDoor:LookupBone("RightLock"))
-	--	constraint.Weld(self.Entity,self.Entity.TargetDoor,0,0,0,true)
-		constraint.NoCollide(self.Entity,self.Entity.TargetDoor,0,0)
+		self.IsMain = true
+		self.TargetDoor = ent
+		self:SetPos(self.TargetDoor:LocalToWorld(Vector(0,0,0)))
+		self:SetAngles(self.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
+		self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+		self:FollowBone(self.TargetDoor, self.TargetDoor:LookupBone("RightLock"))
+		constraint.NoCollide(self,self.TargetDoor,0,0)
 	end
 	
 	if ent:GetClass() == "cap_doors_frame" and ent:GetModel() == "models/madman07/doors/dest_frame.mdl" and ent.Door.Attached != true then
 		ent.Door.Attached = true
-		self.Entity.IsMain = true
-		self.Entity.TargetDoor = ent.Door
-		self.Entity:SetPos(self.Entity.TargetDoor:LocalToWorld(Vector(0,0,0)))
-		self.Entity:SetAngles(self.Entity.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
-		self.Entity:SetCollisionGroup(COLLISION_GROUP_WORLD)
-		self.Entity:FollowBone(self.Entity.TargetDoor, self.Entity.TargetDoor:LookupBone("RightLock"))
-	--	constraint.Weld(self.Entity,self.Entity.TargetDoor,0,0,0,true)
-		constraint.NoCollide(self.Entity,self.Entity.TargetDoor,0,0)
+		self.IsMain = true
+		self.TargetDoor = ent.Door
+		self:SetPos(self.TargetDoor:LocalToWorld(Vector(0,0,0)))
+		self:SetAngles(self.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
+		self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+		self:FollowBone(self.TargetDoor, self.TargetDoor:LookupBone("RightLock"))
+		constraint.NoCollide(self,self.TargetDoor,0,0)
 	end
 	
 end
 
-
 function ENT:Think()
 
-	if not IsValid(self.Entity.TargetDoor) then
-		self:Remove()
-		return
-	end
-	
-	if (self.GetTimer!=0 and CurTime()-self.GetTimer>0) then
-		local activator = self.Activator
-		if (IsValid(activator)) then
-			activator:Give("lucian_door_opener_wep")
-		end
+	if not IsValid(self.TargetDoor) then
 		self:RemoveBothLDO()
 		return
 	end
 	
-	if self.Entity.TargetDoor.Attached and not self.Entity.SecondAttached and not self.Entity.TargetDoor.LucianProcessDone then
+	if self.TargetDoor.Attached and not self.SecondAttached and not self.TargetDoor.LucianProcessDone then
 		local second = ents.Create("lucian_door_opener");
 		second:Spawn();
 		second:Activate();
-		self.Entity.SecondAttached = true
-		second.MainLDO = self.Entity
+		self.SecondAttached = true
+		second.MainLDO = self
 		second.IsMain = false
-		second.TargetDoor = self.Entity.TargetDoor
-		second:SetPos(self.Entity.TargetDoor:LocalToWorld(Vector(0,0,0)))
-		second:SetAngles(self.Entity.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
+		second.TargetDoor = self.TargetDoor
+		second:SetPos(self.TargetDoor:LocalToWorld(Vector(0,0,0)))
+		second:SetAngles(self.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
 		second:SetCollisionGroup(COLLISION_GROUP_WORLD)
-		second:FollowBone(self.Entity.TargetDoor, self.Entity.TargetDoor:LookupBone("LeftLock"))
-	--	constraint.Weld(second,self.Entity.TargetDoor,0,0,0,true)
-		constraint.NoCollide(second,self.Entity.TargetDoor,0,0)
-		self.Entity.SecondLucianDevice = second
-		self.Entity.SecondLucianDevice.Untouchable = true
-		self.Entity.TargetDoor.LucianProcessDone = true
+		second:FollowBone(self.TargetDoor, self.TargetDoor:LookupBone("LeftLock"))
+		second.Owner = second.MainLDO.Owner
+		constraint.NoCollide(second,self.TargetDoor,0,0)
+		self.SecondLucianDevice = second
+		self.SecondLucianDevice.Untouchable = true
+		self.TargetDoor.LucianProcessDone = true
 	end
-
-	--if self.Entity.TargetDoor.Attached and self.Entity.TargetDoor.CanDoAnim then
-		self.Entity:NextThink(CurTime());
-	--end
 	
+	self:NextThink(CurTime()+0.1);
+	
+	return true
 end
 
 function ENT:OnRemove()
-	self.Entity.Attached = false
-	self.Entity.SecondAttached = false
+	self.Attached = false
+	self.SecondAttached = false
 	
-	if IsValid(self.Entity.TargetDoor) then
-		self.Entity.TargetDoor.Attached = false
-		self.Entity.TargetDoor.LucianProcessDone = false
-		--self.Entity.TargetDoor.Attached = false
+	if IsValid(self.TargetDoor) then
+		self.TargetDoor.Attached = false
+		self.TargetDoor.LucianProcessDone = false
 	end
 	
-	if IsValid(self.Entity.SecondLucianDevice) then
-		self.Entity.SecondLucianDevice:Remove()
-		self.Entity:Remove()
+	if IsValid(self.SecondLucianDevice) then
+		self.SecondLucianDevice:Remove()
+		self:Remove()
 	end
 	
-	if IsValid(self.Entity) and IsValid(self.Entity.SecondLucianDevice) then
-		self.Entity.SecondLucianDevice:Remove()
+	if IsValid(self) and IsValid(self.SecondLucianDevice) then
+		self.SecondLucianDevice:Remove()
 	end
 	
-	if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) and self.Entity.TargetDoor.Open == true then
-		self.Entity.TargetDoor:Toggle()
+	if IsValid(self) and IsValid(self.TargetDoor) and self.TargetDoor.Open == true then
+		self.TargetDoor:Toggle()
 	end
 	
 end

@@ -41,7 +41,7 @@ function TOOL:LeftClick(t)
 	local doormodel = model;
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
 	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl") then model = "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl";
-	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
+	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/atl_frame3.mdl"; -- New door and frame
 	else model = "models/madman07/doors/atl_frame.mdl"; end
 
 	if(not self:CheckLimit()) then return false end;

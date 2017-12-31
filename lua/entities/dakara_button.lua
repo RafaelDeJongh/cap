@@ -14,6 +14,8 @@ ENT.WireDebugName = "Dakara Weapon"
 ENT.Spawnable = false
 ENT.AdminSpawnable = false
 
+ENT.Untouchable = true
+
 if SERVER then
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("entweapon")) then return end

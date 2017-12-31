@@ -385,6 +385,7 @@ function ENT:DoRings()
 		self.Rings[i]:SetAngles(self.Entity:GetAngles())
 		self.Rings[i]:SetParent(self.Entity)
 		self.Rings[i]:SetColor(self:GetColor())
+		self.Rings[i]:SetMaterial(self:GetMaterial())
 		self.Rings[i]:Spawn()
 		self.Rings[i]:Activate();
 		constraint.NoCollide( self.Rings[i], self, 0, 0 );
@@ -631,14 +632,14 @@ function ENT:Anim(up)
 			local seq = self.Entity:LookupSequence("up");
 			self.Entity:ResetSequence(seq);
 			self.Anims = true;
-			timer.Create("Anim"..self:EntIndex(),1,1,function()
+			timer.Create("Anim"..self:EntIndex(),0.01,1,function()
 				self.Anims = false;
 			end);
 		else
 			local seq = self.Entity:LookupSequence("down");
 			self.Entity:ResetSequence(seq);
 			self.Anims = true;
-			timer.Create("Anim"..self:EntIndex(),1,1,function()
+			timer.Create("Anim"..self:EntIndex(),0.01,1,function()
 				self.Anims = false;
 			end);
 		end
