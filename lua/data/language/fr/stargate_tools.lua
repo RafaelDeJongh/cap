@@ -421,17 +421,42 @@ stool_sgcscreen_cleaned = Tous les Ecrans du SGC sont supprimés
 stool_sgcscreen_limit = Limite d'Ecran du SGC atteinte
 stool_sgcscreen_limit_sv = Limite de Serveur du SGC atteinte
 stool_sgcscreen_menu = Gestionnaire de code
-stool_sgcscreen_fulldesc =[[Ce sont les Ecran du SGC de la série TV.
+stool_sgcscreen_fulldesc =[[Ce sont les Ecrans du SGC de la série TV.
 
 Auteur: glebqip
-Améliorations et stool par AlexALX]]
+Améliorations et stool par AlexALX
+
+---------
+
+Comment l'utiliser:
+
+1. Placez vos écrans en utilisant le clic gauche de l'outil.
+2. Placez le serveur du SGC en utilisant le clic droit de l'outil.
+3. Maintenez C et faites un clic droit sur votre ordinateur SGC pour définir vos codes.
+4. Pour allumer le système, appuyez sur e sur l'ordinateur.
+5. Pour éteindre le système, maintenez e sur l'ordinateur.]]
+
+stool_sgcscreen_controls =[[Contrôles:
+
+- Appuyez sur le pavé numérique 0 (par défaut) pour basculer entre les programmes et appuyez sur Entrée pour sélectionner le programme après l'avoir mis en surbrillance à l'aide des fléches.
+- Pour s'autodétruire, allez à l'écran Gate Active et maintenez le pavé numérique 1; tapez votre code; appuyez sur Entrée; appuyez sur le pavé numérique 1 pour activer la bombe.
+- Pour abandonner, allez à l'écran Gate Active et tapez votre code d'abandon seulement. Ensuite, appuyez sur Entrée.
+- Pour composer une adresse, accédez à l'écran "Address Book" et sélectionnez l'une des adresses avec les touches fléchées et appuyez deux fois sur Entrée..
+- Pour composer manuellement une adresse, entrez l'adresse souhaitée sur l'écran "Dialing Program".
+- Pour allumer et éteindre vos écrans individuellement, appuyez sur e devant l'écran souhaité.
+- Pour fermer la porte, appuyez sur la touche retour arrière sur l'écran "Dialing Program".
+- Pour faire défiler la "Galaxy Map", vous devez utiliser les touches "Page Up / Down", puis les flèches (gauche / droite / haut / bas).
+
+Instruction by CryptAlchemy
+]]
 stool_sgcscreen_sv = Option du serveur:
 stool_sgcscreen_cl = Option de l'écran:
 stool_sgcscreen_conn_sv = Connexion automatique au serveur le plus proche
 stool_sgcscreen_conn_sg = Connexion automatique a la porte des étoiles la plus\nproche
 stool_sgcscreen_conn_ic = Connexion automatique a l'ordinateur à iris le plus\nproche
 stool_sgcscreen_conn_nb = Connexion automatique a la bombe au Naquadah la\nplus proche
-stool_sgcscreen_keyd = Touche de menu auto-détruire:
+stool_sgcscreen_key = Touche de sélection de programme:
+stool_sgcscreen_keyd = Touche du menu d'auto-destruction:
 stool_sgcscreen_keyboard = Créer avec clavier
 stool_sgcscreen_keyboard_weld = Clavier parent avec l'écran
 stool_sgcscreen_program = Programmes:
