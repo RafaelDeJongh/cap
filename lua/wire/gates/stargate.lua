@@ -5,6 +5,21 @@
 
 GateActions("StarGate")
 
+GateActions["FindGate"] = {
+	name = "Finds Dialed Gate",
+	inputs = { "Ent" },
+	inputtypes = { "ENTITY" },
+	outputtypes = { "ENTITY" },
+	timed = true,
+	output = function(gate, Ent)
+		if not IsValid(Ent) or not Ent.IsStargate then return nil end return Ent:FindGate(true,Ent.DialledAddress)
+	end,
+	label = function(Out)
+		return string.format ("Gate Found = %q", tostring(IsValid(Out)) )
+	end
+}
+
+
 GateActions["GetAddress"] = {
 	name = "Get stargate address",
 	inputs = { "Ent" },
