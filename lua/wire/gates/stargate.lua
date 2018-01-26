@@ -12,7 +12,7 @@ GateActions["FindGate"] = {
 	outputtypes = { "ENTITY" },
 	timed = true,
 	output = function(gate, Ent)
-		if not IsValid(this) or not this.IsStargate or not this.IsOpen then return nil end return this:FindGate(true,this.DialledAddress)
+		if not IsValid(Ent) or not Ent.IsStargate then return nil end return Ent:FindGate(true,Ent.DialledAddress)
 	end,
 	label = function(Out)
 		return string.format ("Gate Found = %q", tostring(IsValid(Out)) )
