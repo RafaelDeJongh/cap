@@ -672,6 +672,11 @@ end
 
 __e2setcost( 50 )
 
+e2function entity entity:stargateFindGate()
+	if not IsValid(this) or not this.IsStargate then return nil end
+	return this:FindGate(true,this.DialledAddress)
+end
+
 e2function number wirelink:stargateGetEnergyFromAddress(string address)
 	if not IsValid(this) or not this.IsStargate then return -2 end
 	return this:WireGetEnergy(address:upper():sub(1,9));
