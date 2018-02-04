@@ -157,6 +157,7 @@ function ENT:Initialize()
 	end
 	
 	self.EventHorizonType = self.EventHorizonData.Type or self.EventHorizonData.BaseClass.Type
+	self.DefEventHorizonType = self.EventHorizonType
 	self.EventHorizonKawoosh = self.EventHorizonData.Kawoosh or self.EventHorizonData.BaseClass.Kawoosh
 	self:SetNWString("EventHorizonType",self.EventHorizonType);
 
@@ -636,12 +637,18 @@ function ENT:TriggerInputDefault(k,v,mobile,mdhd)
 			if (IsValid(self.EventHorizon)) then
 				self.EventHorizon:EHType(true);
 			end
+			if (v==self.DefEventHorizonType) then
+				self.CustomEHType = nil
+			else
+				self.CustomEHType = true
+			end
 		end
 	elseif(k == "Event Horizon Color") then
+		self.CustomEHColor = true
 		if (v.x==0 and v.y==0 and v.z==0) then
 			local type = self.EventHorizonType;
 			local Data = StarGate.EventHorizonTypes[type] or {}
-			if (Data.Color) then v = Vector(Data.Color.r,Data.Color.g,Data.Color.b) end
+			if (Data.Color) then v = Vector(Data.Color.r,Data.Color.g,Data.Color.b) self.CustomEHColor = nil end
 		end
 		self.EHColor = Color(v.x,v.y,v.z);
 		self:SetNWVector("EHColor",v)

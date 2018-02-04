@@ -82,6 +82,8 @@ stargate_c_tool_23 = Event Horizon Color
 stargate_c_tool_23a = Apply
 stargate_c_tool_23r = Reset
 stargate_c_tool_23c = Cancel
+stargate_c_tool_24 = 9 Chevron Mode
+stargate_c_tool_24d = Disable 9 Chevron Mode
 
 // Stargate VGUI menus
 stargate_vgui_address = Address:

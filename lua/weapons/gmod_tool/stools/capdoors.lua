@@ -12,6 +12,7 @@ TOOL.ClientConVar["toggle"] = KEY_PAD_2;
 TOOL.ClientConVar["diff_text"] = 0;
 TOOL.ClientConVar["model"] = "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl";
 TOOL.ClientConVar["doormodel"] = "";
+TOOL.ClientConVar["short_frame"] = 0;
 
 TOOL.List = "DoorsModels";
 list.Set(TOOL.List,"models/madman07/doors/dest_door.mdl",{});
@@ -21,7 +22,7 @@ list.Set(TOOL.List,"models/madman07/doors/atl_door2.mdl",{});
 list.Set(TOOL.List,"models/madman07/doors/atl_door3.mdl",{});
 
 TOOL.Entity.Class = "cap_doors_frame";
-TOOL.Entity.Keys = {"model","toggle", "diff_text", "doormodel"}; -- These keys will get saved from the duplicator
+TOOL.Entity.Keys = {"model","toggle", "diff_text", "doormodel","short_frame"}; -- These keys will get saved from the duplicator
 TOOL.Entity.Limit = 10;
 TOOL.Topic["name"] = SGLanguage.GetMessage("stool_cap_doors_spawner");
 TOOL.Topic["desc"] = SGLanguage.GetMessage("stool_cap_doors_create");
@@ -38,10 +39,16 @@ function TOOL:LeftClick(t)
 	local model = self:GetClientInfo("model"):lower();
 	local toggle = self:GetClientNumber("toggle");
 	local diff_text = util.tobool(self:GetClientNumber("diff_text"));
+	local short_frame = util.tobool(self:GetClientNumber("short_frame"));
 	local doormodel = model;
 	if (model == "models/madman07/doors/dest_door.mdl") then model = "models/madman07/doors/dest_frame.mdl";
 	elseif (model == "models/cryptalchemy_models/destiny/bridge_door/bridge_door.mdl") then model = "models/cryptalchemy_models/destiny/bridge_door/bridge_door_frame.mdl";
-	elseif (model == "models/madman07/doors/atl_door3.mdl") then model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
+	elseif (model == "models/madman07/doors/atl_door3.mdl") then 
+		if short_frame then
+			model = "models/gmod4phun/atl_frame3.mdl"; -- New door and frame
+		else
+			model = "models/gmod4phun/props/atlantis_door_frame_2.mdl"; -- New door and frame
+		end
 	else model = "models/madman07/doors/atl_frame.mdl"; end
 
 	if(not self:CheckLimit()) then return false end;
@@ -63,13 +70,16 @@ function TOOL:LeftClick(t)
 	return true;
 end
 
-function TOOL:PreEntitySpawn(p,e,model,toggle, diff_text, doormodel)
+function TOOL:PreEntitySpawn(p,e,model,toggle, diff_text, doormodel, short_frame)
 	e:SetModel(model);
+	if (model == "models/madman07/doors/atl_frame.mdl") then
+		if diff_text then e:SetMaterial("madman07/doors/atlwall_red"); end
+	end
 	e.DoorModel = doormodel;
 	e.Owner = p;
 end
 
-function TOOL:PostEntitySpawn(p,e,model,toggle, diff_text, doormodel)
+function TOOL:PostEntitySpawn(p,e,model,toggle, diff_text, doormodel, short_frame)
 	if(toggle) then
 		numpad.OnDown(p,toggle,"ToggleDoors",e);
 	end
@@ -83,6 +93,7 @@ function TOOL:ControlsPanel(Panel)
 		Command="capdoors_toggle",
 	});
 	Panel:CheckBox(SGLanguage.GetMessage("stool_cap_doors_redt"),"capdoors_diff_text");
+	Panel:CheckBox(SGLanguage.GetMessage("stool_cap_doors_short"),"capdoors_short_frame");
 	Panel:CheckBox(SGLanguage.GetMessage("stool_autoweld"),"capdoors_autoweld");
 end
 

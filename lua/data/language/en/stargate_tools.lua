@@ -80,6 +80,7 @@ stool_cap_doors_cleanup = Doors
 stool_cap_doors_cleaned = Removed all Doors
 stool_cap_doors_limit = Hit the Doors limit
 stool_cap_doors_redt = Red Texture on Atlantis frame
+stool_cap_doors_short = Use shorter frame for door3 model
 
 // Console
 stool_cappanel_spawner = Console Spawner

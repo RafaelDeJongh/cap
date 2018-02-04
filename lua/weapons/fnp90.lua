@@ -514,6 +514,8 @@ end
 ---------------------------------------------------------*/
 function SWEP:PrimaryAttack()
 
+	if self.Weapon:GetNextPrimaryFire()>CurTime() then return end
+
 -- This makes you E + Left Click to attach Kull Disruptor - now its just skin, later maybe real function
 
 	if (self.Owner:IsPlayer()) then

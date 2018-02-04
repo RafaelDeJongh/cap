@@ -218,6 +218,19 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					local p,y,r = unpack(v.angles:TrimExplode(" "));
 					e:SetAngles(Angle(tonumber(p),tonumber(y),tonumber(r)));
 				end
+				if (v.ecolor) then
+					local col = Color(unpack(v.ecolor:TrimExplode(" ")));
+					e:SetColor(col)
+					if (col.a!=255) then
+						e:SetRenderMode(RENDERMODE_TRANSALPHA)
+					end
+				end
+				if (v.ematerial and v.ematerial!="") then
+					e:SetMaterial(v.ematerial)
+				end
+				if (v.renderfx and v.renderfx!="") then
+					e:SetRenderFX(tonumber(v.renderfx))
+				end
 				-- freeze stuff now
 				local phys = e:GetPhysicsObject();
 				if(IsValid(phys)) then phys:EnableMotion(false); end
@@ -262,10 +275,6 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 						e.RingInbound = true;
 						e:SetNWBool("ActSGCT",true);
 					end
-					if (v.classname=="stargate_infinity" and v.sg1eh ~= nil and v.sg1eh~="" and util.tobool(v.sg1eh)==true) then
-						e.InfDefaultEH = true;
-						e:SetNWBool("ActInf_SG1_EH",true);
-					end
 					if (v.chevlight ~= nil and v.chevlight ~="" and util.tobool(v.chevlight)==true) then
 						e.ChevLight = true;
 						e:SetNWBool("ActMChevL",true);
@@ -277,6 +286,17 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					if (v.atltype ~= nil and v.atltype ~="" and util.tobool(v.atltype)==true) then
 						e.AtlType = true;
 						e:SetNWBool("AtlType",true);
+					end
+					if (v.chev9spec ~= nil and v.chev9spec~="" and util.tobool(v.chev9spec)==true) then
+						e.Chev9Special = true;
+						e:SetNWBool("Chev9Special",true);
+					end
+					if (v.ehtype ~= nil and v.ehtype~="") then
+						e:TriggerInput("Event Horizon Type",v.ehtype);
+					end
+					if (v.ehcolor ~= nil and v.ehcolor~="") then
+						local col = Vector(unpack(v.ehcolor:TrimExplode(" ")));
+						e:TriggerInput("Event Horizon Color",col);
 					end
 				elseif (IsIris) then
 					for _,v in pairs(ents.FindInSphere(e:GetPos(),10)) do
@@ -419,6 +439,7 @@ function StarGate.GateSpawner.Spawn(v,protect,k,k2)
 					e.__id = v.__id;
 				end
 				hook.Call("StarGate.GateSpawner.SpawnPost",GAMEMODE,e,v)
+				e:Activate();
 			end
 		);
 		return e;
@@ -590,6 +611,20 @@ function StarGate.GateSpawner.CreateFile(p)
 		local already_added = {};
 
 		local props = "";
+		
+		local GlobalProps = function(v,f,mat_ignore,col_ignore)
+			local col = v:GetColor();
+			if (not col_ignore and (col.r!=255 or col.g!=255 or col.b!=255 or col.a!=255)) then
+				f = f .. "ecolor="..col.r.." "..col.g.." "..col.b.." "..col.a.."\n";
+			end
+			if (not mat_ignore and v:GetMaterial()!="") then
+				f = f .. "ematerial="..v:GetMaterial().."\n";
+			end
+			if (v:GetRenderFX()!=0) then
+				f = f .. "renderfx="..tostring(v:GetRenderFX()).."\n";
+			end
+			return f
+		end
 
 		-- Gates
 		for _,v in pairs(ents.FindByClass("stargate_*")) do
@@ -626,14 +661,12 @@ function StarGate.GateSpawner.CreateFile(p)
 							end
 							already_added[v] = true;
 							props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..gate:EntIndex().."\n";
+							props = GlobalProps(v,props)
 						end
 					end
 				end
 				if (v.RingInbound) then
 					f = f .. "sgctype=true\n";
-				end
-				if (v:GetClass()=="stargate_infinity" and v.InfDefaultEH) then
-					f = f .. "sg1eh=true\n";
 				end
 				if (v.ChevLight) then
 					f = f .. "chevlight=true\n";
@@ -644,11 +677,26 @@ function StarGate.GateSpawner.CreateFile(p)
 				if (v.AtlType) then
 					f = f .. "atltype=true\n";
 				end
+				if (v.Chev9Special) then
+					f = f .. "chev9spec=true\n";
+				end
+				if (v.CustomEHColor) then
+					f = f .. "ehcolor="..v.EHColor.r.." "..v.EHColor.g.." "..v.EHColor.b.."\n";
+				end
+				if (v.CustomEHType) then
+					f = f .. "ehtype="..v.EventHorizonType.."\n";
+				end
+				if (v:GetClass()=="stargate_universe") then
+					f = GlobalProps(v.Gate,f)
+				else
+					f = GlobalProps(v,f)
+				end
 			end
 		end
 		for _,v in pairs(ents.FindByClass("*_iris")) do
 			if (v.IsIris) then
 				f = f .. "[iris]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+				f = GlobalProps(v,f)
 			end
 		end
 		for _,v in pairs(ents.FindByClass("dhd_*")) do
@@ -664,33 +712,41 @@ function StarGate.GateSpawner.CreateFile(p)
 					f = f .. "disablering=true\n"
 				end
 			end
+			f = GlobalProps(v,f)
 		end
 
 		-- Mobile DHDs
 		for _,v in pairs(ents.FindByClass("mobile_dhd")) do
 			f = f .. "[mobile_dhd]\nclassname=mobile_dhd\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 
 		-- Carter Stuff
 		for _,v in pairs(ents.FindByClass("bearing")) do
 			f = f .. "[sgu_stuff]\nclassname=bearing\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("floorchevron")) do
 			f = f .. "[sgu_stuff]\nclassname=floorchevron\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("destiny_timer")) do
 			f = f .. "[destiny_timer]\nclassname=destiny_timer\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("destiny_console")) do
 			f = f .. "[destiny_console]\nclassname=destiny_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("kino_dispenser")) do
 			f = f .. "[kino_dispenser]\nclassname=kino_dispenser\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 
 		-- Rings
 		for _,v in pairs(ents.FindByClass("ring_panel_*")) do
 			f = f .. "[ring_panel]\nclassname="..v:GetClass().."\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 			local ringp = v;
 			local first = true
 			for _,v in pairs(StarGate.GetConstrainedEnts(v,2) or {}) do
@@ -701,6 +757,7 @@ function StarGate.GateSpawner.CreateFile(p)
 					end
 					already_added[v] = true;
 					props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ringp:EntIndex().."\n";
+					props = GlobalProps(v,props)
 				end
 			end
 		end
@@ -716,43 +773,54 @@ function StarGate.GateSpawner.CreateFile(p)
 					end
 					already_added[v] = true;
 					props = props.."[prop_physics]\nclassname=prop_physics\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..v:GetModel().."\n__id="..ring:EntIndex().."\n";
+					props = GlobalProps(v,props)
 				end
 			end
 		end
 
 		for _,v in pairs(ents.FindByClass("brazier")) do
 			f = f .. "[brazier]\nclassname=brazier\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 
 		-- Ramps
 		for _,v in pairs(ents.FindByClass("ramp")) do
 			f = f .. "[ramp]\nclassname=ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("ramp_2")) do
 			f = f .. "[ramp]\nclassname=ramp_2\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("sgu_ramp")) do
 			f = f .. "[ramp]\nclassname=sgu_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("sgc_ramp")) do
 			f = f .. "[ramp]\nclassname=sgc_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("icarus_ramp")) do
 			f = f .. "[ramp]\nclassname=icarus_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("future_ramp")) do
 			f = f .. "[ramp]\nclassname=future_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("goauld_ramp")) do
 			f = f .. "[ramp]\nclassname=goauld_ramp\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("gravitycontroller")) do
 			if v.ConTable["bSGAPowerNode"][2]==1 then //only nodes with SGAPowerNode Type
 				f = f .. "[gravitycontroller]\nclassname=gravitycontroller\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nsound="..tostring(v.ConTable["sSound"][2]).."\n";
+				f = GlobalProps(v,f)
 			end
 		end
 		for _,v in pairs(ents.FindByClass("atlantis_light")) do
 			f = f .. "[atlantis_light]\nclassname=atlantis_light\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\nbrightness="..v.Brightness.."\n".."size="..v.LightSize.."\n".."color="..v.LightColour.r.." "..v.LightColour.g.." "..v.LightColour.b.."\n";
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("atlantis_transporter")) do
 			f = f .. "[atlantis_transporter]\nclassname=atlantis_transporter\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nname="..v.TName.."\n".."group="..v.TGroup.."\n".."private="..tostring(v.TPrivate).."\n".."locale="..tostring(v.TLocal).."\n";
@@ -765,18 +833,22 @@ function StarGate.GateSpawner.CreateFile(p)
 			if (v.NoAutoClose) then
               		f = f .. "autoclose=false\n";
               	end
+			f = GlobalProps(v,f)
 		end
 		for _,v in pairs(ents.FindByClass("cap_doors_*")) do
 			local class = v:GetClass();
 			if (class=="cap_doors_frame") then
 				f = f .. "[cap_doors]\nclassname=cap_doors_frame\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\ndoormodel="..tostring(v.DoorModel).."\n";
-				if (v:GetMaterial()=="madman07/doors/atlwall_red") then f = f .. "diffmat=true\n"; end
+				if (v:GetMaterial()=="madman07/doors/atlwall_red") then f = f .. "diffmat=true\n"; f = GlobalProps(v,f,true)
+				else f = GlobalProps(v,f) end
 			elseif (class=="cap_doors_contr" and not v.Atlantis) then
 				f = f .. "[cap_doors_contr]\nclassname=cap_doors_contr\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+				f = GlobalProps(v,f)
 			end
 		end
 		for _,v in pairs(ents.FindByClass("cap_console")) do
 			f = f .. "[cap_console]\nclassname=cap_console\nposition="..tostring(v:GetPos()).."\nangles="..tostring(v:GetAngles()).."\nmodel="..tostring(v:GetModel()).."\n";
+			f = GlobalProps(v,f)
 		end
 		f = f .. props
 

@@ -383,11 +383,7 @@ properties.Add( "Stargate.EHType",
 						local ent = net.ReadEntity()
 						if ( !self:Filter( ent, player ) ) then return false end
 
-						ent.EventHorizonType = net.ReadString();
-						ent:SetNWString("EventHorizonType",ent.EventHorizonType);
-						if (IsValid(ent.EventHorizon)) then
-							ent.EventHorizon:EHType(true);
-						end
+						ent:TriggerInput("Event Horizon Type",net.ReadString())
 					end
 
 });
@@ -531,6 +527,68 @@ properties.Add( "Stargate.PoO",
 						if ( !self:Filter( ent, player ) ) then return false end
 
 						ent:TriggerInput("Set Point of Origin",net.ReadInt(8));
+					end
+
+});
+
+
+properties.Add( "Stargate.Chev9Spec.On",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_24"),
+	Order		=	-130,
+	MenuIcon	=	"icon16/plugin_disabled.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateHas9ChevSpecial || ent:GetNWBool("GateSpawnerProtected",false) || ent:GetNWBool("Chev9Special",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("9 Chevron Mode",1);
+					end
+
+});
+
+properties.Add( "Stargate.Chev9Spec.Off",
+{
+	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_24d"),
+	Order		=	-130,
+	MenuIcon	=	"icon16/plugin.png",
+
+	Filter		=	function( self, ent, ply )
+						if ( !IsValid( ent ) || !IsValid( ply ) || !ent.IsStargate || !ent.StargateHas9ChevSpecial || ent:GetNWBool("GateSpawnerProtected",false) || !ent:GetNWBool("Chev9Special",false)) then return false end
+						if ( !gamemode.Call( "CanProperty", ply, "stargatemodify", ent ) ) then return false end
+						return true
+
+					end,
+
+	Action		=	function( self, ent )
+
+						self:MsgStart()
+							net.WriteEntity( ent )
+						self:MsgEnd()
+
+					end,
+
+	Receive		=	function( self, length, player )
+						local ent = net.ReadEntity()
+						if ( !self:Filter( ent, player ) ) then return false end
+
+						ent:TriggerInput("9 Chevron Mode",0);
 					end
 
 });

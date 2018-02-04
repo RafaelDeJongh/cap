@@ -259,7 +259,7 @@ function ENT:WireGetAddresses()
 							if(name == "") then name = "N/A" end;
 							local blocked = 0;
 							if (v:GetBlocked()) then blocked = 1; end
-							if(not table.HasValue(list, {address,name,blocked})) then
+							if(not table.HasValue(list, {address,name,blocked}) and (not ent:GetNWBool("Chev9Special") or address:len()==9)) then
 								table.insert(list, {address,name,blocked});
 							end
 						end
@@ -279,7 +279,7 @@ function ENT:WireGetAddresses()
 								if(name == "") then name = "N/A" end;
 								local blocked = 0;
 								if (v:GetBlocked()) then blocked = 1; end
-								if(not table.HasValue(list, {address,name,blocked})) then
+								if(not table.HasValue(list, {address,name,blocked}) and not ent:GetNWBool("Chev9Special")) then
 									table.insert(list, {address,name,blocked});
 								end
 							end
@@ -305,18 +305,18 @@ function ENT:WireGetAddresses()
 							address = address[1];
 						end
 						if(#address == 7 and g:GetGalaxy() and v:GetGalaxy() and ((v:GetClass() ~= "stargate_atlantis" and g:GetClass() ~= "stargate_atlantis") and
-						   (v:GetClass() ~= "stargate_universe" and g:GetClass() ~= "stargate_universe")))then
+							(v:GetClass() ~= "stargate_universe" and g:GetClass() ~= "stargate_universe")))then
 							address = string.Explode("@",tostring(address));
 							address = address[1];
 						end
 						if((v:GetClass() == "stargate_universe" and g:GetClass() ~= "stargate_universe") or --#address == 7 and
-						   (v:GetClass() ~= "stargate_universe" and g:GetClass() == "stargate_universe"))then
+							(v:GetClass() ~= "stargate_universe" and g:GetClass() == "stargate_universe"))then
 							address = string.Explode("@",tostring(address));
 							address = address[1].."@!";
 						end
 						local name = v:GetGateName();
 						if(name == "") then name = "N/A" end;
-						if (address:len()==6 or candialg==1) then
+						if ((address:len()==6 or candialg==1) and (not g:GetNWBool("Chev9Special") or address:len()==9)) then
 							if (v:GetBlocked()) then address = "1 "..address; end
 							if(not table.HasValue(list, {address,name,0})) then
 								table.insert(list, {address,name,0});

@@ -29,7 +29,7 @@ end
 function EFFECT:Render()
 	if self.Draw then
 		render.MaterialOverride(self.Materiala);
-		self.Entity:SetModelScale(Vector(2*self.Length,1,1));
+		--self.Entity:SetModelScale(Vector(2*self.Length,1,1));
 		local mat = Matrix()
 		mat:Scale(Vector(2*self.Length,1,1))
 		self.Entity:EnableMatrix( "RenderMultiply", mat )

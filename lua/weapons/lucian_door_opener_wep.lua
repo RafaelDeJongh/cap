@@ -100,7 +100,11 @@ function SWEP:SpawnLucian()
 				phys:EnableMotion(true)
 			end
 			
-			self:Remove()
+			--self:Remove()
+			
+			self.Owner:ConCommand("lastinv")
+			self.Owner:StripWeapon(self:GetClass())
+			
 		elseif tr.Entity:GetClass() == "cap_doors_frame" and tr.Entity:GetModel() == "models/madman07/doors/dest_frame.mdl" then
 			if !IsValid(tr.Entity.Door) then return end
 			local ent = ents.Create("lucian_door_opener");
@@ -116,7 +120,9 @@ function SWEP:SpawnLucian()
 				phys:EnableMotion(true)
 			end
 			
-			self:Remove()
+			--self:Remove()
+			self.Owner:ConCommand("lastinv")
+			self.Owner:StripWeapon(self:GetClass())
 		
 		end
 		
@@ -127,6 +133,7 @@ end
 --########## Take control of the MALP @RononDex
 function SWEP:PrimaryAttack()
 
+	self:SetNextPrimaryFire(CurTime() + (1))
 	self:SpawnLucian()
 
 end

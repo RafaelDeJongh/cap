@@ -58,6 +58,7 @@ end
 
 function SWEP:PrimaryAttack() --###### Shoot @Ronondex, aVoN
 
+	if self.Weapon:GetNextPrimaryFire()>CurTime() then return end
 	if(not IsValid(self.Owner) or (self.Owner:IsPlayer() and self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0)) then return end;
 
 	self:Effects()

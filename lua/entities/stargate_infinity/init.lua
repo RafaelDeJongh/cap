@@ -257,11 +257,11 @@ function ENT:ChangeSystemType(groupsystem,reload)
 end
 
 function ENT:GateWireInputs(groupsystem)
-	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
+	self:CreateWireInputs("Dial Address","Dial String [STRING]","Dial Mode","Start String Dial","Close","Disable Autoclose","Transmit [STRING]","Rotate Ring","Ring Speed Mode","Chevron Encode","Chevron 7 Lock","Encode Symbol [STRING]","Lock Symbol [STRING]","Activate chevron numbers [STRING]","SGC Type","9 Chevron Mode","Set Point of Origin","Disable Menu","Event Horizon Type [STRING]","Event Horizon Color [VECTOR]");
 end
 
 function ENT:GateWireOutputs(groupsystem)
-	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Ring Symbol [STRING]","Ring Rotation","Earth Point of Origin","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","SGC Type","Received [STRING]");
+	self:CreateWireOutputs("Active","Open","Inbound","Chevron","Chevron Locked","Chevrons [STRING]","Ring Symbol [STRING]","Ring Rotation","Earth Point of Origin","Dialing Address [STRING]","Dialing Mode","Dialing Symbol [STRING]","Dialed Symbol [STRING]","SGC Type","9 Chevron Mode","Received [STRING]");
 end
 
 function ENT:WireOrigin()
@@ -674,6 +674,10 @@ function ENT:TriggerInput(k,v,mobile,mdhd)
 			self.Entity:SetNWBool("ActSGCT",false);
 			self:SetWire("SGC Type",false);
 		end
+	elseif(k == "9 Chevron Mode") then
+		self.Chev9Special = util.tobool(v);
+		self.Entity:SetNWBool("Chev9Special",util.tobool(v));
+		self:SetWire("9 Chevron Mode",self.Chev9Special);
 	elseif(k == "Encode Symbol" and not self.Active and (not self.NewActive or self.WireManualDial) and not self.WireBlock) then
 		if (v != "" and v:len()==1 and not self.Ring.WireMoving) then
 			if (self:GetWire("Chevron",0,true)==0) then
@@ -730,6 +734,9 @@ end
 --################# Activates or deactivates a chevron @aVoN
 function ENT:ActivateChevron(chev,b)
 	if(not (self and self.Chevron)) then return end;
+	if self.Chev9Special then
+		chev = self:Chev9Spec(chev)
+	end
 	if(self.Chevron[chev]) then
 		if(b) then
 			if (IsValid(self.Chevron[chev])) then

@@ -78,6 +78,8 @@ stargate_c_tool_23 = Цвет горизонта событий
 stargate_c_tool_23a = Применить
 stargate_c_tool_23r = Сбросить
 stargate_c_tool_23c = Отмена
+stargate_c_tool_24 = Режим 9 шевронов
+stargate_c_tool_24d = Выключить режим 9 шевронов
 
 // Stargate VGUI menus
 stargate_vgui_address = Адрес:

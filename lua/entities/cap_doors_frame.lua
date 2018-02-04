@@ -110,12 +110,17 @@ function ENT:TriggerInput(variable, value)
 	elseif (variable == "Lockdown") then
 		if (value == 1) then
 			if self.Door.Open then 
+				if (not self.Door.CanDoAnim) then
+					self.Door.Close = true
+				end
 				self:Toggle() 
-				timer.Simple(2.5, function() 
-					if IsValid(self) and IsValid(self.Door) and self.Lockdown and not self.Door.Open then 
-						self.Entity:EmitSound(self.Sounds.LockedDest,100,100) 
-					end 
-				end)
+				if not self.Door.Close then
+					timer.Simple(2.5, function() 
+						if IsValid(self) and IsValid(self.Door) and self.Lockdown and not self.Door.Open then 
+							self.Entity:EmitSound(self.Sounds.LockedDest,100,100) 
+						end 
+					end)
+				end
 			end
 			self.Lockdown = true;
 		else

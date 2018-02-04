@@ -82,6 +82,7 @@ end
 
 --################### Shoot @aVoN
 function SWEP:PrimaryAttack()
+	if self.Weapon:GetNextPrimaryFire()>CurTime() then return end
 	if(not IsValid(self.Owner) or (self.Owner:IsPlayer() and self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0)) then return end;
 	if(not self.IsEngaged and not self.Owner:IsNPC()) then return end;
 	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK);

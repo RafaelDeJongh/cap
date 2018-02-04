@@ -13,6 +13,7 @@ ENT.Category = "Stargate Carter Addon Pack"
 ENT.WireDebugName = "Lucian Door Opener"
 
 ENT.AutomaticFrameAdvance = true
+ENT.Untouchable = true
 
 if CLIENT then
 
@@ -42,17 +43,33 @@ function ENT:Initialize()
 end*/
 
 function ENT:Draw()
+	self:SetupBones()
+	self:SetRenderMode(RENDERMODE_TRANSALPHA)
     self:DrawModel();
 	
 	render.SetMaterial( Material("sprites/bluecore") )
-	for i=1,table.Count(self.SpritePositions) do
-		render.DrawSprite( self:LocalToWorld(self.SpritePositions[i]), 0.2, 0.2, self.Entity.SpriteColor )
+	for i=1, #self.SpritePositions do
+		render.DrawSprite( self:LocalToWorld(self.SpritePositions[i]), 0.2, 0.2, self.SpriteColor )
 	end
 	
 end
 
+function ENT:DrawTranslucent()
+	self:Draw()
+end
+
 function ENT:OnRemove()
 end
+
+net.Receive( "CAP_LDO_SpriteColorUpdate", function()
+	local tab = net.ReadTable()
+	local color = net.ReadColor()
+	for _,device in pairs(tab) do
+		if device != NULL then
+			device.SpriteColor = color
+		end
+	end
+end)
 
 end
 
@@ -61,6 +78,8 @@ if SERVER then
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
 
 AddCSLuaFile();
+
+util.AddNetworkString("CAP_LDO_SpriteColorUpdate")
 
 function ENT:Initialize()
 	self.Entity:SetModel("models/gmod4phun/lucian_door_opener.mdl");
@@ -131,9 +150,11 @@ function ENT:Use(activator,_,use)
 	if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) and !activator:KeyDown(IN_WALK) then
 	
 		if self.Entity.TargetDoor.Open != true and self.Entity.TargetDoor.CanDoAnim then
-			self.Entity:EmitSound("npc/scanner/cbot_servoscared.wav",70,100)
-			timer.Simple(0.7, function() if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) then self.Entity:EmitSound("npc/scanner/combat_scan4.wav",70,100) end end)
-			timer.Simple(1.2, function() if IsValid(self.Entity) and IsValid(self.Entity.TargetDoor) then self.Entity.TargetDoor:Toggle() end end)
+			self:EmitSound("npc/scanner/cbot_servoscared.wav",70,100)
+			timer.Simple(0.7, function() if IsValid(self) and IsValid(self.TargetDoor) then self:EmitSound("npc/scanner/combat_scan4.wav",70,100) self:UpdateSpriteColor(Color(0,255,0)) end end)
+			timer.Simple(1.2, function() if IsValid(self) and IsValid(self.TargetDoor) then self.TargetDoor:Toggle() end end)
+			timer.Simple(2.0, function() if IsValid(self) and IsValid(self.TargetDoor) then self:UpdateSpriteColor(Color(255,0,0)) end end)
+			--timer.Simple(3.0, function() if IsValid(self) and IsValid(self.TargetDoor) then self.CanUse = true end end)
 		end
 		
 		if self.Entity.TargetDoor.Open == true and self.Entity.TargetDoor.CanDoAnim then
@@ -201,6 +222,7 @@ function ENT:Think()
 		second:SetAngles(self.Entity.TargetDoor:LocalToWorldAngles(Angle(90,0,0)))
 		second:SetCollisionGroup(COLLISION_GROUP_WORLD)
 		second:FollowBone(self.Entity.TargetDoor, self.Entity.TargetDoor:LookupBone("LeftLock"))
+		second.Owner = second.MainLDO.Owner
 	--	constraint.Weld(second,self.Entity.TargetDoor,0,0,0,true)
 		constraint.NoCollide(second,self.Entity.TargetDoor,0,0)
 		self.Entity.SecondLucianDevice = second
@@ -243,4 +265,31 @@ function ENT:PostEntityPaste()
 	self:Remove()
 end
 
+end
+
+function ENT:GetPair() -- returns the 2 LDO entities
+	if IsValid(self) and IsValid(self.SecondLucianDevice) then
+		return {self, self.SecondLucianDevice}
+	elseif IsValid(self) and IsValid(self.MainLDO) then
+		return {self, self.MainLDO}
+	else
+		return NULL, NULL -- in case one of them wasnt found
+	end
+end
+
+function ENT:UpdateSpriteColor(color) -- convenient function to change the color (server and client) if needed
+	local e = self
+	local tab = e:GetPair()
+	if CLIENT then
+		for k,device in pairs(tab) do
+			if IsValid(device) then 
+				device.SpriteColor = color
+			end
+		end
+	else
+		net.Start("CAP_LDO_SpriteColorUpdate")
+		net.WriteTable(tab)
+		net.WriteColor(color)
+		net.Broadcast()
+	end
 end

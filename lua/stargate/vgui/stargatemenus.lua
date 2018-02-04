@@ -2396,7 +2396,7 @@ function PANEL:AddGatesToList(s)
 					end
 					local address2 = string.sub(address:gsub("#","").."#",1,9);
 					local name = v.name;
-					if(not table.HasValue(gates,address) and (not s or (self:Find(address,s) or (name ~= "" and self:Find(name,s))))) then
+					if(not table.HasValue(gates,address) and (not ent:GetNWBool("Chev9Special") or address2:len()==9) and (not s or (self:Find(address,s) or (name ~= "" and self:Find(name,s))))) then
 						if(name == "") then name = "N/A" end;
 						local blocked, energy = "false", "true";
 						if (v.blocked) then blocked = "true"; end

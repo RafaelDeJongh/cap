@@ -677,7 +677,7 @@ function ENT:FindGate(no_target,addr)
 	if(not (self.IsOpen or self.Dialling) or no_target) then
 		local dialadr = self.DialledAddress;
 		if (addr) then dialadr = addr; end
-		if(dialadr and (#dialadr >= 8 and #dialadr <= 10)) then
+		if(dialadr and (#dialadr >= 8 and #dialadr <= 10 and not self.Chev9Special or #dialadr==10)) then
 			local gates = {};
 			local a = dialadr; -- Fast index (Code shorter);
 			local g = self:GetGateGroup();
@@ -802,7 +802,7 @@ function ENT:FindGateGalaxy(no_target,addr)
 	if(not (self.IsOpen or self.Dialling)) then
 		local dialadr = self.DialledAddress;
 		if (addr) then dialadr = addr; end
-		if(dialadr and (#dialadr >= 8 and #dialadr <= 10) or no_target) then
+		if(dialadr and (#dialadr >= 8 and #dialadr <= 10 and not self.Chev9Special or #dialadr==10) or no_target) then
 			local gates = {};
 			local a = dialadr; -- Fast index (Code shorter);
 			local g = self:GetGalaxy();
@@ -1524,9 +1524,22 @@ function ENT:AbortDialling()
 	end
 end
 
+function ENT:Chev9Spec(chev)
+	if not self.Outbound and #self.DialledAddress!=10 then return chev end
+	if chev==4 then chev = 8
+	elseif chev==5 then chev = 9
+	elseif chev==6 then chev = 4
+	elseif chev==8 then chev = 5 
+	elseif chev==9 then chev = 6 end
+	return chev
+end
+
 --################# Wire output with chevrons by AlexALX
 function ENT:SetChevrons(chev,set,chevs)
 	if (self.WireChevrons == nil) then return end
+	if self.Chev9Special and not chevs then
+		chev = self:Chev9Spec(chev)
+	end
 	if (chev and chev>0) then
 		if (chevs) then
 			for i=1,chev do

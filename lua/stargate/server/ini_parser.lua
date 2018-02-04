@@ -30,8 +30,13 @@ function INIParser:new(file_,no_autotrim,game_folder,commtype,no_msg)
 		return self[n]; -- Returns self or the nodes if directly indexed
 	end
 	local exists = false;
+	local mod = true;
 	if (game_folder) then
-		exists = file.Exists(file_,"GAME");
+		exists = file.Exists(file_,"MOD");
+		if not exists then
+			exists = file.Exists(file_,"GAME");
+			mod = false;
+		end
 	else
 		exists = file.Exists(file_,"DATA");
 	end
@@ -40,7 +45,7 @@ function INIParser:new(file_,no_autotrim,game_folder,commtype,no_msg)
 		obj.notrim = no_autotrim;
 		obj.commtype = commtype;
 		if (game_folder) then
-			obj.content = file.Read(file_,"GAME"); -- Saves raw content of the file
+			obj.content = file.Read(file_,mod and "MOD" or "GAME"); -- Saves raw content of the file
 		else
 			obj.content = file.Read(file_,"DATA"); -- Saves raw content of the file
 		end

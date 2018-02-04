@@ -76,6 +76,7 @@ stool_cap_doors_cleanup = Двери
 stool_cap_doors_cleaned = Удалены все двери
 stool_cap_doors_limit = Достигнут лимит дверей
 stool_cap_doors_redt = Красная текстура на Атлантис раме
+stool_cap_doors_short = Короткое основание для door3 модели
 
 // Console
 stool_cappanel_spawner = Создатель консолей

@@ -313,6 +313,24 @@ if(meta/* and not meta.__SetMaterial*/) then
 		end
 	end
 	
+	--################# SetColor @aVoN
+	meta.__SetRenderFX = meta.__SetRenderFX or meta.SetRenderFX;
+	meta.SetRenderFX = function(self,...)
+		if(not IsValid(self)) then return end;
+		-- Default behaviour
+		if (not self.DeriveIgnoreParent) then
+			self:__SetRenderFX(...);
+		end
+		-- Deriving Extra
+		if(self.__DerivedEntities) then
+			for _,v in pairs(self.__DerivedEntities) do
+				if(IsValid(v)) then
+					v:SetRenderFX(...);
+				end
+			end
+		end
+	end
+	
 	--################# K/V Setting @aVoN
 	meta.__SetKeyValue = meta.__SetKeyValue or meta.SetKeyValue;
 	meta.SetKeyValue = function(self,...)
