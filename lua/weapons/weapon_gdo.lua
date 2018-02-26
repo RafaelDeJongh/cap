@@ -149,7 +149,7 @@ function SWEP:PrimaryAttack()
 	local code = self.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")
 	self.gate = self:FindEnt(pos, false)	
 	if(self.gate and self.gate.IsOpen) then
-		self.gate:SetNWString( "gdo_stargate", code )
+		self.gate:TriggerInput("Transmit",code)
 		self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay + 1 )
 		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
