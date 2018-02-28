@@ -149,11 +149,10 @@ function SWEP:PrimaryAttack()
 	local code = self.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")
 	self.gate = self:FindEnt(pos, false)	
 	if(self.gate and self.gate.IsOpen) then
-		self.gate:TriggerInput("Transmit",code)
 		self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay + 1 )
 		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self) end end)
+		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self) self.gate:TriggerInput("Transmit",code) end end)
 		timer.Simple(2, function() if IsValid(self) then self:SetNWString("gdo_textdisplay",code) end end);
 		timer.Simple(self.Primary.Delay+5, function() if (IsValid(self) and not self.Stand) then self:SetNWString("gdo_textdisplay", "GDO") end end);
 	end
