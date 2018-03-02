@@ -71,11 +71,10 @@ local function SendCode(self,code)
 	if IsValid(comp) then comp:RecieveIrisCode(code) end
 	
 	self.gate:TriggerInput("Transmit",code) 
-
-	Iris = self.gate.Target.Iris
 	
 	local id = self:EntIndex()
 	timer.Create("GDOTimer"..id,0.5,0,function()
+		Iris = StarGate.GetIris(self.gate.Target)
 		if IsValid(Iris) then
 			if Iris.IsActivated then
 				self:SetNWString("gdo_textdisplay", "CLOSED")
