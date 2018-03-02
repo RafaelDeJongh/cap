@@ -88,8 +88,8 @@ local function SendCode(self,code)
 	end)
 	
 	timer.Simple(self.Primary.Delay+5, function() 
+		timer.Remove("GDOTimer"..id)
 		if IsValid(self) then 
-			timer.Remove("GDOTimer"..id)
 			self.gate:TriggerInput("Transmit","") 
 			self:SetNWString("gdo_textdisplay", "GDO") 
 		end 
@@ -111,7 +111,7 @@ function SWEP:PrimaryAttack()
 	if(self.gate and self.gate.IsOpen) then
 		self:SetNWString("gdo_textdisplay",code) 
 		self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay + 1 )
-		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
+		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK)
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self,code) end end)
 	end
@@ -366,6 +366,7 @@ end
 
 function SWEP:OnRemove()
 	self:Holster()
+	if self.gate then self.gate:TriggerInput("Transmit","") end
 end
 
 if CLIENT then
