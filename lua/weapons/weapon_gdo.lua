@@ -94,6 +94,9 @@ end
 function SWEP:Reload()
 end
 
+function SWEP:Think()
+end
+
 function SWEP:PrimaryAttack()
 	if(CLIENT || not IsValid(self.Owner) || self:GetNetworkedString("gdo_textdisplay","GDO")!="GDO") then return end
 	local pos = self.Owner:GetPos()
