@@ -62,10 +62,17 @@ end
 
 SWEP.gate = nil
 
+local function ResetGDO(self)
+	if(CLIENT || not IsValid(self.Owner) then return end
+	self:SetNWString("gdo_textdisplay", "GDO")
+	if IsValid(self.gate) then 
+		self.gate:TriggerInput("Transmit","") 
+	end
+end
+
 local function SendCode(self,code)
-	if (CLIENT) then return end
-	if(not IsValid(self.Owner)) then return end
-	if (not IsValid(self.gate) or not IsValid(self.gate.Target)) then return end
+	if(CLIENT || not IsValid(self.Owner) then return end
+	if (not IsValid(self.gate) or not IsValid(self.gate.Target)) then ResetGDO(self) return end
 	
 	local comp = self:FindEnt(self.gate:GetPos(), true)
 	if IsValid(comp) then comp:RecieveIrisCode(code) end
@@ -74,7 +81,8 @@ local function SendCode(self,code)
 	
 	local id = self:EntIndex()
 	timer.Create("GDOTimer"..id,0.5,0,function()
-		Iris = StarGate.GetIris(self.gate.Target)
+		if (not IsValid(self.gate) or not IsValid(self.gate.Target)) then ResetGDO(self) return end
+		Iris = StarGate.GetIris(self.gate.Target) 
 		if IsValid(Iris) then
 			if Iris.IsActivated then
 				self:SetNWString("gdo_textdisplay", "CLOSED")
@@ -88,10 +96,7 @@ local function SendCode(self,code)
 	
 	timer.Simple(self.Primary.Delay+5, function() 
 		timer.Remove("GDOTimer"..id)
-		if IsValid(self) then 
-			self.gate:TriggerInput("Transmit","") 
-			self:SetNWString("gdo_textdisplay", "GDO") 
-		end 
+		ResetGDO(self) 
 	end)
 	
 end
@@ -365,7 +370,7 @@ end
 
 function SWEP:OnRemove()
 	self:Holster()
-	if self.gate then self.gate:TriggerInput("Transmit","") end
+	ResetGDO(self)
 end
 
 if CLIENT then
