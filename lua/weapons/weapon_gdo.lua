@@ -69,21 +69,27 @@ local function SendCode(self,code)
 	
 	local comp = self:FindEnt(self.gate:GetPos(), true)
 	if IsValid(comp) then comp:RecieveIrisCode(code) end
+	
+	self.gate:TriggerInput("Transmit",code) 
 
 	Iris = self.gate.Target.Iris
 	
-	if IsValid(Iris) then
-		if Iris.IsActivated then
-			self:SetNWString("gdo_textdisplay", "CLOSED")
-		elseif not Iris.IsActivated then
+	local id = self:EntIndex()
+	timer.Create("GDOTimer"..id,0.5,0,function()
+		if IsValid(Iris) then
+			if Iris.IsActivated then
+				self:SetNWString("gdo_textdisplay", "CLOSED")
+			elseif not Iris.IsActivated then
+				self:SetNWString("gdo_textdisplay", "OPEN")		
+			end
+		else
 			self:SetNWString("gdo_textdisplay", "OPEN")		
 		end
-	else
-		self:SetNWString("gdo_textdisplay", "OPEN")		
-	end
+	end)
 	
 	timer.Simple(self.Primary.Delay+5, function() 
 		if IsValid(self) then 
+			timer.Remove("GDOTimer"..id)
 			self.gate:TriggerInput("Transmit","") 
 			self:SetNWString("gdo_textdisplay", "GDO") 
 		end 
@@ -107,7 +113,6 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay + 1 )
 		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-		timer.Simple(self.Primary.Delay, function() if IsValid(self) then self.gate:TriggerInput("Transmit",code) end end)
 		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self,code) end end)
 	end
 end
