@@ -307,7 +307,7 @@ function SWEP:Initialize()
 	// other initialize code goes here
 
 	self:SetNWString("gdo_textdisplay", "GDO")
-	d= false
+	self.Stand = false
 
 	self:SetWeaponHoldType(self.HoldType);
 
