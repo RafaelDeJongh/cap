@@ -62,10 +62,10 @@ end
 
 SWEP.gate = nil
 
-local function SendCode(EntTable,code)
+local function SendCode(EntTable)
 	if (CLIENT) then return end
 	if(not IsValid(EntTable.Owner)) then return end
-	local code = EntTable.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")	
+	local code = EntTable.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")
 	if (not IsValid(EntTable.gate) or not IsValid(EntTable.gate.Target)) then return end
 	local gate_pos = EntTable.gate.Target:GetPos()
 	local iris_comp = EntTable:FindEnt(gate_pos, true)
