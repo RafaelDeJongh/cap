@@ -70,6 +70,8 @@ local function SendCode(EntTable)
 	local gate_pos = EntTable.gate.Target:GetPos()
 	local iris_comp = EntTable:FindEnt(gate_pos, true)
 	
+	EntTab.gate:TriggerInput("Transmit",code)
+	
 	if IsValid(iris_comp) then
 	
 		local answer = iris_comp:RecieveIrisCode(code)
@@ -142,7 +144,6 @@ local function SendCode(EntTable)
 		local self = EntTable;
 		
 		self.Stand = true;
-		self.gate:TriggerInput("Transmit",code)
 		
 		local id = self:EntIndex()
 		
