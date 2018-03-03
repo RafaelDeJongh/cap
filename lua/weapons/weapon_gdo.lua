@@ -62,14 +62,16 @@ end
 
 SWEP.gate = nil
 
-local function SendCode(EntTable)
+local function SendCode(EntTable,code)
 	if (CLIENT) then return end
 	if(not IsValid(EntTable.Owner)) then return end
-	local code = EntTable.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")
+	local code = EntTable.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")	
 	if (not IsValid(EntTable.gate) or not IsValid(EntTable.gate.Target)) then return end
 	local gate_pos = EntTable.gate.Target:GetPos()
 	local iris_comp = EntTable:FindEnt(gate_pos, true)
+	
 	if IsValid(iris_comp) then
+	
 		local answer = iris_comp:RecieveIrisCode(code)
 		local answ = iris_comp.GDOText;
 		if answer == 1 then
@@ -134,7 +136,43 @@ local function SendCode(EntTable)
 				end
 			end)
 		end
+		
+	else
+	
+		local self = EntTable;
+		
+		self.Stand = true;
+		self.gate:TriggerInput("Transmit",code)
+		
+		local id = self:EntIndex()
+		
+		timer.Create("GDOTimer2"..id,0.5,0,function()
+			if (not IsValid(self.gate) or not IsValid(self.gate.Target)) then return end
+			Iris = StarGate.GetIris(self.gate.Target) 
+			if IsValid(Iris) then
+				if Iris:IsBusy() then
+					self:SetNWString("gdo_textdisplay", "BUSY")
+				elseif Iris.IsActivated then
+					self:SetNWString("gdo_textdisplay", "CLOSED")
+				elseif not Iris.IsActivated then
+					self:SetNWString("gdo_textdisplay", "OPEN")		
+				end
+			else
+				self:SetNWString("gdo_textdisplay", "ERROR")		
+			end
+		end)
+			
+		timer.Simple(self.Primary.Delay+8, function() 
+			timer.Remove("GDOTimer2"..id)
+			self:SetNWString("gdo_textdisplay", "GDO")
+			self.Stand = false
+			if self.gate then
+				self.gate:TriggerInput("Transmit","")
+			end
+		end)
+	
 	end
+	
 end
 
 function SWEP:Reload()
@@ -152,7 +190,7 @@ function SWEP:PrimaryAttack()
 		self.Owner:SetAnimation(ACT_VM_PRIMARYATTACK);
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 		timer.Simple(self.Primary.Delay+1, function() if IsValid(self) then SendCode(self) end end)
-		timer.Simple(2, function() if IsValid(self) then self:SetNWString("gdo_textdisplay",self.Owner:GetInfo("cl_weapon_gdo_iriscode"):gsub("[^1-9]","")) end end);
+		timer.Simple(2, function() if IsValid(self) then self:SetNWString("gdo_textdisplay", SendCode(self)) end end);
 		timer.Simple(self.Primary.Delay+5, function() if (IsValid(self) and not self.Stand) then self:SetNWString("gdo_textdisplay", "GDO") end end);
 	end
 end
@@ -406,6 +444,9 @@ end
 
 function SWEP:OnRemove()
 	self:Holster()
+	if self.gate then
+		self.gate:TriggerInput("Transmit","")
+	end
 end
 
 if CLIENT then
