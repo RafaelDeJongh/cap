@@ -40,7 +40,7 @@ function ENT:Initialize()
 	self.GDOText = "";
 	self.Busy = false;
 
-	self:CreateWireInputs("Iris Control", "GDO Status", "GDO Text [STRING]","Auto-close","Don't Auto-Open","Close time","Disable Menu Mode")
+	self:CreateWireInputs("Iris Control","Auto-close","Don't Auto-Open","Close time","Disable Menu Mode")
 	self:CreateWireOutputs("Incoming Wormhole", "Code Status", "Gate Active", "Received Code", "Code Description [STRING]", "Iris Active","Busy")
 
 end
