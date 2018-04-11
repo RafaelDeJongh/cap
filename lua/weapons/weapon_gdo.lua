@@ -147,7 +147,7 @@ local function SendCode(EntTable)
 		local id = self:EntIndex()
 		
 		timer.Create("GDOTimer2"..id,0.5,0,function()
-			if (not IsValid(self) or not IsValid(self.gate) or not IsValid(self.gate.Target)) then return end
+			if ( not IsValid(self) or not IsValid(self.gate) or not IsValid(self.gate.Target) ) then return end
 			Iris = StarGate.GetIris(self.gate.Target) 
 			if IsValid(Iris) then
 				if Iris:IsBusy() then
@@ -164,7 +164,7 @@ local function SendCode(EntTable)
 			
 		timer.Simple(self.Primary.Delay+8, function() 
 			timer.Remove("GDOTimer2"..id)
-			if (not IsValid(self)) or (not IsValid(self.gate)) then return end
+			if ( not IsValid(self) or not IsValid(self.gate) ) then return end
 			self:SetNWString("gdo_textdisplay", "GDO")
 			self.Stand = false
 			self.gate:TriggerInput("Transmit","")
