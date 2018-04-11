@@ -444,9 +444,12 @@ end
 
 function SWEP:OnRemove()
 	self:Holster()
+	--[[ may come in handy later		
 	if self.gate then
 		self.gate:TriggerInput("Transmit","")
 	end
+	]]
+			
 end
 
 if CLIENT then
