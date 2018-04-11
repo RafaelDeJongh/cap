@@ -142,7 +142,7 @@ local function SendCode(EntTable)
 		local self = EntTable;
 		
 		self.Stand = true;
-		self.gate:TriggerInput("Transmit","")
+		self.gate:TriggerInput("Transmit",code)
 		
 		local id = self:EntIndex()
 		
