@@ -164,10 +164,12 @@ local function SendCode(EntTable)
 			
 		timer.Simple(self.Primary.Delay+8, function() 
 			timer.Remove("GDOTimer2"..id)
-			if ( not IsValid(self) or not IsValid(self.gate) ) then return end
+			if not IsValid(self) then return end
 			self:SetNWString("gdo_textdisplay", "GDO")
 			self.Stand = false
-			self.gate:TriggerInput("Transmit","")
+			if self.gate then
+				self.gate:TriggerInput("Transmit","")
+			end
 		end)
 	
 	end
