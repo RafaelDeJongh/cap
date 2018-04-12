@@ -69,7 +69,9 @@ local function SendCode(EntTable)
 	if (not IsValid(EntTable.gate) or not IsValid(EntTable.gate.Target)) then return end
 	local gate_pos = EntTable.gate.Target:GetPos()
 	local iris_comp = EntTable:FindEnt(gate_pos, true)
+	
 	if IsValid(iris_comp) then
+	
 		local answer = iris_comp:RecieveIrisCode(code)
 		local answ = iris_comp.GDOText;
 		if answer == 1 then
@@ -134,7 +136,44 @@ local function SendCode(EntTable)
 				end
 			end)
 		end
+		
+	else
+	
+		local self = EntTable;
+		
+		self.Stand = true;
+		self.gate:TriggerInput("Transmit",code)
+		
+		local id = self:EntIndex()
+		
+		timer.Create("GDOTimer2"..id,0.5,0,function()
+			if ( not IsValid(self) or not IsValid(self.gate) or not IsValid(self.gate.Target) ) then return end
+			Iris = StarGate.GetIris(self.gate.Target) 
+			if IsValid(Iris) then
+				if Iris:IsBusy() then
+					self:SetNWString("gdo_textdisplay", "BUSY")
+				elseif Iris.IsActivated then
+					self:SetNWString("gdo_textdisplay", "CLOSED")
+				elseif not Iris.IsActivated then
+					self:SetNWString("gdo_textdisplay", "OPEN")		
+				end
+			else
+				self:SetNWString("gdo_textdisplay", "ERROR")		
+			end
+		end)
+			
+		timer.Simple(self.Primary.Delay+8, function() 
+			timer.Remove("GDOTimer2"..id)
+			if not IsValid(self) then return end
+			self:SetNWString("gdo_textdisplay", "GDO")
+			self.Stand = false
+			if self.gate then
+				self.gate:TriggerInput("Transmit","")
+			end
+		end)
+	
 	end
+	
 end
 
 function SWEP:Reload()
@@ -406,6 +445,12 @@ end
 
 function SWEP:OnRemove()
 	self:Holster()
+	--[[ may come in handy later		
+	if self.gate then
+		self.gate:TriggerInput("Transmit","")
+	end
+	]]
+			
 end
 
 if CLIENT then
