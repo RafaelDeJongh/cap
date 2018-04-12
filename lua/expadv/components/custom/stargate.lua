@@ -3,7 +3,7 @@ if !WireLib then
 	return
 end
 
-local Component = EXPADV.AddComponent( "stargate", true )
+local Component = EXPADV.AddComponent( "stargate2", true )
 
 Component.Author = "E2 source by AlexALX, ported and updated by Kawoosh"
 Component.Description = "Adds functions for stargate CAP addon."
