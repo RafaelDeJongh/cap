@@ -20,15 +20,6 @@ end
 ]])
 Component:AddFunctionHelper( "stargateTestDial", "e:s", "Dials stargate slowly." )
 
-Component:AddPreparedFunction( "stargateTestDial", "wl:s", "",
-[[
-if IsValid(@value 1) and @value 1.IsStargate then 
-	@value 1:DialGate(string.upper(@value 2))
-end
-]])
-Component:AddFunctionHelper( "stargateTestDial", "wl:s", "Dials stargate slowly." )
--------------------------------------------------------------------------
-
 Component:AddPreparedFunction( "stargateTestDial", "e:s,n", "",
 [[
 if IsValid(@value 1) and @value 1.IsStargate then
