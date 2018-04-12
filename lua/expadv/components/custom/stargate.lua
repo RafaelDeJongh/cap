@@ -1104,4 +1104,3 @@ end
 
 Component:AddFunctionHelper( "stargateGetRingAngle2", "wl:", "Returns stargate ring angle. Available both clientside and serverside." )
 -------------------------------------------------------------------------
-
