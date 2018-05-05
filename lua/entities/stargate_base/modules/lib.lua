@@ -514,9 +514,9 @@ end
 
 --################# Find's special DHD's which may power this gate @Mad
 function ENT:FindPowerDHD()
-	if (IsValid(self.LockedDHD) and (not self.LockedDHD.Destroyed or util.tobool(GetConVar("stargate_dhd_destroyed_energy"):GetInt()))) then 
+	if (IsValid(self.LockedDHD) and (not self.LockedDHD.Destroyed or util.tobool(GetConVar("stargate_dhd_destroyed_energy"):GetInt()))) then
 		if self.LockedDHD.Disabled then return {} end
-		return {self.LockedDHD} 
+		return {self.LockedDHD}
 	end
 	if (IsValid(self.LockedMDHD)) then return {self.LockedMDHD} end
 	if (IsValid(self.LockedDestC)) then return {self.LockedDestC} end
@@ -921,14 +921,14 @@ end
 
 function ENT:CalcDelaySlow(target,inbound)
 	local t_dly = target.DialSlowDelay
-	local teh_dly = target.EventHorizonData.OpeningDelay 
-	local dly = self.DialSlowDelay 
+	local teh_dly = target.EventHorizonData.OpeningDelay
+	local dly = self.DialSlowDelay
 	local eh_dly = self.EventHorizonData.OpeningDelay
 	if (inbound) then
 		if (dly<t_dly) then dly = t_dly end
 		if (eh_dly<teh_dly) then dly = dly+(teh_dly-eh_dly) end
 		dly = dly - 0.2
-	else 
+	else
 		if (t_dly>dly) then dly = t_dly end
 		if (teh_dly>eh_dly) then dly = dly+(teh_dly-eh_dly) end
 		--dly = dly - 0.1
@@ -938,13 +938,13 @@ end
 
 function ENT:CalcDelayFast(target,inbound)
 	local t_dly = target.DialFastTime
-	local teh_dly = target.EventHorizonData.OpeningDelay 
-	local dly = self.DialFastTime 
+	local teh_dly = target.EventHorizonData.OpeningDelay
+	local dly = self.DialFastTime
 	local eh_dly = self.EventHorizonData.OpeningDelay
 	if (inbound) then
 		if (dly<t_dly) then dly = t_dly end
 		if (eh_dly<teh_dly) then dly = dly+(teh_dly-eh_dly) end
-	else 
+	else
 		if (t_dly>dly) then dly = t_dly end
 		if (teh_dly>eh_dly) then dly = dly+(teh_dly-eh_dly) end
 	end
@@ -955,7 +955,7 @@ end
 
 function ENT:DialSlowTime(chevs,caller)
 	return 0
-end 
+end
 
 --##################################
 --#### Duplicator Entity Modifiers (for the gates)
@@ -1366,7 +1366,7 @@ function ENT:IsBlocked(only_by_iris,no_open,only_block)
 				local phi = math.pi*phi/10; -- Fraction of 2pi
 				local pos = self.Entity:LocalToWorld(Vector(0,r*math.cos(phi),r*math.sin(phi))); -- Position on the surface of the eventhorizon
 				local trace = util.QuickTrace(pos,self.Entity:GetForward()*15,{self.Entity,self.Iris,self.EventHorizon});
-				if(trace.Hit) then
+				if(trace.Hit and not trace.Entity.Unblockable) then
 					if(trace.HitWorld) then -- Just the boring world. World always counts as a hit
 						hits = hits + 1;
 					elseif((self.IsOpen or only_block and not self.DialBlockedWorld) and IsValid(trace.Entity) and not trace.Entity.IsIris and v ~= self.Entity) then -- Hit an Entity!
@@ -1529,7 +1529,7 @@ function ENT:Chev9Spec(chev)
 	if chev==4 then chev = 8
 	elseif chev==5 then chev = 9
 	elseif chev==6 then chev = 4
-	elseif chev==8 then chev = 5 
+	elseif chev==8 then chev = 5
 	elseif chev==9 then chev = 6 end
 	return chev
 end
