@@ -111,7 +111,7 @@ function StarGate.FindShield(ent)
 	local gate;
 	local dist = 10000;
 	local pos = ent:GetPos();
-	for _,v in pairs(ents.FindByClass("shield_core")) do
+	for _,v in pairs(ents.FindByClass("shield_core_button")) do
 		local sg_dist = (pos - v:GetPos()):Length();
 		if(dist >= sg_dist) then
 			dist = sg_dist;
