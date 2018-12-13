@@ -52,6 +52,7 @@ else
       w = 510,
       h = 382,
       fov = 70,
+      drawviewmodel = false
      } )
    else
      draw.SimpleText("OFFLINE", "Marlett_61", 247, 190, Color(200,0,0,math.abs(math.sin(CurTime()*math.pi/2))*255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
