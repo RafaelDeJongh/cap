@@ -422,6 +422,13 @@ end
 
 -- Damn, I spent the whole day and night for calculating this formula.
 function ENT:StopFormula(y,x,n,n2)
+	-- Adjusting ranges to actually be big enough so it works with the set Tickrate.
+	local tickRateRelation = 66.666668156783 / (1 / engine.TickInterval())
+	local inBetween = (n + n2) / 2
+	local diff = (n - n2) * tickRateRelation
+	n = inBetween + diff
+	n2 = inBetween - diff
+
 	if (y==nil or x==nil) then return end
 	local stop = false;
 	local b,c;
