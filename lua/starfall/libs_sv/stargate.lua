@@ -9,147 +9,146 @@ local ents_lib = SF.Entities.Library
 local ents_metatable = SF.Entities.Metatable
 
 local ents_methods = SF.Entities.Methods
-local wrap, unwrap = SF.Entities.Wrap, SF.Entities.Unwrap
+local ewrap, eunwrap = SF.Entities.Wrap, SF.Entities.Unwrap
+local pwrap, punwrap = SF.Players.Wrap, SF.Players.Unwrap
 local vunwrap = SF.UnwrapObject
-/*
--- Register privileges
-do
-	local P = SF.Permissions
-	P.registerPrivilege( "stargate.Address", "Stargate Address", "Allow player get stargate address" )
-end
-*/
 
---if not SF.Permissions.check( SF.instance.player, this, "stargate.Address" ) then SF.throw( "Insufficient permissions", 2 ) end
+local checktype = SF.CheckType
+local checkluatype = SF.CheckLuaType
+local getent = SF.Entities.GetEntity
+
+-- Stargate type functions
+SF.Libraries["string"]["TrimExplode"] = StarGate.String.TrimExplode
 
 local function canModify ( ply, ent )
-	return SF.Entities.GetOwner( ent ) == ply or game.SinglePlayer() and ent.GateSpawnerSpawned
+	return SF.Permissions.getOwner( ent ) == ply or game.SinglePlayer() and ent.GateSpawnerSpawned
 end
 
 function ents_methods:stargateAddress()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateAddress()
+	checktype( self, ents_metatable )
+	local ent = getent(self)
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetGateAddress()
 end
 
 function ents_methods:stargateSetAddress(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateAddress(address)
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetGateAddress(address)
 end
 
 function ents_methods:stargateGroup()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateGroup()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetGateGroup()
 end
 
 function ents_methods:stargateSetGroup(group)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateGroup(group)
+	checktype( self, ents_metatable )
+	checkluatype( group, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetGateGroup(group)
 end
 
 function ents_methods:stargateName()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateName()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetGateName()
 end
 
 function ents_methods:stargateSetName(name)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateName(name)
+	checktype( self, ents_metatable )
+	checkluatype( name, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetGateName(name)
 end
 
 function ents_methods:stargatePrivate()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetPrivate()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetPrivate()
 end
 
 function ents_methods:stargateSetPrivate(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetPrivate(bool)
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetPrivate(bool)
 end
 
 function ents_methods:stargateLocal()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetLocale()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetLocale()
 end
 
 function ents_methods:stargateSetLocal(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetLocale(bool)
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetLocale(bool)
 end
 
 function ents_methods:stargateBlocked()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetBlocked()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetBlocked()
 end
 
 function ents_methods:stargateSetBlocked(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetBlocked(bool)
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetBlocked(bool)
 end
 
 function ents_methods:stargateGalaxy()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGalaxy()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:GetGalaxy()
 end
 
 function ents_methods:stargateSetGalaxy(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGalaxy(bool)
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetGalaxy(bool)
 end
 
 function ents_methods:stargateUnstable()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if IsValid(this.EventHorizon) and this.EventHorizon.Unstable then
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if IsValid(ent.EventHorizon) and ent.EventHorizon.Unstable then
 		return true
 	else
 		return false
@@ -157,48 +156,39 @@ function ents_methods:stargateUnstable()
 end
 
 function ents_methods:stargateGetRingAngle()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"};
-	local class = this:GetClass();
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
+	local class = ent:GetClass()
 	if (not table.HasValue(vg,class)) then return false, "Stargate should be sg1, movie, infinity or universe class" end
 	if (class=="stargate_universe") then
-		if (IsValid(this.Gate)) then
-			local angle = tonumber(math.NormalizeAngle(this.Gate:GetLocalAngles().r));
-			if (angle<0) then angle = angle+360; end;
-			return angle;
+		if (IsValid(ent.Gate)) then
+			local angle = tonumber(math.NormalizeAngle(ent.Gate:GetLocalAngles().r))
+			if (angle<0) then angle = angle+360 end
+			return angle
 		end
-		return false;
+		return false
 	else
-		if (IsValid(this.Ring)) then
-			local angle = tonumber(math.NormalizeAngle(this.Ring:GetLocalAngles().r));
-			if (angle<0) then angle = angle+360; end;
-			return angle;
+		if (IsValid(ent.Ring)) then
+			local angle = tonumber(math.NormalizeAngle(ent.Ring:GetLocalAngles().r))
+			if (angle<0) then angle = angle+360 end
+			return angle
 		end
-		return false;
+		return false
 	end
 end
-/*
-function ents_methods:stargateGetWireInput(name)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.GetWire or not this.CreateWireInputs then return false, "entity is not from carter addon pack" end
-	return this:GetWire(name,false);
-end*/
 
 function ents_methods:stargateOverload()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.isOverloading) then
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if (ent.isOverloading) then
 		return 2
 	end
-	if (IsValid(this.overloader) and this.overloader.isFiring) then
+	if (IsValid(ent.overloader) and ent.overloader.isFiring) then
 		return 1
 	else
 		return 0
@@ -206,44 +196,44 @@ function ents_methods:stargateOverload()
 end
 
 function ents_methods:stargateOverloadPerc()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.excessPower==nil or this.excessPowerLimit==nil) then return 0; end
-	local perc = (this.excessPower/this.excessPowerLimit)*100;
-	if (perc>100) then return 100; end
-	return perc;
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if (ent.excessPower==nil or ent.excessPowerLimit==nil) then return 0 end
+	local perc = (ent.excessPower/ent.excessPowerLimit)*100
+	if (perc>100) then return 100 end
+	return perc
 end
 
 function ents_methods:stargateOverloadTime()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.excessPower==nil or this.excessPowerLimit==nil or not IsValid(this.overloader)) then return false; end
-	local energyRequired = this.excessPowerLimit - this.excessPower;
-	local timeLeft = (energyRequired / this.overloader.energyPerSecond)
-	if(StarGate.IsIrisClosed(this)) then
-		timeLeft = timeLeft * 2;
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if (ent.excessPower==nil or ent.excessPowerLimit==nil or not IsValid(ent.overloader)) then return false end
+	local energyRequired = ent.excessPowerLimit - ent.excessPower
+	local timeLeft = (energyRequired / ent.overloader.energyPerSecond)
+	if(StarGate.IsIrisClosed(ent)) then
+		timeLeft = timeLeft * 2
 	end
-	if (this.isOverloading) then
-		return 0;
+	if (ent.isOverloading) then
+		return 0
 	end
-	if (this.overloader.isFiring) then
-		return math.ceil(timeLeft);
+	if (ent.overloader.isFiring) then
+		return math.ceil(timeLeft)
 	else
 		return false
 	end
-	return perc;
+	return perc
 end
 
 function ents_methods:stargateAsuranBeam()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (IsValid(this.asuranweapon) and this.asuranweapon.isFiring) then
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if (IsValid(ent.asuranweapon) and ent.asuranweapon.isFiring) then
 		return true
 	else
 		return false
@@ -251,104 +241,102 @@ function ents_methods:stargateAsuranBeam()
 end
 
 function ents_methods:stargateDial(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:DialGate(address)
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	ent:DialGate(address)
 end
 
 function ents_methods:stargateClose()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:AbortDialling()
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	ent:AbortDialling()
 end
 
 function ents_methods:stargateIrisActive()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:IsBlocked(1,1)
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:IsBlocked(1,1)
 end
 
 function ents_methods:stargateIrisToggle()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:IrisToggle();
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	ent:IrisToggle()
 end
 
 function ents_methods:stargateDHDPressButton(char)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( char, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsDHD then return false, "entity is not DHD" end
-	this:TriggerInput("Press Button",char:byte())
+	checktype( self, ents_metatable )
+	checkluatype( char, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsDHD then return false, "entity is not DHD" end
+	ent:TriggerInput("Press Button",char:byte())
 end
 
 function ents_methods:stargateGetEnergyFromAddress(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetEnergy(address:upper():sub(1,9));
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:WireGetEnergy(address:upper():sub(1,9))
 end
 
 function ents_methods:stargateGetDistanceFromAddress(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetEnergy(address:upper():sub(1,9),true);
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:WireGetEnergy(address:upper():sub(1,9),true)
 end
 
 function ents_methods:stargateAddressList()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetAddresses();
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:WireGetAddresses()
 end
 
 function ents_methods:stargateRandomAddress(mode)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( mode, "number" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	StarGate.RandomGateName(nil,this,nil,true,mode);
+	checktype( self, ents_metatable )
+	checkluatype( mode, TYPE_NUMBER )
+	local ent = getent( self )
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	StarGate.RandomGateName(nil,ent,nil,true,mode)
 end
 
 function ents_methods:stargateTransferEnergy(value)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( value, "number" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferResource("energy",value);
+	checktype( self, ents_metatable )
+	checkluatype( value, TYPE_NUMBER )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:TransferResource("energy",value)
 end
 
 function ents_methods:stargateTransferResource(resname, value)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( resname, "string" )
-	SF.CheckType( value, "number" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferResource(resname,value);
+	checktype( self, ents_metatable )
+	checkluatype( resname, TYPE_STRING )
+	checkluatype( value, TYPE_NUMBER )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	return ent:TransferResource(resname,value)
 end
 
---SF.Stargate = {}
-
-local sg_library, _ = SF.Libraries.Register( "stargate" )
+local sg_library = SF.RegisterLibrary("stargate")
 
 function sg_library.SystemType()
 	local ret = GetConVar("stargate_group_system"):GetBool()
@@ -356,637 +344,683 @@ function sg_library.SystemType()
 end
 
 function sg_library.IsInJamming(from,player)
-	SF.CheckType( from, SF.Types[ "Vector" ] )
-	if (player!=nil) then SF.CheckType( player, SF.Types[ "Player" ] ) end
-	local radius = 1024; -- max range of jamming, we will adjust it later
-	local jaiming_online = false;
-	from = Vector(from[1],from[2],from[3]);
-	player = unwrap( player );
+	checktype( from, SF.Types[ "Vector" ] )
+	if (player!=nil) then checktype( player, SF.Types[ "Player" ] ) end
+	local radius = 1024 -- max range of jamming, we will adjust it later
+	local jaiming_online = false
+	from = Vector(from[1],from[2],from[3])
+	player = punwrap( player )
 	if (not IsValid(player)) then return false end
 	for _,v in pairs(ents.FindInSphere(from, radius)) do
 		if IsValid(v) and v.CapJammingDevice then
 			if v.IsEnabled then
-				local dist = from:Distance(v:GetPos());
+				local dist = from:Distance(v:GetPos())
 				if (dist < v.Size) then  -- ow jaiming, we cant do anything
 					if player==nil or not (v.Immunity and v.Owner == player) then jaiming_online = true end
 				end
 			end
 		end
 	end
-	return jaiming_online;
+	return jaiming_online
 end
 
 function ents_methods:stargateRingAddress()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	return this.Address or "";
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsRings then return false, "entity is not ring" end
+	return ent.Address or ""
 end
 
 function ents_methods:stargateRingSetAddress(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not this.IsRings then return false, "entity is not ring" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetRingAddress(address);
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsRings then return false, "entity is not ring" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetRingAddress(address)
 end
 
 function ents_methods:stargateRingDial(address)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	local adr = address:gsub("[^0-9]","");
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsRings then return false, "entity is not ring" end
+	local adr = address:gsub("[^0-9]","")
 	if (adr!="") then
-		this:Dial(address);
+		ent:Dial(address)
 	else
-		this:Dial(" "); -- fail
+		ent:Dial(" ") -- fail
 	end
 end
 
 function ents_methods:stargateRingDialClosest()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	this:Dial("");
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsRings then return false, "entity is not ring" end
+	ent:Dial("")
 end
 
 function ents_methods:stargateAsgardTeleport(origin, dest, all)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( origin, SF.Types[ "Vector" ] )
-	SF.CheckType( dest, SF.Types[ "Vector" ] )
-	SF.CheckType( all, "boolean" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if this:GetClass() != "transporter" then return false, "entity is not asgard trasnporter" end
-	this.TeleportEverything = all;
-	this:Teleport(Vector(origin[1],origin[2],origin[3]), Vector(dest[1],dest[2],dest[3]));
+	checktype( self, ents_metatable )
+	checktype( origin, SF.Types[ "Vector" ] )
+	checktype( dest, SF.Types[ "Vector" ] )
+	checkluatype( all, TYPE_BOOL )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if ent:GetClass() != "transporter" then return false, "entity is not asgard trasnporter" end
+	ent.TeleportEverything = all
+	ent:Teleport(Vector(origin[1],origin[2],origin[3]), Vector(dest[1],dest[2],dest[3]))
 end
 
 function ents_methods:stargateAtlantisTPGetName()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TName or "";
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return ent.TName or ""
 end
 
 function ents_methods:stargateAtlantisTPSetName(name)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlName(name);
+	checktype( self, ents_metatable )
+	checkluatype( name, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetAtlName(name)
 end
 
 function ents_methods:stargateAtlantisTPGetGroup()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TGroup or "";
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return ent.TGroup or ""
 end
 
 function ents_methods:stargateAtlantisTPSetGroup(group)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlGrp(group);
+	checktype( self, ents_metatable )
+	checkluatype( group, TYPE_STRING )
+	local ent = getent( self )
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetAtlGrp(group)
 end
 
 function ents_methods:stargateAtlantisTPGetPrivate()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TPrivate;
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return ent.TPrivate
 end
 
 function ents_methods:stargateAtlantisTPSetPrivate(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlPrivate(bool);
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetAtlPrivate(bool)
 end
 
 function ents_methods:stargateAtlantisTPGetLocal()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TLocal;
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return ent.TLocal
 end
 
 function ents_methods:stargateAtlantisTPSetLocal(bool)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not canModify(SF.instance.player,this) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlLocal(bool);
+	checktype( self, ents_metatable )
+	checkluatype( bool, TYPE_BOOL )
+	local ent = getent( self )
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	if not canModify(SF.instance.player,ent) or not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+	ent:SetAtlLocal(bool)
 end
 
 function ents_methods:stargateAtlantisTPTeleport(name)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	this.Destination = name;
-	this:Teleport();
+	checktype( self, ents_metatable )
+	checkluatype( name, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	ent.Destination = name
+	ent:Teleport()
 end
 
 function ents_methods:stargateAtlantisTPAddressList()
-	SF.CheckType( self, ents_metatable )
-	local this = unwrap( self )
-	if not canModify(SF.instance.player,this) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this:WireGetAddresses();
+	checktype( self, ents_metatable )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+	return ent:WireGetAddresses()
 end
 
-timer.Simple(0,function()
+if not WireLib then return end
 
-if (SF.Wire==nil) then return end
+timer.Create("wait_for_wire", 1, 0, function()
+	if SF.Wire == nil then return end
+	timer.Stop("wait_for_wire")
 
-assert( SF.Wire )
+	local checkpermission = SF.Permissions.check
+	local wirelink_metatable = SF.Wire.WlMetatable
+	local wirelink_methods = SF.Wire.WlMethods
 
-local wirelink_metatable = SF.Wire.WlMetatable
-local wirelink_methods = SF.Wire.WlMethods
+	local wlwrap, wlunwrap = SF.Wire.WlWrap, SF.Wire.WlUnwrap
+	local vwrap, vunwrap = SF.WrapObject, SF.UnwrapObject
 
-local ents_methods = SF.Wire.Methods
-local wrap, unwrap = SF.Wire.WlWrap, SF.Wire.WlUnwrap
-local vwrap, vunwrap = SF.WrapObject, SF.UnwrapObject
-
-function wirelink_methods:stargateAddress()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateAddress()
-end
-
-function wirelink_methods:stargateSetAddress(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateAddress(address)
-end
-
-function wirelink_methods:stargateGroup()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateGroup()
-end
-
-function wirelink_methods:stargateSetGroup(group)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateGroup(group)
-end
-
-function wirelink_methods:stargateName()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGateName()
-end
-
-function wirelink_methods:stargateSetName(name)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGateName(name)
-end
-
-function wirelink_methods:stargatePrivate()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetPrivate()
-end
-
-function wirelink_methods:stargateSetPrivate(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetPrivate(bool)
-end
-
-function wirelink_methods:stargateLocal()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetLocale()
-end
-
-function wirelink_methods:stargateSetLocal(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetLocale(bool)
-end
-
-function wirelink_methods:stargateBlocked()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetBlocked()
-end
-
-function wirelink_methods:stargateSetBlocked(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetBlocked(bool)
-end
-
-function wirelink_methods:stargateGalaxy()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:GetGalaxy()
-end
-
-function wirelink_methods:stargateSetGalaxy(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetGalaxy(bool)
-end
-
-function wirelink_methods:stargateUnstable()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if IsValid(this.EventHorizon) and this.EventHorizon.Unstable then
-		return true
-	else
-		return false
+	function wirelink_methods:stargateAddress()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype(self, wirelink_metatable)
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetGateAddress()
 	end
-end
 
-function wirelink_methods:stargateGetRingAngle()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"};
-	local class = this:GetClass();
-	if (not table.HasValue(vg,class)) then return false, "Stargate should be sg1, movie, infinity or universe class" end
-	if (class=="stargate_universe") then
-		if (IsValid(this.Gate)) then
-			local angle = tonumber(math.NormalizeAngle(this.Gate:GetLocalAngles().r));
-			if (angle<0) then angle = angle+360; end;
-			return angle;
+	function wirelink_methods:stargateSetAddress(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetGateAddress(address)
+	end
+
+	function wirelink_methods:stargateGroup()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetGateGroup()
+	end
+
+	function wirelink_methods:stargateSetGroup(group)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( group, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetGateGroup(group)
+	end
+
+	function wirelink_methods:stargateName()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetGateName()
+	end
+
+	function wirelink_methods:stargateSetName(name)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( name, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetGateName(name)
+	end
+
+	function wirelink_methods:stargatePrivate()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetPrivate()
+	end
+
+	function wirelink_methods:stargateSetPrivate(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetPrivate(bool)
+	end
+
+	function wirelink_methods:stargateLocal()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetLocale()
+	end
+
+	function wirelink_methods:stargateSetLocal(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetLocale(bool)
+	end
+
+	function wirelink_methods:stargateBlocked()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetBlocked()
+	end
+
+	function wirelink_methods:stargateSetBlocked(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetBlocked(bool)
+	end
+
+	function wirelink_methods:stargateGalaxy()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:GetGalaxy()
+	end
+
+	function wirelink_methods:stargateSetGalaxy(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetGalaxy(bool)
+	end
+
+	function wirelink_methods:stargateUnstable()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if IsValid(ent.EventHorizon) and ent.EventHorizon.Unstable then
+			return true
+		else
+			return false
 		end
-		return false;
-	else
-		if (IsValid(this.Ring)) then
-			local angle = tonumber(math.NormalizeAngle(this.Ring:GetLocalAngles().r));
-			if (angle<0) then angle = angle+360; end;
-			return angle;
+	end
+
+	function wirelink_methods:stargateGetRingAngle()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		local vg = {"stargate_movie","stargate_sg1","stargate_infinity","stargate_universe"}
+		local class = ent:GetClass()
+		if (not table.HasValue(vg,class)) then return false, "Stargate should be sg1, movie, infinity or universe class" end
+		if (class=="stargate_universe") then
+			if (IsValid(ent.Gate)) then
+				local angle = tonumber(math.NormalizeAngle(ent.Gate:GetLocalAngles().r))
+				if (angle<0) then angle = angle+360 end
+				return angle
+			end
+			return false
+		else
+			if (IsValid(ent.Ring)) then
+				local angle = tonumber(math.NormalizeAngle(ent.Ring:GetLocalAngles().r))
+				if (angle<0) then angle = angle+360 end
+				return angle
+			end
+			return false
 		end
-		return false;
 	end
-end
-/*
-function wirelink_methods:stargateGetWireInput(name)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.GetWire or not this.CreateWireInputs then return false, "entity is not from carter addon pack" end
-	return this:GetWire(name,false);
-end*/
 
-function wirelink_methods:stargateOverload()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.isOverloading) then
-		return 2
+	function wirelink_methods:stargateOverload()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if (ent.isOverloading) then
+			return 2
+		end
+		if (IsValid(ent.overloader) and ent.overloader.isFiring) then
+			return 1
+		else
+			return 0
+		end
 	end
-	if (IsValid(this.overloader) and this.overloader.isFiring) then
-		return 1
-	else
-		return 0
+
+	function wirelink_methods:stargateOverloadPerc()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if (ent.excessPower==nil or ent.excessPowerLimit==nil) then return 0 end
+		local perc = (ent.excessPower/ent.excessPowerLimit)*100
+		if (perc>100) then return 100 end
+		return perc
 	end
-end
 
-function wirelink_methods:stargateOverloadPerc()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.excessPower==nil or this.excessPowerLimit==nil) then return 0; end
-	local perc = (this.excessPower/this.excessPowerLimit)*100;
-	if (perc>100) then return 100; end
-	return perc;
-end
-
-function wirelink_methods:stargateOverloadTime()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (this.excessPower==nil or this.excessPowerLimit==nil or not IsValid(this.overloader)) then return false; end
-	local energyRequired = this.excessPowerLimit - this.excessPower;
-	local timeLeft = (energyRequired / this.overloader.energyPerSecond)
-	if(StarGate.IsIrisClosed(this)) then
-		timeLeft = timeLeft * 2;
+	function wirelink_methods:stargateOverloadTime()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if (ent.excessPower==nil or ent.excessPowerLimit==nil or not IsValid(ent.overloader)) then return false end
+		local energyRequired = ent.excessPowerLimit - ent.excessPower
+		local timeLeft = (energyRequired / ent.overloader.energyPerSecond)
+		if(StarGate.IsIrisClosed(ent)) then
+			timeLeft = timeLeft * 2
+		end
+		if (ent.isOverloading) then
+			return 0
+		end
+		if (ent.overloader.isFiring) then
+			return math.ceil(timeLeft)
+		else
+			return false
+		end
+		return perc
 	end
-	if (this.isOverloading) then
-		return 0;
+
+	function wirelink_methods:stargateAsuranBeam()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if (IsValid(ent.asuranweapon) and ent.asuranweapon.isFiring) then
+			return true
+		else
+			return false
+		end
 	end
-	if (this.overloader.isFiring) then
-		return math.ceil(timeLeft);
-	else
-		return false
+
+	function wirelink_methods:stargateDial(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		ent:DialGate(address)
 	end
-	return perc;
-end
 
-function wirelink_methods:stargateAsuranBeam()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if (IsValid(this.asuranweapon) and this.asuranweapon.isFiring) then
-		return true
-	else
-		return false
+	function wirelink_methods:stargateClose()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		ent:AbortDialling()
 	end
-end
 
-function wirelink_methods:stargateDial(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:DialGate(address)
-end
-
-function wirelink_methods:stargateClose()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:AbortDialling()
-end
-
-function wirelink_methods:stargateIrisActive()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:IsBlocked(1,1)
-end
-
-function wirelink_methods:stargateIrisToggle()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	this:IrisToggle();
-end
-
-function wirelink_methods:stargateDHDPressButton(char)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( char, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsDHD then return false, "entity is not DHD" end
-	this:TriggerInput("Press Button",char:byte())
-end
-
-function wirelink_methods:stargateGetEnergyFromAddress(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetEnergy(address:upper():sub(1,9));
-end
-
-function wirelink_methods:stargateGetDistanceFromAddress(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetEnergy(address:upper():sub(1,9),true);
-end
-
-function wirelink_methods:stargateAddressList()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:WireGetAddresses();
-end
-
-function wirelink_methods:stargateRandomAddress(mode)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( mode, "number" )
-	local this = unwrap( self )
-	if not this.IsStargate then return false, "entity is not stargate" end
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	StarGate.RandomGateName(nil,this,nil,true,mode);
-end
-
-function wirelink_methods:stargateTransferEnergy(value)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( value, "number" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferResource("energy",value);
-end
-
-function wirelink_methods:stargateTransferResource(resname, value)
-	SF.CheckType( self, ents_metatable )
-	SF.CheckType( resname, "string" )
-	SF.CheckType( value, "number" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) or not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	if not this.IsStargate then return false, "entity is not stargate" end
-	return this:TransferResource(resname,value);
-end
-
-function wirelink_methods:stargateRingAddress()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	return this.Address or "";
-end
-
-function wirelink_methods:stargateRingSetAddress(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetRingAddress(address);
-end
-
-function wirelink_methods:stargateRingDial(address)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( address, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	local adr = address:gsub("[^0-9]","");
-	if (adr!="") then
-		this:Dial(address);
-	else
-		this:Dial(" "); -- fail
+	function wirelink_methods:stargateIrisActive()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:IsBlocked(1,1)
 	end
-end
 
-function wirelink_methods:stargateRingDialClosest()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsRings then return false, "entity is not ring" end
-	this:Dial("");
-end
+	function wirelink_methods:stargateIrisToggle()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		ent:IrisToggle()
+	end
 
-function wirelink_methods:stargateAsgardTeleport(origin, dest, all)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( origin, SF.Types[ "Vector" ] )
-	SF.CheckType( dest, SF.Types[ "Vector" ] )
-	SF.CheckType( all, "boolean" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if this:GetClass() != "transporter" then return false, "entity is not asgard trasnporter" end
-	this.TeleportEverything = all;
-	this:Teleport(Vector(origin[1],origin[2],origin[3]), Vector(dest[1],dest[2],dest[3]));
-end
+	function wirelink_methods:stargateDHDPressButton(char)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( char, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsDHD then return false, "entity is not DHD" end
+		ent:TriggerInput("Press Button",char:byte())
+	end
 
-function wirelink_methods:stargateAtlantisTPGetName()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TName or "";
-end
+	function wirelink_methods:stargateGetEnergyFromAddress(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:WireGetEnergy(address:upper():sub(1,9))
+	end
 
-function wirelink_methods:stargateAtlantisTPSetName(name)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlName(name);
-end
+	function wirelink_methods:stargateGetDistanceFromAddress(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:WireGetEnergy(address:upper():sub(1,9),true)
+	end
 
-function wirelink_methods:stargateAtlantisTPGetGroup()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TGroup or "";
-end
+	function wirelink_methods:stargateAddressList()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:WireGetAddresses()
+	end
 
-function wirelink_methods:stargateAtlantisTPSetGroup(group)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( group, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlGrp(group);
-end
+	function wirelink_methods:stargateRandomAddress(mode)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( mode, TYPE_NUMBER )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		StarGate.RandomGateName(nil,ent,nil,true,mode)
+	end
 
-function wirelink_methods:stargateAtlantisTPGetPrivate()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TPrivate;
-end
+	function wirelink_methods:stargateTransferEnergy(value)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( value, TYPE_NUMBER )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:TransferResource("energy",value)
+	end
 
-function wirelink_methods:stargateAtlantisTPSetPrivate(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlPrivate(bool);
-end
+	function wirelink_methods:stargateTransferResource(resname, value)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( resname, TYPE_STRING )
+		checkluatype( value, TYPE_NUMBER )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		return ent:TransferResource(resname,value)
+	end
 
-function wirelink_methods:stargateAtlantisTPGetLocal()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this.TLocal;
-end
+	function wirelink_methods:stargateRingAddress()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsRings then return false, "entity is not ring" end
+		return ent.Address or ""
+	end
 
-function wirelink_methods:stargateAtlantisTPSetLocal(bool)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( bool, "boolean" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.write" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	if not this:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
-	this:SetAtlLocal(bool);
-end
+	function wirelink_methods:stargateRingSetAddress(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsRings then return false, "entity is not ring" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetRingAddress(address)
+	end
 
-function wirelink_methods:stargateAtlantisTPTeleport(name)
-	SF.CheckType( self, wirelink_metatable )
-	SF.CheckType( name, "string" )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	this.Destination = name;
-	this:Teleport();
-end
+	function wirelink_methods:stargateRingDial(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsRings then return false, "entity is not ring" end
+		local adr = address:gsub("[^0-9]","")
+		if (adr!="") then
+			ent:Dial(address)
+		else
+			ent:Dial(" ") -- fail
+		end
+	end
 
-function wirelink_methods:stargateAtlantisTPAddressList()
-	SF.CheckType( self, wirelink_metatable )
-	local this = unwrap( self )
-	if not SF.Permissions.check( SF.instance.player, nil, "wire.wirelink.read" ) then return false, "Insufficient permissions" end
-	if not this.IsAtlTP then return false, "entity is not atlantis transporter" end
-	return this:WireGetAddresses();
-end
+	function wirelink_methods:stargateRingDialClosest()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsRings then return false, "entity is not ring" end
+		ent:Dial("")
+	end
 
+	function wirelink_methods:stargateAsgardTeleport(origin, dest, all)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checktype( origin, SF.Types[ "Vector" ] )
+		checktype( dest, SF.Types[ "Vector" ] )
+		checkluatype( all, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if ent:GetClass() != "transporter" then return false, "entity is not asgard trasnporter" end
+		ent.TeleportEverything = all
+		ent:Teleport(Vector(origin[1],origin[2],origin[3]), Vector(dest[1],dest[2],dest[3]))
+	end
+
+	function wirelink_methods:stargateAtlantisTPGetName()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		return ent.TName or ""
+	end
+
+	function wirelink_methods:stargateAtlantisTPSetName(name)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( name, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetAtlName(name)
+	end
+
+	function wirelink_methods:stargateAtlantisTPGetGroup()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		return ent.TGroup or ""
+	end
+
+	function wirelink_methods:stargateAtlantisTPSetGroup(group)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( group, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetAtlGrp(group)
+	end
+
+	function wirelink_methods:stargateAtlantisTPGetPrivate()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		return ent.TPrivate
+	end
+
+	function wirelink_methods:stargateAtlantisTPSetPrivate(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetAtlPrivate(bool)
+	end
+
+	function wirelink_methods:stargateAtlantisTPGetLocal()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		return ent.TLocal
+	end
+
+	function wirelink_methods:stargateAtlantisTPSetLocal(bool)
+		checkpermission(SF.instance, nil, "wire.wirelink.write")
+		checktype( self, wirelink_metatable )
+		checkluatype( bool, TYPE_BOOL )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		if not ent:CAP_CanModify(SF.instance.player) then return false, "Insufficient permissions" end
+		ent:SetAtlLocal(bool)
+	end
+
+	function wirelink_methods:stargateAtlantisTPTeleport(name)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( name, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		ent.Destination = name
+		ent:Teleport()
+	end
+
+	function wirelink_methods:stargateAtlantisTPAddressList()
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsAtlTP then return false, "entity is not atlantis transporter" end
+		return ent:WireGetAddresses()
+	end
 end)
