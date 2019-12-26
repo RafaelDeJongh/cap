@@ -240,13 +240,14 @@ function ents_methods:stargateAsuranBeam()
 	end
 end
 
-function ents_methods:stargateDial(address)
+function ents_methods:stargateDial(address, fast_dial)
 	checktype( self, ents_metatable )
 	checkluatype( address, TYPE_STRING )
+	checkluatype( fast_dial, TYPE_BOOL )
 	local ent = getent( self )
 	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
 	if not ent.IsStargate then return false, "entity is not stargate" end
-	ent:DialGate(address)
+	ent:DialGate(address, fast_dial)
 end
 
 function ents_methods:stargateClose()
@@ -757,14 +758,15 @@ timer.Create("wait_for_wire", 1, 0, function()
 		end
 	end
 
-	function wirelink_methods:stargateDial(address)
+	function wirelink_methods:stargateDial(address, fast_dial)
 		checkpermission(SF.instance, nil, "wire.wirelink.read")
 		checktype( self, wirelink_metatable )
 		checkluatype( address, TYPE_STRING )
+		checkluatype( fast_dial, TYPE_BOOL )
 		local ent = wlunwrap(self)
 		if not IsValid(ent) then return false, "invalid entity" end
 		if not ent.IsStargate then return false, "entity is not stargate" end
-		ent:DialGate(address)
+		ent:DialGate(address, fast_dial)
 	end
 
 	function wirelink_methods:stargateClose()
