@@ -1,6 +1,7 @@
 /*
 	Stargate starfall lib
 	Created by AlexALX (c) 2014
+	Ported to StarfallEx by F0x06 - 2019
 */
 
 assert( SF.Entities )
