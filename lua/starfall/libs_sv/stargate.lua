@@ -250,6 +250,15 @@ function ents_methods:stargateDial(address, fast_dial)
 	ent:DialGate(address, fast_dial)
 end
 
+function ents_methods:stargateNoxDial(address)
+	checktype( self, ents_metatable )
+	checkluatype( address, TYPE_STRING )
+	local ent = getent( self )
+	if not canModify(SF.instance.player,ent) then return false, "Insufficient permissions" end
+	if not ent.IsStargate then return false, "entity is not stargate" end
+	ent:NoxDialGate(address)
+end
+
 function ents_methods:stargateClose()
 	checktype( self, ents_metatable )
 	local ent = getent( self )
@@ -767,6 +776,16 @@ timer.Create("wait_for_wire", 1, 0, function()
 		if not IsValid(ent) then return false, "invalid entity" end
 		if not ent.IsStargate then return false, "entity is not stargate" end
 		ent:DialGate(address, fast_dial)
+	end
+
+	function wirelink_methods:stargateNoxDial(address)
+		checkpermission(SF.instance, nil, "wire.wirelink.read")
+		checktype( self, wirelink_metatable )
+		checkluatype( address, TYPE_STRING )
+		local ent = wlunwrap(self)
+		if not IsValid(ent) then return false, "invalid entity" end
+		if not ent.IsStargate then return false, "entity is not stargate" end
+		ent:NoxDialGate(address)
 	end
 
 	function wirelink_methods:stargateClose()
