@@ -216,7 +216,20 @@ function ENT:Initialize()
 	self.ChevLight = false;
 	self.Classic = false;
 	hook.Add("Tick", self, self.RingTickMovie);
+
+	-- Cache for tickrate rate calculations, save some CPU time
+	self.tickRateRelation = 66.666668156783 / (1 / engine.TickInterval())
+	self.tickSlowDial = self:tickRateCalc(17,0.4)
+	self.tickSlowerDial = self:tickRateCalc(17,2)
 end
+
+function ENT:tickRateCalc(inBetween,diff)
+	-- Adjusting ranges to actually be big enough so it works with the set Tickrate.
+	local n = inBetween + diff * self.tickRateRelation
+	local n2 = inBetween - diff * self.tickRateRelation
+	
+	return {n,n2}
+end 
 
 --#################  Called when stargate_group_system changed
 function ENT:ChangeSystemType(groupsystem,reload)
@@ -422,13 +435,6 @@ end
 
 -- Damn, I spent the whole day and night for calculating this formula.
 function ENT:StopFormula(y,x,n,n2)
-	-- Adjusting ranges to actually be big enough so it works with the set Tickrate.
-	local tickRateRelation = 66.666668156783 / (1 / engine.TickInterval())
-	local inBetween = (n + n2) / 2
-	local diff = (n - n2) * tickRateRelation
-	n = inBetween + diff
-	n2 = inBetween - diff
-
 	if (y==nil or x==nil) then return end
 	local stop = false;
 	local b,c;
@@ -492,7 +498,7 @@ function ENT:RingTickMovie()
 						need = need - (40*5);
 					end
 					if (need<0) then need = need+360; end
-					local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
+					local stop = self:StopFormula(angle,need,self.tickSlowDial[1],self.tickSlowDial[2]); --(angle >= need-0.3 and angle <= need+0.3);
 					if (stop and not self.Shutingdown) then
 						self.Entity:ActivateRing(false,false,true);
 						self.Entity:DHDSetAllBusy();
@@ -513,13 +519,13 @@ function ENT:RingTickMovie()
 					local reset2 = true;
 					for k, v in pairs(symbols) do
 						v = v+3;
-						local symbol = self:StopFormula(angle2,v,18.9,14.9);
+						local symbol = self:StopFormula(angle2,v,self.tickSlowerDial[1],self.tickSlowerDial[2]);
 						if (symbol) then
 							self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
 							self.RingSymbol = tostring(k);
 							reset = false;
 						end
-						local symbol2 = self:StopFormula(angle,v,18.9,14.9);
+						local symbol2 = self:StopFormula(angle,v,self.tickSlowerDial[1],self.tickSlowerDial[2]);
 						if (symbol2) then
 							self.Entity:SetWire("Ring Chev7 Symbol",tostring(k)); -- Wire
 							self.RingSymbol7Chev = tostring(k);
@@ -570,7 +576,7 @@ function ENT:RingTickMovie()
 					end
 					if (need<0) then need = need+360; end
 					if (lock) then
-						local stop = self:StopFormula(angle2,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
+						local stop = self:StopFormula(angle2,need,self.tickSlowDial[1],self.tickSlowDial[2]); --(angle >= need-0.3 and angle <= need+0.3);
 						if (stop and not self.Shutingdown) then
 							self.Entity:ActivateRing(false,false,true);
 							self.Entity:SetNWBool("ActRotRingL",false);
@@ -585,7 +591,7 @@ function ENT:RingTickMovie()
 							end)
 						end
 					else
-						local stop = self:StopFormula(angle,need,17.4,16.6); --(angle >= need-0.3 and angle <= need+0.3);
+						local stop = self:StopFormula(angle,need,self.tickSlowDial[1],self.tickSlowDial[2]); --(angle >= need-0.3 and angle <= need+0.3);
 						if (stop and not self.Shutingdown) then
 							self.Entity:ActivateRing(false,false,true);
 							self.Entity:SetNWBool("ActRotRingL",false);
@@ -614,13 +620,13 @@ function ENT:RingTickMovie()
 					local reset2 = true;
 					for k, v in pairs(symbols) do
 						--v = v+3;
-						local symbol = self:StopFormula(angle2,v,18.9,14.9);
+						local symbol = self:StopFormula(angle2,v,self.tickSlowerDial[1],self.tickSlowerDial[2]);
 						if (symbol) then
 							self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
 							self.RingSymbol = tostring(k);
 							reset = false;
 						end
-						local symbol2 = self:StopFormula(angle,v,18.9,14.9);
+						local symbol2 = self:StopFormula(angle,v,self.tickSlowerDial[1],self.tickSlowerDial[2]);
 						if (symbol2) then
 							self.Entity:SetWire("Ring Chev7 Symbol",tostring(k)); -- Wire
 							self.RingSymbol7Chev = tostring(k);
@@ -665,14 +671,18 @@ function ENT:RingTickMovie()
 				local symbols = self.SymbolsLock;
 				if (isconcept) then symbols = self.SymbolsLockConcept; end
 				for k, v in pairs(symbols) do
+					-- special fix for 360/0 symbol, still might not work right on lower tickrates
 					v = v+3;
-					local symbol = (angle >= v-2 and angle <= v+2);
+					
+					local wiredial = self:tickRateCalc(v,2)
+					local symbol = (angle >= wiredial[2] and angle <= wiredial[1]);
 					if (symbol) then
 						self.Entity:SetWire("Ring Chev7 Symbol",tostring(k)); -- Wire
 						self.RingSymbol7Chev = tostring(k);
 						reset = false;
 					end
-					local symbol2 = (angle2 >= v-2 and angle2 <= v+2);
+					
+					local symbol2 = (angle2 >= wiredial[2] and angle2 <= wiredial[1]);
 					if (symbol2) then
 						self.Entity:SetWire("Ring Symbol",tostring(k)); -- Wire
 						self.RingSymbol = tostring(k);

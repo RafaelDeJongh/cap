@@ -160,7 +160,22 @@ function ENT:Initialize()
 	self.ActSymSound = false;
 	self.WireSpinDir = false;
 	hook.Add("Tick", self, self.RingTickUniverse);	
+	
+	-- Cache for tickrate rate calculations, save some CPU time
+	self.tickRateRelation = 66.666668156783 / (1 / engine.TickInterval())
+	self.tickSlowDial = self:tickRateCalc(12.125,0.8)
+	self.tickSlowerDial = self:tickRateCalc(12.125,1.5)
+	self.tickWireSlowDial = self:tickRateCalc(24.5,1)
+	self.tickWireSlowerDial = self:tickRateCalc(24.5,1.5)
 end
+
+function ENT:tickRateCalc(inBetween,diff)
+	-- Adjusting ranges to actually be big enough so it works with the set Tickrate.
+	local n = inBetween + diff * self.tickRateRelation
+	local n2 = inBetween - diff * self.tickRateRelation
+	
+	return {n,n2}
+end 
 
 --#################  Called when stargate_group_system changed
 function ENT:ChangeSystemType(groupsystem,reload)
@@ -546,13 +561,6 @@ end
 
 -- Damn, I spent the whole day and night for calculating this formula.
 function ENT:StopFormula(y,x,n,n2)
-	-- Adjusting ranges to actually be big enough so it works with the set Tickrate.
-	local tickRateRelation = 66.666668156783 / (1 / engine.TickInterval())
-	local inBetween = (n + n2) / 2
-	local diff = (n - n2) * tickRateRelation
-	n = inBetween + diff
-	n2 = inBetween - diff
-
 	if (y==nil or x==nil) then return end
 	local stop = false;
 	local b,c;
@@ -600,12 +608,10 @@ function ENT:RingTickUniverse()
 				if (y<0) then y = y+360; end;
 				local reset = true;
 				local symbols = self.SymbolsLock;
-				local so,so1,so2 = 12.125,1.5,0.8			
+				local s1,s2,s3,s4 = self.tickSlowerDial[1],self.tickSlowerDial[2],self.tickSlowDial[1],self.tickSlowDial[2]
 				if (self.WireSpinSpeed or not self.WireSpin) then
-					so,so1,so2 = 24.5,1.5,1
+					s1,s2,s3,s4 = self.tickWireSlowerDial[1],self.tickWireSlowerDial[2],self.tickWireSlowDial[1],self.tickWireSlowDial[2]
 				end
-				local s1,s2 = so+so1,so-so1
-				local s3,s4 = so+so2,so-so2
 				for k, v in pairs(symbols) do
 					local symbol = self:StopFormula(y,tonumber(self.SymbolsLock[tonumber(k) or k][1]),s1,s2);
 					if (symbol) then
