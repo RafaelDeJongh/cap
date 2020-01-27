@@ -76,6 +76,7 @@ else
       w = 510,
       h = 382,
       fov = 90,
+      drawviewmodel = false,
      } )
    end
    surface.SetAlphaMultiplier(0.6)
