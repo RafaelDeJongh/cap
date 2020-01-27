@@ -209,25 +209,12 @@ function ENT:PrepareTeleport(t)
 		},
 		Bones=self:GetBones(e,p[1]),
 	}
-	-- ######### Calculate the heigh of the object, so it won't get stuck on the other sides ground
-	-- FIXME: Seemed sometimes not to work properly. Invent a new check!
-	local height = g[1]:BoundingRadius();
-	local dir = Vector(0,0,height);
-	local trace={
-		-- On our side
-		util.QuickTrace(p[1],-1*dir,g[1]:GetTraceIgnoredEntities(e)),
-		-- On the other event horizon
-		util.QuickTrace(ret.Entity.Position.New+dir,-2*dir,g[2]:GetTraceIgnoredEntities()),
-	}
-	if(trace[1].Hit and trace[2].Hit) then
-		local add_height = 5 + (1 - 2*trace[2].Fraction + trace[1].Fraction)*height;
-		ret.Entity.Position.New = ret.Entity.Position.New + Vector(0,0,add_height);
-	end
-	-- ######### Calculate the lenght offset
-	-- Do a similar thing now for the length/size of our "thing" we put into the eventhorizon, or it might get stuck on the other side (what we seriously do not want). - I hade some bad experiences with my puddle jumper getting stucked in a wall
-	local dir = g[2]:GetForward();
-	local trace = util.QuickTrace(p[3]-20*dir,-4096*dir,g[2]:GetTraceIgnoredEntities()); -- The -20*dir is a sort of "grace"-offset to make sure it does not collide really with anything
-	ret.Entity.Position.New = ret.Entity.Position.New + dir*math.Clamp(lenght - (1-trace.Fraction)*4096,0,4096);
+		
+	local ent = ret.Entity.Entity
+	local box = ( ent:GetModelBounds() * ent:GetModelScale() )
+	
+	local dir = ( ret.Entity.Position.New - ret.Entity.Position.Old )
+		
 	return ret;
 end
 
