@@ -155,7 +155,7 @@ function ENT:Initialize()
 		end
 		oldSetWire(self,k,v,i);
 	end
-	
+
 	self.EventHorizonType = self.EventHorizonData.Type or self.EventHorizonData.BaseClass.Type
 	self.DefEventHorizonType = self.EventHorizonType
 	self.EventHorizonKawoosh = self.EventHorizonData.Kawoosh or self.EventHorizonData.BaseClass.Kawoosh
