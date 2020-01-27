@@ -6,6 +6,9 @@
 
 assert( SF.Entities )
 
+-- don't load on legacy starfall @AlexALX
+if(SF.Entities.GetEntity == nil) then return end
+
 local ents_lib = SF.Entities.Library
 local ents_metatable = SF.Entities.Metatable
 
