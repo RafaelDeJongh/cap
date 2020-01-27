@@ -183,7 +183,7 @@ function ENT:LightUp(Tick)
 	local i=1;
 	local ent = self.Entity;
 
-	timer.Create( "Effects"..self:EntIndex(), Tick, 72, function()
+	timer.Create( "Effects"..ent:EntIndex(), Tick, 72, function()
 		if (IsValid(ent)) then
 			self:Fade(self.EffectSegments[i], true);
 			self:SetWire("Active Segment",i);
@@ -244,7 +244,7 @@ function ENT:LightUps(Tick)
 	local i=1;
 	local ent = self.Entity;
 
-	timer.Create( "Effectss"..self:EntIndex(), Tick, 72, function()
+	timer.Create( "Effectss"..ent:EntIndex(), Tick, 72, function()
 		if (not IsValid(ent)) then return end
 		self:Fades(self.EffectSegments[i], true);
 		self:SetWire("Active Segment",i);

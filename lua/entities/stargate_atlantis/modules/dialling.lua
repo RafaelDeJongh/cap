@@ -87,7 +87,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 			action:Add({f=self.SetChevrons,v={self,0,0},d=0}); -- Wire
 			action:Add({f=self.RingLight,v={self,0,true},d=0});
 			action:Add({f=self.RingLight,v={self,0,false},d=0});
-			action:Add({f=self.Fire,v={self,"SetBodyGroup",0,0.05},d=0});
+			action:Add({f=self.Fire,v={self.Entity,"SetBodyGroup",0,0.05},d=0});
 			action:Add({f=self.EmitSound,v={self.Entity,self.Sounds.Ring,90,math.random(98,103)},d=0.1}); -- Ring Sound
 			action:Add({f=self.Fire,v={self.Entity,"SetBodyGroup",1},d=0.2}); -- Activate the mainlight
 			-- We are doing exactly 36 steps, so we are adding this delay now in every step.
@@ -183,7 +183,7 @@ function ENT.Sequence:Dial(inbound,fast,fail,busy)
 		action:Add({f=self.SetChevrons,v={self,0,0},d=0}); -- Wire
 		action:Add({f=self.RingLight,v={self,0,true},d=0});
 		action:Add({f=self.RingLight,v={self,0,false},d=0});
-		action:Add({f=self.Fire,v={self,"SetBodyGroup",0,0.05},d=0});
+		action:Add({f=self.Fire,v={self.Entity,"SetBodyGroup",0,0.05},d=0});
 		if(fast)then
             --sound = self.Sounds.Ring; -- Ring Sound
 			action:Add({f=self.EmitSound,v={self.Entity,self.Sounds.Ring,90,math.random(98,103)},d=0}); -- Ring Sound
@@ -410,7 +410,7 @@ function ENT.Sequence:InstantOpen(action,delay,instant,inbound,slow,nox,fail)
 	action:Add({f=self.RingSound,v={self,false},d=0});
 	action:Add({f=self.RingLight,v={self,0,true,true},d=0});
 	action:Add({f=self.RingLight,v={self,0,false,true},d=0});
-	action:Add({f=self.Fire,v={self,"SetBodyGroup",0,0.05},d=0});
+	action:Add({f=self.Fire,v={self.Entity,"SetBodyGroup",0,0.05},d=0});
 	for i=1,chevs do
 		local b = i+1;
 		if (i == 8) then
