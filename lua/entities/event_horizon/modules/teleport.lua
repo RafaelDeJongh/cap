@@ -229,7 +229,7 @@ function ENT:PrepareTeleport(t)
 	local trace = util.QuickTrace(p[3]-20*dir,-4096*dir,g[2]:GetTraceIgnoredEntities()); -- The -20*dir is a sort of "grace"-offset to make sure it does not collide really with anything
 	ret.Entity.Position.New = ret.Entity.Position.New + dir*math.Clamp(lenght - (1-trace.Fraction)*4096,0,4096);
 	
-	--[[ SOME TEST CODE - does not work with contraptions properly
+	--[[ SOME TEST CODE - does not work properly, don't do anything actually?
 	local ent = ret.Entity.Entity
 	local box = ( ent:GetModelBounds() * ent:GetModelScale() )
 	
