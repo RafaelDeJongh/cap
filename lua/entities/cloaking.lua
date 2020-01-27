@@ -315,9 +315,13 @@ end
 function ENT:Cloak(e,b)
 	if(e:IsWeapon()) then return end;
 	if((e:GetModel() or ""):find("*")) then return end; -- Do not cloak brushes (like athmospheres in spacebuild)
+	
 	local phys = e:GetPhysicsObject();
 	local class = e:GetClass();
 	if(e:GetCollisionGroup() == COLLISION_GROUP_PROJECTILE or phys:IsValid() or class == "prop_dynamic" or e.CAP_ForceCloak) then
+		-- special hook
+		if(hook.Call("StarGate.Cloacking.Before"..(b and "Cloak" or "UnCloak"),GAMEMODE,e,self.Entity) == false) then return end;
+		
 		local time = CurTime();
 		if((e.LastCloakEvent or 0) + 0.1 > time) then return end;
 		e.LastCloakEvent = time;
@@ -361,6 +365,7 @@ function ENT:Cloak(e,b)
 				e.CloakCollisionGroup = e:GetCollisionGroup();
 				e:SetCollisionGroup(COLLISION_GROUP_WORLD);
 			end
+			
 			local alpha = 0;
 			-- Some special SENTs need to get drawn. Alpha 0 stops drawing at all (even Lua ENT:Draw functions). Workaround for eg harvester
 			if(self.Exceptions[e:GetClass()]) then alpha = 1 end;
@@ -393,7 +398,10 @@ function ENT:Cloak(e,b)
 								timer.Create(id.."matstart1",2.0,1,function() if IsValid(e) then e:GetActiveWeapon():SetMaterial( "models/effects/vol_light001" ) end end)
 							end
 						end
-						timer.Create(id.."matstart2",2.0,1,function() if IsValid(e) then e:SetMaterial( "models/effects/vol_light001" ) end end)
+						timer.Create(id.."matstart2",2.0,1,function() if IsValid(e) then 
+							e:SetMaterial( "models/effects/vol_light001" ) 
+							hook.Call("StarGate.Cloacking.AfterCloak",GAMEMODE,e,self.Entity)
+						end end)
 					end
 				end
 			);
@@ -404,7 +412,7 @@ function ENT:Cloak(e,b)
 			local delay = math.Clamp(time - (e.CloakStart or 0),0,2);
 			-- Make it reset it's alpha
 			local old_alpha = e.OldAlpha;
-			local function reset_cloak(e)
+			local function reset_cloak(e,second)
 				if(IsValid(e)) then
 					if(e:IsPlayer() or e:IsNPC()) then old_alpha = 255 end; -- Should fix problems with harvesters
 					--e:SetKeyValue("renderamt",old_alpha or 255); -- Old Method
@@ -420,6 +428,7 @@ function ENT:Cloak(e,b)
 						e:GetActiveWeapon():SetColor(Color(color.r,color.g,color.b,old_alpha))
 					end
 					e.OldAlpha = nil;
+					if (second) then hook.Call("StarGate.Cloacking.AfterUnCloak",GAMEMODE,e,self.Entity) end
 				end
 			end
 			if (e:IsPlayer() or e:IsNPC()) then
@@ -433,7 +442,7 @@ function ENT:Cloak(e,b)
 			end
 			e:SetMaterial(e.Material);
 			timer.Create(id.."end1",delay-0.1,1,function() reset_cloak(e) end); -- The first uncloak (make sure things will be synched with the effect)
-			timer.Create(id.."end2",delay+0.3,4,function() reset_cloak(e) end); -- The last effect - Make really, sure, everything has his correct alpha (For multiplayer to compensate lag)
+			timer.Create(id.."end2",delay+0.3,4,function() reset_cloak(e,true) end); -- The last effect - Make really, sure, everything has his correct alpha (For multiplayer to compensate lag)
 			if(e.CloakCollisionGroup) then
 				e:SetCollisionGroup(e.CloakCollisionGroup);
 				e.CloakCollisionGroup = nil;

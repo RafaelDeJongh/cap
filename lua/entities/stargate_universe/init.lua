@@ -159,6 +159,10 @@ function ENT:Initialize()
 	self.WireSpinSpeed = false;
 	self.ActSymSound = false;
 	self.WireSpinDir = false;
+	
+	hook.Add("StarGate.Cloacking.BeforeCloak",self,self.BeforeCloak)
+	hook.Add("StarGate.Cloacking.AfterUnCloak",self,self.AfterUnCloak)
+	
 	hook.Add("Tick", self, self.RingTickUniverse);	
 	
 	-- Cache for tickrate rate calculations, save some CPU time
@@ -176,6 +180,18 @@ function ENT:tickRateCalc(inBetween,diff)
 	
 	return {n,n2}
 end 
+
+function ENT:BeforeCloak(entity,cloacking_device)
+	if (entity:GetClass()=="stargate_universe") then
+		self.BeforeCloakColor = self.Gate:GetColor()
+	end
+end
+
+function ENT:AfterUnCloak(entity,cloacking_device)
+	if (entity:GetClass()=="stargate_universe") then
+		self:SetColor(self.BeforeCloakColor or Color(255,255,255,1))
+	end
+end
 
 --#################  Called when stargate_group_system changed
 function ENT:ChangeSystemType(groupsystem,reload)
