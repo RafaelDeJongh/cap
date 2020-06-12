@@ -98,6 +98,11 @@ res_trans_interval = 0.1
 # allowed resources to transfer, separate by comma, keep empty to allow any resources, example usage: water,oxygen,heavy water
 res_classes = 
 
+#### Stargate Iris config
+[iris]
+# Allow pass through with Nox Hands
+nox_bypass=true
+
 #### Stargate gatespawner config
 [gatespawner]
 # Allow spawn iris on gatespawner gates by players

@@ -787,7 +787,10 @@ function ENT:StartTouchPlayersNPCs(e,ignore)
 		if(not block) then
 			target_gate = self.Target:GetParent();
 			if(IsValid(target_gate) and target_gate.IsStargate) then
-				block = target_gate:IsBlocked();
+				-- Allow player with Nox hands to pass through any iris if enabled in config
+				if (not StarGate.CFG:Get("iris", "nox_bypass", false) or (not e:IsPlayer() or e:GetActiveWeapon():GetClass() ~= "nox_hands")) then
+					block = target_gate:IsBlocked();
+				end
 			end
 			if (self:BlockedCFD(target_gate,e)) then block = false; bcfd = true; end
 		end
