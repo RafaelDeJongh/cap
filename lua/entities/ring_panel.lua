@@ -138,12 +138,23 @@ function ENT:DoCallback(range, address)
 	if (type(address) == "number") then address = tostring(address) end
 
 	if not self.RingBase.Busy then
-		if (self.RingBase:GetClass() == "ring_base_ancient" and address == "3571") then
-			local nearest_ring = self.RingBase:FindNearest("")
-			if (nearest_ring == false) then return end
-			if nearest_ring:GetClass() == "ring_base_ancient" then
-				nearest_ring:StartLaser();
-				if timer.Exists(self.Entity:EntIndex().."Dial") then timer.Destroy(self.Entity:EntIndex().."Dial") end
+		local laserCode = StarGate.CFG:Get("ring","code", "3571");
+		if (tonumber(laserCode) and tonumber(laserCode) > 0 and tostring(laserCode) == address) then
+			local allowedsClasses = StarGate.String.TrimExplode(StarGate.CFG:Get("ring","class", "ancient"), ",");
+			for i = 1, #allowedsClasses do
+				local current = allowedsClasses[i]
+				if not (current == "ori") then
+					if ("ring_base_"..allowedsClasses[i] == self.RingBase:GetClass()) then
+						local ringBaseClass = "ring_base_"..allowedsClasses[i]
+						local nearest_ring = self.RingBase:FindNearest("");
+						if (nearest_ring == false) then return end
+						if nearest_ring:GetClass() == ringBaseClass then
+							nearest_ring:StartLaser();
+							if timer.Exists(self.Entity:EntIndex().."Dial") then timer.Destroy(self.Entity:EntIndex().."Dial") end
+						end
+						return;
+					end
+				end
 			end
 		else
 			self.RingBase.SetRange = range;
