@@ -4,6 +4,9 @@
 	Ported to StarfallEx by F0x06 - 2019-2020
 */
 
+-- Load only on StarfallEx
+if !SF.RegisterLibrary then return end
+
 -- Global to all starfalls
 local checkluatype = SF.CheckLuaType
 
