@@ -431,6 +431,10 @@ sg_sets[naq_gen_mk2][nuke_explode][desc] = Nuke explosion when overloaded/damage
 sg_sets[ring] = Rings
 sg_sets[ring][classnames] = Disallowed entities
 sg_sets[ring][classnames][desc] = These entity types are disallowed to teleportation
+sg_sets[ring][class] = Rings to fire laser
+sg_sets[ring][class][desc] = Possible values (separe with a coma): ancient | goauld
+sg_sets[ring][code] = Rings fire code
+sg_sets[ring][code][desc] = Secret code to dial with panel to fire with laser, Set it to -1 or 0 to disable it
 
 // Ring panels
 sg_sets[ring_panel] = Ring panels
