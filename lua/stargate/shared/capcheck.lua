@@ -83,6 +83,7 @@ local function Workshop_res_Check()
 end
 
 local oldfiles,oldfpath = {},false;
+/* We don't need this anymore at least for now, until global update?
 for k,v in pairs(file.Find("addons/carter_addon_pack_*.gma","GAME")) do
 	table.insert(oldfiles,v);
 	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
@@ -90,7 +91,7 @@ end
 for k,v in pairs(file.Find("addons/stargate_carter_addon_pack_175394472.gma","GAME")) do
 	table.insert(oldfiles,v);
 	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
-end
+end */
 
 if (CLIENT) then
 
