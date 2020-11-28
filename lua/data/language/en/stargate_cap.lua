@@ -486,7 +486,7 @@ vis_reset_menu = Reset stargate menu
 
 // client settings
 cl_sets_title = Client Settings
-cl_sets_dropweapon = Drop weapon on G key (impluse 102)
+cl_sets_dropweapon = Drop weapon on G key (impulse 102)
 
 // keybinder
 key_move_title = Movement

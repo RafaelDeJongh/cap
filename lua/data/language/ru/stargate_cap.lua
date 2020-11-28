@@ -486,7 +486,7 @@ vis_reset_menu = Сбросить меню врат
 
 // client settings
 cl_sets_title = Настройки клиента
-cl_sets_dropweapon = Выбрасывать оружие клавишей G (impluse 102)
+cl_sets_dropweapon = Выбрасывать оружие клавишей G (impulse 102)
 
 // keybinder
 key_move_title = Перемещение
