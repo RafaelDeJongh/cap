@@ -484,6 +484,10 @@ vis_charge_up = Charge up rings
 vis_refl_sphere = Refraction spheres
 vis_reset_menu = Reset stargate menu
 
+// client settings
+cl_sets_title = Client Settings
+cl_sets_dropweapon = Drop weapon on G key (impluse 102)
+
 // keybinder
 key_move_title = Movement
 key_move_forward = Move forward

@@ -43,6 +43,13 @@ function StarGate.VisualsMisc(str,ignore)
 	return false;
 end
 
+function StarGate.ConvarSetting(str)
+	if(LocalPlayer() and LocalPlayer().GetInfo and util.tobool(LocalPlayer():GetInfo(str))) then
+		return true;
+	end
+	return false;
+end
+
 --################ Reset values to 0, if this user just updated to this version @aVoN
 -- The reason is, some dynamic lights crash players. So I want to have them disabled by default.
 -- But sadly they already have the necessary CVAR set to 1. So I reset it to 0 once.
@@ -629,7 +636,9 @@ function StarGate.Hook.AddToolTab()
 	if (StarGate.CheckModule("entweapons") or StarGate.CheckModule("weapons")) then spawnmenu.AddToolMenuOption(cat_name,config_name,SGLanguage.GetMessage("stool_weapvis")," "..SGLanguage.GetMessage("stool_weapvis"),"","",StarGate.WeaponVisualSettings,{SwitchConVar="cl_stargate_visualsweapon"}); end
 	spawnmenu.AddToolMenuOption(cat_name,config_name,SGLanguage.GetMessage("stool_miscvis")," "..SGLanguage.GetMessage("stool_miscvis"),"","",StarGate.MiscVisualSettings,{SwitchConVar="cl_stargate_visualsmisc"});
 	if (StarGate.CheckModule("ship")) then spawnmenu.AddToolMenuOption(cat_name,config_name,SGLanguage.GetMessage("stool_shipvis")," "..SGLanguage.GetMessage("stool_shipvis"),"","",StarGate.ShipVisualSettings,{SwitchConVar="cl_stargate_visualsship"}); end
-
+	spawnmenu.AddToolMenuOption(cat_name,config_name,SGLanguage.GetMessage("cl_sets_title")," "..SGLanguage.GetMessage("cl_sets_title"),"","",StarGate.ClientSettings);
+	
+	
 	-- Keybinders
 	if (StarGate.CheckModule("ships")) then
 		spawnmenu.AddToolMenuOption(cat_name,keys_name,"Daedalus"," "..SGLanguage.GetMessage("stool_key_daedalus"),"","",StarGate.DaedalusSettings);
@@ -1049,6 +1058,16 @@ function StarGate.WeaponVisualSettings(Panel)
 	table.GetLastValue(disable):SetToolTip(low);
 	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("vis_refl_sphere"), "cl_dakara_refract"));
 	table.GetLastValue(disable):SetToolTip(medium);
+end
+
+function StarGate.ClientSettings(Panel)
+	Panel:ClearControls();
+	-- Configuration
+	
+	local disable = {};
+	
+	-- Stargates
+	table.insert(disable,Panel:CheckBox(SGLanguage.GetMessage("cl_sets_dropweapon"),"cl_stargate_dropweapon"));
 end
 
 /*

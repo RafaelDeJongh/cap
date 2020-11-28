@@ -484,6 +484,10 @@ vis_charge_up = Эффект зарядки
 vis_refl_sphere = Сферы приломления
 vis_reset_menu = Сбросить меню врат
 
+// client settings
+cl_sets_title = Настройки клиента
+cl_sets_dropweapon = Выбрасывать оружие клавишей G (impluse 102)
+
 // keybinder
 key_move_title = Перемещение
 key_move_forward = Вперёд

@@ -315,7 +315,7 @@ StarGate.RampOffset.RingP = {
 
 if (CLIENT) then
 	local function DropBindPress( ply, bind, pressed )
-	        if ply:Alive() then
+	        if ply:Alive() and StarGate.VisualsMisc("cl_stargate_dropweapon") then
 	                if string.find( bind, "impulse 201" )then RunConsoleCommand("Drop_Weapon"); return false end
 	        end
 	end

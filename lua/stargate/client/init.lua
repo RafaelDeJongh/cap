@@ -340,6 +340,8 @@ CreateClientConVar("cl_stargate_kenter",1,true,false);
 CreateClientConVar("cl_stargate_effects",1,true,false);
 CreateClientConVar("cl_kawoosh_material",1,true,false);
 
+CreateClientConVar("cl_stargate_dropweapon",1,true,false);
+
 CreateClientConVar("cl_draw_huds",1,true,false);
 CreateClientConVar("cl_dhd_letters",1,true,false);
 
