@@ -142,7 +142,7 @@ properties.Add( "Stargate.Atl.AtlType.Off",
 
 });
 
-properties.Add( "Stargate.Atl.AtlType.On",
+properties.Add( "Stargate.Atl.AltSlowDial.On",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_22"),
 	Order		=	-130,
@@ -174,7 +174,7 @@ properties.Add( "Stargate.Atl.AtlType.On",
 
 });
 
-properties.Add( "Stargate.Atl.AtlType.Off",
+properties.Add( "Stargate.Atl.AltSlowDial.Off",
 {
 	MenuLabel	=	SGLanguage.GetMessage("stargate_c_tool_22d"),
 	Order		=	-130,
