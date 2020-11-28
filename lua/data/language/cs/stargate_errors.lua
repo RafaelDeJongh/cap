@@ -34,7 +34,7 @@ sg_err_11 =[[ Nebyly nalezeny CAP fonty. Prosím stáhněte následující soubo
 sg_err_12 = Vaše složka cap_resources je zastaralá!<br>Prosím aktualizujte ji na nejnovější verzi.
 sg_err_13 = [[Nalezeny staré soubory z Workshopu.
 <br>Prosím smažte následující soubory ve složce:
-<br>"%s"
+<br>"%s" (by default)
 <br>%s
 ]]
 sg_err_14 = [[Váš WireMod je zastaralý, prosím aktualizujte ho aby byl Carters Addon Pack zcela funkční.

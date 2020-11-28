@@ -33,7 +33,7 @@ sg_err_11 =[[ The custom fonts can not be found on your Garry's Mod Installation
 ]]
 sg_err_12 = Your Cap_Resources folder is outdated!<br>Please update it to the latest version.
 sg_err_13 = [[Old workshop files found.
-<br>Please remove following files inside folder:
+<br>Please remove following files inside your garry's mod directory, by default it is located in:
 <br>"%s"
 <br>%s
 ]]

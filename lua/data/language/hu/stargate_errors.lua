@@ -33,7 +33,7 @@ sg_err_11 =[[ Custom Fonts nincs telepítve, töltse le innen és telepítse az 
 sg_err_12 = Cap_resources mappa lejárt!<br>Kérem frissítse.
 sg_err_13 = [[Régi műhelyi fájlok találhatóak.
 <br>Kérem törölje az alábbi fájlokat a mappából:
-<br>"%s"
+<br>"%s" (by default)
 <br>%s
 ]]
 sg_err_14 = [[A Wiremod lejárt, kérem frissítse hogy a CAP jól működjön.

@@ -34,7 +34,7 @@ sg_err_11 =[[ Les polices d'écritures customiser n'ont pas été trouver dans v
 sg_err_12 = Votre dossier CAP_Resources n'est plus à jour!<br>Veuillez le mettre à jour!
 sg_err_13 = [[Des anciens fichiers du workshop ont été trouvé.
 <br>Supprimez les fichiers suivant dans votre dossier:
-<br>"%s"
+<br>"%s" (by default)
 <br>%s
 ]]
 sg_err_14 = [[Votre Wiremod n'est plus à jour, s'il vous plaît mettez le à jour pour que le Carter Addon Pack fonctionne complètement.

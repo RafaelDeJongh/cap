@@ -82,16 +82,21 @@ local function Workshop_res_Check()
 	return ret;
 end
 
-local oldfiles,oldfpath = {},false;
-/* We don't need this anymore at least for now, until global update?
+local oldfiles = {};
+
 for k,v in pairs(file.Find("addons/carter_addon_pack_*.gma","GAME")) do
 	table.insert(oldfiles,v);
-	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
+	-- if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
+	-- sadly, but this function was removed
 end
 for k,v in pairs(file.Find("addons/stargate_carter_addon_pack_175394472.gma","GAME")) do
 	table.insert(oldfiles,v);
-	if (not oldfpath) then oldfpath = util.RelativePathToFull("addons/"..v):Replace(v,""); end
-end */
+end 
+/* for upcoming update 
+for k,v in pairs(file.Find("addons/cap_*.gma","GAME")) do
+	table.insert(oldfiles,v);
+end
+*/
 
 if (CLIENT) then
 
@@ -374,12 +379,12 @@ if (table.getn(oldfiles)>0) then
 		MsgN("Status: "..status)
 	end
 	table.insert(StarGate_Group.ErrorMSG, {"Old workshop files found, please remove it.","13"});
-	table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_13",oldfiles,oldfpath});
+	table.insert(StarGate_Group.ErrorMSG_HTML, {"sg_err_13",oldfiles,"C:/Program Files (x86)/Steam/SteamApps/common/GarrysMod/garrysmod/addons"});
 	MsgN("-------");
 	MsgN("Error #13\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 end
 
-if (VERSION<160424) then
+if (VERSION<201023) then
 	if (status != "Error") then
 		status = "Error";                 
 		MsgN("Status: "..status)
