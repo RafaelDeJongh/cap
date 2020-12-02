@@ -101,7 +101,7 @@ res_classes =
 #### Stargate Iris config
 [iris]
 # Allow pass through with Nox Hands
-nox_bypass=true
+nox_bypass=false
 
 #### Stargate gatespawner config
 [gatespawner]
