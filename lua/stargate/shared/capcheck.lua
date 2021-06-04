@@ -411,7 +411,16 @@ elseif (file.Exists("weapons/gmod_tool/stools/wire_adv.lua","LUA") and not ws_ad
 	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_14");
 	MsgN("-------");
 	MsgN("Error #14\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
-end
+end /*if (string.find(util.RelativePathToFull("gameinfo.txt"),"garrysmodbeta")) then
+	if (status != "Error") then
+		status = "Error";
+		MsgN("Status: "..status)
+	end
+	table.insert(StarGate_Group.ErrorMSG, {"Sorry, Garry's Mod 13 beta isn't supported anymore.\\nPlease make use of the normal Garry's Mod that already came out of the beta.","08"});
+	table.insert(StarGate_Group.ErrorMSG_HTML, "sg_err_08");
+	MsgN("-------");
+	MsgN("Error #08\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
+end  */
 if (status != "Error") then
 	MsgN("Status: "..status)
 else
