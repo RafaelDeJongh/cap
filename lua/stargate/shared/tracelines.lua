@@ -167,9 +167,9 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 	self.Data.start:Set(start)
 	self.Data.endpos:Set(dir); data.endpos:Add(start)
 	self.Data.filter = ignore
-	self.Data.mask = mask
-	self.Data.collisiongroup = colgrp
-	self.Data.ignoreworld = iworld
+	self.Data.mask = tonumber(mask) or MASK_SOLID
+	self.Data.collisiongroup = tonumber(colgrp) or COLLISION_GROUP_NONE
+	self.Data.ignoreworld = tobool(iworld)
 	local trace = util.TraceLine(self.Data)
   
 	--This is better and faster than using table.HasValue(ignore,e) (nested for loops)
