@@ -185,7 +185,7 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 	local norm_world = dir:GetNormal(); -- Get Normal of the dir vector (world coordinates!)
 	-- We need to sort all entities first according to their distance to the trace-start, or we hit a prop behind a prop instead of the one infront
 	-- Problem noticed by Lynix here: http://img140.imageshack.us/img140/7589/gmflatgrass0017bj9.jpg
-	local traced_entities = {} -- Lynix modification
+	local trace_array = {} -- Lynix modification
 
 	for e,_ in pairs(self.Entities) do
 		if(not quick_ignore[e]) then
@@ -237,7 +237,7 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 							hit = self:CheckCoordinate("z",pos,norm,v.Min,v.Max,len,in_box);
 						end
 
-						-- very ugly, but atleast works, with bugs...
+						-- Very ugly, but atleast works, with bugs...
 						-- I have no idea how make function "CheckCoordinate" works with sphere @ AlexALX
 						if (not hit and class=="shield" and not in_box and self:InBox(pos,v.Min,v.Max)) then
 							hit = {HitPos=pos,Fraction=0.8,HitNormal=norm}
@@ -261,9 +261,9 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 						trace.Fraction = hit.Fraction;
 						trace.HitNormal = e:LocalToWorld(hit.HitNormal)-e_pos;
 						trace.Entity = e;
-						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification
-						--break;
+						table.insert(trace_array, table.Copy(trace)); -- Lynix modification
 					end
+
 					if(hit2) then
 						-- Update the trace data with new and correct values, my values are already scaled so i made another if condition @Mad
 						trace.Hit = true;
@@ -280,8 +280,7 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 						trace.Fraction = hit2.Fraction;
 						trace.HitNormal = hit2.HitNormal;
 						trace.Entity = e;
-						table.insert(traced_entities,table.Copy(trace)); -- Lynix modification
-						--break;
+						table.insert(trace_array, table.Copy(trace)); -- Lynix modification
 					end
 
 				end
@@ -289,16 +288,16 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 		end
 	end
 	-- START OF Lynix modification
-	if(#traced_entities > 0) then
-		local min = 10000000000; -- Random startvalue
-		for _,v in pairs(traced_entities) do
-			local dist = trace.StartPos:Distance(v.HitPos);
-			if(dist < min) then
-				min = dist;
-				trace = v;
-			end
+	local min; -- Minimum distance is the first entry @dvdvideo1234
+	for i = 1, #trace_array do -- Interger loop for arrays @dvdvideo1234
+		local v = trace_array[i]
+		local m = trace.StartPos:Distance(v.HitPos);
+		if(not min or m < min) then
+			min = m;
+			trace = v;
 		end
 	end
+
 	-- END OF Lynix modification
 	return trace;
 end
