@@ -24,8 +24,11 @@ StarGate.Trace = StarGate.Trace or {};
 StarGate.Trace.Entities = StarGate.Trace.Entities or {};
 StarGate.Trace.Classes = StarGate.Trace.Classes or {};
 StarGate.Trace.Data = {
+	code   = util.TraceLine, -- Trace code to be executed
 	start  = Vector(), -- The start position of the trace
 	endpos = Vector(), -- The end position of the trace
+	mins   = Vector(), -- The lowest corner of the trace
+	maxs   = Vector(), -- The highest corner of the trace
 	filter = nil, -- Things the trace should not hit
 	mask   = MASK_SOLID, --  This determines what the trace should hit
 	collisiongroup = COLLISION_GROUP_NONE, -- What the trace should hit collision group regards
@@ -154,7 +157,7 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 end
 
 --################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
-function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
+function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less reouces!)
 	if CLIENT then
 		for k,_ in pairs(self.Classes) do
@@ -164,14 +167,24 @@ function StarGate.Trace:New(start,dir,ignore,mask,colgrp,iworld)
 		end
 	end
 
+	-- Setup trace parameters and routine code
 	self.Data.start:Set(start)
 	self.Data.endpos:Set(dir); data.endpos:Add(start)
 	self.Data.filter = ignore
 	self.Data.mask = tonumber(mask) or MASK_SOLID
-	self.Data.collisiongroup = tonumber(colgrp) or COLLISION_GROUP_NONE
+	self.Data.collisiongroup = tonumber(cogrp) or COLLISION_GROUP_NONE
 	self.Data.ignoreworld = tobool(iworld)
-	local trace = util.TraceLine(self.Data)
-  
+	if(width) then local m = width / 2
+		self.Data.mins:SetUnpacked(-m, -m, -m)
+		self.Data.maxs:SetUnpacked( m,  m,  m)
+		self.Data.code = util.TraceHull
+	else -- No width. Fall back to zero width trace
+		self.Data.code = util.TraceLine
+	end
+
+	-- Run the trace when setup is ready and code is picked
+	local trace = self.Data.code(self.Data)
+
 	--This is better and faster than using table.HasValue(ignore,e) (nested for loops)
 	local quick_ignore = {};
 	if(type(ignore) == "table") then
