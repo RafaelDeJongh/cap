@@ -301,10 +301,10 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 		end
 	end
 	-- START OF Lynix modification
-	local min; -- Minimum distance is the first entry @dvdvideo1234
+	local anc, min = trace.start -- First entry minumum @dvdvideo1234
 	for i = 1, #trace_array do -- Interger loop for arrays @dvdvideo1234
 		local v = trace_array[i]
-		local m = trace.StartPos:Distance(v.HitPos);
+		local m = anc:Distance(v.HitPos)
 		if(not min or m < min) then
 			min = m;
 			trace = v;
