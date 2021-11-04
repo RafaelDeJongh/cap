@@ -1,4 +1,4 @@
-/*
+--[[
 	Stargate Lib for GarrysMod10
 	Copyright (C) 2007  aVoN
 
@@ -14,7 +14,7 @@
 
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+]]
 
 --#########################################
 --						Traclines - To stop them on lua drawn physboxes
@@ -23,8 +23,8 @@
 StarGate.Trace = StarGate.Trace or {};
 StarGate.Trace.Entities = StarGate.Trace.Entities or {};
 StarGate.Trace.Classes = StarGate.Trace.Classes or {};
+StarGate.Trace.Code = util.TraceLine; -- Trace code to be executed
 StarGate.Trace.Data = {
-	code   = util.TraceLine, -- Trace code to be executed
 	start  = Vector(), -- The start position of the trace
 	endpos = Vector(), -- The end position of the trace
 	mins   = Vector(), -- The lowest corner of the trace
@@ -36,7 +36,7 @@ StarGate.Trace.Data = {
 	output = nil -- Result will be written here instead of returning a new table
 }
 
---################# Deephook to ents.Create serverside @aVoN
+-- ################# Deephook to ents.Create serverside @aVoN
 if SERVER then
 	hook.Add("OnEntityCreated","StarGate.OnEntityCreated",function(e)
 		if(not IsValid(e) or not StarGate.Trace) then return end;
@@ -46,7 +46,7 @@ if SERVER then
 	end)
 end
 
---################# Add a class to check to the tracesline calculation @aVoN
+-- ################# Add a class to check to the tracesline calculation @aVoN
 function StarGate.Trace:Add(c,condition)
 	self.Classes[c] = {Condition=condition};
 	for _,v in pairs(ents.FindByClass(c)) do
@@ -54,14 +54,14 @@ function StarGate.Trace:Add(c,condition)
 	end
 end
 
---################# Adds a condition-function to the specific entity. This function decides if the trace goes through the BoundingBox or not @aVoN
+-- ################# Adds a condition-function to the specific entity. This function decides if the trace goes through the BoundingBox or not @aVoN
 function StarGate.Trace:AddCondition(c,condition)
 	if(self.Classes[c]) then
 		self.Classes[c] = {Condition=condition};
 	end
 end
 
---################# Remoces such a class @aVoN
+-- ################# Remoces such a class @aVoN
 function StarGate.Trace:Remove(c)
 	self.Classes[c] = nil;
 	for k,_ in pairs(self.Entities) do
@@ -75,7 +75,7 @@ function StarGate.Trace:Remove(c)
 	end
 end
 
---################# Is the vector given inside the box or outside of it? @aVoN
+-- ################# Is the vector given inside the box or outside of it? @aVoN
 function StarGate.Trace:InBox(pos,Min,Max)
 	if(
 		(pos.x >= Min.x and pos.x <= Max.x) and
@@ -89,17 +89,17 @@ end
 -- Because this might also be usefull for other scripts, were defininig this global
 StarGate.InBox = function(a,b,c) return StarGate.Trace:InBox(a,b,c) end;
 
---################# Updates the entities OBB Datas @aVoN
+-- ################# Updates the entities OBB Datas @aVoN
 function StarGate.Trace:GetEntityData(e)
 	if(IsValid(e)) then
-		local time = CurTime();
-		if(not self.Entities[e] or self.Entities[e].Last + 1 < time) then
+		local now = CurTime();
+		if(not self.Entities[e] or self.Entities[e].Last + 1 < now) then
 			local offset = e:OBBCenter(); -- We need the OBB's relatively to the Entiti's position, not to the OBBCenter
 			self.Entities[e] = {
 				Min = e:OBBMins()+offset,
 				Max = e:OBBMaxs()+offset,
-				--Radius = e:BoudingRadius(),
-				Last = time,
+				-- Radius = e:BoudingRadius(),
+				Last = now,
 			}
 		end
 		return true;
@@ -109,7 +109,7 @@ function StarGate.Trace:GetEntityData(e)
 	end
 end
 
---################# Helper Function: Makes the direction vector longer and checks if the hitpos is within a specific range (== hit wall) @aVoN
+-- ################# Helper Function: Makes the direction vector longer and checks if the hitpos is within a specific range (== hit wall) @aVoN
 function StarGate.Trace:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal)
 	local old = norm;
 	local norm = norm*mul; -- Make the normal hit the wall
@@ -128,12 +128,12 @@ function StarGate.Trace:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal)
 	end
 end
 
---################# This checks one coordinate of the trace's normal @aVoN
+-- ################# This checks one coordinate of the trace's normal @aVoN
 function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 	-- I will not check if the trace start position is exactly on a wall, neither I will check, if the start pos is exactly in the center of this entity.
 	-- Doing this would need me to add some more special exeptions where the probability for these cases are < 0.1% (except you are forcing it)
 	local hit_normal = Vector(0,0,0); hit_normal[coordinate] = 1;
-	--################# We are inside the bounding box - Trace to one wall!
+	-- ################# We are inside the bounding box - Trace to one wall!
 	if(in_box) then
 		local mul = 0;
 		if(norm[coordinate] > 0) then -- Norm == 0 has been avoided in StarGate.Trace:New
@@ -145,7 +145,7 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 		end
 		return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal);
 	else
-		--################# We are outside the bounding box.
+		-- ################# We are outside the bounding box.
 		if(pos[coordinate] < Min[coordinate] and norm[coordinate] > 0) then -- We are below the Minimum and the normal goes up => We can hit
 			local mul = math.abs((pos[coordinate] - Min[coordinate])/norm[coordinate]); -- The multiplier so the coordinate we're checking is exact on the wall's surface
 			return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,-1*hit_normal);
@@ -156,7 +156,7 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 	end
 end
 
---################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
+-- ################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
 function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less reouces!)
 	if CLIENT then
@@ -177,15 +177,15 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	if(width) then local m = width / 2
 		self.Data.mins:SetUnpacked(-m, -m, -m)
 		self.Data.maxs:SetUnpacked( m,  m,  m)
-		self.Data.code = util.TraceHull
+		self.Trace.Code = util.TraceHull
 	else -- No width. Fall back to zero width trace
-		self.Data.code = util.TraceLine
+		self.Trace.Code = util.TraceLine
 	end
 
 	-- Run the trace when setup is ready and code is picked
-	local trace = self.Data.code(self.Data)
+	local trace = self.Trace.Code(self.Data)
 
-	--This is better and faster than using table.HasValue(ignore,e) (nested for loops)
+	-- This is better and faster than using table.HasValue(ignore,e) (nested for loops)
 	local quick_ignore = {};
 	if(type(ignore) == "table") then
 		for _,v in pairs(ignore) do
@@ -231,14 +231,14 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 							hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir2, e, a);
 						end
 					elseif (class == "tokra_shield") then // go ahead with my method @Mad
-						//if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then // check, if we intersecting bounding box - save cpu if we are not
-							//local a = not in_box;
-							////local dir2 = dir;
-							//if in_box then dir2 = -1*dir end // fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
-							//if (e.ShShap == 2) then a = in_box end // small fix for box shape, i fucked triangles directions
-							hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir, e, true);
-							// this code not working, need something to do @ AlexALX
-						//end
+						-- if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then // check, if we intersecting bounding box - save cpu if we are not
+						-- local a = not in_box;
+						-- local dir2 = dir;
+						-- if in_box then dir2 = -1*dir end // fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
+						-- if (e.ShShap == 2) then a = in_box end // small fix for box shape, i fucked triangles directions
+						hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir, e, true);
+						-- this code not working, need something to do @ AlexALX
+						-- end
 					else
 						if(norm.x ~= 0) then
 							hit = self:CheckCoordinate("x",pos,norm,v.Min,v.Max,len,in_box);
@@ -300,14 +300,14 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 			end
 		end
 	end
+
 	-- START OF Lynix modification
-	local anc, min = trace.start -- First entry minumum @dvdvideo1234
-	for i = 1, #trace_array do -- Interger loop for arrays @dvdvideo1234
+	local anc, mar = trace.start -- First entry minumum @dvdvideo1234
+	for i = 1, #trace_array do -- Faster loop for arrays @dvdvideo1234
 		local v = trace_array[i]
-		local m = anc:Distance(v.HitPos)
-		if(not min or m < min) then
-			min = m;
-			trace = v;
+		local m = anc:DistToSqr(v.HitPos) -- Faster check @dvdvideo1234
+		if(not mar or m < mar) then
+			mar, trace = m, v;
 		end
 	end
 
