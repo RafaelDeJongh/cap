@@ -171,19 +171,26 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	self.Data.start:Set(start)
 	self.Data.endpos:Set(dir); data.endpos:Add(start)
 	self.Data.filter = ignore
-	self.Data.mask = tonumber(mask) or MASK_SOLID
-	self.Data.collisiongroup = tonumber(cogrp) or COLLISION_GROUP_NONE
+	self.Data.mask = (tonumber(mask) or MASK_SOLID)
+	self.Data.collisiongroup = (tonumber(cogrp) or COLLISION_GROUP_NONE)
 	self.Data.ignoreworld = tobool(iworld)
-	if(width) then local m = width / 2
-		self.Data.mins:SetUnpacked(-m, -m, -m)
-		self.Data.maxs:SetUnpacked( m,  m,  m)
-		self.Trace.Code = util.TraceHull
-	else -- No width. Fall back to zero width trace
-		self.Trace.Code = util.TraceLine
+
+	-- Setup trace width and routine
+	if(width) then -- Trace cube hull with side of width
+		local m = (tonumber(width) or 0) / 2
+		if(m > 0) then -- Width is a valid non-zero number
+			self.Data.mins:SetUnpacked(-m, -m, -m)
+			self.Data.maxs:SetUnpacked( m,  m,  m)
+			self.Code = util.TraceHull -- Use New trace
+		else -- Margin must be a valid non-zero number
+			self.Code = util.TraceLine -- Use the old trace
+		end -- Otherwise falls back to using the old trace method
+	else -- No width so work as before. Fall back to zero width trace
+		self.Code = util.TraceLine
 	end
 
 	-- Run the trace when setup is ready and code is picked
-	local trace = self.Trace.Code(self.Data)
+	local trace = self.Code(self.Data)
 
 	-- This is better and faster than using table.HasValue(ignore,e) (nested for loops)
 	local quick_ignore = {};
@@ -222,22 +229,22 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 					local hit;
 					local hit2;
 					-- We need to check to what side the start pos is the nearest and if the normal (to that side where we checking it) isn't zero
-					if (class == "shield_core_buble") then // go ahead with my method @Mad
-						if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then // check, if we intersecting bounding box - save cpu if we are not
+					if (class == "shield_core_buble") then -- Go ahead with my method @Mad
+						if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save cpu if we are not
 							local a = not in_box;
 							local dir2 = dir;
-							if in_box then dir2 = -1*dir end // fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
-							if (e.ShShap == 2) then a = in_box end // small fix for box shape, i fucked triangles directions
+							if in_box then dir2 = -1*dir end -- Fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
+							if (e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
 							hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir2, e, a);
 						end
-					elseif (class == "tokra_shield") then // go ahead with my method @Mad
-						-- if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then // check, if we intersecting bounding box - save cpu if we are not
+					elseif (class == "tokra_shield") then -- Go ahead with my method @Mad
+						-- if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save cpu if we are not
 						-- local a = not in_box;
 						-- local dir2 = dir;
-						-- if in_box then dir2 = -1*dir end // fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
-						-- if (e.ShShap == 2) then a = in_box end // small fix for box shape, i fucked triangles directions
+						-- if in_box then dir2 = -1*dir end -- Fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
+						-- if (e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
 						hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir, e, true);
-						-- this code not working, need something to do @ AlexALX
+						-- This code not working, need something to do @ AlexALX
 						-- end
 					else
 						if(norm.x ~= 0) then
@@ -301,11 +308,16 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 		end
 	end
 
-	-- START OF Lynix modification
-	local anc, mar = trace.start -- First entry minumum @dvdvideo1234
-	for i = 1, #trace_array do -- Faster loop for arrays @dvdvideo1234
+	--[[ @Lynix @dvdvideo1234
+	 * First entry is considered the first minimum
+	 * Use for-integer loop as it is way faster than pairs
+	 * Store true trace data reference to a local and compare
+	 * If margin is not defined will be considered as minimum
+	]]
+	local anc, mar = self.Data.start
+	for i = 1, #trace_array do
 		local v = trace_array[i]
-		local m = anc:DistToSqr(v.HitPos) -- Faster check @dvdvideo1234
+		local m = anc:DistToSqr(v.HitPos)
 		if(not mar or m < mar) then
 			mar, trace = m, v;
 		end
