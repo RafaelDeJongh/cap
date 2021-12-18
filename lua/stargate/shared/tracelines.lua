@@ -1,5 +1,5 @@
 --[[
-	Stargate Lib for GarrysMod10
+	Stargate Lib for Garry's Mod 10
 	Copyright (C) 2007  aVoN
 
 	This program is free software: you can redistribute it and/or modify
@@ -48,8 +48,8 @@ end
 
 -- ################# Add a class to check to the tracesline calculation @aVoN
 function StarGate.Trace:Add(c,condition)
-	self.Classes[c] = {Condition=condition};
-	for _,v in pairs(ents.FindByClass(c)) do
+	self.Classes[c] = {Condition = condition};
+	for _, v in pairs(ents.FindByClass(c)) do
 		self:GetEntityData(v);
 	end
 end
@@ -57,14 +57,14 @@ end
 -- ################# Adds a condition-function to the specific entity. This function decides if the trace goes through the BoundingBox or not @aVoN
 function StarGate.Trace:AddCondition(c,condition)
 	if(self.Classes[c]) then
-		self.Classes[c] = {Condition=condition};
+		self.Classes[c] = {Condition = condition};
 	end
 end
 
 -- ################# Remoces such a class @aVoN
 function StarGate.Trace:Remove(c)
 	self.Classes[c] = nil;
-	for k,_ in pairs(self.Entities) do
+	for k, _ in pairs(self.Entities) do
 		if(k:IsValid()) then
 			if(k:GetClass() == c) then
 				self.Entities[k] = nil;
@@ -94,10 +94,11 @@ function StarGate.Trace:GetEntityData(e)
 	if(IsValid(e)) then
 		local now = CurTime();
 		if(not self.Entities[e] or self.Entities[e].Last + 1 < now) then
-			local offset = e:OBBCenter(); -- We need the OBB's relatively to the Entiti's position, not to the OBBCenter
+      -- We need the OBB relatively to the Entity's position, not to the OBBCenter
+			local offset = e:OBBCenter();
 			self.Entities[e] = {
-				Min = e:OBBMins()+offset,
-				Max = e:OBBMaxs()+offset,
+				Min = e:OBBMins() + offset,
+				Max = e:OBBMaxs() + offset,
 				-- Radius = e:BoudingRadius(),
 				Last = now,
 			}
@@ -109,21 +110,50 @@ function StarGate.Trace:GetEntityData(e)
 	end
 end
 
+--[[
+ * Checks whenever position hits sphere @dvdvideo1234
+ * This can be used to check colisions for shields and spheres in general
+ * I've explained this here: https://math.stackexchange.com/a/2633290/266012
+ * Returns the nearest circle intersection point ( when available )
+ * rorg > Ray start origin position
+ * rdir > Ray start direction vector
+ * rlen > Ray length forced value ( not mandatory )
+ * spos > Sphere position vector
+ * srad > Sphere radius value
+]]
+function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad)
+  local rlen = (tonumber(rlen) or rdir:Length())
+  local rdir = rdir:GetNormalized(); rdir:Mul(rlen)
+  local equa = rdir:LengthSqr() -- Ray length is zero
+  if(equa < 0) then return nil end -- No intersection
+  local equr = Vector(rorg) equr:Sub(spos) -- Calculate norm
+  local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2)
+  local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
+  if(equd < 0) then return nil end -- No intersection discriminant
+  local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua
+  local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg)
+  local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg)
+  if(ppos:DistToSqr(rorg) < mpos:DistToSqr(rorg)) then
+    return ppos, mpos -- Return the intersected +/- root point
+  end return mpos, ppos -- Return the intersected -/+ root point
+end
+
 -- ################# Helper Function: Makes the direction vector longer and checks if the hitpos is within a specific range (== hit wall) @aVoN
 function StarGate.Trace:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal)
-	local old = norm;
-	local norm = norm*mul; -- Make the normal hit the wall
+	local norm = norm * mul; -- Make the normal hit the wall
 	local length = norm:Length(); -- The new normal's length!
-	if(length <= len) then -- The necessary normal length is shorter than the trace's length (we haven't hit anything before we hit the actual object!)
+	if(length <= len) then -- The necessary normal length is shorter than the trace's length.
+    -- We haven't hit anything before we hit the actual object!
 		-- Check, if the remaining two coordinates are within the Min/Max range!
 		local hit = pos + norm;
-		if(
-			-- The coordinate == "x,y,z" is because of rounding issues. The checked variable has to get skipped - It is on the wall! Sometimes we have 1.999999999 ~= 2
+		if( -- The coordinate == "x,y,z" is because of rounding issues.
+        -- The checked variable has to get skipped - It is on the wall!
+        -- Sometimes we have 1.999999999 ~= 2
 			(coordinate == "x" or hit.x >= Min.x and hit.x <= Max.x) and
 			(coordinate == "y" or hit.y >= Min.y and hit.y <= Max.y) and
 			(coordinate == "z" or hit.z >= Min.z and hit.z <= Max.z)
-		) then
-			return {HitPos=hit,Fraction=length/len,HitNormal=hit_normal}; -- The hitpos and fraction!
+		) then -- The hitpos and fraction!
+			return {HitPos = hit, Fraction = length / len, HitNormal = hit_normal};
 		end
 	end
 end
@@ -133,49 +163,64 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 	-- I will not check if the trace start position is exactly on a wall, neither I will check, if the start pos is exactly in the center of this entity.
 	-- Doing this would need me to add some more special exeptions where the probability for these cases are < 0.1% (except you are forcing it)
 	local hit_normal = Vector(0,0,0); hit_normal[coordinate] = 1;
-	-- ################# We are inside the bounding box - Trace to one wall!
-	if(in_box) then
+	if(in_box) then -- We are inside the bounding box - Trace to one wall!
 		local mul = 0;
 		if(norm[coordinate] > 0) then -- Norm == 0 has been avoided in StarGate.Trace:New
 			-- The multiplier so the coordinate we're checking is exact on the wall's surface
-			mul = math.abs((pos[coordinate] - Max[coordinate])/norm[coordinate]);
-			hit_normal = -1*hit_normal;
+			mul = math.abs((pos[coordinate] - Max[coordinate]) / norm[coordinate]);
+			hit_normal = -1 * hit_normal;
 		else
-			mul = math.abs((pos[coordinate] - Min[coordinate])/norm[coordinate]);
+			mul = math.abs((pos[coordinate] - Min[coordinate]) / norm[coordinate]);
 		end
 		return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal);
-	else
-		-- ################# We are outside the bounding box.
+	else -- We are outside the bounding box.
 		if(pos[coordinate] < Min[coordinate] and norm[coordinate] > 0) then -- We are below the Minimum and the normal goes up => We can hit
-			local mul = math.abs((pos[coordinate] - Min[coordinate])/norm[coordinate]); -- The multiplier so the coordinate we're checking is exact on the wall's surface
-			return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,-1*hit_normal);
+			local mul = math.abs((pos[coordinate] - Min[coordinate]) / norm[coordinate]); -- The multiplier so the coordinate we're checking is exact on the wall's surface
+			return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,-1 * hit_normal);
 		elseif(pos[coordinate] > Max[coordinate] and norm[coordinate] < 0) then --Above Max, norm down
-			local mul = math.abs((pos[coordinate] - Max[coordinate])/norm[coordinate]);
+			local mul = math.abs((pos[coordinate] - Max[coordinate]) / norm[coordinate]);
 			return self:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal);
 		end
 	end
+end
+
+--[[
+ * Converts trace ignore angument to quick indexing @dvdvideo1234
+ * Replace this with a dedicated class method in the routine
+ * Function filters are processed by reglar traces and CAP spcifics are skipped
+]]
+function StarGate.Trace:QuickIgnore(ignore)
+	local quick = {};
+	if(type(ignore) == "table") then
+		for _, v in pairs(ignore) do
+			quick[v] = true;
+		end
+	elseif(ignore) then
+		quick[ignore] = true;
+	end
+  return quick
 end
 
 -- ################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
 function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less reouces!)
 	if CLIENT then
-		for k,_ in pairs(self.Classes) do
-			for _,v in pairs(ents.FindByClass(k)) do
+		for k, _ in pairs(self.Classes) do
+			for _, v in pairs(ents.FindByClass(k)) do
 				self:GetEntityData(v);
 			end
 		end
 	end
 
 	-- Setup trace parameters and routine code
-	self.Data.start:Set(start)
-	self.Data.endpos:Set(dir); data.endpos:Add(start)
 	self.Data.filter = ignore
-	self.Data.mask = (tonumber(mask) or MASK_SOLID)
-	self.Data.collisiongroup = (tonumber(cogrp) or COLLISION_GROUP_NONE)
+	self.Data.start:Set(start)
 	self.Data.ignoreworld = tobool(iworld)
+	self.Data.mask = (tonumber(mask) or MASK_SOLID)
+	self.Data.endpos:Set(dir); data.endpos:Add(start)
+	self.Data.collisiongroup = (tonumber(cogrp) or COLLISION_GROUP_NONE)
 
-	-- Setup trace width and routine
+	-- Setup trace width and routine @dvdvideo1234
 	if(width) then -- Trace cube hull with side of width
 		local m = (tonumber(width) or 0) / 2
 		if(m > 0) then -- Width is a valid non-zero number
@@ -193,21 +238,15 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	local trace = self.Code(self.Data)
 
 	-- This is better and faster than using table.HasValue(ignore,e) (nested for loops)
-	local quick_ignore = {};
-	if(type(ignore) == "table") then
-		for _,v in pairs(ignore) do
-			quick_ignore[v] = true;
-		end
-	elseif(ignore) then
-		quick_ignore[ignore] = true;
-	end
-	local len = dir:Length()*trace.Fraction; -- First of all: The length of the trace.
+  local quick_ignore = self:QuickIgnore(self.Data.filter)
+
+	local len = dir:Length() * trace.Fraction; -- First of all: The length of the trace.
 	local norm_world = dir:GetNormal(); -- Get Normal of the dir vector (world coordinates!)
 	-- We need to sort all entities first according to their distance to the trace-start, or we hit a prop behind a prop instead of the one infront
 	-- Problem noticed by Lynix here: http://img140.imageshack.us/img140/7589/gmflatgrass0017bj9.jpg
 	local trace_array = {} -- Lynix modification
 
-	for e,_ in pairs(self.Entities) do
+	for e, _ in pairs(self.Entities) do
 		if(not quick_ignore[e]) then
 			if(self:GetEntityData(e)) then -- Update dimension data and check, if the ent is valid!
 				local class = e:GetClass();
@@ -260,9 +299,8 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 						-- Very ugly, but atleast works, with bugs...
 						-- I have no idea how make function "CheckCoordinate" works with sphere @ AlexALX
 						if (not hit and class=="shield" and not in_box and self:InBox(pos,v.Min,v.Max)) then
-							hit = {HitPos=pos,Fraction=0.8,HitNormal=norm}
+							hit = {HitPos = pos, Fraction = 0.8, HitNormal = norm}
 						end
-
 					end
 
 					if(hit) then
@@ -302,7 +340,6 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 						trace.Entity = e;
 						table.insert(trace_array, table.Copy(trace)); -- Lynix modification
 					end
-
 				end
 			end
 		end
