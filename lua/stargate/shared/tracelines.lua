@@ -17,7 +17,7 @@
 ]]
 
 --#########################################
---						Traclines - To stop them on lua drawn physboxes
+-- Traclines - To stop them on lua drawn physboxes
 --#########################################
 
 StarGate.Trace = StarGate.Trace or {};
@@ -94,7 +94,7 @@ function StarGate.Trace:GetEntityData(e)
 	if(IsValid(e)) then
 		local now = CurTime();
 		if(not self.Entities[e] or self.Entities[e].Last + 1 < now) then
-      -- We need the OBB relatively to the Entity's position, not to the OBBCenter
+			-- We need the OBB relatively to the Entity's position, not to the OBBCenter
 			local offset = e:OBBCenter();
 			self.Entities[e] = {
 				Min = e:OBBMins() + offset,
@@ -116,7 +116,7 @@ end
  * I've explained this here: https://math.stackexchange.com/a/2633290/266012
  * Returns the nearest and furthest circle intersection point ( when available )
  * rorg > Ray start origin position. Where are we tracing from.
- * rdir > Ray direction vector. Teace direction being checked
+ * rdir > Ray direction vector. Trace direction being checked
  * rlen > Ray length forced value overrives direction ( not mandatory )
  * spos > Sphere position vector. The sphere location in 3D space
  * srad > Sphere radius value. The actual sphere size in 3D space
@@ -125,23 +125,23 @@ end
  *        that check whenever the points belong on the ray or not
 ]]
 function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
-  local rlen = (tonumber(rlen) or rdir:Length())
-  local rdir = rdir:GetNormalized(); rdir:Mul(rlen)
-  local equa = rdir:LengthSqr() -- Ray length is zero
-  if(equa < 0) then return nil end -- No intersection
-  local equr = Vector(rorg) equr:Sub(spos) -- Calculate norm
-  local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2)
-  local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
-  if(equd < 0) then return nil end -- No intersection discriminant
-  local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua
-  local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg)
-  local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg)
-  if(blen) then equr:Set(rdir) equr:Add(rorg) -- Force-apply ray length
-    local vsp, vsm = (ppos - rorg), (mpos - rorg) -- According ray start
-    local vep, vem = (ppos - equr), (mpos - equr) -- According ray end
-    if(vsp:Dot(rdir) < 0 or vep:Dot(rdir) > 0) then ppos = nil end
-    if(vsm:Dot(rdir) < 0 or vem:Dot(rdir) > 0) then mpos = nil end
-  end; return mpos, ppos -- Return the intersected -/+ root point
+	local rlen = (tonumber(rlen) or rdir:Length())
+	local rdir = rdir:GetNormalized(); rdir:Mul(rlen)
+	local equa = rdir:LengthSqr() -- Ray length is zero
+	if(equa < 0) then return nil end -- No intersection
+	local equr = Vector(rorg) equr:Sub(spos) -- Calculate norm
+	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2)
+	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
+	if(equd < 0) then return nil end -- No intersection discriminant
+	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua
+	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg)
+	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg)
+	if(blen) then equr:Set(rdir) equr:Add(rorg) -- Force-apply ray length
+		local vsp, vsm = (ppos - rorg), (mpos - rorg) -- According ray start
+		local vep, vem = (ppos - equr), (mpos - equr) -- According ray end
+		if(vsp:Dot(rdir) < 0 or vep:Dot(rdir) > 0) then ppos = nil end
+		if(vsm:Dot(rdir) < 0 or vem:Dot(rdir) > 0) then mpos = nil end
+	end; return mpos, ppos -- Return the intersected -/+ root point
 end
 
 -- ################# Helper Function: Makes the direction vector longer and checks if the hitpos is within a specific range (== hit wall) @aVoN
@@ -149,12 +149,12 @@ function StarGate.Trace:HitWall(coordinate,pos,norm,mul,Min,Max,len,hit_normal)
 	local norm = norm * mul; -- Make the normal hit the wall
 	local length = norm:Length(); -- The new normal's length!
 	if(length <= len) then -- The necessary normal length is shorter than the trace's length.
-    -- We haven't hit anything before we hit the actual object!
+		-- We haven't hit anything before we hit the actual object!
 		-- Check, if the remaining two coordinates are within the Min/Max range!
 		local hit = pos + norm;
 		if( -- The coordinate == "x,y,z" is because of rounding issues.
-        -- The checked variable has to get skipped - It is on the wall!
-        -- Sometimes we have 1.999999999 ~= 2
+				-- The checked variable has to get skipped - It is on the wall!
+				-- Sometimes we have 1.999999999 ~= 2
 			(coordinate == "x" or hit.x >= Min.x and hit.x <= Max.x) and
 			(coordinate == "y" or hit.y >= Min.y and hit.y <= Max.y) and
 			(coordinate == "z" or hit.z >= Min.z and hit.z <= Max.z)
@@ -204,7 +204,7 @@ function StarGate.Trace:QuickIgnore(ignore)
 	elseif(ignore) then
 		quick[ignore] = true;
 	end
-  return quick
+	return quick
 end
 
 -- ################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
@@ -244,7 +244,7 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	local trace = self.Code(self.Data)
 
 	-- This is better and faster than using table.HasValue(ignore,e) (nested for loops)
-  local quick_ignore = self:QuickIgnore(self.Data.filter)
+	local quick_ignore = self:QuickIgnore(self.Data.filter)
 
 	local len = dir:Length() * trace.Fraction; -- First of all: The length of the trace.
 	local norm_world = dir:GetNormal(); -- Get Normal of the dir vector (world coordinates!)
