@@ -128,7 +128,7 @@ function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
 	local rlen = (tonumber(rlen) or rdir:Length())
 	local rdir = rdir:GetNormalized(); rdir:Mul(rlen)
 	local equa = rdir:LengthSqr() -- Ray length is zero
-	if(equa < 0) then return nil end -- No intersection
+	if(equa <= 0) then return nil end -- No intersection
 	local equr = Vector(rorg) equr:Sub(spos) -- Calculate norm
 	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2)
 	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
