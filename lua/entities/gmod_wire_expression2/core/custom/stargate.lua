@@ -411,21 +411,21 @@ e2function string wirelink:stargateGetWireString(string name)
 end
 
 e2function vector wirelink:stargateGetWireVector(string name)
-	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return {0,0,0} end
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return Vector(0,0,0) end
 	local ret = this:GetWire(name,"",true);
 	if (type(ret)=="Vector") then
-		return {ret.x,ret.y,ret.z};
+		return ret
 	end
-	return {0,0,0};
+	return Vector(0, 0, 0)
 end
 
-e2function vector wirelink:stargateGetWireEntity(string name)
+e2function entity wirelink:stargateGetWireEntity(string name)
 	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return NULL end
 	local ret = this:GetWire(name,NULL,true);
 	if (IsValid(ret)) then
 		return ret;
 	end
-	return NULL;
+	return NULL
 end
 
 e2function number wirelink:stargateGetWireInput(string name)
@@ -447,15 +447,15 @@ e2function string wirelink:stargateGetWireStringInput(string name)
 end
 
 e2function vector wirelink:stargateGetWireVectorInput(string name)
-	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return {0,0,0} end
+	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return Vector(0,0,0) end
 	local ret = this:GetWire(name,"");
 	if (type(ret)=="Vector") then
-		return {ret.x,ret.y,ret.z};
+		return ret
 	end
-	return {0,0,0};
+	return Vector(0, 0, 0);
 end
 
-e2function vector wirelink:stargateGetWireEntityInput(string name)
+e2function entity wirelink:stargateGetWireEntityInput(string name)
 	if not IsValid(this) or not this.GetWire or not this.CreateWireInputs then return NULL end
 	local ret = this:GetWire(name,NULL);
 	if (IsValid(ret)) then
