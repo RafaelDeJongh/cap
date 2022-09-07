@@ -34,7 +34,7 @@ StarGate.Trace.Data = {
 	collisiongroup = COLLISION_GROUP_NONE, -- What the trace should hit collision group regards
 	ignoreworld = false, -- Should the trace ignore world or not
 	output = nil -- Result will be written here instead of returning a new table
-}
+};
 
 -- ################# Deephook to ents.Create serverside @aVoN
 if SERVER then
@@ -120,27 +120,26 @@ end
  * rlen > Ray length forced value overrives direction ( not mandatory )
  * spos > Sphere position vector. The sphere location in 3D space
  * srad > Sphere radius value. The actual sphere size in 3D space
- * blen > When enabled consideres the ray lenght for intersection
+ * blen > When enabled consideres the ray dot for intersections
  *        This forces the function to produce actual intersections
  *        that check whenever the points belong on the ray or not
 ]]
 function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
-	local rlen = (tonumber(rlen) or rdir:Length())
-	local rdir = rdir:GetNormalized(); rdir:Mul(rlen)
-	local equa = rdir:LengthSqr() -- Ray length is zero
+	local equa = (rlen and tonumber(rlen) or rdir:Length());
 	if(equa <= 0) then return nil end -- No intersection
-	local equr = Vector(rorg) equr:Sub(spos) -- Calculate norm
-	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2)
+	local rdir = rdir:GetNormalized(); rdir:Mul(equa); -- Read length
+	local equr, equa = Vector(rorg), equa^2; equr:Sub(spos); -- Sphere norm
+	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2);
 	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
 	if(equd < 0) then return nil end -- No intersection discriminant
-	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua
-	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg)
-	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg)
-	if(blen) then equr:Set(rdir) equr:Add(rorg) -- Force-apply ray length
-		local vsp, vsm = (ppos - rorg), (mpos - rorg) -- According ray start
-		local vep, vem = (ppos - equr), (mpos - equr) -- According ray end
-		if(vsp:Dot(rdir) < 0 or vep:Dot(rdir) > 0) then ppos = nil end
-		if(vsm:Dot(rdir) < 0 or vem:Dot(rdir) > 0) then mpos = nil end
+	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua;
+	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg);
+	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg);
+	if(blen) then equr:Set(rdir) equr:Add(rorg); -- Force-apply ray length
+		local vsp, vsm = (ppos - rorg), (mpos - rorg); -- According ray start
+		local vep, vem = (ppos - equr), (mpos - equr); -- According ray end
+		if(vsp:Dot(rdir) < 0 or vep:Dot(rdir) > 0) then ppos = nil; end
+		if(vsm:Dot(rdir) < 0 or vem:Dot(rdir) > 0) then mpos = nil; end
 	end; return mpos, ppos -- Return the intersected -/+ root point
 end
 
@@ -357,10 +356,10 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	 * Store true trace data reference to a local and compare
 	 * If margin is not defined will be considered as minimum
 	]]
-	local anc, mar = self.Data.start
+	local anc, mar = self.Data.start;
 	for i = 1, #trace_array do
-		local v = trace_array[i]
-		local m = anc:DistToSqr(v.HitPos)
+		local v = trace_array[i];
+		local m = anc:DistToSqr(v.HitPos);
 		if(not mar or m < mar) then
 			mar, trace = m, v;
 		end
