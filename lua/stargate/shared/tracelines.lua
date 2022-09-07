@@ -110,6 +110,23 @@ function StarGate.Trace:GetEntityData(e)
 	end
 end
 
+function StarGate.Trace:InSphere(rorg, spos, srad)
+	local rorg = Vector(rorg); rorg:Sub(spos)
+  return (rorg:Length() <= srad)
+end
+
+function StarGate.Trace:AmongRay(bpos, rorg, rdir, full)
+	local sray = Vector(bpos); sray:Sub(rorg);
+	if(sray:Cross(rdir):LengthSqr() < 0.01) then
+		local eray = Vector(rorg); eray:Add(rdir); eray:Sub();
+		eray.x, eray.y, eray.z = -eray.x, -eray.y, -eray.z;
+		sdot, edot = sray:Dot(rdir), eray:Dot(rdir);
+		if(sdot < 0 and edot < 0) then return false; end -- Behind
+		if(not full and sdot > 0 and edot > 0) then return false; end
+		return true; -- Position is on the ray in non-full format
+	end; return false;
+end
+
 --[[
  * Checks whenever position hits sphere @dvdvideo1234
  * This can be used to check colisions for shields and spheres in general
@@ -125,22 +142,27 @@ end
  *        that check whenever the points belong on the ray or not
 ]]
 function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
-	local equa = (rlen and tonumber(rlen) or rdir:Length());
-	if(equa <= 0) then return nil end -- No intersection
+	local eque = (rlen and tonumber(rlen) or rdir:Length());
+	if(eque <= 0) then return nil end -- No intersection
 	local rdir = rdir:GetNormalized(); rdir:Mul(equa); -- Read length
-	local equr, equa = Vector(rorg), equa^2; equr:Sub(spos); -- Sphere norm
+	local equr, equa = Vector(rorg), eque^2; equr:Sub(spos); -- Sphere norm
 	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2);
 	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
 	if(equd < 0) then return nil end -- No intersection discriminant
 	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua;
 	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg);
 	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg);
-	if(blen) then equr:Set(rdir) equr:Add(rorg); -- Force-apply ray length
-		local vsp, vsm = (ppos - rorg), (mpos - rorg); -- According ray start
-		local vep, vem = (ppos - equr), (mpos - equr); -- According ray end
-		if(vsp:Dot(rdir) < 0 or vep:Dot(rdir) > 0) then ppos = nil; end
-		if(vsm:Dot(rdir) < 0 or vem:Dot(rdir) > 0) then mpos = nil; end
-	end; return mpos, ppos -- Return the intersected -/+ root point
+	if(self:InSphere(rorg, spos, srad)) then ppos, mpos = mpos, ppos end
+	if(self:AmongRay(ppos, rorg, rdir, true)) then
+		local frac = (ppos - rorg):Length() / eque
+		local norm = Vector(ppos); norm:Sub(spos); norm:Normalize()
+		return {HitPos = ppos, Fraction = frac, HitNormal = norm};
+	end
+	if(self:AmongRay(mpos, rorg, rdir, true)) then
+		local frac = (mpos - rorg):Length() / eque
+		local norm = Vector(mpos); norm:Sub(spos); norm:Normalize()
+		return {HitPos = mpos, Fraction = frac, HitNormal = norm};
+	end
 end
 
 -- ################# Helper Function: Makes the direction vector longer and checks if the hitpos is within a specific range (== hit wall) @aVoN
