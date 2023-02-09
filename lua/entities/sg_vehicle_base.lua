@@ -155,6 +155,8 @@ function ENT:Exit(kill) --####### Get out @RononDex
 
 	if (IsValid(self.Pilot)) then
 		StarGate.KeyBoard.ResetKeys(self.Pilot,self.Vehicle);
+
+		local lsSuitData = self.Pilot.suit and {air=self.Pilot.suit.air, coolant=self.Pilot.suit.coolant,energy=self.Pilot.suit.energy} or nil
 		self.Pilot:UnSpectate();
 		self.Pilot:DrawViewModel(true);
 		self.Pilot:DrawWorldModel(true);
@@ -164,6 +166,11 @@ function ENT:Exit(kill) --####### Get out @RononDex
 		self.Pilot:SetParent();
 		self.Pilot:SetMoveType(MOVETYPE_WALK);
 		self.Pilot:SetCollisionGroup(COLLISION_GROUP_PLAYER);
+		if(lsSuitData) then
+			self.Pilot.suit.air = lsSuitData.air
+			self.Pilot.suit.coolant = lsSuitData.coolant
+			self.Pilot.suit.energy = lsSuitData.energy
+		end
 	end
 	if(self.ShouldRotorwash) then
 		self:Rotorwash(false);
