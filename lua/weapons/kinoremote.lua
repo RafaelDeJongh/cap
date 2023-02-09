@@ -249,6 +249,7 @@ function SWEP:ExitKino()
 	if (IsValid(self.Owner)) then
 		--self.Owner:UnSpectate();
 		if (self.Owner:Alive()) then
+			local lsSuitData = self.Owner.suit and {air=self.Owner.suit.air, coolant=self.Owner.suit.coolant,energy=self.Owner.suit.energy} or nil
 			self.Owner:SetMoveType(MOVETYPE_WALK);
 			self.Owner:SetObserverMode(OBS_MODE_NONE);
 			self.Owner:Spawn();
@@ -256,6 +257,11 @@ function SWEP:ExitKino()
 			self.Owner:SetPos(self.StartPos + Vector(0,0,5)); -- whoa it repaired everythin
 			self.Owner:Give("KinoRemote"); -- We get back our wep
 			self.Owner:SelectWeapon("KinoRemote"); -- Finaly, we can hold our wep :)
+			if(lsSuitData) then
+				self.Owner.suit.air = lsSuitData.air
+				self.Owner.suit.coolant = lsSuitData.coolant
+				self.Owner.suit.energy = lsSuitData.energy
+			end
 		end
 		self.Owner:SetViewEntity(self.Owner);
 		self.Owner:SetNWBool("KActive", false);
