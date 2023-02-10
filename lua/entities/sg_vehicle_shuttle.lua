@@ -169,6 +169,8 @@ end
 
 function ENT:ExitShut() --################# Get out the jumper@RononDex
 	if (not IsValid(self.Pilot)) then return end
+	
+	local lsSuitData = self.Pilot.suit and {air=self.Pilot.suit.air, coolant=self.Pilot.suit.coolant,energy=self.Pilot.suit.energy} or nil
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawViewModel(true)
 	self.Pilot:DrawWorldModel(true)
@@ -178,6 +180,11 @@ function ENT:ExitShut() --################# Get out the jumper@RononDex
 	--self.Pilot:SetScriptedVehicle(NULL)
 	self.Pilot:SetNetworkedEntity( "ScriptedVehicle", NULL )
 	self.Pilot:SetViewEntity( NULL )
+	if(lsSuitData) then
+		self.Pilot.suit.air = lsSuitData.air
+		self.Pilot.suit.coolant = lsSuitData.coolant
+		self.Pilot.suit.energy = lsSuitData.energy
+	end
 end
 
 

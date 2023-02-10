@@ -239,6 +239,8 @@ end
 
 function ENT:DeactivateChair(p)
 
+	
+	local lsSuitData = self.Pilot.suit and {air=self.Pilot.suit.air, coolant=self.Pilot.suit.coolant,energy=self.Pilot.suit.energy} or nil
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawWorldModel(true)
 	self.Pilot:DrawViewModel(true)
@@ -258,6 +260,11 @@ function ENT:DeactivateChair(p)
 	self.Pilot:SetParent()
 	self.Pilot:SetNWBool("Control",false)
 	self.Pilot:SetNWEntity("chair",NULL)
+	if(lsSuitData) then
+		self.Pilot.suit.air = lsSuitData.air
+		self.Pilot.suit.coolant = lsSuitData.coolant
+		self.Pilot.suit.energy = lsSuitData.energy
+	end
 	self:SupplyResource("energy",500)
 --	self.Ragdoll:Remove()
 	self.Controlling=false
