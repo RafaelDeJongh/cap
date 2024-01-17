@@ -206,7 +206,7 @@ function ENT:OnRemove()
 	if IsValid(self.Player) then self.Player:SetViewEntity(self.Player); end
 end
 
-function ENT:TrueUse(ply)
+function ENT:Use(ply)
 	if(not self.Busy and ply == self.Owner and not self.Pressed)then
 		self:Status(false, true); -- shutdown old shield, close emmiter
 
