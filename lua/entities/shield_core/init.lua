@@ -1,6 +1,6 @@
 --[[
 	Shield Core
-	Copyright (C) 2011 Madman07
+	Copyright (C) 2011 Madman07 (code updated by Gabriel)
 ]]--
 
 if (StarGate==nil or StarGate.CheckModule==nil or not StarGate.CheckModule("devices")) then return end
@@ -157,29 +157,32 @@ function ENT:Initialize()
 
 end
 
-function ENT:SpawnFunction( ply, tr )
-	if (!tr.Hit) then return end
+function ENT:SpawnFunction(ply, tr)
+    if not tr.Hit then return end
 
-	local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt()
-	if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
-		ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-		return
-	end
+    local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt()
+    if ply:GetCount("CAP_shieldcore") + 1 > PropLimit then
+        ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
+        return
+    end
 
-	local ang = ply:GetAimVector():Angle(); ang.p = 0; ang.r = 0; ang.y = (ang.y+135) % 360;
+    local ang = ply:GetAimVector():Angle()
+    ang.p = 0
+    ang.r = 0
+    ang.y = (ang.y + 135) % 360
 
-	local ent = ents.Create("shield_core");
-	ent:SetAngles(ang);
-	ent:SetPos(tr.HitPos);
-	ent:Spawn();
-	ent:Activate();
-	ent.Owner = ply;
+    local ent = ents.Create("shield_core")
+    ent:SetAngles(ang)
+    ent:SetPos(tr.HitPos)
+    ent:Spawn()
+    ent:Activate()
+    ent.Owner = ply
 
-	local phys = ent:GetPhysicsObject()
-	if IsValid(phys) then phys:EnableMotion(false) end
+    local phys = ent:GetPhysicsObject()
+    if IsValid(phys) then phys:EnableMotion(false) end
 
-	ply:AddCount("CAP_shieldcore", ent)
-	return ent;
+    ply:AddCount("CAP_shieldcore", ent)
+    return ent
 end
 
 function ENT:SpawnButton()
@@ -403,165 +406,164 @@ function ENT:ShowOutput(enabled, atl)
 	end
 end
 
---################# Set's the strengthg multiplier which is necessary for the shields regeneration time and strength @aVoN
+--################# Set's the strength multiplier which is necessary for the shields regeneration time and strength @aVoN
 function ENT:SetMultiplier(n)
-	local n = math.Clamp(n or 0,-5,5); -- Backwarts compatibility and idiot-proof
-	if(n > 0) then
-		n = 1 + n;
-		self.StrengthMultiplier[1] = n
-		self.StrengthMultiplier[2] = n^1.5
-	else
-		n = 1/(1 - n);
-		self.StrengthMultiplier[1] = n^1.5;
-		self.StrengthMultiplier[2] = n;
-	end
-	self.Strength = math.Clamp((self.StrengthMultiplier[3]/n)*self.Strength,0,100); -- This avoids cheating
-	self.StrengthMultiplier[3] = n;
+    local n = math.Clamp(n or 0, -5, 5) -- Backwards compatibility and idiot-proof
+    if n > 0 then
+        n = 1 + n
+        self.StrengthMultiplier[1] = n
+        self.StrengthMultiplier[2] = n ^ 1.5
+    else
+        n = 1 / (1 - n)
+        self.StrengthMultiplier[1] = n ^ 1.5
+        self.StrengthMultiplier[2] = n
+    end
+    self.Strength = math.Clamp((self.StrengthMultiplier[3] / n) * self.Strength, 0, 100) -- This avoids cheating
+    self.StrengthMultiplier[3] = n
 end
 
 --################# Shield got hit - Take strength @aVoN
-function ENT:Hit(strength,normal,pos)
-	-- Calculate strenght-taking multiplier: Are we a shield, which is not moving? If so, we are many times stronger than a shield of a ship which is moving.
-	local divisor = 1;
-	if(self.Entity:GetVelocity():Length() < 5) then
-		divisor = StarGate.CFG:Get("shield","stationary_shield_multiplier",10);
-	end
+function ENT:Hit(strength, normal, pos)
+    -- Calculate strength-taking multiplier: Are we a shield, which is not moving? If so, we are many times stronger than a shield of a ship which is moving.
+    local divisor = 1
+    if self:GetVelocity():Length() < 5 then
+        divisor = StarGate.CFG:Get("shield", "stationary_shield_multiplier", 10)
+    end
 
-	-- Take strength if not atlantis, otherwise take energy
-	if self.Atlantis then
-		-- Consume energy
-		local energy = self:GetResource("energy");
+    -- Take strength if not Atlantis, otherwise take energy
+    if self.Atlantis then
+        -- Consume energy
+        local energy = self:GetResource("energy")
 
-		-- Make the shield consume more power depending on hit strength
-		local take_energy = math.Clamp(200*math.Clamp(strength,1,40)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),1,10000)*StarGate.CFG:Get("shield_core","atlantis_hit",50);
-		self:ConsumeResource("energy",math.Clamp(take_energy,1,energy));
-	else
-		self.Strength = math.Clamp(self.Strength-2*math.Clamp(strength,1,20)/(self.StrengthMultiplier[1]*self.StrengthConfigMultiplier*divisor),0,100);
-	end
+        -- Make the shield consume more power depending on hit strength
+        local take_energy = math.Clamp(200 * math.Clamp(strength, 1, 40) / (self.StrengthMultiplier[1] * self.StrengthConfigMultiplier * divisor), 1, 10000) * StarGate.CFG:Get("shield_core", "atlantis_hit", 50)
+        self:ConsumeResource("energy", math.Clamp(take_energy, 1, energy))
+    else
+        self.Strength = math.Clamp(self.Strength - 2 * math.Clamp(strength, 1, 20) / (self.StrengthMultiplier[1] * self.StrengthConfigMultiplier * divisor), 0, 100)
+    end
 
-	self.RegTime = CurTime()+2.5;
+    self.RegTime = CurTime() + 2.5
 
-	if(StarGate.CFG:Get("shield","apply_force",false)) then
-		-- Make us bounce around
-		local phys = self:GetPhysicsObject();
-		phys:ApplyForceOffset(-1*normal*strength*100*phys:GetMass()/self.StrengthMultiplier[1],pos);
-	end
+    if StarGate.CFG:Get("shield", "apply_force", false) then
+        -- Make us bounce around
+        local phys = self:GetPhysicsObject()
+        phys:ApplyForceOffset(-1 * normal * strength * 100 * phys:GetMass() / self.StrengthMultiplier[1], pos)
+    end
 end
 
---################# Reset it's strength @aVoN
+--################# Reset its strength @aVoN
 function ENT:Regenerate(enabled)
-	if(self.Strength < 100) then
-		local multiplier = 1;
-		-- Disabled shields can regenrate 2 times faster!
-		if(not (enabled or self.Depleted)) then
-			multiplier = multiplier*2.5;
-		end
-		-- Consume energy when restoring the strength
-		if(StarGate.HasResourceDistribution) then
-			local energy = self:GetResource("energy");
-			local speed = math.Clamp(energy/5000,1,4); -- Can make up to 4 times faster to regenerate with enough power connected (ZPMs, resource Caches etc)
-			multiplier = math.floor(multiplier*speed);
-			local take_energy = multiplier*20
-			if(take_energy > energy) then return end;
-			self:ConsumeResource("energy",take_energy);
-		else
-			-- For those without lifesupport: Make the shield regenerate a bit faster (Due to request)
-			multiplier = multiplier*2;
-		end
-		multiplier = multiplier*(self.RestoreMultiplier/self.StrengthMultiplier[2]); -- Multiplier from the config and with the StrengthMultiplier
-		self.Strength = math.Clamp(self.Strength+multiplier,0,100);
-	end
+    if self.Strength < 100 then
+        local multiplier = 1
+
+        -- Disabled shields can regenerate 2 times faster!
+        if not (enabled or self.Depleted) then
+            multiplier = multiplier * 2.5
+        end
+
+        -- Consume energy when restoring the strength
+        if StarGate.HasResourceDistribution then
+            local energy = self:GetResource("energy")
+            local speed = math.Clamp(energy / 5000, 1, 4) -- Can make up to 4 times faster to regenerate with enough power connected (ZPMs, resource Caches etc)
+            multiplier = math.floor(multiplier * speed)
+            local take_energy = multiplier * 20
+            if take_energy > energy then return end
+            self:ConsumeResource("energy", take_energy)
+        else
+            -- For those without lifesupport: Make the shield regenerate a bit faster (Due to request)
+            multiplier = multiplier * 2
+        end
+
+        multiplier = multiplier * (self.RestoreMultiplier / self.StrengthMultiplier[2]) -- Multiplier from the config and with the StrengthMultiplier
+        self.Strength = math.Clamp(self.Strength + multiplier, 0, 100)
+    end
 end
 
---################# Wire input @aVoN
-function ENT:TriggerInput(k,v)
-	if(k=="Activate") then
-		if((v or 0) >= 1) then
-			self:Status(true);
-		else
-			self:Status(false);
-		end
-	end
+---################# Wire input @aVoN
+function ENT:TriggerInput(k, v)
+    if k == "Activate" then
+        if (v or 0) >= 1 then
+            self:Status(true)
+        else
+            self:Status(false)
+        end
+    end
 end
 
 numpad.Register("Toggle_Shield_Core",
-	function(p,e)
-		if not IsValid(e) then return end;
-		if not IsValid(e.Shield) then return end;
-		if(e.Shield.Enabled) then
-			e:Status(false);
-		else
-			e:Status(true);
-		end
-	end
-);
-
+    function(p, e)
+        if not IsValid(e) then return end
+        if not IsValid(e.Shield) then return end
+        if e.Shield.Enabled then
+            e:Status(false)
+        else
+            e:Status(true)
+        end
+    end
+)
 
 function ENT:PreEntityCopy()
-	local dupeInfo = {}
-	if IsValid(self.Entity) then
-		dupeInfo.EntID = self.Entity:EntIndex()
-	end
-	/*
-	if WireAddon then
-		dupeInfo.WireData = WireLib.BuildDupeInfo( self.Entity )
-	end*/
+    local dupeInfo = {}
+    if IsValid(self) then
+        dupeInfo.EntID = self:EntIndex()
+    end
 
-	dupeInfo.SSize = self.SSize;
-	dupeInfo.Ang = self.Ang;
-	dupeInfo.Pos = self.Pos;
-	dupeInfo.Col = self.Col;
-	dupeInfo.Mod = self.Mod;
-	dupeInfo.MenuData = self.MenuData;
+    dupeInfo.SSize = self.SSize
+    dupeInfo.Ang = self.Ang
+    dupeInfo.Pos = self.Pos
+    dupeInfo.Col = self.Col
+    dupeInfo.Mod = self.Mod
+    dupeInfo.MenuData = self.MenuData
 
-	duplicator.StoreEntityModifier(self, "SCDupeInfo", dupeInfo)
-	StarGate.WireRD.PreEntityCopy(self)
+    duplicator.StoreEntityModifier(self, "SCDupeInfo", dupeInfo)
+    StarGate.WireRD.PreEntityCopy(self)
 end
-duplicator.RegisterEntityModifier( "SCDupeInfo" , function() end)
+
+duplicator.RegisterEntityModifier("SCDupeInfo", function() end)
 
 function ENT:PostEntityPaste(ply, Ent, CreatedEntities)
-	if (StarGate.NotSpawnable(Ent:GetClass(),ply)) then self.Entity:Remove(); return end
-	if (IsValid(ply)) then
-		local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt();
-		if(ply:GetCount("CAP_shieldcore")+1 > PropLimit) then
-			ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )");
-			self.Entity:Remove();
-			return
-		end
-	end
+    if StarGate.NotSpawnable(Ent:GetClass(), ply) then
+        self:Remove()
+        return
+    end
 
-	local dupeInfo = Ent.EntityMods.SCDupeInfo
+    if IsValid(ply) then
+        local PropLimit = GetConVar("CAP_shieldcore_max"):GetInt()
+        if ply:GetCount("CAP_shieldcore") + 1 > PropLimit then
+            ply:SendLua("GAMEMODE:AddNotify(SGLanguage.GetMessage(\"entity_limit_shield_core\"), NOTIFY_ERROR, 5); surface.PlaySound( \"buttons/button2.wav\" )")
+            self:Remove()
+            return
+        end
+    end
 
-	if dupeInfo.EntID then
-		self.Entity = CreatedEntities[ dupeInfo.EntID ]
-	end
-    /*
-	if(Ent.EntityMods and Ent.EntityMods.SCDupeInfo.WireData) then
-		WireLib.ApplyDupeInfo( ply, Ent, Ent.EntityMods.SCDupeInfo.WireData, function(id) return CreatedEntities[id] end)
-	end  */
+    local dupeInfo = Ent.EntityMods.SCDupeInfo
 
-	self.Entity:SetNetworkedVector("Size", dupeInfo.SSize);
-	self.Entity:SetNetworkedAngle("Ang", dupeInfo.Ang);
-	self.Entity:SetNetworkedVector("Pos", dupeInfo.Pos);
-	self.Entity:SetNetworkedVector("Col", dupeInfo.Col);
-	self.Entity:SetNetworkedString("Mod", dupeInfo.Mod);
-	self.Entity:SetNetworkedString("MenuData", dupeInfo.MenuData);
+    if dupeInfo.EntID then
+        self = CreatedEntities[dupeInfo.EntID]
+    end
 
-	self.SSize = dupeInfo.SSize;
-	self.Ang = dupeInfo.Ang;
-	self.Pos = dupeInfo.Pos;
-	self.Col = dupeInfo.Col;
-	self.Mod = dupeInfo.Mod;
-	self.MenuData = dupeInfo.MenuData;
+    self:SetNWVector("Size", dupeInfo.SSize)
+    self:SetNWAngle("Ang", dupeInfo.Ang)
+    self:SetNWVector("Pos", dupeInfo.Pos)
+    self:SetNWVector("Col", dupeInfo.Col)
+    self:SetNWString("Mod", dupeInfo.Mod)
+    self:SetNWString("MenuData", dupeInfo.MenuData)
 
-	if (IsValid(ply)) then
-		self.Owner = ply;
-		ply:AddCount("CAP_shieldcore", self.Entity)
-	end
-	StarGate.WireRD.PostEntityPaste(self,ply,Ent,CreatedEntities)
+    self.SSize = dupeInfo.SSize
+    self.Ang = dupeInfo.Ang
+    self.Pos = dupeInfo.Pos
+    self.Col = dupeInfo.Col
+    self.Mod = dupeInfo.Mod
+    self.MenuData = dupeInfo.MenuData
 
+    if IsValid(ply) then
+        self.Owner = ply
+        ply:AddCount("CAP_shieldcore", self)
+    end
+
+    StarGate.WireRD.PostEntityPaste(self, ply, Ent, CreatedEntities)
 end
 
-if (StarGate and StarGate.CAP_GmodDuplicator) then
-	duplicator.RegisterEntityClass( "shield_core", StarGate.CAP_GmodDuplicator, "Data" )
+if StarGate and StarGate.CAP_GmodDuplicator then
+    duplicator.RegisterEntityClass("shield_core", StarGate.CAP_GmodDuplicator, "Data")
 end
