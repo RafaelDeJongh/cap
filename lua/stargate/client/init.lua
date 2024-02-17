@@ -221,7 +221,7 @@ function StarGate.InstalledOnClient()
 			if (not cap_installed and tbl[tonumber(v.wsid)]) then cap_installed = true break end
 		end
 	end
-	if (ws_addonlist[175394472] or cap_installed) then StarGate.InstalledOnCl = true; return true end
+	if (ws_addonlist[175394472] or ws_addonlist[3037205213] or cap_installed) then StarGate.InstalledOnCl = true; return true end
 	if (table.HasValue(addonlist,"Carter Addon Pack") or table.HasValue(addonlist,"Carter Addon Pack - Resources")) then StarGate.InstalledOnCl = true; return true end
 	return false;
 end
