@@ -268,7 +268,7 @@ end
 		MsgN("Error #11\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
 end  ]]
-if (not StarGate.WorkShop) then
+--[[if (not StarGate.WorkShop) then
 	if (cap_installed and not Workshop_res_Installed()) then
 		if (status != "Error") then
 			status = "Error";
@@ -371,7 +371,7 @@ else
 		MsgN("-------");
 		MsgN("Error #04\n"..StarGate_Group.ErrorMSG[table.Count(StarGate_Group.ErrorMSG)][1]:Replace("\\n","\n"));
 	end
-end
+end	]]
 
 if (table.getn(oldfiles)>0) then
 	if (status != "Error") then
