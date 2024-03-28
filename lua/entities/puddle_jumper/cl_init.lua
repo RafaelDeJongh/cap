@@ -125,12 +125,12 @@ end
 function ENT:CreateHUD()
 	if(not (self.HUD and self.HUD.Activate and self.HUD.Deactivate)) then
 		if(self.HUD) then self.HUD:Remove() end; -- Delete invalid but existant previous HUD
-		self.HUD = vgui.Create("JumperHUD",self); -- Player/Passenger indicator
+		self.HUD = vgui.Create("JumperHUD"); -- Player/Passenger indicator
 		--self.HUD:SetParent(self);
 	end
 	if(not (self.LSD and self.LSD.Activate and self.LSD.Deactivate)) then
 		if(self.LSD) then self.LSD:Remove() end;
-		self.LSD = vgui.Create("JumperLSD",self);
+		self.LSD = vgui.Create("JumperLSD");
 	end
 end
 
