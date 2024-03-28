@@ -244,7 +244,7 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	self.Data.start:Set(start)
 	self.Data.ignoreworld = tobool(iworld)
 	self.Data.mask = (tonumber(mask) or MASK_SOLID)
-	self.Data.endpos:Set(dir); data.endpos:Add(start)
+	self.Data.endpos:Set(dir); Data.endpos:Add(start)
 	self.Data.collisiongroup = (tonumber(cogrp) or COLLISION_GROUP_NONE)
 
 	-- Setup trace width and routine @dvdvideo1234
