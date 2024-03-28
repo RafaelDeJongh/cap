@@ -317,6 +317,8 @@ function ENT:PlayerPush(ply)
 end
 
 function ENT:IsEntOnBorder(ent, border)
+	if IsValid(ent) then
+
 	local in_range = false;
 	local in_range2 = false;
 
@@ -333,11 +335,15 @@ function ENT:IsEntOnBorder(ent, border)
 
 	if in_range and not in_range2 then return true
 	else return false end
+	
+    else
+        return false
+    end
 end
 
 local function CalcDmgProtect(ent, inflictor, attacker, ammount, dmginfo)
 	if (IsValid(ent) and ent:IsPlayer()) then
-		if IsValid(inflictor) then
+		if IsValid(inflictor) and inflictor.GetClass then
 			local class = inflictor:GetClass();
 			if (class == "tokra_shield" or class == "shield_core_buble") then
 				dmginfo:SetDamage(0);

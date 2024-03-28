@@ -29,7 +29,7 @@ hook.Add("StarGate.Bullet","StarGate.ShieldCore.Bullet",
 			end
 			if(SERVER) then
 				--Draw a bullet tracer into the Shield
-				if(bullet.Tracer ~= 0) then
+				if(bullet.Tracer and bullet.Tracer ~= 0) then
 					local fx = EffectData();
 					fx:SetStart(bullet.Src);
 					fx:SetOrigin(trace.HitPos);
