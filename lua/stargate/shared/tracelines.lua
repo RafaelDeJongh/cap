@@ -112,7 +112,7 @@ end
 
 function StarGate.Trace:InSphere(rorg, spos, srad)
 	local rorg = Vector(rorg); rorg:Sub(spos)
-  return (rorg:Length() <= srad)
+  return (rorg:LengthSqr() <= srad^2)
 end
 
 function StarGate.Trace:AmongRay(bpos, rorg, rdir, full)
