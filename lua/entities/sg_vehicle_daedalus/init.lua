@@ -787,6 +787,8 @@ function ENT:Exit()
 	self.Active = false;
 	if (not IsValid(self.Driver)) then return end
 	StarGate.KeyBoard.ResetKeys(self.Driver,self.Vehicle);
+
+	local lsSuitData = self.Driver.suit and {air=self.Driver.suit.air, coolant=self.Driver.suit.coolant,energy=self.Driver.suit.energy} or nil
 	self.Driver:UnSpectate();
 	self.Driver:DrawViewModel(true);
 	self.Driver:DrawWorldModel(true);
@@ -794,6 +796,11 @@ function ENT:Exit()
 	self.Driver:Spawn();
 	for k,v in pairs(self.weps) do
 		self.Driver:Give(tostring(v));
+	end
+	if(lsSuitData) then
+		self.Driver.suit.air = lsSuitData.air
+		self.Driver.suit.coolant = lsSuitData.coolant
+		self.Driver.suit.energy = lsSuitData.energy
 	end
 	-- if (self.Entity and self.Entity:IsValid()) then
 		-- self.Driver:SetPos(self.Ring[1]:GetPos()+Vector(0,0,50));
