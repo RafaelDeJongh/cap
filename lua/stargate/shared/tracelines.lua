@@ -128,16 +128,16 @@ function StarGate.Trace:AmongRay(bpos, rorg, rdir, full)
 end
 
 --[[
- * Checks whenever position hits sphere @dvdvideo1234
- * This can be used to check colisions for shields and spheres in general
+ * Checks whenever ray hits sphere @dvdvideo1234
+ * This can be used to check collisions for shields and spheres in general
  * I've explained this here: https://math.stackexchange.com/a/2633290/266012
  * Returns the nearest and furthest circle intersection point ( when available )
  * rorg > Ray start origin position. Where are we tracing from.
  * rdir > Ray direction vector. Trace direction being checked
- * rlen > Ray length forced value overrives direction ( not mandatory )
+ * rlen > Ray length forced value overdrives direction ( not mandatory )
  * spos > Sphere position vector. The sphere location in 3D space
  * srad > Sphere radius value. The actual sphere size in 3D space
- * blen > When enabled consideres the ray dot for intersections
+ * blen > When enabled considers the ray dot for intersections
  *        This forces the function to produce actual intersections
  *        that check whenever the points belong on the ray or not
 ]]
@@ -147,20 +147,16 @@ function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
 	local rdir = rdir:GetNormalized(); rdir:Mul(equa); -- Read length
 	local equr, equa = Vector(rorg), eque^2; equr:Sub(spos); -- Sphere norm
 	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2);
-	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
+	local equd, ounr = (equb ^ 2 - 4 * equa * equc), 1 -- Check imaginary roots
 	if(equd < 0) then return nil end -- No intersection discriminant
 	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua;
 	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg);
 	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg);
-	if(self:InSphere(rorg, spos, srad)) then ppos, mpos = mpos, ppos end
-	if(self:AmongRay(ppos, rorg, rdir, true)) then
-		local frac = (ppos - rorg):Length() / eque
-		local norm = Vector(ppos); norm:Sub(spos); norm:Normalize()
-		return {HitPos = ppos, Fraction = frac, HitNormal = norm};
-	end
-	if(self:AmongRay(mpos, rorg, rdir, true)) then
-		local frac = (mpos - rorg):Length() / eque
+	if(self:InSphere(rorg, spos, srad)) then ppos, mpos, ounr = mpos, ppos, -ounr end
+	-- The position that a bullet will actually hit the circle when fired
+	if(not self:AmongRay(mpos, rorg, rdir, true)) then return nil else
 		local norm = Vector(mpos); norm:Sub(spos); norm:Normalize()
+		local frac = (mpos - rorg):Length() / eque; norm:Mul(ounr)
 		return {HitPos = mpos, Fraction = frac, HitNormal = norm};
 	end
 end
@@ -188,7 +184,7 @@ end
 -- ################# This checks one coordinate of the trace's normal @aVoN
 function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 	-- I will not check if the trace start position is exactly on a wall, neither I will check, if the start pos is exactly in the center of this entity.
-	-- Doing this would need me to add some more special exeptions where the probability for these cases are < 0.1% (except you are forcing it)
+	-- Doing this would need me to add some more special exceptions where the probability for these cases are < 0.1% (except you are forcing it)
 	local hit_normal = Vector(0,0,0); hit_normal[coordinate] = 1;
 	if(in_box) then -- We are inside the bounding box - Trace to one wall!
 		local mul = 0;
@@ -212,9 +208,9 @@ function StarGate.Trace:CheckCoordinate(coordinate,pos,norm,Min,Max,len,in_box)
 end
 
 --[[
- * Converts trace ignore angument to quick indexing @dvdvideo1234
+ * Converts trace ignore argument to quick indexing @dvdvideo1234
  * Replace this with a dedicated class method in the routine
- * Function filters are processed by reglar traces and CAP spcifics are skipped
+ * Function filters are processed by regular traces and CAP specifics are skipped
 ]]
 function StarGate.Trace:QuickIgnore(ignore)
 	local quick = {};
@@ -228,9 +224,9 @@ function StarGate.Trace:QuickIgnore(ignore)
 	return quick
 end
 
--- ################# Start a traceline which can hit Lua Drawn BoundingBoxes @aVoN
+-- ################# Start a trace line which can hit Lua Drawn BoundingBoxes @aVoN
 function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
-	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less reouces!)
+	-- Clients need to add new entities inside this function (Server uses "HookBased" with ents.Create which uses less resources!)
 	if CLIENT then
 		for k, _ in pairs(self.Classes) do
 			for _, v in pairs(ents.FindByClass(k)) do
@@ -268,8 +264,9 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 	local quick_ignore = self:QuickIgnore(self.Data.filter)
 
 	local len = dir:Length() * trace.Fraction; -- First of all: The length of the trace.
-	local norm_world = dir:GetNormal(); -- Get Normal of the dir vector (world coordinates!)
-	-- We need to sort all entities first according to their distance to the trace-start, or we hit a prop behind a prop instead of the one infront
+	local norm_world = dir:GetNormal(); -- Get Normal of the direction vector (world coordinates!)
+	-- We need to sort all entities first according to their distance to the
+	-- trace-start or we hit a prop behind a prop instead of the one in front
 	-- Problem noticed by Lynix here: http://img140.imageshack.us/img140/7589/gmflatgrass0017bj9.jpg
 	local trace_array = {} -- Lynix modification
 
@@ -281,34 +278,34 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 				local pos = e:WorldToLocal(start);
 				local in_box = false;
 
-				if (class == "shield_core_buble") then
+				if(class == "shield_core_buble") then
 					in_box = StarGate.IsInShieldCore(e, start);
-				elseif (class == "shield") then
-					in_box = (e:GetPos():Distance(start)<v.Max.x); -- in sphere! Not box!!! @ AlexALX
+				elseif(class == "shield") then
+					in_box = (e:GetPos():DistToSqr(start) < v.Max.x^2); -- in sphere! Not box!!! @ AlexALX
 				else
 					in_box = self:InBox(pos,v.Min,v.Max);
 				end
 
-				if (self.Classes and self.Classes[class] and (not self.Classes[class].Condition or self.Classes[class].Condition(e,{start,dir,ignore},trace,in_box))) then
+				if(self.Classes and self.Classes[class] and (not self.Classes[class].Condition or self.Classes[class].Condition(e,{start,dir,ignore},trace,in_box))) then
 					local e_pos = e:GetPos();
 					local norm = e:WorldToLocal(e_pos+norm_world); -- Get the normal (local coordinates!)
 					local hit;
 					local hit2;
 					-- We need to check to what side the start pos is the nearest and if the normal (to that side where we checking it) isn't zero
-					if (class == "shield_core_buble") then -- Go ahead with my method @Mad
-						if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save cpu if we are not
+					if(class == "shield_core_buble") then -- Go ahead with my method @Mad
+						if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save CPU if we are not
 							local a = not in_box;
 							local dir2 = dir;
-							if in_box then dir2 = -1*dir end -- Fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
-							if (e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
+							if in_box then dir2 = -1*dir end -- Fix shooting if we are inside, and not shape - to get hitpos on right side (not opposite)
+							if(e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
 							hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir2, e, a);
 						end
-					elseif (class == "tokra_shield") then -- Go ahead with my method @Mad
-						-- if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save cpu if we are not
+					elseif(class == "tokra_shield") then -- Go ahead with my method @Mad
+						-- if StarGate.IsRayBoxIntersect(start, trace.HitPos, e) then -- Check, if we intersecting bounding box - save CPU if we are not
 						-- local a = not in_box;
 						-- local dir2 = dir;
-						-- if in_box then dir2 = -1*dir end -- Fix shoting if we are inside, and not shape - to get hitpos on right side (not opposite)
-						-- if (e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
+						-- if in_box then dir2 = -1*dir end -- Fix shooting if we are inside, and not shape - to get hitpos on right side (not opposite)
+						-- if(e.ShShap == 2) then a = in_box end -- Small fix for box shape, i fucked triangles directions
 						hit2 = StarGate.RayPhysicsPluckerIntersect(trace, dir, e, true);
 						-- This code not working, need something to do @ AlexALX
 						-- end
@@ -323,9 +320,9 @@ function StarGate.Trace:New(start,dir,ignore,mask,cogrp,iworld,width)
 							hit = self:CheckCoordinate("z",pos,norm,v.Min,v.Max,len,in_box);
 						end
 
-						-- Very ugly, but atleast works, with bugs...
+						-- Very ugly, but at least works, with bugs...
 						-- I have no idea how make function "CheckCoordinate" works with sphere @ AlexALX
-						if (not hit and class=="shield" and not in_box and self:InBox(pos,v.Min,v.Max)) then
+						if(not hit and class == "shield" and not in_box and self:InBox(pos,v.Min,v.Max)) then
 							hit = {HitPos = pos, Fraction = 0.8, HitNormal = norm}
 						end
 					end
