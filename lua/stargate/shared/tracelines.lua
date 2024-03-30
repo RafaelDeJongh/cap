@@ -147,17 +147,18 @@ function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
 	local rdir = rdir:GetNormalized(); rdir:Mul(equa); -- Read length
 	local equr, equa = Vector(rorg), eque^2; equr:Sub(spos); -- Sphere norm
 	local equb, equc = 2 * rdir:Dot(equr), (equr:LengthSqr() - srad^2);
-	local equd, ounr = (equb ^ 2 - 4 * equa * equc), 1 -- Check imaginary roots
+	local equd = (equb ^ 2 - 4 * equa * equc) -- Check imaginary roots
 	if(equd < 0) then return nil end -- No intersection discriminant
 	local mqua = (1 / (2 * equa)); equd, equb = mqua*math.sqrt(equd), -equb*mqua;
-	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg);
-	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg);
-	if(self:InSphere(rorg, spos, srad)) then ppos, mpos, ounr = mpos, ppos, -ounr end
+	local mpos = Vector(rdir); mpos:Mul(equb - equd); mpos:Add(rorg)
+	local ppos = Vector(rdir); ppos:Mul(equb + equd); ppos:Add(rorg)
+	local isin = self:InSphere(rorg, spos, srad) -- Inside check
+	local xpos, ounr = (isin and ppos or mpos), (isin and -1 or 1)
 	-- The position that a bullet will actually hit the circle when fired
-	if(not self:AmongRay(mpos, rorg, rdir, true)) then return nil else
-		local norm = Vector(mpos); norm:Sub(spos); norm:Normalize()
-		local frac = (mpos - rorg):Length() / eque; norm:Mul(ounr)
-		return {HitPos = mpos, Fraction = frac, HitNormal = norm};
+	if(not self:AmongRay(xpos, rorg, rdir, true)) then return nil else
+		local norm = Vector(xpos); norm:Sub(spos); norm:Normalize()
+		local frac = (xpos - rorg):Length() / eque; norm:Mul(ounr)
+		return {HitPos = xpos, Fraction = frac, HitNormal = norm};
 	end
 end
 
