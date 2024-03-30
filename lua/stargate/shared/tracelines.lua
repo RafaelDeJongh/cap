@@ -157,7 +157,7 @@ function StarGate.Trace:HitSphere(rorg, rdir, rlen, spos, srad, blen)
 	-- The position that a bullet will actually hit the circle when fired
 	if(not self:AmongRay(xpos, rorg, rdir, true)) then return nil else
 		local norm = Vector(xpos); norm:Sub(spos); norm:Normalize()
-		local frac = (xpos - rorg):Length() / eque; norm:Mul(ounr)
+		local frac = xpos:Distance(rorg) / eque; norm:Mul(ounr)
 		return {HitPos = xpos, Fraction = frac, HitNormal = norm};
 	end
 end
