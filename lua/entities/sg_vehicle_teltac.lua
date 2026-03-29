@@ -706,13 +706,14 @@ function ENT:LSSupport()
 			local pos = (p:GetPos()-ent_pos):Length(); -- Where they are in relation to the jumper
 			if(pos<800 and p.suit) then -- If they're close enough
 				if(not(StarGate.RDThree())) then
-					p.suit.air = 100; -- They get air
-					p.suit.energy = 100; -- and energy
-					p.suit.coolant = 100; -- and coolant
+					if (p.suit.air<100) then p.suit.air = 100; end -- They get air
+					if (p.suit.energy<100) then p.suit.energy = 100; end -- and energy
+					if (p.suit.coolant<100) then p.suit.coolant = 100; end -- and coolant
 				else
-					p.suit.air = 200; -- We need double the amount of LS3(No idea why)
-					p.suit.coolant = 200;
-					p.suit.energy = 200;
+					-- We need double the amount of LS3(No idea why)
+					if (p.suit.air<200) then p.suit.air = 200; end -- They get air
+					if (p.suit.energy<200) then p.suit.energy = 200; end -- and energy
+					if (p.suit.coolant<200) then p.suit.coolant = 200; end -- and coolant
 				end
 			end
 		end

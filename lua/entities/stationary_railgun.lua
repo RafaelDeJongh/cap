@@ -325,6 +325,7 @@ end
 
 function ENT:Exit()
 	self.Active = false;
+	local lsSuitData = self.Driver.suit and {air=self.Driver.suit.air, coolant=self.Driver.suit.coolant,energy=self.Driver.suit.energy} or nil
 	self.Driver:UnSpectate();
 	self.Driver:DrawViewModel(true);
 	self.Driver:DrawWorldModel(true);
@@ -332,6 +333,11 @@ function ENT:Exit()
 	self.Driver:Spawn();
 	for k,v in pairs(self.weps) do
 		self.Driver:Give(tostring(v));
+	end
+	if(lsSuitData) then
+		self.Driver.suit.air = lsSuitData.air
+		self.Driver.suit.coolant = lsSuitData.coolant
+		self.Driver.suit.energy = lsSuitData.energy
 	end
 	self.Driver:SetPos(self.Stand:GetPos() - self.Stand:GetForward() * 100 - self.Stand:GetRight() * 100);
 	self.Driver:SetParent();
