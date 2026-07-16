@@ -225,7 +225,7 @@ end
 function ENT:Think()
 	if self:GetNWBool("Display", false) then
 		if not self.Light then
-			local dlight = DynamicLight(self:EntIndex().."light");
+			local dlight = DynamicLight(self:EntIndex());
 			if dlight then
 				dlight.Pos = self.Entity:LocalToWorld(Vector(0,0,30));
 				dlight.r = 255;
