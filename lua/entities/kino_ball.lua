@@ -205,11 +205,17 @@ end
 function ENT:ExitKino(ply)
 	if (IsValid(ply)) then
 		if (ply:Alive()) then
+			local lsSuitData = ply.suit and {air=ply.suit.air, coolant=ply.suit.coolant,energy=ply.suit.energy} or nil
 			ply:SetMoveType(MOVETYPE_WALK);
 			ply:SetObserverMode(OBS_MODE_NONE);
 			ply:Spawn();
 			ply:SetFOV(ply.CAP_KINO_FOV or 0,0.3);
 			ply:SetPos(ply.CAP_KINO_StartPos or ply:GetPos() + Vector(0,0,5)); -- whoa it repaired everythin
+			if(lsSuitData) then
+				ply.suit.air = lsSuitData.air
+				ply.suit.coolant = lsSuitData.coolant
+				ply.suit.energy = lsSuitData.energy
+			end
 		end
 		ply:SetViewEntity(ply);
 		ply:SetNWBool("KActive", false);

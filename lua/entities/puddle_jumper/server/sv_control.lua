@@ -3,6 +3,7 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
 	if (IsValid(self.Pilot)) then
 		StarGate.KeyBoard.ResetKeys(self.Pilot,"PuddleJumper");
 
+		local lsSuitData = self.Pilot.suit and {air=self.Pilot.suit.air, coolant=self.Pilot.suit.coolant,energy=self.Pilot.suit.energy} or nil
 		self.Pilot:UnSpectate()
 		self.Pilot:DrawViewModel(true)
 		self.Pilot:DrawWorldModel(true)
@@ -20,6 +21,11 @@ function ENT:ExitJumper() --################# Get out the jumper@RononDex
         self.Pilot:SetColor(self.PlayerColor);
 		for k,v in pairs(self.PWeapons) do
 			self.Pilot:Give(tostring(v))
+		end
+		if(lsSuitData) then
+			self.Pilot.suit.air = lsSuitData.air
+			self.Pilot.suit.coolant = lsSuitData.coolant
+			self.Pilot.suit.energy = lsSuitData.energy
 		end
 		self.Pilot = nil;
 	end
